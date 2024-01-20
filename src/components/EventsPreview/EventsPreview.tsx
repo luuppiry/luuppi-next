@@ -23,12 +23,9 @@ export default function EventsPreview() {
 								<p className="text-white font-bold">
 									31 Aug 2024
 								</p>
-								<Link
-									href="/events"
-									className="text-red-400 text-xl font-bold max-md:text-xl group-hover:underline transition-all duration-300"
-								>
+								<p className="text-red-400 text-xl font-bold max-md:text-xl group-hover:underline transition-all duration-300">
 									Event name
-								</Link>
+								</p>
 								<div className="flex items-center gap-1">
 									<IoLocation size={16} color="#fff" />
 									<p className="text-white font-bold">
