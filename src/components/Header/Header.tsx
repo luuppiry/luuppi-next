@@ -134,13 +134,11 @@ export default function Header() {
 		<>
 			<div className="h-36 max-lg:h-16 bg-[#020202]" />
 			<header
-				className={`fixed bg-[#020202] text-white top-0 w-full z-50 ${
-					scrollPosition > 200 ? 'shadow-lg' : ''
-				}`}
+				className={`fixed bg-[#020202] text-white top-0 w-full z-50`}
 			>
 				<nav
-					className={`bg-[#7b7fb5] h-24 px-4 max-lg:h-16 transition-all duration-300 ${
-						scrollPosition > 200 ? 'h-16' : ''
+					className={`bg-[#7b7fb5] px-4 max-lg:h-16 transition-all duration-300 ${
+						scrollPosition > 100 ? 'h-16' : 'h-24'
 					}`}
 				>
 					<div className="max-w-screen-xl mx-auto flex items-center h-full justify-between">
@@ -150,7 +148,7 @@ export default function Header() {
 								priority
 								alt="Luuppi"
 								className={`max-lg:w-24 transition-all duration-300 object-contain ${
-									scrollPosition > 200 ? 'w-24' : 'w-36'
+									scrollPosition > 100 ? 'w-24' : 'w-36'
 								}`}
 								width={140}
 								height={200}
