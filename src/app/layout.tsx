@@ -1,3 +1,4 @@
+import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
 import type { Metadata } from 'next';
 import { Titillium_Web } from 'next/font/google';
@@ -23,6 +24,7 @@ export default function RootLayout({
 			<body className={titilliumFont.className}>
 				<Header />
 				{children}
+				<Footer />
 			</body>
 		</html>
 	);
