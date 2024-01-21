@@ -3,17 +3,17 @@
 @tailwind utilities;
 
 * {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 button {
-	@apply transition-transform transform active:scale-95;
+  @apply transform transition-transform active:scale-95;
 }
 
 @layer base {
-	html {
-		@apply text-text-950;
-	}
+  html {
+    @apply text-text-950;
+  }
 }
