@@ -62,6 +62,7 @@ export default function Discover() {
               <Image
                 draggable={false}
                 src={link.image}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 fill
                 alt="haalarit"
                 className="object-cover brightness-90 transition-all duration-300 group-hover:scale-105"

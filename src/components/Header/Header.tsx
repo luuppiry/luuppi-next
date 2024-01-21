@@ -150,6 +150,7 @@ export default function Header() {
             <Link className="relative flex h-full items-center" href="/">
               <Image
                 src={'/luuppi.svg'}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority
                 draggable={false}
                 alt="Luuppi"

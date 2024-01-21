@@ -103,6 +103,7 @@ export default function Partners() {
             className="relative mx-6 flex h-32 w-48 grayscale filter transition-all duration-300 hover:grayscale-0 max-md:h-20"
           >
             <Image
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               draggable={false}
               priority
               src={partner.image}

@@ -60,7 +60,8 @@ export default function About() {
           draggable={false}
           src="/luuppi-cards-01.svg"
           alt="Luuppi"
-          layout="fill"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          fill
           className="about-image"
         />
       </div>
