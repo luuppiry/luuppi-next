@@ -92,7 +92,7 @@ export default function Partners() {
 				<div className="flex">
 					<Link
 						href="/contact"
-						className="bg-primary-200 text-white font-bold text-2xl px-4 py-2 rounded-lg max-md:text-xl transition-all duration-300"
+						className="bg-primary-200 text-text-950 font-bold text-2xl px-4 py-2 rounded-lg max-md:text-xl transition-all duration-300"
 					>
 						Read more
 					</Link>

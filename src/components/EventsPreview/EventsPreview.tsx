@@ -48,7 +48,7 @@ export default function EventsPreview() {
 				<div className="flex justify-center mt-8">
 					<Link
 						href="/events"
-						className="bg-white text-black font-bold text-2xl px-4 py-2 rounded-lg max-md:text-xl transition-all duration-300"
+						className="bg-primary-200 text-text-950 font-bold text-2xl px-4 py-2 rounded-lg max-md:text-xl transition-all duration-300"
 					>
 						See all events
 					</Link>
