@@ -132,12 +132,12 @@ export default function Header() {
 
 	return (
 		<>
-			<div className="h-36 max-lg:h-16 bg-[#020202]" />
+			<div className="h-36 max-lg:h-16 bg-primary-950" />
 			<header
-				className={`fixed bg-[#020202] text-white top-0 w-full z-50`}
+				className={`fixed bg-primary-950 text-white top-0 w-full z-50`}
 			>
 				<nav
-					className={`bg-[#7b7fb5] px-4 max-lg:h-16 transition-all duration-300 ${
+					className={`bg-primary-400 px-4 max-lg:h-16 transition-all duration-300 ${
 						scrollPosition > 100 ? 'h-16' : 'h-24'
 					}`}
 				>
@@ -155,7 +155,7 @@ export default function Header() {
 							/>
 						</div>
 						<div className="flex gap-4 items-center">
-							<button className="bg-[#b2b5d7] rounded-full p-1 max-lg:hidden">
+							<button className="bg-primary-200 rounded-full p-1 max-lg:hidden">
 								<Image
 									src={'/us.svg'}
 									alt="English"
@@ -163,7 +163,7 @@ export default function Header() {
 									height={36}
 								/>
 							</button>
-							<button className="bg-[#b2b5d7] px-4 py-2 rounded-lg font-bold text-xl flex items-center  max-lg:hidden">
+							<button className="bg-primary-200 px-4 py-2 rounded-lg font-bold text-xl flex items-center  max-lg:hidden">
 								Login
 								<RiLoginCircleLine
 									className="inline-block ml-2"
@@ -184,7 +184,7 @@ export default function Header() {
 						>
 							<Link
 								href="/"
-								className="font-bold text-xl hover:bg-[#b2b5d7] h-full p-2 flex items-center justify-center group-hover:bg-[#b2b5d7] transition-colors duration-300"
+								className="font-bold text-xl hover:bg-primary-200 h-full p-2 flex items-center justify-center group-hover:bg-primary-200 transition-colors duration-300"
 							>
 								<span>{link.name}</span>
 								{link.sublinks.length > 0 && (

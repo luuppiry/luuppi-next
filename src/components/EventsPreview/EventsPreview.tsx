@@ -4,7 +4,7 @@ import { IoLocation } from 'react-icons/io5';
 
 export default function EventsPreview() {
 	return (
-		<section className=" bg-[#b2b5d7]">
+		<section className=" bg-primary-100">
 			<div className="max-w-screen-xl mx-auto py-20 px-4">
 				<p className="text-2xl font-bold mb-2">
 					Check out what&apos;s happening
@@ -19,7 +19,7 @@ export default function EventsPreview() {
 							className=" rounded-xl relative max-md:aspect-square group"
 							key={i}
 						>
-							<div className="h-full absolute flex-col justify-end flex w-full bg-gradient-to-t from-black via-transparent to-transparent z-20 transition-all duration-300 p-6">
+							<div className="h-full absolute flex-col justify-end flex w-full bg-gradient-to-t from-primary-950 via-transparent to-transparent z-20 transition-all duration-300 p-6">
 								<p className="text-white font-bold">
 									31 Aug 2024
 								</p>

@@ -11,3 +11,9 @@
 button {
 	@apply transition-transform transform active:scale-95;
 }
+
+@layer base {
+	html {
+		@apply text-text-950;
+	}
+}

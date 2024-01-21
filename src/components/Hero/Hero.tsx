@@ -4,7 +4,7 @@ export default function Hero() {
 	return (
 		<section>
 			<div className="bg-blue-200  relative h-80 max-md:h-60 transition-all duration-300">
-				<div className="z-10 absolute top-0 left-0 w-full h-full flex items-center justify-center bg-[#7b7fb5]/30">
+				<div className="z-10 absolute top-0 left-0 w-full h-full flex items-center justify-center bg-primary-400/30">
 					<div className="flex flex-col items-center text-white gap-4">
 						<div>
 							<Image
