@@ -10,7 +10,7 @@ export default function EventsPreview() {
           Check out what&apos;s happening
         </p>
         <h2 className="mb-8 text-5xl font-bold max-md:text-4xl">
-          Upcoming events
+          Upcoming Events
         </h2>
         <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-2">
           {Array.from({ length: 4 }, (_, i) => (
