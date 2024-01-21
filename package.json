@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
     "next": "14.1.0",
