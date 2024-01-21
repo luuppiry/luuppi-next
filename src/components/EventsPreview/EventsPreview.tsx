@@ -31,11 +31,10 @@ export default function EventsPreview() {
               </div>
               <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden grayscale-[80%] max-md:aspect-square">
                 <Image
-                  className="transition-all duration-300 group-hover:scale-105"
+                  className="object-cover transition-all duration-300 group-hover:scale-105"
                   src="/temp/events.jpg"
                   alt="event"
-                  layout="fill"
-                  objectFit="cover"
+                  fill
                 />
               </div>
             </Link>

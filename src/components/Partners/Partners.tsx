@@ -106,8 +106,8 @@ export default function Partners() {
               priority
               src={partner.image}
               alt="partner"
-              layout="fill"
-              objectFit="contain"
+              fill
+              className="object-contain"
             />
           </Link>
         ))}

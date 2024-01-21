@@ -61,10 +61,9 @@ export default function Discover() {
               <div className="absolute z-10 flex h-full w-full bg-gradient-to-t from-background-400/70 via-transparent to-transparent"></div>
               <Image
                 src={link.image}
-                layout="fill"
-                objectFit="cover"
+                fill
                 alt="haalarit"
-                className="brightness-90 transition-all duration-300 group-hover:scale-105"
+                className="object-cover brightness-90 transition-all duration-300 group-hover:scale-105"
               />
             </div>
           </Link>

@@ -125,10 +125,14 @@ export default function Header() {
   // Create fixed header on scroll
   const [scrollPosition, setScrollPosition] = useState(0);
   const handleScroll = () => {
+    if (typeof window === 'undefined') return;
     const position = window.scrollY;
     setScrollPosition(position);
   };
-  window.addEventListener('scroll', handleScroll, { passive: true });
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+  }
 
   return (
     <>

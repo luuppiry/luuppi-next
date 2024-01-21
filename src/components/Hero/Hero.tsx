@@ -7,10 +7,10 @@ export default function Hero() {
         <div className="relative flex h-full w-full overflow-hidden">
           <Image
             src="/banner.png"
-            layout="fill"
-            objectFit="cover"
+            fill
             alt="Luuppi banner"
             unoptimized
+            className="object-cover"
           />
         </div>
       </div>
