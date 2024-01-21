@@ -38,9 +38,9 @@ const links = [
 export default function Discover() {
   return (
     <section className="mx-auto max-w-screen-xl px-4 py-20">
-      <h1 className="mb-8 text-5xl font-bold max-md:text-4xl">
+      <h2 className="mb-8 text-5xl font-bold max-md:text-4xl">
         Discover Luuppi
-      </h1>
+      </h2>
       <div className="grid grid-cols-3 gap-6 max-lg:grid-cols-2">
         {links.map((link) => (
           <Link
@@ -60,6 +60,7 @@ export default function Discover() {
             <div className="relative flex h-full w-full overflow-hidden">
               <div className="absolute z-10 flex h-full w-full bg-gradient-to-t from-background-400/70 via-transparent to-transparent"></div>
               <Image
+                draggable={false}
                 src={link.image}
                 fill
                 alt="haalarit"

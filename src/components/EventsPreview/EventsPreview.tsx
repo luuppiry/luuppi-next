@@ -9,9 +9,9 @@ export default function EventsPreview() {
         <p className="mb-2 text-2xl font-bold">
           Check out what&apos;s happening
         </p>
-        <h1 className="mb-8 text-5xl font-bold max-md:text-4xl">
+        <h2 className="mb-8 text-5xl font-bold max-md:text-4xl">
           Upcoming events
-        </h1>
+        </h2>
         <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-2">
           {Array.from({ length: 4 }, (_, i) => (
             <Link
@@ -31,6 +31,7 @@ export default function EventsPreview() {
               </div>
               <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden grayscale-[80%] max-md:aspect-square">
                 <Image
+                  draggable={false}
                   className="object-cover transition-all duration-300 group-hover:scale-105"
                   src="/temp/events.jpg"
                   alt="event"

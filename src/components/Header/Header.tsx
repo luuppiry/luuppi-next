@@ -148,6 +148,7 @@ export default function Header() {
               <Image
                 src={'/luuppi.svg'}
                 priority
+                draggable={false}
                 alt="Luuppi"
                 className={`object-contain transition-all duration-300 max-lg:w-24 ${
                   scrollPosition > 100 ? 'w-24' : 'w-36'
@@ -158,7 +159,13 @@ export default function Header() {
             </Link>
             <div className="flex items-center gap-4">
               <button className="rounded-full bg-primary-200 p-1 max-lg:hidden">
-                <Image src={'/us.svg'} alt="English" width={36} height={36} />
+                <Image
+                  src={'/us.svg'}
+                  alt="English"
+                  width={36}
+                  height={36}
+                  draggable={false}
+                />
               </button>
               <button className="flex items-center rounded-lg bg-primary-200 px-4 py-2 text-xl font-bold  max-lg:hidden">
                 Login

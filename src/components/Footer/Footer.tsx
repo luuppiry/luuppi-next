@@ -9,6 +9,7 @@ export default function Footer() {
             <a href="https://flowbite.com/" className="flex items-center">
               <Image
                 src={'/luuppi.svg'}
+                draggable={false}
                 width={120}
                 height={50}
                 alt="FlowBite Logo"

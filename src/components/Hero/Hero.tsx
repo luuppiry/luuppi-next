@@ -9,6 +9,7 @@ export default function Hero() {
             src="/banner.png"
             fill
             alt="Luuppi banner"
+            draggable={false}
             unoptimized
             className="object-cover"
           />
