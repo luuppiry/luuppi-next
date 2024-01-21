@@ -21,7 +21,7 @@ export default function EventsPreview() {
             >
               <div className="absolute z-20 flex h-full w-full flex-col justify-end bg-gradient-to-t from-primary-950 via-transparent to-transparent p-6 transition-all duration-300">
                 <p className="font-bold text-white">31 Aug 2024</p>
-                <p className="text-xl font-bold text-red-400 transition-all duration-300 group-hover:underline max-md:text-xl">
+                <p className="text-xl font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-xl">
                   Event name
                 </p>
                 <div className="flex items-center gap-1">
@@ -44,7 +44,7 @@ export default function EventsPreview() {
         <div className="mt-8 flex justify-center">
           <Link
             href="/events"
-            className="rounded-lg bg-primary-200 px-4 py-2 text-2xl font-bold text-text-950 transition-all duration-300 max-md:text-xl"
+            className="rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
           >
             See all events
           </Link>
