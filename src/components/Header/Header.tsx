@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HiMenu } from 'react-icons/hi';
 import { RiArrowDropDownLine, RiLoginCircleLine } from 'react-icons/ri';
 
@@ -122,7 +122,6 @@ const links = [
 ];
 
 export default function Header() {
-  // Create fixed header on scroll
   const [scrollPosition, setScrollPosition] = useState(0);
   const handleScroll = () => {
     if (typeof window === 'undefined') return;
@@ -130,9 +129,13 @@ export default function Header() {
     setScrollPosition(position);
   };
 
-  if (typeof window !== 'undefined') {
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
     window.addEventListener('scroll', handleScroll, { passive: true });
-  }
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <div>
