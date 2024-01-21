@@ -58,7 +58,7 @@ export default function About() {
       <div className="about-container relative flex w-1/2 max-xl:h-80 max-xl:w-full">
         <Image
           draggable={false}
-          src="/luuppi-cards-01.svg"
+          src="/luuppi-cards.svg"
           alt="Luuppi"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           fill
