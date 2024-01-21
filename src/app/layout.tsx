@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={titilliumFont.className}>
         <Header />
-        {children}
+        <div className="flex-1">{children}</div>
         <Footer />
       </body>
     </html>

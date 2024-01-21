@@ -135,7 +135,7 @@ export default function Header() {
   }
 
   return (
-    <>
+    <div>
       <div className="h-36 bg-primary-950 max-lg:h-16" />
       <header className={`fixed top-0 z-50 w-full bg-primary-950 text-white`}>
         <nav
@@ -144,7 +144,7 @@ export default function Header() {
           }`}
         >
           <div className="mx-auto flex h-full max-w-screen-xl items-center justify-between">
-            <div className="relative flex h-full items-center">
+            <Link className="relative flex h-full items-center" href="/">
               <Image
                 src={'/luuppi.svg'}
                 priority
@@ -155,7 +155,7 @@ export default function Header() {
                 width={140}
                 height={200}
               />
-            </div>
+            </Link>
             <div className="flex items-center gap-4">
               <button className="rounded-full bg-primary-200 p-1 max-lg:hidden">
                 <Image src={'/us.svg'} alt="English" width={36} height={36} />
@@ -204,6 +204,6 @@ export default function Header() {
           ))}
         </ul>
       </header>
-    </>
+    </div>
   );
 }
