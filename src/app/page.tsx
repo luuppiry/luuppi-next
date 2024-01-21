@@ -1,4 +1,5 @@
 import Banner from '@/components/Banner/Banner';
+import BlogPreview from '@/components/BlogPreview/BlogPreview';
 import Discover from '@/components/Discover/Discover';
 import EventsPreview from '@/components/EventsPreview/EventsPreview';
 import Hero from '@/components/Hero/Hero';
@@ -11,6 +12,7 @@ export default function Home() {
       <Hero />
       <Discover />
       <EventsPreview />
+      <BlogPreview />
       <Partners />
     </>
   );
