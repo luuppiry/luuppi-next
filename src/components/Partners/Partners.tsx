@@ -108,7 +108,7 @@ export default function Partners() {
               src={partner.image}
               alt="partner"
               fill
-              className="object-contain"
+              className="object-contain opacity-75"
             />
           </Link>
         ))}
