@@ -1,0 +1,24 @@
+.about-pattern {
+  opacity: 0.8;
+  background-image: linear-gradient(#d6d6d650 1px, transparent 1px),
+    linear-gradient(to right, #d6d6d650 1px, #fff 1px);
+  background-size: 20px 20px;
+  z-index: -50;
+  height: 401px;
+  width: 501px;
+}
+
+.about-image {
+  transform: rotateY(0) scale(1.25) rotate(-2deg);
+  border-radius: 1rem;
+  transition: transform 1s ease 0s;
+  filter: drop-shadow(7px 7px #7e84c050);
+  z-index: -1;
+}
+
+.about-container {
+  z-index: -2;
+  background: #efeff6;
+  border-radius: 10px;
+  transform: rotate(-2deg);
+}
