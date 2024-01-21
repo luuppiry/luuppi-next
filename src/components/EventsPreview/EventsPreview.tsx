@@ -4,7 +4,7 @@ import { IoLocation } from 'react-icons/io5';
 
 export default function EventsPreview() {
 	return (
-		<section className=" bg-primary-100">
+		<section className=" bg-primary-50">
 			<div className="max-w-screen-xl mx-auto py-20 px-4">
 				<p className="text-2xl font-bold mb-2">
 					Check out what&apos;s happening
