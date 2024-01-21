@@ -137,7 +137,7 @@ export default function Header() {
 				className={`fixed bg-primary-950 text-white top-0 w-full z-50`}
 			>
 				<nav
-					className={`bg-primary-400 px-4 max-lg:h-16 transition-all duration-300 ${
+					className={`bg-primary-400 px-4 max-lg:h-16 transition-all duration-300 max-lg:shadow-md ${
 						scrollPosition > 100 ? 'h-16' : 'h-24'
 					}`}
 				>
