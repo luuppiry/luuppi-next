@@ -61,7 +61,6 @@ export default function About() {
           src="/luuppi-cards-01.svg"
           alt="Luuppi"
           layout="fill"
-          unoptimized
           className="about-image"
         />
       </div>
