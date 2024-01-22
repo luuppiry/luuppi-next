@@ -4,7 +4,7 @@ import { IoLocation } from 'react-icons/io5';
 
 export default function EventsPreview() {
   return (
-    <section className=" bg-primary-50">
+    <section className=" relative bg-primary-50">
       <div className="mx-auto max-w-screen-xl px-4 py-20">
         <p className="mb-1 text-2xl font-bold">
           Check out what&apos;s happening
@@ -47,12 +47,13 @@ export default function EventsPreview() {
         <div className="mt-8 flex justify-center">
           <Link
             href="/events"
-            className="rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
+            className="z-10 rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
           >
             See all events
           </Link>
         </div>
       </div>
+      <div className="luuppi-kolmio-pattern absolute left-0 top-0 -z-0 h-full w-full"></div>
     </section>
   );
 }

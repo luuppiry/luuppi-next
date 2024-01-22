@@ -1,7 +1,6 @@
 'use client';
 import Image from 'next/image';
 import { useEffect, useMemo, useRef } from 'react';
-import './Hero.css';
 
 export default function Hero() {
   const changingTextRef = useRef<HTMLSpanElement | null>(null);
@@ -55,21 +54,21 @@ export default function Hero() {
           </button>
         </div>
       </div>
-      <div className="about-container relative flex w-1/2 max-xl:h-80 max-xl:w-full">
+      <div className="luuppi-hero-container relative flex w-1/2 max-xl:h-80 max-xl:w-full">
         <Image
           draggable={false}
           src="/luuppi-cards.svg"
           alt="Luuppi"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           fill
-          className="about-image"
+          className="luuppi-hero-cards"
         />
       </div>
       <div
         className="absolute left-0 top-1/3 -z-10 h-96 w-96 rounded-full bg-[#d4e1fc] bg-gradient-to-r blur-[200px]
   "
       ></div>
-      <div className="about-pattern absolute -left-0 top-20 -z-50 h-[401px] w-[501px] max-md:top-0 max-md:h-full max-md:w-full"></div>
+      <div className="luuppi-pattern absolute -left-0 top-20 -z-50 h-[401px] w-[501px] max-md:top-0 max-md:h-full max-md:w-full"></div>
     </section>
   );
 }

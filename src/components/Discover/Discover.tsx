@@ -72,6 +72,7 @@ export default function Discover() {
         ))}
       </div>
       <div className="absolute bottom-0 left-0 -z-10 h-full w-full rotate-6 scale-50 rounded-lg bg-[#bec0da] blur-[450px]"></div>
+      <div className="luuppi-pattern absolute right-0 top-20 -z-50 h-[401px] w-[501px] max-md:top-0 max-md:h-full max-md:w-full"></div>
     </section>
   );
 }
