@@ -29,7 +29,7 @@ export default function Hero() {
   }, [studyAreas]);
 
   return (
-    <section className="relative mx-auto flex max-w-screen-xl justify-center gap-8 px-4 pb-20 pt-28 max-xl:flex-col max-xl:gap-20 max-xl:overflow-hidden">
+    <section className="relative mx-auto flex max-w-screen-xl justify-center gap-8 px-4 pb-20 pt-28 max-2xl:overflow-hidden max-xl:flex-col max-xl:gap-20">
       <div className="flex w-1/2 flex-col max-xl:w-full">
         <h1 className="mb-8 max-w-3xl text-6xl font-extrabold leading-[4rem] max-md:text-4xl">
           Luuppi ry, home for{' '}
