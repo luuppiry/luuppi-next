@@ -21,6 +21,7 @@ export default function BlogPreview() {
               >
                 <Image
                   src="/temp/blog.jpg"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   fill
                   alt="yes"
                   className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} object-cover`}

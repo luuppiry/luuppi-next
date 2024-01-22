@@ -147,18 +147,20 @@ export default function Header() {
           }`}
         >
           <div className="mx-auto flex h-full max-w-screen-xl items-center justify-between">
-            <Link className="relative flex h-full items-center" href="/">
+            <Link
+              className={`relative flex h-full items-center transition-all duration-300 ${
+                scrollPosition > 100 ? 'w-24' : 'w-36 max-lg:w-24'
+              }`}
+              href="/"
+            >
               <Image
                 src={'/luuppi.svg'}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority
                 draggable={false}
                 alt="Luuppi"
-                className={`object-contain transition-all duration-300 max-lg:w-24 ${
-                  scrollPosition > 100 ? 'w-24' : 'w-36'
-                }`}
-                width={140}
-                height={200}
+                className={`object-contain`}
+                fill
               />
             </Link>
             <div className="flex items-center gap-4">
