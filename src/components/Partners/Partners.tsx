@@ -85,7 +85,7 @@ export default function Partners() {
           <h2 className="text-5xl font-extrabold max-md:text-4xl">
             Our Partners
           </h2>
-          <p className="max-w-2xl text-2xl font-semibold transition-all duration-300 max-md:text-xl">
+          <p className="max-w-2xl text-xl transition-all duration-300 max-md:text-xl">
             We are proud to work with these companies. If you are interested in
             collaboration don&apos;t hesitate to contact us!
           </p>
