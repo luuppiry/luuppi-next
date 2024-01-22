@@ -10,7 +10,6 @@ export default function Banner() {
               src={'/luuppi_banner_text.svg'}
               draggable={false}
               alt="Luuppi banner"
-              unoptimized
               fill
               className="z-10 object-contain p-8 drop-shadow-[-6px_6px_#00000030] filter max-md:p-4 max-sm:p-2"
             />
@@ -19,8 +18,9 @@ export default function Banner() {
             src="/banner.png"
             fill
             alt="Luuppi banner"
+            priority
             draggable={false}
-            unoptimized
+            quality={100}
             className="object-cover"
           />
         </div>
