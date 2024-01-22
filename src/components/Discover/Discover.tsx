@@ -37,7 +37,7 @@ const links = [
 
 export default function Discover() {
   return (
-    <section className="mx-auto max-w-screen-xl px-4 py-20">
+    <section className="relative mx-auto max-w-screen-xl px-4 py-20">
       <h2 className="mb-8 text-5xl font-bold max-md:text-4xl">
         Discover Luuppi
       </h2>
@@ -71,6 +71,7 @@ export default function Discover() {
           </Link>
         ))}
       </div>
+      <div className="absolute bottom-0 left-0 -z-10 h-full w-full rotate-6 scale-50 rounded-lg bg-[#bec0da] blur-[450px]"></div>
     </section>
   );
 }

@@ -10,34 +10,58 @@ export default function BlogPreview() {
       </h2>
       <div className="flex flex-col gap-8">
         <div className="grid grid-cols-3 gap-6 max-lg:grid-cols-2 max-md:grid-cols-1">
-          {Array.from({ length: 3 }, (_, i) => (
-            <Link
-              href="/blog"
-              className="group relative flex aspect-[3/2] flex-col border-4 border-primary-950 shadow-[7px_7px_#000] transition-all duration-300 hover:shadow-[0px_0px_#000] max-md:aspect-[4/2]"
+          {Array.from({ length: 4 }).map((_, i) => (
+            <article
               key={i}
+              className={`${i === 0 ? 'col-span-3 max-lg:col-span-1 max-lg:flex-col' : 'col-span-1 flex-col'} flex gap-4 rounded-lg border-[1px] border-gray-200/50 shadow-sm`}
             >
-              <div className="relative flex h-full w-full overflow-hidden">
+              <div
+                className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} relative aspect-video w-full bg-gradient-to-r from-primary-400 to-primary-300
+                `}
+              >
                 <Image
-                  draggable={false}
-                  className="object-cover transition-all duration-300 group-hover:scale-105"
-                  src={i % 2 === 0 ? '/temp/blog.jpg' : '/temp/pullapäivä.jpg'}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  alt="event"
+                  src="/temp/blog.jpg"
                   fill
+                  alt="yes"
+                  className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} object-cover`}
                 />
               </div>
-              <div className="absolute z-20 h-full w-0 bg-primary-400/50 transition-all duration-300 group-hover:w-full" />
-              <div className="z-30 flex w-full flex-col border-t-2 border-dashed border-primary-300 bg-primary-400 p-4">
-                <p>
-                  <span className="font-bold text-white">31 Aug 2024</span>
-                </p>
-                <h3>
-                  <span className="text-xl font-bold text-white">
-                    Blog post title
+              <div className="flex w-full flex-col justify-between gap-12 p-4">
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold uppercase text-accent-400">
+                    news
                   </span>
-                </h3>
+                  <Link
+                    href="/blog"
+                    className={`inline-block text-2xl font-bold ${i === 0 ? 'text-4xl max-lg:text-2xl' : ''}`}
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  </Link>
+                  <p className="line-clamp-3">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Voluptate, voluptatem. Lorem ipsum dolor sit amet
+                    consectetur adipisicing elit. Saepe delectus molestiae quas
+                    a architecto, eaque placeat natus voluptatibus, amet
+                    veritatis culpa inventore autem enim labore consequuntur
+                    reprehenderit sint cum fuga obcaecati repudiandae deleniti
+                    sunt aperiam debitis iure. Non, temporibus architecto.
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Image
+                    src="/temp/pullapäivä.jpg"
+                    width={50}
+                    height={50}
+                    alt="avatar"
+                    className="rounded-full"
+                  />
+                  <div className="flex flex-col">
+                    <span>Matti Meikäpoika</span>
+                    <span className="text-sm opacity-60">22.01.2024</span>
+                  </div>
+                </div>
               </div>
-            </Link>
+            </article>
           ))}
         </div>
         <div className="flex justify-center">
