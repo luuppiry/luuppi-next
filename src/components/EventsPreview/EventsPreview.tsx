@@ -6,20 +6,20 @@ export default function EventsPreview() {
   return (
     <section className=" bg-primary-50">
       <div className="mx-auto max-w-screen-xl px-4 py-20">
-        <p className="mb-2 text-2xl font-bold">
+        <p className="mb-1 text-2xl font-bold">
           Check out what&apos;s happening
         </p>
-        <h2 className="mb-8 text-5xl font-bold max-md:text-4xl">
+        <h2 className="mb-8 text-5xl font-extrabold max-md:text-4xl">
           Upcoming Events
         </h2>
         <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-2">
           {Array.from({ length: 4 }, (_, i) => (
             <Link
               href="/events"
-              className=" group relative rounded-xl max-md:aspect-square"
+              className=" group relative max-md:aspect-square"
               key={i}
             >
-              <div className="absolute z-20 flex h-full w-full flex-col justify-end bg-gradient-to-t from-primary-800 via-black/50 to-transparent p-6 transition-all duration-300">
+              <div className="absolute z-20 flex h-full w-full flex-col justify-end rounded-lg bg-gradient-to-t from-primary-800 via-black/50 to-transparent p-6 transition-all duration-300">
                 <p className="font-bold text-white">31 Aug 2024</p>
                 <p className="text-xl font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-xl">
                   Event name
@@ -29,7 +29,7 @@ export default function EventsPreview() {
                   <p className="font-bold text-white">Koskikeskus</p>
                 </div>
               </div>
-              <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden brightness-[75%] group-hover:brightness-100 max-md:aspect-square">
+              <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden rounded-lg brightness-[75%] group-hover:brightness-100 max-md:aspect-square">
                 <Image
                   draggable={false}
                   className="object-cover transition-all duration-300 group-hover:scale-105"

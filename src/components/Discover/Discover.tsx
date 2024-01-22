@@ -38,14 +38,14 @@ const links = [
 export default function Discover() {
   return (
     <section className="relative mx-auto max-w-screen-xl px-4 py-20">
-      <h2 className="mb-8 text-5xl font-bold max-md:text-4xl">
+      <h2 className="mb-8 text-5xl font-extrabold max-md:text-4xl">
         Discover Luuppi
       </h2>
       <div className="grid grid-cols-3 gap-6 max-lg:grid-cols-2">
         {links.map((link) => (
           <Link
             href={link.href}
-            className="group relative flex aspect-[3/2] h-full w-full border-4 border-primary-950 shadow-[7px_7px_#000] transition-all duration-300 hover:shadow-[0px_0px_#000] max-md:aspect-square"
+            className="group relative flex aspect-[3/2] h-full w-full border-4 border-primary-950 shadow-[7px_7px_#090a10] transition-all duration-300 hover:shadow-[0px_0px_#090a10] max-md:aspect-square"
             key={link.name}
           >
             <div className="absolute z-20 h-full w-0 bg-primary-400/50 transition-all duration-300 group-hover:w-full"></div>

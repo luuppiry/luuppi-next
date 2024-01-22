@@ -4,8 +4,8 @@ import Link from 'next/link';
 export default function BlogPreview() {
   return (
     <section className="mx-auto max-w-screen-xl px-4 py-20">
-      <p className="mb-2 text-2xl font-bold">Find out what&apos;s going on</p>
-      <h2 className="mb-8 text-5xl font-bold max-md:text-4xl">
+      <p className="mb-1 text-2xl font-bold">Find out what&apos;s going on</p>
+      <h2 className="mb-8 text-5xl font-extrabold max-md:text-4xl">
         Our Latest Posts
       </h2>
       <div className="flex flex-col gap-8">
@@ -33,7 +33,7 @@ export default function BlogPreview() {
                   </span>
                   <Link
                     href="/blog"
-                    className={`inline-block text-2xl font-bold ${i === 0 ? 'text-4xl max-lg:text-2xl' : ''}`}
+                    className={`inline-block text-2xl font-bold ${i === 0 ? 'text-4xl max-lg:text-2xl' : ''} hover:underline`}
                   >
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   </Link>
@@ -56,7 +56,7 @@ export default function BlogPreview() {
                     className="rounded-full"
                   />
                   <div className="flex flex-col">
-                    <span>Matti Meikäpoika</span>
+                    <span className="font-semibold">Matti Meikäpoika</span>
                     <span className="text-sm opacity-60">22.01.2024</span>
                   </div>
                 </div>

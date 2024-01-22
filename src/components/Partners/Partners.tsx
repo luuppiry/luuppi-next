@@ -79,41 +79,45 @@ const partners = [
 
 export default function Partners() {
   return (
-    <section className="mx-auto max-w-screen-xl px-4 py-20">
-      <div className="flex flex-col gap-6">
-        <h2 className="text-5xl font-bold max-md:text-4xl">Our Partners</h2>
-        <p className="max-w-2xl text-2xl font-semibold transition-all duration-300 max-md:text-xl">
-          We are proud to work with these companies. If you are interested in
-          collaboration don&apos;t hesitate to contact us!
-        </p>
-        <div className="flex">
-          <Link
-            href="/contact"
-            className="rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
-          >
-            Read more
-          </Link>
+    <section className=" bg-primary-50 px-4 py-20">
+      <div className="mx-auto max-w-screen-xl">
+        <div className="flex flex-col gap-6">
+          <h2 className="text-5xl font-extrabold max-md:text-4xl">
+            Our Partners
+          </h2>
+          <p className="max-w-2xl text-2xl font-semibold transition-all duration-300 max-md:text-xl">
+            We are proud to work with these companies. If you are interested in
+            collaboration don&apos;t hesitate to contact us!
+          </p>
+          <div className="flex">
+            <Link
+              href="/contact"
+              className="rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
+            >
+              Read more
+            </Link>
+          </div>
         </div>
+        <Marquee autoFill className="mt-4 max-md:mt-8">
+          {partners.map((partner) => (
+            <Link
+              href={partner.link}
+              key={partner.image}
+              className="relative mx-6 flex h-32 w-48 grayscale filter transition-all duration-300 hover:grayscale-0 max-md:h-20"
+            >
+              <Image
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                draggable={false}
+                priority
+                src={partner.image}
+                alt="partner"
+                fill
+                className="object-contain opacity-75"
+              />
+            </Link>
+          ))}
+        </Marquee>
       </div>
-      <Marquee autoFill className="mt-4 max-md:mt-8">
-        {partners.map((partner) => (
-          <Link
-            href={partner.link}
-            key={partner.image}
-            className="relative mx-6 flex h-32 w-48 grayscale filter transition-all duration-300 hover:grayscale-0 max-md:h-20"
-          >
-            <Image
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              draggable={false}
-              priority
-              src={partner.image}
-              alt="partner"
-              fill
-              className="object-contain opacity-75"
-            />
-          </Link>
-        ))}
-      </Marquee>
     </section>
   );
 }
