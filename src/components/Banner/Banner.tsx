@@ -3,9 +3,9 @@ import Image from 'next/image';
 export default function Banner() {
   return (
     <section>
-      <div className="relative  h-80 bg-blue-200 transition-all duration-300 max-md:h-56">
+      <div className="h-80 bg-blue-200 transition-all duration-300 max-md:h-56">
         <div className="relative flex h-full w-full justify-center overflow-hidden">
-          <div className="z-10 flex h-full max-md:h-56">
+          <div className="relative z-10 flex h-full w-full max-md:h-56">
             <Image
               src={'/luuppi_banner_text.svg'}
               draggable={false}
