@@ -6,32 +6,32 @@ const links = [
   {
     name: 'Organization',
     href: '/organization',
-    image: '/temp/organization.jpg',
+    image: '/images/organization.jpg',
   },
   {
     name: 'Events',
     href: '/events',
-    image: '/temp/events.jpg',
+    image: '/images/events.jpg',
   },
   {
     name: 'New Students',
     href: '/new-students',
-    image: '/temp/new_students.jpg',
+    image: '/images/new_students.jpg',
   },
   {
     name: 'Blog',
     href: '/blog',
-    image: '/temp/blog.jpg',
+    image: '/images/blog.jpg',
   },
   {
     name: 'Collaboration',
     href: '/collaboration',
-    image: '/temp/collaboration.jpg',
+    image: '/images/collaboration.jpg',
   },
   {
     name: 'Contact',
     href: '/contact',
-    image: '/temp/contact.jpg',
+    image: '/images/contact.jpg',
   },
 ];
 

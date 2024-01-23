@@ -34,7 +34,9 @@ export default function EventsPreview() {
                   draggable={false}
                   className="object-cover transition-all duration-300 group-hover:scale-105"
                   src={
-                    i % 2 === 0 ? '/temp/events.jpg' : '/temp/pullapäivä.jpg'
+                    i % 2 === 0
+                      ? '/images/events.jpg'
+                      : '/images/pullapaiva.jpg'
                   }
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   alt="event"

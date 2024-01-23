@@ -1,0 +1,11 @@
+{
+  "navigation": {
+    "home": "Koti",
+    "organization": "Organisaatio",
+    "studying": "Opiskelu",
+    "tutoring": "Fukseille",
+    "events": "Tapahtumat",
+    "blog": "Blogi",
+    "other": "Muut"
+  }
+}

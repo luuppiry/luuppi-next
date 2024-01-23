@@ -1,4 +1,5 @@
 'use client';
+import { getDictionary } from '@/dictionaries';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -7,12 +8,12 @@ import { RiArrowDropDownLine, RiLoginCircleLine } from 'react-icons/ri';
 
 const links = [
   {
-    name: 'Home',
+    translation: 'home',
     href: '/',
     sublinks: [],
   },
   {
-    name: 'Organization',
+    translation: 'organization',
     href: '/organization',
     sublinks: [
       {
@@ -30,7 +31,7 @@ const links = [
     ],
   },
   {
-    name: 'Studying',
+    translation: 'studying',
     href: '/studying',
     sublinks: [
       {
@@ -48,7 +49,7 @@ const links = [
     ],
   },
   {
-    name: 'Tutoring',
+    translation: 'tutoring',
     href: '/services',
     sublinks: [
       {
@@ -66,7 +67,7 @@ const links = [
     ],
   },
   {
-    name: 'Events',
+    translation: 'events',
     href: '/student-union',
     sublinks: [
       {
@@ -84,7 +85,7 @@ const links = [
     ],
   },
   {
-    name: 'Blog',
+    translation: 'blog',
     href: '/contact',
     sublinks: [
       {
@@ -102,7 +103,7 @@ const links = [
     ],
   },
   {
-    name: 'Other',
+    translation: 'other',
     href: '/contact',
     sublinks: [
       {
@@ -119,9 +120,13 @@ const links = [
       },
     ],
   },
-];
+] as const;
 
-export default function Header() {
+export default function Header({
+  dictionary,
+}: {
+  dictionary: Awaited<ReturnType<typeof getDictionary>>['navigation'];
+}) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const handleScroll = () => {
     if (typeof window === 'undefined') return;
@@ -166,7 +171,7 @@ export default function Header() {
             <div className="flex items-center gap-4">
               <button className="rounded-full bg-primary-200 p-1 max-lg:hidden">
                 <Image
-                  src={'/us.svg'}
+                  src={'/locale-icons/us.svg'}
                   alt="English"
                   width={36}
                   height={36}
@@ -185,12 +190,15 @@ export default function Header() {
         </nav>
         <ul className="mx-auto flex max-w-screen-xl justify-center gap-1 px-4 max-lg:hidden">
           {links.map((link) => (
-            <li className="group relative cursor-pointer" key={link.name}>
+            <li
+              className="group relative cursor-pointer"
+              key={link.translation}
+            >
               <Link
                 href="/"
                 className="flex h-full items-center justify-center p-2 text-xl font-bold transition-colors duration-300 hover:bg-primary-200 group-hover:bg-primary-200"
               >
-                <span>{link.name}</span>
+                <span>{dictionary[link.translation]}</span>
                 {link.sublinks.length > 0 && (
                   <div className="w-6">
                     <RiArrowDropDownLine

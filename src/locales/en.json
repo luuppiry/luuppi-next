@@ -1,0 +1,11 @@
+{
+  "navigation": {
+    "home": "Home",
+    "organization": "Organization",
+    "studying": "Studying",
+    "tutoring": "Tutoring",
+    "events": "Events",
+    "blog": "Blog",
+    "other": "Other"
+  }
+}

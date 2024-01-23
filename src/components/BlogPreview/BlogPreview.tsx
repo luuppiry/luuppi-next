@@ -20,7 +20,7 @@ export default function BlogPreview() {
                 `}
               >
                 <Image
-                  src="/temp/blog.jpg"
+                  src="/images/blog.jpg"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   fill
                   alt="yes"
@@ -50,7 +50,7 @@ export default function BlogPreview() {
                 </div>
                 <div className="flex gap-2">
                   <Image
-                    src="/temp/pullapäivä.jpg"
+                    src="/images/pullapaiva.jpg"
                     width={50}
                     height={50}
                     alt="avatar"
