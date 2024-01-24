@@ -2,7 +2,8 @@
 	"scripts": {
 		"next": "yarn dev --prefix ../next/",
 		"strapi": "yarn dev --prefix ../strapi/",
-		"clear": "cd next && rm -rf .next && rm -rf cache"
+		"clear": "cd next && rm -rf .next && rm -rf cache",
+		"copyTypes": "node copyTypes.js"
 	},
 	"dependencies": {
 		"concurrently": "^8.2.2"
