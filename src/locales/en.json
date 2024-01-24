@@ -2,10 +2,22 @@
   "navigation": {
     "home": "Home",
     "organization": "Organization",
-    "studying": "Studying",
+    "studies": "Studies",
     "tutoring": "Tutoring",
     "events": "Events",
     "blog": "Blog",
-    "other": "Other"
+    "sports": "Sports",
+    "companies": "Companies",
+    "rules": "Rules",
+    "board": "Board",
+    "office": "Office",
+    "honorary_members": "Honorary members",
+    "documents": "Documents",
+    "general": "General",
+    "fields_of_study": "Fields of study",
+    "workshops": "Workshops",
+    "contact": "Contact",
+    "larpake": "Lärpake",
+    "faq": "FAQ"
   }
 }

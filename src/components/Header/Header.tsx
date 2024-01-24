@@ -5,122 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { HiMenu } from 'react-icons/hi';
 import { RiArrowDropDownLine, RiLoginCircleLine } from 'react-icons/ri';
-
-const links = [
-  {
-    translation: 'home',
-    href: '/',
-    sublinks: [],
-  },
-  {
-    translation: 'organization',
-    href: '/organization',
-    sublinks: [
-      {
-        name: 'Example 1',
-        href: '/',
-      },
-      {
-        name: 'Example 2',
-        href: '/',
-      },
-      {
-        name: 'Example 3',
-        href: '/',
-      },
-    ],
-  },
-  {
-    translation: 'studying',
-    href: '/studying',
-    sublinks: [
-      {
-        name: 'Example 1',
-        href: '/',
-      },
-      {
-        name: 'Example 2',
-        href: '/',
-      },
-      {
-        name: 'Example 3',
-        href: '/',
-      },
-    ],
-  },
-  {
-    translation: 'tutoring',
-    href: '/services',
-    sublinks: [
-      {
-        name: 'Example 1',
-        href: '/',
-      },
-      {
-        name: 'Example 2',
-        href: '/',
-      },
-      {
-        name: 'Example 3',
-        href: '/',
-      },
-    ],
-  },
-  {
-    translation: 'events',
-    href: '/student-union',
-    sublinks: [
-      {
-        name: 'Example 1',
-        href: '/',
-      },
-      {
-        name: 'Example 2',
-        href: '/',
-      },
-      {
-        name: 'Example 3',
-        href: '/',
-      },
-    ],
-  },
-  {
-    translation: 'blog',
-    href: '/contact',
-    sublinks: [
-      {
-        name: 'Example 1',
-        href: '/',
-      },
-      {
-        name: 'Example 2',
-        href: '/',
-      },
-      {
-        name: 'Example 3',
-        href: '/',
-      },
-    ],
-  },
-  {
-    translation: 'other',
-    href: '/contact',
-    sublinks: [
-      {
-        name: 'Example 1',
-        href: '/',
-      },
-      {
-        name: 'Example 2',
-        href: '/',
-      },
-      {
-        name: 'Example 3',
-        href: '/',
-      },
-    ],
-  },
-] as const;
+import { navLinks } from './navLinks';
 
 export default function Header({
   dictionary,
@@ -189,7 +74,7 @@ export default function Header({
           </div>
         </nav>
         <ul className="mx-auto flex max-w-screen-xl justify-center gap-1 px-4 max-lg:hidden">
-          {links.map((link) => (
+          {navLinks.map((link) => (
             <li
               className="group relative cursor-pointer"
               key={link.translation}
@@ -216,7 +101,7 @@ export default function Header({
                       href="/"
                       className="truncate rounded-lg p-2 text-xl font-bold hover:bg-gray-200"
                     >
-                      {sublink.name}
+                      {dictionary[sublink.name]}
                     </Link>
                   ))}
                 </div>

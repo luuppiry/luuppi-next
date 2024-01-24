@@ -2,10 +2,22 @@
   "navigation": {
     "home": "Koti",
     "organization": "Organisaatio",
-    "studying": "Opiskelu",
+    "studies": "Opinnot",
     "tutoring": "Fukseille",
     "events": "Tapahtumat",
     "blog": "Blogi",
-    "other": "Muut"
+    "sports": "Liikunta",
+    "companies": "Yritykset",
+    "rules": "Säännöt",
+    "board": "Hallitus",
+    "office": "Toimitila",
+    "honorary_members": "Kunniajäsenet",
+    "documents": "Dokumentit",
+    "general": "Yleinen",
+    "fields_of_study": "Opintosuunnat",
+    "workshops": "Työpajat",
+    "contact": "Yhteystiedot",
+    "larpake": "Lärpake",
+    "faq": "UKK"
   }
 }
