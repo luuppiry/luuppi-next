@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { HiMenu } from 'react-icons/hi';
 import { RiArrowDropDownLine, RiLoginCircleLine } from 'react-icons/ri';
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { navLinks } from './navLinks';
 
 export default function Header({
@@ -54,15 +55,7 @@ export default function Header({
               />
             </Link>
             <div className="flex items-center gap-4">
-              <button className="rounded-full bg-primary-200 p-1 max-lg:hidden">
-                <Image
-                  src={'/locale-icons/us.svg'}
-                  alt="English"
-                  width={36}
-                  height={36}
-                  draggable={false}
-                />
-              </button>
+              <LanguageSwitcher />
               <button className="flex items-center rounded-lg bg-primary-200 px-4 py-2 text-xl font-bold  max-lg:hidden">
                 Login
                 <RiLoginCircleLine className="ml-2 inline-block" size={26} />
