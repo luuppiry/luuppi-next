@@ -65,6 +65,22 @@ button {
   animation: slide 30s linear infinite;
 }
 
+.luuppi-custom-scroll {
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 6px;
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background: #d1d1d1;
+  }
+}
+
 @keyframes slide {
   from {
     background-position: 0 0;
