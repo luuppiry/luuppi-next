@@ -19,5 +19,16 @@
     "contact": "Contact",
     "larpake": "Lärpake",
     "faq": "FAQ"
+  },
+  "pages_home": {
+    "hero": {
+      "computer_science": "Computer Science",
+      "mathematics": "Mathematics",
+      "data_analysis": "Data Analysis",
+      "title_1": "Luuppi ry, home for",
+      "title_2": "students since 1969.",
+      "description": "Luuppi ry is a subject association for students of computer science, mathematics and data analysis at Tampere university. We organize events, tutoring and other activities for our members. We are one of the biggest subject associations at Tampere university and we have over 500 members.",
+      "read_more": "Read more"
+    }
   }
 }

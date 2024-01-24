@@ -19,5 +19,16 @@
     "contact": "Yhteystiedot",
     "larpake": "Lärpake",
     "faq": "UKK"
+  },
+  "pages_home": {
+    "hero": {
+      "computer_science": "Tietojenkäsittelyn",
+      "mathematics": "Matematiikan",
+      "data_analysis": "Tilastotieteen",
+      "title_1": "Luuppi ry, koti",
+      "title_2": "opiskelijoille vuodesta 1969.",
+      "description": "Luuppi ry on Tampereen yliopiston matematiikan, tilastollinen data-analyysin ja tietojenkäsittelytieteiden opiskelijoiden ainejärjestö. Luuppi on toiminut aktiivisesti jäsentensä etujenvalvojana ja vapaa-ajantoiminnan järjestäjänä jo vuodesta 1969. Jäsenmäärältään Luuppi on Tampereen yliopiston suurin ainejärjestö!",
+      "read_more": "Read more"
+    }
   }
 }

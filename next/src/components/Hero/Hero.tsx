@@ -1,12 +1,21 @@
 'use client';
+import { getDictionary } from '@/dictionaries';
 import Image from 'next/image';
 import { useEffect, useMemo, useRef } from 'react';
 
-export default function Hero() {
+export default function Hero({
+  dictionary,
+}: {
+  dictionary: Awaited<ReturnType<typeof getDictionary>>['pages_home']['hero'];
+}) {
   const changingTextRef = useRef<HTMLSpanElement | null>(null);
   const studyAreas = useMemo(
-    () => ['Computer Science', 'Data Analysis', 'Mathematics'],
-    [],
+    () => [
+      dictionary.computer_science,
+      dictionary.mathematics,
+      dictionary.data_analysis,
+    ],
+    [dictionary],
   );
 
   useEffect(() => {
@@ -32,7 +41,7 @@ export default function Hero() {
     <section className="relative mx-auto flex max-w-screen-xl justify-center gap-8 px-4 pb-20 pt-28 max-2xl:overflow-hidden max-xl:flex-col max-xl:gap-20">
       <div className="flex w-1/2 flex-col max-xl:w-full">
         <h1 className="mb-8 max-w-3xl text-6xl font-extrabold leading-[4rem] max-md:text-4xl">
-          Luuppi ry, home for{' '}
+          {dictionary.title_1}{' '}
           <span
             className="inline-block bg-gradient-to-r from-primary-400 to-text-300 bg-clip-text text-transparent transition-all duration-300"
             id="study-area"
@@ -40,17 +49,12 @@ export default function Hero() {
           >
             {studyAreas[0]}
           </span>{' '}
-          students since 1969.
+          {dictionary.title_2}
         </h1>
-        <p className="mb-8 text-xl">
-          Luuppi ry is the student organization for computer science students at
-          the University of Tampere. We are a non-profit organization that
-          represents the students in the university&apos;s administration and
-          offers a variety of services to our members.
-        </p>
+        <p className="mb-8 max-w-2xl text-xl">{dictionary.description}</p>
         <div>
           <button className="flex items-center rounded-lg bg-primary-400 px-4 py-2 text-xl font-bold text-white transition-all duration-300 max-md:text-xl">
-            Read more
+            {dictionary.read_more}
           </button>
         </div>
       </div>
