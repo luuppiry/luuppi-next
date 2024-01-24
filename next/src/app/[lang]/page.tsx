@@ -17,8 +17,8 @@ export default async function Home({
     <>
       <Banner />
       <Hero dictionary={dictionary.pages_home.hero} />
-      <Discover />
-      <EventsPreview />
+      <Discover dictionary={dictionary.pages_home.discover} />
+      <EventsPreview dictionary={dictionary.pages_home.events_preview} />
       <BlogPreview />
       <Partners />
     </>

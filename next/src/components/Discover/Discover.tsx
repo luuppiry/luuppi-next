@@ -1,57 +1,32 @@
+import { getDictionary } from '@/dictionaries';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import { discoverLinks } from './discoverLinks';
 
-const links = [
-  {
-    name: 'Organization',
-    href: '/organization',
-    image: '/images/organization.jpg',
-  },
-  {
-    name: 'Events',
-    href: '/events',
-    image: '/images/events.jpg',
-  },
-  {
-    name: 'New Students',
-    href: '/new-students',
-    image: '/images/new_students.jpg',
-  },
-  {
-    name: 'Blog',
-    href: '/blog',
-    image: '/images/blog.jpg',
-  },
-  {
-    name: 'Collaboration',
-    href: '/collaboration',
-    image: '/images/collaboration.jpg',
-  },
-  {
-    name: 'Contact',
-    href: '/contact',
-    image: '/images/contact.jpg',
-  },
-];
-
-export default function Discover() {
+export default function Discover({
+  dictionary,
+}: {
+  dictionary: Awaited<
+    ReturnType<typeof getDictionary>
+  >['pages_home']['discover'];
+}) {
   return (
     <section className="relative mx-auto max-w-screen-xl px-4 py-20">
       <h2 className="mb-8 text-5xl font-extrabold max-md:text-4xl">
-        Discover Luuppi
+        {dictionary.title}
       </h2>
       <div className="grid grid-cols-3 gap-6 max-lg:grid-cols-2">
-        {links.map((link) => (
+        {discoverLinks.map((link) => (
           <Link
             href={link.href}
             className="group relative flex aspect-[3/2] h-full w-full border-4 border-primary-950 shadow-[7px_7px_#090a10] transition-all duration-300 hover:shadow-[0px_0px_#090a10] max-md:aspect-square"
-            key={link.name}
+            key={dictionary[link.translation]}
           >
             <div className="absolute z-20 h-full w-0 bg-primary-400/50 transition-all duration-300 group-hover:w-full"></div>
             <div className="absolute bottom-5 left-5 z-30 flex items-center justify-center bg-white text-2xl transition-all duration-300 max-md:bottom-0 max-md:left-0 max-md:w-full max-md:text-xl">
               <h2 className="flex items-center px-4 py-2 font-bold">
-                {link.name}
+                {dictionary[link.translation]}
                 <span>
                   <MdOutlineKeyboardArrowRight size={25} />
                 </span>

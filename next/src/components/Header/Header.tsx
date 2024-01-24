@@ -57,7 +57,7 @@ export default function Header({
             <div className="flex items-center gap-4">
               <LanguageSwitcher />
               <button className="flex items-center rounded-lg bg-primary-200 px-4 py-2 text-xl font-bold  max-lg:hidden">
-                Login
+                {dictionary.login}
                 <RiLoginCircleLine className="ml-2 inline-block" size={26} />
               </button>
               <button className="cursor-pointer lg:hidden">

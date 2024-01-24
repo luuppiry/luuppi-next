@@ -1,5 +1,6 @@
 {
   "navigation": {
+    "login": "Login",
     "home": "Home",
     "organization": "Organization",
     "studies": "Studies",
@@ -7,7 +8,7 @@
     "events": "Events",
     "blog": "Blog",
     "sports": "Sports",
-    "companies": "Companies",
+    "collaboration": "Companies",
     "rules": "Rules",
     "board": "Board",
     "office": "Office",
@@ -29,6 +30,20 @@
       "title_2": "students since 1969.",
       "description": "Luuppi ry is a subject association for students of computer science, mathematics and data analysis at Tampere university. We organize events, tutoring and other activities for our members. We are one of the biggest subject associations at Tampere university and we have over 500 members.",
       "read_more": "Read more"
+    },
+    "discover": {
+      "title": "Discover Luuppi",
+      "organization": "Organization",
+      "events": "Events",
+      "new_students": "New students",
+      "blog": "Blog",
+      "collaboration": "Collaboration",
+      "contact": "Contact"
+    },
+    "events_preview": {
+      "title": "Upcoming Events",
+      "subtitle": "Check out what's happening",
+      "see_all": "See all events"
     }
   }
 }

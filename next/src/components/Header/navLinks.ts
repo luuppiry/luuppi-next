@@ -81,8 +81,8 @@ export const navLinks = [
     sublinks: [],
   },
   {
-    translation: 'companies',
-    href: '/companies',
+    translation: 'collaboration',
+    href: '/collaboration',
     sublinks: [],
   },
   {

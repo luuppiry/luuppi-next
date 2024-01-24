@@ -1,16 +1,21 @@
+import { getDictionary } from '@/dictionaries';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IoLocation } from 'react-icons/io5';
 
-export default function EventsPreview() {
+export default function EventsPreview({
+  dictionary,
+}: {
+  dictionary: Awaited<
+    ReturnType<typeof getDictionary>
+  >['pages_home']['events_preview'];
+}) {
   return (
     <section className=" relative bg-primary-50">
       <div className="mx-auto max-w-screen-xl px-4 py-20">
-        <p className="mb-1 text-2xl font-bold">
-          Check out what&apos;s happening
-        </p>
+        <p className="mb-1 text-2xl font-bold">{dictionary.subtitle}</p>
         <h2 className="mb-8 text-5xl font-extrabold max-md:text-4xl">
-          Upcoming Events
+          {dictionary.title}
         </h2>
         <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-2">
           {Array.from({ length: 4 }, (_, i) => (
@@ -51,7 +56,7 @@ export default function EventsPreview() {
             href="/events"
             className="z-10 rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
           >
-            See all events
+            {dictionary.see_all}
           </Link>
         </div>
       </div>
