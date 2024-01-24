@@ -24,8 +24,12 @@ export default function BlockRendererClient({
       content={content}
       blocks={{
         heading: ({ level, children }) => {
-          //TODO: Should be changed to something more reliable?
-          const uuid = Math.random().toString(36).substring(7);
+          const uuid = (
+            (children as any)?.[0]?.props.text +
+            '-' +
+            level
+          ).replace(/[^a-zA-Z0-9]/g, '-');
+
           switch (level) {
             case 1:
               return <h1 id={uuid}>{children}</h1>;
