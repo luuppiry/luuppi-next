@@ -362,12 +362,13 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiOrganizationOrganization extends Schema.SingleType {
-  collectionName: 'organizations';
+export interface ApiOrganizationGeneralOrganizationGeneral
+  extends Schema.SingleType {
+  collectionName: 'organization_generals';
   info: {
-    singularName: 'organization';
-    pluralName: 'organizations';
-    displayName: 'Organization';
+    singularName: 'organization-general';
+    pluralName: 'organization-generals';
+    displayName: 'OrganizationGeneral';
   };
   options: {
     draftAndPublish: true;
@@ -378,19 +379,22 @@ export interface ApiOrganizationOrganization extends Schema.SingleType {
     };
   };
   attributes: {
-    title: Attribute.String &
+    Title: Attribute.String &
+      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
-    content: Attribute.Blocks &
+    Content: Attribute.Blocks &
+      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
-    banner: Attribute.Media &
+    Banner: Attribute.Media &
+      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -400,21 +404,21 @@ export interface ApiOrganizationOrganization extends Schema.SingleType {
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::organization.organization',
+      'api::organization-general.organization-general',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::organization.organization',
+      'api::organization-general.organization-general',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     localizations: Attribute.Relation<
-      'api::organization.organization',
+      'api::organization-general.organization-general',
       'oneToMany',
-      'api::organization.organization'
+      'api::organization-general.organization-general'
     >;
     locale: Attribute.String;
   };
@@ -849,7 +853,7 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::organization.organization': ApiOrganizationOrganization;
+      'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;

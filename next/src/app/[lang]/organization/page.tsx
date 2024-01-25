@@ -1,23 +1,24 @@
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import SideNavigator from '@/components/SideNavigator/SideNavigator';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiOrganizationOrganization } from '@/types/contentTypes';
+import { ApiOrganizationGeneralOrganizationGeneral } from '@/types/contentTypes';
 import Image from 'next/image';
 
 const getOrganizationData = async (
   lang: SupportedLanguage,
-): Promise<{ data: ApiOrganizationOrganization }> => {
+): Promise<{ data: ApiOrganizationGeneralOrganizationGeneral }> => {
   let res = await fetch(
-    `${process.env.STRAPI_BASE_URL}/api/organization?populate=*&locale=${lang}`,
+    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/organization-general?populate=*&locale=${lang}`,
   );
 
   if (!res.ok && res.status === 404) {
     res = await fetch(
-      `${process.env.STRAPI_BASE_URL}/api/organization?locale=fi`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/organization-general?locale=fi`,
     );
   }
 
   const data = await res.json();
+
   return data;
 };
 
@@ -27,6 +28,9 @@ export default async function Organization({
   params: { lang: SupportedLanguage };
 }) {
   const organizationData = await getOrganizationData(params.lang);
+  const imagePath =
+    organizationData.data.attributes.Banner.data[0].attributes.url;
+  const imageUrl = `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${imagePath}`;
   return (
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col gap-14">
@@ -34,14 +38,14 @@ export default async function Organization({
           <Image
             alt="Blog"
             className="rounded-lg object-cover"
-            src="/images/blog.jpg"
+            src={imageUrl}
             fill
           />
         </div>
         <div className="flex flex-col gap-4">
           <div>
             <h1 className="inline-block rounded-lg bg-primary-400 px-4 py-2 text-5xl font-extrabold text-white max-md:text-4xl">
-              {organizationData.data.attributes.title}
+              {organizationData.data.attributes.Title}
             </h1>
           </div>
           <div className="flex flex-col opacity-40">
@@ -61,7 +65,7 @@ export default async function Organization({
         </div>
         <article className="organization-page prose prose-lg prose-custom max-w-full decoration-primary-400 transition-all duration-300 ease-in-out max-md:prose-base">
           <BlockRendererClient
-            content={organizationData.data.attributes.content}
+            content={organizationData.data.attributes.Content}
           />
         </article>
       </div>
