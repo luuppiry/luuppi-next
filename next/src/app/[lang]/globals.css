@@ -8,10 +8,6 @@
   padding: 0;
 }
 
-button {
-  @apply transform transition-transform active:scale-95;
-}
-
 @layer base {
   html {
     @apply h-full text-text-950;
@@ -22,70 +18,59 @@ button {
   }
 }
 
-.luuppi-hero-cards {
-  transform: rotateY(0) scale(1.25) rotate(-2deg);
-  border-radius: 1rem;
-  transition: transform 1s ease 0s;
-  filter: drop-shadow(7px 7px #7e84c050);
-}
-
-.luuppi-hero-cards:hover {
-  transform: rotate(0deg) scale(1.3);
-}
-
-@media screen and (max-width: 1280px) {
+@layer components {
   .luuppi-hero-cards {
-    transform: rotateY(0) scale(1.5) rotate(-2deg);
+    @apply rounded-2xl transition-transform delay-[0s] duration-[1s] ease-[ease] hover:rotate-0 hover:scale-[1.3];
+    transform: rotateY(0) scale(1.25) rotate(-2deg);
+    filter: drop-shadow(7px 7px #7e84c050);
   }
 
-  .luuppi-hero-cards:hover {
-    transform: rotate(0deg) scale(1.6);
-  }
-}
-
-.luuppi-hero-container {
-  background: #efeff6;
-  border-radius: 10px;
-  transform: rotate(-2deg);
-}
-
-.luuppi-pattern {
-  opacity: 0.8;
-  background-image: linear-gradient(#d6d6d650 1px, transparent 1px),
-    linear-gradient(to right, #d6d6d650 1px, #fff 1px);
-  background-size: 20px 20px;
-}
-
-.luuppi-kolmio-pattern {
-  background-image: url('/kolmiot.svg');
-  background-position: 0 0;
-  background-size: 200px 200px;
-  filter: grayscale();
-  opacity: 0.02;
-  animation: slide 30s linear infinite;
-}
-
-.luuppi-custom-scroll {
-  &::-webkit-scrollbar {
-    width: 8px;
+  @media screen and (max-width: 1280px) {
+    .luuppi-hero-cards {
+      transform: rotateY(0) scale(1.5) rotate(-2deg);
+    }
+    .luuppi-hero-cards:hover {
+      @apply rotate-0 scale-[1.6];
+    }
   }
 
-  &::-webkit-scrollbar-track {
-    border-radius: 6px;
+  .luuppi-hero-container {
+    @apply -rotate-2 rounded-[10px];
+    background: #efeff6;
+  }
+
+  .luuppi-pattern {
+    @apply bg-[linear-gradient(#d6d6d650_1px,transparent_1px),linear-gradient(to_right,#d6d6d650_1px,#fff_1px)] opacity-80;
+    background-size: 20px 20px;
+  }
+
+  .luuppi-kolmio-pattern {
+    @apply animate-[slide_30s_linear_infinite] bg-[url('/kolmiot.svg')] opacity-[0.03];
+    filter: grayscale();
+    background-position: 0 0;
+    background-size: 200px 200px;
+  }
+
+  .luuppi-custom-scroll::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  .luuppi-custom-scroll::-webkit-scrollbar-track {
+    @apply rounded-md;
     background: #f1f1f1;
   }
 
-  &::-webkit-scrollbar-thumb {
-    border-radius: 6px;
+  .luuppi-custom-scroll::-webkit-scrollbar-thumb {
+    @apply rounded-md;
     background: #d1d1d1;
   }
-}
 
-@keyframes slide {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: -512px -512px;
+  @keyframes slide {
+    from {
+      @apply bg-[0_0];
+    }
+    to {
+      @apply bg-[-512px_-512px];
+    }
   }
 }
