@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_shared_meta_open_graphs",
+  "info": {
+    "displayName": "metaOpenGraph",
+    "icon": "link"
+  },
+  "options": {},
+  "attributes": {
+    "openGraphTitle": {
+      "type": "string",
+      "maxLength": 120,
+      "required": true
+    },
+    "openGraphDescription": {
+      "type": "string",
+      "maxLength": 160,
+      "required": true
+    },
+    "openGraphImage": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

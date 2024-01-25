@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_shared_meta_twitters",
+  "info": {
+    "displayName": "MetaTwitter",
+    "icon": "twitter"
+  },
+  "options": {},
+  "attributes": {
+    "twitterTitle": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120
+    },
+    "twitterDescription": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "twitterImage": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}
