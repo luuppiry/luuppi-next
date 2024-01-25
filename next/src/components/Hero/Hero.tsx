@@ -51,7 +51,9 @@ export default function Hero({
           </span>{' '}
           {dictionary.title_2}
         </h1>
-        <p className="mb-8 max-w-2xl text-xl">{dictionary.description}</p>
+        <p className="mb-8 max-w-2xl text-xl max-md:text-lg">
+          {dictionary.description}
+        </p>
         <div>
           <button className="btn btn-primary text-xl text-white">
             {dictionary.read_more}
