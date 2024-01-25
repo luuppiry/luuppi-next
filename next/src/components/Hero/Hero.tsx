@@ -40,7 +40,7 @@ export default function Hero({
   return (
     <section className="relative mx-auto flex max-w-screen-xl justify-center gap-8 px-4 pb-20 pt-28 max-2xl:overflow-hidden max-xl:flex-col max-xl:gap-20">
       <div className="flex w-1/2 flex-col max-xl:w-full">
-        <h1 className="mb-8 max-w-3xl text-6xl font-extrabold leading-[4rem] max-md:text-4xl">
+        <h1 className="mb-8 max-w-3xl text-6xl font-extrabold leading-[4.6rem] max-md:text-4xl">
           {dictionary.title_1}{' '}
           <span
             className="inline-block bg-gradient-to-r from-primary-400 to-text-300 bg-clip-text text-transparent transition-all duration-300"
