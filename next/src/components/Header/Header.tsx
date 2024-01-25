@@ -57,7 +57,7 @@ export default function Header({
             <div className="flex items-center gap-4">
               <LanguageSwitcher />
               <button
-                className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold max-lg:hidden ${
+                className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold transition-all max-lg:hidden ${
                   scrollPosition > 100 ? 'text-lg' : 'text-xl'
                 }`}
               >
