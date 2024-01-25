@@ -97,7 +97,7 @@ export default function Header({
                   {link.sublinks.map((sublink) => (
                     <Link
                       key={sublink.name}
-                      className="truncate rounded-lg p-2 text-xl font-bold hover:bg-gray-200"
+                      className="truncate rounded-lg p-2 text-lg font-bold hover:bg-gray-200"
                       href="/"
                     >
                       {dictionary[sublink.name]}
