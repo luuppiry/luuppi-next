@@ -56,9 +56,13 @@ export default function Header({
             </Link>
             <div className="flex items-center gap-4">
               <LanguageSwitcher />
-              <button className="flex items-center rounded-lg bg-primary-200 px-4 py-2 text-xl font-bold  max-lg:hidden">
+              <button
+                className={`flex items-center rounded-lg bg-primary-300 px-4 py-2  font-bold  transition-all duration-300 max-lg:hidden ${
+                  scrollPosition > 100 ? 'text-lg' : 'text-xl'
+                }`}
+              >
                 {dictionary.login}
-                <RiLoginCircleLine className="ml-2 inline-block" size={26} />
+                <RiLoginCircleLine className="ml-2 inline-block" size={24} />
               </button>
               <button className="cursor-pointer lg:hidden">
                 <HiMenu size={36} />
@@ -74,7 +78,9 @@ export default function Header({
             >
               <Link
                 href="/"
-                className="flex h-full items-center justify-center p-2 text-xl font-bold transition-colors duration-300 hover:bg-primary-200 group-hover:bg-primary-200"
+                className={`transition- flex h-full items-center justify-center p-2 font-bold duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
+                  scrollPosition > 100 ? 'text-lg' : 'text-xl'
+                }`}
               >
                 <span>{dictionary[link.translation]}</span>
                 {link.sublinks.length > 0 && (
