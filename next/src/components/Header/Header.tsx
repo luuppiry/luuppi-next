@@ -7,6 +7,7 @@ import { HiMenu } from 'react-icons/hi';
 import { RiArrowDropDownLine, RiLoginCircleLine } from 'react-icons/ri';
 import AuthModal from '../AuthModal/AuthModal';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+import MobileHamburger from '../MobileHamburger/MobileHamburger';
 import { navLinks } from './navLinks';
 
 export default function Header({
@@ -16,6 +17,8 @@ export default function Header({
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [mobileHarmburgerOpen, setMobileHarmburgerOpen] = useState(false);
+
   const handleScroll = () => {
     if (typeof window === 'undefined') return;
     const position = window.scrollY;
@@ -34,9 +37,18 @@ export default function Header({
     setAuthModalOpen(!authModalOpen);
   };
 
+  const toggleMobileHamburger = () => {
+    setMobileHarmburgerOpen(!mobileHarmburgerOpen);
+  };
+
   return (
     <div>
       <AuthModal open={authModalOpen} onClose={toggleAuthModal} />
+      <MobileHamburger
+        dictionary={dictionary}
+        open={mobileHarmburgerOpen}
+        onClose={toggleMobileHamburger}
+      />
       <div className="h-36 bg-primary-800 max-lg:h-16" />
       <header className={'fixed top-0 z-50 w-full bg-primary-800 text-white'}>
         <nav
@@ -72,7 +84,10 @@ export default function Header({
                 {dictionary.login}
                 <RiLoginCircleLine className="ml-2 inline-block" size={24} />
               </button>
-              <button className="btn btn-ghost cursor-pointer lg:hidden">
+              <button
+                className="btn btn-ghost cursor-pointer lg:hidden"
+                onClick={toggleMobileHamburger}
+              >
                 <HiMenu size={36} />
               </button>
             </div>
@@ -85,7 +100,7 @@ export default function Header({
               className="group relative cursor-pointer"
             >
               <Link
-                className={`transition- flex h-full items-center justify-center p-2 font-bold duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
+                className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
                   scrollPosition > 100 ? 'text-lg' : 'text-xl'
                 }`}
                 href="/"
