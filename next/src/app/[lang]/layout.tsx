@@ -27,7 +27,7 @@ export default async function RootLayout({
   const dictionary = await getDictionary(params.lang);
 
   return (
-    <html lang={params.lang}>
+    <html data-theme="light" lang={params.lang}>
       <body className={titilliumFont.className}>
         <Header dictionary={dictionary.navigation} />
         <div className="flex-1">{children}</div>

@@ -39,7 +39,7 @@ export default function Header({
         >
           <div className="mx-auto flex h-full max-w-screen-xl items-center justify-between">
             <Link
-              className={`relative flex h-full items-center transition-all duration-300 ${
+              className={`btn btn-link relative h-full transition-all duration-300 ${
                 scrollPosition > 100 ? 'w-24' : 'w-36 max-lg:w-24'
               }`}
               href="/"
@@ -57,14 +57,14 @@ export default function Header({
             <div className="flex items-center gap-4">
               <LanguageSwitcher />
               <button
-                className={`flex items-center rounded-lg bg-primary-600 px-4 py-2  font-bold  transition-all duration-300 max-lg:hidden ${
+                className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold max-lg:hidden ${
                   scrollPosition > 100 ? 'text-lg' : 'text-xl'
                 }`}
               >
                 {dictionary.login}
                 <RiLoginCircleLine className="ml-2 inline-block" size={24} />
               </button>
-              <button className="cursor-pointer lg:hidden">
+              <button className="btn btn-ghost cursor-pointer lg:hidden">
                 <HiMenu size={36} />
               </button>
             </div>

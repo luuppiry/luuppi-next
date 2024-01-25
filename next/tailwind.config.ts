@@ -1,6 +1,16 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
+  daisyui: {
+    themes: [
+      {
+        light: {
+          ...require('daisyui/src/theming/themes')['light'],
+          primary: '#7c80b6',
+        },
+      },
+    ],
+  },
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -115,6 +125,6 @@ const config: Config = {
       }),
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [require('@tailwindcss/typography'), require('daisyui')],
 };
 export default config;

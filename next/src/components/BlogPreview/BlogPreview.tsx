@@ -67,7 +67,7 @@ export default function BlogPreview() {
         </div>
         <div className="flex justify-center">
           <Link
-            className="rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
+            className="btn btn-primary text-xl font-bold text-white"
             href="/blog"
           >
             See all posts

@@ -53,7 +53,7 @@ export default function EventsPreview({
         </div>
         <div className="mt-8 flex justify-center">
           <Link
-            className="z-10 rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
+            className="btn btn-primary z-10 px-4 py-2 text-xl text-white"
             href="/events"
           >
             {dictionary.see_all}

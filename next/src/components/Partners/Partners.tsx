@@ -91,7 +91,7 @@ export default function Partners() {
           </p>
           <div className="flex">
             <Link
-              className="rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
+              className="btn btn-primary text-xl font-bold text-white"
               href="/contact"
             >
               Read more
@@ -102,7 +102,7 @@ export default function Partners() {
           {partners.map((partner) => (
             <Link
               key={partner.image}
-              className="relative mx-6 flex h-32 w-48 grayscale filter transition-all duration-300 hover:grayscale-0 max-md:h-20"
+              className="btn btn-link relative mx-6 flex h-32 w-48 grayscale filter transition-all duration-300 hover:grayscale-0 max-md:h-20"
               href={partner.link}
             >
               <Image

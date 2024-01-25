@@ -53,7 +53,7 @@ export default function Hero({
         </h1>
         <p className="mb-8 max-w-2xl text-xl">{dictionary.description}</p>
         <div>
-          <button className="flex items-center rounded-lg bg-primary-400 px-4 py-2 text-xl font-bold text-white transition-all duration-300 max-md:text-xl">
+          <button className="btn btn-primary text-xl text-white">
             {dictionary.read_more}
           </button>
         </div>

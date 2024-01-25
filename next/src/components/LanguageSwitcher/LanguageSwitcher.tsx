@@ -21,24 +21,24 @@ export default function LanguageSwitcher() {
 
   return (
     <button
-      className="group rounded-full bg-primary-600 p-1 max-lg:hidden"
+      className="btn btn-ghost btn-square group rounded-full bg-primary-600 p-1 max-lg:hidden"
       onClick={() => switchLocale(currentLocale === 'fi' ? 'en' : 'fi')}
     >
       {currentLocale === 'fi' ? (
         <Image
           alt="Suomi"
           draggable={false}
-          height={36}
+          height={38}
           src={'/locale-icons/fi.svg'}
-          width={36}
+          width={38}
         />
       ) : (
         <Image
           alt="English"
           draggable={false}
-          height={36}
+          height={38}
           src={'/locale-icons/us.svg'}
-          width={36}
+          width={38}
         />
       )}
     </button>
