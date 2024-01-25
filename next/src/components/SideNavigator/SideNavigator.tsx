@@ -49,17 +49,17 @@ export default function SideNavigator({
   };
 
   return (
-    <aside className="luuppi-custom-scroll sticky top-36 flex h-full max-h-[calc(100vh-112px-32px)] w-full max-w-80 flex-col gap-4 rounded-lg px-4 pb-4">
+    <aside className="luuppi-custom-scroll sticky top-36 flex h-full max-h-[calc(100vh-112px-32px)] w-full max-w-80 flex-col gap-4 rounded-lg px-4 pb-4 max-lg:hidden">
       <h2 className="text-xl font-bold">Tällä sivulla</h2>
       <ul>
         {headers.map((header, index) => (
           <li
             key={index}
-            className={`py-2 ${activeHeader === header.id ? 'font-bold text-primary-400' : ''}`}
-            style={{
-              paddingLeft: `${(Number(header.tagName.charAt(1)) - 1) * 15}px`,
-            }}
+            className={`flex items-center gap-4 py-2 ${activeHeader === header.id ? 'font-bold text-primary-400' : ''}`}
           >
+            <span
+              className={`h-0.5 flex-shrink-0 bg-primary-400 ${activeHeader === header.id ? 'w-5' : 'w-2'} transition-all duration-300 ease-in-out`}
+            ></span>
             <button
               onClick={() => scrollToElement(header.id)}
               className="max-w-full break-all text-left"

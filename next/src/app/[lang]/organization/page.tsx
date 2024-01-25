@@ -51,7 +51,7 @@ export default async function Organization({
 }) {
   const organizationData = await getOrganizationData(params.lang);
   return (
-    <div className="flex w-full gap-6">
+    <div className="flex w-full gap-12">
       <div className="flex w-full flex-col gap-14">
         <div className="relative h-64 max-md:h-44">
           <Image
@@ -82,7 +82,7 @@ export default async function Organization({
             </p>
           </div>
         </div>
-        <article className="prose prose-lg max-md:prose-base prose-custom organization-page max-w-full decoration-primary-400 transition-all duration-300 ease-in-out">
+        <article className="organization-page prose prose-lg prose-custom max-w-full decoration-primary-400 transition-all duration-300 ease-in-out max-md:prose-base">
           <BlockRendererClient
             content={organizationData.data.attributes.content}
           />
