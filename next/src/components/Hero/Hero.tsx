@@ -43,9 +43,9 @@ export default function Hero({
         <h1 className="mb-8 max-w-3xl text-6xl font-extrabold leading-[4.6rem] max-md:text-4xl">
           {dictionary.title_1}{' '}
           <span
+            ref={changingTextRef}
             className="inline-block bg-gradient-to-r from-primary-400 to-text-300 bg-clip-text text-transparent transition-all duration-300"
             id="study-area"
-            ref={changingTextRef}
           >
             {studyAreas[0]}
           </span>{' '}
@@ -60,19 +60,19 @@ export default function Hero({
       </div>
       <div className="luuppi-hero-container relative flex w-1/2 max-xl:h-80 max-xl:w-full">
         <Image
-          draggable={false}
-          src="/luuppi-cards.svg"
           alt="Luuppi"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          fill
           className="luuppi-hero-cards"
+          draggable={false}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          src="/luuppi-cards.svg"
+          fill
         />
       </div>
       <div
         className="absolute left-0 top-1/3 -z-10 h-96 w-96 rounded-full bg-[#d4e1fc] bg-gradient-to-r blur-[200px]
   "
-      ></div>
-      <div className="luuppi-pattern absolute -left-0 top-20 -z-50 h-[401px] w-[501px] max-md:top-0 max-md:h-full max-md:w-full"></div>
+      />
+      <div className="luuppi-pattern absolute -left-0 top-20 -z-50 h-[401px] w-[501px] max-md:top-0 max-md:h-full max-md:w-full" />
     </section>
   );
 }

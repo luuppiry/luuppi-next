@@ -1,3 +1,37 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "spaced-comment": "error",
+    "no-unused-vars": "error",
+    "react/self-closing-comp": ["error", { "component": true, "html": true }],
+    "arrow-body-style": ["error", "as-needed"],
+    "no-trailing-spaces": "error",
+    "quotes": ["error", "single"],
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "callbacksLast": true,
+        "shorthandFirst": false,
+        "shorthandLast": true,
+        "ignoreCase": false,
+        "noSortAlphabetically": false,
+        "reservedFirst": true
+      }
+    ],
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "lines-around-comment": [
+      "error",
+      {
+        "beforeBlockComment": true,
+        "beforeLineComment": true,
+        "allowBlockStart": true,
+        "allowBlockEnd": true,
+        "allowObjectStart": true,
+        "allowObjectEnd": true,
+        "allowArrayStart": true,
+        "allowArrayEnd": true
+      }
+    ]
+  }
 }

@@ -13,6 +13,7 @@ function getLocale(request: NextRequest): string | undefined {
 
   // Use negotiator and intl-localematcher to get best locale
   let languages = new Negotiator({ headers: negotiatorHeaders }).languages();
+
   // @ts-ignore locales are readonly
   const locales: string[] = i18n.locales;
   return matchLocale(languages, locales, i18n.defaultLocale);
@@ -22,7 +23,7 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // // `/_next/` and `/api/` are ignored by the watcher, but we need to ignore files in `public` manually.
-  //! Do not use ÄÖÅ. These are actually converted to %C3%84%C3%96%C3%85
+  // ! Do not use ÄÖÅ. These are actually converted to %C3%84%C3%96%C3%85
   if (
     [
       '/manifest.json',

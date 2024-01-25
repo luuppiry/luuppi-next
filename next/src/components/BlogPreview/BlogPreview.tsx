@@ -20,11 +20,11 @@ export default function BlogPreview() {
                 `}
               >
                 <Image
-                  src="/images/blog.jpg"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  fill
                   alt="yes"
                   className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} object-cover`}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  src="/images/blog.jpg"
+                  fill
                 />
               </div>
               <div className="flex w-full flex-col justify-between gap-12 p-4">
@@ -33,8 +33,8 @@ export default function BlogPreview() {
                     news
                   </span>
                   <Link
-                    href="/blog"
                     className={`inline-block text-2xl font-bold ${i === 0 ? 'text-4xl max-lg:text-2xl' : ''} hover:underline`}
+                    href="/blog"
                   >
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   </Link>
@@ -50,11 +50,11 @@ export default function BlogPreview() {
                 </div>
                 <div className="flex gap-2">
                   <Image
-                    src="/images/pullapaiva.jpg"
-                    width={50}
-                    height={50}
                     alt="avatar"
                     className="rounded-full"
+                    height={50}
+                    src="/images/pullapaiva.jpg"
+                    width={50}
                   />
                   <div className="flex flex-col">
                     <span className="font-semibold">Matti Meikäpoika</span>
@@ -67,8 +67,8 @@ export default function BlogPreview() {
         </div>
         <div className="flex justify-center">
           <Link
-            href="/blog"
             className="rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
+            href="/blog"
           >
             See all posts
           </Link>

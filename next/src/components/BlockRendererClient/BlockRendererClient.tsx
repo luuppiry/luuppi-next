@@ -21,7 +21,6 @@ export default function BlockRendererClient({
   if (!content) return null;
   return (
     <BlocksRenderer
-      content={content}
       blocks={{
         heading: ({ level, children }) => {
           const uuid = (
@@ -46,18 +45,17 @@ export default function BlockRendererClient({
           }
         },
         link: (props) => <Link href={props.url}>{props.children}</Link>,
-        image: ({ image }) => {
-          return (
-            <Image
-              src={image.url}
-              width={image.width}
-              height={image.height}
-              alt={image.alternativeText || ''}
-              className="rounded-lg"
-            />
-          );
-        },
+        image: ({ image }) => (
+          <Image
+            alt={image.alternativeText || ''}
+            className="rounded-lg"
+            height={image.height}
+            src={image.url}
+            width={image.width}
+          />
+        ),
       }}
+      content={content}
     />
   );
 }

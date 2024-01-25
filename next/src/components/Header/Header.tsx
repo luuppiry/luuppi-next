@@ -31,7 +31,7 @@ export default function Header({
   return (
     <div>
       <div className="h-36 bg-primary-800 max-lg:h-16" />
-      <header className={`fixed top-0 z-50 w-full bg-primary-800 text-white`}>
+      <header className={'fixed top-0 z-50 w-full bg-primary-800 text-white'}>
         <nav
           className={`bg-primary-500 px-4 transition-all duration-300 max-lg:h-16 max-lg:shadow-md ${
             scrollPosition > 100 ? 'h-16' : 'h-24'
@@ -45,13 +45,13 @@ export default function Header({
               href="/"
             >
               <Image
-                src={'/luuppi.svg'}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                priority
-                draggable={false}
                 alt="Luuppi"
-                className={`object-contain`}
+                className={'object-contain'}
+                draggable={false}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                src={'/luuppi.svg'}
                 fill
+                priority
               />
             </Link>
             <div className="flex items-center gap-4">
@@ -73,21 +73,21 @@ export default function Header({
         <ul className="mx-auto flex max-w-screen-xl justify-center gap-1 px-4 max-lg:hidden">
           {navLinks.map((link) => (
             <li
-              className="group relative cursor-pointer"
               key={link.translation}
+              className="group relative cursor-pointer"
             >
               <Link
-                href="/"
                 className={`transition- flex h-full items-center justify-center p-2 font-bold duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
                   scrollPosition > 100 ? 'text-lg' : 'text-xl'
                 }`}
+                href="/"
               >
                 <span>{dictionary[link.translation]}</span>
                 {link.sublinks.length > 0 && (
                   <div className="w-6">
                     <RiArrowDropDownLine
-                      size={32}
                       className="transition-transform duration-300 group-hover:rotate-180"
+                      size={32}
                     />
                   </div>
                 )}
@@ -97,8 +97,8 @@ export default function Header({
                   {link.sublinks.map((sublink) => (
                     <Link
                       key={sublink.name}
-                      href="/"
                       className="truncate rounded-lg p-2 text-xl font-bold hover:bg-gray-200"
+                      href="/"
                     >
                       {dictionary[sublink.name]}
                     </Link>

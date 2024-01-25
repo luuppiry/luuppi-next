@@ -59,11 +59,11 @@ export default function SideNavigator({
           >
             <span
               className={`h-0.5 flex-shrink-0 bg-primary-400 ${activeHeader === header.id ? 'w-5' : 'w-2'} transition-all duration-300 ease-in-out`}
-            ></span>
+            />
             <button
-              onClick={() => scrollToElement(header.id)}
               className="max-w-full break-all text-left"
               title={header.textContent ?? ''}
+              onClick={() => scrollToElement(header.id)}
             >
               <p className="line line-clamp-2">{header.textContent}</p>
             </button>

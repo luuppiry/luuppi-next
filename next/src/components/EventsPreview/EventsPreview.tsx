@@ -20,9 +20,9 @@ export default function EventsPreview({
         <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-2">
           {Array.from({ length: 4 }, (_, i) => (
             <Link
-              href="/events"
-              className=" group relative max-md:aspect-square"
               key={i}
+              className=" group relative max-md:aspect-square"
+              href="/events"
             >
               <div className="absolute z-20 flex h-full w-full flex-col justify-end rounded-lg bg-gradient-to-t from-primary-800 via-black/50 to-transparent p-6 transition-all duration-300">
                 <p className="font-bold text-white">31 Aug 2024</p>
@@ -30,21 +30,21 @@ export default function EventsPreview({
                   Event name
                 </p>
                 <div className="flex items-center gap-1">
-                  <IoLocation size={16} color="#fff" />
+                  <IoLocation color="#fff" size={16} />
                   <p className="font-bold text-white">Koskikeskus</p>
                 </div>
               </div>
               <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden rounded-lg brightness-[75%] group-hover:brightness-100 max-md:aspect-square">
                 <Image
-                  draggable={false}
+                  alt="event"
                   className="object-cover transition-all duration-300 group-hover:scale-105"
+                  draggable={false}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   src={
                     i % 2 === 0
                       ? '/images/events.jpg'
                       : '/images/pullapaiva.jpg'
                   }
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  alt="event"
                   fill
                 />
               </div>
@@ -53,14 +53,14 @@ export default function EventsPreview({
         </div>
         <div className="mt-8 flex justify-center">
           <Link
-            href="/events"
             className="z-10 rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
+            href="/events"
           >
             {dictionary.see_all}
           </Link>
         </div>
       </div>
-      <div className="luuppi-kolmio-pattern absolute left-0 top-0 -z-0 h-full w-full"></div>
+      <div className="luuppi-kolmio-pattern absolute left-0 top-0 -z-0 h-full w-full" />
     </section>
   );
 }

@@ -91,28 +91,28 @@ export default function Partners() {
           </p>
           <div className="flex">
             <Link
-              href="/contact"
               className="rounded-lg bg-primary-400 px-4 py-2 text-2xl font-bold text-white transition-all duration-300 max-md:text-xl"
+              href="/contact"
             >
               Read more
             </Link>
           </div>
         </div>
-        <Marquee autoFill className="mt-4 max-md:mt-8">
+        <Marquee className="mt-4 max-md:mt-8" autoFill>
           {partners.map((partner) => (
             <Link
-              href={partner.link}
               key={partner.image}
               className="relative mx-6 flex h-32 w-48 grayscale filter transition-all duration-300 hover:grayscale-0 max-md:h-20"
+              href={partner.link}
             >
               <Image
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                draggable={false}
-                priority
-                src={partner.image}
                 alt="partner"
-                fill
                 className="object-contain opacity-75"
+                draggable={false}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                src={partner.image}
+                fill
+                priority
               />
             </Link>
           ))}

@@ -26,19 +26,19 @@ export default function LanguageSwitcher() {
     >
       {currentLocale === 'fi' ? (
         <Image
-          src={'/locale-icons/fi.svg'}
           alt="Suomi"
-          width={36}
-          height={36}
           draggable={false}
+          height={36}
+          src={'/locale-icons/fi.svg'}
+          width={36}
         />
       ) : (
         <Image
-          src={'/locale-icons/us.svg'}
           alt="English"
-          width={36}
-          height={36}
           draggable={false}
+          height={36}
+          src={'/locale-icons/us.svg'}
+          width={36}
         />
       )}
     </button>

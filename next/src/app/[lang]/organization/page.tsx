@@ -21,29 +21,6 @@ const getOrganizationData = async (
   return data;
 };
 
-const links = [
-  {
-    href: '/',
-    title: 'Etusivu (linkki)',
-  },
-  {
-    href: '/',
-    title: 'Etusivu (linkki)',
-  },
-  {
-    href: '/',
-    title: 'Etusivu (linkki)',
-  },
-  {
-    href: '/',
-    title: 'Etusivu (linkki)',
-  },
-  {
-    href: '/',
-    title: 'Etusivu (linkki)',
-  },
-];
-
 export default async function Organization({
   params,
 }: {
@@ -55,10 +32,10 @@ export default async function Organization({
       <div className="flex w-full flex-col gap-14">
         <div className="relative h-64 max-md:h-44">
           <Image
-            src="/images/blog.jpg"
-            className="rounded-lg object-cover"
-            fill
             alt="Blog"
+            className="rounded-lg object-cover"
+            src="/images/blog.jpg"
+            fill
           />
         </div>
         <div className="flex flex-col gap-4">
