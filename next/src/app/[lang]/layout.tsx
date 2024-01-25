@@ -3,11 +3,11 @@ import Header from '@/components/Header/Header';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import type { Metadata } from 'next';
-import { Titillium_Web } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import { i18n } from '../../i18n-config';
 import './globals.css';
 
-const titilliumFont = Titillium_Web({
+const titilliumFont = Poppins({
   subsets: ['latin'],
   weight: ['200', '300', '400', '600', '700', '900'],
 });

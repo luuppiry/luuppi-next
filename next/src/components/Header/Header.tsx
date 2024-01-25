@@ -30,10 +30,10 @@ export default function Header({
 
   return (
     <div>
-      <div className="h-36 bg-primary-950 max-lg:h-16" />
-      <header className={`fixed top-0 z-50 w-full bg-primary-950 text-white`}>
+      <div className="h-36 bg-primary-800 max-lg:h-16" />
+      <header className={`fixed top-0 z-50 w-full bg-primary-800 text-white`}>
         <nav
-          className={`bg-primary-400 px-4 transition-all duration-300 max-lg:h-16 max-lg:shadow-md ${
+          className={`bg-primary-500 px-4 transition-all duration-300 max-lg:h-16 max-lg:shadow-md ${
             scrollPosition > 100 ? 'h-16' : 'h-24'
           }`}
         >
@@ -57,7 +57,7 @@ export default function Header({
             <div className="flex items-center gap-4">
               <LanguageSwitcher />
               <button
-                className={`flex items-center rounded-lg bg-primary-300 px-4 py-2  font-bold  transition-all duration-300 max-lg:hidden ${
+                className={`flex items-center rounded-lg bg-primary-600 px-4 py-2  font-bold  transition-all duration-300 max-lg:hidden ${
                   scrollPosition > 100 ? 'text-lg' : 'text-xl'
                 }`}
               >

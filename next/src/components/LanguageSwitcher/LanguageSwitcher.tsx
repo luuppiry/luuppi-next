@@ -21,7 +21,7 @@ export default function LanguageSwitcher() {
 
   return (
     <button
-      className="group rounded-full bg-primary-200 p-1 max-lg:hidden"
+      className="group rounded-full bg-primary-600 p-1 max-lg:hidden"
       onClick={() => switchLocale(currentLocale === 'fi' ? 'en' : 'fi')}
     >
       {currentLocale === 'fi' ? (
