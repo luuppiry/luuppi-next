@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { HiMenu } from 'react-icons/hi';
 import { RiArrowDropDownLine, RiLoginCircleLine } from 'react-icons/ri';
+import AuthModal from '../AuthModal/AuthModal';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { navLinks } from './navLinks';
 
@@ -14,6 +15,7 @@ export default function Header({
   dictionary: Awaited<ReturnType<typeof getDictionary>>['navigation'];
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const handleScroll = () => {
     if (typeof window === 'undefined') return;
     const position = window.scrollY;
@@ -28,8 +30,13 @@ export default function Header({
     };
   }, []);
 
+  const toggleAuthModal = () => {
+    setAuthModalOpen(!authModalOpen);
+  };
+
   return (
     <div>
+      <AuthModal open={authModalOpen} onClose={toggleAuthModal} />
       <div className="h-36 bg-primary-800 max-lg:h-16" />
       <header className={'fixed top-0 z-50 w-full bg-primary-800 text-white'}>
         <nav
@@ -60,6 +67,7 @@ export default function Header({
                 className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold transition-all max-lg:hidden ${
                   scrollPosition > 100 ? 'text-lg' : 'text-xl'
                 }`}
+                onClick={toggleAuthModal}
               >
                 {dictionary.login}
                 <RiLoginCircleLine className="ml-2 inline-block" size={24} />
