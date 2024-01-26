@@ -4,7 +4,8 @@
   "info": {
     "singularName": "organization-general",
     "pluralName": "organization-generals",
-    "displayName": "OrganizationGeneral"
+    "displayName": "OrganizationGeneral",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -34,17 +35,30 @@
       "required": true
     },
     "Banner": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
       "allowedTypes": [
         "images"
       ],
-      "type": "media",
-      "multiple": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "Seo": {
+      "type": "component",
+      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "required": true
+      "component": "shared.seo",
+      "required": true,
+      "max": 1,
+      "min": 1
     }
   }
 }

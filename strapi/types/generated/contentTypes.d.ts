@@ -369,6 +369,7 @@ export interface ApiOrganizationGeneralOrganizationGeneral
     singularName: 'organization-general';
     pluralName: 'organization-generals';
     displayName: 'OrganizationGeneral';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -400,6 +401,20 @@ export interface ApiOrganizationGeneralOrganizationGeneral
           localized: true;
         };
       }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+          max: 1;
+        },
+        number
+      >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
