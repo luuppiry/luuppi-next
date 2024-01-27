@@ -8,6 +8,13 @@ export default function formatMetadata(content: any, url: string): Metadata {
     description: seo.metaDescription,
     authors: seo.metaAuthor,
     keywords: seo.metaKeywords,
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_BASE_URL}${url}`,
+      languages: {
+        fi: `${process.env.NEXT_PUBLIC_BASE_URL}/fi${url.slice(3)}`,
+        en: `${process.env.NEXT_PUBLIC_BASE_URL}/en${url.slice(3)}`,
+      },
+    },
     openGraph: {
       title: seo.openGraph.openGraphTitle,
       description: seo.openGraph.openGraphDescription,
