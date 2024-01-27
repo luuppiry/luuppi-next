@@ -13,11 +13,11 @@ export default async function Organization({
   const organizationData =
     await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
       params.lang,
-      '/api/organization-general?populate=*',
+      '/api/organization-general?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage',
     );
 
   const imagePath =
-    organizationData.data.attributes.Banner.data[0].attributes.url;
+    organizationData.data.attributes.Content.banner.data.attributes.url;
   const imageUrl = `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${imagePath}`;
 
   return (
@@ -34,16 +34,10 @@ export default async function Organization({
         <div className="flex flex-col gap-4">
           <div>
             <h1 className="inline-block rounded-lg bg-primary-400 px-4 py-2 text-5xl font-extrabold text-white max-md:text-4xl">
-              {organizationData.data.attributes.Title}
+              {organizationData.data.attributes.Content.title}
             </h1>
           </div>
           <div className="flex flex-col opacity-40">
-            <p className="text-sm">
-              Sisältö luotu:{' '}
-              {new Date(
-                organizationData.data.attributes.createdAt,
-              ).toLocaleString()}
-            </p>
             <p className="text-sm">
               Sisältö päivitetty:{' '}
               {new Date(
@@ -54,7 +48,7 @@ export default async function Organization({
         </div>
         <article className="organization-page prose prose-lg prose-custom max-w-full decoration-primary-400 transition-all duration-300 ease-in-out max-md:prose-base">
           <BlockRendererClient
-            content={organizationData.data.attributes.Content}
+            content={organizationData.data.attributes.Content.content}
           />
         </article>
       </div>
