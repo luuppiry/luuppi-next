@@ -1,36 +1,25 @@
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import SideNavigator from '@/components/SideNavigator/SideNavigator';
+import getStrapiData from '@/lib/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiOrganizationGeneralOrganizationGeneral } from '@/types/contentTypes';
 import Image from 'next/image';
-
-const getOrganizationData = async (
-  lang: SupportedLanguage,
-): Promise<{ data: ApiOrganizationGeneralOrganizationGeneral }> => {
-  let res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/organization-general?populate=*&locale=${lang}`,
-  );
-
-  if (!res.ok && res.status === 404) {
-    res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/organization-general?locale=fi`,
-    );
-  }
-
-  const data = await res.json();
-
-  return data;
-};
 
 export default async function Organization({
   params,
 }: {
   params: { lang: SupportedLanguage };
 }) {
-  const organizationData = await getOrganizationData(params.lang);
+  const organizationData =
+    await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
+      params.lang,
+      '/api/organization-general?populate=*',
+    );
+
   const imagePath =
     organizationData.data.attributes.Banner.data[0].attributes.url;
   const imageUrl = `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${imagePath}`;
+
   return (
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col gap-14">
