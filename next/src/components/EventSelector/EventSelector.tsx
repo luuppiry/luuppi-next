@@ -22,7 +22,7 @@ export default function EventSelector({
     if (window.innerWidth < 1280) {
       setSelectedView('list');
     }
-  }, [selectedView]);
+  }, []);
 
   const setView = (view: 'calendar' | 'list') => {
     setSelectedView(view);
