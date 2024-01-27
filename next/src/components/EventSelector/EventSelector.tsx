@@ -18,7 +18,6 @@ export default function EventSelector({
   );
 
   useEffect(() => {
-    // If under 1280px, change to day view
     if (window.innerWidth < 1280) {
       setSelectedView('list');
     }
