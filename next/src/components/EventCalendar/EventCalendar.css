@@ -1,0 +1,68 @@
+.fc .fc-button-primary {
+  @apply border-none bg-primary-400 font-bold transition-colors duration-200 ease-in-out;
+}
+
+.fc .fc-button-primary:disabled {
+  @apply cursor-not-allowed border-none bg-primary-400;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  @apply bg-primary-500;
+}
+
+.fc .fc-col-header-cell-cushion {
+  @apply text-sm;
+}
+
+.fc .fc-button-primary:hover {
+  @apply bg-primary-500;
+}
+
+.fc-h-event {
+  @apply border-none bg-primary-400;
+}
+
+.fc-theme-standard .fc-popover-header {
+  @apply bg-primary-400 text-white;
+}
+
+.fc-event-selected,
+.fc-event:focus {
+  @apply border-none bg-primary-400 text-white;
+}
+
+.fc .fc-timegrid-axis-cushion {
+  @apply text-sm;
+}
+
+.fc-daygrid-dot-event.fc-event-mirror,
+.fc-daygrid-dot-event:hover {
+  @apply border-none bg-primary-400 text-white;
+}
+
+.fc-v-event {
+  @apply border-none bg-primary-400;
+}
+
+.fc .fc-toolbar-title {
+  @apply text-4xl font-bold max-lg:text-sm;
+}
+
+.fc .fc-toolbar {
+  @apply flex-row gap-2 max-lg:flex-col max-lg:items-start max-lg:text-sm;
+}
+
+.fc-scroller::-webkit-scrollbar {
+  @apply w-2;
+}
+
+.fc-scroller::-webkit-scrollbar-track {
+  @apply rounded-md;
+  background: #f1f1f1;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb {
+  @apply rounded-md;
+  background: #d1d1d1;
+}

@@ -16,6 +16,10 @@
   body {
     @apply flex h-full flex-col;
   }
+
+  a {
+    @apply cursor-pointer;
+  }
 }
 
 @layer components {
