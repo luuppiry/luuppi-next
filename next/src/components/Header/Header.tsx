@@ -87,7 +87,7 @@ export default function Header({
                 <RiLoginCircleLine className="ml-2 inline-block" size={24} />
               </button>
               <button
-                className="btn btn-ghost cursor-pointer lg:hidden"
+                className="btn btn-ghost lg:hidden"
                 onClick={toggleMobileHamburger}
               >
                 <HiMenu size={36} />
