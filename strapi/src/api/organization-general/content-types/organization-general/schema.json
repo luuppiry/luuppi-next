@@ -16,36 +16,15 @@
     }
   },
   "attributes": {
-    "Title": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "string",
-      "required": true
-    },
     "Content": {
+      "type": "component",
+      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "blocks",
-      "required": true
-    },
-    "Banner": {
-      "type": "media",
-      "multiple": true,
-      "required": true,
-      "allowedTypes": [
-        "images"
-      ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
+      "component": "shared.page-content"
     },
     "Seo": {
       "type": "component",
@@ -55,10 +34,7 @@
           "localized": true
         }
       },
-      "component": "shared.seo",
-      "required": true,
-      "max": 1,
-      "min": 1
+      "component": "shared.seo"
     }
   }
 }

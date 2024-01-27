@@ -380,41 +380,18 @@ export interface ApiOrganizationGeneralOrganizationGeneral
     };
   };
   attributes: {
-    Title: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    Content: Attribute.Blocks &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    Banner: Attribute.Media &
-      Attribute.Required &
+    Content: Attribute.Component<'shared.page-content'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
     Seo: Attribute.Component<'shared.seo'> &
-      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
-      }> &
-      Attribute.SetMinMax<
-        {
-          min: 1;
-          max: 1;
-        },
-        number
-      >;
+      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_shared_page_contents",
+  "info": {
+    "displayName": "PageContent",
+    "icon": "write",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "content": {
+      "type": "blocks",
+      "required": true
+    },
+    "banner": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}

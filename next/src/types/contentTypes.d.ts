@@ -369,6 +369,7 @@ export interface ApiOrganizationGeneralOrganizationGeneral
     singularName: 'organization-general';
     pluralName: 'organization-generals';
     displayName: 'OrganizationGeneral';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -379,22 +380,13 @@ export interface ApiOrganizationGeneralOrganizationGeneral
     };
   };
   attributes: {
-    Title: Attribute.String &
-      Attribute.Required &
+    Content: Attribute.Component<'shared.page-content'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
-    Content: Attribute.Blocks &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    Banner: Attribute.Media &
-      Attribute.Required &
+    Seo: Attribute.Component<'shared.seo'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;

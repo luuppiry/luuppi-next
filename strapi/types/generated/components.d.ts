@@ -41,6 +41,25 @@ export interface SharedMetaTwitter extends Schema.Component {
   };
 }
 
+export interface SharedPageContent extends Schema.Component {
+  collectionName: 'components_shared_page_contents';
+  info: {
+    displayName: 'PageContent';
+    icon: 'write';
+    description: '';
+  };
+  attributes: {
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    subtitle: Attribute.String;
+    content: Attribute.Blocks & Attribute.Required;
+    banner: Attribute.Media & Attribute.Required;
+  };
+}
+
 export interface SharedSeo extends Schema.Component {
   collectionName: 'components_shared_seos';
   info: {
@@ -70,6 +89,7 @@ declare module '@strapi/types' {
     export interface Components {
       'shared.meta-open-graph': SharedMetaOpenGraph;
       'shared.meta-twitter': SharedMetaTwitter;
+      'shared.page-content': SharedPageContent;
       'shared.seo': SharedSeo;
     }
   }
