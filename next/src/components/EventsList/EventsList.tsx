@@ -1,47 +1,50 @@
+import { Event } from '@/models/event';
 import Link from 'next/link';
+import { useState } from 'react';
 
-export default function EventsList({
-  events,
-}: {
-  events: {
-    title: string;
-    start: Date;
-    end: Date;
-  }[];
-}) {
-  // Hide past events
-  const now = new Date();
-  const filteredEvents = events
-    .filter((event) => event.end > now)
-    .sort((a, b) => a.start.getTime() - b.start.getTime());
+interface EventListProps {
+  events: Event[];
+}
 
-  // Group by date
-  const groupedEvents: {
-    [key: string]: {
-      date: Date;
-      events: {
-        title: string;
-        start: Date;
-        end: Date;
-      }[];
-    };
-  } = {};
-  filteredEvents.forEach((event) => {
-    const date = new Date(event.start);
-    const dateStr = date.toDateString();
-    if (!groupedEvents[dateStr]) {
-      groupedEvents[dateStr] = {
-        date,
-        events: [],
-      };
+export default function EventsList({ events }: EventListProps) {
+  const [showPastEvents, setShowPastEvents] = useState(false);
+
+  const toggleShowPastEvents = (e: any) => {
+    e.preventDefault();
+    setShowPastEvents(!showPastEvents);
+  };
+
+  const groupEventsByDate = (events: Event[]) => {
+    const groupedEvents = events.reduce(
+      (acc, event) => {
+        if (!event.start) return acc;
+        const dateStr = event.start.toDateString();
+        if (!acc[dateStr]) {
+          acc[dateStr] = {
+            date: event.start,
+            events: [],
+          };
+        }
+        acc[dateStr].events.push(event);
+        return acc;
+      },
+      {} as Record<string, { date: Date; events: typeof events }>,
+    );
+    return groupedEvents;
+  };
+
+  const getEvents = (showAll: boolean) => {
+    if (showAll) {
+      return groupEventsByDate(events);
     }
-    groupedEvents[dateStr].events.push(event);
-  });
+    const filtered = events.filter((event) => event.start > new Date());
+    return groupEventsByDate(filtered);
+  };
 
   const dateOptions = {
-    weekday: 'long', // Full weekday name (e.g., "Monday")
-    day: 'numeric', // Day of the month (e.g., 30)
-    month: 'short', // Short month name (e.g., "Jan")
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short',
   } as const;
 
   const timeOptions = {
@@ -51,21 +54,38 @@ export default function EventsList({
 
   return (
     <div className="flex flex-col gap-12">
-      {Object.values(groupedEvents).map((group) => (
+      <div>
+        <button
+          className="btn btn-primary text-lg font-bold text-white"
+          onClick={toggleShowPastEvents}
+        >
+          {showPastEvents ? 'Hide past events' : 'Show past events'}
+        </button>
+      </div>
+      {Object.values(getEvents(showPastEvents)).map((group) => (
         <div key={group.date.toDateString()} className="flex flex-col gap-2">
           <h2 className="text-2xl font-bold">
-            {group.date.toLocaleDateString(undefined, dateOptions)}
+            {group.date.toLocaleDateString(
+              undefined,
+              showPastEvents
+                ? { ...dateOptions, year: 'numeric' }
+                : dateOptions,
+            )}
           </h2>
           <div className="divider my-0" />
           <div className="flex flex-col gap-4">
             {group.events.map((event) => (
               <Link
-                key={event.title}
-                className="flex items-center gap-4 rounded-lg transition-all delay-300 ease-in-out hover:bg-primary-50"
+                key={
+                  event.start.toISOString() +
+                  event.end.toISOString() +
+                  event.title
+                }
+                className="flex gap-4 rounded-lg transition-all delay-300 ease-in-out hover:bg-primary-50"
                 href="/"
               >
-                <span className="h-16 w-1 rounded-lg bg-primary-400" />
-                <div className="flex flex-col">
+                <span className="w-1 rounded-l-lg bg-primary-400" />
+                <div className="flex flex-col py-2">
                   <h3 className="text-lg font-bold">{event.title}</h3>
                   <div className="flex gap-2">
                     <p>
@@ -75,7 +95,11 @@ export default function EventsList({
                     <p>
                       {event.end.toLocaleTimeString(undefined, timeOptions)}
                     </p>
+                    p
                   </div>
+                  <p className="line-clamp-3 max-w-xl text-gray-500">
+                    {event.description}
+                  </p>
                 </div>
               </Link>
             ))}

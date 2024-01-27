@@ -1,11 +1,7 @@
 import EventSelector from '@/components/EventSelector/EventSelector';
+import removeHtml from '@/lib/remove-html';
+import { Event } from '@/models/event';
 import ical from 'node-ical';
-
-interface Event {
-  title: string;
-  start: Date;
-  end: Date;
-}
 
 /**
  * Temporary function to get events from Luuppi's legacy calendar.
@@ -16,20 +12,13 @@ const getLuuppiEvents = async (): Promise<Event[]> => {
   const data = await res.text();
   const eventsRaw = ical.parseICS(data);
   const events = Object.values(eventsRaw) as ical.VEvent[];
+
   const formattedEvents: Event[] = events.map((event) => ({
     title: event.summary,
     start: event.start,
     end: event.end,
+    description: removeHtml(event.description) ?? '',
   }));
-
-  // Add 10 events to this day
-  for (let i = 0; i < 10; i++) {
-    formattedEvents.push({
-      title: 'test',
-      start: new Date(),
-      end: new Date(new Date().getHours() + 1),
-    });
-  }
 
   return formattedEvents;
 };

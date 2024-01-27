@@ -1,18 +1,15 @@
 'use client';
+import { Event } from '@/models/event';
 import { useEffect, useState } from 'react';
 import EventCalendar from '../EventCalendar/EventCalendar';
 import EventsList from '../EventsList/EventsList';
 import './EventSelector.css';
 
-export default function EventSelector({
-  events,
-}: {
-  events: {
-    title: string;
-    start: Date;
-    end: Date;
-  }[];
-}) {
+interface EventSelectorProps {
+  events: Event[];
+}
+
+export default function EventSelector({ events }: EventSelectorProps) {
   const [selectedView, setSelectedView] = useState<'calendar' | 'list'>(
     'calendar',
   );

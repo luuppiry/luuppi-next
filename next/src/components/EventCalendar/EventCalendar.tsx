@@ -1,4 +1,5 @@
 'use client';
+import { Event } from '@/models/event';
 import fiLocale from '@fullcalendar/core/locales/fi';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import FullCalendar from '@fullcalendar/react';
@@ -6,15 +7,11 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import { useEffect, useRef, useState } from 'react';
 import './EventCalendar.css';
 
-export default function EventCalendar({
-  events,
-}: {
-  events: {
-    title: string;
-    start: Date;
-    end: Date;
-  }[];
-}) {
+interface EventCalendarProps {
+  events: Event[];
+}
+
+export default function EventCalendar({ events }: EventCalendarProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   // Hacky solution to fix overlapping events styling
@@ -28,13 +25,10 @@ export default function EventCalendar({
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
+      calendarRef?.current?.getApi().updateSize();
     };
     window.addEventListener('resize', handleResize);
     handleResize();
-
-    if (window.innerWidth < 1024) {
-      calendarRef?.current?.getApi().changeView('timeGridDay');
-    }
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -42,6 +36,7 @@ export default function EventCalendar({
   return (
     <FullCalendar
       ref={calendarRef}
+      aspectRatio={isMobile ? 0.8 : 1.35}
       datesSet={() => {
         setTimeout((): void => {
           calendarRef?.current?.getApi().updateSize();
@@ -90,10 +85,10 @@ export default function EventCalendar({
           : {
               left: 'title',
               center: 'prev,next today',
-              right: 'timeGridDay,dayGridMonth',
+              right: 'dayGridMonth',
             }
       }
-      initialView={isMobile ? 'timeGridDay' : 'dayGridMonth'}
+      initialView={'dayGridMonth'}
       locale={fiLocale}
       plugins={[dayGridPlugin, timeGridPlugin]}
       slotLabelFormat={{
