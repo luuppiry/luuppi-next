@@ -24,7 +24,19 @@
 }
 
 .fc-theme-standard .fc-popover-header {
-  @apply bg-primary-400 text-white;
+  @apply rounded-t-lg bg-primary-400 text-white;
+}
+
+.fc .fc-popover-title {
+  @apply font-semibold;
+}
+
+.fc .fc-popover-close {
+  @apply opacity-100;
+}
+
+.fc .fc-popover {
+  @apply rounded-lg;
 }
 
 .fc-event-selected,
