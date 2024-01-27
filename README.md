@@ -50,6 +50,8 @@ In summary, you use the content-type builder locally to structure the correct 'd
 
 <br>
 
+> ⚠️ When modifying content in Strapi, update the newly generated types on the frontend by running `copyTypes.js` in the project's root. This action will copy the Strapi-generated types to the frontend.
+
 **Note:** The following commands should be executed within the `strapi` folder.
 
 #### Prerequisites
