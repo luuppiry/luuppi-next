@@ -24,27 +24,23 @@ export default function EventSelector({
     }
   }, [selectedView]);
 
-  const toggleView = () => {
-    if (selectedView === 'calendar') {
-      setSelectedView('list');
-    } else {
-      setSelectedView('calendar');
-    }
+  const setView = (view: 'calendar' | 'list') => {
+    setSelectedView(view);
   };
   return (
     <>
       <div className="tabs-boxed tabs mb-8" role="tablist">
         <button
-          className={`tab text-xl font-bold ${selectedView === 'calendar' && 'tab-active'}`}
+          className={`tab text-lg font-bold ${selectedView === 'calendar' && 'tab-active'}`}
           role="tab"
-          onClick={toggleView}
+          onClick={() => setView('calendar')}
         >
           Kalenteri
         </button>
         <button
-          className={`tab text-xl font-bold ${selectedView === 'list' && 'tab-active'}`}
+          className={`tab text-lg font-bold ${selectedView === 'list' && 'tab-active'}`}
           role="tab"
-          onClick={toggleView}
+          onClick={() => setView('list')}
         >
           Tapahtumavirta
         </button>
