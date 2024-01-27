@@ -1,4 +1,4 @@
-import EventCalendar from '@/components/EventCalendar/EventCalendar';
+import EventSelector from '@/components/EventSelector/EventSelector';
 import ical from 'node-ical';
 
 interface Event {
@@ -39,7 +39,7 @@ export default async function Events() {
   return (
     <section className="mx-auto max-w-screen-xl px-4 py-20">
       <h1 className="mb-14 text-6xl font-extrabold">Events</h1>
-      <EventCalendar events={events} />
+      <EventSelector events={events} />
     </section>
   );
 }
