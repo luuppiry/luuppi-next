@@ -38,7 +38,7 @@ export default async function Events() {
   const events = await getLuuppiEvents();
   return (
     <section className="mx-auto max-w-screen-xl px-4 py-20">
-      <h1 className="text-6xl font-extrabold">Events</h1>
+      <h1 className="mb-14 text-6xl font-extrabold">Events</h1>
       <EventCalendar events={events} />
     </section>
   );
