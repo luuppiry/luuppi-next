@@ -1,4 +1,5 @@
 import { getDictionary } from '@/dictionaries';
+import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { IoMdClose } from 'react-icons/io';
 import { navLinks } from '../Header/navLinks';
@@ -6,12 +7,14 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 
 interface MobileNavbarProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>['navigation'];
+  lang: SupportedLanguage;
   open: boolean;
   onClose: () => void;
 }
 
 export default function MobileHamburger({
   dictionary,
+  lang,
   open,
   onClose,
 }: MobileNavbarProps) {
@@ -24,21 +27,33 @@ export default function MobileHamburger({
         <ul className="menu h-full w-full flex-nowrap gap-4 text-lg">
           {navLinks.map((link) => (
             <li key={link.translation}>
-              {link.sublinks.length > 0 ? (
+              {link.sublinks && link.sublinks.length > 0 ? (
                 <div className="flex items-center justify-between bg-primary-400 font-bold text-white hover:cursor-auto">
-                  {dictionary[link.translation]}
+                  {dictionary[link.translation as keyof typeof dictionary]}
                 </div>
               ) : (
-                <Link className="font-bold" href={link.href}>
-                  {dictionary[link.translation]}
+                <Link
+                  className="font-bold"
+                  href={`/${lang}${link.href as string}`}
+                  onClick={onClose}
+                >
+                  {dictionary[link.translation as keyof typeof dictionary]}
                 </Link>
               )}
-              {link.sublinks.length > 0 && (
+              {link.sublinks && link.sublinks.length > 0 && (
                 <ul className="my-4">
                   {link.sublinks.map((sublink) => (
-                    <li key={sublink.name}>
-                      <Link className="font-bold" href={sublink.href}>
-                        {dictionary[sublink.name]}
+                    <li key={sublink.translation}>
+                      <Link
+                        className="font-bold"
+                        href={`/${lang}${sublink.href as string}`}
+                        onClick={onClose}
+                      >
+                        {
+                          dictionary[
+                            sublink.translation as keyof typeof dictionary
+                          ]
+                        }
                       </Link>
                     </li>
                   ))}

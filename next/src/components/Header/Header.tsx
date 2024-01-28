@@ -1,5 +1,6 @@
 'use client';
 import { getDictionary } from '@/dictionaries';
+import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -12,21 +13,21 @@ import { navLinks } from './navLinks';
 
 export default function Header({
   dictionary,
+  lang,
 }: {
   dictionary: Awaited<ReturnType<typeof getDictionary>>['navigation'];
+  lang: SupportedLanguage;
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [mobileHarmburgerOpen, setMobileHarmburgerOpen] = useState(false);
 
   const handleScroll = () => {
-    if (typeof window === 'undefined') return;
     const position = window.scrollY;
     setScrollPosition(position);
   };
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -46,6 +47,7 @@ export default function Header({
       <AuthModal open={authModalOpen} onClose={toggleAuthModal} />
       <MobileHamburger
         dictionary={dictionary}
+        lang={lang}
         open={mobileHarmburgerOpen}
         onClose={toggleMobileHamburger}
       />
@@ -61,7 +63,7 @@ export default function Header({
               className={`btn btn-link relative h-full transition-all duration-300 ${
                 scrollPosition > 100 ? 'w-24' : 'w-36 max-lg:w-24'
               }`}
-              href="/"
+              href={`/${lang}`}
             >
               <Image
                 alt="Luuppi"
@@ -101,31 +103,57 @@ export default function Header({
               key={link.translation}
               className="group relative cursor-pointer"
             >
-              <Link
-                className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
-                  scrollPosition > 100 ? 'text-lg' : 'text-xl'
-                }`}
-                href="/"
-              >
-                <span>{dictionary[link.translation]}</span>
-                {link.sublinks.length > 0 && (
-                  <div className="w-6">
-                    <RiArrowDropDownLine
-                      className="transition-transform duration-300 group-hover:rotate-180"
-                      size={32}
-                    />
-                  </div>
-                )}
-              </Link>
-              {link.sublinks.length > 0 && (
+              {link.sublinks && link.sublinks.length > 0 ? (
+                <div
+                  className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
+                    scrollPosition > 100 ? 'text-lg' : 'text-xl'
+                  }`}
+                >
+                  <span>
+                    {dictionary[link.translation as keyof typeof dictionary]}
+                  </span>
+                  {link.sublinks && link.sublinks.length > 0 && (
+                    <div className="w-6">
+                      <RiArrowDropDownLine
+                        className="transition-transform duration-300 group-hover:rotate-180"
+                        size={32}
+                      />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
+                    scrollPosition > 100 ? 'text-lg' : 'text-xl'
+                  }`}
+                  href={`/${lang}${link.href as string}`}
+                >
+                  <span>
+                    {dictionary[link.translation as keyof typeof dictionary]}
+                  </span>
+                  {link.sublinks && link.sublinks.length > 0 && (
+                    <div className="w-6">
+                      <RiArrowDropDownLine
+                        className="transition-transform duration-300 group-hover:rotate-180"
+                        size={32}
+                      />
+                    </div>
+                  )}
+                </Link>
+              )}
+              {link.sublinks && link.sublinks.length > 0 && (
                 <div className="invisible absolute z-50 flex min-w-full flex-col bg-gray-100 px-2 py-4 text-gray-800 shadow-xl group-hover:visible">
                   {link.sublinks.map((sublink) => (
                     <Link
-                      key={sublink.name}
+                      key={sublink.translation}
                       className="truncate rounded-lg p-2 text-lg font-bold hover:bg-gray-200"
-                      href="/"
+                      href={`/${lang}${sublink.href as string}`}
                     >
-                      {dictionary[sublink.name]}
+                      {
+                        dictionary[
+                          sublink.translation as keyof typeof dictionary
+                        ]
+                      }
                     </Link>
                   ))}
                 </div>

@@ -1,98 +1,98 @@
-export const navLinks = [
+export interface NavLink {
+  translation: string;
+  href?: string;
+  sublinks?: {
+    translation: string;
+    href: string;
+  }[];
+}
+
+export const navLinks: NavLink[] = [
   {
     translation: 'home',
     href: '/',
-    sublinks: [],
   },
   {
     translation: 'organization',
-    href: '/organization',
     sublinks: [
       {
-        name: 'general',
-        href: '/',
+        translation: 'general',
+        href: '/organization',
       },
       {
-        name: 'rules',
-        href: '/',
+        translation: 'rules',
+        href: '/organization/rules',
       },
       {
-        name: 'board',
-        href: '/',
+        translation: 'board',
+        href: '/organization/board',
       },
       {
-        name: 'office',
-        href: '/',
+        translation: 'office',
+        href: '/organization/office',
       },
       {
-        name: 'honorary_members',
-        href: '/',
+        translation: 'honorary_members',
+        href: '/organization/honorary-members',
       },
       {
-        name: 'documents',
-        href: '/',
+        translation: 'documents',
+        href: '/organization/documents',
       },
     ],
   },
   {
     translation: 'studies',
-    href: '/studies',
     sublinks: [
       {
-        name: 'general',
-        href: '/',
+        translation: 'general',
+        href: '/studies',
       },
       {
-        name: 'fields_of_study',
-        href: '/',
+        translation: 'fields_of_study',
+        href: '/studies/fields-of-study',
       },
       {
-        name: 'workshops',
-        href: '/',
+        translation: 'workshops',
+        href: '/studies/workshops',
       },
     ],
   },
   {
     translation: 'tutoring',
-    href: '/services',
     sublinks: [
       {
-        name: 'general',
-        href: '/',
+        translation: 'general',
+        href: '/tutoring',
       },
       {
-        name: 'larpake',
-        href: '/',
+        translation: 'larpake',
+        href: '/tutoring/larpake',
       },
       {
-        name: 'faq',
-        href: '/',
+        translation: 'faq',
+        href: '/tutoring/faq',
       },
     ],
   },
   {
     translation: 'events',
     href: '/events',
-    sublinks: [],
   },
   {
     translation: 'blog',
     href: '/blog',
-    sublinks: [],
   },
   {
     translation: 'collaboration',
     href: '/collaboration',
-    sublinks: [],
   },
   {
     translation: 'sports',
     href: '/sports',
-    sublinks: [],
   },
   {
     translation: 'contact',
     href: '/contact',
-    sublinks: [],
   },
-] as const;
+];

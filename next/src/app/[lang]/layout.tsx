@@ -43,7 +43,7 @@ export default async function RootLayout({
   return (
     <html data-theme="light" lang={params.lang}>
       <body className={titilliumFont.className}>
-        <Header dictionary={dictionary.navigation} />
+        <Header dictionary={dictionary.navigation} lang={params.lang} />
         <div className="flex-1">{children}</div>
         <Footer />
       </body>
