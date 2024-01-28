@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "boards",
+  "info": {
+    "singularName": "board",
+    "pluralName": "boards",
+    "displayName": "Board",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "pluginOptions": {},
+      "type": "email",
+      "required": true
+    },
+    "fullName": {
+      "pluginOptions": {},
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "pluginOptions": {}
+    },
+    "isBoardMember": {
+      "pluginOptions": {},
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "boardRole": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::board-role.board-role",
+      "inversedBy": "boards"
+    }
+  }
+}

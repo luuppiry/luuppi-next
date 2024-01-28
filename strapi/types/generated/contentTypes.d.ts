@@ -362,60 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiOrganizationGeneralOrganizationGeneral
-  extends Schema.SingleType {
-  collectionName: 'organization_generals';
-  info: {
-    singularName: 'organization-general';
-    pluralName: 'organization-generals';
-    displayName: 'OrganizationGeneral';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    Content: Attribute.Component<'shared.page-content'> &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    Seo: Attribute.Component<'shared.seo'> &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::organization-general.organization-general',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::organization-general.organization-general',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::organization-general.organization-general',
-      'oneToMany',
-      'api::organization-general.organization-general'
-    >;
-    locale: Attribute.String;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -835,6 +781,160 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiBoardBoard extends Schema.CollectionType {
+  collectionName: 'boards';
+  info: {
+    singularName: 'board';
+    pluralName: 'boards';
+    displayName: 'Board';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    email: Attribute.Email & Attribute.Required;
+    fullName: Attribute.String & Attribute.Required;
+    image: Attribute.Media;
+    isBoardMember: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<false>;
+    boardRole: Attribute.Relation<
+      'api::board.board',
+      'manyToOne',
+      'api::board-role.board-role'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::board.board',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::board.board',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
+  collectionName: 'board_roles';
+  info: {
+    singularName: 'board-role';
+    pluralName: 'board-roles';
+    displayName: 'BoardRole';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    email: Attribute.Email &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    boards: Attribute.Relation<
+      'api::board-role.board-role',
+      'oneToMany',
+      'api::board.board'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::board-role.board-role',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::board-role.board-role',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::board-role.board-role',
+      'oneToMany',
+      'api::board-role.board-role'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiOrganizationGeneralOrganizationGeneral
+  extends Schema.SingleType {
+  collectionName: 'organization_generals';
+  info: {
+    singularName: 'organization-general';
+    pluralName: 'organization-generals';
+    displayName: 'OrganizationGeneral';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::organization-general.organization-general',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::organization-general.organization-general',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::organization-general.organization-general',
+      'oneToMany',
+      'api::organization-general.organization-general'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -845,7 +945,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
@@ -854,6 +953,9 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::board.board': ApiBoardBoard;
+      'api::board-role.board-role': ApiBoardRoleBoardRole;
+      'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
     }
   }
 }
