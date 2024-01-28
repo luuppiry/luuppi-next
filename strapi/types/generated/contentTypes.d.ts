@@ -787,6 +787,7 @@ export interface ApiBoardBoard extends Schema.CollectionType {
     singularName: 'board';
     pluralName: 'boards';
     displayName: 'Boards';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -805,7 +806,7 @@ export interface ApiBoardBoard extends Schema.CollectionType {
       }>;
     boardMembers: Attribute.Relation<
       'api::board.board',
-      'oneToMany',
+      'manyToMany',
       'api::board-member.board-member'
     >;
     createdAt: Attribute.DateTime;
@@ -885,6 +886,11 @@ export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
           localized: false;
         };
       }>;
+    boards: Attribute.Relation<
+      'api::board-member.board-member',
+      'manyToMany',
+      'api::board.board'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

@@ -66,6 +66,12 @@
         }
       },
       "type": "integer"
+    },
+    "boards": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::board.board",
+      "inversedBy": "boardMembers"
     }
   }
 }

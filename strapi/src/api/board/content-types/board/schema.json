@@ -4,7 +4,8 @@
   "info": {
     "singularName": "board",
     "pluralName": "boards",
-    "displayName": "Boards"
+    "displayName": "Boards",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -25,8 +26,9 @@
     },
     "boardMembers": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::board-member.board-member"
+      "relation": "manyToMany",
+      "target": "api::board-member.board-member",
+      "inversedBy": "boards"
     }
   }
 }
