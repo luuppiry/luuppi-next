@@ -1,8 +1,7 @@
-import { ApiBoardBoard } from '@/types/contentTypes';
 import Image from 'next/image';
 
 interface BoardMemberProps {
-  member: ApiBoardBoard;
+  member: any;
 }
 
 export default function BoardMember({ member }: BoardMemberProps) {
@@ -23,13 +22,13 @@ export default function BoardMember({ member }: BoardMemberProps) {
       <div className="flex flex-col gap-2 px-4 py-6">
         <h2 className="text-2xl font-bold">{member.attributes.fullName}</h2>
         <div className="flex flex-wrap gap-2">
-          {member.attributes.boardRole.data.map((role: any, index: number) => (
+          {member.attributes.boardRoles.data.map((role: any, index: number) => (
             <div
               key={role.attributes.title}
               className="flex items-center gap-2 opacity-90"
             >
               <div className="font-semibold">{role.attributes.title}</div>
-              {index !== member.attributes.boardRole.data.length - 1 && (
+              {index !== member.attributes.boardRoles.data.length - 1 && (
                 <span className="font-semibold">|</span>
               )}
             </div>
@@ -38,7 +37,7 @@ export default function BoardMember({ member }: BoardMemberProps) {
         <div className="mt-2">
           <h3 className="text-lg font-semibold">Email</h3>
           <div className="flex flex-col gap-1">
-            {member.attributes.boardRole.data.map((role: any) => (
+            {member.attributes.boardRoles.data.map((role: any) => (
               <p key={role.attributes.email} className="text-sm">
                 {role.attributes.email}
               </p>

@@ -786,23 +786,18 @@ export interface ApiBoardBoard extends Schema.CollectionType {
   info: {
     singularName: 'board';
     pluralName: 'boards';
-    displayName: 'Board';
+    displayName: 'Boards';
     description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    email: Attribute.Email & Attribute.Required;
-    fullName: Attribute.String & Attribute.Required;
-    image: Attribute.Media;
-    isBoardMember: Attribute.Boolean &
-      Attribute.Required &
-      Attribute.DefaultTo<false>;
-    boardRole: Attribute.Relation<
+    year: Attribute.Integer;
+    boardMembers: Attribute.Relation<
       'api::board.board',
-      'oneToMany',
-      'api::board-role.board-role'
+      'manyToMany',
+      'api::board-member.board-member'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -822,12 +817,58 @@ export interface ApiBoardBoard extends Schema.CollectionType {
   };
 }
 
+export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
+  collectionName: 'board_members';
+  info: {
+    singularName: 'board-member';
+    pluralName: 'board-members';
+    displayName: 'BoardMember';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    fullName: Attribute.String;
+    email: Attribute.Email;
+    image: Attribute.Media;
+    isBoardMember: Attribute.Boolean & Attribute.DefaultTo<false>;
+    boardRoles: Attribute.Relation<
+      'api::board-member.board-member',
+      'oneToMany',
+      'api::board-role.board-role'
+    >;
+    year: Attribute.Integer;
+    boards: Attribute.Relation<
+      'api::board-member.board-member',
+      'manyToMany',
+      'api::board.board'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::board-member.board-member',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::board-member.board-member',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
   collectionName: 'board_roles';
   info: {
     singularName: 'board-role';
     pluralName: 'board-roles';
     displayName: 'BoardRole';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -849,7 +890,7 @@ export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
-          localized: false;
+          localized: true;
         };
       }>;
     createdAt: Attribute.DateTime;
@@ -949,6 +990,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::board.board': ApiBoardBoard;
+      'api::board-member.board-member': ApiBoardMemberBoardMember;
       'api::board-role.board-role': ApiBoardRoleBoardRole;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
     }

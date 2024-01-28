@@ -3,44 +3,37 @@ import getStrapiData from '@/lib/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBoardBoard } from '@/types/contentTypes';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
-export default async function Board({
+export default async function OldBoard({
   params,
 }: {
-  params: { lang: SupportedLanguage };
+  params: { slug: string; lang: SupportedLanguage };
 }) {
-  /**
-   * TODO: This is by far the worst query in our codebase. Should be cached well
-   * because basically we have board changes once a year. :D
-   *
-   * Localization doesn't matter because we have non i18n
-   * collections (boards, boardMembers) and only boardRoles are localized.
-   * Strapi doesn't support localized queries from non i18n collections. We
-   * use workaround by populating boardRoles with localizations.
-   */
+  const year = parseInt(params.slug, 10);
+
+  if (isNaN(year)) {
+    redirect(`/${params.lang}/404`);
+  }
 
   const boardData = await getStrapiData<ApiBoardBoard[]>(
     'fi',
     '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
   );
 
-  const groupByYear = (data: ApiBoardBoard[]) =>
-    data.reduce(
-      (acc, item) => {
-        const year = item.attributes.year;
-        acc[year] = item;
-        return acc;
-      },
-      {} as Record<string, ApiBoardBoard>,
-    );
-
   const boardGroupedByYear = groupByYear(boardData.data);
+  const board = boardGroupedByYear[params.slug];
+
+  if (!board) {
+    redirect(`/${params.lang}/404`);
+  }
+
   const boardSortedByYear = Object.keys(boardGroupedByYear).sort(
     (a, b) => Number(b) - Number(a),
   );
   const latestBoard = boardGroupedByYear[boardSortedByYear[0]];
   const otherBoards = boardSortedByYear.filter(
-    (year) => parseInt(year, 10) !== latestBoard.attributes.year,
+    (year) => parseInt(year, 10) !== board.attributes.year,
   );
 
   return (
@@ -58,7 +51,9 @@ export default async function Board({
             >
               {otherBoards.map((year) => (
                 <li key={year}>
-                  <Link href={`/${params.lang}/organization/board/${year}`}>
+                  <Link
+                    href={`/${params.lang}/organization/board/${year === latestBoard.attributes.year.toString() ? '' : year}`}
+                  >
                     {year}
                   </Link>
                 </li>
@@ -68,10 +63,36 @@ export default async function Board({
         )}
       </div>
       <div className="grid grid-cols-2 gap-12 lg:grid-cols-3">
-        {latestBoard.attributes.boardMembers.data.map((member: any) => (
+        {board.attributes.boardMembers.data.map((member: any) => (
           <BoardMember key={member.attributes.createdAt} member={member} />
         ))}
       </div>
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  const boardData = await getStrapiData<ApiBoardBoard[]>(
+    'fi',
+    '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
+  );
+
+  const boardGroupedByYear = groupByYear(boardData.data);
+
+  return Object.keys(boardGroupedByYear).map((year) => ({
+    params: { slug: year },
+  }));
+}
+
+function groupByYear(data: ApiBoardBoard[]) {
+  const groupedData = data.reduce(
+    (acc, item) => {
+      const year = item.attributes.year;
+      acc[year] = item;
+      return acc;
+    },
+    {} as Record<string, ApiBoardBoard>,
+  );
+
+  return groupedData;
 }
