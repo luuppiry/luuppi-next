@@ -10,15 +10,27 @@
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {},
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
   "attributes": {
     "email": {
-      "pluginOptions": {},
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
       "type": "email",
       "required": true
     },
     "fullName": {
-      "pluginOptions": {},
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
       "type": "string",
       "required": true
     },
@@ -29,10 +41,18 @@
       "allowedTypes": [
         "images"
       ],
-      "pluginOptions": {}
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
     },
     "isBoardMember": {
-      "pluginOptions": {},
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
       "type": "boolean",
       "default": false,
       "required": true

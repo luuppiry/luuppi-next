@@ -792,12 +792,39 @@ export interface ApiBoardBoard extends Schema.CollectionType {
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
-    email: Attribute.Email & Attribute.Required;
-    fullName: Attribute.String & Attribute.Required;
-    image: Attribute.Media;
+    email: Attribute.Email &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    fullName: Attribute.String &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    image: Attribute.Media &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
     isBoardMember: Attribute.Boolean &
       Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
       Attribute.DefaultTo<false>;
     boardRole: Attribute.Relation<
       'api::board.board',
@@ -819,6 +846,12 @@ export interface ApiBoardBoard extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::board.board',
+      'oneToMany',
+      'api::board.board'
+    >;
+    locale: Attribute.String;
   };
 }
 
