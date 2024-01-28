@@ -786,8 +786,7 @@ export interface ApiBoardBoard extends Schema.CollectionType {
   info: {
     singularName: 'board';
     pluralName: 'boards';
-    displayName: 'Board';
-    description: '';
+    displayName: 'Boards';
   };
   options: {
     draftAndPublish: true;
@@ -798,38 +797,16 @@ export interface ApiBoardBoard extends Schema.CollectionType {
     };
   };
   attributes: {
-    email: Attribute.Email &
-      Attribute.Required &
+    year: Attribute.Integer &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
         };
       }>;
-    fullName: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    image: Attribute.Media &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    isBoardMember: Attribute.Boolean &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }> &
-      Attribute.DefaultTo<false>;
-    boardRole: Attribute.Relation<
+    boardMembers: Attribute.Relation<
       'api::board.board',
       'oneToMany',
-      'api::board-role.board-role'
+      'api::board-member.board-member'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -850,6 +827,83 @@ export interface ApiBoardBoard extends Schema.CollectionType {
       'api::board.board',
       'oneToMany',
       'api::board.board'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
+  collectionName: 'board_members';
+  info: {
+    singularName: 'board-member';
+    pluralName: 'board-members';
+    displayName: 'BoardMember';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    fullName: Attribute.String &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    email: Attribute.Email &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    image: Attribute.Media &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    isBoardMember: Attribute.Boolean &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Attribute.DefaultTo<false>;
+    boardRoles: Attribute.Relation<
+      'api::board-member.board-member',
+      'oneToMany',
+      'api::board-role.board-role'
+    >;
+    year: Attribute.Integer &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::board-member.board-member',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::board-member.board-member',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::board-member.board-member',
+      'oneToMany',
+      'api::board-member.board-member'
     >;
     locale: Attribute.String;
   };
@@ -982,6 +1036,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::board.board': ApiBoardBoard;
+      'api::board-member.board-member': ApiBoardMemberBoardMember;
       'api::board-role.board-role': ApiBoardRoleBoardRole;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
     }

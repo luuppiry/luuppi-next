@@ -4,8 +4,7 @@
   "info": {
     "singularName": "board",
     "pluralName": "boards",
-    "displayName": "Board",
-    "description": ""
+    "displayName": "Boards"
   },
   "options": {
     "draftAndPublish": true
@@ -16,51 +15,18 @@
     }
   },
   "attributes": {
-    "email": {
+    "year": {
       "pluginOptions": {
         "i18n": {
           "localized": false
         }
       },
-      "type": "email",
-      "required": true
+      "type": "integer"
     },
-    "fullName": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
-      "type": "string",
-      "required": true
-    },
-    "image": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      }
-    },
-    "isBoardMember": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
-      "type": "boolean",
-      "default": false,
-      "required": true
-    },
-    "boardRole": {
+    "boardMembers": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::board-role.board-role"
+      "target": "api::board-member.board-member"
     }
   }
 }
