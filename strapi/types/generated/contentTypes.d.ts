@@ -793,7 +793,7 @@ export interface ApiBoardBoard extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    year: Attribute.Integer;
+    year: Attribute.Integer & Attribute.Unique;
     boardMembers: Attribute.Relation<
       'api::board.board',
       'manyToMany',
