@@ -39,9 +39,8 @@
     },
     "boardRole": {
       "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::board-role.board-role",
-      "inversedBy": "boards"
+      "relation": "oneToMany",
+      "target": "api::board-role.board-role"
     }
   }
 }

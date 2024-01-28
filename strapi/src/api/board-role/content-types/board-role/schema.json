@@ -32,12 +32,6 @@
       },
       "type": "email",
       "required": true
-    },
-    "boards": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::board.board",
-      "mappedBy": "boardRole"
     }
   }
 }

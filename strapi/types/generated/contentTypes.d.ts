@@ -801,7 +801,7 @@ export interface ApiBoardBoard extends Schema.CollectionType {
       Attribute.DefaultTo<false>;
     boardRole: Attribute.Relation<
       'api::board.board',
-      'manyToOne',
+      'oneToMany',
       'api::board-role.board-role'
     >;
     createdAt: Attribute.DateTime;
@@ -852,11 +852,6 @@ export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
           localized: false;
         };
       }>;
-    boards: Attribute.Relation<
-      'api::board-role.board-role',
-      'oneToMany',
-      'api::board.board'
-    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
