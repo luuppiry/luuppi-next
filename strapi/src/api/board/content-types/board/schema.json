@@ -10,25 +10,17 @@
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": true
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
     "year": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
+      "pluginOptions": {},
       "type": "integer"
     },
     "boardMembers": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::board-member.board-member",
-      "inversedBy": "boards"
+      "mappedBy": "boards"
     }
   }
 }

@@ -10,26 +10,14 @@
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": true
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
     "fullName": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
+      "pluginOptions": {},
       "type": "string"
     },
     "email": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
+      "pluginOptions": {},
       "type": "email"
     },
     "image": {
@@ -39,18 +27,10 @@
       "allowedTypes": [
         "images"
       ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      }
+      "pluginOptions": {}
     },
     "isBoardMember": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
+      "pluginOptions": {},
       "type": "boolean",
       "default": false
     },
@@ -60,11 +40,7 @@
       "target": "api::board-role.board-role"
     },
     "year": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
+      "pluginOptions": {},
       "type": "integer"
     },
     "boards": {

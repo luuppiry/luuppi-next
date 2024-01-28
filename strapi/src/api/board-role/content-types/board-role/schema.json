@@ -4,7 +4,8 @@
   "info": {
     "singularName": "board-role",
     "pluralName": "board-roles",
-    "displayName": "BoardRole"
+    "displayName": "BoardRole",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -27,7 +28,7 @@
     "email": {
       "pluginOptions": {
         "i18n": {
-          "localized": false
+          "localized": true
         }
       },
       "type": "email",

@@ -792,18 +792,8 @@ export interface ApiBoardBoard extends Schema.CollectionType {
   options: {
     draftAndPublish: true;
   };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
   attributes: {
-    year: Attribute.Integer &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
+    year: Attribute.Integer;
     boardMembers: Attribute.Relation<
       'api::board.board',
       'manyToMany',
@@ -824,12 +814,6 @@ export interface ApiBoardBoard extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::board.board',
-      'oneToMany',
-      'api::board.board'
-    >;
-    locale: Attribute.String;
   };
 }
 
@@ -844,48 +828,17 @@ export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
   options: {
     draftAndPublish: true;
   };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
   attributes: {
-    fullName: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    email: Attribute.Email &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    image: Attribute.Media &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    isBoardMember: Attribute.Boolean &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }> &
-      Attribute.DefaultTo<false>;
+    fullName: Attribute.String;
+    email: Attribute.Email;
+    image: Attribute.Media;
+    isBoardMember: Attribute.Boolean & Attribute.DefaultTo<false>;
     boardRoles: Attribute.Relation<
       'api::board-member.board-member',
       'oneToMany',
       'api::board-role.board-role'
     >;
-    year: Attribute.Integer &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
+    year: Attribute.Integer;
     boards: Attribute.Relation<
       'api::board-member.board-member',
       'manyToMany',
@@ -906,12 +859,6 @@ export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::board-member.board-member',
-      'oneToMany',
-      'api::board-member.board-member'
-    >;
-    locale: Attribute.String;
   };
 }
 
@@ -921,6 +868,7 @@ export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
     singularName: 'board-role';
     pluralName: 'board-roles';
     displayName: 'BoardRole';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -942,7 +890,7 @@ export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
-          localized: false;
+          localized: true;
         };
       }>;
     createdAt: Attribute.DateTime;
