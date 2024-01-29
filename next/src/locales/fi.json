@@ -64,5 +64,10 @@
   "pages_events": {
     "calendar": "Kalenteri",
     "event_feed": "Tapahtumavirta"
+  },
+  "pages_404": {
+    "title": "404 - Sivua ei löytynyt",
+    "description": "Etsimääsi sivua ei löytynyt",
+    "return_home": "Kotisivulle"
   }
 }
