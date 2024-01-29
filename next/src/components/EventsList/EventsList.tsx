@@ -34,10 +34,13 @@ export default function EventsList({ events }: EventListProps) {
   };
 
   const getEvents = (showAll: boolean) => {
+    const sortedEvents = events
+      .filter((e) => e.start)
+      .sort((a, b) => a.start.getTime() - b.start.getTime());
     if (showAll) {
-      return groupEventsByDate(events);
+      return groupEventsByDate(sortedEvents);
     }
-    const filtered = events.filter((event) => event.start > new Date());
+    const filtered = sortedEvents.filter((event) => event.start > new Date());
     return groupEventsByDate(filtered);
   };
 
@@ -83,6 +86,7 @@ export default function EventsList({ events }: EventListProps) {
                 }
                 className="flex gap-4 rounded-lg transition-all delay-300 ease-in-out hover:bg-primary-50"
                 href="/"
+                id={event.start.toDateString() + event.title}
               >
                 <span className="w-1 rounded-l-lg bg-primary-400" />
                 <div className="flex flex-col py-2">
