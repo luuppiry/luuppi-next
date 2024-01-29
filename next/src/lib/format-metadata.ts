@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 export default function formatMetadata(content: any, url: string): Metadata {
   const seo = content.data.attributes.Seo;
 
+  if (!seo) throw new Error('No SEO data found');
+
   return {
     title: seo.metaTitle,
     description: seo.metaDescription,
