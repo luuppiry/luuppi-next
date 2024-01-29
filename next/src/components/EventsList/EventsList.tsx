@@ -35,12 +35,12 @@ export default function EventsList({ events }: EventListProps) {
 
   const getEvents = (showAll: boolean) => {
     const sortedEvents = events
-      .filter((e) => e.start)
+      .filter((e) => e.end && e.start)
       .sort((a, b) => a.start.getTime() - b.start.getTime());
     if (showAll) {
       return groupEventsByDate(sortedEvents);
     }
-    const filtered = sortedEvents.filter((event) => event.start > new Date());
+    const filtered = sortedEvents.filter((event) => event.end > new Date());
     return groupEventsByDate(filtered);
   };
 
