@@ -10,11 +10,11 @@ export default function EventsPreview({
 }) {
   return (
     <section className=" relative bg-primary-50">
-      <div className="mx-auto max-w-screen-xl px-4 py-20">
-        <p className="mb-1 text-2xl font-bold">
+      <div className="mx-auto max-w-[1200px] px-4 py-20">
+        <p className="mb-1 text-xl font-bold">
           {dictionary.pages_home.events_preview.subtitle}
         </p>
-        <h2 className="mb-8 text-5xl font-extrabold max-md:text-4xl">
+        <h2 className="mb-8 text-4xl font-extrabold max-md:text-3xl">
           {dictionary.pages_home.events_preview.title}
         </h2>
         <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-2">
@@ -25,13 +25,13 @@ export default function EventsPreview({
               href="/events"
             >
               <div className="absolute z-20 flex h-full w-full flex-col justify-end rounded-lg bg-gradient-to-t from-primary-800 via-black/50 to-transparent p-6 transition-all duration-300">
-                <p className="font-bold text-white">31 Aug 2024</p>
-                <p className="text-xl font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-xl">
+                <p className="text-sm font-bold text-white">31 Aug 2024</p>
+                <p className="text-lg font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-base">
                   {dictionary.pages_home.events_preview.event}
                 </p>
                 <div className="flex items-center gap-1">
                   <IoLocation color="#fff" size={16} />
-                  <p className="font-bold text-white">Koskikeskus</p>
+                  <p className="text-sm font-bold text-white">Koskikeskus</p>
                 </div>
               </div>
               <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden rounded-lg brightness-[75%] group-hover:brightness-100 max-md:aspect-square">
@@ -53,7 +53,7 @@ export default function EventsPreview({
         </div>
         <div className="mt-8 flex justify-center">
           <Link
-            className="btn btn-primary z-10 px-4 py-2 text-xl text-white"
+            className="btn btn-primary z-10 px-4 py-2 text-lg text-white max-md:text-base"
             href="/events"
           >
             {dictionary.pages_home.events_preview.see_all}

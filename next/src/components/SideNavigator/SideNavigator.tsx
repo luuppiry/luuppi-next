@@ -53,7 +53,7 @@ export default function SideNavigator({
 
   return (
     <aside className="luuppi-custom-scroll sticky top-36 flex h-full max-h-[calc(100vh-112px-32px)] w-full max-w-80 flex-col gap-4 rounded-lg px-4 pb-4 max-lg:hidden">
-      <h2 className="text-xl font-bold">{dictionary.general.on_this_page}</h2>
+      <h2 className="text-lg font-bold">{dictionary.general.on_this_page}</h2>
       <ul>
         {headers.map((header, index) => (
           <li
@@ -68,7 +68,7 @@ export default function SideNavigator({
               title={header.textContent ?? ''}
               onClick={() => scrollToElement(header.id)}
             >
-              <p className="line line-clamp-2">{header.textContent}</p>
+              <p className="line line-clamp-2 text-sm">{header.textContent}</p>
             </button>
           </li>
         ))}

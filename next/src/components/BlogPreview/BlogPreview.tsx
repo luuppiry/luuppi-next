@@ -3,9 +3,11 @@ import Link from 'next/link';
 
 export default function BlogPreview() {
   return (
-    <section className="mx-auto max-w-screen-xl px-4 py-20">
-      <p className="mb-1 text-2xl font-bold">Find out what&apos;s going on</p>
-      <h2 className="mb-8 text-5xl font-extrabold max-md:text-4xl">
+    <section className="mx-auto max-w-[1200px] px-4 py-20">
+      <p className="mb-1 text-xl font-bold max-md:text-base">
+        Find out what&apos;s going on
+      </p>
+      <h2 className="mb-8 text-4xl font-extrabold max-md:text-3xl">
         Our Latest Posts
       </h2>
       <div className="flex flex-col gap-8">
@@ -29,16 +31,16 @@ export default function BlogPreview() {
               </div>
               <div className="flex w-full flex-col justify-between gap-12 p-4">
                 <div className="flex flex-col gap-1">
-                  <span className="font-bold uppercase text-accent-400">
+                  <span className="text-sm font-bold uppercase text-accent-400">
                     news
                   </span>
                   <Link
-                    className={`inline-block text-2xl font-bold ${i === 0 ? 'text-4xl max-lg:text-2xl' : ''} hover:underline`}
+                    className={`inline-block font-bold ${i === 0 ? 'text-2xl max-lg:text-xl' : 'text-xl'} hover:underline`}
                     href="/blog"
                   >
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   </Link>
-                  <p className="line-clamp-3">
+                  <p className="line-clamp-3 text-sm">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Voluptate, voluptatem. Lorem ipsum dolor sit amet
                     consectetur adipisicing elit. Saepe delectus molestiae quas
@@ -48,7 +50,7 @@ export default function BlogPreview() {
                     sunt aperiam debitis iure. Non, temporibus architecto.
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
                   <Image
                     alt="avatar"
                     className="rounded-full"
@@ -57,7 +59,9 @@ export default function BlogPreview() {
                     width={50}
                   />
                   <div className="flex flex-col">
-                    <span className="font-semibold">Matti Meikäpoika</span>
+                    <span className="text-sm font-semibold">
+                      Matti Meikäpoika
+                    </span>
                     <span className="text-sm opacity-60">22.01.2024</span>
                   </div>
                 </div>
@@ -67,7 +71,7 @@ export default function BlogPreview() {
         </div>
         <div className="flex justify-center">
           <Link
-            className="btn btn-primary text-xl font-bold text-white"
+            className="btn btn-primary text-lg font-bold text-white max-md:text-base"
             href="/blog"
           >
             See all posts

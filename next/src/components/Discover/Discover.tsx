@@ -10,8 +10,8 @@ export default function Discover({
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
 }) {
   return (
-    <section className="relative mx-auto max-w-screen-xl px-4 py-20">
-      <h2 className="mb-8 text-5xl font-extrabold max-md:text-4xl">
+    <section className="relative mx-auto max-w-[1200px] px-4 py-20">
+      <h2 className="mb-8 text-4xl font-extrabold max-md:text-3xl">
         {dictionary.pages_home.discover.title}
       </h2>
       <div className="grid grid-cols-3 gap-6 max-lg:grid-cols-2">
@@ -22,7 +22,7 @@ export default function Discover({
             href={link.href}
           >
             <div className="absolute z-20 h-full w-0 bg-primary-400/50 transition-all duration-300 group-hover:w-full" />
-            <div className="absolute bottom-5 left-5 z-30 flex items-center justify-center bg-white text-2xl transition-all duration-300 max-md:bottom-0 max-md:left-0 max-md:w-full max-md:text-xl">
+            <div className="absolute bottom-5 left-5 z-30 flex items-center justify-center bg-white text-lg transition-all duration-300 max-md:bottom-0 max-md:left-0 max-md:w-full max-md:text-base">
               <h2 className="flex items-center px-4 py-2 font-bold">
                 {dictionary.pages_home.discover[link.translation]}
                 <span>

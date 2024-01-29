@@ -38,9 +38,9 @@ export default function Hero({
   }, [studyAreas]);
 
   return (
-    <section className="relative mx-auto flex max-w-screen-xl justify-center gap-8 px-4 pb-20 pt-28 max-2xl:overflow-hidden max-xl:flex-col max-xl:gap-20">
+    <section className="relative mx-auto flex max-w-[1200px] justify-center gap-8 px-4 pb-20 pt-28 max-2xl:overflow-hidden max-xl:flex-col max-xl:gap-20">
       <div className="flex w-1/2 flex-col max-xl:w-full">
-        <h1 className="mb-8 max-w-3xl text-6xl font-extrabold leading-[4.6rem] max-md:text-4xl">
+        <h1 className="mb-8 max-w-3xl text-5xl font-extrabold leading-[3.8rem] max-md:text-4xl">
           {dictionary.pages_home.hero.title_1}{' '}
           <span
             ref={changingTextRef}
@@ -51,11 +51,11 @@ export default function Hero({
           </span>{' '}
           {dictionary.pages_home.hero.title_2}
         </h1>
-        <p className="mb-8 max-w-2xl text-xl max-md:text-lg">
+        <p className="mb-8 max-w-2xl text-lg max-md:text-base">
           {dictionary.pages_home.hero.description}
         </p>
         <div>
-          <button className="btn btn-primary text-xl text-white">
+          <button className="btn btn-primary text-lg text-white max-md:text-base">
             {dictionary.pages_home.hero.read_more}
           </button>
         </div>

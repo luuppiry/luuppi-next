@@ -12,7 +12,7 @@ import { SiLinktree } from 'react-icons/si';
 export default function Footer() {
   return (
     <footer className="bg-primary-500 py-12">
-      <div className="mx-auto flex max-w-screen-xl flex-col gap-6">
+      <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
         <div className="grid w-full grid-cols-5 gap-12 px-4 max-lg:grid-cols-2 max-md:grid-cols-1">
           <div className="flex flex-col gap-6 max-lg:col-span-2 max-lg:flex-row max-md:col-span-1">
             <Image
@@ -31,13 +31,16 @@ export default function Footer() {
           </div>
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="flex flex-col gap-4">
-              <h6 className="font-semibold uppercase text-white">
+              <h6 className="text-sm font-semibold uppercase text-white">
                 Organisaatio
               </h6>
               <div className="flex flex-col gap-2">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div key={i}>
-                    <Link className="text-white hover:underline" href="/">
+                    <Link
+                      className="text-sm text-white hover:underline"
+                      href="/"
+                    >
                       Link 1
                     </Link>
                   </div>
@@ -49,24 +52,28 @@ export default function Footer() {
         <span className="h-0.5 w-full bg-white max-md:hidden" />
         <div className="flex items-center justify-between gap-6 p-4 max-md:flex-col max-md:items-start">
           <div className="flex items-center gap-6">
-            <p className="text-white">
+            <p className="text-sm text-white">
               {new Date().getFullYear()} © Luuppi ry
             </p>
             <div className="flex gap-4">
               {Array.from({ length: 4 }).map((_, i) => (
-                <Link key={i} className="text-white hover:underline" href="/">
+                <Link
+                  key={i}
+                  className="text-sm text-white hover:underline"
+                  href="/"
+                >
                   Privacy
                 </Link>
               ))}
             </div>
           </div>
           <div className="flex gap-4">
-            <FaTelegram className="text-white" size={24} />
-            <FaGithub className="text-white" size={24} />
-            <FaFacebook className="text-white" size={24} />
-            <FaInstagram className="text-white" size={24} />
-            <FaDiscord className="text-white" size={24} />
-            <SiLinktree className="text-white" size={24} />
+            <FaTelegram className="text-white" size={20} />
+            <FaGithub className="text-white" size={20} />
+            <FaFacebook className="text-white" size={20} />
+            <FaInstagram className="text-white" size={20} />
+            <FaDiscord className="text-white" size={20} />
+            <SiLinktree className="text-white" size={20} />
           </div>
         </div>
       </div>

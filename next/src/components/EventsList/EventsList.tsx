@@ -58,8 +58,9 @@ export default function EventsList({ events }: EventListProps) {
   return (
     <div className="flex flex-col gap-12">
       <div>
+        {/* Match with fullcalendar styles */}
         <button
-          className="btn btn-primary text-lg font-bold text-white"
+          className="rounded-[4px] bg-primary-400 px-[10.4px] py-[6.4px] text-base font-bold text-white"
           onClick={toggleShowPastEvents}
         >
           {showPastEvents ? 'Hide past events' : 'Show past events'}
@@ -67,7 +68,7 @@ export default function EventsList({ events }: EventListProps) {
       </div>
       {Object.values(getEvents(showPastEvents)).map((group) => (
         <div key={group.date.toDateString()} className="flex flex-col gap-2">
-          <h2 className="text-2xl font-bold">
+          <h2 className="text-xl font-bold">
             {group.date.toLocaleDateString(
               undefined,
               showPastEvents
@@ -90,7 +91,9 @@ export default function EventsList({ events }: EventListProps) {
               >
                 <span className="w-1 rounded-l-lg bg-primary-400" />
                 <div className="flex flex-col py-2">
-                  <h3 className="text-lg font-bold">{event.title}</h3>
+                  <h3 className="text-lg font-bold max-md:text-base">
+                    {event.title}
+                  </h3>
                   <div className="flex gap-2">
                     <p>
                       {event.start.toLocaleTimeString(undefined, timeOptions)}
@@ -100,7 +103,7 @@ export default function EventsList({ events }: EventListProps) {
                       {event.end.toLocaleTimeString(undefined, timeOptions)}
                     </p>
                   </div>
-                  <p className="line-clamp-3 max-w-xl text-gray-500">
+                  <p className="line-clamp-3 max-w-xl text-gray-500 max-md:text-sm">
                     {event.description}
                   </p>
                 </div>

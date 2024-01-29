@@ -58,7 +58,7 @@ export default function Header({
             scrollPosition > 100 ? 'h-16' : 'h-24'
           }`}
         >
-          <div className="mx-auto flex h-full max-w-screen-xl items-center justify-between">
+          <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between">
             <Link
               className={`btn btn-link relative h-full transition-all duration-300 ${
                 scrollPosition > 100 ? 'w-24' : 'w-36 max-lg:w-24'
@@ -81,7 +81,7 @@ export default function Header({
               </div>
               <button
                 className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold transition-all max-lg:hidden ${
-                  scrollPosition > 100 ? 'text-lg' : 'text-xl'
+                  scrollPosition > 100 ? 'text-base' : 'text-lg'
                 }`}
                 onClick={toggleAuthModal}
               >
@@ -97,7 +97,7 @@ export default function Header({
             </div>
           </div>
         </nav>
-        <ul className="mx-auto flex max-w-screen-xl justify-center gap-1 px-4 max-lg:hidden">
+        <ul className="mx-auto flex max-w-[1200px] justify-center gap-1 px-4 max-lg:hidden">
           {navLinks.map((link) => (
             <li
               key={link.translation}
@@ -106,7 +106,7 @@ export default function Header({
               {link.sublinks && link.sublinks.length > 0 ? (
                 <div
                   className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
-                    scrollPosition > 100 ? 'text-lg' : 'text-xl'
+                    scrollPosition > 100 ? 'text-base' : 'text-lg'
                   }`}
                 >
                   <span>
@@ -128,7 +128,7 @@ export default function Header({
               ) : (
                 <Link
                   className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
-                    scrollPosition > 100 ? 'text-lg' : 'text-xl'
+                    scrollPosition > 100 ? 'text-base' : 'text-lg'
                   }`}
                   href={`/${lang}${link.href as string}`}
                 >
@@ -154,7 +154,7 @@ export default function Header({
                   {link.sublinks.map((sublink) => (
                     <Link
                       key={sublink.translation}
-                      className="truncate rounded-lg p-2 text-lg font-bold hover:bg-gray-200"
+                      className="truncate rounded-lg p-2 font-bold hover:bg-gray-200"
                       href={`/${lang}${sublink.href as string}`}
                     >
                       {

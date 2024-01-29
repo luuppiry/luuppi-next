@@ -11,17 +11,17 @@ export default function Partners({
 }) {
   return (
     <section className=" bg-primary-50 px-4 py-20">
-      <div className="mx-auto max-w-screen-xl">
+      <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-col gap-6">
-          <h2 className="text-5xl font-extrabold max-md:text-4xl">
+          <h2 className="text-4xl font-extrabold max-md:text-3xl">
             {dictionary.pages_home.partners.title}
           </h2>
-          <p className="max-w-2xl text-xl transition-all duration-300 max-md:text-lg">
+          <p className="max-w-2xl text-lg transition-all duration-300 max-md:text-base">
             {dictionary.pages_home.partners.description}
           </p>
           <div className="flex">
             <Link
-              className="btn btn-primary text-xl font-bold text-white"
+              className="btn btn-primary text-lg font-bold text-white max-md:text-base"
               href="/contact"
             >
               {dictionary.pages_home.partners.read_more}

@@ -35,14 +35,14 @@ export default function EventSelector({
     <>
       <div className="tabs-boxed tabs mb-8" role="tablist">
         <button
-          className={`tab text-lg font-bold ${selectedView === 'calendar' && 'tab-active'}`}
+          className={`tab font-bold ${selectedView === 'calendar' && 'tab-active'}`}
           role="tab"
           onClick={() => setView('calendar')}
         >
           {dictionary.pages_events.calendar}
         </button>
         <button
-          className={`tab text-lg font-bold ${selectedView === 'list' && 'tab-active'}`}
+          className={`tab font-bold ${selectedView === 'list' && 'tab-active'}`}
           role="tab"
           onClick={() => setView('list')}
         >

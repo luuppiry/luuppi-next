@@ -39,7 +39,7 @@ export default async function Organization({
         </div>
         <div className="flex flex-col gap-4">
           <div>
-            <h1 className="inline-block rounded-lg bg-primary-400 px-4 py-2 text-5xl font-extrabold text-white max-md:text-4xl">
+            <h1 className="inline-block rounded-lg bg-primary-400 px-4 py-2 text-4xl font-extrabold text-white max-md:text-3xl">
               {organizationData.data.attributes.Content.title}
             </h1>
           </div>
@@ -52,7 +52,7 @@ export default async function Organization({
             </p>
           </div>
         </div>
-        <article className="organization-page prose prose-lg prose-custom max-w-full decoration-primary-400 transition-all duration-300 ease-in-out max-md:prose-base">
+        <article className="organization-page prose prose-base prose-custom max-w-full decoration-primary-400 transition-all duration-300 ease-in-out max-md:prose-base">
           <BlockRendererClient
             content={organizationData.data.attributes.Content.content}
           />

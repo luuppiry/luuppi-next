@@ -10,9 +10,9 @@ export default async function NotFound({
   const dictionary = await getDictionary(params.lang);
 
   return (
-    <section className="mx-auto max-w-screen-xl px-4 py-20">
+    <section className="mx-auto max-w-[1200px] px-4 py-20">
       <div className="flex flex-col items-center gap-4">
-        <h1 className="text-6xl font-extrabold">
+        <h1 className="text-5xl font-extrabold">
           {dictionary.pages_404.title}
         </h1>
         <p className="text-lg">{dictionary.pages_404.description}</p>

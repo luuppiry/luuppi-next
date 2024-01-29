@@ -4,6 +4,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mx-auto max-w-screen-xl px-4 py-20">{children}</section>
+    <section className="mx-auto max-w-[1200px] px-4 py-20">{children}</section>
   );
 }
