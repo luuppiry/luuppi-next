@@ -17,7 +17,10 @@ export default async function NotFound({
         </h1>
         <p className="text-lg">{dictionary.pages_404.description}</p>
         <div>
-          <Link className="btn btn-primary text-lg text-white" href="/">
+          <Link
+            className="btn btn-primary text-lg text-white"
+            href={`/${params.lang}`}
+          >
             {dictionary.pages_404.return_home}
           </Link>
         </div>
