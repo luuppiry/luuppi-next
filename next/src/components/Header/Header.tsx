@@ -15,7 +15,7 @@ export default function Header({
   dictionary,
   lang,
 }: {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>['navigation'];
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
   lang: SupportedLanguage;
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -85,7 +85,7 @@ export default function Header({
                 }`}
                 onClick={toggleAuthModal}
               >
-                {dictionary.login}
+                {dictionary.general.login}
                 <RiLoginCircleLine className="ml-2 inline-block" size={24} />
               </button>
               <button
@@ -110,7 +110,11 @@ export default function Header({
                   }`}
                 >
                   <span>
-                    {dictionary[link.translation as keyof typeof dictionary]}
+                    {
+                      dictionary.navigation[
+                        link.translation as keyof typeof dictionary.navigation
+                      ]
+                    }
                   </span>
                   {link.sublinks && link.sublinks.length > 0 && (
                     <div className="w-6">
@@ -129,7 +133,11 @@ export default function Header({
                   href={`/${lang}${link.href as string}`}
                 >
                   <span>
-                    {dictionary[link.translation as keyof typeof dictionary]}
+                    {
+                      dictionary.navigation[
+                        link.translation as keyof typeof dictionary.navigation
+                      ]
+                    }
                   </span>
                   {link.sublinks && link.sublinks.length > 0 && (
                     <div className="w-6">
@@ -150,8 +158,8 @@ export default function Header({
                       href={`/${lang}${sublink.href as string}`}
                     >
                       {
-                        dictionary[
-                          sublink.translation as keyof typeof dictionary
+                        dictionary.navigation[
+                          sublink.translation as keyof typeof dictionary.navigation
                         ]
                       }
                     </Link>

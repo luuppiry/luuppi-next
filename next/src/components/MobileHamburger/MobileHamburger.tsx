@@ -6,7 +6,7 @@ import { navLinks } from '../Header/navLinks';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 
 interface MobileNavbarProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>['navigation'];
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
   lang: SupportedLanguage;
   open: boolean;
   onClose: () => void;
@@ -29,7 +29,11 @@ export default function MobileHamburger({
             <li key={link.translation}>
               {link.sublinks && link.sublinks.length > 0 ? (
                 <div className="flex items-center justify-between bg-primary-400 font-bold text-white hover:cursor-auto">
-                  {dictionary[link.translation as keyof typeof dictionary]}
+                  {
+                    dictionary.navigation[
+                      link.translation as keyof typeof dictionary.navigation
+                    ]
+                  }
                 </div>
               ) : (
                 <Link
@@ -37,7 +41,11 @@ export default function MobileHamburger({
                   href={`/${lang}${link.href as string}`}
                   onClick={onClose}
                 >
-                  {dictionary[link.translation as keyof typeof dictionary]}
+                  {
+                    dictionary.navigation[
+                      link.translation as keyof typeof dictionary.navigation
+                    ]
+                  }
                 </Link>
               )}
               {link.sublinks && link.sublinks.length > 0 && (
@@ -50,8 +58,8 @@ export default function MobileHamburger({
                         onClick={onClose}
                       >
                         {
-                          dictionary[
-                            sublink.translation as keyof typeof dictionary
+                          dictionary.navigation[
+                            sublink.translation as keyof typeof dictionary.navigation
                           ]
                         }
                       </Link>

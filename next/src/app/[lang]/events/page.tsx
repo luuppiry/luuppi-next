@@ -1,6 +1,8 @@
 import EventSelector from '@/components/EventSelector/EventSelector';
+import { getDictionary } from '@/dictionaries';
 import removeHtml from '@/lib/remove-html';
 import { Event } from '@/models/event';
+import { SupportedLanguage } from '@/models/locale';
 import ical from 'node-ical';
 
 /**
@@ -23,12 +25,23 @@ const getLuuppiEvents = async (): Promise<Event[]> => {
   return formattedEvents;
 };
 
-export default async function Events() {
+export default async function Events({
+  params,
+}: {
+  params: { lang: SupportedLanguage };
+}) {
+  const dictionary = await getDictionary(params.lang);
   const events = await getLuuppiEvents();
   return (
     <section className="mx-auto max-w-screen-xl px-4 py-20">
-      <h1 className="mb-14 text-5xl font-extrabold max-md:text-4xl">Events</h1>
-      <EventSelector events={events} />
+      <h1 className="mb-14 text-5xl font-extrabold max-md:text-4xl">
+        {dictionary.navigation.events}
+      </h1>
+      <EventSelector
+        dictionary={dictionary}
+        events={events}
+        lang={params.lang}
+      />
     </section>
   );
 }

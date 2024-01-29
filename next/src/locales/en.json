@@ -1,6 +1,11 @@
 {
-  "navigation": {
+  "general": {
+    "email": "Email",
+    "content_updated": "Content updated",
     "login": "Login",
+    "on_this_page": "On this page"
+  },
+  "navigation": {
     "home": "Home",
     "organization": "Organization",
     "studies": "Studies",
@@ -44,6 +49,20 @@
       "title": "Upcoming Events",
       "subtitle": "Check out what's happening",
       "see_all": "See all events"
+    },
+    "partners": {
+      "title": "Partners",
+      "description": "We are proud to work with these companies. If you are interested in collaboration don't hesitate to contact us!",
+      "read_more": "Read more"
     }
+  },
+  "pages_board": {
+    "other_boards": "Muut hallitukset",
+    "board_member": "Board member",
+    "official": "Official"
+  },
+  "pages_events": {
+    "calendar": "Calendar",
+    "event_feed": "Event feed"
   }
 }

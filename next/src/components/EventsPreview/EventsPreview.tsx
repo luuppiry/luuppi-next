@@ -6,16 +6,16 @@ import { IoLocation } from 'react-icons/io5';
 export default function EventsPreview({
   dictionary,
 }: {
-  dictionary: Awaited<
-    ReturnType<typeof getDictionary>
-  >['pages_home']['events_preview'];
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
 }) {
   return (
     <section className=" relative bg-primary-50">
       <div className="mx-auto max-w-screen-xl px-4 py-20">
-        <p className="mb-1 text-2xl font-bold">{dictionary.subtitle}</p>
+        <p className="mb-1 text-2xl font-bold">
+          {dictionary.pages_home.events_preview.subtitle}
+        </p>
         <h2 className="mb-8 text-5xl font-extrabold max-md:text-4xl">
-          {dictionary.title}
+          {dictionary.pages_home.events_preview.title}
         </h2>
         <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-2">
           {Array.from({ length: 4 }, (_, i) => (
@@ -56,7 +56,7 @@ export default function EventsPreview({
             className="btn btn-primary z-10 px-4 py-2 text-xl text-white"
             href="/events"
           >
-            {dictionary.see_all}
+            {dictionary.pages_home.events_preview.see_all}
           </Link>
         </div>
       </div>

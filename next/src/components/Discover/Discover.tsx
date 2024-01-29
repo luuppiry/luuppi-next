@@ -7,26 +7,24 @@ import { discoverLinks } from './discoverLinks';
 export default function Discover({
   dictionary,
 }: {
-  dictionary: Awaited<
-    ReturnType<typeof getDictionary>
-  >['pages_home']['discover'];
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
 }) {
   return (
     <section className="relative mx-auto max-w-screen-xl px-4 py-20">
       <h2 className="mb-8 text-5xl font-extrabold max-md:text-4xl">
-        {dictionary.title}
+        {dictionary.pages_home.discover.title}
       </h2>
       <div className="grid grid-cols-3 gap-6 max-lg:grid-cols-2">
         {discoverLinks.map((link) => (
           <Link
-            key={dictionary[link.translation]}
+            key={dictionary.pages_home.discover[link.translation]}
             className="group relative flex aspect-[3/2] h-full w-full border-4 border-primary-950 shadow-[7px_7px_#090a10] transition-all duration-300 hover:shadow-[0px_0px_#090a10] max-md:aspect-square"
             href={link.href}
           >
             <div className="absolute z-20 h-full w-0 bg-primary-400/50 transition-all duration-300 group-hover:w-full" />
             <div className="absolute bottom-5 left-5 z-30 flex items-center justify-center bg-white text-2xl transition-all duration-300 max-md:bottom-0 max-md:left-0 max-md:w-full max-md:text-xl">
               <h2 className="flex items-center px-4 py-2 font-bold">
-                {dictionary[link.translation]}
+                {dictionary.pages_home.discover[link.translation]}
                 <span>
                   <MdOutlineKeyboardArrowRight size={25} />
                 </span>

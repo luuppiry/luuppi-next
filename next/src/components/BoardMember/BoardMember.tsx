@@ -1,14 +1,18 @@
+import { getDictionary } from '@/dictionaries';
 import Image from 'next/image';
 
 interface BoardMemberProps {
   member: any;
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
 }
 
-export default function BoardMember({ member }: BoardMemberProps) {
+export default function BoardMember({ member, dictionary }: BoardMemberProps) {
   return (
     <div className="indicator flex w-full flex-col rounded-lg border-[1px] border-gray-200 shadow-lg">
       <span className="badge indicator-item badge-primary badge-lg indicator-center border-none px-4 font-bold text-white">
-        {member.attributes.isBoardMember ? 'Hallitus' : 'Toimihenkilö'}
+        {member.attributes.isBoardMember
+          ? dictionary.pages_board.board_member
+          : dictionary.pages_board.official}
       </span>
       <div className="relative aspect-[5/6] w-full rounded-lg bg-primary-400">
         <Image
@@ -35,7 +39,7 @@ export default function BoardMember({ member }: BoardMemberProps) {
           ))}
         </div>
         <div className="mt-2">
-          <h3 className="text-lg font-semibold">Email</h3>
+          <h3 className="text-lg font-semibold">{dictionary.general.email}</h3>
           <div className="flex flex-col gap-1">
             {member.attributes.boardRoles.data.map((role: any) => (
               <p key={role.attributes.email} className="text-sm">

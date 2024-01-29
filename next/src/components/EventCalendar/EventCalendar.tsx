@@ -1,5 +1,6 @@
 'use client';
 import { Event } from '@/models/event';
+import { SupportedLanguage } from '@/models/locale';
 import fiLocale from '@fullcalendar/core/locales/fi';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import FullCalendar from '@fullcalendar/react';
@@ -9,9 +10,10 @@ import './EventCalendar.css';
 
 interface EventCalendarProps {
   events: Event[];
+  lang: SupportedLanguage;
 }
 
-export default function EventCalendar({ events }: EventCalendarProps) {
+export default function EventCalendar({ events, lang }: EventCalendarProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   // Hacky solution to fix overlapping events styling
@@ -89,7 +91,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
             }
       }
       initialView={'dayGridMonth'}
-      locale={fiLocale}
+      locale={lang === 'fi' ? fiLocale : ''}
       plugins={[dayGridPlugin, timeGridPlugin]}
       slotLabelFormat={{
         hour: 'numeric',

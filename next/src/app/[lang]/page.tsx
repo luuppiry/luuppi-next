@@ -16,11 +16,11 @@ export default async function Home({
   return (
     <>
       <Banner />
-      <Hero dictionary={dictionary.pages_home.hero} />
-      <Discover dictionary={dictionary.pages_home.discover} />
-      <EventsPreview dictionary={dictionary.pages_home.events_preview} />
+      <Hero dictionary={dictionary} />
+      <Discover dictionary={dictionary} />
+      <EventsPreview dictionary={dictionary} />
       <BlogPreview />
-      <Partners />
+      <Partners dictionary={dictionary} />
     </>
   );
 }

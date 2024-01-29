@@ -1,5 +1,6 @@
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import SideNavigator from '@/components/SideNavigator/SideNavigator';
+import { getDictionary } from '@/dictionaries';
 import formatMetadata from '@/lib/format-metadata';
 import getStrapiData from '@/lib/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
@@ -8,26 +9,13 @@ import { Metadata } from 'next';
 import { headers } from 'next/headers';
 import Image from 'next/image';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: SupportedLanguage };
-}): Promise<Metadata> {
-  const data = await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
-    params.lang,
-    '/api/organization-general?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage',
-  );
-
-  const pathname = headers().get('x-pathname') as string;
-
-  return formatMetadata(data, pathname);
-}
-
 export default async function Organization({
   params,
 }: {
   params: { lang: SupportedLanguage };
 }) {
+  const dictionary = await getDictionary(params.lang);
+
   const organizationData =
     await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
       params.lang,
@@ -57,7 +45,7 @@ export default async function Organization({
           </div>
           <div className="flex flex-col opacity-40">
             <p className="text-sm">
-              Sisältö päivitetty:{' '}
+              {dictionary.general.content_updated}:{' '}
               {new Date(
                 organizationData.data.attributes.updatedAt,
               ).toLocaleString()}
@@ -70,7 +58,22 @@ export default async function Organization({
           />
         </article>
       </div>
-      <SideNavigator targetClass="organization-page" />
+      <SideNavigator dictionary={dictionary} targetClass="organization-page" />
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { lang: SupportedLanguage };
+}): Promise<Metadata> {
+  const data = await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
+    params.lang,
+    '/api/organization-general?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage',
+  );
+
+  const pathname = headers().get('x-pathname') as string;
+
+  return formatMetadata(data, pathname);
 }

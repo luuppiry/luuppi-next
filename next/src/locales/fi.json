@@ -1,6 +1,11 @@
 {
-  "navigation": {
+  "general": {
+    "email": "Sähköposti",
+    "content_updated": "Sisältö päivitetty",
     "login": "Kirjaudu",
+    "on_this_page": "Tällä sivulla"
+  },
+  "navigation": {
     "home": "Koti",
     "organization": "Organisaatio",
     "studies": "Opinnot",
@@ -44,6 +49,20 @@
       "title": "Tulevat Tapahtumat",
       "subtitle": "Kurkista mitä on tulossa!",
       "see_all": "Kaikki tapahtumat"
+    },
+    "partners": {
+      "title": "Yhteistyökumppanit",
+      "description": "Me olemme ylpeitä voidessamme työskennellä näiden yritysten kanssa. Jos olet kiinnostunut yhteistyöstä, älä epäröi ottaa meihin yhteyttä!",
+      "read_more": "Lue lisää"
     }
+  },
+  "pages_board": {
+    "other_boards": "Muut hallitukset",
+    "board_member": "Hallituksessa",
+    "official": "Toimihenkilö"
+  },
+  "pages_events": {
+    "calendar": "Kalenteri",
+    "event_feed": "Tapahtumavirta"
   }
 }

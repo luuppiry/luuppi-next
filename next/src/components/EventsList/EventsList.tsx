@@ -95,7 +95,6 @@ export default function EventsList({ events }: EventListProps) {
                     <p>
                       {event.end.toLocaleTimeString(undefined, timeOptions)}
                     </p>
-                    p
                   </div>
                   <p className="line-clamp-3 max-w-xl text-gray-500">
                     {event.description}

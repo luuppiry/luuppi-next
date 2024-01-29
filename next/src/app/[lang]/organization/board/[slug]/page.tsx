@@ -1,5 +1,7 @@
 import BoardMember from '@/components/BoardMember/BoardMember';
+import { getDictionary } from '@/dictionaries';
 import getStrapiData from '@/lib/get-strapi-data';
+import groupByYear from '@/lib/group-by-year';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBoardBoard } from '@/types/contentTypes';
 import Link from 'next/link';
@@ -10,6 +12,8 @@ export default async function OldBoard({
 }: {
   params: { slug: string; lang: SupportedLanguage };
 }) {
+  const dictionary = await getDictionary(params.lang);
+
   const year = parseInt(params.slug, 10);
 
   if (isNaN(year)) {
@@ -39,11 +43,13 @@ export default async function OldBoard({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="mb-14 text-5xl font-extrabold max-md:text-4xl">Board</h1>
+        <h1 className="mb-14 text-5xl font-extrabold max-md:text-4xl">
+          {dictionary.navigation.board} {board.attributes.year}
+        </h1>
         {!!otherBoards.length && (
           <div className="dropdown">
             <div className="btn m-1" role="button" tabIndex={0}>
-              Muut hallitukset
+              {dictionary.pages_board.other_boards}
             </div>
             <ul
               className="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow"
@@ -64,7 +70,11 @@ export default async function OldBoard({
       </div>
       <div className="grid grid-cols-2 gap-12 lg:grid-cols-3">
         {board.attributes.boardMembers.data.map((member: any) => (
-          <BoardMember key={member.attributes.createdAt} member={member} />
+          <BoardMember
+            key={member.attributes.createdAt}
+            dictionary={dictionary}
+            member={member}
+          />
         ))}
       </div>
     </div>
@@ -82,17 +92,4 @@ export async function generateStaticParams() {
   return Object.keys(boardGroupedByYear).map((year) => ({
     params: { slug: year },
   }));
-}
-
-function groupByYear(data: ApiBoardBoard[]) {
-  const groupedData = data.reduce(
-    (acc, item) => {
-      const year = item.attributes.year;
-      acc[year] = item;
-      return acc;
-    },
-    {} as Record<string, ApiBoardBoard>,
-  );
-
-  return groupedData;
 }

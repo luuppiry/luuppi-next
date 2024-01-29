@@ -6,14 +6,14 @@ import { useEffect, useMemo, useRef } from 'react';
 export default function Hero({
   dictionary,
 }: {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>['pages_home']['hero'];
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
 }) {
   const changingTextRef = useRef<HTMLSpanElement | null>(null);
   const studyAreas = useMemo(
     () => [
-      dictionary.computer_science,
-      dictionary.mathematics,
-      dictionary.data_analysis,
+      dictionary.pages_home.hero.computer_science,
+      dictionary.pages_home.hero.mathematics,
+      dictionary.pages_home.hero.data_analysis,
     ],
     [dictionary],
   );
@@ -41,7 +41,7 @@ export default function Hero({
     <section className="relative mx-auto flex max-w-screen-xl justify-center gap-8 px-4 pb-20 pt-28 max-2xl:overflow-hidden max-xl:flex-col max-xl:gap-20">
       <div className="flex w-1/2 flex-col max-xl:w-full">
         <h1 className="mb-8 max-w-3xl text-6xl font-extrabold leading-[4.6rem] max-md:text-4xl">
-          {dictionary.title_1}{' '}
+          {dictionary.pages_home.hero.title_1}{' '}
           <span
             ref={changingTextRef}
             className="inline-block bg-gradient-to-r from-primary-400 to-text-300 bg-clip-text text-transparent transition-all duration-300"
@@ -49,14 +49,14 @@ export default function Hero({
           >
             {studyAreas[0]}
           </span>{' '}
-          {dictionary.title_2}
+          {dictionary.pages_home.hero.title_2}
         </h1>
         <p className="mb-8 max-w-2xl text-xl max-md:text-lg">
-          {dictionary.description}
+          {dictionary.pages_home.hero.description}
         </p>
         <div>
           <button className="btn btn-primary text-xl text-white">
-            {dictionary.read_more}
+            {dictionary.pages_home.hero.read_more}
           </button>
         </div>
       </div>
