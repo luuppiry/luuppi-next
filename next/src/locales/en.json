@@ -48,7 +48,8 @@
     "events_preview": {
       "title": "Upcoming Events",
       "subtitle": "Check out what's happening",
-      "see_all": "See all events"
+      "see_all": "See all events",
+      "event": "Event"
     },
     "partners": {
       "title": "Partners",

@@ -48,7 +48,8 @@
     "events_preview": {
       "title": "Tulevat Tapahtumat",
       "subtitle": "Kurkista mitä on tulossa!",
-      "see_all": "Kaikki tapahtumat"
+      "see_all": "Kaikki tapahtumat",
+      "event": "Tapahtuma"
     },
     "partners": {
       "title": "Yhteistyökumppanit",
