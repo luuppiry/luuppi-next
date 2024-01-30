@@ -1,14 +1,19 @@
+import { getDictionary } from '@/dictionaries';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function BlogPreview() {
+interface BlogPreviewProps {
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+}
+
+export default function BlogPreview({ dictionary }: BlogPreviewProps) {
   return (
     <section className="mx-auto max-w-[1200px] px-4 py-20">
       <p className="mb-1 text-xl font-bold max-md:text-base">
-        Find out what&apos;s going on
+        {dictionary.pages_home.blog.subtitle}
       </p>
       <h2 className="mb-8 text-4xl font-extrabold max-md:text-3xl">
-        Our Latest Posts
+        {dictionary.pages_home.blog.title}
       </h2>
       <div className="flex flex-col gap-8">
         <div className="grid grid-cols-3 gap-6 max-lg:grid-cols-2 max-md:grid-cols-1">
@@ -32,7 +37,7 @@ export default function BlogPreview() {
               <div className="flex w-full flex-col justify-between gap-12 p-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm font-bold uppercase text-accent-400">
-                    news
+                    {dictionary.pages_home.blog.news}
                   </span>
                   <Link
                     className={`inline-block font-bold ${i === 0 ? 'text-2xl max-lg:text-xl' : 'text-xl'} hover:underline`}
@@ -74,7 +79,7 @@ export default function BlogPreview() {
             className="btn btn-primary text-lg font-bold text-white max-md:text-base"
             href="/blog"
           >
-            See all posts
+            {dictionary.pages_home.blog.see_all}
           </Link>
         </div>
       </div>

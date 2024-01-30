@@ -51,6 +51,12 @@
       "see_all": "Kaikki tapahtumat",
       "event": "Tapahtuma"
     },
+    "blog": {
+      "title": "Uusimmat Postaukset",
+      "subtitle": "Katso mistä pöhistään!",
+      "news": "Uutiset",
+      "see_all": "Kaikki postaukset"
+    },
     "partners": {
       "title": "Yhteistyökumppanit",
       "description": "Me olemme ylpeitä voidessamme työskennellä näiden yritysten kanssa. Jos olet kiinnostunut yhteistyöstä, älä epäröi ottaa meihin yhteyttä!",
