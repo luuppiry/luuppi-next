@@ -19,7 +19,7 @@ jobs:
                   node-version: 20
 
             - name: Navigate to strapi folder
-              run: cd luuppi-next/strapi
+              run: cd strapi
 
             - name: Install dependencies
               run: yarn install
