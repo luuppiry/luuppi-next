@@ -64,7 +64,9 @@
   },
   "pages_events": {
     "calendar": "Kalenteri",
-    "event_feed": "Tapahtumavirta"
+    "event_feed": "Tapahtumavirta",
+    "show_past": "Näytä menneet tapahtumat",
+    "hide_past": "Piilota menneet tapahtumat"
   },
   "pages_404": {
     "title": "404 - Sivua ei löytynyt",

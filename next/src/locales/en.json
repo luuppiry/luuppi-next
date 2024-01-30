@@ -64,7 +64,9 @@
   },
   "pages_events": {
     "calendar": "Calendar",
-    "event_feed": "Event feed"
+    "event_feed": "Event feed",
+    "show_past": "Show past events",
+    "hide_past": "Hide past events"
   },
   "pages_404": {
     "title": "404 - Page not found",

@@ -1,12 +1,14 @@
+import { getDictionary } from '@/dictionaries';
 import { Event } from '@/models/event';
 import Link from 'next/link';
 import { useState } from 'react';
 
 interface EventListProps {
   events: Event[];
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
 }
 
-export default function EventsList({ events }: EventListProps) {
+export default function EventsList({ events, dictionary }: EventListProps) {
   const [showPastEvents, setShowPastEvents] = useState(false);
 
   const toggleShowPastEvents = (e: any) => {
@@ -63,7 +65,9 @@ export default function EventsList({ events }: EventListProps) {
           className="rounded-[4px] bg-primary-400 px-[10.4px] py-[6.4px] text-base font-bold text-white"
           onClick={toggleShowPastEvents}
         >
-          {showPastEvents ? 'Hide past events' : 'Show past events'}
+          {showPastEvents
+            ? dictionary.pages_events.hide_past
+            : dictionary.pages_events.show_past}
         </button>
       </div>
       {Object.values(getEvents(showPastEvents)).map((group) => (
