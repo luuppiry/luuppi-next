@@ -34,8 +34,9 @@ jobs:
                   key: ${{ secrets.KEY }}
                   port: ${{ secrets.PORT }}
                   script: |
-                      cd luuppi-next/strapi
+                      cd luuppi-next
                       git pull
+                      cd strapi
                       docker build -t strapi .
                       docker compose down
                       docker compose up -d
@@ -47,5 +48,36 @@ jobs:
         needs: ['strapi']
         steps:
             - uses: actions/checkout@v3
-            - name: echo test
-              run: echo "test"
+            - uses: pnpm/action-setup@v2
+              with:
+                  version: 8
+
+            - name: Setup Node.js environment
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 20
+                  cache: 'pnpm'
+
+            - name: Install dependencies
+              run: pnpm install
+              working-directory: ./next
+
+            - name: Build Next.js
+              run: pnpm run build
+              working-directory: ./next
+
+            - name: Deploy Next.js
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.HOST }}
+                  username: ${{ secrets.USERNAME }}
+                  key: ${{ secrets.KEY }}
+                  port: ${{ secrets.PORT }}
+                  script: |
+                      cd luuppi-next
+                      git pull
+                      cd next
+                      docker stop next
+                      docker rm next
+                      docker build -t next:latest .
+                      docker run -d --name next -p 3000:3000 next:latest
