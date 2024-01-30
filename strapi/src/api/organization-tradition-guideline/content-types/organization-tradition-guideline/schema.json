@@ -1,10 +1,10 @@
 {
   "kind": "singleType",
-  "collectionName": "organization_generals",
+  "collectionName": "organization_tradition_guidelines",
   "info": {
-    "singularName": "organization-general",
-    "pluralName": "organization-generals",
-    "displayName": "OrganizationGeneral",
+    "singularName": "organization-tradition-guideline",
+    "pluralName": "organization-tradition-guidelines",
+    "displayName": "OrganizationTraditionGuidelines",
     "description": ""
   },
   "options": {

@@ -1,10 +1,10 @@
 {
   "kind": "singleType",
-  "collectionName": "organization_generals",
+  "collectionName": "organization_rules",
   "info": {
-    "singularName": "organization-general",
-    "pluralName": "organization-generals",
-    "displayName": "OrganizationGeneral",
+    "singularName": "organization-rule",
+    "pluralName": "organization-rules",
+    "displayName": "OrganizationRules",
     "description": ""
   },
   "options": {

@@ -790,7 +790,7 @@ export interface ApiBoardBoard extends Schema.CollectionType {
     description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     year: Attribute.Integer & Attribute.Unique;
@@ -801,7 +801,6 @@ export interface ApiBoardBoard extends Schema.CollectionType {
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::board.board',
       'oneToOne',
@@ -826,7 +825,7 @@ export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
     description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     fullName: Attribute.String;
@@ -846,7 +845,6 @@ export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::board-member.board-member',
       'oneToOne',
@@ -871,7 +869,7 @@ export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
     description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   pluginOptions: {
     i18n: {
@@ -895,7 +893,6 @@ export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
       }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::board-role.board-role',
       'oneToOne',
@@ -917,6 +914,61 @@ export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
   };
 }
 
+export interface ApiOrganizationDocumentOrganizationDocument
+  extends Schema.SingleType {
+  collectionName: 'organization_documents';
+  info: {
+    singularName: 'organization-document';
+    pluralName: 'organization-documents';
+    displayName: 'OrganizationDocuments';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::organization-document.organization-document',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::organization-document.organization-document',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::organization-document.organization-document',
+      'oneToMany',
+      'api::organization-document.organization-document'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 export interface ApiOrganizationGeneralOrganizationGeneral
   extends Schema.SingleType {
   collectionName: 'organization_generals';
@@ -927,7 +979,7 @@ export interface ApiOrganizationGeneralOrganizationGeneral
     description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   pluginOptions: {
     i18n: {
@@ -936,12 +988,14 @@ export interface ApiOrganizationGeneralOrganizationGeneral
   };
   attributes: {
     Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
     Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -949,7 +1003,6 @@ export interface ApiOrganizationGeneralOrganizationGeneral
       }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::organization-general.organization-general',
       'oneToOne',
@@ -966,6 +1019,225 @@ export interface ApiOrganizationGeneralOrganizationGeneral
       'api::organization-general.organization-general',
       'oneToMany',
       'api::organization-general.organization-general'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiOrganizationHonoraryMemberOrganizationHonoraryMember
+  extends Schema.SingleType {
+  collectionName: 'organization_honorary_members';
+  info: {
+    singularName: 'organization-honorary-member';
+    pluralName: 'organization-honorary-members';
+    displayName: 'OrganizationHonoraryMembers';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::organization-honorary-member.organization-honorary-member',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::organization-honorary-member.organization-honorary-member',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::organization-honorary-member.organization-honorary-member',
+      'oneToMany',
+      'api::organization-honorary-member.organization-honorary-member'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiOrganizationOfficeOrganizationOffice
+  extends Schema.SingleType {
+  collectionName: 'organization_offices';
+  info: {
+    singularName: 'organization-office';
+    pluralName: 'organization-offices';
+    displayName: 'OrganizationOffice';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::organization-office.organization-office',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::organization-office.organization-office',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::organization-office.organization-office',
+      'oneToMany',
+      'api::organization-office.organization-office'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiOrganizationRuleOrganizationRule extends Schema.SingleType {
+  collectionName: 'organization_rules';
+  info: {
+    singularName: 'organization-rule';
+    pluralName: 'organization-rules';
+    displayName: 'OrganizationRules';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::organization-rule.organization-rule',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::organization-rule.organization-rule',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::organization-rule.organization-rule',
+      'oneToMany',
+      'api::organization-rule.organization-rule'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline
+  extends Schema.SingleType {
+  collectionName: 'organization_tradition_guidelines';
+  info: {
+    singularName: 'organization-tradition-guideline';
+    pluralName: 'organization-tradition-guidelines';
+    displayName: 'OrganizationTraditionGuidelines';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::organization-tradition-guideline.organization-tradition-guideline',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::organization-tradition-guideline.organization-tradition-guideline',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::organization-tradition-guideline.organization-tradition-guideline',
+      'oneToMany',
+      'api::organization-tradition-guideline.organization-tradition-guideline'
     >;
     locale: Attribute.String;
   };
@@ -992,7 +1264,12 @@ declare module '@strapi/types' {
       'api::board.board': ApiBoardBoard;
       'api::board-member.board-member': ApiBoardMemberBoardMember;
       'api::board-role.board-role': ApiBoardRoleBoardRole;
+      'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
+      'api::organization-honorary-member.organization-honorary-member': ApiOrganizationHonoraryMemberOrganizationHonoraryMember;
+      'api::organization-office.organization-office': ApiOrganizationOfficeOrganizationOffice;
+      'api::organization-rule.organization-rule': ApiOrganizationRuleOrganizationRule;
+      'api::organization-tradition-guideline.organization-tradition-guideline': ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline;
     }
   }
 }

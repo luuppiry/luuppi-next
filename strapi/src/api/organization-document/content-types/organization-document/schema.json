@@ -1,10 +1,10 @@
 {
   "kind": "singleType",
-  "collectionName": "organization_generals",
+  "collectionName": "organization_documents",
   "info": {
-    "singularName": "organization-general",
-    "pluralName": "organization-generals",
-    "displayName": "OrganizationGeneral",
+    "singularName": "organization-document",
+    "pluralName": "organization-documents",
+    "displayName": "OrganizationDocuments",
     "description": ""
   },
   "options": {

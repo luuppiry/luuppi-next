@@ -1,10 +1,10 @@
 {
   "kind": "singleType",
-  "collectionName": "organization_generals",
+  "collectionName": "organization_honorary_members",
   "info": {
-    "singularName": "organization-general",
-    "pluralName": "organization-generals",
-    "displayName": "OrganizationGeneral",
+    "singularName": "organization-honorary-member",
+    "pluralName": "organization-honorary-members",
+    "displayName": "OrganizationHonoraryMembers",
     "description": ""
   },
   "options": {
