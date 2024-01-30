@@ -16,7 +16,7 @@ export const navLinks: NavLink[] = [
     translation: 'organization',
     sublinks: [
       {
-        translation: 'general',
+        translation: 'introduction',
         href: '/organization',
       },
       {
@@ -30,6 +30,10 @@ export const navLinks: NavLink[] = [
       {
         translation: 'office',
         href: '/organization/office',
+      },
+      {
+        translation: 'tradition_guidelines',
+        href: '/organization/tradition-guidelines',
       },
       {
         translation: 'honorary_members',

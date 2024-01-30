@@ -8,10 +8,12 @@
   "navigation": {
     "home": "Home",
     "organization": "Organization",
+    "introduction": "Esittely",
     "studies": "Studies",
     "tutoring": "Tutoring",
     "events": "Events",
     "blog": "Blog",
+    "tradition_guidelines": "Traditional guidelines",
     "sports": "Sports",
     "collaboration": "Companies",
     "rules": "Rules",

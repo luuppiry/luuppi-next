@@ -7,11 +7,13 @@
   },
   "navigation": {
     "home": "Koti",
-    "organization": "Organisaatio",
+    "organization": "Yhdistys",
+    "introduction": "Esittely",
     "studies": "Opinnot",
     "tutoring": "Fukseille",
     "events": "Tapahtumat",
     "blog": "Blogi",
+    "tradition_guidelines": "Perinneohjesääntö",
     "sports": "Liikunta",
     "collaboration": "Yritysyhteistyö",
     "rules": "Säännöt",
@@ -38,7 +40,7 @@
     },
     "discover": {
       "title": "Tutustu Luuppiin",
-      "organization": "Organisaatio",
+      "organization": "Yhdistys",
       "events": "Tapahtumat",
       "new_students": "Uudet opiskelijat",
       "blog": "Blogi",

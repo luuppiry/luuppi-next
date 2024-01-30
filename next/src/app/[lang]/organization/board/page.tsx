@@ -1,5 +1,6 @@
 import BoardMember from '@/components/BoardMember/BoardMember';
 import { getDictionary } from '@/dictionaries';
+import flipLocale from '@/lib/flip-locale';
 import getStrapiData from '@/lib/get-strapi-data';
 import groupByYear from '@/lib/group-by-year';
 import { SupportedLanguage } from '@/models/locale';
@@ -36,17 +37,27 @@ export default async function Board({
     (year) => parseInt(year, 10) !== latestBoard.attributes.year,
   );
 
+  const boardLanguageFlipped = flipLocale(params.lang, latestBoard);
+
+  // Flatmap dublicate data 20 times
+  const boardLanguageFlippedDublicated = Array.from(
+    { length: 20 },
+    () => boardLanguageFlipped,
+  ).flat();
+
   return (
-    <div>
+    <div className="flex flex-col gap-12">
       <div className="flex items-center justify-between">
-        <h1 className="mb-14">{dictionary.navigation.board}</h1>
+        <h1>
+          {dictionary.navigation.board} {latestBoard.attributes.year}
+        </h1>
         {Boolean(otherBoards.length) && (
-          <div className="dropdown">
+          <div className="dropdown dropdown-end">
             <div className="btn m-1" role="button" tabIndex={0}>
               {dictionary.pages_board.other_boards}
             </div>
             <ul
-              className="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow"
+              className="menu dropdown-content z-[9999] w-52 rounded-box bg-base-100 p-2 shadow"
               tabIndex={0}
             >
               {otherBoards.map((year) => (
@@ -60,12 +71,13 @@ export default async function Board({
           </div>
         )}
       </div>
-      <div className="grid grid-cols-2 gap-12 lg:grid-cols-3">
-        {latestBoard.attributes.boardMembers.data.map((member: any) => (
+      <div className="grid grid-cols-1 gap-x-4 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {boardLanguageFlippedDublicated.map((member: any) => (
           <BoardMember
             key={member.attributes.createdAt}
             dictionary={dictionary}
             member={member}
+            showEmail={true}
           />
         ))}
       </div>

@@ -1,5 +1,6 @@
 import BoardMember from '@/components/BoardMember/BoardMember';
 import { getDictionary } from '@/dictionaries';
+import flipLocale from '@/lib/flip-locale';
 import getStrapiData from '@/lib/get-strapi-data';
 import groupByYear from '@/lib/group-by-year';
 import { SupportedLanguage } from '@/models/locale';
@@ -26,9 +27,9 @@ export default async function OldBoard({
   );
 
   const boardGroupedByYear = groupByYear(boardData.data);
-  const board = boardGroupedByYear[params.slug];
+  const wantedBoard = boardGroupedByYear[params.slug];
 
-  if (!board) {
+  if (!wantedBoard) {
     redirect(`/${params.lang}/404`);
   }
 
@@ -37,22 +38,24 @@ export default async function OldBoard({
   );
   const latestBoard = boardGroupedByYear[boardSortedByYear[0]];
   const otherBoards = boardSortedByYear.filter(
-    (year) => parseInt(year, 10) !== board.attributes.year,
+    (year) => parseInt(year, 10) !== wantedBoard.attributes.year,
   );
 
+  const boardLanguageFlipped = flipLocale(params.lang, wantedBoard);
+
   return (
-    <div>
+    <div className="flex flex-col gap-12">
       <div className="flex items-center justify-between">
-        <h1 className="mb-14">
-          {dictionary.navigation.board} {board.attributes.year}
+        <h1>
+          {dictionary.navigation.board} {wantedBoard.attributes.year}
         </h1>
         {!!otherBoards.length && (
-          <div className="dropdown">
+          <div className="dropdown dropdown-end">
             <div className="btn m-1" role="button" tabIndex={0}>
               {dictionary.pages_board.other_boards}
             </div>
             <ul
-              className="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow"
+              className="menu dropdown-content z-[9999] w-52 rounded-box bg-base-100 p-2 shadow"
               tabIndex={0}
             >
               {otherBoards.map((year) => (
@@ -68,12 +71,13 @@ export default async function OldBoard({
           </div>
         )}
       </div>
-      <div className="grid grid-cols-2 gap-12 lg:grid-cols-3">
-        {board.attributes.boardMembers.data.map((member: any) => (
+      <div className="grid grid-cols-1 gap-x-4 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {boardLanguageFlipped.map((member: any) => (
           <BoardMember
             key={member.attributes.createdAt}
             dictionary={dictionary}
             member={member}
+            showEmail={false}
           />
         ))}
       </div>
