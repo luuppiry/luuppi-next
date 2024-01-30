@@ -18,14 +18,13 @@ jobs:
               with:
                   node-version: 20
 
-            - name: Navigate to strapi folder
-              run: cd strapi
-
             - name: Install dependencies
               run: yarn install
+              working-directory: ./strapi
 
             - name: Build Strapi
               run: yarn build
+              working-directory: ./strapi
 
             - name: Deploy Strapi
               uses: appleboy/ssh-action@master
