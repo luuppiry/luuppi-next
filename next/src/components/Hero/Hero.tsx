@@ -40,7 +40,7 @@ export default function Hero({
   return (
     <section className="relative mx-auto flex max-w-[1200px] justify-center gap-8 px-4 pb-20 pt-28 max-2xl:overflow-hidden max-xl:flex-col max-xl:gap-20">
       <div className="flex w-1/2 flex-col max-xl:w-full">
-        <h1 className="mb-8 max-w-3xl text-5xl font-extrabold leading-[3.8rem] max-md:text-4xl">
+        <h1 className="mb-8 max-w-3xl leading-[3.8rem]">
           {dictionary.pages_home.hero.title_1}{' '}
           <span
             ref={changingTextRef}

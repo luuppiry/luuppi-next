@@ -53,7 +53,7 @@ export default function SideNavigator({
 
   return (
     <aside className="luuppi-custom-scroll sticky top-36 flex h-full max-h-[calc(100vh-112px-32px)] w-full max-w-80 flex-col gap-4 rounded-lg px-4 pb-4 max-lg:hidden">
-      <h2 className="text-lg font-bold">{dictionary.general.on_this_page}</h2>
+      <h6 className="text-lg font-bold">{dictionary.general.on_this_page}</h6>
       <ul>
         {headers.map((header, index) => (
           <li

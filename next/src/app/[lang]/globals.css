@@ -20,6 +20,10 @@
   a {
     @apply cursor-pointer;
   }
+
+  h1 {
+    @apply text-5xl font-extrabold max-md:text-4xl;
+  }
 }
 
 @layer components {

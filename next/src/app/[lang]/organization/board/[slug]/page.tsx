@@ -43,7 +43,7 @@ export default async function OldBoard({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="mb-14 text-5xl font-extrabold max-md:text-4xl">
+        <h1 className="mb-14">
           {dictionary.navigation.board} {board.attributes.year}
         </h1>
         {!!otherBoards.length && (

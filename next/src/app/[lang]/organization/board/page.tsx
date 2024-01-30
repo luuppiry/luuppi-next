@@ -39,9 +39,7 @@ export default async function Board({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="mb-14 text-5xl font-extrabold max-md:text-4xl">
-          {dictionary.navigation.board}
-        </h1>
+        <h1 className="mb-14">{dictionary.navigation.board}</h1>
         {Boolean(otherBoards.length) && (
           <div className="dropdown">
             <div className="btn m-1" role="button" tabIndex={0}>
