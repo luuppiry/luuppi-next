@@ -1,0 +1,49 @@
+name: Build and Deploy
+
+on:
+    push:
+        branches: ['deploy-test']
+
+jobs:
+    strapi:
+        name: Build and Deploy Strapi
+        timeout-minutes: 15
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Setup Node.js environment
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 20
+
+            - name: Install dependencies
+              run: yarn install
+
+            - name: Build Strapi
+              run: yarn build
+
+            - name: Deploy Strapi
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.HOST }}
+                  username: ${{ secrets.USERNAME }}
+                  key: ${{ secrets.KEY }}
+                  port: ${{ secrets.PORT }}
+                  script: |
+                      cd luuppi-next/strapi
+                      git pull
+                      docker build -t strapi .
+                      docker compose down
+                      docker-compose up -d
+
+    next:
+        name: Build and Deploy Next.js
+        timeout-minutes: 15
+        runs-on: ubuntu-latest
+        needs: ['strapi']
+        steps:
+            - uses: actions/checkout@v3
+            - name: echo test
+              run: echo "test"
