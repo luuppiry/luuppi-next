@@ -92,7 +92,7 @@ export default function Header({
                 className="btn btn-ghost lg:hidden"
                 onClick={toggleMobileHamburger}
               >
-                <HiMenu size={36} />
+                <HiMenu size={34} />
               </button>
             </div>
           </div>
