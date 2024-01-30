@@ -38,7 +38,7 @@ jobs:
                       git pull
                       docker build -t strapi .
                       docker compose down
-                      docker-compose up -d
+                      docker compose up -d
 
     next:
         name: Build and Deploy Next.js
