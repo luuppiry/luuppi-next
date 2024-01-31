@@ -17,7 +17,7 @@ jobs:
             - uses: dorny/paths-filter@v3
               id: filter
               with:
-                  token: ''
+                  token: ${{ secrets.PAT }}
                   filters: |
                       strapi:
                         - 'strapi/**'
