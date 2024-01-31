@@ -25,7 +25,7 @@ services:
       - ./.env:/opt/app/.env
       - ./public/uploads:/opt/app/public/uploads
     ports:
-      - "1337:1337"
+      - "127.0.0.1:1337:1337"
     networks:
       - strapi
     depends_on:
@@ -57,5 +57,3 @@ networks:
   strapi:
     name: Strapi
     driver: bridge
-
-
