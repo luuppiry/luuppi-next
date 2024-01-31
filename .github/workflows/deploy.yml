@@ -77,7 +77,7 @@ jobs:
                       cd luuppi-next
                       git pull
                       cd next
+                      docker build -t next:latest .
                       docker stop next
                       docker rm next
-                      docker build -t next:latest .
                       docker run -d --name next -p 127.0.0.1:3000:3000 next:latest
