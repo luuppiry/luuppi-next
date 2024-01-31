@@ -47,10 +47,10 @@
 
   @media screen and (max-width: 992px) {
     .luuppi-hero-cards {
-      transform: rotateY(0) scale(1.2) rotate(-2deg);
+      transform: rotateY(0) scale(1.4) rotate(-2deg);
     }
     .luuppi-hero-cards:hover {
-      @apply rotate-0 scale-[1.3];
+      @apply rotate-0 scale-[1.5];
     }
   }
 
