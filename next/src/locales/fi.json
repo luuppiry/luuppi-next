@@ -67,8 +67,8 @@
   },
   "pages_board": {
     "other_boards": "Muut hallitukset",
-    "board_member": "Hallituksessa",
-    "official": "Toimihenkilö"
+    "board_members": "Hallituksen jäsenet",
+    "officials": "Toimihenkilöt"
   },
   "pages_events": {
     "calendar": "Kalenteri",

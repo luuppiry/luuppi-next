@@ -39,6 +39,13 @@ export default async function Board({
 
   const boardLanguageFlipped = flipLocale(params.lang, latestBoard);
 
+  const boardMembers = boardLanguageFlipped.filter(
+    (member: any) => member.attributes.isBoardMember === true,
+  );
+  const officials = boardLanguageFlipped.filter(
+    (member: any) => member.attributes.isBoardMember === false,
+  );
+
   return (
     <div className="flex flex-col gap-12">
       <div className="flex items-center justify-between">
@@ -65,15 +72,43 @@ export default async function Board({
           </div>
         )}
       </div>
-      <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-y-12 lg:grid-cols-4">
-        {boardLanguageFlipped.map((member: any) => (
-          <BoardMember
-            key={member.attributes.createdAt}
-            dictionary={dictionary}
-            member={member}
-            showEmail={true}
-          />
-        ))}
+      <div>
+        {Boolean(boardMembers.length) && (
+          <>
+            <h2 className="mb-6 text-3xl font-bold max-md:text-2xl">
+              {dictionary.pages_board.board_members}
+            </h2>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-y-12 lg:grid-cols-4">
+              {boardMembers.map((member: any) => (
+                <BoardMember
+                  key={member.attributes.createdAt}
+                  dictionary={dictionary}
+                  member={member}
+                  showEmail={true}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+      <div>
+        {Boolean(officials.length) && (
+          <>
+            <h2 className="mb-6 text-3xl font-bold max-md:text-2xl">
+              {dictionary.pages_board.officials}
+            </h2>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-y-12 lg:grid-cols-4">
+              {officials.map((member: any) => (
+                <BoardMember
+                  key={member.attributes.createdAt}
+                  dictionary={dictionary}
+                  member={member}
+                  showEmail={true}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

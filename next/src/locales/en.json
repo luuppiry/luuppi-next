@@ -67,8 +67,8 @@
   },
   "pages_board": {
     "other_boards": "Muut hallitukset",
-    "board_member": "Board member",
-    "official": "Official"
+    "board_members": "Board members",
+    "officials": "Officials"
   },
   "pages_events": {
     "calendar": "Calendar",
