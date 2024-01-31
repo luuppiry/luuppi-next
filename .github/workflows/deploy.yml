@@ -6,6 +6,7 @@ on:
 
 jobs:
     changes:
+        name: Check for changes
         runs-on: ubuntu-latest
         outputs:
             strapi: ${{ steps.filter.outputs.strapi }}
