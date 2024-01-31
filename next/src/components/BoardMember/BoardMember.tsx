@@ -24,7 +24,9 @@ export default function BoardMember({
         />
       </div>
       <div className="flex flex-col gap-2 px-4 py-6">
-        <h2 className="text-xl font-bold">{member.attributes.fullName}</h2>
+        <h2 className="text-xl font-bold max-md:text-base">
+          {member.attributes.fullName}
+        </h2>
         <div className="flex flex-col items-start">
           {member.attributes.boardRoles.data.map((role: any) => (
             <div
