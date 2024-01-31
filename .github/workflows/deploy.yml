@@ -75,7 +75,10 @@ jobs:
 
     next:
         needs: [changes, strapi]
-        if: ${{ needs.changes.outputs.next == 'true' }}
+        if: |
+            always() &&
+            needs.changes.outputs.next == 'true' &&
+            (needs.strapi.result == 'success' || needs.strapi.result == 'skipped')
         name: Build and Deploy Next.js
         timeout-minutes: 15
         runs-on: ubuntu-latest
