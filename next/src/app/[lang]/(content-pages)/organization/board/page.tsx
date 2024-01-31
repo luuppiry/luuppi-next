@@ -48,12 +48,12 @@ export default async function Board({
 
   return (
     <div className="flex flex-col gap-12">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
         <h1>
           {dictionary.navigation.board} {latestBoard.attributes.year}
         </h1>
         {Boolean(otherBoards.length) && (
-          <div className="dropdown dropdown-end">
+          <div className="dropdown sm:dropdown-end">
             <div className="btn m-1" role="button" tabIndex={0}>
               {dictionary.pages_board.other_boards}
             </div>
