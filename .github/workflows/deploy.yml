@@ -7,8 +7,6 @@ on:
 jobs:
     changes:
         runs-on: ubuntu-latest
-        permissions:
-            pull-requests: read
         outputs:
             strapi: ${{ steps.filter.outputs.strapi }}
             next: ${{ steps.filter.outputs.next }}
@@ -17,7 +15,6 @@ jobs:
             - uses: dorny/paths-filter@v3
               id: filter
               with:
-                  token: ${{ secrets.PAT }}
                   filters: |
                       strapi:
                         - 'strapi/**'
