@@ -39,12 +39,6 @@ export default async function Board({
 
   const boardLanguageFlipped = flipLocale(params.lang, latestBoard);
 
-  // Flatmap dublicate data 20 times
-  const boardLanguageFlippedDublicated = Array.from(
-    { length: 20 },
-    () => boardLanguageFlipped,
-  ).flat();
-
   return (
     <div className="flex flex-col gap-12">
       <div className="flex items-center justify-between">
@@ -72,7 +66,7 @@ export default async function Board({
         )}
       </div>
       <div className="grid grid-cols-1 gap-x-4 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {boardLanguageFlippedDublicated.map((member: any) => (
+        {boardLanguageFlipped.map((member: any) => (
           <BoardMember
             key={member.attributes.createdAt}
             dictionary={dictionary}
