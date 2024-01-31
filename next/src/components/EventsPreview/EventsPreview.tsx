@@ -10,7 +10,7 @@ export default function EventsPreview({
 }) {
   return (
     <section className=" relative bg-primary-50">
-      <div className="mx-auto max-w-[1200px] px-4 py-20">
+      <div className="relative z-[10] mx-auto max-w-[1200px] px-4 py-20">
         <p className="mb-1 text-xl font-bold">
           {dictionary.pages_home.events_preview.subtitle}
         </p>
