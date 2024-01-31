@@ -33,13 +33,13 @@ export default async function Events({
   const dictionary = await getDictionary(params.lang);
   const events = await getLuuppiEvents();
   return (
-    <section className="mx-auto max-w-[1200px] px-4 py-20">
+    <>
       <h1 className="mb-14">{dictionary.navigation.events}</h1>
       <EventSelector
         dictionary={dictionary}
         events={events}
         lang={params.lang}
       />
-    </section>
+    </>
   );
 }
