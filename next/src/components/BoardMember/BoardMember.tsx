@@ -25,15 +25,21 @@ export default function BoardMember({
       </div>
       <div className="flex flex-col gap-2 px-4 py-6">
         <h2 className="text-xl font-bold">{member.attributes.fullName}</h2>
-        <div className="flex flex-col">
+        <div className="flex flex-col items-start">
           {member.attributes.boardRoles.data.map((role: any) => (
-            <div key={role.attributes.title} className="opacity-90">
-              <div className="font-semibold">{role.attributes.title}</div>
+            <div
+              key={role.attributes.title}
+              className="tooltip flex max-w-full opacity-90"
+              data-tip={role.attributes.title}
+            >
+              <div className="inline-block truncate text-left text-sm font-semibold">
+                {role.attributes.title}
+              </div>
             </div>
           ))}
         </div>
         {showEmail && (
-          <div className="mt-2">
+          <div>
             <h3 className="font-semibold">{dictionary.general.email}</h3>
             <div className="flex flex-col gap-1">
               {member.attributes.boardRoles.data.map((role: any) => (
