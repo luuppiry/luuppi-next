@@ -28,7 +28,7 @@ export default function MobileHamburger({
           {navLinks.map((link) => (
             <li key={link.translation}>
               {link.sublinks && link.sublinks.length > 0 ? (
-                <div className="flex items-center justify-between bg-primary-400 font-bold text-white hover:cursor-auto">
+                <div className="flex items-center justify-between bg-primary-400 font-bold text-white hover:cursor-auto hover:bg-primary-400">
                   {
                     dictionary.navigation[
                       link.translation as keyof typeof dictionary.navigation
