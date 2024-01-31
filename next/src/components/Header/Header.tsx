@@ -56,7 +56,7 @@ export default function Header({
       <header className={'fixed top-0 z-50 w-full bg-primary-800 text-white'}>
         <nav
           className={`bg-primary-500 px-4 transition-all duration-300 max-lg:h-16 max-lg:shadow-md ${
-            scrollPosition > 100 ? 'h-16' : 'h-24'
+            scrollPosition > 100 ? 'h-16 max-lg:h-16' : 'h-24 max-lg:h-16'
           }`}
         >
           <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between">

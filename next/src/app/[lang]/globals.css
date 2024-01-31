@@ -31,6 +31,9 @@
     @apply rounded-2xl transition-transform delay-[0s] duration-[1s] ease-[ease] hover:rotate-0 hover:scale-[1.3];
     transform: rotateY(0) scale(1.25) rotate(-2deg);
     filter: drop-shadow(7px 7px #7e84c050);
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
   }
 
   @media screen and (max-width: 1280px) {
@@ -39,6 +42,15 @@
     }
     .luuppi-hero-cards:hover {
       @apply rotate-0 scale-[1.6];
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    .luuppi-hero-cards {
+      transform: rotateY(0) scale(1.2) rotate(-2deg);
+    }
+    .luuppi-hero-cards:hover {
+      @apply rotate-0 scale-[1.3];
     }
   }
 
