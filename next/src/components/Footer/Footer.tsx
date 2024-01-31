@@ -14,7 +14,7 @@ export default function Footer() {
     <footer className="bg-primary-500 py-12">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
         <div className="grid w-full grid-cols-5 gap-12 px-4 max-lg:grid-cols-2 max-md:grid-cols-1">
-          <div className="flex flex-col gap-6 max-lg:col-span-2 max-lg:flex-row max-md:col-span-1">
+          <div className="flex flex-col gap-6 max-lg:col-span-2 max-lg:flex-row max-md:col-span-1 max-sm:flex-col">
             <Image
               alt="Luuppi"
               className={'object-contain'}
