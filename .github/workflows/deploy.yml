@@ -74,7 +74,7 @@ jobs:
                       docker compose up -d
 
     next:
-        needs: ['changes', 'strapi']
+        needs: [changes, strapi]
         if: ${{ needs.changes.outputs.next == 'true' }}
         name: Build and Deploy Next.js
         timeout-minutes: 15
