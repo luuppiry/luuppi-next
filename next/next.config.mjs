@@ -9,6 +9,11 @@ const nextConfig = {
         port: '1337',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cms.kassq.dev',
+        pathname: '/uploads/**',
+      },
     ],
   },
 };
