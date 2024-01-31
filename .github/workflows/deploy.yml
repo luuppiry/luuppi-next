@@ -18,6 +18,19 @@ jobs:
               with:
                   node-version: 20
 
+            - name: Backup Strapi
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.HOST }}
+                  username: ${{ secrets.USERNAME }}
+                  key: ${{ secrets.KEY }}
+                  port: ${{ secrets.PORT }}
+                  script: |
+                      cd luuppi-next/strapi
+                      docker compose exec -T strapi sh -c 'npm run strapi export -- --no-encrypt --file backup'
+                      docker cp strapi:/opt/app/backup.tar.gz backup-$(date +%Y-%m-%d-%H-%M-%S).tar.gz
+                      docker compose exec -T strapi sh -c 'rm backup.tar.gz'
+
             - name: Install dependencies
               run: npm install
               working-directory: ./strapi
