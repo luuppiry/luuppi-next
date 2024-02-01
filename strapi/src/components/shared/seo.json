@@ -22,7 +22,7 @@
     },
     "metaKeywords": {
       "type": "string",
-      "regex": "^\\s*[\\w\\s]+(?:,\\s*[\\w\\s]+)*\\s*$"
+      "regex": "^\\s*[\\w\\säö]+(?:,\\s*[\\w\\säö]+)*\\s*$"
     },
     "openGraph": {
       "displayName": "metaOpenGraph",
