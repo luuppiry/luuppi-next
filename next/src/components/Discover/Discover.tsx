@@ -22,7 +22,7 @@ export default function Discover({
             href={link.href}
           >
             <div className="absolute z-20 h-full w-0 bg-primary-400/50 transition-all duration-300 group-hover:w-full" />
-            <div className="absolute bottom-5 left-5 z-30 flex items-center justify-center bg-white text-lg transition-all duration-300 max-md:bottom-0 max-md:left-0 max-md:w-full max-md:text-base">
+            <div className="absolute bottom-5 left-5 z-30 flex items-center justify-center bg-white text-lg transition-all duration-300 max-md:bottom-0 max-md:left-0 max-md:w-full max-md:text-sm">
               <h2 className="flex items-center px-4 py-2 font-bold">
                 {dictionary.pages_home.discover[link.translation]}
                 <span>

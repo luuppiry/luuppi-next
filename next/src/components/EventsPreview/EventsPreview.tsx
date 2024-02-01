@@ -17,13 +17,9 @@ export default function EventsPreview({
         <h2 className="mb-8 text-4xl font-extrabold max-md:text-3xl">
           {dictionary.pages_home.events_preview.title}
         </h2>
-        <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-2">
+        <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
           {Array.from({ length: 4 }, (_, i) => (
-            <Link
-              key={i}
-              className=" group relative max-md:aspect-square"
-              href="/events"
-            >
+            <Link key={i} className="group relative" href="/events">
               <div className="absolute z-20 flex h-full w-full flex-col justify-end rounded-lg bg-gradient-to-t from-primary-800 via-black/50 to-transparent p-6 transition-all duration-300">
                 <p className="text-sm font-bold text-white">31 Aug 2024</p>
                 <p className="text-lg font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-base">
@@ -34,7 +30,7 @@ export default function EventsPreview({
                   <p className="text-sm font-bold text-white">Koskikeskus</p>
                 </div>
               </div>
-              <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden rounded-lg brightness-[75%] group-hover:brightness-100 max-md:aspect-square">
+              <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden rounded-lg brightness-[75%] group-hover:brightness-100 max-md:aspect-[2/1]">
                 <Image
                   alt="event"
                   className="object-cover transition-all duration-300 group-hover:scale-105"
