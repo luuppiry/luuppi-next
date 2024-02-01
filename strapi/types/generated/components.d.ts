@@ -5,6 +5,7 @@ export interface SharedMetaOpenGraph extends Schema.Component {
   info: {
     displayName: 'metaOpenGraph';
     icon: 'link';
+    description: '';
   };
   attributes: {
     openGraphTitle: Attribute.String &
@@ -12,10 +13,10 @@ export interface SharedMetaOpenGraph extends Schema.Component {
       Attribute.SetMinMaxLength<{
         maxLength: 120;
       }>;
-    openGraphDescription: Attribute.String &
+    openGraphDescription: Attribute.Text &
       Attribute.Required &
       Attribute.SetMinMaxLength<{
-        maxLength: 160;
+        maxLength: 300;
       }>;
     openGraphImage: Attribute.Media;
   };
@@ -26,6 +27,7 @@ export interface SharedMetaTwitter extends Schema.Component {
   info: {
     displayName: 'MetaTwitter';
     icon: 'twitter';
+    description: '';
   };
   attributes: {
     twitterTitle: Attribute.String &
@@ -33,9 +35,9 @@ export interface SharedMetaTwitter extends Schema.Component {
       Attribute.SetMinMaxLength<{
         maxLength: 120;
       }>;
-    twitterDescription: Attribute.String &
+    twitterDescription: Attribute.Text &
       Attribute.SetMinMaxLength<{
-        maxLength: 160;
+        maxLength: 300;
       }>;
     twitterImage: Attribute.Media;
   };
@@ -65,6 +67,7 @@ export interface SharedSeo extends Schema.Component {
   info: {
     displayName: 'Seo';
     icon: 'search';
+    description: '';
   };
   attributes: {
     metaTitle: Attribute.String &
@@ -75,7 +78,7 @@ export interface SharedSeo extends Schema.Component {
     metaDescription: Attribute.Text &
       Attribute.Required &
       Attribute.SetMinMaxLength<{
-        maxLength: 160;
+        maxLength: 300;
       }>;
     metaAuthor: Attribute.String;
     metaKeywords: Attribute.String;

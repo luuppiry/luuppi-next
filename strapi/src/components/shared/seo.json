@@ -2,7 +2,8 @@
   "collectionName": "components_shared_seos",
   "info": {
     "displayName": "Seo",
-    "icon": "search"
+    "icon": "search",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -14,7 +15,7 @@
     "metaDescription": {
       "type": "text",
       "required": true,
-      "maxLength": 160
+      "maxLength": 300
     },
     "metaAuthor": {
       "type": "string"
