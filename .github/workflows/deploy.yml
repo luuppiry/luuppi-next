@@ -95,7 +95,9 @@ jobs:
               working-directory: ./next
 
             - name: Add Next.js environment variables
-              run: echo "NEXT_PUBLIC_STRAPI_BASE_URL=https://${{ secrets.CMS_HOST }}" >> .env.local
+              run:
+                  echo "NEXT_PUBLIC_STRAPI_BASE_URL=https://${{ secrets.CMS_HOST }}
+                  NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST }}" >> .env.local
               working-directory: ./next
 
             - name: Build Next.js
