@@ -22,6 +22,10 @@ function getLocale(request: NextRequest): string | undefined {
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
+  if (pathname.startsWith('/api')) {
+    return NextResponse.next();
+  }
+
   // // `/_next/` and `/api/` are ignored by the watcher, but we need to ignore files in `public` manually.
   // ! Do not use ÄÖÅ. These are actually converted to %C3%84%C3%96%C3%85
   if (

@@ -4,10 +4,12 @@ import { SupportedLanguage } from '@/models/locale';
 export default async function getStrapiData<T>(
   lang: SupportedLanguage,
   url: string,
+  revalidateTag: string,
 ): Promise<{ data: T }> {
   try {
     let res = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${url}&locale=${lang}`,
+      { next: { tags: [revalidateTag] } },
     );
 
     /**
@@ -19,6 +21,7 @@ export default async function getStrapiData<T>(
     if (!res.ok && res.status === 404) {
       res = await fetch(
         `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${url}?locale=fi`,
+        { next: { tags: [revalidateTag] } },
       );
     }
 

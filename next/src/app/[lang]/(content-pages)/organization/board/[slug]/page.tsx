@@ -24,6 +24,7 @@ export default async function OldBoard({
   const boardData = await getStrapiData<ApiBoardBoard[]>(
     'fi',
     '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
+    'board',
   );
 
   const boardGroupedByYear = groupByYear(boardData.data);
@@ -124,6 +125,7 @@ export async function generateStaticParams() {
   const boardData = await getStrapiData<ApiBoardBoard[]>(
     'fi',
     '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
+    'board',
   );
 
   const boardGroupedByYear = groupByYear(boardData.data);
