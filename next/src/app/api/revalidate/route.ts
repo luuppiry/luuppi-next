@@ -3,6 +3,7 @@ import { revalidateTag } from 'next/cache';
 export async function POST(request: Request) {
   const auth = request.headers.get('authorization');
   if (!auth || auth !== process.env.REVALIDATE_AUTH) {
+    console.log(process.env.REVALIDATE_AUTH);
     console.log('Unauthorized revalidate request', auth);
     return new Response('Unauthorized', { status: 401 });
   }

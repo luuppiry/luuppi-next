@@ -26,7 +26,7 @@ export default async function Board({
   const boardData = await getStrapiData<ApiBoardBoard[]>(
     'fi',
     '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
-    'board',
+    ['board', 'board-role', 'board-member'],
   );
 
   const boardGroupedByYear = groupByYear(boardData.data);

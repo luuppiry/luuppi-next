@@ -20,7 +20,7 @@ export default async function Organization({
     await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
       params.lang,
       '/api/organization-general?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage',
-      'organization-general',
+      ['organization-general'],
     );
 
   const imagePath =
@@ -72,7 +72,7 @@ export async function generateMetadata({
   const data = await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
     params.lang,
     '/api/organization-general?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage',
-    'organization-general',
+    ['organization-general'],
   );
 
   const pathname = headers().get('x-pathname') as string;
