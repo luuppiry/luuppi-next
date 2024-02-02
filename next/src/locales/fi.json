@@ -48,13 +48,13 @@
       "contact": "Yhteystiedot"
     },
     "events_preview": {
-      "title": "Tulevat Tapahtumat",
+      "title": "Tulevat tapahtumat",
       "subtitle": "Kurkista mitä on tulossa!",
       "see_all": "Kaikki tapahtumat",
       "event": "Tapahtuma"
     },
     "blog": {
-      "title": "Uusimmat Postaukset",
+      "title": "Uusimmat postaukset",
       "subtitle": "Katso mistä pöhistään!",
       "news": "Uutiset",
       "see_all": "Kaikki postaukset"
