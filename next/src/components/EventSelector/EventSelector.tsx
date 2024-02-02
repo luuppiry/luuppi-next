@@ -52,7 +52,7 @@ export default function EventSelector({
       {selectedView === 'calendar' ? (
         <EventCalendar events={events} lang={lang} />
       ) : (
-        <EventsList dictionary={dictionary} events={events} />
+        <EventsList dictionary={dictionary} events={events} lang={lang} />
       )}
     </>
   );

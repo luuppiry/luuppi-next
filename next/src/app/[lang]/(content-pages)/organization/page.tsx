@@ -49,7 +49,7 @@ export default async function Organization({
               {dictionary.general.content_updated}:{' '}
               {new Date(
                 organizationData.data.attributes.updatedAt,
-              ).toLocaleString()}
+              ).toLocaleString(params.lang)}
             </p>
           </div>
         </div>

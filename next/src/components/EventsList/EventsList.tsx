@@ -1,14 +1,20 @@
 import { getDictionary } from '@/dictionaries';
 import { Event } from '@/models/event';
+import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { useState } from 'react';
 
 interface EventListProps {
   events: Event[];
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  lang: SupportedLanguage;
 }
 
-export default function EventsList({ events, dictionary }: EventListProps) {
+export default function EventsList({
+  events,
+  dictionary,
+  lang,
+}: EventListProps) {
   const [showPastEvents, setShowPastEvents] = useState(false);
 
   const toggleShowPastEvents = (e: any) => {
@@ -74,7 +80,7 @@ export default function EventsList({ events, dictionary }: EventListProps) {
         <div key={group.date.toDateString()} className="flex flex-col gap-2">
           <h2 className="text-xl font-bold">
             {group.date.toLocaleDateString(
-              undefined,
+              lang,
               showPastEvents
                 ? { ...dateOptions, year: 'numeric' }
                 : dateOptions,
@@ -99,13 +105,9 @@ export default function EventsList({ events, dictionary }: EventListProps) {
                     {event.title}
                   </h3>
                   <div className="flex gap-2">
-                    <p>
-                      {event.start.toLocaleTimeString(undefined, timeOptions)}
-                    </p>
+                    <p>{event.start.toLocaleTimeString(lang, timeOptions)}</p>
                     <p>-</p>
-                    <p>
-                      {event.end.toLocaleTimeString(undefined, timeOptions)}
-                    </p>
+                    <p>{event.end.toLocaleTimeString(lang, timeOptions)}</p>
                   </div>
                   <p className="line-clamp-3 max-w-xl text-gray-500 max-md:text-sm">
                     {event.description}
