@@ -10,8 +10,14 @@ export default function formatMetadata(
 
   const cmsUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 
-  const twitterImage = `${cmsUrl}${seo.twitter.twitterImage.data.attributes.url}`;
-  const openGraphImage = `${cmsUrl}${seo.openGraph.openGraphImage.data.attributes.url}`;
+  let twitterImage: string | null = null;
+  if (seo.twitter?.twitterImage?.data?.attributes?.url) {
+    twitterImage = `${cmsUrl}${seo.twitter.twitterImage.data.attributes.url}`;
+  }
+  let openGraphImage: string | null = null;
+  if (seo.openGraph?.openGraphImage?.data?.attributes?.url) {
+    openGraphImage = `${cmsUrl}${seo.openGraph.openGraphImage.data.attributes.url}`;
+  }
 
   return {
     title: seo.metaTitle,
@@ -29,13 +35,13 @@ export default function formatMetadata(
       title: seo.openGraph.openGraphTitle,
       description: seo.openGraph.openGraphDescription,
       url: pathname,
-      images: [openGraphImage],
+      images: openGraphImage ? [openGraphImage] : undefined,
     },
     twitter: {
       title: seo.twitter.twitterTitle,
       description: seo.twitter.twitterDescription,
       card: 'summary_large_image',
-      images: [twitterImage],
+      images: twitterImage ? [twitterImage] : undefined,
     },
   };
 }
