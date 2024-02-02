@@ -30,6 +30,14 @@ export default async function ContentPage({
   const imagePath = contentData.attributes.Content.banner.data.attributes.url;
   const imageUrl = `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${imagePath}`;
 
+  const timeOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  } as const;
+
   return (
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col gap-14">
@@ -50,7 +58,10 @@ export default async function ContentPage({
           <div className="flex flex-col opacity-40">
             <p className="text-sm">
               {dictionary.general.content_updated}:{' '}
-              {new Date(contentData.attributes.updatedAt).toLocaleString(lang)}
+              {new Date(contentData.attributes.updatedAt).toLocaleString(
+                lang,
+                timeOptions,
+              )}
             </p>
           </div>
         </div>
