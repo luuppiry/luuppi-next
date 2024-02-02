@@ -1,6 +1,11 @@
+import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 
-export default function Banner() {
+interface BannerProps {
+  lang: SupportedLanguage;
+}
+
+export default function Banner({ lang }: BannerProps) {
   return (
     <section>
       <div className="h-72 bg-primary-400 transition-all duration-300 max-md:h-48">
@@ -8,9 +13,13 @@ export default function Banner() {
           <div className="relative z-10 flex h-full w-full max-md:h-48">
             <Image
               alt="Luuppi banner"
-              className="z-10 object-contain p-8 drop-shadow-[-6px_6px_#00000030] filter max-md:p-6"
+              className="z-10 object-contain p-6 drop-shadow-[-6px_6px_#00000030] filter max-md:p-4"
               draggable={false}
-              src={'/luuppi_banner_text.svg'}
+              src={
+                lang === 'en'
+                  ? '/luuppi_banner_text_en.svg'
+                  : '/luuppi_banner_text_fi.svg'
+              }
               fill
             />
           </div>

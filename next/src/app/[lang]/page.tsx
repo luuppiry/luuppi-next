@@ -15,7 +15,7 @@ export default async function Home({
   const dictionary = await getDictionary(params.lang);
   return (
     <>
-      <Banner />
+      <Banner lang={params.lang} />
       <Hero dictionary={dictionary} />
       <Discover dictionary={dictionary} />
       <EventsPreview dictionary={dictionary} />
