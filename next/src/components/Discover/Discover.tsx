@@ -30,7 +30,7 @@ export default function Discover({
                 </span>
               </h2>
             </div>
-            <div className="relative flex h-full w-full overflow-hidden">
+            <div className="relative flex h-full w-full overflow-hidden bg-gradient-to-r from-primary-400 to-primary-300">
               <div className="absolute z-10 flex h-full w-full bg-gradient-to-t from-background-400/70 via-transparent to-transparent" />
               <Image
                 alt="haalarit"

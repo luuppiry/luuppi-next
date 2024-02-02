@@ -58,7 +58,7 @@ export default function BlogPreview({ dictionary }: BlogPreviewProps) {
                 <div className="flex items-center gap-2">
                   <Image
                     alt="avatar"
-                    className="rounded-full"
+                    className="rounded-full bg-gradient-to-r from-primary-400 to-primary-300"
                     height={50}
                     src="/images/pullapaiva.jpg"
                     width={50}
