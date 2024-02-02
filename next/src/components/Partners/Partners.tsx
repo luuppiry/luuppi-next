@@ -1,14 +1,23 @@
 import { getDictionary } from '@/dictionaries';
+import getStrapiData from '@/lib/get-strapi-data';
+import { SupportedLanguage } from '@/models/locale';
+import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
 import Link from 'next/link';
 import Marquee from 'react-fast-marquee';
-import { partnerLinks } from './parner-links';
 
-export default function Partners({
-  dictionary,
-}: {
+interface PartnersProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
-}) {
+  lang: SupportedLanguage;
+}
+
+export default async function Partners({ dictionary, lang }: PartnersProps) {
+  const partnersData = await getStrapiData<ApiCompanyCompany[]>(
+    lang,
+    '/api/companies?populate=*',
+    ['company'],
+  );
+
   return (
     <section className=" bg-primary-50 px-4 py-20">
       <div className="mx-auto max-w-[1200px]">
@@ -29,18 +38,18 @@ export default function Partners({
           </div>
         </div>
         <Marquee className="mt-4 max-md:mt-8" autoFill>
-          {partnerLinks.map((partner) => (
+          {partnersData.data.map((partner) => (
             <Link
-              key={partner.image}
-              className="btn btn-link relative mx-6 flex h-32 w-48 brightness-0 filter transition-all duration-300 hover:brightness-100 max-md:h-20"
-              href={partner.link}
+              key={partner.attributes.createdAt}
+              className="btn btn-link relative mx-6 flex h-32 w-48 opacity-65 brightness-0 filter transition-all duration-300 hover:opacity-100 hover:brightness-100 max-md:h-20"
+              href={partner.attributes.homepageUrl}
             >
               <Image
                 alt="partner"
-                className="object-contain opacity-75"
+                className="object-contain"
                 draggable={false}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={partner.image}
+                src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${partner.attributes.logo.data.attributes.url}`}
                 fill
                 priority
               />

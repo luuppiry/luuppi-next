@@ -20,7 +20,7 @@ export default async function Home({
       <Discover dictionary={dictionary} />
       <EventsPreview dictionary={dictionary} />
       <BlogPreview dictionary={dictionary} />
-      <Partners dictionary={dictionary} />
+      <Partners dictionary={dictionary} lang={params.lang} />
     </>
   );
 }
