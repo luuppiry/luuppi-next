@@ -2,11 +2,11 @@ import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 
-export default async function NotFound({
-  params,
-}: {
+interface NotFoundProps {
   params: { lang: SupportedLanguage };
-}) {
+}
+
+export default async function NotFound({ params }: NotFoundProps) {
   const dictionary = await getDictionary(params.lang);
 
   return (

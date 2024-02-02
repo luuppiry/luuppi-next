@@ -25,11 +25,11 @@ const getLuuppiEvents = async (): Promise<Event[]> => {
   return formattedEvents;
 };
 
-export default async function Events({
-  params,
-}: {
+interface EventsProps {
   params: { lang: SupportedLanguage };
-}) {
+}
+
+export default async function Events({ params }: EventsProps) {
   const dictionary = await getDictionary(params.lang);
   const events = await getLuuppiEvents();
   return (

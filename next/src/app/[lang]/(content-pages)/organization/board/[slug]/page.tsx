@@ -8,11 +8,11 @@ import { ApiBoardBoard } from '@/types/contentTypes';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-export default async function OldBoard({
-  params,
-}: {
+interface OldBoardProps {
   params: { slug: string; lang: SupportedLanguage };
-}) {
+}
+
+export default async function OldBoard({ params }: OldBoardProps) {
   const dictionary = await getDictionary(params.lang);
 
   const year = parseInt(params.slug, 10);

@@ -7,11 +7,11 @@ import { SupportedLanguage } from '@/models/locale';
 import { ApiBoardBoard } from '@/types/contentTypes';
 import Link from 'next/link';
 
-export default async function Board({
-  params,
-}: {
+interface BoardProps {
   params: { lang: SupportedLanguage };
-}) {
+}
+
+export default async function Board({ params }: BoardProps) {
   const dictionary = await getDictionary(params.lang);
 
   /**
