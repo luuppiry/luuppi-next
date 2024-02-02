@@ -32,7 +32,7 @@ export default function Partners({
           {partnerLinks.map((partner) => (
             <Link
               key={partner.image}
-              className="btn btn-link relative mx-6 flex h-32 w-48 grayscale filter transition-all duration-300 hover:grayscale-0 max-md:h-20"
+              className="btn btn-link relative mx-6 flex h-32 w-48 brightness-0 filter transition-all duration-300 hover:brightness-100 max-md:h-20"
               href={partner.link}
             >
               <Image
