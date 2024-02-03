@@ -51,6 +51,8 @@ export default function SideNavigator({
     });
   };
 
+  if (!headers.length) return null;
+
   return (
     <aside className="flex flex-col gap-4 px-4 pb-4">
       <h6 className="text-lg font-bold">{dictionary.general.on_this_page}</h6>
