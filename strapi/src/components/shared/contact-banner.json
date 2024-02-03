@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_shared_contact_banners",
+  "info": {
+    "displayName": "ContactBanner",
+    "icon": "message"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    }
+  }
+}

@@ -1,5 +1,18 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
+export interface SharedContactBanner extends Schema.Component {
+  collectionName: 'components_shared_contact_banners';
+  info: {
+    displayName: 'ContactBanner';
+    icon: 'message';
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    description: Attribute.Text & Attribute.Required;
+    email: Attribute.Email & Attribute.Required;
+  };
+}
+
 export interface SharedMetaOpenGraph extends Schema.Component {
   collectionName: 'components_shared_meta_open_graphs';
   info: {
@@ -90,6 +103,7 @@ export interface SharedSeo extends Schema.Component {
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
+      'shared.contact-banner': SharedContactBanner;
       'shared.meta-open-graph': SharedMetaOpenGraph;
       'shared.meta-twitter': SharedMetaTwitter;
       'shared.page-content': SharedPageContent;
