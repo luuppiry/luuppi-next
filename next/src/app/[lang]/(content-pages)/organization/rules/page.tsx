@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import formatMetadata from '@/lib/format-metadata';
 import getStrapiData from '@/lib/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiOrganizationGeneralOrganizationGeneral } from '@/types/contentTypes';
+import { ApiOrganizationRuleOrganizationRule } from '@/types/contentTypes';
 import { Metadata } from 'next';
 import { headers } from 'next/headers';
 
@@ -18,16 +18,15 @@ interface OrganizationRulesProps {
 export default async function Organization({ params }: OrganizationRulesProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const organizationData =
-    await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
-      params.lang,
-      url,
-      tags,
-    );
+  const rulesData = await getStrapiData<ApiOrganizationRuleOrganizationRule>(
+    params.lang,
+    url,
+    tags,
+  );
 
   return (
     <ContentPage
-      contentData={organizationData.data}
+      contentData={rulesData.data}
       dictionary={dictionary}
       lang={params.lang}
     />
@@ -37,7 +36,7 @@ export default async function Organization({ params }: OrganizationRulesProps) {
 export async function generateMetadata({
   params,
 }: OrganizationRulesProps): Promise<Metadata> {
-  const data = await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
+  const data = await getStrapiData<ApiOrganizationRuleOrganizationRule>(
     params.lang,
     url,
     tags,
