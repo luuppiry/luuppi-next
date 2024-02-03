@@ -1,0 +1,41 @@
+{
+  "kind": "singleType",
+  "collectionName": "tutoring_larpakes",
+  "info": {
+    "singularName": "tutoring-larpake",
+    "pluralName": "tutoring-larpakes",
+    "displayName": "TutoringLarpake"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "Content": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.page-content",
+      "required": true
+    },
+    "Seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo",
+      "required": true
+    }
+  }
+}
