@@ -23,7 +23,7 @@ export default function MobileHamburger({
       className={`modal ${open && 'modal-open lg:hidden'}`}
       id="mobileNavbar"
     >
-      <div className="modal-box flex h-fit min-h-screen w-screen max-w-full gap-4 rounded-none">
+      <div className="modal-box flex h-fit min-h-dvh w-screen max-w-full gap-4 rounded-none">
         <ul className="menu h-full w-full flex-nowrap gap-4">
           {navLinks.map((link) => (
             <li key={link.translation}>
