@@ -81,5 +81,9 @@
     "title": "404 - Page not found",
     "description": "The page you are looking for does not exist.",
     "return_home": "Back to home"
+  },
+  "seo": {
+    "title": "Luuppi ry | Subject association for mathematics, statistical data analysis, and computer science students at the University of Tampere",
+    "description": "Luuppi ry is the subject association for mathematics, statistical data analysis, and computer science students at the University of Tampere. Luuppi has actively represented the interests of its members and organized recreational activities since 1969. With its membership, Luuppi is the largest subject association at the University of Tampere!"
   }
 }

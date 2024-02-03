@@ -81,5 +81,9 @@
     "title": "404 - Sivua ei löytynyt",
     "description": "Etsimääsi sivua ei löytynyt",
     "return_home": "Kotisivulle"
+  },
+  "seo": {
+    "title": "Luuppi ry | Tampereen yliopiston matematiikan, tilastotieteen ja tietojenkäsittelyn opiskelijoiden ainejärjestö",
+    "description": "Luuppi ry on Tampereen yliopiston matematiikan, tilastotieteen ja tietojenkäsittelyn opiskelijoiden ainejärjestö. Luuppi on toiminut aktiivisesti jäsentensä etujenvalvojana ja vapaa-ajantoiminnan järjestäjänä jo vuodesta 1969. Jäsenmäärältään Luuppi on Tampereen yliopiston suurin ainejärjestö!"
   }
 }
