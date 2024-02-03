@@ -16,7 +16,7 @@ export default function SideNavigator({
     const headerElements = Array.from(
       document
         .getElementsByClassName(targetClass)[0]
-        .querySelectorAll('h1, h2, h3, h4, h5, h6'),
+        .querySelectorAll('h1, h2'),
     );
     setHeaders(headerElements);
 
