@@ -1496,6 +1496,7 @@ export interface ApiStudiesWorkshopStudiesWorkshop extends Schema.SingleType {
     singularName: 'studies-workshop';
     pluralName: 'studies-workshops';
     displayName: 'StudiesWorkshops';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1506,7 +1507,7 @@ export interface ApiStudiesWorkshopStudiesWorkshop extends Schema.SingleType {
     };
   };
   attributes: {
-    StudiesWorkshops: Attribute.Component<'shared.page-content'> &
+    Content: Attribute.Component<'shared.page-content'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {

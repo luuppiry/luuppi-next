@@ -4,7 +4,8 @@
   "info": {
     "singularName": "studies-workshop",
     "pluralName": "studies-workshops",
-    "displayName": "StudiesWorkshops"
+    "displayName": "StudiesWorkshops",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -15,7 +16,7 @@
     }
   },
   "attributes": {
-    "StudiesWorkshops": {
+    "Content": {
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
