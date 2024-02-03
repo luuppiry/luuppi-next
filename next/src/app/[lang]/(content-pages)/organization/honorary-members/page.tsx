@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import formatMetadata from '@/lib/format-metadata';
 import getStrapiData from '@/lib/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiOrganizationGeneralOrganizationGeneral } from '@/types/contentTypes';
+import { ApiOrganizationHonoraryMemberOrganizationHonoraryMember } from '@/types/contentTypes';
 import { Metadata } from 'next';
 import { headers } from 'next/headers';
 
@@ -21,7 +21,7 @@ export default async function OrganizationHonoraryMembers({
   const dictionary = await getDictionary(params.lang);
 
   const organizationData =
-    await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
+    await getStrapiData<ApiOrganizationHonoraryMemberOrganizationHonoraryMember>(
       params.lang,
       url,
       tags,
@@ -39,11 +39,12 @@ export default async function OrganizationHonoraryMembers({
 export async function generateMetadata({
   params,
 }: OrganizationHonoraryMembersProps): Promise<Metadata> {
-  const data = await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
-    params.lang,
-    url,
-    tags,
-  );
+  const data =
+    await getStrapiData<ApiOrganizationHonoraryMemberOrganizationHonoraryMember>(
+      params.lang,
+      url,
+      tags,
+    );
 
   const pathname = headers().get('x-pathname') as string;
 
