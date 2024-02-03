@@ -23,10 +23,13 @@ export default function MobileHamburger({
       className={`modal ${open && 'modal-open lg:hidden'}`}
       id="mobileNavbar"
     >
-      <div className="modal-box flex h-fit min-h-dvh w-screen max-w-full gap-4 rounded-none">
+      <div className="modal-box flex h-full min-h-dvh w-screen max-w-full gap-4 rounded-none">
         <ul className="menu h-full w-full flex-nowrap gap-4">
-          {navLinks.map((link) => (
-            <li key={link.translation}>
+          {navLinks.map((link, index) => (
+            <li
+              key={link.translation}
+              className={`${index === navLinks.length - 1 ? 'pb-6' : ''}`}
+            >
               {link.sublinks && link.sublinks.length > 0 ? (
                 <div className="flex items-center justify-between bg-primary-400 font-bold text-white hover:cursor-auto hover:bg-primary-400 focus:bg-primary-400">
                   {
