@@ -1,0 +1,41 @@
+{
+  "kind": "singleType",
+  "collectionName": "studying_fields_of_studies",
+  "info": {
+    "singularName": "studying-fields-of-study",
+    "pluralName": "studying-fields-of-studies",
+    "displayName": "StudyingFieldsOfStudy"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "Content": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.page-content",
+      "required": true
+    },
+    "Seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo",
+      "required": true
+    }
+  }
+}

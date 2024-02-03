@@ -1,0 +1,51 @@
+{
+  "kind": "singleType",
+  "collectionName": "studying_workshops",
+  "info": {
+    "singularName": "studying-workshop",
+    "pluralName": "studying-workshops",
+    "displayName": "StudyingWorkshops"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "Content": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.page-content"
+    },
+    "ContactBanner": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.contact-banner",
+      "required": true
+    },
+    "Seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo",
+      "required": true
+    }
+  }
+}

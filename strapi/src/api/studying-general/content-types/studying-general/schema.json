@@ -1,0 +1,52 @@
+{
+  "kind": "singleType",
+  "collectionName": "studying_generals",
+  "info": {
+    "singularName": "studying-general",
+    "pluralName": "studying-generals",
+    "displayName": "StudyingGeneral"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "Content": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.page-content",
+      "required": true
+    },
+    "ContactBanner": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.contact-banner",
+      "required": true
+    },
+    "Seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo",
+      "required": true
+    }
+  }
+}
