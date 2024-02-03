@@ -1,17 +1,15 @@
 import { getDictionary } from '@/dictionaries';
 import getStrapiData from '@/lib/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import {
-  ApiCompanyCompany,
-  ApiOrganizationGeneralOrganizationGeneral,
-} from '@/types/contentTypes';
+import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
+import Link from 'next/link';
 import BlockRendererClient from '../BlockRendererClient/BlockRendererClient';
 import SideNavigator from '../SideNavigator/SideNavigator';
 import SidePartners from '../SidePartners/SidePartners';
 
 interface ContentPageProps {
-  contentData: ApiOrganizationGeneralOrganizationGeneral;
+  contentData: any;
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
   lang: SupportedLanguage;
 }
@@ -51,7 +49,7 @@ export default async function ContentPage({
         </div>
         <div className="flex flex-col gap-4">
           <div>
-            <h1 className="inline-block rounded-lg bg-primary-400 px-4 py-2 text-4xl font-extrabold text-white max-md:text-3xl">
+            <h1 className="inline-block rounded-lg bg-secondary-400 px-4 py-2 text-4xl font-extrabold text-white max-md:text-3xl">
               {contentData.attributes.Content.title}
             </h1>
           </div>
@@ -70,6 +68,22 @@ export default async function ContentPage({
             content={contentData.attributes.Content.content}
           />
         </article>
+        {contentData.attributes.ContactBanner && (
+          <div className="luuppi-questions-bg flex flex-col items-center justify-center gap-4 rounded-xl bg-secondary-400 p-6 text-center text-white shadow-sm">
+            <h2 className="text-2xl font-bold">
+              {contentData.attributes.ContactBanner.title}
+            </h2>
+            <p className="max-w-md">
+              {contentData.attributes.ContactBanner.description}
+            </p>
+            <Link
+              className="link"
+              href={`mailto:${contentData.attributes.ContactBanner.email}`}
+            >
+              {contentData.attributes.ContactBanner.email}
+            </Link>
+          </div>
+        )}
       </div>
       <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
         <SideNavigator

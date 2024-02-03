@@ -30,6 +30,7 @@ export function middleware(request: NextRequest) {
   // ! Do not use ÄÖÅ. These are actually converted to %C3%84%C3%96%C3%85
   if (
     [
+      '/questions.svg',
       '/manifest.webmanifest',
       '/favicon.ico',
       '/sitemap.xml',

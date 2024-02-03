@@ -1316,6 +1316,59 @@ export interface ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline
   };
 }
 
+export interface ApiSportSport extends Schema.SingleType {
+  collectionName: 'sports';
+  info: {
+    singularName: 'sport';
+    pluralName: 'sports';
+    displayName: 'Sports';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::sport.sport',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::sport.sport',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::sport.sport',
+      'oneToMany',
+      'api::sport.sport'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1344,6 +1397,7 @@ declare module '@strapi/types' {
       'api::organization-office.organization-office': ApiOrganizationOfficeOrganizationOffice;
       'api::organization-rule.organization-rule': ApiOrganizationRuleOrganizationRule;
       'api::organization-tradition-guideline.organization-tradition-guideline': ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline;
+      'api::sport.sport': ApiSportSport;
     }
   }
 }

@@ -85,6 +85,10 @@
     background: #d1d1d1;
   }
 
+  .luuppi-questions-bg {
+    @apply bg-[url('/questions.svg')] bg-cover bg-center bg-no-repeat;
+  }
+
   @keyframes slide {
     from {
       @apply bg-[0_0];
