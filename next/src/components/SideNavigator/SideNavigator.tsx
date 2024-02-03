@@ -60,10 +60,10 @@ export default function SideNavigator({
         {headers.map((header, index) => (
           <li
             key={index}
-            className={`flex items-center gap-4 py-2 ${activeHeader === header.id ? 'font-bold text-primary-400' : ''}`}
+            className={`flex items-center gap-4 py-2 ${activeHeader === header.id ? 'font-bold text-secondary-400' : ''}`}
           >
             <span
-              className={`h-0.5 flex-shrink-0 bg-primary-400 ${activeHeader === header.id ? 'w-5' : 'w-2'} transition-all duration-300 ease-in-out`}
+              className={`h-0.5 flex-shrink-0 bg-secondary-400 ${activeHeader === header.id ? 'w-5' : 'w-2'} transition-all duration-300 ease-in-out`}
             />
             <button
               className="truncate text-left"

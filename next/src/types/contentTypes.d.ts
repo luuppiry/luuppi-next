@@ -1322,6 +1322,68 @@ export interface ApiSportSport extends Schema.SingleType {
     singularName: 'sport';
     pluralName: 'sports';
     displayName: 'Sports';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ContactBanner: Attribute.Component<'shared.contact-banner'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::sport.sport',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::sport.sport',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::sport.sport',
+      'oneToMany',
+      'api::sport.sport'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiStudyingFieldsOfStudyStudyingFieldsOfStudy
+  extends Schema.SingleType {
+  collectionName: 'studying_fields_of_studies';
+  info: {
+    singularName: 'studying-fields-of-study';
+    pluralName: 'studying-fields-of-studies';
+    displayName: 'StudyingFieldsOfStudy';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1349,21 +1411,306 @@ export interface ApiSportSport extends Schema.SingleType {
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::sport.sport',
+      'api::studying-fields-of-study.studying-fields-of-study',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::sport.sport',
+      'api::studying-fields-of-study.studying-fields-of-study',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     localizations: Attribute.Relation<
-      'api::sport.sport',
+      'api::studying-fields-of-study.studying-fields-of-study',
       'oneToMany',
-      'api::sport.sport'
+      'api::studying-fields-of-study.studying-fields-of-study'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiStudyingGeneralStudyingGeneral extends Schema.SingleType {
+  collectionName: 'studying_generals';
+  info: {
+    singularName: 'studying-general';
+    pluralName: 'studying-generals';
+    displayName: 'StudyingGeneral';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ContactBanner: Attribute.Component<'shared.contact-banner'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::studying-general.studying-general',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::studying-general.studying-general',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::studying-general.studying-general',
+      'oneToMany',
+      'api::studying-general.studying-general'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiStudyingWorkshopStudyingWorkshop extends Schema.SingleType {
+  collectionName: 'studying_workshops';
+  info: {
+    singularName: 'studying-workshop';
+    pluralName: 'studying-workshops';
+    displayName: 'StudyingWorkshops';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ContactBanner: Attribute.Component<'shared.contact-banner'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::studying-workshop.studying-workshop',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::studying-workshop.studying-workshop',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::studying-workshop.studying-workshop',
+      'oneToMany',
+      'api::studying-workshop.studying-workshop'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiTutoringFaqTutoringFaq extends Schema.SingleType {
+  collectionName: 'tutoring_faqs';
+  info: {
+    singularName: 'tutoring-faq';
+    pluralName: 'tutoring-faqs';
+    displayName: 'TutoringFaq';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::tutoring-faq.tutoring-faq',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::tutoring-faq.tutoring-faq',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::tutoring-faq.tutoring-faq',
+      'oneToMany',
+      'api::tutoring-faq.tutoring-faq'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiTutoringGeneralTutoringGeneral extends Schema.SingleType {
+  collectionName: 'tutoring_generals';
+  info: {
+    singularName: 'tutoring-general';
+    pluralName: 'tutoring-generals';
+    displayName: 'TutoringGeneral';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ContactBanner: Attribute.Component<'shared.contact-banner'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::tutoring-general.tutoring-general',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::tutoring-general.tutoring-general',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::tutoring-general.tutoring-general',
+      'oneToMany',
+      'api::tutoring-general.tutoring-general'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiTutoringLarpakeTutoringLarpake extends Schema.SingleType {
+  collectionName: 'tutoring_larpakes';
+  info: {
+    singularName: 'tutoring-larpake';
+    pluralName: 'tutoring-larpakes';
+    displayName: 'TutoringLarpake';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::tutoring-larpake.tutoring-larpake',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::tutoring-larpake.tutoring-larpake',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::tutoring-larpake.tutoring-larpake',
+      'oneToMany',
+      'api::tutoring-larpake.tutoring-larpake'
     >;
     locale: Attribute.String;
   };
@@ -1398,6 +1745,12 @@ declare module '@strapi/types' {
       'api::organization-rule.organization-rule': ApiOrganizationRuleOrganizationRule;
       'api::organization-tradition-guideline.organization-tradition-guideline': ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline;
       'api::sport.sport': ApiSportSport;
+      'api::studying-fields-of-study.studying-fields-of-study': ApiStudyingFieldsOfStudyStudyingFieldsOfStudy;
+      'api::studying-general.studying-general': ApiStudyingGeneralStudyingGeneral;
+      'api::studying-workshop.studying-workshop': ApiStudyingWorkshopStudyingWorkshop;
+      'api::tutoring-faq.tutoring-faq': ApiTutoringFaqTutoringFaq;
+      'api::tutoring-general.tutoring-general': ApiTutoringGeneralTutoringGeneral;
+      'api::tutoring-larpake.tutoring-larpake': ApiTutoringLarpakeTutoringLarpake;
     }
   }
 }
