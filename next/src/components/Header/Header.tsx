@@ -43,6 +43,17 @@ export default function Header({
     setMobileHarmburgerOpen(!mobileHarmburgerOpen);
   };
 
+  // Tällä rahalla saa tällästä tälläkertaa
+  const hideAfterClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const group: HTMLElement = e.currentTarget.parentElement as HTMLElement;
+    if (group) {
+      group.style.display = 'none';
+      setTimeout(() => {
+        group.style.display = 'flex';
+      }, 0);
+    }
+  };
+
   return (
     <div>
       <AuthModal open={authModalOpen} onClose={toggleAuthModal} />
@@ -157,6 +168,7 @@ export default function Header({
                       key={sublink.translation}
                       className="truncate rounded-lg p-2 font-bold hover:bg-gray-200"
                       href={`/${lang}${sublink.href as string}`}
+                      onClick={hideAfterClick}
                     >
                       {
                         dictionary.navigation[
