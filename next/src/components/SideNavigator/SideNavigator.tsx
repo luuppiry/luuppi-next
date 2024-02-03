@@ -64,11 +64,13 @@ export default function SideNavigator({
               className={`h-0.5 flex-shrink-0 bg-primary-400 ${activeHeader === header.id ? 'w-5' : 'w-2'} transition-all duration-300 ease-in-out`}
             />
             <button
-              className="max-w-full break-all text-left"
-              title={header.textContent ?? ''}
+              className="truncate text-left"
+              title={header.textContent?.replace(/\d+§/, '') ?? ''}
               onClick={() => scrollToElement(header.id)}
             >
-              <p className="line line-clamp-2 text-sm">{header.textContent}</p>
+              <p className="truncate text-sm">
+                {header.textContent?.replace(/\d+§/, '')}
+              </p>
             </button>
           </li>
         ))}
