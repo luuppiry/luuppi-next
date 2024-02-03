@@ -36,6 +36,7 @@ export default function formatMetadata(
       description: seo.openGraph.openGraphDescription,
       url: pathname,
       images: openGraphImage ? [openGraphImage] : undefined,
+      siteName: 'Luuppi ry',
     },
     twitter: {
       title: seo.twitter.twitterTitle,
