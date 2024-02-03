@@ -39,7 +39,7 @@ export default async function ContentPage({
   return (
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col gap-14">
-        <div className="relative h-64 max-md:h-44">
+        <div className="relative h-64 rounded-lg bg-gradient-to-r from-primary-400 to-primary-300 max-md:h-44">
           <Image
             alt="Blog"
             className="rounded-lg object-cover"
