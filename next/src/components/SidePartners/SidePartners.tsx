@@ -19,7 +19,7 @@ export default function SidePartners({
     setRandomPartners(partnersData.sort(() => Math.random() - 0.5).slice(0, 3));
   }, [partnersData]);
   return (
-    <div className="mt-4 flex w-full flex-col gap-2 px-4">
+    <div className="flex w-full flex-col gap-2 px-4">
       <h6 className="text-lg font-bold">{dictionary.general.partners}</h6>
       <div className="flex flex-col gap-4">
         {randomPartners.map((partner) => (
