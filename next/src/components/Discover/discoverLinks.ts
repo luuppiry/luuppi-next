@@ -11,7 +11,7 @@ export const discoverLinks = [
   },
   {
     translation: 'new_students',
-    href: '/new-students',
+    href: '/tutoring',
     image: '/images/new_students.jpg',
   },
   {
@@ -21,7 +21,7 @@ export const discoverLinks = [
   },
   {
     translation: 'collaboration',
-    href: '/collaboration',
+    href: '/companies',
     image: '/images/collaboration.jpg',
   },
   {
