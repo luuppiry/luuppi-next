@@ -1,10 +1,10 @@
 {
   "kind": "singleType",
-  "collectionName": "studying_workshops",
+  "collectionName": "studies_workshops",
   "info": {
-    "singularName": "studying-workshop",
-    "pluralName": "studying-workshops",
-    "displayName": "StudyingWorkshops"
+    "singularName": "studies-workshop",
+    "pluralName": "studies-workshops",
+    "displayName": "StudiesWorkshops"
   },
   "options": {
     "draftAndPublish": false
@@ -15,7 +15,7 @@
     }
   },
   "attributes": {
-    "Content": {
+    "StudiesWorkshops": {
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
@@ -23,6 +23,7 @@
           "localized": true
         }
       },
+      "required": true,
       "component": "shared.page-content"
     },
     "ContactBanner": {
@@ -33,8 +34,8 @@
           "localized": true
         }
       },
-      "component": "shared.contact-banner",
-      "required": true
+      "required": true,
+      "component": "shared.contact-banner"
     },
     "Seo": {
       "type": "component",
@@ -44,8 +45,8 @@
           "localized": true
         }
       },
-      "component": "shared.seo",
-      "required": true
+      "required": true,
+      "component": "shared.seo"
     }
   }
 }

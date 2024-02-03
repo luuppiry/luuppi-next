@@ -1,10 +1,10 @@
 {
   "kind": "singleType",
-  "collectionName": "studying_generals",
+  "collectionName": "studies_fields_of_studies",
   "info": {
-    "singularName": "studying-general",
-    "pluralName": "studying-generals",
-    "displayName": "StudyingGeneral"
+    "singularName": "studies-fields-of-study",
+    "pluralName": "studies-fields-of-studies",
+    "displayName": "StudiesFieldsOfStudy"
   },
   "options": {
     "draftAndPublish": false
@@ -23,19 +23,8 @@
           "localized": true
         }
       },
-      "component": "shared.page-content",
-      "required": true
-    },
-    "ContactBanner": {
-      "type": "component",
-      "repeatable": false,
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "component": "shared.contact-banner",
-      "required": true
+      "required": true,
+      "component": "shared.page-content"
     },
     "Seo": {
       "type": "component",

@@ -1376,14 +1376,13 @@ export interface ApiSportSport extends Schema.SingleType {
   };
 }
 
-export interface ApiStudyingFieldsOfStudyStudyingFieldsOfStudy
+export interface ApiStudiesFieldsOfStudyStudiesFieldsOfStudy
   extends Schema.SingleType {
-  collectionName: 'studying_fields_of_studies';
+  collectionName: 'studies_fields_of_studies';
   info: {
-    singularName: 'studying-fields-of-study';
-    pluralName: 'studying-fields-of-studies';
-    displayName: 'StudyingFieldsOfStudy';
-    description: '';
+    singularName: 'studies-fields-of-study';
+    pluralName: 'studies-fields-of-studies';
+    displayName: 'StudiesFieldsOfStudy';
   };
   options: {
     draftAndPublish: false;
@@ -1411,32 +1410,32 @@ export interface ApiStudyingFieldsOfStudyStudyingFieldsOfStudy
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::studying-fields-of-study.studying-fields-of-study',
+      'api::studies-fields-of-study.studies-fields-of-study',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::studying-fields-of-study.studying-fields-of-study',
+      'api::studies-fields-of-study.studies-fields-of-study',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     localizations: Attribute.Relation<
-      'api::studying-fields-of-study.studying-fields-of-study',
+      'api::studies-fields-of-study.studies-fields-of-study',
       'oneToMany',
-      'api::studying-fields-of-study.studying-fields-of-study'
+      'api::studies-fields-of-study.studies-fields-of-study'
     >;
     locale: Attribute.String;
   };
 }
 
-export interface ApiStudyingGeneralStudyingGeneral extends Schema.SingleType {
-  collectionName: 'studying_generals';
+export interface ApiStudiesGeneralStudiesGeneral extends Schema.SingleType {
+  collectionName: 'studies_generals';
   info: {
-    singularName: 'studying-general';
-    pluralName: 'studying-generals';
-    displayName: 'StudyingGeneral';
+    singularName: 'studies-general';
+    pluralName: 'studies-generals';
+    displayName: 'StudiesGeneral';
   };
   options: {
     draftAndPublish: false;
@@ -1471,32 +1470,32 @@ export interface ApiStudyingGeneralStudyingGeneral extends Schema.SingleType {
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::studying-general.studying-general',
+      'api::studies-general.studies-general',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::studying-general.studying-general',
+      'api::studies-general.studies-general',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     localizations: Attribute.Relation<
-      'api::studying-general.studying-general',
+      'api::studies-general.studies-general',
       'oneToMany',
-      'api::studying-general.studying-general'
+      'api::studies-general.studies-general'
     >;
     locale: Attribute.String;
   };
 }
 
-export interface ApiStudyingWorkshopStudyingWorkshop extends Schema.SingleType {
-  collectionName: 'studying_workshops';
+export interface ApiStudiesWorkshopStudiesWorkshop extends Schema.SingleType {
+  collectionName: 'studies_workshops';
   info: {
-    singularName: 'studying-workshop';
-    pluralName: 'studying-workshops';
-    displayName: 'StudyingWorkshops';
+    singularName: 'studies-workshop';
+    pluralName: 'studies-workshops';
+    displayName: 'StudiesWorkshops';
   };
   options: {
     draftAndPublish: false;
@@ -1507,7 +1506,8 @@ export interface ApiStudyingWorkshopStudyingWorkshop extends Schema.SingleType {
     };
   };
   attributes: {
-    Content: Attribute.Component<'shared.page-content'> &
+    StudiesWorkshops: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -1530,21 +1530,21 @@ export interface ApiStudyingWorkshopStudyingWorkshop extends Schema.SingleType {
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::studying-workshop.studying-workshop',
+      'api::studies-workshop.studies-workshop',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::studying-workshop.studying-workshop',
+      'api::studies-workshop.studies-workshop',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     localizations: Attribute.Relation<
-      'api::studying-workshop.studying-workshop',
+      'api::studies-workshop.studies-workshop',
       'oneToMany',
-      'api::studying-workshop.studying-workshop'
+      'api::studies-workshop.studies-workshop'
     >;
     locale: Attribute.String;
   };
@@ -1745,9 +1745,9 @@ declare module '@strapi/types' {
       'api::organization-rule.organization-rule': ApiOrganizationRuleOrganizationRule;
       'api::organization-tradition-guideline.organization-tradition-guideline': ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline;
       'api::sport.sport': ApiSportSport;
-      'api::studying-fields-of-study.studying-fields-of-study': ApiStudyingFieldsOfStudyStudyingFieldsOfStudy;
-      'api::studying-general.studying-general': ApiStudyingGeneralStudyingGeneral;
-      'api::studying-workshop.studying-workshop': ApiStudyingWorkshopStudyingWorkshop;
+      'api::studies-fields-of-study.studies-fields-of-study': ApiStudiesFieldsOfStudyStudiesFieldsOfStudy;
+      'api::studies-general.studies-general': ApiStudiesGeneralStudiesGeneral;
+      'api::studies-workshop.studies-workshop': ApiStudiesWorkshopStudiesWorkshop;
       'api::tutoring-faq.tutoring-faq': ApiTutoringFaqTutoringFaq;
       'api::tutoring-general.tutoring-general': ApiTutoringGeneralTutoringGeneral;
       'api::tutoring-larpake.tutoring-larpake': ApiTutoringLarpakeTutoringLarpake;
