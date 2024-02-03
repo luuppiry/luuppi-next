@@ -45,7 +45,7 @@ export default function Header({
 
   // Tällä rahalla saa tällästä tälläkertaa
   const hideAfterClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const group: HTMLElement = e.currentTarget.parentElement as HTMLElement;
+    const group = e.currentTarget.parentElement as HTMLElement;
     if (group) {
       group.style.display = 'none';
       setTimeout(() => {
