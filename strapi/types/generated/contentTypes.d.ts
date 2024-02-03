@@ -1383,9 +1383,10 @@ export interface ApiStudyingFieldsOfStudyStudyingFieldsOfStudy
     singularName: 'studying-fields-of-study';
     pluralName: 'studying-fields-of-studies';
     displayName: 'StudyingFieldsOfStudy';
+    description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   pluginOptions: {
     i18n: {
@@ -1409,7 +1410,6 @@ export interface ApiStudyingFieldsOfStudyStudyingFieldsOfStudy
       }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::studying-fields-of-study.studying-fields-of-study',
       'oneToOne',

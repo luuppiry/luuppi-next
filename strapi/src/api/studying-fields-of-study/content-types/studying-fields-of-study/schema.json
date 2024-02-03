@@ -4,10 +4,11 @@
   "info": {
     "singularName": "studying-fields-of-study",
     "pluralName": "studying-fields-of-studies",
-    "displayName": "StudyingFieldsOfStudy"
+    "displayName": "StudyingFieldsOfStudy",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {
     "i18n": {
