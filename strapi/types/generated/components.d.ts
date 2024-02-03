@@ -49,6 +49,7 @@ export interface SharedMetaTwitter extends Schema.Component {
         maxLength: 120;
       }>;
     twitterDescription: Attribute.Text &
+      Attribute.Required &
       Attribute.SetMinMaxLength<{
         maxLength: 300;
       }>;

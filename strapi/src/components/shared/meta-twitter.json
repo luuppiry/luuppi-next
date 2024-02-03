@@ -14,7 +14,8 @@
     },
     "twitterDescription": {
       "type": "text",
-      "maxLength": 300
+      "maxLength": 300,
+      "required": true
     },
     "twitterImage": {
       "type": "media",
