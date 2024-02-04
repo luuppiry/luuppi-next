@@ -108,6 +108,15 @@ export async function GET() {
     ],
   }));
 
+  const blogPostsSiteMapEn: SitemapItemLoose[] = blogPosts.map((post) => ({
+    url: post.url.replace('/fi/', '/en/'),
+    lastmod: post.lastmod,
+    links: [
+      { hreflang: 'en', url: post.url.replace('/fi/', '/en/'), lang: 'en' },
+      { hreflang: 'fi', url: post.url, lang: 'fi' },
+    ],
+  }));
+
   const boardPagesSiteMap: SitemapItemLoose[] = boardPages.map((page) => ({
     url: page.url,
     lastmod: page.lastmod,
@@ -117,9 +126,20 @@ export async function GET() {
     ],
   }));
 
+  const boardPagesSiteMapEn: SitemapItemLoose[] = boardPages.map((page) => ({
+    url: page.url.replace('/fi/', '/en/'),
+    lastmod: page.lastmod,
+    links: [
+      { hreflang: 'en', url: page.url.replace('/fi/', '/en/'), lang: 'en' },
+      { hreflang: 'fi', url: page.url, lang: 'fi' },
+    ],
+  }));
+
   const sitemap: SitemapItemLoose[] = [
     ...blogPostsSiteMap,
     ...boardPagesSiteMap,
+    ...blogPostsSiteMapEn,
+    ...boardPagesSiteMapEn,
     ...staticFinnishSitemap,
     ...staticEnglishSitemap,
   ];
