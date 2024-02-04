@@ -1,6 +1,6 @@
 import BoardMember from '@/components/BoardMember/BoardMember';
 import { getDictionary } from '@/dictionaries';
-import flipLocale from '@/lib/flip-locale';
+import { flipBoardLocale } from '@/lib/flip-locale';
 import getStrapiData from '@/lib/get-strapi-data';
 import groupByYear from '@/lib/group-by-year';
 import { SupportedLanguage } from '@/models/locale';
@@ -38,7 +38,7 @@ export default async function Board({ params }: BoardProps) {
     (year) => parseInt(year, 10) !== latestBoard.attributes.year,
   );
 
-  const boardLanguageFlipped = flipLocale(params.lang, latestBoard);
+  const boardLanguageFlipped = flipBoardLocale(params.lang, latestBoard);
 
   const boardMembers = boardLanguageFlipped.filter(
     (member: any) => member.attributes.isBoardMember === true,

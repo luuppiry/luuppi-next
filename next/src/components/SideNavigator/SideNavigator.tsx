@@ -13,6 +13,9 @@ export default function SideNavigator({
   const [activeHeader, setActiveHeader] = useState('');
 
   useEffect(() => {
+    const element = document.getElementsByClassName(targetClass)?.[0];
+    if (!element) return;
+
     const headerElements = Array.from(
       document
         .getElementsByClassName(targetClass)[0]
