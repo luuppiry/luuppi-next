@@ -48,11 +48,7 @@ export default async function ContentPage({
           />
         </div>
         <div className="flex flex-col gap-4">
-          <div>
-            <h1 className="inline-block rounded-lg bg-secondary-400 px-4 py-2 text-4xl font-extrabold text-white max-md:text-3xl">
-              {contentData.attributes.Content.title}
-            </h1>
-          </div>
+          <h1>{contentData.attributes.Content.title}</h1>
           <div className="flex flex-col opacity-40">
             <p className="text-sm">
               {dictionary.general.content_updated}:{' '}
