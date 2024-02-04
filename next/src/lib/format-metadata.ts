@@ -20,7 +20,7 @@ export default function formatMetadata(
   }
 
   return {
-    title: seo.metaTitle,
+    title: `${seo.metaTitle} | Luuppi ry`,
     description: seo.metaDescription,
     authors: seo.metaAuthor,
     keywords: seo.metaKeywords,
