@@ -107,6 +107,14 @@
       },
       "component": "shared.seo",
       "required": true
+    },
+    "authorTitle": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
     }
   }
 }
