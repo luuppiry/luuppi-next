@@ -49,7 +49,7 @@ export default async function Blog({ params }: BlogProps) {
                 fill
               />
             </div>
-            <div className="flex w-full flex-col justify-between gap-12 p-4">
+            <div className="flex w-full flex-col justify-between gap-6 p-4">
               <div className="flex flex-col gap-1">
                 <span className="text-sm font-bold uppercase text-accent-400">
                   {blog.attributes.category}
@@ -62,9 +62,7 @@ export default async function Blog({ params }: BlogProps) {
                 >
                   {blog.attributes.title}
                 </Link>
-                <p className="line-clamp-3 text-sm">
-                  {blog.attributes.description}
-                </p>
+                <p className="line-clamp-4">{blog.attributes.description}</p>
               </div>
               <div className="flex items-center gap-2">
                 {blog.attributes.authorImage.data?.attributes.url ? (
