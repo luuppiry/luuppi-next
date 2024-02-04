@@ -103,8 +103,8 @@ export async function GET() {
     url: post.url,
     lastmod: post.lastmod,
     links: [
-      { lang: 'en', url: 'http://test.com/page-1/' },
-      { lang: 'ja', url: 'http://test.com/page-1/ja/' },
+      { hreflang: 'fi', url: post.url, lang: 'fi' },
+      { hreflang: 'en', url: post.url.replace('/fi/', '/en/'), lang: 'en' },
     ],
   }));
 
