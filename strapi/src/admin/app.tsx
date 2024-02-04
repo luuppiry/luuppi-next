@@ -1,3 +1,6 @@
+// @ts-ignore - Ignore import errors
+import favicon from "./extensions/favicon.ico";
+
 export default {
   config: {
     locales: [
@@ -28,6 +31,9 @@ export default {
       // 'zh-Hans',
       // 'zh',
     ],
+    head: {
+      favicon: favicon,
+    },
     translations: {
       en: {
         "app.components.LeftMenu.navbrand.title": "Content Management",
