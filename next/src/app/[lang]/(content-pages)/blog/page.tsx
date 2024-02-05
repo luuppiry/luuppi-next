@@ -18,6 +18,12 @@ export default async function Blog({ params }: BlogProps) {
 
   const blogLocaleFlipped = flipBlogLocale(params.lang, pageData.data);
 
+  const sortedBlogs = blogLocaleFlipped.sort(
+    (a, b) =>
+      new Date(b.attributes.createdAt).getTime() -
+      new Date(a.attributes.createdAt).getTime(),
+  );
+
   const timeOptions = {
     year: 'numeric',
     month: 'numeric',
@@ -29,8 +35,8 @@ export default async function Blog({ params }: BlogProps) {
   return (
     <div className="flex flex-col gap-12">
       <h1>Blog</h1>
-      <div className="flex flex-col gap-4">
-        {blogLocaleFlipped.map((blog) => (
+      <div className="flex flex-col gap-12">
+        {sortedBlogs.map((blog) => (
           <article
             key={blog.attributes.title}
             className={
