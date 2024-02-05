@@ -1,3 +1,28 @@
+import { Event } from '@/models/event';
+import ical from 'node-ical';
+
+/**
+ * Temporary function to get events from Luuppi's legacy calendar.
+ * TODO: Replace this with a logic that gets events from the new calendar.
+ */
+export default async function getLuuppiEvents(): Promise<Event[]> {
+  const res = await fetch('https://luuppi.fi/service/ics/events.ics?lang=fin', {
+    next: { revalidate: 300 },
+  });
+  const data = await res.text();
+  const eventsRaw = ical.parseICS(data);
+  const events = Object.values(eventsRaw) as ical.VEvent[];
+
+  const formattedEvents: Event[] = events.map((event) => ({
+    title: event.summary,
+    start: event.start,
+    end: event.end,
+    description: removeHtml(event.description) ?? '',
+  }));
+
+  return formattedEvents;
+}
+
 /**
  * iha ok, mut ootko kattonu Luupin ICS sarjasta jakson himo siisti kalenteri :D siinä esiintyy koko html perhe
  * eli myös div-elementti fanit saavat nauraa ja naurattaahan se tietty myös vaikka ics speksin rikkominen ja muut :D
@@ -6,8 +31,7 @@
  * TODO: Remove this function when we our ics calendar has plaintext description and formatted description
  * as some non standard property: https://www.rfc-editor.org/rfc/rfc5545#section-3.8.8.2
  */
-
-export default function removeHtml(text: string | undefined) {
+function removeHtml(text: string | undefined) {
   const removeHtml = text?.replace(/(<([^>]+)>)/gi, '');
 
   // Replace &auml; with ä, etc.

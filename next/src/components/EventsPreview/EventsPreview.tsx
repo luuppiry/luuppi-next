@@ -1,13 +1,31 @@
 import { getDictionary } from '@/dictionaries';
+import getLuuppiEvents from '@/lib/get-legacy-events';
+import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
-import { IoLocation } from 'react-icons/io5';
 
-export default function EventsPreview({
-  dictionary,
-}: {
+interface EventsPreviewProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
-}) {
+  lang: SupportedLanguage;
+}
+
+export default async function EventsPreview({
+  dictionary,
+  lang,
+}: EventsPreviewProps) {
+  const events = await getLuuppiEvents();
+  const upcomingEvents = events
+    .filter((event) => event.end > new Date())
+    .sort((a, b) => a.end.getTime() - b.end.getTime());
+
+  const timeOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  } as const;
+
   return (
     <section className=" relative bg-primary-50">
       <div className="relative z-[10] mx-auto max-w-[1200px] px-4 py-20">
@@ -18,16 +36,19 @@ export default function EventsPreview({
           {dictionary.pages_home.events_preview.title}
         </h2>
         <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
-          {Array.from({ length: 4 }, (_, i) => (
+          {upcomingEvents.slice(0, 4).map((event, i) => (
             <Link key={i} className="group relative" href="/events">
               <div className="absolute z-20 flex h-full w-full flex-col justify-end rounded-lg bg-gradient-to-t from-primary-800 via-black/50 to-transparent p-6 transition-all duration-300">
-                <p className="text-sm font-bold text-white">31 Aug 2024</p>
-                <p className="text-lg font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-base">
-                  {dictionary.pages_home.events_preview.event}
+                <p className="text-sm font-bold text-white">
+                  {new Date(event.start).toLocaleString(lang, timeOptions)}
                 </p>
-                <div className="flex items-center gap-1">
-                  <IoLocation color="#fff" size={16} />
-                  <p className="text-sm font-bold text-white">Koskikeskus</p>
+                <p className="line-clamp-3 text-lg font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-base">
+                  {event.title}
+                </p>
+                <div className="flex items-center">
+                  <p className="line-clamp-3 text-sm text-white">
+                    {event.description}
+                  </p>
                 </div>
               </div>
               <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden rounded-lg bg-gradient-to-r from-primary-400 to-primary-300 brightness-[75%] group-hover:brightness-100 max-md:aspect-[2/1]">
