@@ -35,7 +35,7 @@ export default async function Blog({ params }: BlogProps) {
   return (
     <div className="flex flex-col gap-12">
       <h1>Blog</h1>
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-12 max-md:gap-6">
         {sortedBlogs.map((blog) => (
           <article
             key={blog.attributes.title}
