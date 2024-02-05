@@ -51,8 +51,7 @@
     "events_preview": {
       "title": "Tulevat tapahtumat",
       "subtitle": "Kurkista mitä on tulossa!",
-      "see_all": "Kaikki tapahtumat",
-      "event": "Tapahtuma"
+      "see_all": "Kaikki tapahtumat"
     },
     "blog": {
       "title": "Uusimmat postaukset",

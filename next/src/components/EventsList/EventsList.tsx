@@ -1,4 +1,5 @@
 import { getDictionary } from '@/dictionaries';
+import { longDateFormat, shortDateFormat } from '@/lib/time-utils';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
@@ -52,17 +53,6 @@ export default function EventsList({
     return groupEventsByDate(filtered);
   };
 
-  const dateOptions = {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'short',
-  } as const;
-
-  const timeOptions = {
-    hour: '2-digit',
-    minute: '2-digit',
-  } as const;
-
   return (
     <div className="flex flex-col gap-12">
       <div>
@@ -82,8 +72,8 @@ export default function EventsList({
             {group.date.toLocaleDateString(
               lang,
               showPastEvents
-                ? { ...dateOptions, year: 'numeric' }
-                : dateOptions,
+                ? { ...longDateFormat, year: 'numeric' }
+                : longDateFormat,
             )}
           </h2>
           <div className="divider my-0" />
@@ -105,9 +95,11 @@ export default function EventsList({
                     {event.title}
                   </h3>
                   <div className="flex gap-2">
-                    <p>{event.start.toLocaleTimeString(lang, timeOptions)}</p>
+                    <p>
+                      {event.start.toLocaleTimeString(lang, shortDateFormat)}
+                    </p>
                     <p>-</p>
-                    <p>{event.end.toLocaleTimeString(lang, timeOptions)}</p>
+                    <p>{event.end.toLocaleTimeString(lang, shortDateFormat)}</p>
                   </div>
                   <p className="line-clamp-3 max-w-xl text-gray-500 max-md:text-sm">
                     {event.description}

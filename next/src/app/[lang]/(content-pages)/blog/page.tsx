@@ -1,5 +1,6 @@
 import { flipBlogLocale } from '@/lib/flip-locale';
 import getStrapiData from '@/lib/get-strapi-data';
+import { dateFormat } from '@/lib/time-utils';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -23,14 +24,6 @@ export default async function Blog({ params }: BlogProps) {
       new Date(b.attributes.createdAt).getTime() -
       new Date(a.attributes.createdAt).getTime(),
   );
-
-  const timeOptions = {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  } as const;
 
   return (
     <div className="flex flex-col gap-12">
@@ -89,7 +82,7 @@ export default async function Blog({ params }: BlogProps) {
                   <span className="text-sm opacity-60">
                     {new Date(blog.attributes.createdAt).toLocaleDateString(
                       params.lang,
-                      timeOptions,
+                      dateFormat,
                     )}
                   </span>
                 </div>

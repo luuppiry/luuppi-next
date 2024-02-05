@@ -1,5 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import getStrapiData from '@/lib/get-strapi-data';
+import { dateFormat } from '@/lib/time-utils';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -28,14 +29,6 @@ export default async function ContentPage({
   const imagePath = contentData.attributes.Content.banner.data.attributes.url;
   const imageUrl = `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${imagePath}`;
 
-  const timeOptions = {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  } as const;
-
   return (
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col gap-14">
@@ -54,7 +47,7 @@ export default async function ContentPage({
               {dictionary.general.content_updated}:{' '}
               {new Date(contentData.attributes.updatedAt).toLocaleString(
                 lang,
-                timeOptions,
+                dateFormat,
               )}
             </p>
           </div>

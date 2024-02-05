@@ -4,6 +4,7 @@ import SidePartners from '@/components/SidePartners/SidePartners';
 import { getDictionary } from '@/dictionaries';
 import { flipBlogLocale } from '@/lib/flip-locale';
 import getStrapiData from '@/lib/get-strapi-data';
+import { dateFormat } from '@/lib/time-utils';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog, ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -38,14 +39,6 @@ export default async function BlogPost({ params }: BlogPostProps) {
   }
 
   const selectedBlog = blogLocaleFlipped[0];
-
-  const timeOptions = {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  } as const;
 
   return (
     <div className="flex w-full gap-12">
@@ -83,7 +76,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
               <span className="text-sm opacity-75">
                 {new Date(selectedBlog.attributes.createdAt).toLocaleString(
                   params.lang,
-                  timeOptions,
+                  dateFormat,
                 )}
               </span>
             </div>
@@ -98,7 +91,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
               {dictionary.general.content_updated}:{' '}
               {new Date(selectedBlog.attributes.createdAt).toLocaleString(
                 params.lang,
-                timeOptions,
+                dateFormat,
               )}
             </p>
           </div>

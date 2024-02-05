@@ -1,6 +1,7 @@
 import { getDictionary } from '@/dictionaries';
 import { flipBlogLocale } from '@/lib/flip-locale';
 import getStrapiData from '@/lib/get-strapi-data';
+import { dateFormat } from '@/lib/time-utils';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -30,14 +31,6 @@ export default async function BlogPreview({
         new Date(a.attributes.createdAt).getTime(),
     )
     .slice(0, 4);
-
-  const timeOptions = {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  } as const;
 
   return (
     <section className="mx-auto max-w-[1200px] px-4 py-20">
@@ -96,7 +89,7 @@ export default async function BlogPreview({
                     <span className="text-sm opacity-60">
                       {new Date(blog.attributes.createdAt).toLocaleDateString(
                         lang,
-                        timeOptions,
+                        dateFormat,
                       )}
                     </span>
                   </div>
