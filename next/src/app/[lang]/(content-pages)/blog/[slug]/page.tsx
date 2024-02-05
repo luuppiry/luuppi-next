@@ -62,16 +62,17 @@ export default async function BlogPost({ params }: BlogPostProps) {
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">
-            <div className="rounded-lg bg-gradient-to-r from-primary-400 to-primary-300">
+            {selectedBlog.attributes.authorImage.data?.attributes.url ? (
               <Image
-                alt="yes"
-                className="rounded-lg object-cover"
+                alt="avatar"
+                className="rounded-full bg-gradient-to-r from-primary-400 to-primary-300"
                 height={50}
-                quality={100}
-                src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${selectedBlog.attributes.authorImage.data.attributes.url}`}
+                src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${selectedBlog.attributes.authorImage.data?.attributes.url}`}
                 width={50}
               />
-            </div>
+            ) : (
+              <div className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-primary-400 to-primary-300" />
+            )}
             <div className="flex flex-col">
               <span className="font-bold">
                 {selectedBlog.attributes.authorName}{' '}
