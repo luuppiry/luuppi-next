@@ -19,7 +19,7 @@ export default async function Home({
       <Hero dictionary={dictionary} />
       <Discover dictionary={dictionary} />
       <EventsPreview dictionary={dictionary} lang={params.lang} />
-      <BlogPreview dictionary={dictionary} />
+      <BlogPreview dictionary={dictionary} lang={params.lang} />
       <Partners dictionary={dictionary} lang={params.lang} />
     </>
   );

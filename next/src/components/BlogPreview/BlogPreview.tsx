@@ -1,12 +1,44 @@
 import { getDictionary } from '@/dictionaries';
+import { flipBlogLocale } from '@/lib/flip-locale';
+import getStrapiData from '@/lib/get-strapi-data';
+import { SupportedLanguage } from '@/models/locale';
+import { ApiBlogBlog } from '@/types/contentTypes';
 import Image from 'next/image';
 import Link from 'next/link';
 
 interface BlogPreviewProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  lang: SupportedLanguage;
 }
 
-export default function BlogPreview({ dictionary }: BlogPreviewProps) {
+export default async function BlogPreview({
+  dictionary,
+  lang,
+}: BlogPreviewProps) {
+  const pageData = await getStrapiData<ApiBlogBlog[]>(
+    'fi',
+    '/api/blogs?populate[0]=banner&populate[1]=authorImage&populate[3]=localizations&pagination[pageSize]=100',
+    ['blog'],
+  );
+
+  const blogLocaleFlipped = flipBlogLocale(lang, pageData.data);
+
+  const sortedBlogs = blogLocaleFlipped
+    .sort(
+      (a, b) =>
+        new Date(b.attributes.createdAt).getTime() -
+        new Date(a.attributes.createdAt).getTime(),
+    )
+    .slice(0, 4);
+
+  const timeOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  } as const;
+
   return (
     <section className="mx-auto max-w-[1200px] px-4 py-20">
       <p className="mb-1 text-xl font-bold max-md:text-base">
@@ -17,7 +49,7 @@ export default function BlogPreview({ dictionary }: BlogPreviewProps) {
       </h2>
       <div className="flex flex-col gap-8">
         <div className="grid grid-cols-3 gap-6 max-lg:grid-cols-2 max-sm:grid-cols-1">
-          {Array.from({ length: 4 }).map((_, i) => (
+          {sortedBlogs.map((blog, i) => (
             <article
               key={i}
               className={`${i === 0 ? 'col-span-3 max-lg:col-span-1 max-lg:flex-col' : 'col-span-1 flex-col'} flex gap-4 rounded-lg border-[1px] border-gray-200/50 shadow-sm`}
@@ -30,29 +62,23 @@ export default function BlogPreview({ dictionary }: BlogPreviewProps) {
                   alt="yes"
                   className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} object-cover`}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  src="/images/blog.jpg"
+                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${blog.attributes.banner.data.attributes.url}`}
                   fill
                 />
               </div>
               <div className="flex w-full flex-col justify-between gap-12 p-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm font-bold uppercase text-accent-400">
-                    {dictionary.pages_home.blog.news}
+                    {blog.attributes.category}
                   </span>
                   <Link
                     className={`inline-block font-bold ${i === 0 ? 'text-2xl max-lg:text-xl' : 'text-xl'} hover:underline`}
-                    href="/blog"
+                    href={`/${lang}/blog/${blog.attributes.slug}`}
                   >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    {blog.attributes.title}
                   </Link>
                   <p className="line-clamp-3 text-sm">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Voluptate, voluptatem. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Saepe delectus molestiae quas
-                    a architecto, eaque placeat natus voluptatibus, amet
-                    veritatis culpa inventore autem enim labore consequuntur
-                    reprehenderit sint cum fuga obcaecati repudiandae deleniti
-                    sunt aperiam debitis iure. Non, temporibus architecto.
+                    {blog.attributes.description}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -65,9 +91,14 @@ export default function BlogPreview({ dictionary }: BlogPreviewProps) {
                   />
                   <div className="flex flex-col">
                     <span className="text-sm font-semibold">
-                      Matti Meikäpoika
+                      {blog.attributes.authorName}
                     </span>
-                    <span className="text-sm opacity-60">22.01.2024</span>
+                    <span className="text-sm opacity-60">
+                      {new Date(blog.attributes.createdAt).toLocaleDateString(
+                        lang,
+                        timeOptions,
+                      )}
+                    </span>
                   </div>
                 </div>
               </div>
