@@ -33,7 +33,12 @@ export default async function Event({ params }: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
+  // Remove empty paragraphs
   event.description = event.description.replace(/<p>&nbsp;<\/p>/g, '');
+
+  // Replace h1 with h2
+  event.description = event.description.replace(/<h1/g, '<h2');
+  event.description = event.description.replace(/<\/h1>/g, '</h2>');
 
   const index = event.description.indexOf('--\n');
   if (index !== -1) {
