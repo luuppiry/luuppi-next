@@ -52,7 +52,7 @@ export default async function ContentPage({
             </p>
           </div>
         </div>
-        <article className="organization-page prose prose-base prose-custom max-w-full decoration-primary-400 transition-all duration-300 ease-in-out max-md:prose-base">
+        <article className="organization-page prose prose-custom max-w-full decoration-primary-400 transition-all duration-300 ease-in-out">
           <BlockRendererClient
             content={contentData.attributes.Content.content}
           />
