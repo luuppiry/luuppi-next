@@ -44,20 +44,28 @@ export default async function Event({ params }: EventProps) {
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col">
         <h1 className="mb-14">{event.title}</h1>
-        <div className="mb-6 flex flex-col gap-2 rounded-lg bg-secondary-400 p-4 text-lg font-bold text-white">
+        <div className="mb-6 flex flex-col gap-2 rounded-lg bg-secondary-400 p-4 font-bold text-white max-sm:text-sm">
           <div className="flex items-center">
-            <IoCalendarOutline className="mr-2 text-2xl" />
-            {firstLetterToUpperCase(
-              new Date(event.start).toLocaleString(params.lang, longDateFormat),
-            )}{' '}
-            -{' '}
-            {new Date(event.start).toLocaleString(params.lang, shortDateFormat)}
-            {'-'}
-            {new Date(event.end).toLocaleString(params.lang, shortDateFormat)}
+            <IoCalendarOutline className="mr-2 shrink-0 text-2xl" />
+            <p className="truncate">
+              {firstLetterToUpperCase(
+                new Date(event.start).toLocaleString(
+                  params.lang,
+                  longDateFormat,
+                ),
+              )}{' '}
+              -{' '}
+              {new Date(event.start).toLocaleString(
+                params.lang,
+                shortDateFormat,
+              )}
+              {'-'}
+              {new Date(event.end).toLocaleString(params.lang, shortDateFormat)}
+            </p>
           </div>
           <div className="flex items-center">
-            <IoLocationOutline className="mr-2 text-2xl" />
-            <p>{event.location}</p>
+            <IoLocationOutline className="mr-2 shrink-0 text-2xl" />
+            <p className="truncate">{event.location}</p>
           </div>
         </div>
         <div
