@@ -6,9 +6,7 @@ import ical from 'node-ical';
  * Temporary function to get events from Luuppi's legacy calendar.
  * TODO: Replace this with a logic that gets events from the new calendar.
  */
-export default async function getLuuppiEvents(
-  lang: SupportedLanguage,
-): Promise<Event[]> {
+async function getLuuppiEvents(lang: SupportedLanguage): Promise<Event[]> {
   const langParam = lang === 'fi' ? 'fin' : 'eng';
 
   const res = await fetch(
@@ -26,9 +24,40 @@ export default async function getLuuppiEvents(
     start: event.start,
     end: event.end,
     description: removeHtml(event.description) ?? '',
+    id: event.url?.split('id=')[1] ?? '',
   }));
 
   return formattedEvents;
+}
+
+async function getLuuppiEventById(
+  lang: SupportedLanguage,
+  id: string,
+): Promise<Event | undefined> {
+  const langParam = lang === 'fi' ? 'fin' : 'eng';
+
+  const res = await fetch(
+    `https://luuppi.fi/service/ics/events.ics?lang=${langParam}`,
+    {
+      next: { revalidate: 300 },
+    },
+  );
+  const data = await res.text();
+  const eventsRaw = ical.parseICS(data);
+  const events = Object.values(eventsRaw) as ical.VEvent[];
+
+  const event = events.find((e) => e.url?.includes(`id=${id}`));
+  if (!event) return undefined;
+
+  const eventId = event.url?.split('id=')[1];
+
+  return {
+    title: event.summary,
+    start: event.start,
+    end: event.end,
+    description: event.description ?? '',
+    id: eventId,
+  };
 }
 
 /**
@@ -65,3 +94,5 @@ function removeHtml(text: string | undefined) {
   });
   return decodeHtml;
 }
+
+export { getLuuppiEventById, getLuuppiEvents };

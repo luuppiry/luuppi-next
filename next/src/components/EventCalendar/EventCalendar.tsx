@@ -5,6 +5,7 @@ import fiLocale from '@fullcalendar/core/locales/fi';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import './EventCalendar.css';
 
@@ -16,12 +17,14 @@ interface EventCalendarProps {
 export default function EventCalendar({ events, lang }: EventCalendarProps) {
   const [isMobile, setIsMobile] = useState(false);
 
+  const router = useRouter();
+
   // Hacky solution to fix overlapping events styling
   const calendarRef = useRef<FullCalendar>(null);
 
   const handleEventClick = (e: any) => {
-    // TODO: Event page
-    console.log(e.event);
+    const eventId = e.event.id;
+    router.push(`/${lang}/events/${eventId}`);
   };
 
   useEffect(() => {

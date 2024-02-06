@@ -86,7 +86,7 @@ export default function EventsList({
                   event.title
                 }
                 className="flex gap-4 rounded-lg transition-all delay-300 ease-in-out hover:bg-primary-50"
-                href="/"
+                href={`/${lang}/events/${event.id}`}
                 id={event.start.toDateString() + event.title}
               >
                 <span className="w-1 rounded-l-lg bg-primary-400" />
