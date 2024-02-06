@@ -58,7 +58,7 @@
 }
 
 .fc .fc-toolbar-title {
-  @apply text-4xl font-bold max-lg:text-xs;
+  @apply text-2xl font-bold max-lg:text-xs;
 }
 
 .fc .fc-toolbar {
