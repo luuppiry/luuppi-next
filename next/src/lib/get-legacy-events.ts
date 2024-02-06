@@ -25,6 +25,7 @@ async function getLuuppiEvents(lang: SupportedLanguage): Promise<Event[]> {
     end: event.end,
     description: removeHtml(event.description) ?? '',
     id: event.url?.split('id=')[1] ?? '',
+    location: event.location ?? '',
   }));
 
   return formattedEvents;
@@ -57,6 +58,7 @@ async function getLuuppiEventById(
     end: event.end,
     description: event.description ?? '',
     id: eventId,
+    location: event.location ?? '',
   };
 }
 

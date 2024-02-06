@@ -1,4 +1,5 @@
 import { getDictionary } from '@/dictionaries';
+import firstLetterToUpperCase from '@/lib/text-utils';
 import { longDateFormat, shortDateFormat } from '@/lib/time-utils';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
@@ -69,11 +70,13 @@ export default function EventsList({
       {Object.values(getEvents(showPastEvents)).map((group) => (
         <div key={group.date.toDateString()} className="flex flex-col gap-2">
           <h2 className="text-xl font-bold">
-            {group.date.toLocaleDateString(
-              lang,
-              showPastEvents
-                ? { ...longDateFormat, year: 'numeric' }
-                : longDateFormat,
+            {firstLetterToUpperCase(
+              group.date.toLocaleDateString(
+                lang,
+                showPastEvents
+                  ? { ...longDateFormat, year: 'numeric' }
+                  : longDateFormat,
+              ),
             )}
           </h2>
           <div className="divider my-0" />
