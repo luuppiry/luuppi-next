@@ -12,7 +12,7 @@
 }
 
 .fc .fc-col-header-cell-cushion {
-  @apply text-sm;
+  @apply text-xs;
 }
 
 .fc .fc-button-primary:hover {
@@ -45,7 +45,7 @@
 }
 
 .fc .fc-timegrid-axis-cushion {
-  @apply text-sm;
+  @apply text-xs;
 }
 
 .fc-daygrid-dot-event.fc-event-mirror,
@@ -58,11 +58,11 @@
 }
 
 .fc .fc-toolbar-title {
-  @apply text-4xl font-bold max-lg:text-sm;
+  @apply text-4xl font-bold max-lg:text-xs;
 }
 
 .fc .fc-toolbar {
-  @apply flex-row gap-2 max-lg:flex-col max-lg:items-start max-lg:text-sm;
+  @apply flex-row gap-2 max-lg:flex-col max-lg:items-start max-lg:text-xs;
 }
 
 .fc-scroller::-webkit-scrollbar {

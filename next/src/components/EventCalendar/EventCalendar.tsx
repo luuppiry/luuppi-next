@@ -65,7 +65,7 @@ export default function EventCalendar({ events, lang }: EventCalendarProps) {
       eventContent={function (arg) {
         return (
           <span className="tooltip block w-full" data-tip={arg.event.title}>
-            <p className="overflow-hidden pl-[2px] text-left max-lg:text-xs">
+            <p className="overflow-hidden pl-[2px] text-left text-xs">
               {arg.timeText}{' '}
               <span className="font-bold">{arg.event.title}</span>
             </p>
