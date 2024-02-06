@@ -14,7 +14,7 @@ export default async function EventsPreview({
   dictionary,
   lang,
 }: EventsPreviewProps) {
-  const events = await getLuuppiEvents();
+  const events = await getLuuppiEvents(lang);
   const upcomingEvents = events
     .filter((event) => event.end > new Date())
     .sort((a, b) => a.end.getTime() - b.end.getTime());

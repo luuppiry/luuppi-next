@@ -9,7 +9,7 @@ interface EventsProps {
 
 export default async function Events({ params }: EventsProps) {
   const dictionary = await getDictionary(params.lang);
-  const events = await getLuuppiEvents();
+  const events = await getLuuppiEvents(params.lang);
   return (
     <>
       <h1 className="mb-14">{dictionary.navigation.events}</h1>

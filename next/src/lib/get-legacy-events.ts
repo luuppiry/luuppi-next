@@ -1,14 +1,22 @@
 import { Event } from '@/models/event';
+import { SupportedLanguage } from '@/models/locale';
 import ical from 'node-ical';
 
 /**
  * Temporary function to get events from Luuppi's legacy calendar.
  * TODO: Replace this with a logic that gets events from the new calendar.
  */
-export default async function getLuuppiEvents(): Promise<Event[]> {
-  const res = await fetch('https://luuppi.fi/service/ics/events.ics?lang=fin', {
-    next: { revalidate: 300 },
-  });
+export default async function getLuuppiEvents(
+  lang: SupportedLanguage,
+): Promise<Event[]> {
+  const langParam = lang === 'fi' ? 'fin' : 'eng';
+
+  const res = await fetch(
+    `https://luuppi.fi/service/ics/events.ics?lang=${langParam}`,
+    {
+      next: { revalidate: 300 },
+    },
+  );
   const data = await res.text();
   const eventsRaw = ical.parseICS(data);
   const events = Object.values(eventsRaw) as ical.VEvent[];
