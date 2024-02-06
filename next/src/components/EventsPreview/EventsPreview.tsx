@@ -30,7 +30,11 @@ export default async function EventsPreview({
         </h2>
         <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
           {upcomingEvents.slice(0, 4).map((event, i) => (
-            <Link key={i} className="group relative" href="/events">
+            <Link
+              key={i}
+              className="group relative"
+              href={`/${lang}/events/${event.id}`}
+            >
               <div className="absolute z-20 flex h-full w-full flex-col justify-end rounded-lg bg-gradient-to-t from-primary-800 via-black/50 to-transparent p-6 transition-all duration-300">
                 <p className="text-sm font-bold text-white">
                   {new Date(event.start).toLocaleString(lang, dateFormat)}
