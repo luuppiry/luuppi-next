@@ -1,3 +1,4 @@
+import { getLuuppiEvents } from '@/lib/get-legacy-events';
 import getStrapiData from '@/lib/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog, ApiBoardBoard } from '@/types/contentTypes';
@@ -79,6 +80,46 @@ export async function GET() {
     'board',
   ]);
 
+  const eventsData = await getLuuppiEvents('fi');
+
+  const eventPagesSiteMap: SitemapItemLoose[] = eventsData
+    .filter((e) => e.start)
+    .sort((a, b) => b.start.getTime() - a.start.getTime())
+    .map((event) => ({
+      url: `/fi/events/${event.id}`,
+      links: [
+        {
+          hreflang: 'fi',
+          url: `/fi/events/${event.id}`,
+          lang: 'fi',
+        },
+        {
+          hreflang: 'en',
+          url: `/en/events/${event.id}`,
+          lang: 'en',
+        },
+      ],
+    }));
+
+  const eventPagesSiteMapEn: SitemapItemLoose[] = eventsData
+    .filter((e) => e.start)
+    .sort((a, b) => b.start.getTime() - a.start.getTime())
+    .map((event) => ({
+      url: `/en/events/${event.id}`,
+      links: [
+        {
+          hreflang: 'en',
+          url: `/en/events/${event.id}`,
+          lang: 'en',
+        },
+        {
+          hreflang: 'fi',
+          url: `/fi/events/${event.id}`,
+          lang: 'fi',
+        },
+      ],
+    }));
+
   const boardPages: SitemapItemLoose[] = boardData.data
     .sort((a, b) => b.attributes.year - a.attributes.year)
     .map((board) => ({
@@ -142,6 +183,8 @@ export async function GET() {
     ...boardPagesSiteMapEn,
     ...staticFinnishSitemap,
     ...staticEnglishSitemap,
+    ...eventPagesSiteMap,
+    ...eventPagesSiteMapEn,
   ];
 
   const smStream = new SitemapStream({
