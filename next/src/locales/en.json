@@ -92,5 +92,10 @@
   },
   "footer": {
     "description": "Luuppi ry is the student organization for computer science, mathematics, and statistical data analysis at the University of Tampere."
+  },
+  "pages_companies": {
+    "founded": "Founded",
+    "homepage": "Homepage",
+    "open_jobs": "Open jobs"
   }
 }

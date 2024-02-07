@@ -92,5 +92,10 @@
   },
   "footer": {
     "description": "Luuppi ry on Tampereen yliopiston tietojenkäsittelytieteen, matematiikan ja tilastollisen data-analyysin ainejärjestö."
+  },
+  "pages_companies": {
+    "founded": "Perustettu",
+    "homepage": "Kotisivut",
+    "open_jobs": "Avoimet työpaikat"
   }
 }

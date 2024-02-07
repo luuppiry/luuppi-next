@@ -26,41 +26,53 @@ export default async function Organization({
   return (
     <div className="flex flex-col gap-12">
       <h1>{dictionary.navigation.companies}</h1>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-8">
         {pageData.data.map((company) => (
           <div
             key={company.attributes.createdAt}
-            className="flex gap-12 py-8 max-md:flex-col max-md:gap-6"
+            className="flex gap-4 rounded-lg"
           >
-            <div className="flex shrink-0 flex-col justify-center gap-4">
-              <Image
-                alt="Company logo"
-                className="rounded-lg object-contain max-md:w-44"
-                height={100}
-                src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${company.attributes.logo.data.attributes.url}`}
-                width={300}
-              />
-              <div className="font-semibold">
-                <p>Founded: {company.attributes.foundedYear}</p>
-                <div>
-                  Homepage:{' '}
-                  <Link className="link" href={company.attributes.homepageUrl}>
-                    {
-                      company.attributes.homepageUrl
-                        .replace(/https?:\/\//, '')
-                        .split('/')[0]
-                    }
-                  </Link>
-                </div>
-                <div>
-                  <Link className="link" href={company.attributes.openJobsUrl}>
-                    Open Jobs
-                  </Link>
+            <span className="w-1 flex-shrink-0 rounded-l-lg bg-secondary-400" />
+            <div className="flex gap-12 py-4 max-md:flex-col max-md:gap-6">
+              <div className="flex shrink-0 flex-col justify-center gap-4">
+                <Image
+                  alt="Company logo"
+                  className="rounded-lg object-contain max-md:w-44"
+                  height={100}
+                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${company.attributes.logo.data.attributes.url}`}
+                  width={300}
+                />
+                <div className="font-semibold">
+                  <p>
+                    {dictionary.pages_companies.founded}:{' '}
+                    {company.attributes.foundedYear}
+                  </p>
+                  <div>
+                    {dictionary.pages_companies.homepage}:{' '}
+                    <Link
+                      className="link"
+                      href={company.attributes.homepageUrl}
+                    >
+                      {
+                        company.attributes.homepageUrl
+                          .replace(/https?:\/\//, '')
+                          .split('/')[0]
+                      }
+                    </Link>
+                  </div>
+                  <div>
+                    <Link
+                      className="link flex items-center gap-1"
+                      href={company.attributes.openJobsUrl}
+                    >
+                      {dictionary.pages_companies.open_jobs}
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center">
-              <p>{company.attributes.description}</p>
+              <div className="flex items-center">
+                <p>{company.attributes.description}</p>
+              </div>
             </div>
           </div>
         ))}
