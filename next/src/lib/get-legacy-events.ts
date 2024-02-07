@@ -1,3 +1,4 @@
+'use server';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import ical from 'node-ical';
