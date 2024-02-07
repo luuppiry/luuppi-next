@@ -4,11 +4,12 @@ import { ApiBlogBlog, ApiBoardBoard } from '@/types/contentTypes';
 import { SitemapItemLoose, SitemapStream, streamToPromise } from 'sitemap';
 
 /**
- * TODO: This is a temporary solution for sitemap generation.
- * Nextjs not supporting languages on it's own sitemap.xml generation.
- * PR: https://github.com/vercel/next.js/pull/53765
+ * Get static pages for sitemap. There is no clean way
+ * to get all static pages automatically, so this is something that
+ * needs to be maintained manually. :(
+ * @param lang "fi" or "en
+ * @returns array of static pages
  */
-
 const getStaticPages = (lang: SupportedLanguage) => {
   const staticPages = [
     // General
@@ -46,6 +47,15 @@ const getStaticPages = (lang: SupportedLanguage) => {
   return staticPages;
 };
 
+/**
+ * TODO: This is a temporary solution for sitemap generation.
+ * Nextjs not supporting languages on it's own sitemap.xml generation.
+ * PR: https://github.com/vercel/next.js/pull/53765
+ *
+ * (There is nothing more permanent than a temporary solution :D)
+ *
+ * @returns sitemap.xml
+ */
 export async function GET() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
   const fiStaticPages = getStaticPages('fi');

@@ -12,13 +12,15 @@ const titilliumFont = Poppins({
   weight: ['200', '300', '400', '600', '700', '900'],
 });
 
+interface RootLayoutProps {
+  children: React.ReactNode;
+  params: { lang: SupportedLanguage };
+}
+
 export default async function RootLayout({
   children,
   params,
-}: {
-  children: React.ReactNode;
-  params: { lang: SupportedLanguage };
-}) {
+}: RootLayoutProps) {
   const dictionary = await getDictionary(params.lang);
 
   return (

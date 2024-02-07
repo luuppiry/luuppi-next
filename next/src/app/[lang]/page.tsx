@@ -7,11 +7,11 @@ import Partners from '@/components/Partners/Partners';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 
-export default async function Home({
-  params,
-}: {
+interface HomeProps {
   params: { lang: SupportedLanguage };
-}) {
+}
+
+export default async function Home({ params }: HomeProps) {
   const dictionary = await getDictionary(params.lang);
   return (
     <>
