@@ -11,13 +11,12 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import MobileHamburger from '../MobileHamburger/MobileHamburger';
 import { navLinks } from './navLinks';
 
-export default function Header({
-  dictionary,
-  lang,
-}: {
+interface HeaderProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
   lang: SupportedLanguage;
-}) {
+}
+
+export default function Header({ dictionary, lang }: HeaderProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [mobileHarmburgerOpen, setMobileHarmburgerOpen] = useState(false);

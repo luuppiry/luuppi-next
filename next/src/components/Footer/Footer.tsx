@@ -1,3 +1,4 @@
+import { getDictionary } from '@/dictionaries';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -6,42 +7,40 @@ import {
   FaGithub,
   FaInstagram,
   FaTelegram,
+  FaTiktok,
 } from 'react-icons/fa';
-import { SiLinktree } from 'react-icons/si';
+import { footerLinks } from './footerLinks';
 
-export default function Footer() {
+interface FooterProps {
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+}
+
+export default function Footer({ dictionary }: FooterProps) {
   return (
     <footer className="bg-primary-500 py-12">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
-        <div className="grid w-full grid-cols-5 gap-12 px-4 max-lg:grid-cols-2 max-md:grid-cols-1">
-          <div className="flex flex-col gap-6 max-lg:col-span-2 max-lg:flex-row max-md:col-span-1 max-sm:flex-col">
-            <Image
-              alt="Luuppi"
-              className={'object-contain'}
-              draggable={false}
-              height={100}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src={'/luuppi.svg'}
-              width={125}
-            />
-            <p className="max-w-md text-sm text-white">
-              Luuppi ry on Tampereen yliopiston tietojenkäsittelytieteen
-              opiskelijoiden ainejärjestö. Luuppi ry on perustettu vuonna 1991.
-            </p>
-          </div>
-          {Array.from({ length: 4 }).map((_, i) => (
+        <div className="grid w-full grid-cols-5 gap-12 px-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+          {footerLinks.map((footerLink, i) => (
             <div key={i} className="flex flex-col gap-4">
               <h6 className="text-sm font-semibold uppercase text-white">
-                Organisaatio
+                {
+                  dictionary.navigation[
+                    footerLink.translation as keyof typeof dictionary.navigation
+                  ]
+                }
               </h6>
               <div className="flex flex-col gap-2">
-                {Array.from({ length: 4 }).map((_, i) => (
+                {footerLink.sublinks?.map((link, i) => (
                   <div key={i}>
                     <Link
                       className="text-sm text-white hover:underline"
-                      href="/"
+                      href={link.href}
                     >
-                      Link 1
+                      {
+                        dictionary.navigation[
+                          link.translation as keyof typeof dictionary.navigation
+                        ]
+                      }
                     </Link>
                   </div>
                 ))}
@@ -49,31 +48,46 @@ export default function Footer() {
             </div>
           ))}
         </div>
-        <span className="h-0.5 w-full bg-white max-md:hidden" />
+        <span className="h-0.5 w-full bg-white opacity-10 max-md:hidden" />
         <div className="flex items-center justify-between gap-6 p-4 max-md:flex-col max-md:items-start">
-          <div className="flex items-center gap-6">
-            <p className="text-sm text-white">
-              {new Date().getFullYear()} © Luuppi ry
-            </p>
-            <div className="flex gap-4">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <Link
-                  key={i}
-                  className="text-sm text-white hover:underline"
-                  href="/"
-                >
-                  Privacy
-                </Link>
-              ))}
+          <div className="flex items-center gap-12 max-md:flex-col max-md:items-start max-md:gap-4">
+            <div className="flex items-center gap-4">
+              <Image
+                alt="Luuppi"
+                className={'object-contain'}
+                draggable={false}
+                height={80}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                src={'/luuppi.svg'}
+                width={95}
+              />
+              <div className="flex flex-col text-sm text-white">
+                <p>{new Date().getFullYear()} © Luuppi ry</p>
+                <p className="text-xs">
+                  {dictionary.general.business_id}: 0512347-2
+                </p>
+              </div>
             </div>
           </div>
           <div className="flex gap-4">
-            <FaTelegram className="text-white" size={20} />
-            <FaGithub className="text-white" size={20} />
-            <FaFacebook className="text-white" size={20} />
-            <FaInstagram className="text-white" size={20} />
-            <FaDiscord className="text-white" size={20} />
-            <SiLinktree className="text-white" size={20} />
+            <Link href="https://t.me/Luuppi">
+              <FaTelegram className="text-white" size={20} />
+            </Link>
+            <Link href="https://github.com/luuppiry">
+              <FaGithub className="text-white" size={20} />
+            </Link>
+            <Link href="https://www.facebook.com/luuppiry">
+              <FaFacebook className="text-white" size={20} />
+            </Link>
+            <Link href="https://www.tiktok.com/@luuppiry">
+              <FaTiktok className="text-white" size={20} />
+            </Link>
+            <Link href="https://www.instagram.com/luuppiry/">
+              <FaInstagram className="text-white" size={20} />
+            </Link>
+            <Link href="https://discord.com/invite/ZcwqXjq">
+              <FaDiscord className="text-white" size={20} />
+            </Link>
           </div>
         </div>
       </div>

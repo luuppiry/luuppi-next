@@ -4,7 +4,8 @@
     "content_updated": "Content updated",
     "login": "Login",
     "on_this_page": "On this page",
-    "partners": "Partners"
+    "partners": "Partners",
+    "business_id": "Business ID"
   },
   "navigation": {
     "home": "Home",
@@ -27,7 +28,11 @@
     "workshops": "Workshops",
     "contact": "Contact",
     "larpake": "Lärpake",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "privacy_policy": "Privacy policy",
+    "miscellaneous": "Miscellaneous",
+    "companies": "Companies",
+    "benefits": "Benefits"
   },
   "pages_home": {
     "hero": {
@@ -84,5 +89,8 @@
   "seo": {
     "title": "Luuppi ry | Subject association for mathematics, statistical data analysis, and computer science students at the University of Tampere",
     "description": "Luuppi ry is the subject association for mathematics, statistical data analysis, and computer science students at the University of Tampere. Luuppi has actively represented the interests of its members and organized recreational activities since 1969. With its membership, Luuppi is the largest subject association at the University of Tampere!"
+  },
+  "footer": {
+    "description": "Luuppi ry is the student organization for computer science, mathematics, and statistical data analysis at the University of Tampere."
   }
 }

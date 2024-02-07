@@ -4,7 +4,8 @@
     "content_updated": "Sisältö päivitetty",
     "login": "Kirjaudu",
     "on_this_page": "Tällä sivulla",
-    "partners": "Yhteistyössä"
+    "partners": "Yhteistyössä",
+    "business_id": "Y-tunnus"
   },
   "navigation": {
     "home": "Koti",
@@ -27,7 +28,11 @@
     "workshops": "Työpajat",
     "contact": "Yhteystiedot",
     "larpake": "Lärpake",
-    "faq": "UKK"
+    "faq": "UKK",
+    "privacy_policy": "Tietosuojaseloste",
+    "miscellaneous": "Muuta",
+    "companies": "Yritykset",
+    "benefits": "Yritysedut"
   },
   "pages_home": {
     "hero": {
@@ -84,5 +89,8 @@
   "seo": {
     "title": "Luuppi ry | Tampereen yliopiston matematiikan, tilastotieteen ja tietojenkäsittelyn opiskelijoiden ainejärjestö",
     "description": "Luuppi ry on Tampereen yliopiston matematiikan, tilastotieteen ja tietojenkäsittelyn opiskelijoiden ainejärjestö. Luuppi on toiminut aktiivisesti jäsentensä etujenvalvojana ja vapaa-ajantoiminnan järjestäjänä jo vuodesta 1969. Jäsenmäärältään Luuppi on Tampereen yliopiston suurin ainejärjestö!"
+  },
+  "footer": {
+    "description": "Luuppi ry on Tampereen yliopiston tietojenkäsittelytieteen, matematiikan ja tilastollisen data-analyysin ainejärjestö."
   }
 }

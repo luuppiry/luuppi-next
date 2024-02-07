@@ -7,11 +7,7 @@ export interface NavLink {
   }[];
 }
 
-export const navLinks: NavLink[] = [
-  {
-    translation: 'home',
-    href: '/',
-  },
+export const footerLinks: NavLink[] = [
   {
     translation: 'organization',
     sublinks: [
@@ -63,23 +59,6 @@ export const navLinks: NavLink[] = [
     ],
   },
   {
-    translation: 'tutoring',
-    sublinks: [
-      {
-        translation: 'general',
-        href: '/tutoring',
-      },
-      {
-        translation: 'larpake',
-        href: '/tutoring/larpake',
-      },
-      {
-        translation: 'faq',
-        href: '/tutoring/faq',
-      },
-    ],
-  },
-  {
     translation: 'collaboration',
     sublinks: [
       {
@@ -97,19 +76,45 @@ export const navLinks: NavLink[] = [
     ],
   },
   {
-    translation: 'events',
-    href: '/events',
+    translation: 'tutoring',
+    sublinks: [
+      {
+        translation: 'general',
+        href: '/tutoring',
+      },
+      {
+        translation: 'larpake',
+        href: '/tutoring/larpake',
+      },
+      {
+        translation: 'faq',
+        href: '/tutoring/faq',
+      },
+    ],
   },
   {
-    translation: 'blog',
-    href: '/blog',
-  },
-  {
-    translation: 'sports',
-    href: '/sports',
-  },
-  {
-    translation: 'contact',
-    href: '/contact',
+    translation: 'miscellaneous',
+    sublinks: [
+      {
+        translation: 'events',
+        href: '/events',
+      },
+      {
+        translation: 'blog',
+        href: '/blog',
+      },
+      {
+        translation: 'sports',
+        href: '/sports',
+      },
+      {
+        translation: 'contact',
+        href: '/contact',
+      },
+      {
+        translation: 'privacy_policy',
+        href: '/privacy-policy',
+      },
+    ],
   },
 ];
