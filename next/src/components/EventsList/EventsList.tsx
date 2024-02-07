@@ -92,7 +92,7 @@ export default function EventsList({
                 href={`/${lang}/events/${event.id}`}
                 id={event.start.toDateString() + event.title}
               >
-                <span className="w-1 rounded-l-lg bg-primary-400" />
+                <span className="w-1 shrink-0 rounded-l-lg bg-primary-400" />
                 <div className="flex flex-col py-2">
                   <h3 className="text-lg font-bold max-md:text-base">
                     {event.title}

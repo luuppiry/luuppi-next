@@ -50,7 +50,7 @@ export default async function Event({ params }: EventProps) {
       <div className="flex w-full flex-col">
         <h1 className="mb-14">{event.title}</h1>
         <div className="mb-6 flex gap-4 rounded-lg">
-          <span className="w-1 flex-shrink-0 rounded-l-lg bg-secondary-400" />
+          <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
           <div className="flex flex-col gap-2 rounded-lg py-4 font-bold max-sm:text-sm">
             <div className="flex items-center">
               <IoCalendarOutline className="mr-2 shrink-0 text-2xl" />

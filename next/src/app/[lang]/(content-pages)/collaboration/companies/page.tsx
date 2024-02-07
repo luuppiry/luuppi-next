@@ -32,7 +32,7 @@ export default async function Organization({
             key={company.attributes.createdAt}
             className="flex gap-4 rounded-lg"
           >
-            <span className="w-1 flex-shrink-0 rounded-l-lg bg-secondary-400" />
+            <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
             <div className="flex gap-12 py-4 max-md:flex-col max-md:gap-6">
               <div className="flex shrink-0 flex-col justify-center gap-4">
                 <Image
