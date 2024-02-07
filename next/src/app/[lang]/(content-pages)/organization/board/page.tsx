@@ -1,8 +1,6 @@
 import BoardMember from '@/components/BoardMember/BoardMember';
 import { getDictionary } from '@/dictionaries';
-import { flipBoardLocale } from '@/lib/flip-locale';
-import getStrapiData from '@/lib/get-strapi-data';
-import groupByYear from '@/lib/group-by-year';
+import { flipBoardLocale, getStrapiData, groupByYear } from '@/lib';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBoardBoard } from '@/types/contentTypes';
 import Link from 'next/link';

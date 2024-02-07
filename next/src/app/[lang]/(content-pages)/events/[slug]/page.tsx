@@ -1,9 +1,12 @@
 import SidePartners from '@/components/SidePartners/SidePartners';
 import { getDictionary } from '@/dictionaries';
-import { getLuuppiEventById } from '@/lib/get-legacy-events';
-import getStrapiData from '@/lib/get-strapi-data';
-import firstLetterToUpperCase from '@/lib/text-utils';
-import { longDateFormat, shortDateFormat } from '@/lib/time-utils';
+import {
+  firstLetterToUpperCase,
+  getLuuppiEventById,
+  getStrapiData,
+  longDateFormat,
+  shortDateFormat,
+} from '@/lib';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import { redirect } from 'next/navigation';

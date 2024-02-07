@@ -1,6 +1,4 @@
-import { flipBlogLocale } from '@/lib/flip-locale';
-import getStrapiData from '@/lib/get-strapi-data';
-import { dateFormat } from '@/lib/time-utils';
+import { dateFormat, flipBlogLocale, getStrapiData } from '@/lib';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog } from '@/types/contentTypes';
 import Image from 'next/image';

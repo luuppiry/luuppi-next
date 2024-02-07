@@ -3,10 +3,13 @@ import { SupportedLanguage } from '@/models/locale';
 import ical from 'node-ical';
 
 /**
- * Temporary function to get events from Luuppi's legacy calendar.
- * TODO: Replace this with a logic that gets events from the new calendar.
+ * Get events from Luuppi's legacy ICS calendar.
+ * @param lang "fi" or "en
+ * @returns Events from Luuppi's legacy ICS calendar
  */
-async function getLuuppiEvents(lang: SupportedLanguage): Promise<Event[]> {
+export const getLuuppiEvents = async (
+  lang: SupportedLanguage,
+): Promise<Event[]> => {
   const langParam = lang === 'fi' ? 'fin' : 'eng';
 
   const res = await fetch(
@@ -24,17 +27,23 @@ async function getLuuppiEvents(lang: SupportedLanguage): Promise<Event[]> {
     start: event.start,
     end: event.end,
     description: removeHtml(event.description) ?? '',
-    id: event.url?.split('id=')[1] ?? '',
+    id: getIdFromUrl(event.url ?? ''),
     location: event.location ?? '',
   }));
 
   return formattedEvents;
-}
+};
 
-async function getLuuppiEventById(
+/**
+ * Get event by ID from Luuppi's legacy ICS calendar.
+ * @param lang "fi" or "en"
+ * @param id Event ID
+ * @returns Event from Luuppi's legacy ICS calendar
+ */
+export const getLuuppiEventById = async (
   lang: SupportedLanguage,
   id: string,
-): Promise<Event | undefined> {
+): Promise<Event | undefined> => {
   const langParam = lang === 'fi' ? 'fin' : 'eng';
 
   const res = await fetch(
@@ -50,7 +59,7 @@ async function getLuuppiEventById(
   const event = events.find((e) => e.url?.includes(`id=${id}`));
   if (!event) return undefined;
 
-  const eventId = event.url?.split('id=')[1];
+  const eventId = getIdFromUrl(event.url ?? '');
 
   return {
     title: event.summary,
@@ -60,6 +69,15 @@ async function getLuuppiEventById(
     id: eventId,
     location: event.location ?? '',
   };
+};
+
+/**
+ * Get event ID from legacy ICS calendar URL.
+ * @param url URL
+ * @returns Event ID
+ */
+function getIdFromUrl(url: string) {
+  return url.split('id=')[1];
 }
 
 /**
@@ -96,5 +114,3 @@ function removeHtml(text: string | undefined) {
   });
   return decodeHtml;
 }
-
-export { getLuuppiEventById, getLuuppiEvents };

@@ -1,6 +1,5 @@
 import { getDictionary } from '@/dictionaries';
-import { getLuuppiEvents } from '@/lib/get-legacy-events';
-import { dateFormat } from '@/lib/time-utils';
+import { dateFormat, getLuuppiEvents } from '@/lib';
 import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';

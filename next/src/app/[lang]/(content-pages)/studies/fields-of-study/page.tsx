@@ -1,7 +1,6 @@
 import ContentPage from '@/components/ContentPage/ContentPage';
 import { getDictionary } from '@/dictionaries';
-import formatMetadata from '@/lib/format-metadata';
-import getStrapiData from '@/lib/get-strapi-data';
+import { formatMetadata, getStrapiData } from '@/lib';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiStudiesFieldsOfStudyStudiesFieldsOfStudy } from '@/types/contentTypes';
 import { Metadata } from 'next';

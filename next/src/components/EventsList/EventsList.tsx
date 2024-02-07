@@ -1,6 +1,5 @@
 import { getDictionary } from '@/dictionaries';
-import firstLetterToUpperCase from '@/lib/text-utils';
-import { longDateFormat, shortDateFormat } from '@/lib/time-utils';
+import { firstLetterToUpperCase, longDateFormat, shortDateFormat } from '@/lib';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';

@@ -1,9 +1,13 @@
 import { Metadata } from 'next';
 
-export default function formatMetadata(
-  content: any,
-  pathname: string,
-): Metadata {
+/**
+ * Takes "content page"'s data and pathname and returns formatted metadata
+ * that can be used in the head of the page.
+ * @param content content page data
+ * @param pathname current page's pathname
+ * @returns formatted metadata
+ */
+export const formatMetadata = (content: any, pathname: string): Metadata => {
   const seo = content.data.attributes.Seo;
 
   if (!seo) throw new Error('No SEO data found');
@@ -45,4 +49,4 @@ export default function formatMetadata(
       images: twitterImage ? [twitterImage] : undefined,
     },
   };
-}
+};

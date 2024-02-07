@@ -1,8 +1,16 @@
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog } from '@/types/contentTypes';
 
-function flipBoardLocale(lang: SupportedLanguage, data: any) {
-  return lang === 'en'
+/**
+ * Strapi does not support direct localization in a case where we
+ * have relations and everything is not localized. Workaround is to
+ * populate localizations and then "flip" the locale.
+ * @param lang 'en' or 'fi'
+ * @param data Board members data
+ * @returns Board members data with correct locale
+ */
+export const flipBoardLocale = (lang: SupportedLanguage, data: any) =>
+  lang === 'en'
     ? data.attributes.boardMembers.data.map((member: any) => {
         const flippedLocales = member.attributes.boardRoles.data.map(
           (role: any) => {
@@ -24,10 +32,17 @@ function flipBoardLocale(lang: SupportedLanguage, data: any) {
         };
       })
     : data.attributes.boardMembers.data;
-}
 
-function flipBlogLocale(lang: SupportedLanguage, data: ApiBlogBlog[]) {
-  return lang === 'en'
+/**
+ * Strapi does not support direct localization in a case where we
+ * have relations and everything is not localized. Workaround is to
+ * populate localizations and then "flip" the locale.
+ * @param lang 'en' or 'fi'
+ * @param data Blog data
+ * @returns Blog data with correct locale
+ */
+export const flipBlogLocale = (lang: SupportedLanguage, data: ApiBlogBlog[]) =>
+  lang === 'en'
     ? data.map((blog) => {
         const localeEn = blog.attributes.localizations.data[0];
         return {
@@ -41,6 +56,3 @@ function flipBlogLocale(lang: SupportedLanguage, data: ApiBlogBlog[]) {
         };
       })
     : data;
-}
-
-export { flipBlogLocale, flipBoardLocale };
