@@ -3,6 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import {
   firstLetterToUpperCase,
   getLuuppiEventById,
+  getLuuppiEvents,
   getStrapiData,
   longDateFormat,
   shortDateFormat,
@@ -97,4 +98,14 @@ export default async function Event({ params }: EventProps) {
       </div>
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  const eventData = await getLuuppiEvents('fi');
+
+  return eventData.map((event) => ({
+    params: {
+      slug: event.id,
+    },
+  }));
 }
