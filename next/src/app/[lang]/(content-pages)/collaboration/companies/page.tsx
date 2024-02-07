@@ -30,7 +30,7 @@ export default async function Organization({
         {pageData.data.map((company) => (
           <div
             key={company.attributes.createdAt}
-            className="flex gap-12 px-4 py-8 max-md:flex-col max-md:gap-6"
+            className="flex gap-12 py-8 max-md:flex-col max-md:gap-6"
           >
             <div className="flex shrink-0 flex-col justify-center gap-4">
               <Image
@@ -60,7 +60,7 @@ export default async function Organization({
               </div>
             </div>
             <div className="flex items-center">
-              <p className="max-md:text-sm">{company.attributes.description}</p>
+              <p>{company.attributes.description}</p>
             </div>
           </div>
         ))}
