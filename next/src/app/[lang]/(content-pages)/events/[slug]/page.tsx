@@ -51,10 +51,10 @@ export default async function Event({ params }: EventProps) {
         <h1 className="mb-14">{event.title}</h1>
         <div className="mb-6 flex gap-4 rounded-lg">
           <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
-          <div className="flex flex-col gap-2 rounded-lg py-4 font-bold max-sm:text-sm">
+          <div className="flex max-w-full flex-col gap-2 rounded-lg py-4 pr-4 font-bold max-sm:text-sm">
             <div className="flex items-center">
               <IoCalendarOutline className="mr-2 shrink-0 text-2xl" />
-              <p className="truncate">
+              <p className="line-clamp-2">
                 {firstLetterToUpperCase(
                   new Date(event.start).toLocaleString(
                     params.lang,
@@ -75,7 +75,7 @@ export default async function Event({ params }: EventProps) {
             </div>
             <div className="flex items-center">
               <IoLocationOutline className="mr-2 shrink-0 text-2xl" />
-              <p className="truncate">{event.location}</p>
+              <p className="line-clamp-2">{event.location}</p>
             </div>
           </div>
         </div>
