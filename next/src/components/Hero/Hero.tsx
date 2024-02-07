@@ -1,13 +1,16 @@
 'use client';
 import { getDictionary } from '@/dictionaries';
+import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useMemo, useRef } from 'react';
 
-export default function Hero({
-  dictionary,
-}: {
+interface HeroProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
-}) {
+  lang: SupportedLanguage;
+}
+
+export default function Hero({ dictionary, lang }: HeroProps) {
   const changingTextRef = useRef<HTMLSpanElement | null>(null);
   const studyAreas = useMemo(
     () => [
@@ -55,9 +58,12 @@ export default function Hero({
           {dictionary.pages_home.hero.description}
         </p>
         <div>
-          <button className="btn btn-primary text-lg text-white max-md:text-base">
+          <Link
+            className="btn btn-primary text-lg text-white max-md:text-base"
+            href={`/${lang}/organization`}
+          >
             {dictionary.pages_home.hero.read_more}
-          </button>
+          </Link>
         </div>
       </div>
       <div className="luuppi-hero-container relative flex w-1/2 max-xl:h-80 max-xl:w-full">

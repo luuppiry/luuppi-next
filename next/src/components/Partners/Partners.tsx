@@ -31,7 +31,7 @@ export default async function Partners({ dictionary, lang }: PartnersProps) {
           <div className="flex">
             <Link
               className="btn btn-primary text-lg font-bold text-white max-md:text-base"
-              href="/contact"
+              href={`/${lang}/collaboration`}
             >
               {dictionary.pages_home.partners.read_more}
             </Link>
