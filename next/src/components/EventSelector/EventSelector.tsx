@@ -3,6 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import { useEffect, useState } from 'react';
+import CopyInput from '../CopyInput/CopyInput';
 import EventCalendar from '../EventCalendar/EventCalendar';
 import EventsList from '../EventsList/EventsList';
 import './EventSelector.css';
@@ -32,28 +33,41 @@ export default function EventSelector({
     setSelectedView(view);
   };
   return (
-    <>
-      <div className="tabs-boxed tabs mb-8" role="tablist">
-        <button
-          className={`tab font-bold ${selectedView === 'calendar' && 'tab-active'}`}
-          role="tab"
-          onClick={() => setView('calendar')}
+    <div className="flex flex-col gap-8">
+      <div className="flex w-full items-center justify-between rounded-lg max-md:flex-col max-md:justify-center max-md:gap-4">
+        <div
+          className="tabs-boxed tabs border-[1px] bg-white max-md:w-full"
+          role="tablist"
         >
-          {dictionary.pages_events.calendar}
-        </button>
-        <button
-          className={`tab font-bold ${selectedView === 'list' && 'tab-active'}`}
-          role="tab"
-          onClick={() => setView('list')}
-        >
-          {dictionary.pages_events.event_feed}
-        </button>
+          <button
+            className={`tab font-bold ${selectedView === 'calendar' && 'tab-active'}`}
+            role="tab"
+            onClick={() => setView('calendar')}
+          >
+            {dictionary.pages_events.calendar}
+          </button>
+          <button
+            className={`tab font-bold ${selectedView === 'list' && 'tab-active'}`}
+            role="tab"
+            onClick={() => setView('list')}
+          >
+            {dictionary.pages_events.event_feed}
+          </button>
+        </div>
+        <CopyInput
+          dictionary={dictionary}
+          value={
+            lang === 'en'
+              ? 'https://luuppi.fi/service/ics/events.ics?lang=eng'
+              : 'https://luuppi.fi/service/ics/events.ics?lang=fin'
+          }
+        />
       </div>
       {selectedView === 'calendar' ? (
         <EventCalendar events={events} lang={lang} />
       ) : (
         <EventsList dictionary={dictionary} events={events} lang={lang} />
       )}
-    </>
+    </div>
   );
 }
