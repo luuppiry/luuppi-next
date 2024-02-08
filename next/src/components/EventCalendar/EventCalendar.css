@@ -1,9 +1,9 @@
 .fc .fc-button-primary {
-  @apply border-none bg-primary-400 font-bold transition-colors duration-200 ease-in-out;
+  @apply border-none bg-secondary-400 font-bold transition-colors duration-200 ease-in-out;
 }
 
 .fc .fc-button-primary:disabled {
-  @apply cursor-not-allowed border-none bg-primary-400;
+  @apply cursor-not-allowed border-none bg-secondary-400;
 }
 
 .fc .fc-button-primary:not(:disabled).fc-button-active,
@@ -20,11 +20,11 @@
 }
 
 .fc-h-event {
-  @apply border-none bg-primary-400;
+  @apply border-none bg-secondary-400;
 }
 
 .fc-theme-standard .fc-popover-header {
-  @apply rounded-t-lg bg-primary-400 text-white;
+  @apply rounded-t-lg bg-secondary-400 text-white;
 }
 
 .fc .fc-popover-title {
@@ -41,7 +41,7 @@
 
 .fc-event-selected,
 .fc-event:focus {
-  @apply border-none bg-primary-400 text-white;
+  @apply border-none bg-secondary-400 text-white;
 }
 
 .fc .fc-timegrid-axis-cushion {
@@ -50,11 +50,11 @@
 
 .fc-daygrid-dot-event.fc-event-mirror,
 .fc-daygrid-dot-event:hover {
-  @apply border-none bg-primary-400 text-white;
+  @apply border-none bg-secondary-400 text-white;
 }
 
 .fc-v-event {
-  @apply border-none bg-primary-400;
+  @apply border-none bg-secondary-400;
 }
 
 .fc .fc-toolbar-title {

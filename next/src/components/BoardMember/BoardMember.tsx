@@ -14,7 +14,7 @@ export default function BoardMember({
 }: BoardMemberProps) {
   return (
     <div className="flex w-full flex-col rounded-lg border-[1px] border-gray-200 shadow-lg">
-      <div className="relative aspect-[9/10] w-full rounded-lg bg-primary-400">
+      <div className="relative aspect-[9/10] w-full rounded-lg bg-secondary-400">
         <Image
           alt={`${member.attributes.fullName}`}
           className="rounded-t-lg object-cover"

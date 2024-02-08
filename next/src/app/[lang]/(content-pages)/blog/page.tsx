@@ -35,7 +35,7 @@ export default async function Blog({ params }: BlogProps) {
             }
           >
             <div
-              className={`relative aspect-video w-full rounded-l-lg bg-gradient-to-r from-primary-400 to-primary-300 max-lg:rounded-l-none max-lg:rounded-t-lg
+              className={`relative aspect-video w-full rounded-l-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-lg:rounded-l-none max-lg:rounded-t-lg
                       `}
             >
               <Image
@@ -65,13 +65,13 @@ export default async function Blog({ params }: BlogProps) {
                 {blog.attributes.authorImage.data?.attributes.url ? (
                   <Image
                     alt="avatar"
-                    className="rounded-full bg-gradient-to-r from-primary-400 to-primary-300"
+                    className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
                     height={50}
                     src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${blog.attributes.authorImage.data?.attributes.url}`}
                     width={50}
                   />
                 ) : (
-                  <div className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-primary-400 to-primary-300" />
+                  <div className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300" />
                 )}
                 <div className="flex flex-col">
                   <span className="text-sm font-semibold">

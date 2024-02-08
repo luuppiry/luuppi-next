@@ -58,7 +58,7 @@ export default function EventsList({
       <div>
         {/* Match with fullcalendar styles */}
         <button
-          className="rounded-[4px] bg-primary-400 px-[10.4px] py-[6.4px] text-base font-bold text-white"
+          className="rounded-[4px] bg-secondary-400 px-[10.4px] py-[6.4px] text-base font-bold text-white"
           onClick={toggleShowPastEvents}
         >
           {showPastEvents
@@ -91,7 +91,7 @@ export default function EventsList({
                 href={`/${lang}/events/${event.id}`}
                 id={event.start.toDateString() + event.title}
               >
-                <span className="w-1 shrink-0 rounded-l-lg bg-primary-400" />
+                <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
                 <div className="flex flex-col py-2">
                   <h3 className="text-lg font-bold max-md:text-base">
                     {event.title}

@@ -31,7 +31,7 @@ export default function MobileHamburger({
               className={`${index === navLinks.length - 1 ? 'pb-6' : ''}`}
             >
               {link.sublinks && link.sublinks.length > 0 ? (
-                <div className="flex items-center justify-between bg-primary-400 font-bold text-white hover:cursor-auto hover:bg-primary-400 focus:bg-primary-400">
+                <div className="flex items-center justify-between bg-secondary-400 font-bold text-white hover:cursor-auto hover:bg-secondary-400 focus:bg-secondary-400">
                   {
                     dictionary.navigation[
                       link.translation as keyof typeof dictionary.navigation

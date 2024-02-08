@@ -8,7 +8,7 @@ interface BannerProps {
 export default function Banner({ lang }: BannerProps) {
   return (
     <section>
-      <div className="h-72 bg-primary-400 transition-all duration-300 max-md:h-48">
+      <div className="h-72 bg-secondary-400 transition-all duration-300 max-md:h-48">
         <div className="relative flex h-full w-full justify-center overflow-hidden">
           <div className="relative z-10 flex h-full w-full max-md:h-48">
             <Image

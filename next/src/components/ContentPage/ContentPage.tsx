@@ -31,7 +31,7 @@ export default async function ContentPage({
   return (
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col gap-14">
-        <div className="relative h-64 rounded-lg bg-gradient-to-r from-primary-400 to-primary-300 max-md:h-44">
+        <div className="relative h-64 rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:h-44">
           <Image
             alt="Blog"
             className="rounded-lg object-cover"
@@ -51,7 +51,7 @@ export default async function ContentPage({
             </p>
           </div>
         </div>
-        <article className="organization-page prose prose-custom max-w-full decoration-primary-400 transition-all duration-300 ease-in-out">
+        <article className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
           <BlockRendererClient
             content={contentData.attributes.Content.content}
           />

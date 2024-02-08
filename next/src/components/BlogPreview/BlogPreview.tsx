@@ -46,7 +46,7 @@ export default async function BlogPreview({
               className={`${i === 0 ? 'col-span-3 max-lg:col-span-1 max-lg:flex-col' : 'col-span-1 flex-col'} flex gap-4 rounded-lg border-[1px] border-gray-200/50 shadow-sm`}
             >
               <div
-                className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} relative aspect-video w-full bg-gradient-to-r from-primary-400 to-primary-300
+                className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300
                 `}
               >
                 <Image
@@ -75,7 +75,7 @@ export default async function BlogPreview({
                 <div className="flex items-center gap-2">
                   <Image
                     alt="avatar"
-                    className="rounded-full bg-gradient-to-r from-primary-400 to-primary-300"
+                    className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
                     height={50}
                     src="/images/pullapaiva.jpg"
                     width={50}

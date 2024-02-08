@@ -21,7 +21,7 @@ export default function Discover({
             className="group relative flex aspect-[3/2] h-full w-full border-4 border-primary-950 shadow-[7px_7px_#090a10] transition-all duration-300 hover:shadow-[0px_0px_#090a10] max-md:aspect-square"
             href={link.href}
           >
-            <div className="absolute z-20 h-full w-0 bg-primary-400/50 transition-all duration-300 group-hover:w-full" />
+            <div className="absolute z-20 h-full w-0 bg-secondary-400/50 transition-all duration-300 group-hover:w-full" />
             <div className="absolute bottom-5 left-5 z-30 flex items-center justify-center bg-white text-lg transition-all duration-300 max-md:bottom-0 max-md:left-0 max-md:w-full max-md:text-sm">
               <h2 className="flex items-center px-4 py-2 font-bold">
                 {dictionary.pages_home.discover[link.translation]}
@@ -30,7 +30,7 @@ export default function Discover({
                 </span>
               </h2>
             </div>
-            <div className="relative flex h-full w-full overflow-hidden bg-gradient-to-r from-primary-400 to-primary-300">
+            <div className="relative flex h-full w-full overflow-hidden bg-gradient-to-r from-secondary-400 to-primary-300">
               <div className="absolute z-10 flex h-full w-full bg-gradient-to-t from-background-400/70 via-transparent to-transparent" />
               <Image
                 alt="haalarit"

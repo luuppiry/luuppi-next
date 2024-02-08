@@ -41,7 +41,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
   return (
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col gap-14">
-        <div className="relative aspect-[2/1] w-full rounded-lg bg-gradient-to-r from-primary-400 to-primary-300">
+        <div className="relative aspect-[2/1] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
           <Image
             alt="yes"
             className={'rounded-lg object-cover'}
@@ -56,13 +56,13 @@ export default async function BlogPost({ params }: BlogPostProps) {
             {selectedBlog.attributes.authorImage.data?.attributes.url ? (
               <Image
                 alt="avatar"
-                className="rounded-full bg-gradient-to-r from-primary-400 to-primary-300"
+                className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
                 height={50}
                 src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${selectedBlog.attributes.authorImage.data?.attributes.url}`}
                 width={50}
               />
             ) : (
-              <div className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-primary-400 to-primary-300" />
+              <div className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300" />
             )}
             <div className="flex flex-col">
               <span className="font-bold">
@@ -94,7 +94,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
             </p>
           </div>
         </div>
-        <article className="organization-page prose prose-custom max-w-full decoration-primary-400 transition-all duration-300 ease-in-out">
+        <article className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
           <BlockRendererClient content={selectedBlog.attributes.content} />
         </article>
       </div>

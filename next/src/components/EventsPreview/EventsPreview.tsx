@@ -47,7 +47,7 @@ export default async function EventsPreview({
                   </p>
                 </div>
               </div>
-              <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden rounded-lg bg-gradient-to-r from-primary-400 to-primary-300 brightness-[75%] group-hover:brightness-100 max-md:aspect-[2/1]">
+              <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 brightness-[75%] group-hover:brightness-100 max-md:aspect-[2/1]">
                 <Image
                   alt="event"
                   className="object-cover transition-all duration-300 group-hover:scale-105"
