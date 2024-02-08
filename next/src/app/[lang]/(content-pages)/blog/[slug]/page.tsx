@@ -40,7 +40,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
 
   return (
     <div className="flex w-full gap-12">
-      <div className="flex w-full flex-col gap-14">
+      <div className="flex w-full flex-col gap-12">
         <div className="relative aspect-[2/1] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
           <Image
             alt="yes"

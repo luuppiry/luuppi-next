@@ -12,7 +12,7 @@ export default async function Events({ params }: EventsProps) {
   const events = await getLuuppiEvents(params.lang);
   return (
     <>
-      <h1 className="mb-14">{dictionary.navigation.events}</h1>
+      <h1 className="mb-12">{dictionary.navigation.events}</h1>
       <EventSelector
         dictionary={dictionary}
         events={events}

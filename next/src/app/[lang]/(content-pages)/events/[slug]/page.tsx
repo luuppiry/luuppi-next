@@ -52,7 +52,7 @@ export default async function Event({ params }: EventProps) {
   return (
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col">
-        <h1 className="mb-14">{event.title}</h1>
+        <h1 className="mb-12">{event.title}</h1>
         <div className="mb-6 flex gap-4 rounded-lg">
           <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
           <div className="flex max-w-full flex-col gap-2 rounded-lg py-4 pr-4 font-bold max-sm:text-sm">
