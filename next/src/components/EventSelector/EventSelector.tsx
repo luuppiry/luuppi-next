@@ -34,7 +34,7 @@ export default function EventSelector({
   };
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex w-full items-center justify-between rounded-lg max-md:flex-col max-md:justify-center max-md:gap-4">
+      <div className="flex w-full items-center justify-between rounded-lg bg-background-50/50 p-4 max-md:flex-col max-md:justify-center max-md:gap-4 max-md:px-2">
         <div
           className="tabs-boxed tabs border-[1px] bg-white max-md:w-full"
           role="tablist"
