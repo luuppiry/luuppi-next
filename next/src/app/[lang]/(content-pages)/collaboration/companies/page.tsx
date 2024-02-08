@@ -30,7 +30,7 @@ export default async function Organization({
         {pageData.data.map((company) => (
           <div
             key={company.attributes.createdAt}
-            className="flex gap-4 rounded-lg"
+            className="flex gap-4 rounded-lg bg-background-50/50"
           >
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
             <div className="flex gap-12 py-4 max-md:flex-col max-md:gap-6">

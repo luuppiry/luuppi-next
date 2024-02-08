@@ -1,28 +1,19 @@
-import { getDictionary } from '@/dictionaries';
 import { firstLetterToUpperCase, longDateFormat, shortDateFormat } from '@/lib';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
-import { useState } from 'react';
 
 interface EventListProps {
   events: Event[];
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  showPastEvents: boolean;
   lang: SupportedLanguage;
 }
 
 export default function EventsList({
   events,
-  dictionary,
+  showPastEvents,
   lang,
 }: EventListProps) {
-  const [showPastEvents, setShowPastEvents] = useState(false);
-
-  const toggleShowPastEvents = (e: any) => {
-    e.preventDefault();
-    setShowPastEvents(!showPastEvents);
-  };
-
   const groupEventsByDate = (events: Event[]) => {
     const groupedEvents = events.reduce(
       (acc, event) => {
@@ -55,17 +46,6 @@ export default function EventsList({
 
   return (
     <div className="flex flex-col gap-12">
-      <div>
-        {/* Match with fullcalendar styles */}
-        <button
-          className="rounded-[4px] bg-secondary-400 px-[10.4px] py-[6.4px] text-base font-bold text-white"
-          onClick={toggleShowPastEvents}
-        >
-          {showPastEvents
-            ? dictionary.pages_events.hide_past
-            : dictionary.pages_events.show_past}
-        </button>
-      </div>
       {Object.values(getEvents(showPastEvents)).map((group) => (
         <div key={group.date.toDateString()} className="flex flex-col gap-2">
           <h2 className="text-xl font-bold">
@@ -87,7 +67,7 @@ export default function EventsList({
                   event.end.toISOString() +
                   event.title
                 }
-                className="flex gap-4 rounded-lg transition-all delay-300 ease-in-out hover:bg-background-50/50"
+                className="flex gap-4 rounded-lg bg-background-50/50 transition-all delay-300 ease-in-out"
                 href={`/${lang}/events/${event.id}`}
                 id={event.start.toDateString() + event.title}
               >
