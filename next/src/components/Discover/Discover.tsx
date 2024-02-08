@@ -11,6 +11,13 @@ export default function Discover({
 }) {
   return (
     <section className="relative mx-auto max-w-[1200px] px-4 py-20">
+      <Image
+        alt="ccchaos"
+        className="absolute -left-32 top-0 -z-10 max-md:hidden"
+        height={400}
+        src="/ccchaos.svg"
+        width={400}
+      />
       <h2 className="mb-8 text-4xl font-extrabold max-md:text-3xl">
         {dictionary.pages_home.discover.title}
       </h2>
@@ -44,7 +51,7 @@ export default function Discover({
           </Link>
         ))}
       </div>
-      <div className="absolute bottom-0 left-0 -z-10 h-full w-full rotate-6 scale-50 rounded-lg bg-[#bec0da] blur-[450px]" />
+      <div className="absolute bottom-0 left-0 -z-10 h-full w-full rotate-6 scale-50 rounded-lg bg-blue-200 blur-[550px]" />
       <div className="luuppi-pattern absolute right-0 top-20 -z-50 h-[401px] w-[501px] max-md:top-0 max-md:h-full max-md:w-full" />
     </section>
   );
