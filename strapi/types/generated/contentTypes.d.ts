@@ -1154,6 +1154,7 @@ export interface ApiContactContact extends Schema.SingleType {
     singularName: 'contact';
     pluralName: 'contacts';
     displayName: 'Contact';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1171,7 +1172,7 @@ export interface ApiContactContact extends Schema.SingleType {
           localized: true;
         };
       }>;
-    Seo: Attribute.Component<'shared.seo', true> &
+    Seo: Attribute.Component<'shared.seo'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
