@@ -1,5 +1,6 @@
 'use client';
 import { getDictionary } from '@/dictionaries';
+import { useState } from 'react';
 import { IoIosLink } from 'react-icons/io';
 
 interface CopyInputProps {
@@ -8,8 +9,14 @@ interface CopyInputProps {
 }
 
 export default function CopyInput({ value, dictionary }: CopyInputProps) {
+  const [copied, setCopied] = useState(false);
+
   const copyToClipboard = () => {
+    setCopied(true);
     navigator.clipboard.writeText(value);
+    setTimeout(() => {
+      setCopied(false);
+    }, 3000);
   };
 
   return (
@@ -28,7 +35,7 @@ export default function CopyInput({ value, dictionary }: CopyInputProps) {
         className="btn btn-primary join-item btn-sm border-none bg-secondary-400 text-white"
         onClick={copyToClipboard}
       >
-        {dictionary.general.copy}
+        {copied ? `${dictionary.general.copied}!` : dictionary.general.copy}
       </button>
     </div>
   );
