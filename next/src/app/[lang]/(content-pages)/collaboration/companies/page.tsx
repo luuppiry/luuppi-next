@@ -48,16 +48,11 @@ export default async function Organization({
                     {company.attributes.foundedYear}
                   </p>
                   <div>
-                    {dictionary.pages_companies.homepage}:{' '}
                     <Link
                       className="link"
                       href={company.attributes.homepageUrl}
                     >
-                      {
-                        company.attributes.homepageUrl
-                          .replace(/https?:\/\//, '')
-                          .split('/')[0]
-                      }
+                      {dictionary.pages_companies.homepage}
                     </Link>
                   </div>
                   <div>
