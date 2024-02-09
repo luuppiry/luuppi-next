@@ -84,8 +84,8 @@
     "hide_past": "Piilota menneet tapahtumat"
   },
   "pages_404": {
-    "title": "404 - Sivua ei löytynyt",
-    "description": "Etsimääsi sivua ei löytynyt",
+    "title": "Sivua ei löytynyt",
+    "description": "\"Piiiip, paaat, kriz kruts\" Etsimääsi sivua ei löytynyt. Voit palata takaisin kotisivulle tai ottaa meihin yhteyttä, jos etsit jotain tiettyä sivua.",
     "return_home": "Kotisivulle"
   },
   "seo": {

@@ -84,8 +84,8 @@
     "hide_past": "Hide past events"
   },
   "pages_404": {
-    "title": "404 - Page not found",
-    "description": "The page you are looking for does not exist.",
+    "title": "Page not found",
+    "description": "Ooops.... The page you are looking for does not exist. Please check the URL and try again.",
     "return_home": "Back to home"
   },
   "seo": {
