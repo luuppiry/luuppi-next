@@ -85,7 +85,7 @@ export default function Footer({ dictionary }: FooterProps) {
             <Link href="https://www.instagram.com/luuppiry/">
               <FaInstagram className="text-white" size={20} />
             </Link>
-            <Link href="https://discord.com/invite/ZcwqXjq">
+            <Link href="https://discord.gg/ZcREUWmYZs">
               <FaDiscord className="text-white" size={20} />
             </Link>
           </div>
