@@ -65,7 +65,7 @@ export default async function ContentPage({
               {contentData.attributes.ContactBanner.description}
             </p>
             <Link
-              className="link"
+              className="link text-white"
               href={`mailto:${contentData.attributes.ContactBanner.email}`}
             >
               {contentData.attributes.ContactBanner.email}

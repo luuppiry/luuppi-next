@@ -1014,6 +1014,67 @@ export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
   };
 }
 
+export interface ApiCollaborationGeneralCollaborationGeneral
+  extends Schema.SingleType {
+  collectionName: 'collaboration_generals';
+  info: {
+    singularName: 'collaboration-general';
+    pluralName: 'collaboration-generals';
+    displayName: 'CollaborationGeneral';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ContactBanner: Attribute.Component<'shared.contact-banner'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::collaboration-general.collaboration-general',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::collaboration-general.collaboration-general',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::collaboration-general.collaboration-general',
+      'oneToMany',
+      'api::collaboration-general.collaboration-general'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 export interface ApiCompanyCompany extends Schema.CollectionType {
   collectionName: 'companies';
   info: {
@@ -1839,6 +1900,7 @@ declare module '@strapi/types' {
       'api::board.board': ApiBoardBoard;
       'api::board-member.board-member': ApiBoardMemberBoardMember;
       'api::board-role.board-role': ApiBoardRoleBoardRole;
+      'api::collaboration-general.collaboration-general': ApiCollaborationGeneralCollaborationGeneral;
       'api::company.company': ApiCompanyCompany;
       'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
