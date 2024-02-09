@@ -85,7 +85,7 @@ export default async function Event({ params }: EventProps) {
         </div>
         <div
           dangerouslySetInnerHTML={{ __html: event.description }}
-          className="prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out"
+          className="prose prose-custom max-w-full break-words decoration-secondary-400 transition-all duration-300 ease-in-out"
         />
       </div>
       <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
