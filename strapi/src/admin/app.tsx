@@ -37,6 +37,10 @@ export default {
     translations: {
       en: {
         "app.components.LeftMenu.navbrand.title": "Content Management",
+        "Auth.form.email.placeholder": "e.g. webmaster@luuppi.fi",
+        "Auth.form.welcome.title": "Luuppi CMS 👷",
+        "Auth.form.welcome.subtitle":
+          "If you have any questions or encounter any issues, please reach out WWW/IT representatives at webmaster@luuppi.fi.",
         "app.components.LeftMenu.navbrand.workplace": "Luuppi ry",
         "app.components.HomePage.welcome": "Luuppi CMS 👷",
         "app.components.HomePage.welcome.again": "Luuppi CMS 👷",
