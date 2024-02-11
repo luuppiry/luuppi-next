@@ -34,6 +34,11 @@ const getStaticPages = (lang: SupportedLanguage) => {
     `/${lang}/tutoring/larpake`,
     `/${lang}/tutoring/faq`,
 
+    // Collaboration
+    `/${lang}/collaboration`,
+    `/${lang}/collaboration/companies`,
+    `/${lang}/collaboration/benefits`,
+
     // Events
     `/${lang}/events`,
 
@@ -42,6 +47,9 @@ const getStaticPages = (lang: SupportedLanguage) => {
 
     // Sports
     `/${lang}/sports`,
+
+    // Privacy policy
+    `/${lang}/privacy-policy`,
   ];
 
   return staticPages;
