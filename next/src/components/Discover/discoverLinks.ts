@@ -21,7 +21,7 @@ export const discoverLinks = [
   },
   {
     translation: 'collaboration',
-    href: '/companies',
+    href: '/collaboration',
     image: '/images/collaboration.jpg',
   },
   {
