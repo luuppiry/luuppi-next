@@ -1,4 +1,5 @@
 import { getDictionary } from '@/dictionaries';
+import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -13,9 +14,10 @@ import { footerLinks } from './footerLinks';
 
 interface FooterProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  lang: SupportedLanguage;
 }
 
-export default function Footer({ dictionary }: FooterProps) {
+export default function Footer({ dictionary, lang }: FooterProps) {
   return (
     <footer className="bg-primary-500 py-12">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
@@ -34,7 +36,7 @@ export default function Footer({ dictionary }: FooterProps) {
                   <div key={i}>
                     <Link
                       className="text-sm text-white hover:underline"
-                      href={link.href}
+                      href={`/${lang}${link.href}`}
                     >
                       {
                         dictionary.navigation[

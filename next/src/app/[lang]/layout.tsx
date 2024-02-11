@@ -28,7 +28,7 @@ export default async function RootLayout({
       <body className={titilliumFont.className}>
         <Header dictionary={dictionary} lang={params.lang} />
         <div className="flex-1">{children}</div>
-        <Footer dictionary={dictionary} />
+        <Footer dictionary={dictionary} lang={params.lang} />
       </body>
     </html>
   );
