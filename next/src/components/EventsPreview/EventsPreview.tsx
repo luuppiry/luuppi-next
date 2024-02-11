@@ -63,7 +63,7 @@ export default async function EventsPreview({
         <div className="mt-8 flex justify-center">
           <Link
             className="btn btn-primary z-10 px-4 py-2 text-lg text-white max-md:text-base"
-            href="/events"
+            href={`/${lang}/events`}
           >
             {dictionary.pages_home.events_preview.see_all}
           </Link>

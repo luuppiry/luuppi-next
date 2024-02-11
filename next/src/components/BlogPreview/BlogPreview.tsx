@@ -103,7 +103,7 @@ export default async function BlogPreview({
         <div className="flex justify-center">
           <Link
             className="btn btn-primary text-lg font-bold text-white max-md:text-base"
-            href="/blog"
+            href={`/${lang}/blog`}
           >
             {dictionary.pages_home.blog.see_all}
           </Link>
