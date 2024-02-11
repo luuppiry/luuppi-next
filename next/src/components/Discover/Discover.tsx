@@ -4,15 +4,15 @@ import Link from 'next/link';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { discoverLinks } from './discoverLinks';
 
-export default function Discover({
-  dictionary,
-}: {
+interface DiscoverProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
-}) {
+}
+
+export default function Discover({ dictionary }: DiscoverProps) {
   return (
     <section className="relative mx-auto max-w-[1200px] px-4 py-20">
       <Image
-        alt="ccchaos"
+        alt="Luuppi pattern"
         className="absolute -left-32 top-0 -z-10 max-md:hidden"
         height={400}
         src="/ccchaos.svg"

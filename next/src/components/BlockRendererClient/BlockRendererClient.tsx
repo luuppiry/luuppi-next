@@ -1,9 +1,3 @@
-/**
- * TODO: At the time writing this, the BlockRenderer does not support SSR.
- * This is a workaround to render the blocks on the client side.
- *
- * This should be addressed in the future. #bleeding-edge
- */
 'use client';
 import Image from 'next/image';
 
@@ -13,11 +7,20 @@ import {
 } from '@strapi/blocks-react-renderer';
 import Link from 'next/link';
 
+/**
+ * TODO: At the time writing this, the BlockRenderer does not support SSR.
+ * This is a workaround to render the blocks on the client side.
+ *
+ * This should be addressed in the future. #bleeding-edge
+ */
+
+interface BlockRendererClientProps {
+  content: BlocksContent;
+}
+
 export default function BlockRendererClient({
   content,
-}: {
-  readonly content: BlocksContent;
-}) {
+}: BlockRendererClientProps) {
   if (!content) return null;
   return (
     <BlocksRenderer

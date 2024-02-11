@@ -2,13 +2,15 @@
 import { getDictionary } from '@/dictionaries';
 import { useEffect, useState } from 'react';
 
+interface SideNavigatorProps {
+  targetClass: string;
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+}
+
 export default function SideNavigator({
   targetClass,
   dictionary,
-}: {
-  targetClass: string;
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
-}) {
+}: SideNavigatorProps) {
   const [headers, setHeaders] = useState<Element[]>([]);
   const [activeHeader, setActiveHeader] = useState('');
 
