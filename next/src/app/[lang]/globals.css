@@ -90,7 +90,7 @@
   }
 
   .luuppi-questions-bg {
-    @apply bg-[url('/questions.svg')] bg-cover bg-center bg-no-repeat;
+    @apply bg-[url('/blob.svg')] bg-cover bg-bottom bg-no-repeat;
   }
 
   @keyframes slide {

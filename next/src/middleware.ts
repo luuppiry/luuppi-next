@@ -32,7 +32,7 @@ export function middleware(request: NextRequest) {
     [
       '/robo.svg',
       '/ccchaos.svg',
-      '/questions.svg',
+      '/blob.svg',
       '/manifest.webmanifest',
       '/favicon.ico',
       '/sitemap.xml',
