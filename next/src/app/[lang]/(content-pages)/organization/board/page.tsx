@@ -13,9 +13,6 @@ export default async function Board({ params }: BoardProps) {
   const dictionary = await getDictionary(params.lang);
 
   /**
-   * TODO: This is by far the worst query in our codebase. Should be cached well
-   * because basically we have board changes once a year. :D
-   *
    * Localization doesn't matter because we have non i18n
    * collections (boards, boardMembers) and only boardRoles are localized.
    * Strapi doesn't support localized queries from non i18n collections. We
