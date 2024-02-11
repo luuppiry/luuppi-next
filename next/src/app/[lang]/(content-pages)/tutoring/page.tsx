@@ -17,16 +17,15 @@ interface TutoringProps {
 export default async function Tutoring({ params }: TutoringProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const organizationData =
-    await getStrapiData<ApiTutoringGeneralTutoringGeneral>(
-      params.lang,
-      url,
-      tags,
-    );
+  const pageData = await getStrapiData<ApiTutoringGeneralTutoringGeneral>(
+    params.lang,
+    url,
+    tags,
+  );
 
   return (
     <ContentPage
-      contentData={organizationData.data}
+      contentData={pageData.data}
       dictionary={dictionary}
       lang={params.lang}
     />

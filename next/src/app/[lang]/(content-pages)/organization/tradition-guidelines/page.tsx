@@ -14,12 +14,12 @@ interface OrganizationTraditionGuidelinesProps {
   params: { lang: SupportedLanguage };
 }
 
-export default async function OrganizationHonoraryMembers({
+export default async function OrganizationTraditionGuidelines({
   params,
 }: OrganizationTraditionGuidelinesProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const organizationData =
+  const pageData =
     await getStrapiData<ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline>(
       params.lang,
       url,
@@ -28,7 +28,7 @@ export default async function OrganizationHonoraryMembers({
 
   return (
     <ContentPage
-      contentData={organizationData.data}
+      contentData={pageData.data}
       dictionary={dictionary}
       lang={params.lang}
     />

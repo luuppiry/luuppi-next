@@ -17,7 +17,7 @@ interface TutoringFaqProps {
 export default async function TutoringFaq({ params }: TutoringFaqProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const organizationData = await getStrapiData<ApiTutoringFaqTutoringFaq>(
+  const pageData = await getStrapiData<ApiTutoringFaqTutoringFaq>(
     params.lang,
     url,
     tags,
@@ -25,7 +25,7 @@ export default async function TutoringFaq({ params }: TutoringFaqProps) {
 
   return (
     <ContentPage
-      contentData={organizationData.data}
+      contentData={pageData.data}
       dictionary={dictionary}
       lang={params.lang}
     />

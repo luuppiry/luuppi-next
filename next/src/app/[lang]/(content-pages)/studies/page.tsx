@@ -17,7 +17,7 @@ interface StudiesProps {
 export default async function Studies({ params }: StudiesProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const organizationData = await getStrapiData<ApiStudiesGeneralStudiesGeneral>(
+  const pageData = await getStrapiData<ApiStudiesGeneralStudiesGeneral>(
     params.lang,
     url,
     tags,
@@ -25,7 +25,7 @@ export default async function Studies({ params }: StudiesProps) {
 
   return (
     <ContentPage
-      contentData={organizationData.data}
+      contentData={pageData.data}
       dictionary={dictionary}
       lang={params.lang}
     />

@@ -19,16 +19,15 @@ export default async function TutoringLarpake({
 }: TutoringLarpakeProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const organizationData =
-    await getStrapiData<ApiTutoringLarpakeTutoringLarpake>(
-      params.lang,
-      url,
-      tags,
-    );
+  const pageData = await getStrapiData<ApiTutoringLarpakeTutoringLarpake>(
+    params.lang,
+    url,
+    tags,
+  );
 
   return (
     <ContentPage
-      contentData={organizationData.data}
+      contentData={pageData.data}
       dictionary={dictionary}
       lang={params.lang}
     />

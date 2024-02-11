@@ -17,15 +17,11 @@ interface SportsProps {
 export default async function Organization({ params }: SportsProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const organizationData = await getStrapiData<ApiSportSport>(
-    params.lang,
-    url,
-    tags,
-  );
+  const pageData = await getStrapiData<ApiSportSport>(params.lang, url, tags);
 
   return (
     <ContentPage
-      contentData={organizationData.data}
+      contentData={pageData.data}
       dictionary={dictionary}
       lang={params.lang}
     />

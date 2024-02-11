@@ -17,7 +17,7 @@ interface OrganizationProps {
 export default async function Organization({ params }: OrganizationProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const organizationData =
+  const pageData =
     await getStrapiData<ApiOrganizationGeneralOrganizationGeneral>(
       params.lang,
       url,
@@ -26,7 +26,7 @@ export default async function Organization({ params }: OrganizationProps) {
 
   return (
     <ContentPage
-      contentData={organizationData.data}
+      contentData={pageData.data}
       dictionary={dictionary}
       lang={params.lang}
     />

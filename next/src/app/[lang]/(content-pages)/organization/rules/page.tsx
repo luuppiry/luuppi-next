@@ -14,10 +14,12 @@ interface OrganizationRulesProps {
   params: { lang: SupportedLanguage };
 }
 
-export default async function Organization({ params }: OrganizationRulesProps) {
+export default async function OrganizationRules({
+  params,
+}: OrganizationRulesProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const rulesData = await getStrapiData<ApiOrganizationRuleOrganizationRule>(
+  const pageData = await getStrapiData<ApiOrganizationRuleOrganizationRule>(
     params.lang,
     url,
     tags,
@@ -25,7 +27,7 @@ export default async function Organization({ params }: OrganizationRulesProps) {
 
   return (
     <ContentPage
-      contentData={rulesData.data}
+      contentData={pageData.data}
       dictionary={dictionary}
       lang={params.lang}
     />
