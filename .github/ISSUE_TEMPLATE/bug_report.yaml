@@ -1,7 +1,16 @@
-name: Bug report
-description: Template for bug reports
+name: 🐛 Bug Report
+description: Create a bug report
 title: '[Bug]: '
+labels:
+    - 'type: bug'
+
 body:
+    - type: markdown
+      attributes:
+          value: |
+              **Thanks for taking the time to fill out this bug report!**
+              We kindly ask that you search to see if an issue [already exists](https://github.com/luuppiry/luuppi-next/issues) for your bug.
+
     - type: textarea
       id: description
       attributes:
