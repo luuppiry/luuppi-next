@@ -54,7 +54,7 @@ export function middleware(request: NextRequest) {
       '/images/events.jpg',
       '/images/new_students.jpg',
       '/images/organization.jpg',
-      '/images/pullapaiva.jpg',
+      '/images/event_placeholder.png',
     ].includes(pathname)
   )
     return;

@@ -46,7 +46,7 @@ export default async function BlogPreview({
               className={`${i === 0 ? 'col-span-3 max-lg:col-span-1 max-lg:flex-col' : 'col-span-1 flex-col'} flex gap-4 rounded-lg border-[1px] border-gray-200/50 shadow-sm`}
             >
               <div
-                className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300
+                className={`${i !== 0 ? 'shrink-0 rounded-t-lg' : 'rounded-l-lg max-lg:shrink-0 max-lg:rounded-l-none max-lg:rounded-t-lg'} relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300
                 `}
               >
                 <Image
@@ -57,7 +57,7 @@ export default async function BlogPreview({
                   fill
                 />
               </div>
-              <div className="flex w-full flex-col justify-between gap-12 p-4">
+              <div className="flex h-full w-full flex-col justify-between gap-12 p-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm font-bold uppercase text-accent-400">
                     {blog.attributes.category}
@@ -73,13 +73,17 @@ export default async function BlogPreview({
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Image
-                    alt="avatar"
-                    className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
-                    height={50}
-                    src="/images/pullapaiva.jpg"
-                    width={50}
-                  />
+                  {blog.attributes.authorImage.data?.attributes.url ? (
+                    <Image
+                      alt="avatar"
+                      className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
+                      height={50}
+                      src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${blog.attributes.authorImage.data?.attributes.url}`}
+                      width={50}
+                    />
+                  ) : (
+                    <div className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300" />
+                  )}
                   <div className="flex flex-col">
                     <span className="text-sm font-semibold">
                       {blog.attributes.authorName}
