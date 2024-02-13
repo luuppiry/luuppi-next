@@ -65,7 +65,7 @@ export default async function Organization({
                   </div>
                 </div>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center pr-4">
                 <p>{company.attributes.description}</p>
               </div>
             </div>
