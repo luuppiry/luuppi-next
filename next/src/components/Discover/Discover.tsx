@@ -1,4 +1,5 @@
 import { getDictionary } from '@/dictionaries';
+import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
@@ -6,9 +7,10 @@ import { discoverLinks } from './discoverLinks';
 
 interface DiscoverProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  lang: SupportedLanguage;
 }
 
-export default function Discover({ dictionary }: DiscoverProps) {
+export default function Discover({ dictionary, lang }: DiscoverProps) {
   return (
     <section className="relative mx-auto max-w-[1200px] px-4 py-20">
       <Image
@@ -26,7 +28,7 @@ export default function Discover({ dictionary }: DiscoverProps) {
           <Link
             key={dictionary.pages_home.discover[link.translation]}
             className="group relative flex aspect-[3/2] h-full w-full border-4 border-primary-950 shadow-[7px_7px_#090a10] transition-all duration-300 hover:shadow-[0px_0px_#090a10] max-md:aspect-square"
-            href={link.href}
+            href={`/${lang}/${link.href}`}
           >
             <div className="absolute z-20 h-full w-0 bg-secondary-400/50 transition-all duration-300 group-hover:w-full" />
             <div className="absolute bottom-5 left-5 z-30 flex items-center justify-center bg-white text-lg transition-all duration-300 max-md:bottom-0 max-md:left-0 max-md:w-full max-md:text-sm">
