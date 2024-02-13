@@ -893,7 +893,7 @@ export interface ApiBoardBoard extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    year: Attribute.Integer & Attribute.Unique;
+    year: Attribute.Integer & Attribute.Required & Attribute.Unique;
     boardMembers: Attribute.Relation<
       'api::board.board',
       'manyToMany',
@@ -928,16 +928,18 @@ export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    fullName: Attribute.String;
-    email: Attribute.Email;
+    fullName: Attribute.String & Attribute.Required;
+    email: Attribute.Email & Attribute.Required;
     image: Attribute.Media;
-    isBoardMember: Attribute.Boolean & Attribute.DefaultTo<false>;
+    isBoardMember: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<false>;
     boardRoles: Attribute.Relation<
       'api::board-member.board-member',
       'oneToMany',
       'api::board-role.board-role'
     >;
-    year: Attribute.Integer;
+    year: Attribute.Integer & Attribute.Required & Attribute.Private;
     boards: Attribute.Relation<
       'api::board-member.board-member',
       'manyToMany',

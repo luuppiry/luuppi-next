@@ -14,11 +14,13 @@
   "attributes": {
     "fullName": {
       "pluginOptions": {},
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "email": {
       "pluginOptions": {},
-      "type": "email"
+      "type": "email",
+      "required": true
     },
     "image": {
       "type": "media",
@@ -32,7 +34,8 @@
     "isBoardMember": {
       "pluginOptions": {},
       "type": "boolean",
-      "default": false
+      "default": false,
+      "required": true
     },
     "boardRoles": {
       "type": "relation",
@@ -41,7 +44,9 @@
     },
     "year": {
       "pluginOptions": {},
-      "type": "integer"
+      "type": "integer",
+      "required": true,
+      "private": true
     },
     "boards": {
       "type": "relation",
