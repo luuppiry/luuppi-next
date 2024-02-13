@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       'Luuppi ry is subject assosiation for students of mathematics, statistical data analysis and computer science at Tampere University.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#5c61a3',
-    theme_color: '#5c61a3',
+    background_color: '#ffffff',
+    theme_color: '#787eba',
     icons: [
       {
         src: '/favicon.ico',

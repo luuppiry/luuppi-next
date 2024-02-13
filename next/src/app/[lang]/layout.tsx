@@ -2,7 +2,7 @@ import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import PlausibleProvider from 'next-plausible';
 import { Poppins } from 'next/font/google';
 import { i18n } from '../../i18n-config';
@@ -67,3 +67,7 @@ export async function generateMetadata({
     },
   };
 }
+
+export const viewport: Viewport = {
+  themeColor: '#787eba',
+};
