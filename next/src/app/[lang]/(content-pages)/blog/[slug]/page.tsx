@@ -7,6 +7,7 @@ import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog, ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import { FaUserAlt } from 'react-icons/fa';
 
 const baseUrl =
   '/api/blogs?populate[0]=banner&populate[1]=authorImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&filters[slug][$eq]=';
@@ -62,7 +63,9 @@ export default async function BlogPost({ params }: BlogPostProps) {
                 width={50}
               />
             ) : (
-              <div className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300" />
+              <div className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-gradient-to-r from-secondary-400 to-primary-300">
+                <FaUserAlt color="white" size={20} />
+              </div>
             )}
             <div className="flex flex-col">
               <span className="font-bold">
