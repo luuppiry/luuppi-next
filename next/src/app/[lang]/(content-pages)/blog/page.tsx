@@ -1,3 +1,4 @@
+import { getDictionary } from '@/dictionaries';
 import { dateFormat, flipBlogLocale, getStrapiData } from '@/lib';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog } from '@/types/contentTypes';
@@ -17,6 +18,7 @@ export default async function Blog({ params }: BlogProps) {
   );
 
   const blogLocaleFlipped = flipBlogLocale(params.lang, pageData.data);
+  const dictionary = await getDictionary(params.lang);
 
   const sortedBlogs = blogLocaleFlipped.sort(
     (a, b) =>
@@ -26,7 +28,7 @@ export default async function Blog({ params }: BlogProps) {
 
   return (
     <div className="flex flex-col gap-12">
-      <h1>Blog</h1>
+      <h1>{dictionary.navigation.blog}</h1>
       <div className="flex flex-col gap-12 max-md:gap-6">
         {sortedBlogs.map((blog) => (
           <article
