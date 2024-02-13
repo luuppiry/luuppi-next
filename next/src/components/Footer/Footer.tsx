@@ -24,13 +24,13 @@ export default function Footer({ dictionary, lang }: FooterProps) {
         <div className="grid w-full grid-cols-5 gap-12 px-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
           {footerLinks.map((footerLink, i) => (
             <div key={i} className="flex flex-col gap-4">
-              <h6 className="text-sm font-semibold uppercase text-white">
+              <p className="text-sm font-semibold uppercase text-white">
                 {
                   dictionary.navigation[
                     footerLink.translation as keyof typeof dictionary.navigation
                   ]
                 }
-              </h6>
+              </p>
               <div className="flex flex-col gap-2">
                 {footerLink.sublinks?.map((link, i) => (
                   <div key={i}>
@@ -72,22 +72,28 @@ export default function Footer({ dictionary, lang }: FooterProps) {
             </div>
           </div>
           <div className="flex gap-4">
-            <Link href="https://t.me/Luuppi">
+            <Link aria-label="Telegram" href="https://t.me/Luuppi">
               <FaTelegram className="text-white" size={20} />
             </Link>
-            <Link href="https://github.com/luuppiry">
+            <Link aria-label="GitHub" href="https://github.com/luuppiry">
               <FaGithub className="text-white" size={20} />
             </Link>
-            <Link href="https://www.facebook.com/luuppiry">
+            <Link
+              aria-label="Facebook"
+              href="https://www.facebook.com/luuppiry"
+            >
               <FaFacebook className="text-white" size={20} />
             </Link>
-            <Link href="https://www.tiktok.com/@luuppiry">
+            <Link aria-label="TikTok" href="https://www.tiktok.com/@luuppiry">
               <FaTiktok className="text-white" size={20} />
             </Link>
-            <Link href="https://www.instagram.com/luuppiry/">
+            <Link
+              aria-label="Instagram"
+              href="https://www.instagram.com/luuppiry/"
+            >
               <FaInstagram className="text-white" size={20} />
             </Link>
-            <Link href="https://discord.gg/ZcREUWmYZs">
+            <Link aria-label="Discord" href="https://discord.gg/ZcREUWmYZs">
               <FaDiscord className="text-white" size={20} />
             </Link>
           </div>
