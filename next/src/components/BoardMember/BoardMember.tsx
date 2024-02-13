@@ -1,5 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import Image from 'next/image';
+import { FaUserAlt } from 'react-icons/fa';
 
 interface BoardMemberProps {
   member: any;
@@ -14,14 +15,20 @@ export default function BoardMember({
 }: BoardMemberProps) {
   return (
     <div className="flex w-full flex-col rounded-lg border-[1px] border-gray-200 shadow-lg">
-      <div className="relative aspect-[9/10] w-full rounded-lg bg-secondary-400">
-        <Image
-          alt={`Picture of ${member.attributes.fullName}`}
-          className="rounded-t-lg object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${member.attributes.image.data.attributes.url}`}
-          fill
-        />
+      <div className="relative aspect-[9/10] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
+        {member.attributes.image.data?.attributes.url ? (
+          <Image
+            alt={`Picture of ${member.attributes.fullName}`}
+            className="rounded-t-lg object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${member.attributes.image.data.attributes.url}`}
+            fill
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <FaUserAlt color="white" size={56} />
+          </div>
+        )}
       </div>
       <div className="flex flex-col gap-2 px-4 py-6">
         <h2 className="text-xl font-bold max-md:text-base">
