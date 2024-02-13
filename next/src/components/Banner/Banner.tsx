@@ -12,7 +12,7 @@ export default function Banner({ lang }: BannerProps) {
         <div className="relative flex h-full w-full justify-center overflow-hidden">
           <div className="relative z-10 flex h-full w-full max-md:h-48">
             <Image
-              alt="Luuppi banner"
+              alt="Luuppi banner text"
               className="z-10 object-contain p-6 drop-shadow-[-6px_6px_#00000030] filter max-md:p-4"
               draggable={false}
               src={

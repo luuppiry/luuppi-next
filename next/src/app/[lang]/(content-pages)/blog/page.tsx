@@ -42,7 +42,7 @@ export default async function Blog({ params }: BlogProps) {
                       `}
             >
               <Image
-                alt="yes"
+                alt="Blog banner"
                 className={'rounded-t-lg object-cover'}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${blog.attributes.banner.data.attributes.url}`}
@@ -67,7 +67,7 @@ export default async function Blog({ params }: BlogProps) {
               <div className="flex items-center gap-2">
                 {blog.attributes.authorImage.data?.attributes.url ? (
                   <Image
-                    alt="avatar"
+                    alt="Blog author avatar"
                     className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
                     height={50}
                     src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${blog.attributes.authorImage.data?.attributes.url}`}

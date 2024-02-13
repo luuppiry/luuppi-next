@@ -16,7 +16,7 @@ export default function BoardMember({
     <div className="flex w-full flex-col rounded-lg border-[1px] border-gray-200 shadow-lg">
       <div className="relative aspect-[9/10] w-full rounded-lg bg-secondary-400">
         <Image
-          alt={`${member.attributes.fullName}`}
+          alt={`Picture of ${member.attributes.fullName}`}
           className="rounded-t-lg object-cover"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${member.attributes.image.data.attributes.url}`}

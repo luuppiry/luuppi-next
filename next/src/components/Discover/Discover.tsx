@@ -14,7 +14,7 @@ export default function Discover({ dictionary, lang }: DiscoverProps) {
   return (
     <section className="relative mx-auto max-w-[1200px] px-4 py-20">
       <Image
-        alt="Luuppi pattern"
+        alt="Luuppi background pattern"
         className="absolute -left-32 top-0 -z-10 max-md:hidden"
         height={400}
         src="/ccchaos.svg"
@@ -42,7 +42,7 @@ export default function Discover({ dictionary, lang }: DiscoverProps) {
             <div className="relative flex h-full w-full overflow-hidden bg-gradient-to-r from-secondary-400 to-primary-300">
               <div className="absolute z-10 flex h-full w-full bg-gradient-to-t from-background-400/70 via-transparent to-transparent" />
               <Image
-                alt="haalarit"
+                alt="Discover link image"
                 className="object-cover brightness-90 transition-all duration-300 group-hover:scale-105"
                 draggable={false}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

@@ -44,7 +44,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
       <div className="flex w-full flex-col gap-12">
         <div className="relative aspect-[2/1] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
           <Image
-            alt="yes"
+            alt="Blog banner"
             className={'rounded-lg object-cover'}
             quality={100}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -56,7 +56,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
           <div className="flex items-center gap-4">
             {selectedBlog.attributes.authorImage.data?.attributes.url ? (
               <Image
-                alt="avatar"
+                alt="Blog author avatar"
                 className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
                 height={50}
                 src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${selectedBlog.attributes.authorImage.data?.attributes.url}`}

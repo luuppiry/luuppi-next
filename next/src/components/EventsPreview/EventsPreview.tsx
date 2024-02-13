@@ -49,7 +49,7 @@ export default async function EventsPreview({
               </div>
               <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:aspect-[2/1]">
                 <Image
-                  alt="event"
+                  alt="Event placeholder image"
                   className="object-cover transition-all duration-300 group-hover:scale-105"
                   draggable={false}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

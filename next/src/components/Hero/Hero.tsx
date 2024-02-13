@@ -68,7 +68,7 @@ export default function Hero({ dictionary, lang }: HeroProps) {
       </div>
       <div className="luuppi-hero-container relative flex w-1/2 max-xl:h-80 max-xl:w-full">
         <Image
-          alt="Luuppi"
+          alt="Luuppi hero card image"
           className="luuppi-hero-cards"
           draggable={false}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

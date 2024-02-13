@@ -15,9 +15,11 @@ export default function SidePartners({
   dictionary,
 }: SidePartnersProps) {
   const [randomPartners, setRandomPartners] = useState<ApiCompanyCompany[]>([]);
+
   useEffect(() => {
     setRandomPartners(partnersData.sort(() => Math.random() - 0.5).slice(0, 3));
   }, [partnersData]);
+
   return (
     <div className="flex w-full flex-col gap-2 px-4">
       <h6 className="text-lg font-bold">{dictionary.general.partners}</h6>
@@ -29,7 +31,7 @@ export default function SidePartners({
             href={partner.attributes.homepageUrl}
           >
             <Image
-              alt="Logo"
+              alt="Partner company logo"
               className="w-auto object-contain object-left"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${partner.attributes.logo.data.attributes.url}`}

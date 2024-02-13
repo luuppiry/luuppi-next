@@ -50,7 +50,7 @@ export default function BlockRendererClient({
         link: (props) => <Link href={props.url}>{props.children}</Link>,
         image: ({ image }) => (
           <Image
-            alt={image.alternativeText || ''}
+            alt={image.alternativeText || 'Embedded image'}
             className="rounded-lg"
             height={image.height}
             src={image.url}

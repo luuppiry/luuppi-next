@@ -55,7 +55,7 @@ export default function Footer({ dictionary, lang }: FooterProps) {
           <div className="flex items-center gap-12 max-md:flex-col max-md:items-start max-md:gap-4">
             <div className="flex items-center gap-4">
               <Image
-                alt="Luuppi"
+                alt="Luuppi logo"
                 className={'object-contain'}
                 draggable={false}
                 height={80}

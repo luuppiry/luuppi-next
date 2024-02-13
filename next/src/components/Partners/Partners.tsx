@@ -45,7 +45,7 @@ export default async function Partners({ dictionary, lang }: PartnersProps) {
               href={partner.attributes.homepageUrl}
             >
               <Image
-                alt="partner"
+                alt="Partner company logo"
                 className="object-contain"
                 draggable={false}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
