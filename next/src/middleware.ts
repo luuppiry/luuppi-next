@@ -31,6 +31,7 @@ export function middleware(request: NextRequest) {
   if (
     [
       '/robo.svg',
+      '/binary.svg',
       '/ccchaos.svg',
       '/blob.svg',
       '/manifest.webmanifest',

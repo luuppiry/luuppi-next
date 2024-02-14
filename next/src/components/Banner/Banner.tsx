@@ -13,13 +13,20 @@ export default function Banner({ lang }: BannerProps) {
           <div className="relative z-10 flex h-full w-full max-md:h-48">
             <Image
               alt="Luuppi banner text"
-              className="z-10 object-contain p-6 drop-shadow-[-6px_6px_#00000030] filter max-md:p-4"
+              className="z-20 object-contain p-6 drop-shadow-[-6px_6px_#00000030] filter max-md:p-4"
               draggable={false}
               src={
                 lang === 'en'
                   ? '/luuppi_banner_text_en.svg'
                   : '/luuppi_banner_text_fi.svg'
               }
+              fill
+            />
+            <Image
+              alt="Luuppi banner text"
+              className="z-10 object-cover opacity-[0.05] max-lg:scale-[2] max-md:scale-[3]"
+              draggable={false}
+              src={'/binary.svg'}
               fill
             />
           </div>
