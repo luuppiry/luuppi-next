@@ -1,5 +1,5 @@
 > ### ⚠️ Note
-> Please open an issue before submitting a pull request to validate that your work
+> Please open an issue before submitting a pull request to ensure that your bugfix, feature, etc is accepted beforehand.
 
 ## Description
 [_Replace this line with short summary of the PR_]
