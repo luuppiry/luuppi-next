@@ -21,6 +21,7 @@ export default function Banner({ lang }: BannerProps) {
                   : '/luuppi_banner_text_fi.svg'
               }
               fill
+              priority
             />
             <Image
               alt="Luuppi banner text"
@@ -28,6 +29,7 @@ export default function Banner({ lang }: BannerProps) {
               draggable={false}
               src={'/binary.svg'}
               fill
+              priority
             />
           </div>
           <Image
