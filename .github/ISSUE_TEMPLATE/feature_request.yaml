@@ -1,7 +1,6 @@
 ---
 name: 🛠️ Feature Request
 description: Suggest a new feature
-title: '[Feature]: '
 labels:
     - 'type: feature request'
 

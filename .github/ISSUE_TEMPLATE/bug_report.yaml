@@ -1,6 +1,5 @@
 name: 🐛 Bug Report
 description: Create a bug report
-title: '[Bug]: '
 labels:
     - 'type: bug'
 
