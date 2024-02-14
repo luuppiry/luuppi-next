@@ -31,7 +31,7 @@ body:
       id: checklist
       attributes:
           label: Checklist
-          description: Few checkboxes to fill
+          description: Are you willing to contribute to the development of this feature?
           options:
               - label: I am willing to work on this feature
                 required: false

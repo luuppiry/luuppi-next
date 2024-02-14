@@ -21,7 +21,7 @@ body:
       id: reproduce
       attributes:
           label: Reproduce
-          description: Steps to reproduce the behavior
+          description: Steps to reproduce the behavior.
           placeholder: Click on '....', go to '...', etc
           value: |
               1. Go to '...'
