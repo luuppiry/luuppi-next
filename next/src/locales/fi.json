@@ -7,7 +7,8 @@
     "partners": "Yhteistyössä",
     "business_id": "Y-tunnus",
     "copy": "Kopioi",
-    "copied": "Kopioitu"
+    "copied": "Kopioitu",
+    "close": "Sulje"
   },
   "navigation": {
     "home": "Koti",
@@ -86,7 +87,8 @@
   "pages_404": {
     "title": "Sivua ei löytynyt",
     "description": "\"Piiiip, paaat, kriz kruts\" Etsimääsi sivua ei löytynyt. Voit palata takaisin kotisivulle tai ottaa meihin yhteyttä, jos etsit jotain tiettyä sivua.",
-    "return_home": "Kotisivulle"
+    "return_home": "Kotisivulle",
+    "play_game": "Shhh, täällä on piilossa peli."
   },
   "seo": {
     "title": "Luuppi ry | Tampereen yliopiston matematiikan, tilastotieteen ja tietojenkäsittelyn opiskelijoiden ainejärjestö",
