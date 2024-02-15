@@ -7,8 +7,7 @@
     "partners": "Partners",
     "business_id": "Business ID",
     "copy": "Copy",
-    "copied": "Copied",
-    "close": "Close"
+    "copied": "Copied"
   },
   "navigation": {
     "home": "Home",
@@ -87,8 +86,7 @@
   "pages_404": {
     "title": "Page not found",
     "description": "Ooops.... The page you are looking for does not exist. Please check the URL and try again.",
-    "return_home": "Back to home",
-    "play_game": "Pssst! Try this game while you're here!"
+    "return_home": "Back to home"
   },
   "seo": {
     "title": "Luuppi ry | Subject association for mathematics, statistical data analysis, and computer science students at the University of Tampere",

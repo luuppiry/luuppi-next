@@ -1,4 +1,3 @@
-import LuuppiBird from '@/components/LuuppiBird/LuuppiBird';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
@@ -23,9 +22,6 @@ export default async function NotFound({ params }: NotFoundProps) {
           >
             {dictionary.pages_404.return_home}
           </Link>
-        </div>
-        <div>
-          <LuuppiBird dictionary={dictionary} />
         </div>
       </div>
       <div>
