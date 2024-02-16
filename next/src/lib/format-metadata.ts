@@ -26,7 +26,9 @@ export const formatMetadata = (content: any, pathname: string): Metadata => {
   return {
     title: `${seo.metaTitle} | Luuppi ry`,
     description: seo.metaDescription,
-    authors: seo.metaAuthor,
+    authors: {
+      name: seo.metaAuthor,
+    },
     keywords: seo.metaKeywords,
     alternates: {
       canonical: pathname,
