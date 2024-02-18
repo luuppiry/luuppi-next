@@ -55,7 +55,12 @@ export default function Header({ dictionary, lang }: HeaderProps) {
 
   return (
     <div>
-      <AuthModal open={authModalOpen} onClose={toggleAuthModal} />
+      <AuthModal
+        dictionary={dictionary}
+        lang={lang}
+        open={authModalOpen}
+        onClose={toggleAuthModal}
+      />
       <MobileHamburger
         dictionary={dictionary}
         lang={lang}

@@ -1,13 +1,28 @@
 {
   "general": {
     "email": "Sähköposti",
+    "password": "Salasana",
+    "username": "Käyttäjänimi",
     "content_updated": "Sisältö päivitetty",
     "login": "Kirjaudu",
+    "register": "Rekisteröidy",
     "on_this_page": "Tällä sivulla",
     "partners": "Yhteistyössä",
     "business_id": "Y-tunnus",
     "copy": "Kopioi",
     "copied": "Kopioitu"
+  },
+  "auth": {
+    "login_to_account": "Kirjaudu sisään",
+    "register_account": "Rekisteröidy",
+    "remember_me": "Muista minut",
+    "dont_have_account": "Eikö sinulla ole vielä tiliä?",
+    "already_have_account": "Onko sinulla jo tili?",
+    "register_here": "Rekisteröidy täällä",
+    "login_here": "Kirjaudu sisään täällä",
+    "forgot_password": "Unohditko salasanasi?",
+    "confirm_password": "Vahvista salasana",
+    "accept_terms": "Hyväksyn tietosuojaselosteen ja käyttöehdot"
   },
   "navigation": {
     "home": "Koti",

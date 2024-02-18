@@ -1,13 +1,28 @@
 {
   "general": {
     "email": "Email",
+    "password": "Password",
+    "username": "Username",
     "content_updated": "Content updated",
     "login": "Login",
+    "register": "Register",
     "on_this_page": "On this page",
     "partners": "Partners",
     "business_id": "Business ID",
     "copy": "Copy",
     "copied": "Copied"
+  },
+  "auth": {
+    "login_to_account": "Login to your account",
+    "register_account": "Register an account",
+    "remember_me": "Remember me",
+    "dont_have_account": "Don't have an account?",
+    "already_have_account": "Already have an account?",
+    "register_here": "Register here",
+    "login_here": "Login here",
+    "forgot_password": "Forgot your password?",
+    "confirm_password": "Confirm password",
+    "accept_terms": "I accept the terms and conditions"
   },
   "navigation": {
     "home": "Home",
