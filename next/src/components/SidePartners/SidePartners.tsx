@@ -1,5 +1,6 @@
 'use client';
 import { getDictionary } from '@/dictionaries';
+import { getStrapiUrl } from '@/lib/get-url';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -34,7 +35,7 @@ export default function SidePartners({
               alt="Partner company logo"
               className="w-auto object-contain object-left"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${partner.attributes.logo.data.attributes.url}`}
+              src={getStrapiUrl(partner.attributes.logo.data.attributes.url)}
               fill
             />
           </Link>

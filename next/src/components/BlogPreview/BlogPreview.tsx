@@ -1,5 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import { dateFormat, flipBlogLocale, getStrapiData } from '@/lib';
+import { getStrapiUrl } from '@/lib/get-url';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -54,7 +55,7 @@ export default async function BlogPreview({
                   alt="Blog banner"
                   className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} object-cover`}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${blog.attributes.banner.data.attributes.url}`}
+                  src={getStrapiUrl(blog.attributes.banner.data.attributes.url)}
                   fill
                 />
               </div>
@@ -79,7 +80,9 @@ export default async function BlogPreview({
                       alt="Blog author avatar"
                       className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
                       height={50}
-                      src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${blog.attributes.authorImage.data?.attributes.url}`}
+                      src={getStrapiUrl(
+                        blog.attributes.authorImage.data?.attributes.url,
+                      )}
                       width={50}
                     />
                   ) : (

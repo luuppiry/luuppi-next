@@ -1,5 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/lib';
+import { getStrapiUrl } from '@/lib/get-url';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -49,7 +50,7 @@ export default async function Partners({ dictionary, lang }: PartnersProps) {
                 className="object-contain"
                 draggable={false}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${partner.attributes.logo.data.attributes.url}`}
+                src={getStrapiUrl(partner.attributes.logo.data.attributes.url)}
                 fill
                 priority
               />

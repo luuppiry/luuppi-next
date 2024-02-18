@@ -1,5 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/lib';
+import { getStrapiUrl } from '@/lib/get-url';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -39,7 +40,9 @@ export default async function Organization({
                   alt="Company logo"
                   className="rounded-lg object-contain max-md:w-44"
                   height={100}
-                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${company.attributes.logo.data.attributes.url}`}
+                  src={getStrapiUrl(
+                    company.attributes.logo.data.attributes.url,
+                  )}
                   width={300}
                 />
                 <div className="font-semibold">

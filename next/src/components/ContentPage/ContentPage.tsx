@@ -1,5 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import { dateFormat, getStrapiData } from '@/lib';
+import { getStrapiUrl } from '@/lib/get-url';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -26,7 +27,7 @@ export default async function ContentPage({
   );
 
   const imagePath = contentData.attributes.Content.banner.data.attributes.url;
-  const imageUrl = `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${imagePath}`;
+  const imageUrl = getStrapiUrl(imagePath);
 
   return (
     <div className="flex w-full gap-12">

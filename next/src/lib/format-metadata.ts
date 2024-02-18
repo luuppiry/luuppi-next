@@ -7,7 +7,11 @@ import { Metadata } from 'next';
  * @param pathname current page's pathname
  * @returns formatted metadata
  */
-export const formatMetadata = (content: any, pathname: string): Metadata => {
+export const formatMetadata = (
+  content: any,
+  pathname: string,
+  isBlog = false,
+): Metadata => {
   const seo = content.data.attributes.Seo;
 
   if (!seo) throw new Error('No SEO data found');
@@ -21,6 +25,17 @@ export const formatMetadata = (content: any, pathname: string): Metadata => {
   let openGraphImage: string | null = null;
   if (seo.openGraph?.openGraphImage?.data?.attributes?.url) {
     openGraphImage = `${cmsUrl}${seo.openGraph.openGraphImage.data.attributes.url}`;
+  }
+
+  if (isBlog && !openGraphImage) {
+    const ogUrl = new URL('https://luuppi-opengraph.vercel.app/api/og');
+    ogUrl.searchParams.append('author', seo.metaAuthor ?? 'Luuppi ry');
+    ogUrl.searchParams.append('title', seo.metaTitle);
+    ogUrl.searchParams.append(
+      'published',
+      seo.publishedAt ?? new Date().toISOString(),
+    );
+    ogUrl.searchParams.append('image', 'https://i.pravatar.cc/300');
   }
 
   return {

@@ -1,5 +1,6 @@
 import { Colors } from '@/models/colors';
 import { SupportedLanguage } from '@/models/locale';
+import { getStrapiUrl } from './get-url';
 
 /**
  * Fetch data from Strapi and revalidate it with given tags.
@@ -14,10 +15,9 @@ export const getStrapiData = async <T>(
   revalidateTags: string[],
 ): Promise<{ data: T }> => {
   try {
-    let res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${url}&locale=${lang}`,
-      { next: { tags: revalidateTags } },
-    );
+    let res = await fetch(getStrapiUrl(`${url}&locale=${lang}`), {
+      next: { tags: revalidateTags },
+    });
 
     /**
      * Strapi does not have any feature to fallback language? (or does it?)
@@ -26,10 +26,9 @@ export const getStrapiData = async <T>(
      * TODO: Remove this when Strapi has an automatic fallback
      */
     if (!res.ok && res.status === 404) {
-      res = await fetch(
-        `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${url}?locale=fi`,
-        { next: { tags: revalidateTags } },
-      );
+      res = await fetch(getStrapiUrl(`${url}?locale=fi`), {
+        next: { tags: revalidateTags },
+      });
     }
 
     const data = await res.json();

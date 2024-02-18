@@ -1,4 +1,5 @@
 import { getDictionary } from '@/dictionaries';
+import { getStrapiUrl } from '@/lib/get-url';
 import Image from 'next/image';
 import { FaUserAlt } from 'react-icons/fa';
 
@@ -21,7 +22,7 @@ export default function BoardMember({
             alt={`Picture of ${member.attributes.fullName}`}
             className="rounded-t-lg object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${member.attributes.image.data.attributes.url}`}
+            src={getStrapiUrl(member.attributes.image.data.attributes.url)}
             fill
           />
         ) : (
