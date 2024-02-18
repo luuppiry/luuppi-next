@@ -70,7 +70,11 @@ export default function RegisterForm({
       </label>
       <div className="form-control my-4">
         <label className="label cursor-pointer">
-          <Link className="link label-text" href={`${lang}/privacy-policy`}>
+          <Link
+            className="link label-text"
+            href={`/${lang}/privacy-policy`}
+            target="_blank"
+          >
             {dictionary.auth.accept_terms}
           </Link>
           <input
