@@ -2,6 +2,8 @@ import { register } from '@/app/actions';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
+import { useFormState, useFormStatus } from 'react-dom';
+import FormInput from '../FormInput/FormInput';
 
 interface RegisterFormProps {
   login: () => void;
@@ -9,65 +11,49 @@ interface RegisterFormProps {
   lang: SupportedLanguage;
 }
 
+const initialState = {
+  error: {
+    field: '',
+    message: '',
+  },
+};
+
 export default function RegisterForm({
   login,
   dictionary,
   lang,
 }: RegisterFormProps) {
+  const [state, formAction] = useFormState(register, initialState);
+
   return (
-    <form action={register}>
-      <label className="form-control">
-        <div className="label">
-          <span className="label-text">{dictionary.general.email}</span>
-        </div>
-        <input
-          className="input input-bordered"
-          id="email"
-          name="email"
-          placeholder="webmaster@luuppi.fi"
-          type="email"
-          required
-        />
-      </label>
-      <label className="form-control my-4">
-        <div className="label">
-          <span className="label-text">{dictionary.general.username}</span>
-        </div>
-        <input
-          className="input input-bordered"
-          id="username"
-          name="username"
-          placeholder="Veeti Webalainen"
-          type="text"
-          required
-        />
-      </label>
-      <label className="form-control my-4">
-        <div className="label">
-          <span className="label-text">{dictionary.general.password}</span>
-        </div>
-        <input
-          className="input input-bordered"
-          id="password"
-          name="password"
-          placeholder="*********"
-          type="password"
-          required
-        />
-      </label>
-      <label className="form-control my-4">
-        <div className="label">
-          <span className="label-text">{dictionary.auth.confirm_password}</span>
-        </div>
-        <input
-          className="input input-bordered"
-          id="confirmPassword"
-          name="confirmPassword"
-          placeholder="*********"
-          type="password"
-          required
-        />
-      </label>
+    <form action={formAction}>
+      <FormInput
+        error={state?.error}
+        id="email"
+        placeholder="webmaster@luuppi.fi"
+        title={dictionary.general.email}
+        type="email"
+      />
+      <FormInput
+        error={state?.error}
+        id="username"
+        placeholder="Webmaster"
+        title={dictionary.general.username}
+      />
+      <FormInput
+        error={state?.error}
+        id="password"
+        placeholder="*********"
+        title={dictionary.general.password}
+        type="password"
+      />
+      <FormInput
+        error={state?.error}
+        id="confirmPassword"
+        placeholder="*********"
+        title={dictionary.auth.confirm_password}
+        type="confirmPassword"
+      />
       <div className="form-control my-4">
         <label className="label cursor-pointer">
           <Link
@@ -82,12 +68,11 @@ export default function RegisterForm({
             id="termsAccepted"
             name="termsAccepted"
             type="checkbox"
+            required
           />
         </label>
       </div>
-      <button className="btn btn-primary text-white" type="submit">
-        {dictionary.general.register}
-      </button>
+      <SubmitButton dictionary={dictionary} />
       <div className="form-control mb-2 mt-4 text-sm opacity-75">
         <span className="pl-1">
           {dictionary.auth.already_have_account}{' '}
@@ -98,5 +83,22 @@ export default function RegisterForm({
         </span>
       </div>
     </form>
+  );
+}
+
+interface SubmitButtonProps {
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+}
+
+export function SubmitButton({ dictionary }: SubmitButtonProps) {
+  const { pending } = useFormStatus();
+  return (
+    <button className="btn btn-primary min-w-28 text-white" type="submit">
+      {pending ? (
+        <span className="loading loading-spinner loading-md" />
+      ) : (
+        dictionary.general.register
+      )}
+    </button>
   );
 }

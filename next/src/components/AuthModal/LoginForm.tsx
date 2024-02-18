@@ -1,40 +1,39 @@
 import { login } from '@/app/actions';
 import { getDictionary } from '@/dictionaries';
+import { useFormState } from 'react-dom';
+import FormInput from '../FormInput/FormInput';
 
 interface LoginFormProps {
   register: () => void;
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
 }
 
+const initialState = {
+  error: {
+    field: '',
+    message: '',
+  },
+};
+
 export default function LoginForm({ register, dictionary }: LoginFormProps) {
+  const [state, formAction] = useFormState(login, initialState);
+
   return (
-    <form action={login}>
-      <label className="form-control">
-        <div className="label">
-          <span className="label-text">{dictionary.general.email}</span>
-        </div>
-        <input
-          className="input input-bordered"
-          id="email"
-          name="email"
-          placeholder="webmaster@luuppi.fi"
-          type="email"
-          required
-        />
-      </label>
-      <label className="form-control my-4">
-        <div className="label">
-          <span className="label-text">{dictionary.general.password}</span>
-        </div>
-        <input
-          className="input input-bordered"
-          id="password"
-          name="password"
-          placeholder="*********"
-          type="password"
-          required
-        />
-      </label>
+    <form action={formAction}>
+      <FormInput
+        error={state?.error}
+        id="email"
+        placeholder="webmaster@luuppi.fi"
+        title={dictionary.general.email}
+        type="email"
+      />
+      <FormInput
+        error={state?.error}
+        id="password"
+        placeholder="*********"
+        title={dictionary.general.password}
+        type="password"
+      />
       <div className="form-control my-4">
         <label className="label cursor-pointer">
           <span className="label-text">{dictionary.auth.remember_me}</span>
