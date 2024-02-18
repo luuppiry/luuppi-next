@@ -52,7 +52,7 @@ export default function RegisterForm({
         id="confirmPassword"
         placeholder="*********"
         title={dictionary.auth.confirm_password}
-        type="confirmPassword"
+        type="password"
       />
       <div className="form-control my-4">
         <label className="label cursor-pointer">
