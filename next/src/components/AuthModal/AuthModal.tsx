@@ -2,6 +2,7 @@ import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
+import ForgotPasswordForm from './ForgotPasswordForm';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 
@@ -18,7 +19,9 @@ export default function AuthModal({
   dictionary,
   lang,
 }: AuthModalProps) {
-  const [type, setType] = useState<'login' | 'register'>('login');
+  const [type, setType] = useState<'login' | 'register' | 'forgotPassword'>(
+    'login',
+  );
 
   return (
     <dialog
@@ -30,7 +33,9 @@ export default function AuthModal({
           <h3 className="text-lg font-bold">
             {type === 'login'
               ? dictionary.auth.login_to_account
-              : dictionary.auth.register_account}
+              : type === 'register'
+                ? dictionary.auth.register_account
+                : dictionary.auth.reset_password}
           </h3>
           <button className="btn btn-circle btn-ghost btn-sm">
             <IoMdClose onClick={onClose} />
@@ -39,12 +44,18 @@ export default function AuthModal({
         {type === 'login' ? (
           <LoginForm
             dictionary={dictionary}
+            forgotPassword={() => setType('forgotPassword')}
             register={() => setType('register')}
           />
-        ) : (
+        ) : type === 'register' ? (
           <RegisterForm
             dictionary={dictionary}
             lang={lang}
+            login={() => setType('login')}
+          />
+        ) : (
+          <ForgotPasswordForm
+            dictionary={dictionary}
             login={() => setType('login')}
           />
         )}

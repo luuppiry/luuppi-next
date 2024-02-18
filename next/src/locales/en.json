@@ -10,7 +10,8 @@
     "partners": "Partners",
     "business_id": "Business ID",
     "copy": "Copy",
-    "copied": "Copied"
+    "copied": "Copied",
+    "submit": "Submit"
   },
   "auth": {
     "login_to_account": "Login to your account",
@@ -22,7 +23,8 @@
     "login_here": "Login here",
     "forgot_password": "Forgot your password?",
     "confirm_password": "Confirm password",
-    "accept_terms": "I accept the terms and conditions"
+    "accept_terms": "I accept the terms and conditions",
+    "reset_password": "Reset password"
   },
   "navigation": {
     "home": "Home",

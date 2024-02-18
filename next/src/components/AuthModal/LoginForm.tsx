@@ -5,6 +5,7 @@ import FormInput from '../FormInput/FormInput';
 
 interface LoginFormProps {
   register: () => void;
+  forgotPassword: () => void;
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
 }
 
@@ -15,7 +16,11 @@ const initialState = {
   },
 };
 
-export default function LoginForm({ register, dictionary }: LoginFormProps) {
+export default function LoginForm({
+  register,
+  forgotPassword,
+  dictionary,
+}: LoginFormProps) {
   const [state, formAction] = useFormState(login, initialState);
 
   return (
@@ -30,10 +35,20 @@ export default function LoginForm({ register, dictionary }: LoginFormProps) {
       <FormInput
         error={state?.error}
         id="password"
+        labelTopRight={
+          <button
+            className="link text-xs opacity-75"
+            type="button"
+            onClick={() => forgotPassword()}
+          >
+            {dictionary.auth.forgot_password}
+          </button>
+        }
         placeholder="*********"
         title={dictionary.general.password}
         type="password"
       />
+
       <div className="form-control my-4">
         <label className="label cursor-pointer">
           <span className="label-text">{dictionary.auth.remember_me}</span>

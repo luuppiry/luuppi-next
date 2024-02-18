@@ -10,7 +10,8 @@
     "partners": "Yhteistyössä",
     "business_id": "Y-tunnus",
     "copy": "Kopioi",
-    "copied": "Kopioitu"
+    "copied": "Kopioitu",
+    "submit": "Lähetä"
   },
   "auth": {
     "login_to_account": "Kirjaudu sisään",
@@ -22,7 +23,8 @@
     "login_here": "Kirjaudu sisään täällä",
     "forgot_password": "Unohditko salasanasi?",
     "confirm_password": "Vahvista salasana",
-    "accept_terms": "Hyväksyn tietosuojaselosteen ja käyttöehdot"
+    "accept_terms": "Hyväksyn tietosuojaselosteen ja käyttöehdot",
+    "reset_password": "Nollaa salasana"
   },
   "navigation": {
     "home": "Koti",

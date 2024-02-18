@@ -7,6 +7,7 @@ interface FormInputProps {
     field: string;
     message: string;
   };
+  labelTopRight?: React.ReactNode;
 }
 
 export default function FormInput({
@@ -14,12 +15,16 @@ export default function FormInput({
   error,
   placeholder,
   id,
+  labelTopRight,
   type,
 }: FormInputProps) {
   return (
     <label className="form-control my-4">
       <div className="label">
         <span className="label-text">{title}</span>
+        {labelTopRight && (
+          <span className="label-text-alt">{labelTopRight}</span>
+        )}
       </div>
       <input
         className={`input input-bordered ${
