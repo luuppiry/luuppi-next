@@ -4,7 +4,7 @@ interface FormInputProps {
   type?: HTMLInputElement['type'];
   placeholder?: string;
   error?: {
-    field: string;
+    field?: string;
     message: string;
   };
   labelTopRight?: React.ReactNode;
