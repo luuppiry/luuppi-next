@@ -30,7 +30,7 @@ export default function ForgotPasswordForm({
         title={dictionary.general.email}
         type="email"
       />
-      <button className="btn btn-primary text-white" type="submit">
+      <button className="btn btn-primary mt-2 text-white" type="submit">
         {dictionary.general.submit}
       </button>
       <div className="form-control mb-2 mt-4 text-sm opacity-75">
