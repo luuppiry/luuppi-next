@@ -10,6 +10,8 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@azure/msal-browser": "^3.10.0",
+    "@azure/msal-react": "^2.0.12",
     "@formatjs/intl-localematcher": "^0.5.4",
     "@fullcalendar/core": "^6.1.10",
     "@fullcalendar/daygrid": "^6.1.10",
@@ -17,7 +19,7 @@
     "@fullcalendar/timegrid": "^6.1.10",
     "@strapi/blocks-react-renderer": "^1.0.0",
     "negotiator": "^0.6.3",
-    "next": "14.1.0",
+    "next": "14.1.1-canary.62",
     "next-plausible": "^3.12.0",
     "node-ical": "^0.17.1",
     "react": "^18",

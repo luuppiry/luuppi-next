@@ -1,12 +1,16 @@
 'use client';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
+import {
+  AuthenticatedTemplate,
+  UnauthenticatedTemplate,
+  useMsal,
+} from '@azure/msal-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { HiMenu } from 'react-icons/hi';
 import { RiArrowDropDownLine, RiLoginCircleLine } from 'react-icons/ri';
-import AuthModal from '../AuthModal/AuthModal';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import MobileHamburger from '../MobileHamburger/MobileHamburger';
 import { navLinks } from './navLinks';
@@ -18,8 +22,8 @@ interface HeaderProps {
 
 export default function Header({ dictionary, lang }: HeaderProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
   const [mobileHarmburgerOpen, setMobileHarmburgerOpen] = useState(false);
+  const { instance } = useMsal();
 
   const handleScroll = () => {
     const position = window.scrollY;
@@ -33,10 +37,6 @@ export default function Header({ dictionary, lang }: HeaderProps) {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  const toggleAuthModal = () => {
-    setAuthModalOpen(!authModalOpen);
-  };
 
   const toggleMobileHamburger = () => {
     setMobileHarmburgerOpen(!mobileHarmburgerOpen);
@@ -53,14 +53,24 @@ export default function Header({ dictionary, lang }: HeaderProps) {
     }
   };
 
+  const handleLogin = async () => {
+    try {
+      await instance.loginRedirect();
+    } catch (error) {
+      console.error('Login failed', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await instance.logout();
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  };
+
   return (
     <div>
-      <AuthModal
-        dictionary={dictionary}
-        lang={lang}
-        open={authModalOpen}
-        onClose={toggleAuthModal}
-      />
       <MobileHamburger
         dictionary={dictionary}
         lang={lang}
@@ -95,15 +105,28 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               <div className="flex items-center justify-center max-lg:hidden">
                 <LanguageSwitcher />
               </div>
-              <button
-                className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold transition-all max-lg:hidden ${
-                  scrollPosition > 100 ? 'text-base' : 'text-lg'
-                }`}
-                onClick={toggleAuthModal}
-              >
-                {dictionary.general.login}
-                <RiLoginCircleLine className="ml-2 inline-block" size={24} />
-              </button>
+              <AuthenticatedTemplate>
+                <button
+                  className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold transition-all max-lg:hidden ${
+                    scrollPosition > 100 ? 'text-base' : 'text-lg'
+                  }`}
+                  onClick={handleLogout}
+                >
+                  {dictionary.general.logout}
+                  <RiLoginCircleLine className="ml-2 inline-block" size={24} />
+                </button>
+              </AuthenticatedTemplate>
+              <UnauthenticatedTemplate>
+                <button
+                  className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold transition-all max-lg:hidden ${
+                    scrollPosition > 100 ? 'text-base' : 'text-lg'
+                  }`}
+                  onClick={handleLogin}
+                >
+                  {dictionary.general.login}
+                  <RiLoginCircleLine className="ml-2 inline-block" size={24} />
+                </button>
+              </UnauthenticatedTemplate>
               <button
                 className="btn btn-ghost lg:hidden"
                 onClick={toggleMobileHamburger}
