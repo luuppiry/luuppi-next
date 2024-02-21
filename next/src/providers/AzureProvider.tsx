@@ -12,6 +12,7 @@ export const msalConfig: Configuration = {
     clientId: process.env.NEXT_PUBLIC_AZURE_CLIENT_ID!,
     authority: `https://${process.env.NEXT_PUBLIC_AZURE_TENANT_NAME}.ciamlogin.com/`,
     navigateToLoginRequestUrl: false,
+    redirectUri: process.env.NEXT_PUBLIC_BASE_URL,
   },
   cache: {
     cacheLocation: 'sessionStorage',
