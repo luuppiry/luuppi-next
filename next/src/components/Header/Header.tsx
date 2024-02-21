@@ -1,6 +1,7 @@
 'use client';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
+import { InteractionStatus } from '@azure/msal-browser';
 import {
   AuthenticatedTemplate,
   UnauthenticatedTemplate,
@@ -13,6 +14,7 @@ import { HiMenu } from 'react-icons/hi';
 import { RiArrowDropDownLine, RiLoginCircleLine } from 'react-icons/ri';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import MobileHamburger from '../MobileHamburger/MobileHamburger';
+import UserDropdown from '../UserDropdown/UserDropdown';
 import { navLinks } from './navLinks';
 
 interface HeaderProps {
@@ -23,7 +25,7 @@ interface HeaderProps {
 export default function Header({ dictionary, lang }: HeaderProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [mobileHarmburgerOpen, setMobileHarmburgerOpen] = useState(false);
-  const { instance } = useMsal();
+  const { instance, inProgress } = useMsal();
 
   const handleScroll = () => {
     const position = window.scrollY;
@@ -58,14 +60,6 @@ export default function Header({ dictionary, lang }: HeaderProps) {
       await instance.loginRedirect();
     } catch (error) {
       console.error('Login failed', error);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await instance.logout();
-    } catch (error) {
-      console.error('Logout failed', error);
     }
   };
 
@@ -105,28 +99,35 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               <div className="flex items-center justify-center max-lg:hidden">
                 <LanguageSwitcher />
               </div>
-              <AuthenticatedTemplate>
+              {inProgress === InteractionStatus.Startup ? (
                 <button
-                  className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold transition-all max-lg:hidden ${
-                    scrollPosition > 100 ? 'text-base' : 'text-lg'
-                  }`}
-                  onClick={handleLogout}
+                  className={
+                    'btn btn-circle btn-ghost m-1 flex items-center bg-primary-600 font-bold transition-all max-lg:hidden'
+                  }
                 >
-                  {dictionary.general.logout}
-                  <RiLoginCircleLine className="ml-2 inline-block" size={24} />
+                  <span className="loading loading-spinner loading-md" />
                 </button>
-              </AuthenticatedTemplate>
-              <UnauthenticatedTemplate>
-                <button
-                  className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold transition-all max-lg:hidden ${
-                    scrollPosition > 100 ? 'text-base' : 'text-lg'
-                  }`}
-                  onClick={handleLogin}
-                >
-                  {dictionary.general.login}
-                  <RiLoginCircleLine className="ml-2 inline-block" size={24} />
-                </button>
-              </UnauthenticatedTemplate>
+              ) : (
+                <>
+                  <AuthenticatedTemplate>
+                    <UserDropdown dictionary={dictionary} />
+                  </AuthenticatedTemplate>
+                  <UnauthenticatedTemplate>
+                    <button
+                      className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold transition-all max-lg:hidden ${
+                        scrollPosition > 100 ? 'text-base' : 'text-lg'
+                      }`}
+                      onClick={handleLogin}
+                    >
+                      {dictionary.general.login}
+                      <RiLoginCircleLine
+                        className="ml-2 inline-block"
+                        size={24}
+                      />
+                    </button>
+                  </UnauthenticatedTemplate>
+                </>
+              )}
               <button
                 className="btn btn-ghost lg:hidden"
                 onClick={toggleMobileHamburger}
