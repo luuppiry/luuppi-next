@@ -3,6 +3,7 @@ import { SupportedLanguage } from '@/models/locale';
 import {
   AuthenticatedTemplate,
   UnauthenticatedTemplate,
+  useIsAuthenticated,
   useMsal,
 } from '@azure/msal-react';
 import Link from 'next/link';
@@ -27,6 +28,7 @@ export default function MobileHamburger({
   onClose,
 }: MobileNavbarProps) {
   const { instance } = useMsal();
+  const authenticated = useIsAuthenticated();
 
   const handleLogout = async () => {
     await instance.logout();
@@ -43,53 +45,58 @@ export default function MobileHamburger({
     >
       <div className="modal-box flex h-full min-h-dvh w-screen max-w-full gap-4 rounded-none">
         <ul className="menu h-full w-full flex-nowrap gap-4">
-          {navLinks.map((link, index) => (
-            <li
-              key={link.translation}
-              className={`${index === navLinks.length - 1 ? 'pb-6' : ''}`}
-            >
-              {link.sublinks && link.sublinks.length > 0 ? (
-                <div className="flex items-center justify-between bg-secondary-400 font-bold text-white hover:cursor-auto hover:bg-secondary-400">
-                  {
-                    dictionary.navigation[
-                      link.translation as keyof typeof dictionary.navigation
-                    ]
-                  }
-                </div>
-              ) : (
-                <Link
-                  className="font-bold"
-                  href={`/${lang}${link.href as string}`}
-                  onClick={onClose}
-                >
-                  {
-                    dictionary.navigation[
-                      link.translation as keyof typeof dictionary.navigation
-                    ]
-                  }
-                </Link>
-              )}
-              {link.sublinks && link.sublinks.length > 0 && (
-                <ul className="my-4">
-                  {link.sublinks.map((sublink) => (
-                    <li key={sublink.translation}>
-                      <Link
-                        className="font-bold"
-                        href={`/${lang}${sublink.href as string}`}
-                        onClick={onClose}
-                      >
-                        {
-                          dictionary.navigation[
-                            sublink.translation as keyof typeof dictionary.navigation
-                          ]
-                        }
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
+          {navLinks
+            .filter(
+              (link) =>
+                (link.authenticated && authenticated) || !link.authenticated,
+            )
+            .map((link, index) => (
+              <li
+                key={link.translation}
+                className={`${index === navLinks.length - 1 ? 'pb-6' : ''}`}
+              >
+                {link.sublinks && link.sublinks.length > 0 ? (
+                  <div className="flex items-center justify-between bg-secondary-400 font-bold text-white hover:cursor-auto hover:bg-secondary-400">
+                    {
+                      dictionary.navigation[
+                        link.translation as keyof typeof dictionary.navigation
+                      ]
+                    }
+                  </div>
+                ) : (
+                  <Link
+                    className="font-bold"
+                    href={`/${lang}${link.href as string}`}
+                    onClick={onClose}
+                  >
+                    {
+                      dictionary.navigation[
+                        link.translation as keyof typeof dictionary.navigation
+                      ]
+                    }
+                  </Link>
+                )}
+                {link.sublinks && link.sublinks.length > 0 && (
+                  <ul className="my-4">
+                    {link.sublinks.map((sublink) => (
+                      <li key={sublink.translation}>
+                        <Link
+                          className="font-bold"
+                          href={`/${lang}${sublink.href as string}`}
+                          onClick={onClose}
+                        >
+                          {
+                            dictionary.navigation[
+                              sublink.translation as keyof typeof dictionary.navigation
+                            ]
+                          }
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
         </ul>
         <div className="sticky top-0 z-10 flex justify-end">
           <div className="flex h-full flex-col items-center gap-4">

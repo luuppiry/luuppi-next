@@ -56,11 +56,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
   };
 
   const handleLogin = async () => {
-    try {
-      await instance.loginRedirect();
-    } catch (error) {
-      console.error('Login failed', error);
-    }
+    await instance.loginRedirect();
   };
 
   return (
@@ -140,77 +136,79 @@ export default function Header({ dictionary, lang }: HeaderProps) {
           </div>
         </nav>
         <ul className="mx-auto flex max-w-[1200px] justify-center gap-1 px-4 max-lg:hidden">
-          {navLinks.map((link) => (
-            <li
-              key={link.translation}
-              className="group relative cursor-pointer"
-            >
-              {link.sublinks && link.sublinks.length > 0 ? (
-                <div
-                  className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
-                    scrollPosition > 100 ? 'text-base' : 'text-lg'
-                  }`}
-                >
-                  <span>
-                    {
-                      dictionary.navigation[
-                        link.translation as keyof typeof dictionary.navigation
-                      ]
-                    }
-                  </span>
-                  {link.sublinks && link.sublinks.length > 0 && (
-                    <div className="w-6">
-                      <RiArrowDropDownLine
-                        className="transition-transform duration-300 group-hover:rotate-180"
-                        size={32}
-                      />
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <Link
-                  className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
-                    scrollPosition > 100 ? 'text-base' : 'text-lg'
-                  }`}
-                  href={`/${lang}${link.href as string}`}
-                >
-                  <span>
-                    {
-                      dictionary.navigation[
-                        link.translation as keyof typeof dictionary.navigation
-                      ]
-                    }
-                  </span>
-                  {link.sublinks && link.sublinks.length > 0 && (
-                    <div className="w-6">
-                      <RiArrowDropDownLine
-                        className="transition-transform duration-300 group-hover:rotate-180"
-                        size={32}
-                      />
-                    </div>
-                  )}
-                </Link>
-              )}
-              {link.sublinks && link.sublinks.length > 0 && (
-                <div className="invisible absolute z-50 flex min-w-full flex-col bg-gray-100 px-2 py-4 text-gray-800 shadow-xl group-hover:visible">
-                  {link.sublinks.map((sublink) => (
-                    <Link
-                      key={sublink.translation}
-                      className="truncate rounded-lg p-2 font-bold hover:bg-gray-200"
-                      href={`/${lang}${sublink.href as string}`}
-                      onClick={hideAfterClick}
-                    >
+          {navLinks
+            .filter((link) => !link?.mobileOnly)
+            .map((link) => (
+              <li
+                key={link.translation}
+                className="group relative cursor-pointer"
+              >
+                {link.sublinks && link.sublinks.length > 0 ? (
+                  <div
+                    className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
+                      scrollPosition > 100 ? 'text-base' : 'text-lg'
+                    }`}
+                  >
+                    <span>
                       {
                         dictionary.navigation[
-                          sublink.translation as keyof typeof dictionary.navigation
+                          link.translation as keyof typeof dictionary.navigation
                         ]
                       }
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </li>
-          ))}
+                    </span>
+                    {link.sublinks && link.sublinks.length > 0 && (
+                      <div className="w-6">
+                        <RiArrowDropDownLine
+                          className="transition-transform duration-300 group-hover:rotate-180"
+                          size={32}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
+                      scrollPosition > 100 ? 'text-base' : 'text-lg'
+                    }`}
+                    href={`/${lang}${link.href as string}`}
+                  >
+                    <span>
+                      {
+                        dictionary.navigation[
+                          link.translation as keyof typeof dictionary.navigation
+                        ]
+                      }
+                    </span>
+                    {link.sublinks && link.sublinks.length > 0 && (
+                      <div className="w-6">
+                        <RiArrowDropDownLine
+                          className="transition-transform duration-300 group-hover:rotate-180"
+                          size={32}
+                        />
+                      </div>
+                    )}
+                  </Link>
+                )}
+                {link.sublinks && link.sublinks.length > 0 && (
+                  <div className="invisible absolute z-50 flex min-w-full flex-col bg-gray-100 px-2 py-4 text-gray-800 shadow-xl group-hover:visible">
+                    {link.sublinks.map((sublink) => (
+                      <Link
+                        key={sublink.translation}
+                        className="truncate rounded-lg p-2 font-bold hover:bg-gray-200"
+                        href={`/${lang}${sublink.href as string}`}
+                        onClick={hideAfterClick}
+                      >
+                        {
+                          dictionary.navigation[
+                            sublink.translation as keyof typeof dictionary.navigation
+                          ]
+                        }
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </li>
+            ))}
         </ul>
       </header>
     </div>
