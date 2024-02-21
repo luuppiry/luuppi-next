@@ -2,7 +2,8 @@
 import { getDictionary } from '@/dictionaries';
 import { useMsal } from '@azure/msal-react';
 import Link from 'next/link';
-import { RiShutDownLine, RiUser3Fill } from 'react-icons/ri';
+import { BiLogOutCircle } from 'react-icons/bi';
+import { RiUser3Fill } from 'react-icons/ri';
 
 interface UserDropdownProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
@@ -24,9 +25,9 @@ export default function UserDropdown({ dictionary }: UserDropdownProps) {
   if (!account) return null;
 
   return (
-    <div className="dropdown dropdown-end">
+    <div className="dropdown dropdown-end text-white">
       <div
-        className="btn btn-circle btn-ghost m-1 bg-primary-600"
+        className="btn btn-circle btn-ghost m-1 bg-primary-600 max-lg:bg-secondary-400"
         role="button"
         tabIndex={0}
       >
@@ -61,7 +62,7 @@ export default function UserDropdown({ dictionary }: UserDropdownProps) {
           className="btn btn-error btn-sm w-full justify-start text-white"
           onClick={handleLogout}
         >
-          <RiShutDownLine size={22} />
+          <BiLogOutCircle size={22} />
           {dictionary.general.logout}
         </button>
       </div>

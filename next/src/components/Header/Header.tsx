@@ -110,7 +110,9 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               ) : (
                 <>
                   <AuthenticatedTemplate>
-                    <UserDropdown dictionary={dictionary} />
+                    <div className="flex items-center justify-center max-lg:hidden">
+                      <UserDropdown dictionary={dictionary} />
+                    </div>
                   </AuthenticatedTemplate>
                   <UnauthenticatedTemplate>
                     <button

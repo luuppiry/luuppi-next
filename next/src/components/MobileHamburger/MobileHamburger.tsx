@@ -1,7 +1,14 @@
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
+import {
+  AuthenticatedTemplate,
+  UnauthenticatedTemplate,
+  useMsal,
+} from '@azure/msal-react';
 import Link from 'next/link';
+import { BiLogOutCircle } from 'react-icons/bi';
 import { IoMdClose } from 'react-icons/io';
+import { RiLoginCircleLine } from 'react-icons/ri';
 import { navLinks } from '../Header/navLinks';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import './MobileHamburger.css';
@@ -19,6 +26,16 @@ export default function MobileHamburger({
   open,
   onClose,
 }: MobileNavbarProps) {
+  const { instance } = useMsal();
+
+  const handleLogout = async () => {
+    await instance.logout();
+  };
+
+  const handleLogin = async () => {
+    await instance.loginRedirect();
+  };
+
   return (
     <dialog
       className={`modal ${open && 'modal-open lg:hidden'}`}
@@ -75,7 +92,7 @@ export default function MobileHamburger({
           ))}
         </ul>
         <div className="sticky top-0 z-10 flex justify-end">
-          <div className="flex h-full flex-col items-end gap-4">
+          <div className="flex h-full flex-col items-center gap-4">
             <button
               className="btn btn-circle btn-primary text-white"
               onClick={onClose}
@@ -83,6 +100,22 @@ export default function MobileHamburger({
               <IoMdClose size={32} />
             </button>
             <LanguageSwitcher />
+            <AuthenticatedTemplate>
+              <button
+                className="btn btn-circle btn-ghost m-1 bg-error text-white"
+                onClick={handleLogout}
+              >
+                <BiLogOutCircle size={32} />
+              </button>
+            </AuthenticatedTemplate>
+            <UnauthenticatedTemplate>
+              <button
+                className="btn btn-circle btn-ghost m-1 bg-primary-600 text-white max-lg:bg-secondary-400"
+                onClick={handleLogin}
+              >
+                <RiLoginCircleLine size={32} />
+              </button>
+            </UnauthenticatedTemplate>
           </div>
         </div>
       </div>
