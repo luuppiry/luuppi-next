@@ -9,10 +9,14 @@ import React, { useMemo } from 'react';
 
 export const msalConfig: Configuration = {
   auth: {
-    clientId: process.env.NEXT_PUBLIC_AZURE_CLIENT_ID!,
+    clientId: process.env.NEXT_PUBLIC_AZURE_FRONTEND_CLIENT_ID!,
     authority: `https://${process.env.NEXT_PUBLIC_AZURE_TENANT_NAME}.ciamlogin.com/`,
     navigateToLoginRequestUrl: false,
     redirectUri: process.env.NEXT_PUBLIC_BASE_URL,
+
+    // https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/performance.md#bypass-authority-metadata-resolution
+    authorityMetadata: process.env.NEXT_PUBLIC_AZURE_AUTHORITY_METADATA,
+    skipAuthorityMetadataCache: true,
   },
   cache: {
     cacheLocation: 'sessionStorage',
