@@ -1,6 +1,6 @@
 import BoardMember from '@/components/BoardMember/BoardMember';
 import { getDictionary } from '@/dictionaries';
-import { flipBoardLocale, getStrapiData, groupByYear } from '@/lib';
+import { flipBoardLocale, getStrapiData, groupBoardByYear } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBoardBoard } from '@/types/contentTypes';
 import Link from 'next/link';
@@ -24,7 +24,7 @@ export default async function Board({ params }: BoardProps) {
     ['board', 'board-role', 'board-member'],
   );
 
-  const boardGroupedByYear = groupByYear(boardData.data);
+  const boardGroupedByYear = groupBoardByYear(boardData.data);
   const boardSortedByYear = Object.keys(boardGroupedByYear).sort(
     (a, b) => Number(b) - Number(a),
   );

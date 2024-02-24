@@ -1,6 +1,10 @@
 import { getDictionary } from '@/dictionaries';
-import { dateFormat, flipBlogLocale, getStrapiData } from '@/lib';
-import { getStrapiUrl } from '@/lib/get-url';
+import {
+  dateFormat,
+  flipBlogLocale,
+  getStrapiData,
+  getStrapiUrl,
+} from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -45,7 +49,7 @@ export default async function BlogPreview({
           {sortedBlogs.map((blog, i) => (
             <article
               key={i}
-              className={`${i === 0 ? 'col-span-3 max-lg:col-span-1 max-lg:flex-col' : 'col-span-1 flex-col'} flex gap-4 rounded-lg border-[1px] border-gray-200/50 shadow-sm`}
+              className={`${i === 0 ? 'col-span-3 max-lg:col-span-1 max-lg:flex-col' : 'col-span-1 flex-col'} flex gap-4 rounded-lg border border-gray-200/50 shadow-sm`}
             >
               <div
                 className={`${i !== 0 ? 'shrink-0 rounded-t-lg' : 'rounded-l-lg max-lg:shrink-0 max-lg:rounded-l-none max-lg:rounded-t-lg'} relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300

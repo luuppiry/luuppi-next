@@ -2,8 +2,12 @@ import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererC
 import SideNavigator from '@/components/SideNavigator/SideNavigator';
 import SidePartners from '@/components/SidePartners/SidePartners';
 import { getDictionary } from '@/dictionaries';
-import { dateFormat, flipBlogLocale, getStrapiData } from '@/lib';
-import { getStrapiUrl } from '@/lib/get-url';
+import {
+  dateFormat,
+  flipBlogLocale,
+  getStrapiData,
+  getStrapiUrl,
+} from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog, ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';

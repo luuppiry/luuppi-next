@@ -1,6 +1,6 @@
-import { Colors } from '@/models/colors';
+import { logger } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
-import { getStrapiUrl } from './get-url';
+import { getStrapiUrl } from './get-strapi-url';
 
 /**
  * Fetch data from Strapi and revalidate it with given tags.
@@ -46,7 +46,5 @@ export const getStrapiData = async <T>(
 };
 
 function logConsoleError(type: 'fetch_failed' | 'no_data', error: any) {
-  console.error(
-    `${Colors.FgRed}Error fetching data from Strapi. This is not necessarily a frontend error. Frontend requires running Strapi instance with valid data to operate. Code: ${type}, Error: ${error}${Colors.Reset}`,
-  );
+  logger.error(`Failed to fetch data from Strapi. Type: ${type}`, error);
 }

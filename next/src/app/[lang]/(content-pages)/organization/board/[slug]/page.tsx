@@ -1,6 +1,6 @@
 import BoardMember from '@/components/BoardMember/BoardMember';
 import { getDictionary } from '@/dictionaries';
-import { flipBoardLocale, getStrapiData, groupByYear } from '@/lib';
+import { flipBoardLocale, getStrapiData, groupBoardByYear } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBoardBoard } from '@/types/contentTypes';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ export default async function OldBoard({ params }: OldBoardProps) {
     ['board', 'board-role', 'board-member'],
   );
 
-  const boardGroupedByYear = groupByYear(boardData.data);
+  const boardGroupedByYear = groupBoardByYear(boardData.data);
   const wantedBoard = boardGroupedByYear[params.slug];
 
   if (!wantedBoard) {
@@ -126,7 +126,7 @@ export async function generateStaticParams() {
     ['board', 'board-role', 'board-member'],
   );
 
-  const boardGroupedByYear = groupByYear(boardData.data);
+  const boardGroupedByYear = groupBoardByYear(boardData.data);
 
   return Object.keys(boardGroupedByYear).map((year) => ({
     params: { slug: year },

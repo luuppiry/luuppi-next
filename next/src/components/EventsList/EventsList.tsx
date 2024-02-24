@@ -1,4 +1,8 @@
-import { firstLetterToUpperCase, longDateFormat, shortDateFormat } from '@/lib';
+import {
+  firstLetterToUpperCase,
+  longDateFormat,
+  shortDateFormat,
+} from '@/libs';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';

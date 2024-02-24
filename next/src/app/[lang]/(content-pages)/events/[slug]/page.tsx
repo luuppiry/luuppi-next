@@ -7,7 +7,7 @@ import {
   getStrapiData,
   longDateFormat,
   shortDateFormat,
-} from '@/lib';
+} from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import { redirect } from 'next/navigation';

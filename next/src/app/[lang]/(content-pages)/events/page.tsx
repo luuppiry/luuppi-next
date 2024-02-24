@@ -1,6 +1,6 @@
 import EventSelector from '@/components/EventSelector/EventSelector';
 import { getDictionary } from '@/dictionaries';
-import { getLuuppiEvents } from '@/lib';
+import { getLuuppiEvents } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 
 interface EventsProps {
