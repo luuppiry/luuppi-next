@@ -1,5 +1,5 @@
 'use client';
-import { getProfile, getSilentToken, logger, updateEmail } from '@/libs';
+import { getSilentToken, getUser, logger, sendEmailVerifyMail } from '@/libs';
 import { InteractionStatus } from '@azure/msal-browser';
 import { useMsal } from '@azure/msal-react';
 import { FormEvent, useEffect, useState } from 'react';
@@ -24,21 +24,21 @@ export default function ProfileForm() {
         const activeAccount = instance.getActiveAccount();
         if (inProgress === InteractionStatus.None && activeAccount) {
           const accessToken = await getSilentToken(instance);
-          const profileData = await getProfile(accessToken);
+          const user = await getUser(accessToken);
 
-          if (profileData) {
+          if (user) {
             setProfile({
-              displayName: (profileData.displayName as string) ?? '',
-              givenName: (profileData.givenName as string) ?? '',
-              surname: (profileData.surname as string) ?? '',
-              mail: (profileData.mail as string) ?? '',
+              displayName: (user.displayName as string) ?? '',
+              givenName: (user.givenName as string) ?? '',
+              surname: (user.surname as string) ?? '',
+              mail: (user.mail as string) ?? '',
             });
           }
 
           setLoading(false);
         }
       } catch (error) {
-        logger.error('Failed to fetch profile', error);
+        logger.error('Failed to authenticate', error);
       }
     })();
   }, [instance, inProgress]);
@@ -52,7 +52,7 @@ export default function ProfileForm() {
     }
 
     const accessToken = await getSilentToken(instance);
-    await updateEmail(accessToken, email);
+    await sendEmailVerifyMail(accessToken, email);
   };
 
   const handleProfileUpdate = async (event: FormEvent<HTMLFormElement>) => {

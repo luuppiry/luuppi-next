@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import getPem from 'rsa-pem-from-mod-exp';
 
 const options = {
@@ -31,7 +31,7 @@ const getPublicKey = async (kid: string): Promise<string | null> => {
  * @param token The token to validate
  * @returns Whether the token is valid
  */
-export const validateToken = async (token: string): Promise<boolean> => {
+const validateToken = async (token: string): Promise<boolean> => {
   let decoded: { [key: string]: any } | null;
   let kid: string;
 
@@ -58,4 +58,41 @@ export const validateToken = async (token: string): Promise<boolean> => {
   }
 
   return true;
+};
+
+/**
+ * Validates the authorization header and returns the decoded token
+ * @param req The request
+ * @returns The decoded token
+ */
+export const validateAuth = async (
+  req: Request,
+): Promise<JwtPayload | null> => {
+  const authHeader = req.headers.get('authorization');
+  if (!authHeader) {
+    return null;
+  }
+
+  const authToken = authHeader.split(' ')?.[1];
+  if (!authToken) {
+    return null;
+  }
+
+  const isValidAuth = await validateToken(authToken);
+  if (!isValidAuth) {
+    return null;
+  }
+
+  let decoded: JwtPayload | null = null;
+  try {
+    decoded = jwt.decode(authToken, { json: true });
+  } catch (error) {
+    return null;
+  }
+
+  if (!decoded) {
+    return null;
+  }
+
+  return decoded;
 };

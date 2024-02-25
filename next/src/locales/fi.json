@@ -1,4 +1,15 @@
 {
+  "api": {
+    "bad_request": "Virheellinen pyyntö",
+    "unauthorized": "Sinulla ei ole oikeuksia tähän toimintoon",
+    "server_error": "Palvelinvirhe",
+    "email_already_in_use": "Sähköpostiosoite on jo käytössä",
+    "verify_email_sent": "Vahvistusviesti lähetetty sähköpostiisi",
+    "email_change_mail_subject": "Vahvista uusi sähköpostiosoitteesi",
+    "email_change_mail_text": "Olet pyytänyt sähköpostiosoitteesi vaihtamista. Vahvista uusi sähköpostiosoitteesi klikkaamalla alla olevaa linkkiä. Jos et ole pyytänyt tätä, voit jättää tämän viestin huomiotta.",
+    "email_token_expired_or_invalid": "Vahvistuslinkki on vanhentunut tai virheellinen",
+    "email_changed": "Sähköpostiosoite vaihdettu. Sinut kirjataan ulos."
+  },
   "general": {
     "email": "Sähköposti",
     "password": "Salasana",
@@ -118,5 +129,8 @@
     "founded": "Perustettu",
     "homepage": "Kotisivut",
     "open_jobs": "Avoimet työpaikat"
+  },
+  "pages_verify_email": {
+    "title": "Email verification"
   }
 }

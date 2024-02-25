@@ -3,6 +3,7 @@ import Header from '@/components/Header/Header';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import { AzureProvider } from '@/providers/AzureProvider';
+import { SilentAuthProvider } from '@/providers/SilentAuthProvider';
 import type { Metadata, Viewport } from 'next';
 import PlausibleProvider from 'next-plausible';
 import { Poppins } from 'next/font/google';
@@ -37,9 +38,11 @@ export default async function RootLayout({
       </head>
       <body className={titilliumFont.className}>
         <AzureProvider>
-          <Header dictionary={dictionary} lang={params.lang} />
-          <div className="flex-1">{children}</div>
-          <Footer dictionary={dictionary} lang={params.lang} />
+          <SilentAuthProvider>
+            <Header dictionary={dictionary} lang={params.lang} />
+            <div className="flex-1">{children}</div>
+            <Footer dictionary={dictionary} lang={params.lang} />
+          </SilentAuthProvider>
         </AzureProvider>
       </body>
     </html>
