@@ -1,15 +1,18 @@
 {
   "api": {
-    "bad_request": "Bad request",
-    "unauthorized": "You are not authorized to perform this action",
-    "server_error": "Server side error occurred",
+    "invalid_email": "Invalid email",
+    "unauthorized": "Unauthorized",
     "email_already_in_use": "Email is already in use",
-    "invalid_language": "Invalid language",
-    "verify_email_sent": "Verification email sent",
+    "server_error": "Server error",
     "email_change_mail_subject": "Email change verification",
-    "email_change_mail_text": "You have changed your email address. Please verify your new email address by clicking the link below. If you did not request this change you can ignore this email.",
-    "email_token_expired_or_invalid": "Email token expired or invalid",
-    "email_changed": "Email changed. You are being logged out."
+    "email_change_mail_text": "You have requested an email change. Please verify your new email address by clicking the link below. If you did not request this change you can ignore this email.",
+    "verify_email_sent": "Verification link sent to your email. Link is valid for 30 minutes.",
+    "email_sending_failed": "Email sending failed. This could be caused by invalid email address or server error.",
+    "invalid_display_name": "Invalid display name. Display name must be 3-30 characters long.",
+    "invalid_given_name": "Invalid first name. First name must be 2-35 characters long.",
+    "invalid_surname": "Invalid last name. Last name must be 2-35 characters long..",
+    "no_changes_detected": "No changes detected",
+    "profile_updated": "Profile updated. Some changes require you to re-login to take effect."
   },
   "general": {
     "email": "Email",
@@ -24,7 +27,9 @@
     "copy": "Copy",
     "logout": "Logout",
     "copied": "Copied",
-    "submit": "Submit"
+    "submit": "Submit",
+    "firstName": "First name",
+    "lastName": "Last name"
   },
   "auth": {
     "login_to_account": "Login to your account",

@@ -8,7 +8,15 @@ const getFormattedDate = () => {
 
 const formatMessage = (message: any[]) =>
   message
-    .map((m) => (typeof m === 'object' ? JSON.stringify(m) : m))
+    .map((m) => {
+      if (m instanceof Error) {
+        return m.stack;
+      }
+      if (typeof m === 'object') {
+        return JSON.stringify(m, null, 2);
+      }
+      return m;
+    })
     .join(', ');
 
 const colors = {

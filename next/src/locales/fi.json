@@ -1,14 +1,18 @@
 {
   "api": {
-    "bad_request": "Virheellinen pyyntö",
-    "unauthorized": "Sinulla ei ole oikeuksia tähän toimintoon",
+    "invalid_email": "Kelvoton sähköpostiosoite",
+    "unauthorized": "Ei oikeutta",
+    "email_already_in_use": "Sähköposti on jo käytössä",
     "server_error": "Palvelinvirhe",
-    "email_already_in_use": "Sähköpostiosoite on jo käytössä",
-    "verify_email_sent": "Vahvistusviesti lähetetty sähköpostiisi",
     "email_change_mail_subject": "Vahvista uusi sähköpostiosoitteesi",
     "email_change_mail_text": "Olet pyytänyt sähköpostiosoitteesi vaihtamista. Vahvista uusi sähköpostiosoitteesi klikkaamalla alla olevaa linkkiä. Jos et ole pyytänyt tätä, voit jättää tämän viestin huomiotta.",
-    "email_token_expired_or_invalid": "Vahvistuslinkki on vanhentunut tai virheellinen",
-    "email_changed": "Sähköpostiosoite vaihdettu. Sinut kirjataan ulos."
+    "verify_email_sent": "Vahvistuslinkki on lähetetty uuteen sähköpostiosoitteeseesi. Linkki on voimassa 30 minuuttia.",
+    "email_sending_failed": "Sähköpostin lähetys epäonnistui. Tämä voi johtua väärästä sähköpostiosoitteesta tai teknisestä ongelmasta.",
+    "invalid_display_name": "Kelvoton käyttäjänimi. Käyttäjänimen tulee olla 3-30 merkkiä pitkä ja se voi sisältää vain kirjaimia, numeroita ja seuraavia erikoismerkkejä: ._-",
+    "invalid_given_name": "Kelvoton etunimi. Etunimen tulee olla 2-35 merkkiä pitkä.",
+    "invalid_surname": "Kelvoton sukunimi. Sukunimen tulee olla 2-35 merkkiä pitkä.",
+    "no_changes_detected": "Muutoksia ei havaittu",
+    "profile_updated": "Profiili päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen."
   },
   "general": {
     "email": "Sähköposti",
@@ -23,7 +27,9 @@
     "copy": "Kopioi",
     "logout": "Kirjaudu ulos",
     "copied": "Kopioitu",
-    "submit": "Lähetä"
+    "submit": "Lähetä",
+    "firstName": "Etunimi",
+    "lastName": "Sukunimi"
   },
   "auth": {
     "login_to_account": "Kirjaudu sisään",
