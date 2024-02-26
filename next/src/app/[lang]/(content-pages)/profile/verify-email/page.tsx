@@ -1,4 +1,3 @@
-import EmailVerify from '@/components/EmailVerify/EmailVerify';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import { redirect } from 'next/navigation';
@@ -23,7 +22,6 @@ export default async function VerifyEmail({
   return (
     <>
       <h1>{dictionary.pages_verify_email.title}</h1>
-      <EmailVerify dictionary={dictionary} token={token} />
     </>
   );
 }

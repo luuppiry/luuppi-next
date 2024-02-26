@@ -1,20 +1,14 @@
-'use client';
+import { auth, signIn, signOut } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
-import { InteractionStatus } from '@azure/msal-browser';
-import {
-  AuthenticatedTemplate,
-  UnauthenticatedTemplate,
-  useMsal,
-} from '@azure/msal-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { HiMenu } from 'react-icons/hi';
 import { RiArrowDropDownLine, RiLoginCircleLine } from 'react-icons/ri';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import MobileHamburger from '../MobileHamburger/MobileHamburger';
 import UserDropdown from '../UserDropdown/UserDropdown';
+import HideableLink from './HideableLink';
+import ScrollListener from './ScrollListener';
 import { navLinks } from './navLinks';
 
 interface HeaderProps {
@@ -22,63 +16,23 @@ interface HeaderProps {
   lang: SupportedLanguage;
 }
 
-export default function Header({ dictionary, lang }: HeaderProps) {
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [mobileHarmburgerOpen, setMobileHarmburgerOpen] = useState(false);
-  const { instance, inProgress } = useMsal();
-
-  const handleScroll = () => {
-    const position = window.scrollY;
-    setScrollPosition(position);
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const toggleMobileHamburger = () => {
-    setMobileHarmburgerOpen(!mobileHarmburgerOpen);
-  };
-
-  // Tällä rahalla saa tällästä tälläkertaa
-  const hideAfterClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const group = e.currentTarget.parentElement as HTMLElement;
-    if (group) {
-      group.style.display = 'none';
-      setTimeout(() => {
-        group.style.display = 'flex';
-      }, 0);
-    }
-  };
-
-  const handleLogin = async () => {
-    await instance.loginRedirect();
-  };
-
+export default async function Header({ dictionary, lang }: HeaderProps) {
+  const session = await auth();
   return (
     <div>
-      <MobileHamburger
-        dictionary={dictionary}
-        lang={lang}
-        open={mobileHarmburgerOpen}
-        onClose={toggleMobileHamburger}
-      />
+      <ScrollListener />
       <div className="h-36 bg-primary-800 max-lg:h-16" />
       <header className={'fixed top-0 z-50 w-full bg-primary-800 text-white'}>
         <nav
-          className={`bg-primary-500 px-4 transition-all duration-300 max-lg:h-16 max-lg:shadow-md ${
-            scrollPosition > 100 ? 'h-16 max-lg:h-16' : 'h-24 max-lg:h-16'
-          }`}
+          className={
+            'custom-scroll-nav h-24 bg-primary-500 px-4 transition-all duration-300 max-lg:h-16 max-lg:shadow-md'
+          }
         >
           <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between">
             <Link
-              className={`btn btn-link relative h-full transition-all duration-300 ${
-                scrollPosition > 100 ? 'w-24' : 'w-36 max-lg:w-24'
-              }`}
+              className={
+                'custom-scroll-nav-image btn btn-link relative h-full w-36 transition-all duration-300 max-lg:w-24'
+              }
               href={`/${lang}`}
             >
               <Image
@@ -95,43 +49,48 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               <div className="flex items-center justify-center max-lg:hidden">
                 <LanguageSwitcher />
               </div>
-              {inProgress === InteractionStatus.Startup ? (
-                <button
-                  className={
-                    'btn btn-circle btn-ghost m-1 flex items-center bg-primary-600 font-bold transition-all max-lg:hidden'
-                  }
-                >
-                  <span className="loading loading-spinner loading-md" />
-                </button>
-              ) : (
+
+              {session && session.user ? (
                 <>
-                  <AuthenticatedTemplate>
-                    <div className="flex items-center justify-center max-lg:hidden">
-                      <UserDropdown dictionary={dictionary} />
-                    </div>
-                  </AuthenticatedTemplate>
-                  <UnauthenticatedTemplate>
-                    <button
-                      className={`btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 font-bold transition-all max-lg:hidden ${
-                        scrollPosition > 100 ? 'text-base' : 'text-lg'
-                      }`}
-                      onClick={handleLogin}
-                    >
-                      {dictionary.general.login}
-                      <RiLoginCircleLine
-                        className="ml-2 inline-block"
-                        size={24}
-                      />
-                    </button>
-                  </UnauthenticatedTemplate>
+                  <div className="flex items-center justify-center max-lg:hidden">
+                    <UserDropdown dictionary={dictionary} />
+                  </div>
                 </>
+              ) : (
+                <form
+                  action={async () => {
+                    'use server';
+                    await signIn('azure-ad-b2c');
+                  }}
+                >
+                  <button
+                    className={
+                      'custom-scroll-text btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 text-lg font-bold transition-all max-lg:hidden'
+                    }
+                    type="submit"
+                  >
+                    {dictionary.general.login}
+                    <RiLoginCircleLine
+                      className="ml-2 inline-block"
+                      size={24}
+                    />
+                  </button>{' '}
+                </form>
               )}
-              <button
-                className="btn btn-ghost lg:hidden"
-                onClick={toggleMobileHamburger}
-              >
-                <HiMenu size={34} />
-              </button>
+
+              <MobileHamburger
+                dictionary={dictionary}
+                isLogged={session && session.user ? true : false}
+                lang={lang}
+                signIn={async () => {
+                  'use server';
+                  await signIn('azure-ad-b2c');
+                }}
+                signOut={async () => {
+                  'use server';
+                  await signOut();
+                }}
+              />
             </div>
           </div>
         </nav>
@@ -145,9 +104,9 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               >
                 {link.sublinks && link.sublinks.length > 0 ? (
                   <div
-                    className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
-                      scrollPosition > 100 ? 'text-base' : 'text-lg'
-                    }`}
+                    className={
+                      'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200'
+                    }
                   >
                     <span>
                       {
@@ -167,9 +126,9 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                   </div>
                 ) : (
                   <Link
-                    className={`flex h-full items-center justify-center p-2 font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 ${
-                      scrollPosition > 100 ? 'text-base' : 'text-lg'
-                    }`}
+                    className={
+                      'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200'
+                    }
                     href={`/${lang}${link.href as string}`}
                   >
                     <span>
@@ -192,18 +151,12 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                 {link.sublinks && link.sublinks.length > 0 && (
                   <div className="invisible absolute z-50 flex min-w-full flex-col bg-gray-100 px-2 py-4 text-gray-800 shadow-xl group-hover:visible">
                     {link.sublinks.map((sublink) => (
-                      <Link
+                      <HideableLink
                         key={sublink.translation}
-                        className="truncate rounded-lg p-2 font-bold hover:bg-gray-200"
-                        href={`/${lang}${sublink.href as string}`}
-                        onClick={hideAfterClick}
-                      >
-                        {
-                          dictionary.navigation[
-                            sublink.translation as keyof typeof dictionary.navigation
-                          ]
-                        }
-                      </Link>
+                        dictionary={dictionary}
+                        lang={lang}
+                        sublink={sublink}
+                      />
                     ))}
                   </div>
                 )}

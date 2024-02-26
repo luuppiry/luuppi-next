@@ -1,10 +1,15 @@
 import ProfileForm from '@/components/ProfileForm/ProfileForm';
+import { SupportedLanguage } from '@/models/locale';
 
-export default async function Profile() {
+interface ProfileProps {
+  params: { lang: SupportedLanguage };
+}
+
+export default async function Profile({ params }: ProfileProps) {
   return (
     <>
       <h1>Profile</h1>
-      <ProfileForm />
+      <ProfileForm lang={params.lang} />
     </>
   );
 }

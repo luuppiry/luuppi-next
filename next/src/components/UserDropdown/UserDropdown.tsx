@@ -1,6 +1,5 @@
-'use client';
+import { auth, signOut } from '@/auth';
 import { getDictionary } from '@/dictionaries';
-import { useMsal } from '@azure/msal-react';
 import Link from 'next/link';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { RiUser3Fill } from 'react-icons/ri';
@@ -9,20 +8,13 @@ interface UserDropdownProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
 }
 
-export default function UserDropdown({ dictionary }: UserDropdownProps) {
-  const { instance } = useMsal();
-  const account = instance.getActiveAccount();
+export default async function UserDropdown({ dictionary }: UserDropdownProps) {
+  // const handleClose = () => {
+  //   (document.activeElement as HTMLElement)?.blur();
+  // };
 
-  const handleClose = () => {
-    (document.activeElement as HTMLElement)?.blur();
-  };
-
-  const handleLogout = async () => {
-    handleClose();
-    await instance.logout();
-  };
-
-  if (!account) return null;
+  const session = await auth();
+  if (!session) return null;
 
   return (
     <div className="dropdown dropdown-end text-white">
@@ -42,29 +34,32 @@ export default function UserDropdown({ dictionary }: UserDropdownProps) {
         tabIndex={0}
       >
         <div className="flex max-w-full flex-col p-2">
-          <span className="truncate font-bold" title={account.name}>
-            {account.name}
+          <span className="truncate font-bold" title={session.user?.name ?? ''}>
+            {session.user?.name}
           </span>
-          <span className="truncate text-sm" title={account.username}>
-            {account.username}
+          <span className="truncate text-sm" title={session.user?.email ?? ''}>
+            {session.user?.email}
           </span>
         </div>
-        <Link
-          className="btn btn-ghost btn-sm justify-start"
-          href="/profile"
-          onClick={handleClose}
-        >
+        <Link className="btn btn-ghost btn-sm justify-start" href="/profile">
           <RiUser3Fill size={22} />
           {dictionary.navigation.profile}
         </Link>
         <div className="divider my-1" />
-        <button
-          className="btn btn-error btn-sm w-full justify-start text-white"
-          onClick={handleLogout}
+        <form
+          action={async () => {
+            'use server';
+            await signOut();
+          }}
         >
-          <BiLogOutCircle size={22} />
-          {dictionary.general.logout}
-        </button>
+          <button
+            className="btn btn-error btn-sm w-full justify-start text-white"
+            type="submit"
+          >
+            <BiLogOutCircle size={22} />
+            {dictionary.general.logout}
+          </button>
+        </form>
       </div>
     </div>
   );

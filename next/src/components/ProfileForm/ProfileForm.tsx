@@ -1,128 +1,73 @@
-'use client';
-import { getSilentToken, getUser, logger, sendEmailVerifyMail } from '@/libs';
-import { InteractionStatus } from '@azure/msal-browser';
-import { useMsal } from '@azure/msal-react';
-import { FormEvent, useEffect, useState } from 'react';
+import { auth } from '@/auth';
+import { getAccessToken, getGraphAPIUser } from '@/libs';
+import { SupportedLanguage } from '@/models/locale';
+import { redirect } from 'next/navigation';
 import { MdOutlineEdit } from 'react-icons/md';
 import FormInput from '../FormInput/FormInput';
 
-const initialState = {
-  displayName: '',
-  givenName: '',
-  surname: '',
-  mail: '',
-};
+interface ProfileFormProps {
+  lang: SupportedLanguage;
+}
 
-export default function ProfileForm() {
-  const { instance, inProgress } = useMsal();
-  const [profile, setProfile] = useState<typeof initialState>(initialState);
-  const [loading, setLoading] = useState(true);
+export default async function ProfileForm({ lang }: ProfileFormProps) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect(`/${lang}`);
+  }
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const activeAccount = instance.getActiveAccount();
-        if (inProgress === InteractionStatus.None && activeAccount) {
-          const accessToken = await getSilentToken(instance);
-          const user = await getUser(accessToken);
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    throw new Error('Error getting access token');
+  }
 
-          if (user) {
-            setProfile({
-              displayName: (user.displayName as string) ?? '',
-              givenName: (user.givenName as string) ?? '',
-              surname: (user.surname as string) ?? '',
-              mail: (user.mail as string) ?? '',
-            });
-          }
-
-          setLoading(false);
-        }
-      } catch (error) {
-        logger.error('Failed to authenticate', error);
-      }
-    })();
-  }, [instance, inProgress]);
-
-  const handleEmailUpdate = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get('email') as string;
-    if (!email) {
-      return;
-    }
-
-    const accessToken = await getSilentToken(instance);
-    await sendEmailVerifyMail(accessToken, email);
-  };
-
-  const handleProfileUpdate = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const updatedFields = Object.fromEntries(formData.entries());
-
-    if (Object.keys(updatedFields).length === 0) {
-      return;
-    }
-
-    // const accessToken = await getSilentToken(instance);
-    // await updateProfile(tokenResult.accessToken, updatedFields);
-  };
+  const user = await getGraphAPIUser(accessToken, session.user.azureId);
+  if (!user) {
+    throw new Error('Error getting user');
+  }
 
   return (
     <>
-      <form onSubmit={handleEmailUpdate}>
+      <form>
         <div className="flex w-full gap-24">
           <div className="flex-grow">
             <FormInput
               id="email"
-              loading={loading}
               placeholder="Your email"
               title="Email"
               type="email"
-              value={profile.mail}
+              value={user.mail as string}
             />
-            <button
-              className="btn btn-primary"
-              disabled={loading}
-              type="submit"
-            >
+            <button className="btn btn-primary" type="submit">
               Update email
             </button>
           </div>
         </div>
       </form>
-      <form onSubmit={handleProfileUpdate}>
+      <form>
         <div className="flex w-full gap-24">
           <div className="flex-grow">
             <FormInput
               id="displayName"
-              loading={loading}
               placeholder="Your displayname"
               title="Display name"
               type="text"
-              value={profile.displayName}
+              value={user.displayName as string}
             />
             <FormInput
               id="givenName"
-              loading={loading}
               placeholder="Your given name"
               title="Given name"
               type="text"
-              value={profile.givenName}
+              value={user.givenName as string}
             />
             <FormInput
               id="surname"
-              loading={loading}
               placeholder="Your surname"
               title="Surname"
               type="text"
-              value={profile.surname}
+              value={user.surname as string}
             />
-            <button
-              className="btn btn-primary"
-              disabled={loading}
-              type="submit"
-            >
+            <button className="btn btn-primary" type="submit">
               Update profile
             </button>
           </div>
@@ -152,7 +97,6 @@ export default function ProfileForm() {
                           className="btn-disabled opacity-50"
                           role="button"
                           aria-disabled
-                          onClick={() => null}
                         >
                           Upload a photo...
                         </div>
@@ -162,7 +106,6 @@ export default function ProfileForm() {
                           className="btn-disabled opacity-50"
                           role="button"
                           aria-disabled
-                          onClick={() => null}
                         >
                           Remove photo
                         </div>
