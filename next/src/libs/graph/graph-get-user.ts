@@ -1,4 +1,5 @@
 import { User } from '@microsoft/microsoft-graph-types';
+import 'server-only';
 
 /**
  * Get a user from the Microsoft Graph API

@@ -1,3 +1,5 @@
+import 'server-only';
+
 /**
  * Verify if an email is already in use in the Microsoft Graph API
  * @param token Access token

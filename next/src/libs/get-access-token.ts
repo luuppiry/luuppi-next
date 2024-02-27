@@ -1,4 +1,5 @@
 import { ConfidentialClientApplication } from '@azure/msal-node';
+import 'server-only';
 
 const msalConfig = {
   auth: {
