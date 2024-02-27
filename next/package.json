@@ -14,7 +14,7 @@
     "@azure/msal-node": "^2.6.4",
     "@formatjs/intl-localematcher": "^0.5.4",
     "@fullcalendar/core": "^6.1.10",
-    "@fullcalendar/daygrid": "^6.1.10",
+    "@fullcalendar/daygrid": "^6.1.11",
     "@fullcalendar/react": "^6.1.10",
     "@fullcalendar/timegrid": "^6.1.10",
     "@strapi/blocks-react-renderer": "^1.0.0",
