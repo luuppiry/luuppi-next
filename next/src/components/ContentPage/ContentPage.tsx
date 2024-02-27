@@ -1,6 +1,5 @@
 import { getDictionary } from '@/dictionaries';
-import { dateFormat, getStrapiData } from '@/lib';
-import { getStrapiUrl } from '@/lib/get-url';
+import { dateFormat, getStrapiData, getStrapiUrl } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';

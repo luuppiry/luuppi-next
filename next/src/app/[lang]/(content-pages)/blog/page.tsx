@@ -1,6 +1,10 @@
 import { getDictionary } from '@/dictionaries';
-import { dateFormat, flipBlogLocale, getStrapiData } from '@/lib';
-import { getStrapiUrl } from '@/lib/get-url';
+import {
+  dateFormat,
+  flipBlogLocale,
+  getStrapiData,
+  getStrapiUrl,
+} from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -35,7 +39,7 @@ export default async function Blog({ params }: BlogProps) {
           <article
             key={blog.attributes.title}
             className={
-              'flex gap-4 rounded-lg border-[1px] border-gray-200/50 shadow-sm max-sm:flex-col'
+              'flex gap-4 rounded-lg border border-gray-200/50 shadow-sm max-sm:flex-col'
             }
           >
             <div

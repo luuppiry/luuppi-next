@@ -1,6 +1,6 @@
 'use client';
 import { getDictionary } from '@/dictionaries';
-import { getStrapiUrl } from '@/lib/get-url';
+import { getStrapiUrl } from '@/libs';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
 import Link from 'next/link';

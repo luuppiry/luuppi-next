@@ -1,13 +1,54 @@
 {
+  "api": {
+    "invalid_email": "Kelvoton sähköpostiosoite",
+    "unauthorized": "Ei oikeutta",
+    "email_already_in_use": "Sähköposti on jo käytössä",
+    "server_error": "Palvelinvirhe",
+    "email_change_mail_subject": "Vahvista uusi sähköpostiosoitteesi",
+    "email_change_mail_text": "Olet pyytänyt sähköpostiosoitteesi vaihtamista. Vahvista uusi sähköpostiosoitteesi klikkaamalla alla olevaa linkkiä. Jos et ole pyytänyt tätä, voit jättää tämän viestin huomiotta.",
+    "verify_email_sent": "Vahvistuslinkki on lähetetty uuteen sähköpostiosoitteeseesi. Linkki on voimassa 30 minuuttia.",
+    "email_sending_failed": "Sähköpostin lähetys epäonnistui. Tämä voi johtua väärästä sähköpostiosoitteesta tai teknisestä ongelmasta.",
+    "invalid_display_name": "Kelvoton käyttäjänimi. Käyttäjänimen tulee olla 3-30 merkkiä pitkä ja se voi sisältää vain kirjaimia, numeroita ja seuraavia erikoismerkkejä: ._-",
+    "invalid_given_name": "Kelvoton etunimi. Etunimen tulee olla 2-35 merkkiä pitkä.",
+    "invalid_surname": "Kelvoton sukunimi. Sukunimen tulee olla 2-35 merkkiä pitkä.",
+    "no_changes_detected": "Muutoksia ei havaittu",
+    "profile_updated": "Profiili päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen."
+  },
   "general": {
     "email": "Sähköposti",
+    "password": "Salasana",
+    "username": "Käyttäjänimi",
     "content_updated": "Sisältö päivitetty",
     "login": "Kirjaudu",
+    "register": "Rekisteröidy",
     "on_this_page": "Tällä sivulla",
     "partners": "Yhteistyössä",
     "business_id": "Y-tunnus",
     "copy": "Kopioi",
-    "copied": "Kopioitu"
+    "logout": "Kirjaudu ulos",
+    "copied": "Kopioitu",
+    "submit": "Lähetä",
+    "firstName": "Etunimi",
+    "lastName": "Sukunimi"
+  },
+  "mail_list": {
+    "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat",
+    "freeloop": "FREELOOP: Vapaa lista, hae, myy, osta, ilmoita, vaihda ja tiedota kaikkea Suomen lain ja hyvän maun rajoissa.",
+    "alumni": "Alumni: Lista Luupin piirissä aikanaan vaikuttaneille",
+    "new_students": "Fuksi: Erityisesti ensimmäisen vuoden opiskelijoita kiinnostavat Luupin tapahtumat ja muu tiedotus"
+  },
+  "auth": {
+    "login_to_account": "Kirjaudu sisään",
+    "register_account": "Rekisteröidy",
+    "remember_me": "Muista minut",
+    "dont_have_account": "Eikö sinulla ole vielä tiliä?",
+    "already_have_account": "Onko sinulla jo tili?",
+    "register_here": "Rekisteröidy täällä",
+    "login_here": "Kirjaudu sisään täällä",
+    "forgot_password": "Unohditko salasanasi?",
+    "confirm_password": "Vahvista salasana",
+    "accept_terms": "Hyväksyn tietosuojaselosteen ja käyttöehdot",
+    "reset_password": "Nollaa salasana"
   },
   "navigation": {
     "home": "Koti",
@@ -34,7 +75,8 @@
     "privacy_policy": "Tietosuojaseloste",
     "miscellaneous": "Muuta",
     "companies": "Yritykset",
-    "benefits": "Yritysedut"
+    "benefits": "Yritysedut",
+    "profile": "Profiili"
   },
   "pages_home": {
     "hero": {
@@ -99,5 +141,8 @@
     "founded": "Perustettu",
     "homepage": "Kotisivut",
     "open_jobs": "Avoimet työpaikat"
+  },
+  "pages_verify_email": {
+    "title": "Email verification"
   }
 }

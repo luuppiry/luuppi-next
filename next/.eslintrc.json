@@ -8,6 +8,7 @@
     "arrow-body-style": ["error", "as-needed"],
     "no-trailing-spaces": "error",
     "quotes": ["error", "single"],
+    "no-console": "error",
     "react/jsx-sort-props": [
       "error",
       {

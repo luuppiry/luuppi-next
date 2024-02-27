@@ -1,6 +1,5 @@
 import { getDictionary } from '@/dictionaries';
-import { getStrapiData } from '@/lib';
-import { getStrapiUrl } from '@/lib/get-url';
+import { getStrapiData, getStrapiUrl } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
@@ -20,7 +19,7 @@ export default async function Partners({ dictionary, lang }: PartnersProps) {
   );
 
   return (
-    <section className=" bg-primary-50 px-4 py-20">
+    <section className="relative overflow-hidden bg-background-50/50 px-4 py-20">
       <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-col gap-6">
           <h2 className="text-4xl font-extrabold max-md:text-3xl">
@@ -58,6 +57,7 @@ export default async function Partners({ dictionary, lang }: PartnersProps) {
           ))}
         </Marquee>
       </div>
+      <div className="luuppi-patners-pattern absolute left-0 top-0 -z-10 h-full w-full" />
     </section>
   );
 }

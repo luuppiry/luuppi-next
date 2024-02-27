@@ -1,4 +1,4 @@
-import { getLuuppiEvents, getStrapiData } from '@/lib';
+import { getLuuppiEvents, getStrapiData } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiBlogBlog, ApiBoardBoard } from '@/types/contentTypes';
 import { SitemapItemLoose, SitemapStream, streamToPromise } from 'sitemap';

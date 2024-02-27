@@ -1,13 +1,54 @@
 {
+  "api": {
+    "invalid_email": "Invalid email",
+    "unauthorized": "Unauthorized",
+    "email_already_in_use": "Email is already in use",
+    "server_error": "Server error",
+    "email_change_mail_subject": "Email change verification",
+    "email_change_mail_text": "You have requested an email change. Please verify your new email address by clicking the link below. If you did not request this change you can ignore this email.",
+    "verify_email_sent": "Verification link sent to your email. Link is valid for 30 minutes.",
+    "email_sending_failed": "Email sending failed. This could be caused by invalid email address or server error.",
+    "invalid_display_name": "Invalid display name. Display name must be 3-30 characters long.",
+    "invalid_given_name": "Invalid first name. First name must be 2-35 characters long.",
+    "invalid_surname": "Invalid last name. Last name must be 2-35 characters long..",
+    "no_changes_detected": "No changes detected",
+    "profile_updated": "Profile updated. Some changes require you to re-login to take effect."
+  },
   "general": {
     "email": "Email",
+    "password": "Password",
+    "username": "Username",
     "content_updated": "Content updated",
     "login": "Login",
+    "register": "Register",
     "on_this_page": "On this page",
     "partners": "Partners",
     "business_id": "Business ID",
     "copy": "Copy",
-    "copied": "Copied"
+    "logout": "Logout",
+    "copied": "Copied",
+    "submit": "Submit",
+    "firstName": "First name",
+    "lastName": "Last name"
+  },
+  "mail_list": {
+    "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi",
+    "freeloop": "FREELOOP: A free list for buying, selling, advertising, exchanging, and sharing information within the limits of Finnish law and good taste.",
+    "alumni": "Alumni: A list for individuals who have previously been involved with Luuppi",
+    "new_students": "First-year: Specifically for first-year students interested in Luuppi's events and other information"
+  },
+  "auth": {
+    "login_to_account": "Login to your account",
+    "register_account": "Register an account",
+    "remember_me": "Remember me",
+    "dont_have_account": "Don't have an account?",
+    "already_have_account": "Already have an account?",
+    "register_here": "Register here",
+    "login_here": "Login here",
+    "forgot_password": "Forgot your password?",
+    "confirm_password": "Confirm password",
+    "accept_terms": "I accept the terms and conditions",
+    "reset_password": "Reset password"
   },
   "navigation": {
     "home": "Home",
@@ -34,7 +75,8 @@
     "privacy_policy": "Privacy policy",
     "miscellaneous": "Miscellaneous",
     "companies": "Companies",
-    "benefits": "Benefits"
+    "benefits": "Benefits",
+    "profile": "Profile"
   },
   "pages_home": {
     "hero": {
@@ -99,5 +141,8 @@
     "founded": "Founded",
     "homepage": "Homepage",
     "open_jobs": "Open jobs"
+  },
+  "pages_verify_email": {
+    "title": "Email verification"
   }
 }

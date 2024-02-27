@@ -1,6 +1,8 @@
 export interface NavLink {
   translation: string;
   href?: string;
+  mobileOnly?: boolean;
+  authenticated?: boolean;
   sublinks?: {
     translation: string;
     href: string;
@@ -11,6 +13,12 @@ export const navLinks: NavLink[] = [
   {
     translation: 'home',
     href: '/',
+  },
+  {
+    translation: 'profile',
+    href: '/profile',
+    mobileOnly: true,
+    authenticated: true,
   },
   {
     translation: 'organization',

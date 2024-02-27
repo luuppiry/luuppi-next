@@ -1,5 +1,5 @@
 import { getDictionary } from '@/dictionaries';
-import { dateFormat, getLuuppiEvents } from '@/lib';
+import { dateFormat, getLuuppiEvents } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ export default async function EventsPreview({
     .sort((a, b) => a.end.getTime() - b.end.getTime());
 
   return (
-    <section className=" relative bg-primary-50">
+    <section className="relative bg-background-50/50">
       <div className="relative z-[10] mx-auto max-w-[1200px] px-4 py-20">
         <p className="mb-1 text-xl font-bold">
           {dictionary.pages_home.events_preview.subtitle}
