@@ -4,6 +4,7 @@ import { getAccessToken } from '@/libs/get-access-token';
 import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
 import { SupportedLanguage } from '@/models/locale';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 const tenantName = process.env.NEXT_PUBLIC_AZURE_TENANT_NAME!;
@@ -82,6 +83,8 @@ export default async function VerifyEmail({
     logger.error('Error updating user email');
     redirect(`/${params.lang}/404`);
   }
+
+  revalidatePath(`/${params.lang}/profile`);
 
   // TODO: Proper UI
   return (

@@ -6,6 +6,7 @@ import { getAccessToken } from '@/libs/get-access-token';
 import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
 import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
 import { SupportedLanguage } from '@/models/locale';
+import { revalidatePath } from 'next/cache';
 
 // TODO: Rate limit this action
 export async function updateProfile(
@@ -123,6 +124,8 @@ export async function updateProfile(
     givenName,
     surname,
   });
+
+  revalidatePath(`/${lang}/profile`);
 
   return {
     message: dictionary.api.profile_updated,
