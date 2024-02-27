@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 import ProfileEmailform from '@/components/ProfileEmailForm/ProfileEmailForm';
+import ProfileNotificationsForm from '@/components/ProfileNotificationsForm/ProfileNotificationsForm';
 import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInfoForm';
 import { getDictionary } from '@/dictionaries';
 import { getAccessToken } from '@/libs/get-access-token';
@@ -38,6 +39,11 @@ export default async function Profile({ params }: ProfileProps) {
           user={user}
         />
         <ProfileUserInfoForm
+          dictionary={dictionary}
+          lang={params.lang}
+          user={user}
+        />
+        <ProfileNotificationsForm
           dictionary={dictionary}
           lang={params.lang}
           user={user}

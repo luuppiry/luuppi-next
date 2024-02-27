@@ -24,10 +24,10 @@
   h1 {
     @apply text-5xl font-extrabold max-md:text-4xl;
   }
+}
 
-  .link {
-    @apply text-secondary-400;
-  }
+.card {
+  @apply rounded-lg bg-background-50/50;
 }
 
 @layer components {

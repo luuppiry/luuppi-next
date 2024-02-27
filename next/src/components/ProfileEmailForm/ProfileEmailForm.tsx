@@ -28,29 +28,29 @@ export default function ProfileEmailform({
   const [state, formAction] = useFormState(handleEmailUpdate, initialState);
 
   return (
-    <form action={formAction} className="card card-body bg-primary-50">
-      <div className="flex w-full gap-24">
-        <div className="flex-grow">
-          {Boolean(state.isError && state.message && !state.field) && (
-            <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
-              <BiErrorCircle size={24} />
-              {state.message}
-            </div>
-          )}
-          {Boolean(!state.isError && state.message && !state.field) && (
-            <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
-              {state.message}
-            </div>
-          )}
-          <FormInput
-            error={state.field === 'email' ? state.message : ''}
-            id="email"
-            marginTop={false}
-            placeholder="webmaster@luuppi.fi"
-            title={dictionary.general.email}
-            type="email"
-            value={user.mail as string}
-          />
+    <form action={formAction} className="card card-body">
+      <div className="flex w-full flex-col">
+        {Boolean(state.isError && state.message && !state.field) && (
+          <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+            <BiErrorCircle size={24} />
+            {state.message}
+          </div>
+        )}
+        {Boolean(!state.isError && state.message && !state.field) && (
+          <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
+            {state.message}
+          </div>
+        )}
+        <FormInput
+          error={state.field === 'email' ? state.message : ''}
+          id="email"
+          marginTop={false}
+          placeholder="webmaster@luuppi.fi"
+          title={dictionary.general.email}
+          type="email"
+          value={user.mail as string}
+        />
+        <div>
           <SubmitButton dictionary={dictionary} />
         </div>
       </div>

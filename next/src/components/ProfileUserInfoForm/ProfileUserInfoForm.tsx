@@ -28,47 +28,47 @@ export default function ProfileUserInfoForm({
   const [state, formAction] = useFormState(updateProfileAction, initialState);
 
   return (
-    <form action={formAction} className="card card-body bg-primary-50">
-      <div className="flex w-full gap-24">
-        <div className="flex-grow">
-          {Boolean(state.isError && state.message && !state.field) && (
-            <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
-              <BiErrorCircle size={24} />
-              {state.message}
-            </div>
-          )}
-          {Boolean(!state.isError && state.message && !state.field) && (
-            <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
-              {state.message}
-            </div>
-          )}
-          <FormInput
-            error={state.field === 'displayName' ? state.message : ''}
-            id="displayName"
-            marginTop={false}
-            placeholder={dictionary.general.username}
-            title={dictionary.general.username}
-            type="text"
-            value={user.displayName as string}
-          />
-          <FormInput
-            error={state.field === 'givenName' ? state.message : ''}
-            id="givenName"
-            marginTop={false}
-            placeholder={dictionary.general.firstName}
-            title={dictionary.general.firstName}
-            type="text"
-            value={user.givenName as string}
-          />
-          <FormInput
-            error={state.field === 'surname' ? state.message : ''}
-            id="surname"
-            marginTop={false}
-            placeholder={dictionary.general.lastName}
-            title={dictionary.general.lastName}
-            type="text"
-            value={user.surname as string}
-          />
+    <form action={formAction} className="card card-body bg-background-50">
+      <div className="flex w-full flex-col">
+        {Boolean(state.isError && state.message && !state.field) && (
+          <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+            <BiErrorCircle size={24} />
+            {state.message}
+          </div>
+        )}
+        {Boolean(!state.isError && state.message && !state.field) && (
+          <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
+            {state.message}
+          </div>
+        )}
+        <FormInput
+          error={state.field === 'displayName' ? state.message : ''}
+          id="displayName"
+          marginTop={false}
+          placeholder={dictionary.general.username}
+          title={dictionary.general.username}
+          type="text"
+          value={user.displayName as string}
+        />
+        <FormInput
+          error={state.field === 'givenName' ? state.message : ''}
+          id="givenName"
+          marginTop={false}
+          placeholder={dictionary.general.firstName}
+          title={dictionary.general.firstName}
+          type="text"
+          value={user.givenName as string}
+        />
+        <FormInput
+          error={state.field === 'surname' ? state.message : ''}
+          id="surname"
+          marginTop={false}
+          placeholder={dictionary.general.lastName}
+          title={dictionary.general.lastName}
+          type="text"
+          value={user.surname as string}
+        />
+        <div>
           <SubmitButton dictionary={dictionary} />
         </div>
       </div>

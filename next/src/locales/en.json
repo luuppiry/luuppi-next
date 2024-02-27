@@ -31,6 +31,12 @@
     "firstName": "First name",
     "lastName": "Last name"
   },
+  "mail_list": {
+    "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi",
+    "freeloop": "FREELOOP: A free list for buying, selling, advertising, exchanging, and sharing information within the limits of Finnish law and good taste.",
+    "alumni": "Alumni: A list for individuals who have previously been involved with Luuppi",
+    "new_students": "First-year: Specifically for first-year students interested in Luuppi's events and other information"
+  },
   "auth": {
     "login_to_account": "Login to your account",
     "register_account": "Register an account",

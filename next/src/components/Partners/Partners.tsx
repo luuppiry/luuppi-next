@@ -19,7 +19,7 @@ export default async function Partners({ dictionary, lang }: PartnersProps) {
   );
 
   return (
-    <section className=" bg-primary-50 px-4 py-20">
+    <section className=" bg-background-50/50 px-4 py-20">
       <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-col gap-6">
           <h2 className="text-4xl font-extrabold max-md:text-3xl">

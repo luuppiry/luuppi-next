@@ -31,6 +31,12 @@
     "firstName": "Etunimi",
     "lastName": "Sukunimi"
   },
+  "mail_list": {
+    "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat",
+    "freeloop": "FREELOOP: Vapaa lista, hae, myy, osta, ilmoita, vaihda ja tiedota kaikkea Suomen lain ja hyvän maun rajoissa.",
+    "alumni": "Alumni: Lista Luupin piirissä aikanaan vaikuttaneille",
+    "new_students": "Fuksi: Erityisesti ensimmäisen vuoden opiskelijoita kiinnostavat Luupin tapahtumat ja muu tiedotus"
+  },
   "auth": {
     "login_to_account": "Kirjaudu sisään",
     "register_account": "Rekisteröidy",
