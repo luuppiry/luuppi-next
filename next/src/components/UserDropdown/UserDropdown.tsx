@@ -15,7 +15,7 @@ export default async function UserDropdown({
   lang,
 }: UserDropdownProps) {
   const session = await auth();
-  if (!session) return null;
+  if (!session?.user) return null;
 
   return (
     <div className="dropdown dropdown-end text-white">

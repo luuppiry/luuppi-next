@@ -6,7 +6,7 @@ import { getAccessToken } from '@/libs/get-access-token';
 import { verifyGraphAPIEmail } from '@/libs/graph/graph-verify-email';
 import { SupportedLanguage } from '@/models/locale';
 import { EmailClient, EmailMessage } from '@azure/communication-email';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const connectionString =
   process.env.AZURE_BACKEND_COMMUNICATION_SERVICE_CONNECTION_STRING!;
@@ -97,7 +97,7 @@ export async function sendVerifyEmail(
   const payload = {
     newMail: email,
     userId: user.azureId,
-  };
+  } as JwtPayload & { newMail: string; userId: string };
 
   const token = jwt.sign(payload, jwtSecret, {
     expiresIn: '30m',
