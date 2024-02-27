@@ -53,7 +53,7 @@ export default async function Header({ dictionary, lang }: HeaderProps) {
               {session && session.user ? (
                 <>
                   <div className="flex items-center justify-center max-lg:hidden">
-                    <UserDropdown dictionary={dictionary} />
+                    <UserDropdown dictionary={dictionary} lang={lang} />
                   </div>
                 </>
               ) : (

@@ -1,18 +1,19 @@
 import { auth, signOut } from '@/auth';
 import { getDictionary } from '@/dictionaries';
-import Link from 'next/link';
+import { SupportedLanguage } from '@/models/locale';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { RiUser3Fill } from 'react-icons/ri';
+import CloseableLink from './CloseableClient';
 
 interface UserDropdownProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  lang: SupportedLanguage;
 }
 
-export default async function UserDropdown({ dictionary }: UserDropdownProps) {
-  // const handleClose = () => {
-  //   (document.activeElement as HTMLElement)?.blur();
-  // };
-
+export default async function UserDropdown({
+  dictionary,
+  lang,
+}: UserDropdownProps) {
   const session = await auth();
   if (!session) return null;
 
@@ -41,10 +42,7 @@ export default async function UserDropdown({ dictionary }: UserDropdownProps) {
             {session.user?.email}
           </span>
         </div>
-        <Link className="btn btn-ghost btn-sm justify-start" href="/profile">
-          <RiUser3Fill size={22} />
-          {dictionary.navigation.profile}
-        </Link>
+        <CloseableLink dictionary={dictionary} lang={lang} />
         <div className="divider my-1" />
         <form
           action={async () => {

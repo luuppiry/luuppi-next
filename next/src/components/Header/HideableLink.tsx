@@ -24,7 +24,7 @@ export default function HideableLink({
       group.style.display = 'none';
       setTimeout(() => {
         group.style.display = 'flex';
-      }, 0);
+      }, 50);
     }
   };
 
