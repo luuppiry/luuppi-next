@@ -75,6 +75,22 @@
     background-size: 200px 200px;
   }
 
+  .luuppi-patners-pattern {
+    @apply bg-[url('/partners_pattern.svg')] bg-cover bg-center bg-no-repeat opacity-[0.05] grayscale;
+  }
+
+  @media screen and (max-width: 1280px) {
+    .luuppi-patners-pattern {
+      @apply scale-[1.5];
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .luuppi-patners-pattern {
+      @apply scale-[3];
+    }
+  }
+
   .luuppi-custom-scroll::-webkit-scrollbar {
     @apply w-2;
   }
