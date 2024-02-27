@@ -7,7 +7,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-const tenantName = process.env.NEXT_PUBLIC_AZURE_TENANT_NAME!;
+const tenantName = process.env.AZURE_TENANT_NAME!;
 
 interface VerifyEmailProps {
   params: { lang: SupportedLanguage };

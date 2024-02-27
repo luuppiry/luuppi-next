@@ -9,10 +9,9 @@ import { EmailClient, EmailMessage } from '@azure/communication-email';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const connectionString =
-  process.env.AZURE_BACKEND_COMMUNICATION_SERVICE_CONNECTION_STRING!;
+  process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!;
 
-const senderAddress =
-  process.env.AZURE_BACKEND_COMMUNICATION_SERVICE_SENDER_EMAIL!;
+const senderAddress = process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!;
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 

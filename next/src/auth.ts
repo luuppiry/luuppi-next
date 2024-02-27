@@ -10,9 +10,9 @@ export const {
 } = NextAuth({
   providers: [
     AzureB2C({
-      clientId: process.env.B2C_CLIENT_ID,
-      clientSecret: process.env.B2C_CLIENT_SECRET,
-      issuer: `https://${process.env.B2C_TENANT_ID}.ciamlogin.com/${process.env.B2C_TENANT_ID}/v2.0`,
+      clientId: process.env.AZURE_P_CLIENT_ID,
+      clientSecret: process.env.AZURE_P_CLIENT_SECRET,
+      issuer: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/v2.0`,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
