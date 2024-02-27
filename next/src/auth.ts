@@ -15,6 +15,7 @@ export const {
       issuer: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/v2.0`,
     }),
   ],
+  trustHost: true,
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async session({ session, token }) {
