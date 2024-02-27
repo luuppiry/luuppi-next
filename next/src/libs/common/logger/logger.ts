@@ -34,19 +34,19 @@ export const logger = {
     console.log(process.env.NODE_ENV);
     if (!LOGS_ENABLED) return;
     console.log(
-      `${colors.green}✓${colors.reset} ${getFormattedDate()} ${colors.green}[INFO]${colors.reset} ${formatMessage(message)}`,
+      ` ${colors.green}✓${colors.reset} ${getFormattedDate()} ${colors.green}[INFO]${colors.reset} ${formatMessage(message)}`,
     );
   },
   warn: (...message: any[]) => {
     if (!LOGS_ENABLED) return;
     console.log(
-      `${colors.yellow}⚠${colors.reset} ${getFormattedDate()} ${colors.yellow}[WARN]${colors.reset} ${formatMessage(message)}`,
+      ` ${colors.yellow}⚠${colors.reset} ${getFormattedDate()} ${colors.yellow}[WARN]${colors.reset} ${formatMessage(message)}`,
     );
   },
   error: (...message: any[]) => {
     if (!LOGS_ENABLED) return;
     console.log(
-      `${colors.red}✖${colors.reset} ${getFormattedDate()} ${colors.red}[ERROR]${colors.reset} ${formatMessage(message)}`,
+      ` ${colors.red}✖${colors.reset} ${getFormattedDate()} ${colors.red}[ERROR]${colors.reset} ${formatMessage(message)}`,
     );
   },
 };
