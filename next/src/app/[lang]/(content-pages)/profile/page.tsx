@@ -31,7 +31,7 @@ export default async function Profile({ params }: ProfileProps) {
 
   return (
     <>
-      <h1 className="mb-12">Profile</h1>
+      <h1 className="mb-12">{dictionary.navigation.profile}</h1>
       <div className="flex w-full flex-col gap-12">
         <ProfileEmailform
           dictionary={dictionary}
