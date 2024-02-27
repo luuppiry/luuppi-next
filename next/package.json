@@ -16,7 +16,7 @@
     "@fullcalendar/core": "^6.1.10",
     "@fullcalendar/daygrid": "^6.1.10",
     "@fullcalendar/react": "^6.1.10",
-    "@fullcalendar/timegrid": "^6.1.10",
+    "@fullcalendar/timegrid": "^6.1.11",
     "@strapi/blocks-react-renderer": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
     "negotiator": "^0.6.3",
