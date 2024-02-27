@@ -50,6 +50,7 @@ export default async function VerifyEmail({
     newEmailVerified = newMail;
     userIdVerified = userId;
   } catch (error) {
+    logger.error('Invalid token', error);
     redirect(`/${params.lang}/404`);
   }
 
