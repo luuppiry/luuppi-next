@@ -30,6 +30,10 @@
   @apply rounded-lg bg-background-50/50;
 }
 
+.skeleton {
+  @apply rounded-lg;
+}
+
 @layer components {
   .luuppi-hero-cards {
     @apply rounded-2xl transition-transform delay-[0s] duration-[1s] ease-[ease] hover:rotate-0 hover:scale-[1.3];

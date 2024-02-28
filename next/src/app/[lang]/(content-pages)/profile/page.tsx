@@ -15,6 +15,7 @@ interface ProfileProps {
 
 export default async function Profile({ params }: ProfileProps) {
   const dictionary = await getDictionary(params.lang);
+
   const session = await auth();
   if (!session?.user) {
     logger.error('Error getting session');

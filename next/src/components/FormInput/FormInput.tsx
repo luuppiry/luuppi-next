@@ -38,7 +38,7 @@ export default function FormInput({
         )}
       </div>
       {loading ? (
-        <div className="skeleton h-12 rounded-lg" />
+        <div className="skeleton h-12" />
       ) : (
         <input
           className={`input input-bordered ${Boolean(error) && 'input-error'}`}
