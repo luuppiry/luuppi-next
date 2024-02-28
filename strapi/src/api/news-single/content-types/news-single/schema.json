@@ -1,11 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "blogs",
+  "collectionName": "news",
   "info": {
-    "singularName": "blog",
-    "pluralName": "blogs",
-    "displayName": "Blog",
-    "description": ""
+    "singularName": "news-single",
+    "pluralName": "news",
+    "displayName": "News"
   },
   "options": {
     "draftAndPublish": false
@@ -35,12 +34,11 @@
       "required": true
     },
     "authorImage": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
       "allowedTypes": [
         "images"
       ],
+      "type": "media",
+      "multiple": false,
       "pluginOptions": {
         "i18n": {
           "localized": false
@@ -66,17 +64,17 @@
       "required": true
     },
     "banner": {
-      "type": "media",
-      "multiple": false,
-      "required": true,
       "allowedTypes": [
         "images"
       ],
+      "type": "media",
+      "multiple": false,
       "pluginOptions": {
         "i18n": {
           "localized": false
         }
-      }
+      },
+      "required": true
     },
     "slug": {
       "pluginOptions": {
@@ -105,8 +103,8 @@
           "localized": true
         }
       },
-      "component": "shared.seo",
-      "required": true
+      "required": true,
+      "component": "shared.seo"
     },
     "authorTitle": {
       "pluginOptions": {
