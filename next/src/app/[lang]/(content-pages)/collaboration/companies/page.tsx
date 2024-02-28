@@ -12,7 +12,7 @@ interface CollaborationCompaniesProps {
   params: { lang: SupportedLanguage };
 }
 
-export default async function Organization({
+export default async function CollaborationCompanies({
   params,
 }: CollaborationCompaniesProps) {
   const dictionary = await getDictionary(params.lang);
