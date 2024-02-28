@@ -44,7 +44,7 @@ export default function MobileHamburger({
         id="mobileNavbar"
       >
         <div className="modal-box flex h-full min-h-dvh w-screen max-w-full gap-4 rounded-none">
-          <ul className="menu h-full w-full flex-nowrap gap-4">
+          <ul className="menu h-max w-full flex-nowrap gap-4">
             {navLinks
               .filter(
                 (link) =>
