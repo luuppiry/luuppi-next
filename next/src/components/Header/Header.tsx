@@ -21,17 +21,17 @@ export default async function Header({ dictionary, lang }: HeaderProps) {
   return (
     <div>
       <ScrollListener />
-      <div className="h-36 bg-primary-800 max-lg:h-16" />
+      <div className="h-36 bg-primary-800 max-xl:h-28 max-lg:h-16" />
       <header className={'fixed top-0 z-50 w-full bg-primary-800 text-white'}>
         <nav
           className={
-            'custom-scroll-nav h-24 bg-primary-500 px-4 transition-all duration-300 max-lg:h-16 max-lg:shadow-md'
+            'custom-scroll-nav h-24 bg-primary-500 px-4 transition-all duration-300 max-xl:h-16 max-xl:shadow-md'
           }
         >
           <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between">
             <Link
               className={
-                'custom-scroll-nav-image btn btn-link relative h-full w-36 transition-all duration-300 max-lg:w-24'
+                'custom-scroll-nav-image btn btn-link relative h-full w-36 transition-all duration-300 max-xl:w-24'
               }
               href={`/${lang}`}
             >
@@ -65,7 +65,7 @@ export default async function Header({ dictionary, lang }: HeaderProps) {
                 >
                   <button
                     className={
-                      'custom-scroll-text btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 text-lg font-bold transition-all max-lg:hidden'
+                      'custom-scroll-text btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 text-lg font-bold transition-all max-xl:text-base max-lg:hidden'
                     }
                     type="submit"
                   >
@@ -105,7 +105,7 @@ export default async function Header({ dictionary, lang }: HeaderProps) {
                 {link.sublinks && link.sublinks.length > 0 ? (
                   <div
                     className={
-                      'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200'
+                      'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 max-xl:text-base'
                     }
                   >
                     <span>
@@ -127,7 +127,7 @@ export default async function Header({ dictionary, lang }: HeaderProps) {
                 ) : (
                   <Link
                     className={
-                      'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200'
+                      'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 max-xl:text-base'
                     }
                     href={`/${lang}${link.href as string}`}
                   >
