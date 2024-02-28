@@ -801,6 +801,7 @@ export interface ApiBoardBoard extends Schema.CollectionType {
       'manyToMany',
       'api::board-member.board-member'
     >;
+    Seo: Attribute.Component<'shared.seo'> & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -913,6 +914,53 @@ export interface ApiBoardRoleBoardRole extends Schema.CollectionType {
       'api::board-role.board-role',
       'oneToMany',
       'api::board-role.board-role'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiCollaborationCompanyCollaborationCompany
+  extends Schema.SingleType {
+  collectionName: 'collaboration_companies';
+  info: {
+    singularName: 'collaboration-company';
+    pluralName: 'collaboration-companies';
+    displayName: 'CollaborationCompanies';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::collaboration-company.collaboration-company',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::collaboration-company.collaboration-company',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::collaboration-company.collaboration-company',
+      'oneToMany',
+      'api::collaboration-company.collaboration-company'
     >;
     locale: Attribute.String;
   };
@@ -1101,6 +1149,98 @@ export interface ApiContactContact extends Schema.SingleType {
       'api::contact.contact',
       'oneToMany',
       'api::contact.contact'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiEventsCalendarEventsCalendar extends Schema.SingleType {
+  collectionName: 'events_calendars';
+  info: {
+    singularName: 'events-calendar';
+    pluralName: 'events-calendars';
+    displayName: 'EventsCalendar';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Seo: Attribute.Component<'shared.seo', true> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::events-calendar.events-calendar',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::events-calendar.events-calendar',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::events-calendar.events-calendar',
+      'oneToMany',
+      'api::events-calendar.events-calendar'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiNewsListNewsList extends Schema.SingleType {
+  collectionName: 'news_lists';
+  info: {
+    singularName: 'news-list';
+    pluralName: 'news-lists';
+    displayName: 'NewsList';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Seo: Attribute.Component<'shared.seo', true> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::news-list.news-list',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::news-list.news-list',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::news-list.news-list',
+      'oneToMany',
+      'api::news-list.news-list'
     >;
     locale: Attribute.String;
   };
@@ -1595,6 +1735,52 @@ export interface ApiPrivacyPolicyPrivacyPolicy extends Schema.SingleType {
   };
 }
 
+export interface ApiProfileProfile extends Schema.SingleType {
+  collectionName: 'profiles';
+  info: {
+    singularName: 'profile';
+    pluralName: 'profiles';
+    displayName: 'Profile';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::profile.profile',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::profile.profile',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::profile.profile',
+      'oneToMany',
+      'api::profile.profile'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 export interface ApiSportSport extends Schema.SingleType {
   collectionName: 'sports';
   info: {
@@ -2017,9 +2203,12 @@ declare module '@strapi/types' {
       'api::board.board': ApiBoardBoard;
       'api::board-member.board-member': ApiBoardMemberBoardMember;
       'api::board-role.board-role': ApiBoardRoleBoardRole;
+      'api::collaboration-company.collaboration-company': ApiCollaborationCompanyCollaborationCompany;
       'api::collaboration-general.collaboration-general': ApiCollaborationGeneralCollaborationGeneral;
       'api::company.company': ApiCompanyCompany;
       'api::contact.contact': ApiContactContact;
+      'api::events-calendar.events-calendar': ApiEventsCalendarEventsCalendar;
+      'api::news-list.news-list': ApiNewsListNewsList;
       'api::news-single.news-single': ApiNewsSingleNewsSingle;
       'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
@@ -2028,6 +2217,7 @@ declare module '@strapi/types' {
       'api::organization-rule.organization-rule': ApiOrganizationRuleOrganizationRule;
       'api::organization-tradition-guideline.organization-tradition-guideline': ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline;
       'api::privacy-policy.privacy-policy': ApiPrivacyPolicyPrivacyPolicy;
+      'api::profile.profile': ApiProfileProfile;
       'api::sport.sport': ApiSportSport;
       'api::studies-fields-of-study.studies-fields-of-study': ApiStudiesFieldsOfStudyStudiesFieldsOfStudy;
       'api::studies-general.studies-general': ApiStudiesGeneralStudiesGeneral;

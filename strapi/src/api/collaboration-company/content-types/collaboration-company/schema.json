@@ -1,0 +1,30 @@
+{
+  "kind": "singleType",
+  "collectionName": "collaboration_companies",
+  "info": {
+    "singularName": "collaboration-company",
+    "pluralName": "collaboration-companies",
+    "displayName": "CollaborationCompanies"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "Seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true,
+      "component": "shared.seo"
+    }
+  }
+}

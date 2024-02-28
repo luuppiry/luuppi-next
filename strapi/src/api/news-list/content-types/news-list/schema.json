@@ -1,0 +1,30 @@
+{
+  "kind": "singleType",
+  "collectionName": "news_lists",
+  "info": {
+    "singularName": "news-list",
+    "pluralName": "news-lists",
+    "displayName": "NewsList"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "Seo": {
+      "type": "component",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true,
+      "component": "shared.seo"
+    }
+  }
+}

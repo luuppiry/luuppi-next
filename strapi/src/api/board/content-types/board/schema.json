@@ -23,6 +23,12 @@
       "relation": "manyToMany",
       "target": "api::board-member.board-member",
       "mappedBy": "boards"
+    },
+    "Seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo",
+      "required": true
     }
   }
 }
