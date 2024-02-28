@@ -131,7 +131,9 @@
   "pages_404": {
     "title": "Sivua ei löytynyt",
     "description": "\"Piiiip, paaat, kriz kruts\" Etsimääsi sivua ei löytynyt. Voit palata takaisin kotisivulle tai ottaa meihin yhteyttä, jos etsit jotain tiettyä sivua.",
-    "return_home": "Kotisivulle"
+    "return_home": "Kotisivulle",
+    "seo_title": "Luuppi ry | Sivua ei löytynyt",
+    "seo_description": "Etsimääsi sivua ei löytynyt. Sivu saattaa olla poistettu tai siirretty."
   },
   "seo": {
     "title": "Luuppi ry | Tampereen yliopiston matematiikan, tilastotieteen ja tietojenkäsittelyn opiskelijoiden ainejärjestö",

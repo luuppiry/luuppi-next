@@ -131,7 +131,9 @@
   "pages_404": {
     "title": "Page not found",
     "description": "Ooops.... The page you are looking for does not exist. Please check the URL and try again.",
-    "return_home": "Back to home"
+    "return_home": "Back to home",
+    "seo_title": "Luuppi ry | Page not found",
+    "seo_description": "The page you are looking for does not exist. Page might have been removed or the URL is incorrect."
   },
   "seo": {
     "title": "Luuppi ry | Subject association for mathematics, statistical data analysis, and computer science students at the University of Tampere",

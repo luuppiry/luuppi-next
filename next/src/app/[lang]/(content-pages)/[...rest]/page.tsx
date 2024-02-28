@@ -1,5 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -29,4 +30,14 @@ export default async function NotFound({ params }: NotFoundProps) {
       </div>
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: NotFoundProps): Promise<Metadata> {
+  const dictionary = await getDictionary(params.lang);
+  return {
+    title: dictionary.pages_404.seo_title,
+    description: dictionary.pages_404.seo_description,
+  };
 }
