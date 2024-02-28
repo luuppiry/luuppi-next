@@ -100,8 +100,12 @@ export const footerLinks: NavLink[] = [
         href: '/events',
       },
       {
-        translation: 'blog',
-        href: '/blog',
+        translation: 'news',
+        href: '/news',
+      },
+      {
+        translation: 'sanomat',
+        href: '/luuppi-sanomat',
       },
       {
         translation: 'sports',

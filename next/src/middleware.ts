@@ -50,7 +50,7 @@ export function middleware(request: NextRequest) {
       '/banner.png',
       '/locale-icons/us.svg',
       '/locale-icons/fi.svg',
-      '/images/blog.jpg',
+      '/images/news.jpg',
       '/images/collaboration.jpg',
       '/images/contact.jpg',
       '/images/events.jpg',

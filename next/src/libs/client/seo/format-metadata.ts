@@ -10,7 +10,7 @@ import { Metadata } from 'next';
 export const formatMetadata = (
   content: any,
   pathname: string,
-  isBlog = false,
+  isNews = false,
 ): Metadata => {
   const seo = content.data.attributes.Seo;
 
@@ -27,7 +27,7 @@ export const formatMetadata = (
     openGraphImage = `${cmsUrl}${seo.openGraph.openGraphImage.data.attributes.url}`;
   }
 
-  if (isBlog && !openGraphImage) {
+  if (isNews && !openGraphImage) {
     const ogUrl = new URL('https://luuppi-opengraph.vercel.app/api/og');
     ogUrl.searchParams.append('author', seo.metaAuthor ?? 'Luuppi ry');
     ogUrl.searchParams.append('title', seo.metaTitle);

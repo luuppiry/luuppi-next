@@ -781,106 +781,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
-export interface ApiBlogBlog extends Schema.CollectionType {
-  collectionName: 'blogs';
-  info: {
-    singularName: 'blog';
-    pluralName: 'blogs';
-    displayName: 'Blog';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    title: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    authorName: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    authorImage: Attribute.Media &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    description: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    content: Attribute.Blocks &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    banner: Attribute.Media &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    slug: Attribute.UID<'api::blog.blog', 'title'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    category: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    Seo: Attribute.Component<'shared.seo'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    authorTitle: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::blog.blog', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::blog.blog', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::blog.blog',
-      'oneToMany',
-      'api::blog.blog'
-    >;
-    locale: Attribute.String;
-  };
-}
-
 export interface ApiBoardBoard extends Schema.CollectionType {
   collectionName: 'boards';
   info: {
@@ -893,7 +793,7 @@ export interface ApiBoardBoard extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    year: Attribute.Integer & Attribute.Unique;
+    year: Attribute.Integer & Attribute.Required & Attribute.Unique;
     boardMembers: Attribute.Relation<
       'api::board.board',
       'manyToMany',
@@ -928,16 +828,18 @@ export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    fullName: Attribute.String;
-    email: Attribute.Email;
+    fullName: Attribute.String & Attribute.Required;
+    email: Attribute.Email & Attribute.Required;
     image: Attribute.Media;
-    isBoardMember: Attribute.Boolean & Attribute.DefaultTo<false>;
+    isBoardMember: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<false>;
     boardRoles: Attribute.Relation<
       'api::board-member.board-member',
       'oneToMany',
       'api::board-role.board-role'
     >;
-    year: Attribute.Integer;
+    year: Attribute.Integer & Attribute.Required & Attribute.Private;
     boards: Attribute.Relation<
       'api::board-member.board-member',
       'manyToMany',
@@ -1197,6 +1099,113 @@ export interface ApiContactContact extends Schema.SingleType {
       'api::contact.contact',
       'oneToMany',
       'api::contact.contact'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiNewsSingleNewsSingle extends Schema.CollectionType {
+  collectionName: 'news';
+  info: {
+    singularName: 'news-single';
+    pluralName: 'news';
+    displayName: 'News';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    authorName: Attribute.String &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    authorImage: Attribute.Media &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    description: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    content: Attribute.Blocks &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    banner: Attribute.Media &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    slug: Attribute.UID<'api::news-single.news-single', 'title'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    category: Attribute.String &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    authorTitle: Attribute.String &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::news-single.news-single',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::news-single.news-single',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::news-single.news-single',
+      'oneToMany',
+      'api::news-single.news-single'
     >;
     locale: Attribute.String;
   };
@@ -2003,13 +2012,13 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'api::blog.blog': ApiBlogBlog;
       'api::board.board': ApiBoardBoard;
       'api::board-member.board-member': ApiBoardMemberBoardMember;
       'api::board-role.board-role': ApiBoardRoleBoardRole;
       'api::collaboration-general.collaboration-general': ApiCollaborationGeneralCollaborationGeneral;
       'api::company.company': ApiCompanyCompany;
       'api::contact.contact': ApiContactContact;
+      'api::news-single.news-single': ApiNewsSingleNewsSingle;
       'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
       'api::organization-honorary-member.organization-honorary-member': ApiOrganizationHonoraryMemberOrganizationHonoraryMember;

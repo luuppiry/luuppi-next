@@ -1,8 +1,8 @@
 import Banner from '@/components/Banner/Banner';
-import BlogPreview from '@/components/BlogPreview/BlogPreview';
 import Discover from '@/components/Discover/Discover';
 import EventsPreview from '@/components/EventsPreview/EventsPreview';
 import Hero from '@/components/Hero/Hero';
+import NewsPreview from '@/components/NewsPreview/NewsPreview';
 import Partners from '@/components/Partners/Partners';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
@@ -19,7 +19,7 @@ export default async function Home({ params }: HomeProps) {
       <Hero dictionary={dictionary} lang={params.lang} />
       <Discover dictionary={dictionary} lang={params.lang} />
       <EventsPreview dictionary={dictionary} lang={params.lang} />
-      <BlogPreview dictionary={dictionary} lang={params.lang} />
+      <NewsPreview dictionary={dictionary} lang={params.lang} />
       <Partners dictionary={dictionary} lang={params.lang} />
     </>
   );

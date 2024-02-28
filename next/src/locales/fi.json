@@ -57,7 +57,10 @@
     "studies": "Opinnot",
     "tutoring": "Fukseille",
     "events": "Tapahtumat",
-    "blog": "Blogi",
+    "news": "Uutiset",
+    "communication": "Viestintä",
+    "sanomat": "LuuppiSanomat",
+    "gallery": "Galleria",
     "tradition_guidelines": "Perinneohjesääntö",
     "sports": "Liikunta",
     "collaboration": "Yritysyhteistyö",
@@ -93,7 +96,7 @@
       "organization": "Yhdistys",
       "events": "Tapahtumat",
       "new_students": "Uudet opiskelijat",
-      "blog": "Blogi",
+      "news": "Uutiset",
       "collaboration": "Yritysyhteistyö",
       "contact": "Yhteystiedot"
     },
@@ -102,11 +105,11 @@
       "subtitle": "Kurkista mitä on tulossa!",
       "see_all": "Kaikki tapahtumat"
     },
-    "blog": {
-      "title": "Uusimmat postaukset",
+    "news": {
+      "title": "Uusimmat uutiset",
       "subtitle": "Katso mistä pöhistään!",
       "news": "Uutiset",
-      "see_all": "Kaikki postaukset"
+      "see_all": "Kaikki uutiset"
     },
     "partners": {
       "title": "Yhteistyökumppanit",

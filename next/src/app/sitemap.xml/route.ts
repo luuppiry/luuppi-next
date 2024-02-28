@@ -1,6 +1,6 @@
 import { getLuuppiEvents, getStrapiData } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiBlogBlog, ApiBoardBoard } from '@/types/contentTypes';
+import { ApiBoardBoard, ApiNewsSingleNewsSingle } from '@/types/contentTypes';
 import { SitemapItemLoose, SitemapStream, streamToPromise } from 'sitemap';
 
 /**
@@ -42,8 +42,8 @@ const getStaticPages = (lang: SupportedLanguage) => {
     // Events
     `/${lang}/events`,
 
-    // Blog
-    `/${lang}/blog`,
+    // News
+    `/${lang}/news`,
 
     // Sports
     `/${lang}/sports`,
@@ -85,12 +85,14 @@ export async function GET() {
     ],
   }));
 
-  const blogData = await getStrapiData<ApiBlogBlog[]>('fi', '/api/blogs', [
-    'blog',
-  ]);
-  const blogPosts = blogData.data.map((blog) => ({
-    url: `/fi/blog/${blog.attributes.slug}`,
-    lastmod: new Date(blog.attributes.updatedAt).toISOString(),
+  const newsData = await getStrapiData<ApiNewsSingleNewsSingle[]>(
+    'fi',
+    '/api/news',
+    ['news-single'],
+  );
+  const news = newsData.data.map((news) => ({
+    url: `/fi/news/${news.attributes.slug}`,
+    lastmod: new Date(news.attributes.updatedAt).toISOString(),
   }));
 
   const boardData = await getStrapiData<ApiBoardBoard[]>('fi', '/api/boards', [
@@ -157,7 +159,7 @@ export async function GET() {
     }))
     .slice(1);
 
-  const blogPostsSiteMap: SitemapItemLoose[] = blogPosts.map((post) => ({
+  const newsSiteMap: SitemapItemLoose[] = news.map((post) => ({
     url: post.url,
     lastmod: post.lastmod,
     links: [
@@ -166,7 +168,7 @@ export async function GET() {
     ],
   }));
 
-  const blogPostsSiteMapEn: SitemapItemLoose[] = blogPosts.map((post) => ({
+  const newsSiteMapEn: SitemapItemLoose[] = news.map((post) => ({
     url: post.url.replace('/fi/', '/en/'),
     lastmod: post.lastmod,
     links: [
@@ -194,9 +196,9 @@ export async function GET() {
   }));
 
   const sitemap: SitemapItemLoose[] = [
-    ...blogPostsSiteMap,
+    ...newsSiteMap,
     ...boardPagesSiteMap,
-    ...blogPostsSiteMapEn,
+    ...newsSiteMapEn,
     ...boardPagesSiteMapEn,
     ...staticFinnishSitemap,
     ...staticEnglishSitemap,

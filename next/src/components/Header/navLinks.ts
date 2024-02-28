@@ -105,12 +105,25 @@ export const navLinks: NavLink[] = [
     ],
   },
   {
-    translation: 'events',
-    href: '/events',
+    translation: 'communication',
+    sublinks: [
+      {
+        translation: 'news',
+        href: '/news',
+      },
+      {
+        translation: 'sanomat',
+        href: '/luuppi-sanomat',
+      },
+      {
+        translation: 'gallery',
+        href: '/', // TODO: Add photos page (external link?)
+      },
+    ],
   },
   {
-    translation: 'blog',
-    href: '/blog',
+    translation: 'events',
+    href: '/events',
   },
   {
     translation: 'sports',

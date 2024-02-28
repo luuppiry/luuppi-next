@@ -4,33 +4,36 @@ import SidePartners from '@/components/SidePartners/SidePartners';
 import { getDictionary } from '@/dictionaries';
 import {
   dateFormat,
-  flipBlogLocale,
+  flipNewsLocale,
   getStrapiData,
   getStrapiUrl,
 } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiBlogBlog, ApiCompanyCompany } from '@/types/contentTypes';
+import {
+  ApiCompanyCompany,
+  ApiNewsSingleNewsSingle,
+} from '@/types/contentTypes';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { FaUserAlt } from 'react-icons/fa';
 
 const baseUrl =
-  '/api/blogs?populate[0]=banner&populate[1]=authorImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&filters[slug][$eq]=';
+  '/api/news?populate[0]=banner&populate[1]=authorImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&filters[slug][$eq]=';
 
-interface BlogPostProps {
+interface NewsPostProps {
   params: { slug: string; lang: SupportedLanguage };
 }
 
-export default async function BlogPost({ params }: BlogPostProps) {
+export default async function NewsPost({ params }: NewsPostProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const pageData = await getStrapiData<ApiBlogBlog[]>(
+  const pageData = await getStrapiData<ApiNewsSingleNewsSingle[]>(
     'fi',
     `${baseUrl}${params.slug}`,
-    ['blog'],
+    ['news-single'],
   );
 
-  const blogLocaleFlipped = flipBlogLocale(params.lang, pageData.data);
+  const newsLocaleFlipped = flipNewsLocale(params.lang, pageData.data);
 
   const partnersData = await getStrapiData<ApiCompanyCompany[]>(
     params.lang,
@@ -42,32 +45,32 @@ export default async function BlogPost({ params }: BlogPostProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const selectedBlog = blogLocaleFlipped[0];
+  const selectedNews = newsLocaleFlipped[0];
 
   return (
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col gap-12">
         <div className="relative aspect-[2/1] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
           <Image
-            alt="Blog banner"
+            alt="News banner"
             className={'rounded-lg object-cover'}
             quality={100}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             src={getStrapiUrl(
-              selectedBlog.attributes.banner.data.attributes.url,
+              selectedNews.attributes.banner.data.attributes.url,
             )}
             fill
           />
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">
-            {selectedBlog.attributes.authorImage.data?.attributes.url ? (
+            {selectedNews.attributes.authorImage.data?.attributes.url ? (
               <Image
-                alt="Blog author avatar"
+                alt="News author avatar"
                 className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
                 height={50}
                 src={getStrapiUrl(
-                  selectedBlog.attributes.authorImage.data?.attributes.url,
+                  selectedNews.attributes.authorImage.data?.attributes.url,
                 )}
                 width={50}
               />
@@ -78,13 +81,13 @@ export default async function BlogPost({ params }: BlogPostProps) {
             )}
             <div className="flex flex-col">
               <span className="font-bold">
-                {selectedBlog.attributes.authorName}{' '}
+                {selectedNews.attributes.authorName}{' '}
                 <span className="font-normal">
-                  | {selectedBlog.attributes?.authorTitle}
+                  | {selectedNews.attributes?.authorTitle}
                 </span>
               </span>
               <span className="text-sm opacity-75">
-                {new Date(selectedBlog.attributes.createdAt).toLocaleString(
+                {new Date(selectedNews.attributes.createdAt).toLocaleString(
                   params.lang,
                   dateFormat,
                 )}
@@ -93,13 +96,13 @@ export default async function BlogPost({ params }: BlogPostProps) {
           </div>
           <div>
             <h1 className="text-4xl font-extrabold max-md:text-3xl">
-              {selectedBlog.attributes.title}
+              {selectedNews.attributes.title}
             </h1>
           </div>
           <div className="flex flex-col opacity-40">
             <p className="text-sm">
               {dictionary.general.content_updated}:{' '}
-              {new Date(selectedBlog.attributes.createdAt).toLocaleString(
+              {new Date(selectedNews.attributes.createdAt).toLocaleString(
                 params.lang,
                 dateFormat,
               )}
@@ -107,7 +110,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
           </div>
         </div>
         <article className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
-          <BlockRendererClient content={selectedBlog.attributes.content} />
+          <BlockRendererClient content={selectedNews.attributes.content} />
         </article>
       </div>
       <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
@@ -127,15 +130,15 @@ export default async function BlogPost({ params }: BlogPostProps) {
 }
 
 export async function generateStaticParams() {
-  const pageData = await getStrapiData<ApiBlogBlog[]>(
+  const pageData = await getStrapiData<ApiNewsSingleNewsSingle[]>(
     'fi',
-    '/api/blogs?pagination[pageSize]=100',
-    ['blog'],
+    '/api/news?pagination[pageSize]=100',
+    ['news-single'],
   );
 
-  return pageData.data.map((blog) => ({
+  return pageData.data.map((news) => ({
     params: {
-      slug: blog.attributes.slug,
+      slug: news.attributes.slug,
     },
   }));
 }

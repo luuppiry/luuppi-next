@@ -57,7 +57,10 @@
     "studies": "Studies",
     "tutoring": "Tutoring",
     "events": "Events",
-    "blog": "Blog",
+    "news": "News",
+    "communication": "Communication",
+    "sanomat": "Publications",
+    "gallery": "Gallery",
     "tradition_guidelines": "Traditional guidelines",
     "sports": "Sports",
     "collaboration": "Collaboration",
@@ -93,7 +96,7 @@
       "organization": "Organization",
       "events": "Events",
       "new_students": "New students",
-      "blog": "Blog",
+      "news": "News",
       "collaboration": "Collaboration",
       "contact": "Contact"
     },
@@ -102,11 +105,11 @@
       "subtitle": "Check out what's happening",
       "see_all": "See all events"
     },
-    "blog": {
-      "title": "Our Latest Posts",
+    "news": {
+      "title": "Our Latest News",
       "subtitle": "Check out what's going on",
       "news": "News",
-      "see_all": "See all posts"
+      "see_all": "See all news"
     },
     "partners": {
       "title": "Partners",

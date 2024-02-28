@@ -1,5 +1,5 @@
 import { SupportedLanguage } from '@/models/locale';
-import { ApiBlogBlog } from '@/types/contentTypes';
+import { ApiNewsSingleNewsSingle } from '@/types/contentTypes';
 
 /**
  * Strapi does not support direct localization in a case where we
@@ -38,20 +38,23 @@ export const flipBoardLocale = (lang: SupportedLanguage, data: any) =>
  * have relations and everything is not localized. Workaround is to
  * populate localizations and then "flip" the locale.
  * @param lang 'en' or 'fi'
- * @param data Blog data
- * @returns Blog data with correct locale
+ * @param data News data
+ * @returns News data with correct locale
  */
-export const flipBlogLocale = (lang: SupportedLanguage, data: ApiBlogBlog[]) =>
+export const flipNewsLocale = (
+  lang: SupportedLanguage,
+  data: ApiNewsSingleNewsSingle[],
+) =>
   lang === 'en'
-    ? data.map((blog) => {
-        const localeEn = blog.attributes.localizations.data[0];
+    ? data.map((news) => {
+        const localeEn = news.attributes.localizations.data[0];
         return {
-          ...blog,
+          ...news,
           attributes: {
             ...localeEn.attributes,
-            banner: blog.attributes.banner,
-            authorImage: blog.attributes.authorImage,
-            slug: blog.attributes.slug,
+            banner: news.attributes.banner,
+            authorImage: news.attributes.authorImage,
+            slug: news.attributes.slug,
           },
         };
       })

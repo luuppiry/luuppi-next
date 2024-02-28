@@ -15,9 +15,9 @@ export const discoverLinks = [
     image: '/images/new_students.jpg',
   },
   {
-    translation: 'blog',
-    href: '/blog',
-    image: '/images/blog.jpg',
+    translation: 'news',
+    href: '/news',
+    image: '/images/news.jpg',
   },
   {
     translation: 'collaboration',
