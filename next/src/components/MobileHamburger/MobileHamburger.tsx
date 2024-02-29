@@ -28,8 +28,6 @@ export default function MobileHamburger({
 }: MobileNavbarProps) {
   const [open, setOpen] = useState(false);
 
-  const authenticated = false;
-
   const toggleMenu = () => {
     setOpen(!open);
   };
@@ -48,7 +46,7 @@ export default function MobileHamburger({
             {navLinks
               .filter(
                 (link) =>
-                  (link.authenticated && authenticated) || !link.authenticated,
+                  (link.authenticated && isLogged) || !link.authenticated,
               )
               .map((link, index) => (
                 <li

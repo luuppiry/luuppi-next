@@ -1,23 +1,16 @@
 import { getDictionary } from '@/dictionaries';
-import { getStrapiData, getStrapiUrl } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiCompanyCompany } from '@/types/contentTypes';
-import Image from 'next/image';
 import Link from 'next/link';
-import Marquee from 'react-fast-marquee';
+import { Suspense } from 'react';
+import PartnersSkeleton from './PartnersSkeleton';
+import RenderPartners from './RenderPartners';
 
 interface PartnersProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
   lang: SupportedLanguage;
 }
 
-export default async function Partners({ dictionary, lang }: PartnersProps) {
-  const partnersData = await getStrapiData<ApiCompanyCompany[]>(
-    lang,
-    '/api/companies?populate=*',
-    ['company'],
-  );
-
+export default function Partners({ dictionary, lang }: PartnersProps) {
   return (
     <section className="relative overflow-hidden bg-background-50/50 px-4 py-20">
       <div className="mx-auto max-w-[1200px]">
@@ -37,25 +30,9 @@ export default async function Partners({ dictionary, lang }: PartnersProps) {
             </Link>
           </div>
         </div>
-        <Marquee className="mt-4 max-md:mt-8" autoFill>
-          {partnersData.data.map((partner) => (
-            <Link
-              key={partner.attributes.createdAt}
-              className="btn btn-link relative mx-6 flex h-32 w-48 opacity-65 brightness-0 filter transition-all duration-300 hover:opacity-100 hover:brightness-100 max-md:h-20"
-              href={partner.attributes.homepageUrl}
-            >
-              <Image
-                alt="Partner company logo"
-                className="object-contain"
-                draggable={false}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={getStrapiUrl(partner.attributes.logo.data.attributes.url)}
-                fill
-                priority
-              />
-            </Link>
-          ))}
-        </Marquee>
+        <Suspense fallback={<PartnersSkeleton />}>
+          <RenderPartners lang={lang} />
+        </Suspense>
       </div>
       <div className="luuppi-patners-pattern absolute left-0 top-0 -z-10 h-full w-full" />
     </section>
