@@ -27,12 +27,8 @@ export default function EventSelector({
   const [width, setWidth] = useState(1200);
 
   useEffect(() => {
-    window.addEventListener('resize', () => setWidth(window.innerWidth));
     setWidth(window.innerWidth);
-    if (window.innerWidth < 1280) {
-      setSelectedView('list');
-    }
-
+    window.addEventListener('resize', () => setWidth(window.innerWidth));
     return () => {
       window.removeEventListener('resize', () => setWidth(window.innerWidth));
     };
