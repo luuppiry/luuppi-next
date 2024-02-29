@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import CopyInput from '../CopyInput/CopyInput';
 import EventCalendar from '../EventCalendar/EventCalendar';
 import EventsList from '../EventsList/EventsList';
+import MobileCalendar from '../MobileCalendar/MobileCalendar';
 import './EventSelector.css';
 
 interface EventSelectorProps {
@@ -23,11 +24,18 @@ export default function EventSelector({
   const [selectedView, setSelectedView] = useState<'calendar' | 'list'>(
     'calendar',
   );
+  const [width, setWidth] = useState(1200);
 
   useEffect(() => {
+    window.addEventListener('resize', () => setWidth(window.innerWidth));
+    setWidth(window.innerWidth);
     if (window.innerWidth < 1280) {
       setSelectedView('list');
     }
+
+    return () => {
+      window.removeEventListener('resize', () => setWidth(window.innerWidth));
+    };
   }, []);
 
   const setView = (view: 'calendar' | 'list') => {
@@ -86,7 +94,17 @@ export default function EventSelector({
         />
       </div>
       {selectedView === 'calendar' ? (
-        <EventCalendar events={events} lang={lang} />
+        <>
+          {width > 960 ? (
+            <EventCalendar events={events} lang={lang} />
+          ) : (
+            <MobileCalendar
+              dictionary={dictionary}
+              events={events}
+              lang={lang}
+            />
+          )}
+        </>
       ) : (
         <EventsList
           events={events}

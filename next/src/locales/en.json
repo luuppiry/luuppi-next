@@ -29,7 +29,8 @@
     "copied": "Copied",
     "submit": "Submit",
     "firstName": "First name",
-    "lastName": "Last name"
+    "lastName": "Last name",
+    "close": "Close"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi",

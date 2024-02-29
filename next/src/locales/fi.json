@@ -29,7 +29,8 @@
     "copied": "Kopioitu",
     "submit": "Lähetä",
     "firstName": "Etunimi",
-    "lastName": "Sukunimi"
+    "lastName": "Sukunimi",
+    "close": "Sulje"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat",
