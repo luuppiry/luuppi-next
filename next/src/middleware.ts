@@ -78,15 +78,7 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  // Populate pathname
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-pathname', pathname);
-
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  return NextResponse.next();
 }
 
 export const config = {

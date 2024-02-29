@@ -4,7 +4,6 @@ import { formatMetadata, getStrapiData } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiOrganizationDocumentOrganizationDocument } from '@/types/contentTypes';
 import { Metadata } from 'next';
-import { headers } from 'next/headers';
 
 const url =
   '/api/organization-document?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
@@ -44,7 +43,7 @@ export async function generateMetadata({
     tags,
   );
 
-  const pathname = headers().get('x-pathname') as string;
+  const pathname = `/${params.lang}/organization/documents`;
 
   return formatMetadata(data, pathname);
 }

@@ -4,7 +4,6 @@ import { formatMetadata, getStrapiData } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiTutoringGeneralTutoringGeneral } from '@/types/contentTypes';
 import { Metadata } from 'next';
-import { headers } from 'next/headers';
 
 const url =
   '/api/tutoring-general?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=ContactBanner';
@@ -41,7 +40,7 @@ export async function generateMetadata({
     tags,
   );
 
-  const pathname = headers().get('x-pathname') as string;
+  const pathname = `/${params.lang}/tutoring`;
 
   return formatMetadata(data, pathname);
 }

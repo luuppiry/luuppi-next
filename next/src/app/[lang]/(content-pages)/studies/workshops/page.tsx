@@ -4,7 +4,6 @@ import { formatMetadata, getStrapiData } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiStudiesWorkshopStudiesWorkshop } from '@/types/contentTypes';
 import { Metadata } from 'next';
-import { headers } from 'next/headers';
 
 const url =
   '/api/studies-workshop?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=ContactBanner';
@@ -43,7 +42,7 @@ export async function generateMetadata({
     tags,
   );
 
-  const pathname = headers().get('x-pathname') as string;
+  const pathname = `/${params.lang}/studies/workshops`;
 
   return formatMetadata(data, pathname);
 }

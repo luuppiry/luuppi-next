@@ -4,7 +4,6 @@ import { formatMetadata, getStrapiData } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiSportSport } from '@/types/contentTypes';
 import { Metadata } from 'next';
-import { headers } from 'next/headers';
 
 const url =
   '/api/contact?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=ContactBanner';
@@ -33,7 +32,7 @@ export async function generateMetadata({
 }: ContactProps): Promise<Metadata> {
   const data = await getStrapiData<ApiSportSport>(params.lang, url, tags);
 
-  const pathname = headers().get('x-pathname') as string;
+  const pathname = `/${params.lang}/contact`;
 
   return formatMetadata(data, pathname);
 }
