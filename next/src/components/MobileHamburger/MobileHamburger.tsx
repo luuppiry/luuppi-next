@@ -1,5 +1,6 @@
 'use client';
 import { getDictionary } from '@/dictionaries';
+import { navLinks } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -7,7 +8,6 @@ import { BiLogOutCircle } from 'react-icons/bi';
 import { HiMenu } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
 import { RiLoginCircleLine } from 'react-icons/ri';
-import { navLinks } from '../Header/navLinks';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import './MobileHamburger.css';
 

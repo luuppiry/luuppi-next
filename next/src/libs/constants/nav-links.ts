@@ -1,4 +1,4 @@
-export interface NavLink {
+interface NavLink {
   translation: string;
   href?: string;
   mobileOnly?: boolean;

@@ -2,8 +2,8 @@ import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import PartnersSkeleton from './PartnersSkeleton';
-import RenderPartners from './RenderPartners';
+import PartnersSkeleton from './PartnersSkeleton/PartnersSkeleton';
+import RenderPartners from './RenderPartners/RenderPartners';
 
 interface PartnersProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;

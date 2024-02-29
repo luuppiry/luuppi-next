@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { RiUser3Fill } from 'react-icons/ri';
-import CloseableLink from './CloseableClient';
+import CloseableLink from './CloseableLink/CloseableLink';
 
 interface UserDropdownProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;

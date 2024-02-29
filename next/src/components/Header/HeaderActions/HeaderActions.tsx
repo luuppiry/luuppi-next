@@ -3,18 +3,18 @@ import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import { signIn, signOut } from 'next-auth/react';
 import { RiLoginCircleLine } from 'react-icons/ri';
-import MobileHamburger from '../MobileHamburger/MobileHamburger';
-import UserDropdown from '../UserDropdown/UserDropdown';
+import MobileHamburger from '../../MobileHamburger/MobileHamburger';
+import UserDropdown from '../../UserDropdown/UserDropdown';
 
-interface HeaderToolsProps {
+interface HeaderActionsProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
   lang: SupportedLanguage;
 }
 
-export default async function HeaderTools({
+export default async function HeaderActions({
   dictionary,
   lang,
-}: HeaderToolsProps) {
+}: HeaderActionsProps) {
   const session = await auth();
 
   const primise10sec = () =>

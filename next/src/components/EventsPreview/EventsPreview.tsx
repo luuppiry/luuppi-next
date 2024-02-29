@@ -2,8 +2,8 @@ import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import EventsSkeleton from './EventsSkeleton';
-import RenderEvents from './RenderEvents';
+import EventsSkeleton from './EventsSkeleton/EventsSkeleton';
+import RenderEvents from './RenderEvents/RenderEvents';
 
 interface EventsPreviewProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;

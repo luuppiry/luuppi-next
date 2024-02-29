@@ -1,4 +1,4 @@
-export interface NavLink {
+interface FooterLink {
   translation: string;
   href?: string;
   sublinks?: {
@@ -7,7 +7,7 @@ export interface NavLink {
   }[];
 }
 
-export const footerLinks: NavLink[] = [
+export const footerLinks: FooterLink[] = [
   {
     translation: 'organization',
     sublinks: [

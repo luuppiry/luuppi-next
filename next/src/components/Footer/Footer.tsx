@@ -1,4 +1,5 @@
 import { getDictionary } from '@/dictionaries';
+import { footerLinks } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,7 +11,6 @@ import {
   FaTelegram,
   FaTiktok,
 } from 'react-icons/fa';
-import { footerLinks } from './footerLinks';
 
 interface FooterProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;

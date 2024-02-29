@@ -1,14 +1,14 @@
 import { getDictionary } from '@/dictionaries';
+import { navLinks } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
-import HeaderTools from './HeaderTools';
-import HideableLink from './HideableLink';
-import ScrollListener from './ScrollListener';
-import { navLinks } from './navLinks';
+import HeaderTools from './HeaderActions/HeaderActions';
+import HideableLink from './HideableLinks/HideableLink';
+import ScrollListener from './ScrollListener/ScrollListener';
 
 interface HeaderProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;

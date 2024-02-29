@@ -2,8 +2,8 @@ import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import NewsSkeleton from './NewsSkeleton';
-import RenderNews from './RenderNews';
+import NewsSkeleton from './NewsSkeleton/NewsSkeleton';
+import RenderNews from './RenderNews/RenderNews';
 
 interface NewsPreviewProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
