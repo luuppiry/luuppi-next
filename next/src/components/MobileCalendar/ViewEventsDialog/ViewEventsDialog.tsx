@@ -23,7 +23,7 @@ export default function ViewEventsDialog({
       className={`modal modal-bottom sm:modal-middle ${events && events.length > 0 ? 'modal-open' : ''}`}
     >
       <div className="modal-box">
-        <h2 className="mb-2 text-lg font-bold">
+        <h2 className="mb-4 text-lg font-bold">
           {new Intl.DateTimeFormat(lang, {
             month: 'long',
             year: 'numeric',
