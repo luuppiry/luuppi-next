@@ -1,6 +1,5 @@
 'use client';
-import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 
 interface HideableLinkProps {
@@ -8,7 +7,7 @@ interface HideableLinkProps {
     translation: string;
     href: string;
   };
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 

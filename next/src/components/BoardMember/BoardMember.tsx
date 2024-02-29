@@ -1,11 +1,11 @@
-import { getDictionary } from '@/dictionaries';
-import { getStrapiUrl } from '@/libs';
+import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
+import { Dictionary } from '@/models/locale';
 import Image from 'next/image';
 import { FaUserAlt } from 'react-icons/fa';
 
 interface BoardMemberProps {
   member: any;
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   showEmail?: boolean;
 }
 

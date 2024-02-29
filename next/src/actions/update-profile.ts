@@ -1,10 +1,10 @@
 'use server';
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
-import { logger } from '@/libs';
 import { getAccessToken } from '@/libs/get-access-token';
 import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
 import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
+import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath } from 'next/cache';
 

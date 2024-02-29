@@ -1,12 +1,11 @@
 'use client';
-import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { RiUser3Fill } from 'react-icons/ri';
 
 interface CloseableLinkProps {
   lang: SupportedLanguage;
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
 }
 
 export default function CloseableLink({

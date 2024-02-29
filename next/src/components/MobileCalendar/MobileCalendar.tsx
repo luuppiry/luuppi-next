@@ -1,6 +1,5 @@
-import { getDictionary } from '@/dictionaries';
 import { Event } from '@/models/event';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useMemo, useState } from 'react';
 import { BiArrowToLeft, BiArrowToRight } from 'react-icons/bi';
 import ViewEventsDialog from './ViewEventsDialog/ViewEventsDialog';
@@ -74,7 +73,7 @@ const generateMonthGrid = (
 interface MobileCalendarProps {
   lang: SupportedLanguage;
   events: Event[];
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
 }
 
 export default function MobileCalendar({

@@ -1,6 +1,5 @@
-import { getDictionary } from '@/dictionaries';
-import { navLinks } from '@/libs';
-import { SupportedLanguage } from '@/models/locale';
+import { navLinks } from '@/libs/constants';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiArrowDropDownLine } from 'react-icons/ri';
@@ -11,7 +10,7 @@ import HideableLink from './HideableLinks/HideableLink';
 import ScrollListener from './ScrollListener/ScrollListener';
 
 interface HeaderProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 

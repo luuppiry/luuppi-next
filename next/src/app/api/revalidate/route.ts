@@ -1,4 +1,4 @@
-import { logger } from '@/libs';
+import { logger } from '@/libs/utils/logger';
 import { revalidateTag } from 'next/cache';
 
 /**

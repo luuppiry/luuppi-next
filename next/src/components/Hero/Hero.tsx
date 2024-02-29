@@ -1,12 +1,11 @@
 'use client';
-import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef } from 'react';
 
 interface HeroProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 

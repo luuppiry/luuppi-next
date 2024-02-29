@@ -1,10 +1,9 @@
-import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import RenderNews from './RenderNews/RenderNews';
 
 interface NewsPreviewProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 

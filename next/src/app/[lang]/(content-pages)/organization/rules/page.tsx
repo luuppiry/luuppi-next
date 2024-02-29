@@ -1,6 +1,7 @@
 import ContentPage from '@/components/ContentPage/ContentPage';
 import { getDictionary } from '@/dictionaries';
-import { formatMetadata, getStrapiData } from '@/libs';
+import { formatMetadata } from '@/libs/strapi/format-metadata';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiOrganizationRuleOrganizationRule } from '@/types/contentTypes';
 import { Metadata } from 'next';

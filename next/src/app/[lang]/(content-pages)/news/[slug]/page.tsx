@@ -2,12 +2,10 @@ import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererC
 import SideNavigator from '@/components/SideNavigator/SideNavigator';
 import SidePartners from '@/components/SidePartners/SidePartners';
 import { getDictionary } from '@/dictionaries';
-import {
-  dateFormat,
-  flipNewsLocale,
-  getStrapiData,
-  getStrapiUrl,
-} from '@/libs';
+import { dateFormat } from '@/libs/constants';
+import { flipNewsLocale } from '@/libs/strapi/flip-locale';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
+import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
 import {
   ApiCompanyCompany,

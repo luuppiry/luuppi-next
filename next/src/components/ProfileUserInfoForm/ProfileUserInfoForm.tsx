@@ -1,7 +1,6 @@
 'use client';
 import { updateProfile } from '@/actions/update-profile';
-import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { User } from '@microsoft/microsoft-graph-types';
 import { useFormState, useFormStatus } from 'react-dom';
 import { BiErrorCircle } from 'react-icons/bi';
@@ -16,7 +15,7 @@ const initialState = {
 interface ProfileUserInfoFormProps {
   user: User;
   lang: SupportedLanguage;
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
 }
 
 export default function ProfileUserInfoForm({
@@ -77,7 +76,7 @@ export default function ProfileUserInfoForm({
 }
 
 interface SubmitButtonProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
 }
 
 function SubmitButton({ dictionary }: SubmitButtonProps) {

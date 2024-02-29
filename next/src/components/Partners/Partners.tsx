@@ -1,10 +1,9 @@
-import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import RenderPartners from './RenderPartners/RenderPartners';
 
 interface PartnersProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 

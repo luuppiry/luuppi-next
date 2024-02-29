@@ -1,13 +1,12 @@
 'use client';
 import { signIn } from '@/actions/auth';
-import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useSession } from 'next-auth/react';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import UserDropdown from '../../UserDropdown/UserDropdown';
 
 interface HeaderActionsProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 

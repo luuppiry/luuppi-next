@@ -1,10 +1,10 @@
 'use client';
-import { getDictionary } from '@/dictionaries';
+import { Dictionary } from '@/models/locale';
 import { useEffect, useState } from 'react';
 
 interface SideNavigatorProps {
   targetClass: string;
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
 }
 
 export default function SideNavigator({

@@ -1,13 +1,12 @@
 'use client';
-import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { User } from '@microsoft/microsoft-graph-types';
 import FormCheckbox from '../FormCheckbox/FormCheckbox';
 
 interface ProfileNotificationsFormProps {
   user: User;
   lang: SupportedLanguage;
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
 }
 
 export default function ProfileNotificationsForm({

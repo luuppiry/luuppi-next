@@ -1,4 +1,5 @@
-import { dateFormat, getLuuppiEvents } from '@/libs';
+import { dateFormat } from '@/libs/constants';
+import { getLuuppiEvents } from '@/libs/events/get-legacy-events';
 import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';

@@ -1,5 +1,6 @@
 import { SupportedLanguage } from '@/models/locale';
 import { ApiNewsSingleNewsSingle } from '@/types/contentTypes';
+import 'server-only';
 
 /**
  * Strapi does not support direct localization in a case where we

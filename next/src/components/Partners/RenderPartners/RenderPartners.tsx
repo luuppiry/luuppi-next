@@ -1,4 +1,5 @@
-import { getStrapiData, getStrapiUrl } from '@/libs';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
+import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';

@@ -1,7 +1,6 @@
 'use client';
-import { getDictionary } from '@/dictionaries';
 import { Event } from '@/models/event';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useEffect, useState } from 'react';
 import CopyInput from '../CopyInput/CopyInput';
 import EventCalendar from '../EventCalendar/EventCalendar';
@@ -11,7 +10,7 @@ import './EventSelector.css';
 
 interface EventSelectorProps {
   events: Event[];
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 

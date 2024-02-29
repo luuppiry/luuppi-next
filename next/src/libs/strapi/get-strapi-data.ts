@@ -1,5 +1,6 @@
-import { logger } from '@/libs';
+import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
+import 'server-only';
 import { getStrapiUrl } from './get-strapi-url';
 
 /**

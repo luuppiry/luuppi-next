@@ -1,4 +1,5 @@
 import { ApiBoardBoard } from '@/types/contentTypes';
+import 'server-only';
 
 /**
  * Group board members by year

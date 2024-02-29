@@ -3,9 +3,9 @@ import ProfileEmailform from '@/components/ProfileEmailForm/ProfileEmailForm';
 import ProfileNotificationsForm from '@/components/ProfileNotificationsForm/ProfileNotificationsForm';
 import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInfoForm';
 import { getDictionary } from '@/dictionaries';
-import { logger } from '@/libs';
 import { getAccessToken } from '@/libs/get-access-token';
 import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
+import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { redirect } from 'next/navigation';
 

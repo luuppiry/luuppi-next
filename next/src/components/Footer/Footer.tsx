@@ -1,6 +1,5 @@
-import { getDictionary } from '@/dictionaries';
-import { footerLinks } from '@/libs';
-import { SupportedLanguage } from '@/models/locale';
+import { footerLinks } from '@/libs/constants';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -13,7 +12,7 @@ import {
 } from 'react-icons/fa';
 
 interface FooterProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 

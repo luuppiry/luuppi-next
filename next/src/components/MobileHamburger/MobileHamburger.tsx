@@ -1,8 +1,7 @@
 'use client';
 import { signIn, signOut } from '@/actions/auth';
-import { getDictionary } from '@/dictionaries';
-import { navLinks } from '@/libs';
-import { SupportedLanguage } from '@/models/locale';
+import { navLinks } from '@/libs/constants';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -14,7 +13,7 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import './MobileHamburger.css';
 
 interface MobileNavbarProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 

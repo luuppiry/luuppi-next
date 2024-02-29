@@ -1,13 +1,12 @@
 import SidePartners from '@/components/SidePartners/SidePartners';
 import { getDictionary } from '@/dictionaries';
+import { longDateFormat, shortDateFormat } from '@/libs/constants';
 import {
-  firstLetterToUpperCase,
   getLuuppiEventById,
   getLuuppiEvents,
-  getStrapiData,
-  longDateFormat,
-  shortDateFormat,
-} from '@/libs';
+} from '@/libs/events/get-legacy-events';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
+import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { SupportedLanguage } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import { redirect } from 'next/navigation';

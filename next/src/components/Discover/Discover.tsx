@@ -1,12 +1,11 @@
-import { getDictionary } from '@/dictionaries';
-import { discoverLinks } from '@/libs';
-import { SupportedLanguage } from '@/models/locale';
+import { discoverLinks } from '@/libs/constants';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 
 interface DiscoverProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 

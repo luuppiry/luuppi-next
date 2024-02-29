@@ -1,13 +1,12 @@
-import { getDictionary } from '@/dictionaries';
 import { Event } from '@/models/event';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 
 interface ViewEventsDialogProps {
   events: Event[];
   onClose: () => void;
   lang: SupportedLanguage;
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
 }
 
 export default function ViewEventsDialog({

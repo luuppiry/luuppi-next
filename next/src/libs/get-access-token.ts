@@ -10,8 +10,9 @@ const msalConfig = {
 };
 
 /**
- * Get access token
- * @returns Access token
+ * Get access token with high privilege. This is used on server side to
+ * access Microsoft Graph API.
+ * @returns Access token or null if failed to get it.
  */
 export const getAccessToken = async (): Promise<string | null> => {
   const cca = new ConfidentialClientApplication(msalConfig);

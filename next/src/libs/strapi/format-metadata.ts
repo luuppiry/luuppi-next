@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
+import 'server-only';
 
 /**
- * Takes "content page"'s data and pathname and returns formatted metadata
+ * Takes "content page"'s Seo data and pathname and returns formatted metadata
  * that can be used in the head of the page.
  * @param content content page data
  * @param pathname current page's pathname

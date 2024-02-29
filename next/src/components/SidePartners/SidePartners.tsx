@@ -1,6 +1,6 @@
 'use client';
-import { getDictionary } from '@/dictionaries';
-import { getStrapiUrl } from '@/libs';
+import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
+import { Dictionary } from '@/models/locale';
 import { ApiCompanyCompany } from '@/types/contentTypes';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 interface SidePartnersProps {
   partnersData: ApiCompanyCompany[];
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
 }
 
 export default function SidePartners({

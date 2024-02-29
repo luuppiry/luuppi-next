@@ -1,7 +1,7 @@
-'use server';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import ical from 'node-ical';
+import 'server-only';
 
 /**
  * Get events from Luuppi's legacy ICS calendar.

@@ -1,10 +1,9 @@
 'use client';
-import Image from 'next/image';
-
 import {
   BlocksRenderer,
   type BlocksContent,
 } from '@strapi/blocks-react-renderer';
+import Image from 'next/image';
 import Link from 'next/link';
 
 /**

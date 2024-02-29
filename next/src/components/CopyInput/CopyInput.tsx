@@ -1,11 +1,11 @@
 'use client';
-import { getDictionary } from '@/dictionaries';
+import { Dictionary } from '@/models/locale';
 import { useState } from 'react';
 import { IoIosLink } from 'react-icons/io';
 
 interface CopyInputProps {
   value: string;
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
 }
 
 export default function CopyInput({ value, dictionary }: CopyInputProps) {

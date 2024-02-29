@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
-import { logger } from '@/libs';
 import { getAccessToken } from '@/libs/get-access-token';
 import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
+import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { revalidatePath } from 'next/cache';

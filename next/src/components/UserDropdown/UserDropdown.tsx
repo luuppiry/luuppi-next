@@ -1,14 +1,13 @@
 'use client';
 import { signOut } from '@/actions/auth';
-import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useSession } from 'next-auth/react';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { RiUser3Fill } from 'react-icons/ri';
 import CloseableLink from './CloseableLink/CloseableLink';
 
 interface UserDropdownProps {
-  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 
