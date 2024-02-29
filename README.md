@@ -12,7 +12,8 @@ This repository is the foundation of [luuppi.fi](https://luuppi.fi) website. It 
 
 ### Frontend (_next_)
 
-> ⚠️ The frontend content is primarily fetched from the CMS. Therefore, when developing the frontend, you should work with an instance of the CMS. If you are solely focused on frontend development without modifying the CMS logic, you can even use the production instance for this purpose. To make this adjustment, you can change the `NEXT_PUBLIC_STRAPI_BASE_URL` inside `next/.env.local`.
+> [!IMPORTANT]
+> The frontend content is primarily fetched from the CMS. Therefore, when developing the frontend, you should work with an instance of the CMS. If you are solely focused on frontend development without modifying the CMS logic, you can even use the production instance for this purpose. To make this adjustment, you can change the `NEXT_PUBLIC_STRAPI_BASE_URL` inside `next/.env.local`.
 
 **Note:** The following commands should be executed within the `next` folder.
 
@@ -52,7 +53,8 @@ In summary, you use the content-type builder locally to structure the correct 'd
 
 <br>
 
-> ⚠️ When modifying content in Strapi, update the newly generated types on the frontend by running `copyTypes.js` in the project's root. This action will copy the Strapi-generated types to the frontend.
+> [!IMPORTANT]
+> When modifying content in Strapi, update the newly generated types on the frontend by running `copyTypes.js` in the project's root. This action will copy the Strapi-generated types to the frontend.
 
 **Note:** The following commands should be executed within the `strapi` folder.
 
