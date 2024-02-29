@@ -52,6 +52,9 @@ export default function ViewEventsDialog({
           </form>
         </div>
       </div>
+      <label className="modal-backdrop" onClick={onClose}>
+        Close
+      </label>
     </dialog>
   );
 }
