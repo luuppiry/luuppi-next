@@ -129,6 +129,6 @@ export async function generateStaticParams() {
   const boardGroupedByYear = groupBoardByYear(boardData.data);
 
   return Object.keys(boardGroupedByYear).map((year) => ({
-    params: { slug: year },
+    slug: year,
   }));
 }

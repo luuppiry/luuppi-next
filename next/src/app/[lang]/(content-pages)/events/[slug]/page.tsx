@@ -103,9 +103,9 @@ export default async function Event({ params }: EventProps) {
 export async function generateStaticParams() {
   const eventData = await getLuuppiEvents('fi');
 
-  return eventData.map((event) => ({
-    params: {
+  return eventData
+    .filter((e) => e.id)
+    .map((event) => ({
       slug: event.id,
-    },
-  }));
+    }));
 }

@@ -137,8 +137,6 @@ export async function generateStaticParams() {
   );
 
   return pageData.data.map((news) => ({
-    params: {
-      slug: news.attributes.slug,
-    },
+    slug: news.attributes.slug,
   }));
 }
