@@ -44,7 +44,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/negotiator": "^0.6.3",
-    "@types/node": "^20.11.19",
+    "@types/node": "^20.11.23",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
