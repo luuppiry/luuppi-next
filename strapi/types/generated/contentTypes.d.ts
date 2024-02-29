@@ -1206,6 +1206,7 @@ export interface ApiNewsListNewsList extends Schema.SingleType {
     singularName: 'news-list';
     pluralName: 'news-lists';
     displayName: 'NewsList';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1216,7 +1217,7 @@ export interface ApiNewsListNewsList extends Schema.SingleType {
     };
   };
   attributes: {
-    Seo: Attribute.Component<'shared.seo', true> &
+    Seo: Attribute.Component<'shared.seo'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {

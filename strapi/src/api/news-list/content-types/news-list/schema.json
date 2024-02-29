@@ -4,7 +4,8 @@
   "info": {
     "singularName": "news-list",
     "pluralName": "news-lists",
-    "displayName": "NewsList"
+    "displayName": "NewsList",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -17,7 +18,7 @@
   "attributes": {
     "Seo": {
       "type": "component",
-      "repeatable": true,
+      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
