@@ -118,7 +118,7 @@ export default function MobileCalendar({
   };
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full">
       <ViewEventsDialog
         dictionary={dictionary}
         events={selectedEvents}
@@ -166,7 +166,8 @@ export default function MobileCalendar({
           return (
             <button
               key={idx}
-              className={`flex w-full flex-col items-center rounded-lg py-2 text-center ${isToday ? 'bg-[#fffadf] font-bold' : 'bg-gray-50'}`}
+              className={`flex w-full flex-col items-center rounded-lg py-2 text-center transition-all duration-300 ease-in-out
+               ${isToday ? 'bg-[#fffadf] font-bold' : 'bg-gray-50'} ${hasEvents && 'hover:bg-gray-200 focus:bg-gray-200'}`}
               disabled={isPast || !hasEvents}
               onClick={() => openDayEventsDialog(dateKey)}
             >
