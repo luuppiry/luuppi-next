@@ -1,8 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
-import { Suspense } from 'react';
-import PartnersSkeleton from './PartnersSkeleton/PartnersSkeleton';
 import RenderPartners from './RenderPartners/RenderPartners';
 
 interface PartnersProps {
@@ -30,9 +28,7 @@ export default function Partners({ dictionary, lang }: PartnersProps) {
             </Link>
           </div>
         </div>
-        <Suspense fallback={<PartnersSkeleton />}>
-          <RenderPartners lang={lang} />
-        </Suspense>
+        <RenderPartners lang={lang} />
       </div>
       <div className="luuppi-patners-pattern absolute left-0 top-0 -z-10 h-full w-full" />
     </section>

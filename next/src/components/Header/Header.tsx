@@ -3,10 +3,10 @@ import { navLinks } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
-import HeaderTools from './HeaderActions/HeaderActions';
+import MobileHamburger from '../MobileHamburger/MobileHamburger';
+import HeaderActions from './HeaderActions/HeaderActions';
 import HideableLink from './HideableLinks/HideableLink';
 import ScrollListener from './ScrollListener/ScrollListener';
 
@@ -47,20 +47,8 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               <div className="flex items-center justify-center max-lg:hidden">
                 <LanguageSwitcher />
               </div>
-              <Suspense
-                fallback={
-                  <button
-                    className={
-                      'custom-scroll-text btn btn-ghost flex min-w-20 items-center rounded-lg bg-primary-600 px-4 py-2 text-lg font-bold transition-all max-xl:text-base max-lg:hidden'
-                    }
-                    disabled
-                  >
-                    <span className="loading loading-spinner loading-md" />
-                  </button>
-                }
-              >
-                <HeaderTools dictionary={dictionary} lang={lang} />
-              </Suspense>
+              <HeaderActions dictionary={dictionary} lang={lang} />
+              <MobileHamburger dictionary={dictionary} lang={lang} />
             </div>
           </div>
         </nav>

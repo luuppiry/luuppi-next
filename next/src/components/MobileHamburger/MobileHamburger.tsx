@@ -1,7 +1,9 @@
 'use client';
+import { signIn, signOut } from '@/actions/auth';
 import { getDictionary } from '@/dictionaries';
 import { navLinks } from '@/libs';
 import { SupportedLanguage } from '@/models/locale';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BiLogOutCircle } from 'react-icons/bi';
@@ -14,18 +16,14 @@ import './MobileHamburger.css';
 interface MobileNavbarProps {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
   lang: SupportedLanguage;
-  isLogged: boolean;
-  signIn: () => Promise<void>;
-  signOut: () => Promise<void>;
 }
 
 export default function MobileHamburger({
   dictionary,
   lang,
-  isLogged,
-  signIn,
-  signOut,
 }: MobileNavbarProps) {
+  const { data } = useSession();
+  const session = data;
   const [open, setOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -46,7 +44,7 @@ export default function MobileHamburger({
             {navLinks
               .filter(
                 (link) =>
-                  (link.authenticated && isLogged) || !link.authenticated,
+                  (link.authenticated && session?.user) || !link.authenticated,
               )
               .map((link, index) => (
                 <li
@@ -105,7 +103,7 @@ export default function MobileHamburger({
                 <IoMdClose size={32} />
               </button>
               <LanguageSwitcher />
-              {isLogged ? (
+              {session?.user ? (
                 <button
                   className="btn btn-circle btn-ghost m-1 bg-error text-white"
                   type="submit"
@@ -116,7 +114,7 @@ export default function MobileHamburger({
               ) : (
                 <button
                   className="btn btn-circle btn-ghost m-1 bg-primary-500 text-white"
-                  onClick={async () => await signIn()}
+                  onClick={async () => await signIn('azure-ad-b2c')}
                 >
                   <RiLoginCircleLine size={32} />
                 </button>

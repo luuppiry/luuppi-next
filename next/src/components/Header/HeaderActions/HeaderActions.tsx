@@ -1,9 +1,9 @@
-import { auth } from '@/auth';
+'use client';
+import { signIn } from '@/actions/auth';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
-import { signIn, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { RiLoginCircleLine } from 'react-icons/ri';
-import MobileHamburger from '../../MobileHamburger/MobileHamburger';
 import UserDropdown from '../../UserDropdown/UserDropdown';
 
 interface HeaderActionsProps {
@@ -11,20 +11,12 @@ interface HeaderActionsProps {
   lang: SupportedLanguage;
 }
 
-export default async function HeaderActions({
+export default function HeaderActions({
   dictionary,
   lang,
 }: HeaderActionsProps) {
-  const session = await auth();
-
-  const primise10sec = () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve('resolved');
-      }, 10000);
-    });
-
-  await primise10sec();
+  const { data } = useSession();
+  const session = data;
 
   return (
     <>
@@ -35,12 +27,7 @@ export default async function HeaderActions({
           </div>
         </>
       ) : (
-        <form
-          action={async () => {
-            'use server';
-            await signIn('azure-ad-b2c');
-          }}
-        >
+        <form action={async () => await signIn('azure-ad-b2c')}>
           <button
             className={
               'custom-scroll-text btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 text-lg font-bold transition-all max-xl:text-base max-lg:hidden'
@@ -52,19 +39,6 @@ export default async function HeaderActions({
           </button>{' '}
         </form>
       )}
-      <MobileHamburger
-        dictionary={dictionary}
-        isLogged={session && session.user ? true : false}
-        lang={lang}
-        signIn={async () => {
-          'use server';
-          await signIn('azure-ad-b2c');
-        }}
-        signOut={async () => {
-          'use server';
-          await signOut();
-        }}
-      />
     </>
   );
 }

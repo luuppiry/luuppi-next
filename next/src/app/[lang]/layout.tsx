@@ -3,6 +3,7 @@ import Header from '@/components/Header/Header';
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import type { Metadata, Viewport } from 'next';
+import { SessionProvider } from 'next-auth/react';
 import PlausibleProvider from 'next-plausible';
 import { Poppins } from 'next/font/google';
 import { i18n } from '../../i18n-config';
@@ -35,9 +36,11 @@ export default async function RootLayout({
         />
       </head>
       <body className={titilliumFont.className}>
-        <Header dictionary={dictionary} lang={params.lang} />
-        <div className="flex-1">{children}</div>
-        <Footer dictionary={dictionary} lang={params.lang} />
+        <SessionProvider>
+          <Header dictionary={dictionary} lang={params.lang} />
+          <div className="flex-1">{children}</div>
+          <Footer dictionary={dictionary} lang={params.lang} />
+        </SessionProvider>
       </body>
     </html>
   );

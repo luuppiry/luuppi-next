@@ -1,8 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
-import { Suspense } from 'react';
-import NewsSkeleton from './NewsSkeleton/NewsSkeleton';
 import RenderNews from './RenderNews/RenderNews';
 
 interface NewsPreviewProps {
@@ -21,9 +19,7 @@ export default function NewsPreview({ dictionary, lang }: NewsPreviewProps) {
       </h2>
       <div className="flex flex-col gap-8">
         <div className="grid grid-cols-3 gap-6 max-lg:grid-cols-2 max-sm:grid-cols-1">
-          <Suspense fallback={<NewsSkeleton />}>
-            <RenderNews lang={lang} />
-          </Suspense>
+          <RenderNews lang={lang} />
         </div>
         <div className="flex justify-center">
           <Link

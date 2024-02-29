@@ -1,8 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
-import { Suspense } from 'react';
-import EventsSkeleton from './EventsSkeleton/EventsSkeleton';
 import RenderEvents from './RenderEvents/RenderEvents';
 
 interface EventsPreviewProps {
@@ -24,9 +22,7 @@ export default function EventsPreview({
           {dictionary.pages_home.events_preview.title}
         </h2>
         <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
-          <Suspense fallback={<EventsSkeleton />}>
-            <RenderEvents lang={lang} />
-          </Suspense>
+          <RenderEvents lang={lang} />
         </div>
         <div className="mt-8 flex justify-center">
           <Link
