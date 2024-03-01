@@ -117,6 +117,5 @@ jobs:
                       git pull
                       cd next
                       docker build -t next:latest .
-                      docker stop next
-                      docker rm next
-                      docker run -d --name next -p 127.0.0.1:3000:3000 --mount type=bind,source="$(pwd)"/.env.local,target=/app/.env.local -u $(id -u):$(id -g) next:latest
+                      docker compose down
+                      docker compose up -d
