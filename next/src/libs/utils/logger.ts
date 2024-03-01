@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const LOGS_ENABLED = process.env.NODE_ENV === 'development';
+const LOGS_ENABLED = process.env.LOGS_ENABLED ?? true;
 
 const getFormattedDate = () => {
   const date = new Date();
