@@ -12,7 +12,8 @@
     "invalid_given_name": "Kelvoton etunimi. Etunimen tulee olla 2-35 merkkiä pitkä.",
     "invalid_surname": "Kelvoton sukunimi. Sukunimen tulee olla 2-35 merkkiä pitkä.",
     "no_changes_detected": "Muutoksia ei havaittu",
-    "profile_updated": "Profiili päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen."
+    "profile_updated": "Profiili päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen.",
+    "ratelimit": "Liian monta pyyntöä. Yritä uudelleen myöhemmin."
   },
   "general": {
     "email": "Sähköposti",

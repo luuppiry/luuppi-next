@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import { getAccessToken } from '@/libs/get-access-token';
 import { verifyGraphAPIEmail } from '@/libs/graph/graph-verify-email';
+import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { EmailClient, EmailMessage } from '@azure/communication-email';
@@ -17,7 +18,8 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
 const jwtSecret = process.env.JWT_SECRET!;
 
-// TODO: Rate limit this action
+const cacheKey = 'email-verification';
+
 export async function sendVerifyEmail(
   lang: SupportedLanguage,
   _: any,
@@ -32,6 +34,14 @@ export async function sendVerifyEmail(
     logger.error('Unauthorized, user not found in session');
     return {
       message: dictionary.api.unauthorized,
+      isError: true,
+    };
+  }
+
+  const isLimited = await isRateLimited(user.azureId, cacheKey, 3);
+  if (isLimited) {
+    return {
+      message: dictionary.api.ratelimit,
       isError: true,
     };
   }
@@ -132,6 +142,9 @@ export async function sendVerifyEmail(
     const poller = await emailClient.beginSend(message);
     await poller.pollUntilDone();
     logger.info('Email change verification email sent to', email);
+
+    await updateRateLimitCounter(user.azureId, cacheKey);
+
     return {
       message: dictionary.api.verify_email_sent,
       isError: false,

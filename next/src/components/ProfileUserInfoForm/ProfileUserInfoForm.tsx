@@ -2,11 +2,18 @@
 import { updateProfile } from '@/actions/update-profile';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { User } from '@microsoft/microsoft-graph-types';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { BiErrorCircle } from 'react-icons/bi';
 import FormInput from '../FormInput/FormInput';
 
-const initialState = {
+interface ProfileFormResponse {
+  message: string;
+  isError: boolean;
+  field?: string;
+}
+
+const initialState: ProfileFormResponse = {
   message: '',
   isError: false,
   field: '',
@@ -24,48 +31,69 @@ export default function ProfileUserInfoForm({
   dictionary,
 }: ProfileUserInfoFormProps) {
   const updateProfileAction = updateProfile.bind(null, lang);
-  const [state, formAction] = useFormState(updateProfileAction, initialState);
+  const [formResponse, setFormResponse] = useState(initialState);
+
+  const handleProfileUpdate = async (formData: FormData) => {
+    const response = await updateProfileAction(null, formData);
+    setFormResponse(response);
+  };
 
   return (
-    <form action={formAction} className="card card-body bg-background-50">
+    <form
+      action={handleProfileUpdate}
+      className="card card-body bg-background-50"
+    >
       <div className="flex w-full flex-col">
-        {Boolean(state.isError && state.message && !state.field) && (
+        {Boolean(
+          formResponse.isError &&
+            formResponse.message &&
+            formResponse.field !== '',
+        ) && (
           <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
             <BiErrorCircle size={24} />
-            {state.message}
+            {formResponse.message}
           </div>
         )}
-        {Boolean(!state.isError && state.message && !state.field) && (
+        {Boolean(
+          !formResponse.isError &&
+            formResponse.message &&
+            formResponse.field !== '',
+        ) && (
           <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
-            {state.message}
+            {formResponse.message}
           </div>
         )}
         <FormInput
-          error={state.field === 'displayName' ? state.message : ''}
+          error={
+            formResponse.field === 'displayName' ? formResponse.message : ''
+          }
           id="displayName"
           marginTop={false}
           placeholder={dictionary.general.username}
           title={dictionary.general.username}
           type="text"
           value={user.displayName as string}
+          onChange={() => setFormResponse(initialState)}
         />
         <FormInput
-          error={state.field === 'givenName' ? state.message : ''}
+          error={formResponse.field === 'givenName' ? formResponse.message : ''}
           id="givenName"
           marginTop={false}
           placeholder={dictionary.general.firstName}
           title={dictionary.general.firstName}
           type="text"
           value={user.givenName as string}
+          onChange={() => setFormResponse(initialState)}
         />
         <FormInput
-          error={state.field === 'surname' ? state.message : ''}
+          error={formResponse.field === 'surname' ? formResponse.message : ''}
           id="surname"
           marginTop={false}
           placeholder={dictionary.general.lastName}
           title={dictionary.general.lastName}
           type="text"
           value={user.surname as string}
+          onChange={() => setFormResponse(initialState)}
         />
         <div>
           <SubmitButton dictionary={dictionary} />

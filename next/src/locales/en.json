@@ -12,7 +12,8 @@
     "invalid_given_name": "Invalid first name. First name must be 2-35 characters long.",
     "invalid_surname": "Invalid last name. Last name must be 2-35 characters long..",
     "no_changes_detected": "No changes detected",
-    "profile_updated": "Profile updated. Some changes require you to re-login to take effect."
+    "profile_updated": "Profile updated. Some changes require you to re-login to take effect.",
+    "ratelimit": "Too many requests. Please try again later."
   },
   "general": {
     "email": "Email",

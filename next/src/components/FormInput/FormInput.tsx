@@ -10,6 +10,7 @@ interface FormInputProps {
   marginTop?: boolean;
   marginBottom?: boolean;
   labelTopRight?: React.ReactNode;
+  onChange?: () => void;
 }
 
 export default function FormInput({
@@ -24,6 +25,7 @@ export default function FormInput({
   loading,
   marginTop = true,
   marginBottom = true,
+  onChange,
 }: FormInputProps) {
   return (
     <label
@@ -48,6 +50,7 @@ export default function FormInput({
           placeholder={placeholder}
           required={required}
           type={type ?? 'text'}
+          onChange={onChange}
         />
       )}
       {Boolean(error) && (

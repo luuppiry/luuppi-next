@@ -2,11 +2,18 @@
 import { sendVerifyEmail } from '@/actions/send-verify-email';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { User } from '@microsoft/microsoft-graph-types';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { BiErrorCircle } from 'react-icons/bi';
 import FormInput from '../FormInput/FormInput';
 
-const initialState = {
+interface ProfileEmailResponse {
+  message: string;
+  isError: boolean;
+  field?: string;
+}
+
+const initialState: ProfileEmailResponse = {
   message: '',
   isError: false,
   field: '',
@@ -23,31 +30,41 @@ export default function ProfileEmailform({
   lang,
   dictionary,
 }: ProfileEmailFormProps) {
-  const handleEmailUpdate = sendVerifyEmail.bind(null, lang);
-  const [state, formAction] = useFormState(handleEmailUpdate, initialState);
+  const handleEmailUpdateAction = sendVerifyEmail.bind(null, lang);
+  const [formResponse, setFormResponse] = useState(initialState);
+
+  const updateEmailUpdate = async (formData: FormData) => {
+    const response = await handleEmailUpdateAction(null, formData);
+    setFormResponse(response);
+  };
 
   return (
-    <form action={formAction} className="card card-body">
+    <form action={updateEmailUpdate} className="card card-body">
       <div className="flex w-full flex-col">
-        {Boolean(state.isError && state.message && !state.field) && (
+        {Boolean(
+          formResponse.isError && formResponse.message && !formResponse.field,
+        ) && (
           <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
             <BiErrorCircle size={24} />
-            {state.message}
+            {formResponse.message}
           </div>
         )}
-        {Boolean(!state.isError && state.message && !state.field) && (
+        {Boolean(
+          !formResponse.isError && formResponse.message && !formResponse.field,
+        ) && (
           <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
-            {state.message}
+            {formResponse.message}
           </div>
         )}
         <FormInput
-          error={state.field === 'email' ? state.message : ''}
+          error={formResponse.field === 'email' ? formResponse.message : ''}
           id="email"
           marginTop={false}
           placeholder="webmaster@luuppi.fi"
           title={dictionary.general.email}
           type="email"
           value={user.mail as string}
+          onChange={() => setFormResponse(initialState)}
         />
         <div>
           <SubmitButton dictionary={dictionary} />

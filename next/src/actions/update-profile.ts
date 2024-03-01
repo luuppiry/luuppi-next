@@ -4,11 +4,13 @@ import { getDictionary } from '@/dictionaries';
 import { getAccessToken } from '@/libs/get-access-token';
 import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
 import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
+import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath } from 'next/cache';
 
-// TODO: Rate limit this action
+const cacheKey = 'update-profile';
+
 export async function updateProfile(
   lang: SupportedLanguage,
   _: any,
@@ -23,6 +25,14 @@ export async function updateProfile(
     logger.error('Unauthorized, user not found in session');
     return {
       message: dictionary.api.unauthorized,
+      isError: true,
+    };
+  }
+
+  const isLimited = await isRateLimited(user.azureId, cacheKey, 10);
+  if (isLimited) {
+    return {
+      message: dictionary.api.ratelimit,
       isError: true,
     };
   }
@@ -126,6 +136,8 @@ export async function updateProfile(
   });
 
   revalidatePath(`/${lang}/profile`);
+
+  await updateRateLimitCounter(user.azureId, cacheKey);
 
   return {
     message: dictionary.api.profile_updated,
