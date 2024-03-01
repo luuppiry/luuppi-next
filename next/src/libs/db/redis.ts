@@ -11,6 +11,7 @@ const redisClient = createClient({
 redisClient.on('error', (err) => logger.error(err));
 
 if (!redisClient.isOpen) {
+  logger.info('Connecting to Redis');
   redisClient.connect();
 }
 
