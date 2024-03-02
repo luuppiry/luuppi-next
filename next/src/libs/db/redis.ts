@@ -1,18 +1,15 @@
-import { createClient } from 'redis';
+import Redis from 'ioredis';
 import { logger } from '../utils/logger';
 
-const redisClient = createClient({
-  socket: {
-    host: process.env.REDIS_HOST!,
-    port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379,
-  },
+const redisClient = new Redis({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379,
+  lazyConnect: true,
 });
 
 redisClient.on('error', (err) => logger.error(err));
 
-if (!redisClient.isOpen) {
-  logger.info('Connecting to Redis');
-  redisClient.connect();
-}
+logger.info('Connecting to Redis');
+redisClient.connect();
 
 export { redisClient };

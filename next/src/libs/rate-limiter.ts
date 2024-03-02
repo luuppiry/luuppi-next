@@ -30,7 +30,5 @@ export async function updateRateLimitCounter(
     expiration = currentExpiration > 0 ? currentExpiration : expiration;
   }
 
-  await redisClient.set(key, currentVerification + 1, {
-    EX: expiration,
-  });
+  await redisClient.set(key, currentVerification + 1, 'EX', expiration);
 }
