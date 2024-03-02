@@ -9,8 +9,10 @@
     "verify_email_sent": "Vahvistuslinkki on lähetetty uuteen sähköpostiosoitteeseesi. Linkki on voimassa 30 minuuttia.",
     "email_sending_failed": "Sähköpostin lähetys epäonnistui. Tämä voi johtua väärästä sähköpostiosoitteesta tai teknisestä ongelmasta.",
     "invalid_display_name": "Kelvoton käyttäjänimi. Käyttäjänimen tulee olla 3-30 merkkiä pitkä ja se voi sisältää vain kirjaimia, numeroita ja seuraavia erikoismerkkejä: ._-",
-    "invalid_given_name": "Kelvoton etunimi. Etunimen tulee olla 2-35 merkkiä pitkä.",
+    "invalid_given_name": "Kelvottomat etunimet. Etunimien yhteispituuden tulee olla 2-70 merkkiä pitkä.",
     "invalid_surname": "Kelvoton sukunimi. Sukunimen tulee olla 2-35 merkkiä pitkä.",
+    "invalid_domicle": "Kelvoton kotikunta. Kotikunnan tulee olla 2-35 merkkiä pitkä.",
+    "invalid_preferred_full_name": "Kelvoton haluttu koko nimi. Halutun koko nimen tulee olla 2-100 merkkiä pitkä.",
     "no_changes_detected": "Muutoksia ei havaittu",
     "profile_updated": "Profiili päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen.",
     "ratelimit": "Liian monta pyyntöä. Yritä uudelleen myöhemmin."
@@ -29,9 +31,11 @@
     "logout": "Kirjaudu ulos",
     "copied": "Kopioitu",
     "submit": "Lähetä",
-    "firstName": "Etunimi",
+    "firstNames": "Etunimet",
     "lastName": "Sukunimi",
-    "close": "Sulje"
+    "close": "Sulje",
+    "preferredFullName": "Ensisijainen koko nimi",
+    "domicle": "Kotikunta"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat",

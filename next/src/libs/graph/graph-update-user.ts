@@ -11,8 +11,16 @@ import 'server-only';
 export const updateGraphAPIUser = async (
   token: string,
   userId: string,
-  updatedFields: Partial<User>,
+  updatedFields: Partial<User | { [key: string]: any }>,
 ): Promise<boolean> => {
+  const changeEmptyStringToNull = (obj: any) => {
+    for (const key in obj) {
+      if (obj[key] === '') {
+        obj[key] = null;
+      }
+    }
+    return obj;
+  };
   try {
     const response = await fetch(
       `https://graph.microsoft.com/v1.0/users/${userId}`,
@@ -23,7 +31,7 @@ export const updateGraphAPIUser = async (
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...updatedFields,
+          ...changeEmptyStringToNull(updatedFields),
         }),
       },
     );

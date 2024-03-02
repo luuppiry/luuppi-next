@@ -1,4 +1,4 @@
-import { User } from '@microsoft/microsoft-graph-types';
+import { ExtendedUser } from '@/models/user';
 import 'server-only';
 
 /**
@@ -10,10 +10,10 @@ import 'server-only';
 export const getGraphAPIUser = async (
   token: string,
   userId: string,
-): Promise<User | null> => {
+): Promise<ExtendedUser | null> => {
   try {
     const response = await fetch(
-      `https://graph.microsoft.com/v1.0/users/${userId}`,
+      `https://graph.microsoft.com/beta/users/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

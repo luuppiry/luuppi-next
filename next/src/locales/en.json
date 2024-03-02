@@ -9,8 +9,10 @@
     "verify_email_sent": "Verification link sent to your email. Link is valid for 30 minutes.",
     "email_sending_failed": "Email sending failed. This could be caused by invalid email address or server error.",
     "invalid_display_name": "Invalid display name. Display name must be 3-30 characters long.",
-    "invalid_given_name": "Invalid first name. First name must be 2-35 characters long.",
+    "invalid_given_name": "Invalid first names. First names must be 2-70 characters long.",
     "invalid_surname": "Invalid last name. Last name must be 2-35 characters long..",
+    "invalid_domicle": "Invalid domicle. Domicle must be 2-35 characters long.",
+    "invalid_preferred_full_name": "Invalid preferred full name. Preferred full name must be 2-100 characters long.",
     "no_changes_detected": "No changes detected",
     "profile_updated": "Profile updated. Some changes require you to re-login to take effect.",
     "ratelimit": "Too many requests. Please try again later."
@@ -29,9 +31,11 @@
     "logout": "Logout",
     "copied": "Copied",
     "submit": "Submit",
-    "firstName": "First name",
+    "firstNames": "First name(s)",
     "lastName": "Last name",
-    "close": "Close"
+    "close": "Close",
+    "preferredFullName": "Preferred full name",
+    "domicle": "Domicle"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi",

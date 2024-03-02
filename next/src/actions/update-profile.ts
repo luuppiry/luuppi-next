@@ -40,37 +40,14 @@ export async function updateProfile(
   const displayName = formData.get('displayName') as string;
   const givenName = formData.get('givenName') as string;
   const surname = formData.get('surname') as string;
-
-  if (!displayName) {
-    logger.error('Display name not found in form data');
-    return {
-      message: dictionary.api.invalid_display_name,
-      isError: true,
-      field: 'displayName',
-    };
-  }
-
-  if (!givenName) {
-    logger.error('Given name not found in form data');
-    return {
-      message: dictionary.api.invalid_given_name,
-      isError: true,
-      field: 'givenName',
-    };
-  }
-
-  if (!surname) {
-    logger.error('Surname not found in form data');
-    return {
-      message: dictionary.api.invalid_surname,
-      isError: true,
-      field: 'surname',
-    };
-  }
+  const domicle = formData.get('domicle') as string;
+  const preferredFullName = formData.get('preferredFullName') as string;
 
   const displaynameRegex = /^[a-zA-Z0-9]{3,30}$/;
-  const givenNameRegex = /^.{2,35}$/;
+  const givenNameRegex = /^.{2,70}$/;
   const surnameRegex = /^.{2,35}$/;
+  const domicleRegex = /^.{2,35}$/;
+  const preferredFullNameRegex = /^.{2,100}$/;
 
   if (!displaynameRegex.test(displayName)) {
     logger.error('Invalid display name');
@@ -81,7 +58,7 @@ export async function updateProfile(
     };
   }
 
-  if (!givenNameRegex.test(givenName)) {
+  if (givenName && !givenNameRegex.test(givenName)) {
     logger.error('Invalid given name');
     return {
       message: dictionary.api.invalid_given_name,
@@ -90,12 +67,30 @@ export async function updateProfile(
     };
   }
 
-  if (!surnameRegex.test(surname)) {
+  if (surname && !surnameRegex.test(surname)) {
     logger.error('Invalid surname');
     return {
       message: dictionary.api.invalid_surname,
       isError: true,
       field: 'surname',
+    };
+  }
+
+  if (domicle && !domicleRegex.test(domicle)) {
+    logger.error('Invalid domicle');
+    return {
+      message: dictionary.api.invalid_domicle,
+      isError: true,
+      field: 'domicle',
+    };
+  }
+
+  if (preferredFullName && !preferredFullNameRegex.test(preferredFullName)) {
+    logger.error('Invalid preferred full name');
+    return {
+      message: dictionary.api.invalid_preferred_full_name,
+      isError: true,
+      field: 'preferredFullName',
     };
   }
 
@@ -120,7 +115,11 @@ export async function updateProfile(
   if (
     currentUserData.displayName === displayName &&
     currentUserData.givenName === givenName &&
-    currentUserData.surname === surname
+    currentUserData.surname === surname &&
+    currentUserData.extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle ===
+      domicle &&
+    currentUserData.extension_3c0a9d6308d649589e6b4e1f57006bcc_PreferredFullName ===
+      preferredFullName
   ) {
     logger.error('No changes detected');
     return {
@@ -133,6 +132,9 @@ export async function updateProfile(
     displayName,
     givenName,
     surname,
+    extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle: domicle,
+    extension_3c0a9d6308d649589e6b4e1f57006bcc_PreferredFullName:
+      preferredFullName,
   });
 
   revalidatePath(`/${lang}/profile`);

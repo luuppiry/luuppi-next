@@ -1,7 +1,7 @@
 'use client';
 import { updateProfile } from '@/actions/update-profile';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { User } from '@microsoft/microsoft-graph-types';
+import { ExtendedUser } from '@/models/user';
 import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { BiErrorCircle } from 'react-icons/bi';
@@ -20,7 +20,7 @@ const initialState: ProfileFormResponse = {
 };
 
 interface ProfileUserInfoFormProps {
-  user: User;
+  user: ExtendedUser;
   lang: SupportedLanguage;
   dictionary: Dictionary;
 }
@@ -72,17 +72,18 @@ export default function ProfileUserInfoForm({
           placeholder={dictionary.general.username}
           title={dictionary.general.username}
           type="text"
-          value={user.displayName as string}
+          value={user.displayName ?? ''}
           onChange={() => setFormResponse(initialState)}
         />
         <FormInput
           error={formResponse.field === 'givenName' ? formResponse.message : ''}
           id="givenName"
           marginTop={false}
-          placeholder={dictionary.general.firstName}
-          title={dictionary.general.firstName}
+          placeholder={dictionary.general.firstNames}
+          required={false}
+          title={dictionary.general.firstNames}
           type="text"
-          value={user.givenName as string}
+          value={user.givenName ?? ''}
           onChange={() => setFormResponse(initialState)}
         />
         <FormInput
@@ -90,9 +91,39 @@ export default function ProfileUserInfoForm({
           id="surname"
           marginTop={false}
           placeholder={dictionary.general.lastName}
+          required={false}
           title={dictionary.general.lastName}
           type="text"
-          value={user.surname as string}
+          value={user.surname ?? ''}
+          onChange={() => setFormResponse(initialState)}
+        />
+        <FormInput
+          error={
+            formResponse.field === 'preferredFullName'
+              ? formResponse.message
+              : ''
+          }
+          id="preferredFullName"
+          marginTop={false}
+          placeholder={dictionary.general.preferredFullName}
+          required={false}
+          title={dictionary.general.preferredFullName}
+          type="text"
+          value={
+            user.extension_3c0a9d6308d649589e6b4e1f57006bcc_PreferredFullName ??
+            ''
+          }
+          onChange={() => setFormResponse(initialState)}
+        />
+        <FormInput
+          error={formResponse.field === 'domicle' ? formResponse.message : ''}
+          id="domicle"
+          marginTop={false}
+          placeholder={dictionary.general.domicle}
+          required={false}
+          title={dictionary.general.domicle}
+          type="text"
+          value={user.extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle ?? ''}
           onChange={() => setFormResponse(initialState)}
         />
         <div>
