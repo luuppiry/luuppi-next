@@ -155,5 +155,12 @@
   },
   "pages_verify_email": {
     "title": "Email verification"
+  },
+  "pages_profile": {
+    "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",
+    "given_name_explanation": "All your official first names. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
+    "surname_explanation": "Official surname. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
+    "preferred_full_name_explanation": "Desired full name. This is the name by which you will be called within the association. This could be, for example, a nickname or another name you wish to be called by. This information is used, for example, in seating arrangements at events.",
+    "domicle_explanation": "Your official domicle. This is information required by section 11 of the Associations Act, which will be verified upon joining the association."
   }
 }

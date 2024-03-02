@@ -5,6 +5,7 @@ import { ExtendedUser } from '@/models/user';
 import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { BiErrorCircle } from 'react-icons/bi';
+import { FaQuestion } from 'react-icons/fa';
 import FormInput from '../FormInput/FormInput';
 
 interface ProfileFormResponse {
@@ -68,6 +69,14 @@ export default function ProfileUserInfoForm({
             formResponse.field === 'displayName' ? formResponse.message : ''
           }
           id="displayName"
+          labelTopRight={
+            <span
+              className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
+              data-tip={dictionary.pages_profile.username_explanation}
+            >
+              <FaQuestion size={12} />
+            </span>
+          }
           marginTop={false}
           placeholder={dictionary.general.username}
           title={dictionary.general.username}
@@ -78,6 +87,14 @@ export default function ProfileUserInfoForm({
         <FormInput
           error={formResponse.field === 'givenName' ? formResponse.message : ''}
           id="givenName"
+          labelTopRight={
+            <span
+              className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
+              data-tip={dictionary.pages_profile.given_name_explanation}
+            >
+              <FaQuestion size={12} />
+            </span>
+          }
           marginTop={false}
           placeholder={dictionary.general.firstNames}
           required={false}
@@ -89,6 +106,14 @@ export default function ProfileUserInfoForm({
         <FormInput
           error={formResponse.field === 'surname' ? formResponse.message : ''}
           id="surname"
+          labelTopRight={
+            <span
+              className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
+              data-tip={dictionary.pages_profile.surname_explanation}
+            >
+              <FaQuestion size={12} />
+            </span>
+          }
           marginTop={false}
           placeholder={dictionary.general.lastName}
           required={false}
@@ -104,6 +129,16 @@ export default function ProfileUserInfoForm({
               : ''
           }
           id="preferredFullName"
+          labelTopRight={
+            <span
+              className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
+              data-tip={
+                dictionary.pages_profile.preferred_full_name_explanation
+              }
+            >
+              <FaQuestion size={12} />
+            </span>
+          }
           marginTop={false}
           placeholder={dictionary.general.preferredFullName}
           required={false}
@@ -118,6 +153,14 @@ export default function ProfileUserInfoForm({
         <FormInput
           error={formResponse.field === 'domicle' ? formResponse.message : ''}
           id="domicle"
+          labelTopRight={
+            <span
+              className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
+              data-tip={dictionary.pages_profile.domicle_explanation}
+            >
+              <FaQuestion size={12} />
+            </span>
+          }
           marginTop={false}
           placeholder={dictionary.general.domicle}
           required={false}

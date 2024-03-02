@@ -30,6 +30,12 @@
   @apply rounded-lg bg-background-50/50;
 }
 
+@media screen and (max-width: 768px) {
+  .card {
+    @apply p-4;
+  }
+}
+
 .skeleton {
   @apply rounded-lg;
 }

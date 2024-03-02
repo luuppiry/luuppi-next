@@ -155,5 +155,12 @@
   },
   "pages_verify_email": {
     "title": "Email verification"
+  },
+  "pages_profile": {
+    "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",
+    "given_name_explanation": "Kaikki viralliset etunimesi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
+    "surname_explanation": "Virallinen sukunimi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
+    "preferred_full_name_explanation": "Haluttu koko nimi. Tämä on nimi, jolla sinua kutsutaan yhdistyksen sisällä. Tämä voi olla esimerkiksi lempinimi tai muu nimi, jolla haluat tulla kutsutuksi. Tätä tietoa käytetään esimerkiksi tapahtumien pöytäplaseerauksissa.",
+    "domicle_explanation": "Kotikunta. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä."
   }
 }
