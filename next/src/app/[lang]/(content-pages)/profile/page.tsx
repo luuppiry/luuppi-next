@@ -5,9 +5,12 @@ import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInf
 import { getDictionary } from '@/dictionaries';
 import { getAccessToken } from '@/libs/get-access-token';
 import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
+import { getGraphAPIUserGroups } from '@/libs/graph/graph-get-user-groups';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { redirect } from 'next/navigation';
+
+const luuppiMemberGroupId = process.env.AZURE_LUUPPI_MEMBER_GROUP;
 
 interface ProfileProps {
   params: { lang: SupportedLanguage };
@@ -29,8 +32,9 @@ export default async function Profile({ params }: ProfileProps) {
   }
 
   const user = await getGraphAPIUser(accessToken, session.user.azureId);
-  if (!user) {
-    logger.error('Error getting user');
+  const groups = await getGraphAPIUserGroups(accessToken, session.user.azureId);
+  if (!user || !groups) {
+    logger.error('Error getting user or groups');
     redirect(`/${params.lang}`);
   }
 
@@ -45,6 +49,9 @@ export default async function Profile({ params }: ProfileProps) {
         />
         <ProfileUserInfoForm
           dictionary={dictionary}
+          isLuuppiMember={groups.value.some(
+            (group) => group.id === luuppiMemberGroupId,
+          )}
           lang={params.lang}
           user={user}
         />
