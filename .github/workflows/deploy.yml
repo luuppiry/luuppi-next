@@ -3,6 +3,11 @@ name: Build and Deploy
 on:
     push:
         branches: ['main']
+    workflow_dispatch:
+
+concurrency:
+    group: build-deploy-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
     changes:
