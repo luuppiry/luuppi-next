@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import { getAccessToken } from '@/libs/get-access-token';
 import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
+import { getGraphAPIUserGroups } from '@/libs/graph/graph-get-user-groups';
 import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
@@ -10,6 +11,8 @@ import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath } from 'next/cache';
 
 const cacheKey = 'update-profile';
+
+const luuppiMemberGroupId = process.env.AZURE_LUUPPI_MEMBER_GROUP;
 
 export async function updateProfile(
   lang: SupportedLanguage,
@@ -97,7 +100,7 @@ export async function updateProfile(
     };
   }
 
-  if (!majorRegex.test(major)) {
+  if (major && !majorRegex.test(major)) {
     logger.error('Invalid major');
     return {
       message: dictionary.api.invalid_major,
@@ -120,6 +123,29 @@ export async function updateProfile(
     logger.error('Error getting user data');
     return {
       message: dictionary.api.server_error,
+      isError: true,
+    };
+  }
+
+  const currentUserGroups = await getGraphAPIUserGroups(
+    accessToken,
+    user.azureId,
+  );
+  if (!currentUserGroups) {
+    logger.error('Error getting user groups');
+    return {
+      message: dictionary.api.server_error,
+      isError: true,
+    };
+  }
+
+  if (
+    (major || domicle) &&
+    !currentUserGroups.value.some((group) => group.id === luuppiMemberGroupId)
+  ) {
+    logger.error('Unauthorized, user is not a luuppi member');
+    return {
+      message: dictionary.api.unauthorized,
       isError: true,
     };
   }
