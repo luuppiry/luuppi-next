@@ -13,6 +13,7 @@
     "invalid_surname": "Invalid last name. Last name must be 2-35 characters long..",
     "invalid_domicle": "Invalid domicle. Domicle must be 2-35 characters long.",
     "invalid_preferred_full_name": "Invalid preferred full name. Preferred full name must be 2-100 characters long.",
+    "invalid_major": "Invalid major",
     "no_changes_detected": "No changes detected",
     "profile_updated": "Profile updated. Some changes require you to re-login to take effect.",
     "ratelimit": "Too many requests. Please try again later."
@@ -35,7 +36,8 @@
     "lastName": "Last name",
     "close": "Close",
     "preferredFullName": "Preferred full name",
-    "domicle": "Domicle"
+    "domicle": "Domicle",
+    "major": "Major"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi",
@@ -161,6 +163,13 @@
     "given_name_explanation": "All your official first names. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
     "surname_explanation": "Official surname. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
     "preferred_full_name_explanation": "Desired full name. This is the name by which you will be called within the association. This could be, for example, a nickname or another name you wish to be called by. This information is used, for example, in seating arrangements at events.",
-    "domicle_explanation": "Your official domicle. This is information required by section 11 of the Associations Act, which will be verified upon joining the association."
+    "domicle_explanation": "Your official domicle. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
+    "major_explanation": "Your major. Select other if your major is something else than computer science, mathematics, or statistical data analysis.",
+    "majors": {
+      "other": "Other / Not specified",
+      "computer_science": "Computer Science",
+      "mathematics": "Mathematics",
+      "statistical_data_analysis": "Statistical Data Analysis"
+    }
   }
 }

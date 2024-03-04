@@ -13,6 +13,7 @@
     "invalid_surname": "Kelvoton sukunimi. Sukunimen tulee olla 2-35 merkkiä pitkä.",
     "invalid_domicle": "Kelvoton kotikunta. Kotikunnan tulee olla 2-35 merkkiä pitkä.",
     "invalid_preferred_full_name": "Kelvoton haluttu koko nimi. Halutun koko nimen tulee olla 2-100 merkkiä pitkä.",
+    "invalid_major": "Kelvoton pääaine",
     "no_changes_detected": "Muutoksia ei havaittu",
     "profile_updated": "Profiili päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen.",
     "ratelimit": "Liian monta pyyntöä. Yritä uudelleen myöhemmin."
@@ -35,7 +36,8 @@
     "lastName": "Sukunimi",
     "close": "Sulje",
     "preferredFullName": "Ensisijainen koko nimi",
-    "domicle": "Kotikunta"
+    "domicle": "Kotikunta",
+    "major": "Pääaine"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat",
@@ -161,6 +163,13 @@
     "given_name_explanation": "Kaikki viralliset etunimesi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "surname_explanation": "Virallinen sukunimi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "preferred_full_name_explanation": "Haluttu koko nimi. Tämä on nimi, jolla sinua kutsutaan yhdistyksen sisällä. Tämä voi olla esimerkiksi lempinimi tai muu nimi, jolla haluat tulla kutsutuksi. Tätä tietoa käytetään esimerkiksi tapahtumien pöytäplaseerauksissa.",
-    "domicle_explanation": "Kotikunta. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä."
+    "domicle_explanation": "Kotikunta. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
+    "major_explanation": "Pääaine. Valitse muu jos et halua kertoa pääainettasi tai jos pääaineesi ei ole listalla.",
+    "majors": {
+      "other": "Muu / En halua kertoa",
+      "computer_science": "Tietojenkäsittelytiede",
+      "mathematics": "Matematiikka",
+      "statistical_data_analysis": "Tilastollinen data-analyysi"
+    }
   }
 }

@@ -42,12 +42,15 @@ export async function updateProfile(
   const surname = formData.get('surname') as string;
   const domicle = formData.get('domicle') as string;
   const preferredFullName = formData.get('preferredFullName') as string;
+  const major = formData.get('major') as string;
 
   const displaynameRegex = /^[a-zA-Z0-9]{3,30}$/;
   const givenNameRegex = /^.{2,70}$/;
   const surnameRegex = /^.{2,35}$/;
   const domicleRegex = /^.{2,35}$/;
   const preferredFullNameRegex = /^.{2,100}$/;
+  const majorRegex =
+    /^(computer_science|mathematics|statistical_data_analysis|other)$/;
 
   if (!displaynameRegex.test(displayName)) {
     logger.error('Invalid display name');
@@ -94,6 +97,15 @@ export async function updateProfile(
     };
   }
 
+  if (!majorRegex.test(major)) {
+    logger.error('Invalid major');
+    return {
+      message: dictionary.api.invalid_major,
+      isError: true,
+      field: 'major',
+    };
+  }
+
   const accessToken = await getAccessToken();
   if (!accessToken) {
     logger.error('Error getting access token');
@@ -119,7 +131,8 @@ export async function updateProfile(
     currentUserData.extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle ===
       domicle &&
     currentUserData.extension_3c0a9d6308d649589e6b4e1f57006bcc_PreferredFullName ===
-      preferredFullName
+      preferredFullName &&
+    currentUserData.extension_3c0a9d6308d649589e6b4e1f57006bcc_Major === major
   ) {
     logger.error('No changes detected');
     return {
@@ -135,6 +148,7 @@ export async function updateProfile(
     extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle: domicle,
     extension_3c0a9d6308d649589e6b4e1f57006bcc_PreferredFullName:
       preferredFullName,
+    extension_3c0a9d6308d649589e6b4e1f57006bcc_Major: major,
   });
 
   revalidatePath(`/${lang}/profile`);

@@ -1,30 +1,26 @@
-interface FormInputProps {
+interface FormSelectProps {
   title: string;
   id: string;
-  type?: HTMLInputElement['type'];
-  required?: boolean;
-  placeholder?: string;
   value?: string;
-  error?: string;
+  options: { value: string; label: string }[];
+  required?: boolean;
   marginTop?: boolean;
   marginBottom?: boolean;
   labelTopRight?: React.ReactNode;
   onChange?: () => void;
 }
 
-export default function FormInput({
+export default function FormSelect({
   title,
-  error,
-  placeholder,
   id,
-  required = true,
-  labelTopRight,
+  options,
   value,
-  type,
+  required = true,
   marginTop = true,
   marginBottom = true,
+  labelTopRight,
   onChange,
-}: FormInputProps) {
+}: FormSelectProps) {
   return (
     <label
       className={`form-control ${marginTop && 'mt-4'} ${marginBottom && 'mb-4'}`}
@@ -37,21 +33,20 @@ export default function FormInput({
           <span className="label-text-alt">{labelTopRight}</span>
         )}
       </div>
-      <input
-        className={`input input-bordered ${Boolean(error) && 'input-error'}`}
-        defaultValue={value ?? ''}
+      <select
+        className="select select-bordered w-full"
+        defaultValue={value}
         id={id}
         name={id}
-        placeholder={placeholder}
         required={required}
-        type={type ?? 'text'}
         onChange={onChange}
-      />
-      {Boolean(error) && (
-        <div className="label">
-          <span className="label-text text-xs text-red-400">{error}</span>
-        </div>
-      )}
+      >
+        {options.map((option, index) => (
+          <option key={index} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
     </label>
   );
 }

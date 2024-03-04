@@ -7,6 +7,7 @@ import { useFormStatus } from 'react-dom';
 import { BiErrorCircle } from 'react-icons/bi';
 import { FaQuestion } from 'react-icons/fa';
 import FormInput from '../FormInput/FormInput';
+import FormSelect from '../FormSelect/FormSelect';
 
 interface ProfileFormResponse {
   message: string;
@@ -167,6 +168,32 @@ export default function ProfileUserInfoForm({
           title={dictionary.general.domicle}
           type="text"
           value={user.extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle ?? ''}
+          onChange={() => setFormResponse(initialState)}
+        />
+        <FormSelect
+          id="major"
+          labelTopRight={
+            <span
+              className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
+              data-tip={dictionary.pages_profile.major_explanation}
+            >
+              <FaQuestion size={12} />
+            </span>
+          }
+          marginTop={false}
+          options={Object.keys(dictionary.pages_profile.majors).map((m) => ({
+            value: m,
+            label:
+              dictionary.pages_profile.majors[
+                m as keyof typeof dictionary.pages_profile.majors
+              ],
+          }))}
+          required={false}
+          title={dictionary.general.major}
+          value={
+            user.extension_3c0a9d6308d649589e6b4e1f57006bcc_Major ??
+            'computer_science'
+          }
           onChange={() => setFormResponse(initialState)}
         />
         <div>
