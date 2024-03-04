@@ -7,6 +7,7 @@ interface FormSelectProps {
   marginTop?: boolean;
   marginBottom?: boolean;
   labelTopRight?: React.ReactNode;
+  disabled?: boolean;
   onChange?: () => void;
 }
 
@@ -19,6 +20,7 @@ export default function FormSelect({
   marginTop = true,
   marginBottom = true,
   labelTopRight,
+  disabled = false,
   onChange,
 }: FormSelectProps) {
   return (
@@ -36,6 +38,7 @@ export default function FormSelect({
       <select
         className="select select-bordered w-full"
         defaultValue={value}
+        disabled={disabled}
         id={id}
         name={id}
         required={required}

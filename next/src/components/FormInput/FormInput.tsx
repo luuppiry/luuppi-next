@@ -8,6 +8,7 @@ interface FormInputProps {
   error?: string;
   marginTop?: boolean;
   marginBottom?: boolean;
+  disabled?: boolean;
   labelTopRight?: React.ReactNode;
   onChange?: () => void;
 }
@@ -21,6 +22,7 @@ export default function FormInput({
   labelTopRight,
   value,
   type,
+  disabled = false,
   marginTop = true,
   marginBottom = true,
   onChange,
@@ -40,6 +42,7 @@ export default function FormInput({
       <input
         className={`input input-bordered ${Boolean(error) && 'input-error'}`}
         defaultValue={value ?? ''}
+        disabled={disabled}
         id={id}
         name={id}
         placeholder={placeholder}
