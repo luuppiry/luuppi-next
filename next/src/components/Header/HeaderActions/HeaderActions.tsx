@@ -26,7 +26,7 @@ export default function HeaderActions({
           </div>
         </>
       ) : (
-        <form action={async () => await signIn('azure-ad-b2c')}>
+        <form action={async () => await signIn()}>
           <button
             className={
               'custom-scroll-text btn btn-ghost flex items-center rounded-lg bg-primary-600 px-4 py-2 text-lg font-bold transition-all max-xl:text-base max-lg:hidden'

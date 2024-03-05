@@ -113,7 +113,7 @@ export default function MobileHamburger({
               ) : (
                 <button
                   className="btn btn-circle btn-ghost m-1 bg-primary-500 text-white"
-                  onClick={async () => await signIn('azure-ad-b2c')}
+                  onClick={async () => await signIn()}
                 >
                   <RiLoginCircleLine size={32} />
                 </button>
