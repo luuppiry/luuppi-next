@@ -157,8 +157,11 @@ export default function MobileCalendar({
             day === todayDate &&
             currentMonth === todayMonth &&
             currentYear === todayYear;
+          const yesterday = new Date(today);
+          yesterday.setDate(today.getDate() - 1);
+          yesterday.setHours(23, 59, 59, 999);
 
-          const isPast = new Date(dateKey) < today;
+          const isPast = new Date(dateKey) < yesterday;
 
           const hasEvents = dayEvents.length > 0;
 
