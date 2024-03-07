@@ -95,6 +95,11 @@
     animation: slideRight 10s linear infinite;
   }
 
+  .luuppi-events-preview-pattern {
+    @apply scale-[1.75] bg-[url('/partners_pattern.svg')] bg-cover bg-center bg-no-repeat;
+    filter: grayscale(100%) brightness(1000%) opacity(3%);
+  }
+
   .luuppi-patners-pattern {
     @apply bg-[url('/partners_pattern.svg')] bg-cover bg-center bg-no-repeat opacity-[0.05] grayscale;
   }
@@ -108,6 +113,10 @@
   @media screen and (max-width: 768px) {
     .luuppi-patners-pattern {
       @apply scale-[3];
+    }
+
+    .luuppi-events-preview-pattern {
+      @apply scale-[1];
     }
   }
 

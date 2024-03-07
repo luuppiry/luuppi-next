@@ -19,23 +19,10 @@ export default async function RenderEvents({ lang }: RenderEventsProps) {
       {upcomingEvents.slice(0, 4).map((event, i) => (
         <Link
           key={i}
-          className="group relative"
+          className="group flex flex-col overflow-hidden rounded-lg bg-primary-800 text-white"
           href={`/${lang}/events/${event.id}`}
         >
-          <div className="absolute z-20 flex h-full w-full flex-col justify-end rounded-lg bg-gradient-to-t from-primary-800 via-black/50 to-transparent p-6 transition-all duration-300">
-            <p className="text-sm font-bold text-white">
-              {new Date(event.start).toLocaleString(lang, dateFormat)}
-            </p>
-            <p className="line-clamp-3 text-lg font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-base">
-              {event.title}
-            </p>
-            <div className="flex items-center">
-              <p className="line-clamp-3 text-sm text-white">
-                {event.description}
-              </p>
-            </div>
-          </div>
-          <div className="relative flex aspect-[5/6] h-full w-full overflow-hidden rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:aspect-[2/1]">
+          <div className="relative aspect-[7/5] overflow-hidden bg-gradient-to-r from-secondary-400 to-primary-300 max-md:aspect-video max-sm:aspect-[7/3]">
             <Image
               alt="Event placeholder image"
               className="object-cover transition-all duration-300 group-hover:scale-105"
@@ -44,6 +31,18 @@ export default async function RenderEvents({ lang }: RenderEventsProps) {
               src="/images/event_placeholder.png"
               fill
             />
+          </div>
+          <div className="relative flex flex-grow flex-col overflow-hidden p-6 transition-all duration-300">
+            <p className="z-20 text-sm font-bold">
+              {new Date(event.start).toLocaleString(lang, dateFormat)}
+            </p>
+            <p className="z-20 line-clamp-3 text-lg font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-base">
+              {event.title}
+            </p>
+            <div className="z-20 flex items-center">
+              <p className="line-clamp-3 text-sm">{event.description}</p>
+            </div>
+            <div className="luuppi-events-preview-pattern absolute left-0 top-0 z-10 h-full w-full opacity-100" />
           </div>
         </Link>
       ))}
