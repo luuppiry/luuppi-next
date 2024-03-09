@@ -4,16 +4,18 @@ import SidePartners from '@/components/SidePartners/SidePartners';
 import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
 import { flipNewsLocale } from '@/libs/strapi/flip-locale';
+import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { FaUserAlt } from 'react-icons/fa';
 
 const baseUrl =
-  '/api/news?populate[0]=banner&populate[1]=authorImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&filters[slug][$eq]=';
+  '/api/news?populate[0]=banner&populate[1]=authorImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[slug][$eq]=';
 
 interface NewsPostProps {
   params: { slug: string; lang: SupportedLanguage };
@@ -118,6 +120,19 @@ export default async function NewsPost({ params }: NewsPostProps) {
       </div>
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: NewsPostProps): Promise<Metadata> {
+  const data = await getStrapiData<
+    APIResponseCollection<'api::news-single.news-single'>
+  >('fi', `${baseUrl}${params.slug}`, ['news-single']);
+  const newsLocaleFlipped = flipNewsLocale(params.lang, data.data);
+  const selectedNews = newsLocaleFlipped[0];
+  const pathname = `/${params.lang}/news/${params.slug}`;
+
+  return formatMetadata({ data: selectedNews }, pathname);
 }
 
 export async function generateStaticParams() {

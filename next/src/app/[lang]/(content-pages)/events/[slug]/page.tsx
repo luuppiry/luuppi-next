@@ -9,6 +9,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 
@@ -95,6 +96,37 @@ export default async function Event({ params }: EventProps) {
       </div>
     </div>
   );
+}
+
+// TODO: Change when we have events on Strapi :)
+export async function generateMetadata({
+  params,
+}: EventProps): Promise<Metadata> {
+  const event = await getLuuppiEventById(params.lang, params.slug);
+
+  const pathname = `/${params.lang}/events/${params.slug}`;
+
+  return {
+    title: `${event?.title} | Luuppi ry`,
+    description: event?.description,
+    alternates: {
+      canonical: pathname,
+      languages: {
+        fi: `/fi${pathname.slice(3)}`,
+        en: `/en${pathname.slice(3)}`,
+      },
+    },
+    openGraph: {
+      title: event?.title,
+      description: event?.description,
+      url: pathname,
+      siteName: 'Luuppi ry',
+    },
+    twitter: {
+      title: event?.title,
+      description: event?.description,
+    },
+  };
 }
 
 export async function generateStaticParams() {
