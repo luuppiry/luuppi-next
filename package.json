@@ -1,11 +1,8 @@
 {
 	"scripts": {
-		"next": "npm run dev --prefix ../next/",
-		"strapi": "npm run dev --prefix ../strapi/",
+		"next": "npm run dev --prefix ./next/",
+		"strapi": "npm run dev --prefix ./strapi/",
 		"clear": "cd next && rm -rf .next && rm -rf cache",
 		"copyTypes": "node copyTypes.js"
-	},
-	"dependencies": {
-		"concurrently": "^8.2.2"
 	}
 }
