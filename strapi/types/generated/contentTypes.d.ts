@@ -1165,6 +1165,7 @@ export interface ApiEventsCalendarEventsCalendar extends Schema.SingleType {
     singularName: 'events-calendar';
     pluralName: 'events-calendars';
     displayName: 'EventsCalendar';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1175,7 +1176,7 @@ export interface ApiEventsCalendarEventsCalendar extends Schema.SingleType {
     };
   };
   attributes: {
-    Seo: Attribute.Component<'shared.seo', true> &
+    Seo: Attribute.Component<'shared.seo'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "events-calendar",
     "pluralName": "events-calendars",
-    "displayName": "EventsCalendar"
+    "displayName": "EventsCalendar",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -17,7 +18,7 @@
   "attributes": {
     "Seo": {
       "type": "component",
-      "repeatable": true,
+      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
