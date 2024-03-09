@@ -7,6 +7,7 @@ const config: Config = {
         light: {
           ...require('daisyui/src/theming/themes')['light'],
           primary: '#787eba',
+          accent: '#b166cc',
         },
       },
     ],

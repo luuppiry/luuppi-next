@@ -37,7 +37,8 @@
     "close": "Sulje",
     "preferredFullName": "Ensisijainen koko nimi",
     "domicle": "Kotikunta",
-    "major": "Pääaine"
+    "major": "Pääaine",
+    "today": "Tänään"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat",

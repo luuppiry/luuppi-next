@@ -20,8 +20,8 @@ export default function EventsPreview({
         <h2 className="mb-8 text-4xl font-extrabold max-md:text-3xl">
           {dictionary.pages_home.events_preview.title}
         </h2>
-        <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
-          <RenderEvents lang={lang} />
+        <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 max-sm:gap-6">
+          <RenderEvents dictionary={dictionary} lang={lang} />
         </div>
         <div className="mt-8 flex justify-center">
           <Link
