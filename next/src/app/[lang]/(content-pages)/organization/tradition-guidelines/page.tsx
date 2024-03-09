@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
@@ -19,12 +19,9 @@ export default async function OrganizationTraditionGuidelines({
 }: OrganizationTraditionGuidelinesProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const pageData =
-    await getStrapiData<ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline>(
-      params.lang,
-      url,
-      tags,
-    );
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::organization-tradition-guideline.organization-tradition-guideline'>
+  >(params.lang, url, tags);
 
   return (
     <ContentPage
@@ -38,12 +35,9 @@ export default async function OrganizationTraditionGuidelines({
 export async function generateMetadata({
   params,
 }: OrganizationTraditionGuidelinesProps): Promise<Metadata> {
-  const data =
-    await getStrapiData<ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline>(
-      params.lang,
-      url,
-      tags,
-    );
+  const data = await getStrapiData<
+    APIResponseCollection<'api::organization-tradition-guideline.organization-tradition-guideline'>
+  >(params.lang, url, tags);
 
   const pathname = `/${params.lang}/tradition-guidelines`;
 

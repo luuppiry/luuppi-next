@@ -2,7 +2,7 @@ import { dateFormat } from '@/libs/constants';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { ApiCompanyCompany } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import BlockRendererClient from '../BlockRendererClient/BlockRendererClient';
@@ -20,11 +20,9 @@ export default async function ContentPage({
   dictionary,
   lang,
 }: ContentPageProps) {
-  const partnersData = await getStrapiData<ApiCompanyCompany[]>(
-    lang,
-    '/api/companies?populate=*',
-    ['company'],
-  );
+  const partnersData = await getStrapiData<
+    APIResponseCollection<'api::company.company'>
+  >(lang, '/api/companies?populate=*', ['company']);
 
   const imagePath = contentData.attributes.Content.banner.data.attributes.url;
   const imageUrl = getStrapiUrl(imagePath);

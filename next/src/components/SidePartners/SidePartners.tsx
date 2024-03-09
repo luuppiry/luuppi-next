@@ -1,13 +1,13 @@
 'use client';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { Dictionary } from '@/models/locale';
-import { ApiCompanyCompany } from '@/types/contentTypes';
+import { APIResponseData } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 interface SidePartnersProps {
-  partnersData: ApiCompanyCompany[];
+  partnersData: APIResponseData<'api::company.company'>[];
   dictionary: Dictionary;
 }
 
@@ -15,7 +15,9 @@ export default function SidePartners({
   partnersData,
   dictionary,
 }: SidePartnersProps) {
-  const [randomPartners, setRandomPartners] = useState<ApiCompanyCompany[]>([]);
+  const [randomPartners, setRandomPartners] = useState<
+    APIResponseData<'api::company.company'>[]
+  >([]);
 
   useEffect(() => {
     setRandomPartners(partnersData.sort(() => Math.random() - 0.5).slice(0, 3));
@@ -27,7 +29,7 @@ export default function SidePartners({
       <div className="flex flex-col gap-4">
         {randomPartners.map((partner) => (
           <Link
-            key={partner.attributes.createdAt}
+            key={partner.attributes.createdAt!.toString()}
             className={`relative w-full ${partner.attributes.homepageUrl.includes('tietokonepalveluhietaniemi') ? 'h-16' : 'h-8'}`}
             href={partner.attributes.homepageUrl}
           >
@@ -35,7 +37,7 @@ export default function SidePartners({
               alt="Partner company logo"
               className="w-auto object-contain object-left"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src={getStrapiUrl(partner.attributes.logo.data.attributes.url)}
+              src={getStrapiUrl(partner.attributes.logo?.data.attributes.url)}
               fill
             />
           </Link>

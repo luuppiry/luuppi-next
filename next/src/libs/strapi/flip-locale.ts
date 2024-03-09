@@ -1,5 +1,5 @@
 import { SupportedLanguage } from '@/models/locale';
-import { ApiNewsSingleNewsSingle } from '@/types/contentTypes';
+import { APIResponseData } from '@/types/types';
 import 'server-only';
 
 /**
@@ -44,15 +44,15 @@ export const flipBoardLocale = (lang: SupportedLanguage, data: any) =>
  */
 export const flipNewsLocale = (
   lang: SupportedLanguage,
-  data: ApiNewsSingleNewsSingle[],
+  data: APIResponseData<'api::news-single.news-single'>[],
 ) =>
   lang === 'en'
     ? data.map((news) => {
-        const localeEn = news.attributes.localizations.data[0];
+        const localeEn = news.attributes.localizations?.data[0];
         return {
           ...news,
           attributes: {
-            ...localeEn.attributes,
+            ...localeEn?.attributes,
             banner: news.attributes.banner,
             authorImage: news.attributes.authorImage,
             slug: news.attributes.slug,

@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiStudiesWorkshopStudiesWorkshop } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
@@ -19,11 +19,9 @@ export default async function StudiesWorkshop({
 }: StudiesWorkshopProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const pageData = await getStrapiData<ApiStudiesWorkshopStudiesWorkshop>(
-    params.lang,
-    url,
-    tags,
-  );
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::studies-workshop.studies-workshop'>
+  >(params.lang, url, tags);
 
   return (
     <ContentPage
@@ -37,11 +35,9 @@ export default async function StudiesWorkshop({
 export async function generateMetadata({
   params,
 }: StudiesWorkshopProps): Promise<Metadata> {
-  const data = await getStrapiData<ApiStudiesWorkshopStudiesWorkshop>(
-    params.lang,
-    url,
-    tags,
-  );
+  const data = await getStrapiData<
+    APIResponseCollection<'api::studies-workshop.studies-workshop'>
+  >(params.lang, url, tags);
 
   const pathname = `/${params.lang}/studies/workshops`;
 

@@ -1,7 +1,7 @@
 import { getLuuppiEvents } from '@/libs/events/get-legacy-events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiBoardBoard, ApiNewsSingleNewsSingle } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import { SitemapItemLoose, SitemapStream, streamToPromise } from 'sitemap';
 
 /**
@@ -86,19 +86,17 @@ export async function GET() {
     ],
   }));
 
-  const newsData = await getStrapiData<ApiNewsSingleNewsSingle[]>(
-    'fi',
-    '/api/news',
-    ['news-single'],
-  );
+  const newsData = await getStrapiData<
+    APIResponseCollection<'api::news-single.news-single'>
+  >('fi', '/api/news', ['news-single']);
   const news = newsData.data.map((news) => ({
     url: `/fi/news/${news.attributes.slug}`,
-    lastmod: new Date(news.attributes.updatedAt).toISOString(),
+    lastmod: new Date(news.attributes.updatedAt!).toISOString(),
   }));
 
-  const boardData = await getStrapiData<ApiBoardBoard[]>('fi', '/api/boards', [
-    'board',
-  ]);
+  const boardData = await getStrapiData<
+    APIResponseCollection<'api::board.board'>
+  >('fi', '/api/boards', ['board']);
 
   const eventsData = await getLuuppiEvents('fi');
 
@@ -144,7 +142,7 @@ export async function GET() {
     .sort((a, b) => b.attributes.year - a.attributes.year)
     .map((board) => ({
       url: `/fi/organization/board/${board.attributes.year}`,
-      lastmod: new Date(board.attributes.updatedAt).toISOString(),
+      lastmod: new Date(board.attributes.updatedAt!).toISOString(),
       links: [
         {
           hreflang: 'fi',

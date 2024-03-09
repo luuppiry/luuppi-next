@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiTutoringFaqTutoringFaq } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
@@ -17,11 +17,9 @@ interface TutoringFaqProps {
 export default async function TutoringFaq({ params }: TutoringFaqProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const pageData = await getStrapiData<ApiTutoringFaqTutoringFaq>(
-    params.lang,
-    url,
-    tags,
-  );
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::tutoring-faq.tutoring-faq'>
+  >(params.lang, url, tags);
 
   return (
     <ContentPage
@@ -35,11 +33,9 @@ export default async function TutoringFaq({ params }: TutoringFaqProps) {
 export async function generateMetadata({
   params,
 }: TutoringFaqProps): Promise<Metadata> {
-  const data = await getStrapiData<ApiTutoringFaqTutoringFaq>(
-    params.lang,
-    url,
-    tags,
-  );
+  const data = await getStrapiData<
+    APIResponseCollection<'api::tutoring-faq.tutoring-faq'>
+  >(params.lang, url, tags);
 
   const pathname = `/${params.lang}/tutoring/faq`;
 

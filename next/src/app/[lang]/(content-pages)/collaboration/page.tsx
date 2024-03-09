@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiCollaborationGeneralCollaborationGeneral } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
@@ -19,12 +19,9 @@ export default async function CollaborationGeneral({
 }: CollaborationGeneralProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const pageData =
-    await getStrapiData<ApiCollaborationGeneralCollaborationGeneral>(
-      params.lang,
-      url,
-      tags,
-    );
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::collaboration-general.collaboration-general'>
+  >(params.lang, url, tags);
 
   return (
     <ContentPage
@@ -38,11 +35,9 @@ export default async function CollaborationGeneral({
 export async function generateMetadata({
   params,
 }: CollaborationGeneralProps): Promise<Metadata> {
-  const data = await getStrapiData<ApiCollaborationGeneralCollaborationGeneral>(
-    params.lang,
-    url,
-    tags,
-  );
+  const data = await getStrapiData<
+    APIResponseCollection<'api::collaboration-general.collaboration-general'>
+  >(params.lang, url, tags);
 
   const pathname = `/${params.lang}/collaboration`;
 

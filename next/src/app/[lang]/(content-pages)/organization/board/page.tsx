@@ -4,7 +4,7 @@ import { flipBoardLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { groupBoardByYear } from '@/libs/strapi/group-board-by-year';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiBoardBoard } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import Link from 'next/link';
 
 interface BoardProps {
@@ -20,7 +20,9 @@ export default async function Board({ params }: BoardProps) {
    * Strapi doesn't support localized queries from non i18n collections. We
    * use workaround by populating boardRoles with localizations.
    */
-  const boardData = await getStrapiData<ApiBoardBoard[]>(
+  const boardData = await getStrapiData<
+    APIResponseCollection<'api::board.board'>
+  >(
     'fi',
     '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
     ['board', 'board-role', 'board-member'],

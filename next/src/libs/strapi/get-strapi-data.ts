@@ -14,7 +14,7 @@ export const getStrapiData = async <T>(
   lang: SupportedLanguage,
   url: string,
   revalidateTags: string[],
-): Promise<{ data: T }> => {
+): Promise<T> => {
   try {
     let res = await fetch(getStrapiUrl(`${url}&locale=${lang}`), {
       next: { tags: revalidateTags },

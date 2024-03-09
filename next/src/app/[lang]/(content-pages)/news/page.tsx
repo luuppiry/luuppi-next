@@ -4,7 +4,7 @@ import { flipNewsLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiNewsSingleNewsSingle } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaUserAlt } from 'react-icons/fa';
@@ -14,7 +14,9 @@ interface NewsProps {
 }
 
 export default async function News({ params }: NewsProps) {
-  const pageData = await getStrapiData<ApiNewsSingleNewsSingle[]>(
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::news-single.news-single'>
+  >(
     'fi',
     '/api/news?populate[0]=banner&populate[1]=authorImage&populate[3]=localizations&pagination[pageSize]=100',
     ['news-single'],
@@ -23,11 +25,13 @@ export default async function News({ params }: NewsProps) {
   const newsLocaleFlipped = flipNewsLocale(params.lang, pageData.data);
   const dictionary = await getDictionary(params.lang);
 
-  const sortedNews = newsLocaleFlipped.sort(
-    (a, b) =>
-      new Date(b.attributes.createdAt).getTime() -
-      new Date(a.attributes.createdAt).getTime(),
-  );
+  const sortedNews = newsLocaleFlipped
+    .filter((n) => n.attributes.createdAt)
+    .sort(
+      (a, b) =>
+        new Date(b.attributes.createdAt!).getTime() -
+        new Date(a.attributes.createdAt!).getTime(),
+    );
 
   return (
     <div className="flex flex-col gap-12">
@@ -48,7 +52,7 @@ export default async function News({ params }: NewsProps) {
                 alt="News banner"
                 className={'rounded-t-lg object-cover'}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={getStrapiUrl(news.attributes.banner.data.attributes.url)}
+                src={getStrapiUrl(news.attributes.banner?.data.attributes.url)}
                 fill
               />
             </div>
@@ -68,7 +72,7 @@ export default async function News({ params }: NewsProps) {
                 <p className="line-clamp-4">{news.attributes.description}</p>
               </div>
               <div className="flex items-center gap-2">
-                {news.attributes.authorImage.data?.attributes.url ? (
+                {news.attributes.authorImage?.data.attributes.url ? (
                   <Image
                     alt="News author avatar"
                     className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
@@ -88,7 +92,7 @@ export default async function News({ params }: NewsProps) {
                     {news.attributes.authorName}
                   </span>
                   <span className="text-sm opacity-60">
-                    {new Date(news.attributes.createdAt).toLocaleDateString(
+                    {new Date(news.attributes.createdAt!).toLocaleDateString(
                       params.lang,
                       dateFormat,
                     )}

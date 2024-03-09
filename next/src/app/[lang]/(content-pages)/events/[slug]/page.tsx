@@ -8,7 +8,7 @@ import {
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiCompanyCompany } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import { redirect } from 'next/navigation';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 
@@ -26,11 +26,9 @@ export default async function Event({ params }: EventProps) {
 
   const event = await getLuuppiEventById(params.lang, params.slug);
 
-  const partnersData = await getStrapiData<ApiCompanyCompany[]>(
-    params.lang,
-    '/api/companies?populate=*',
-    ['company'],
-  );
+  const partnersData = await getStrapiData<
+    APIResponseCollection<'api::company.company'>
+  >(params.lang, '/api/companies?populate=*', ['company']);
 
   if (!event) {
     redirect(`/${params.lang}/404`);

@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiTutoringLarpakeTutoringLarpake } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
@@ -19,11 +19,9 @@ export default async function TutoringLarpake({
 }: TutoringLarpakeProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const pageData = await getStrapiData<ApiTutoringLarpakeTutoringLarpake>(
-    params.lang,
-    url,
-    tags,
-  );
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::tutoring-larpake.tutoring-larpake'>
+  >(params.lang, url, tags);
 
   return (
     <ContentPage
@@ -37,11 +35,9 @@ export default async function TutoringLarpake({
 export async function generateMetadata({
   params,
 }: TutoringLarpakeProps): Promise<Metadata> {
-  const data = await getStrapiData<ApiTutoringLarpakeTutoringLarpake>(
-    params.lang,
-    url,
-    tags,
-  );
+  const data = await getStrapiData<
+    APIResponseCollection<'api::tutoring-larpake.tutoring-larpake'>
+  >(params.lang, url, tags);
 
   const pathname = `/${params.lang}/tutoring/larpake`;
 

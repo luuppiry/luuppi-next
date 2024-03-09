@@ -4,7 +4,7 @@ import { flipBoardLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { groupBoardByYear } from '@/libs/strapi/group-board-by-year';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiBoardBoard } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -21,7 +21,9 @@ export default async function OldBoard({ params }: OldBoardProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const boardData = await getStrapiData<ApiBoardBoard[]>(
+  const boardData = await getStrapiData<
+    APIResponseCollection<'api::board.board'>
+  >(
     'fi',
     '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
     ['board', 'board-role', 'board-member'],
@@ -122,7 +124,9 @@ export default async function OldBoard({ params }: OldBoardProps) {
 }
 
 export async function generateStaticParams() {
-  const boardData = await getStrapiData<ApiBoardBoard[]>(
+  const boardData = await getStrapiData<
+    APIResponseCollection<'api::board.board'>
+  >(
     'fi',
     '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
     ['board', 'board-role', 'board-member'],

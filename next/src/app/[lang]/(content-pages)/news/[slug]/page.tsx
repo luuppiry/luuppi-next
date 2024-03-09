@@ -7,10 +7,7 @@ import { flipNewsLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
-import {
-  ApiCompanyCompany,
-  ApiNewsSingleNewsSingle,
-} from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { FaUserAlt } from 'react-icons/fa';
@@ -25,19 +22,15 @@ interface NewsPostProps {
 export default async function NewsPost({ params }: NewsPostProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const pageData = await getStrapiData<ApiNewsSingleNewsSingle[]>(
-    'fi',
-    `${baseUrl}${params.slug}`,
-    ['news-single'],
-  );
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::news-single.news-single'>
+  >('fi', `${baseUrl}${params.slug}`, ['news-single']);
 
   const newsLocaleFlipped = flipNewsLocale(params.lang, pageData.data);
 
-  const partnersData = await getStrapiData<ApiCompanyCompany[]>(
-    params.lang,
-    '/api/companies?populate=*',
-    ['company'],
-  );
+  const partnersData = await getStrapiData<
+    APIResponseCollection<'api::company.company'>
+  >(params.lang, '/api/companies?populate=*', ['company']);
 
   if (!pageData.data.length) {
     redirect(`/${params.lang}/404`);
@@ -55,14 +48,14 @@ export default async function NewsPost({ params }: NewsPostProps) {
             quality={100}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             src={getStrapiUrl(
-              selectedNews.attributes.banner.data.attributes.url,
+              selectedNews.attributes.banner?.data.attributes.url,
             )}
             fill
           />
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">
-            {selectedNews.attributes.authorImage.data?.attributes.url ? (
+            {selectedNews.attributes.authorImage?.data.attributes.url ? (
               <Image
                 alt="News author avatar"
                 className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
@@ -85,7 +78,7 @@ export default async function NewsPost({ params }: NewsPostProps) {
                 </span>
               </span>
               <span className="text-sm opacity-75">
-                {new Date(selectedNews.attributes.createdAt).toLocaleString(
+                {new Date(selectedNews.attributes.createdAt!).toLocaleString(
                   params.lang,
                   dateFormat,
                 )}
@@ -100,7 +93,7 @@ export default async function NewsPost({ params }: NewsPostProps) {
           <div className="flex flex-col opacity-40">
             <p className="text-sm">
               {dictionary.general.content_updated}:{' '}
-              {new Date(selectedNews.attributes.createdAt).toLocaleString(
+              {new Date(selectedNews.attributes.createdAt!).toLocaleString(
                 params.lang,
                 dateFormat,
               )}
@@ -108,7 +101,7 @@ export default async function NewsPost({ params }: NewsPostProps) {
           </div>
         </div>
         <article className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
-          <BlockRendererClient content={selectedNews.attributes.content} />
+          <BlockRendererClient content={selectedNews.attributes.content!} />
         </article>
       </div>
       <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
@@ -128,11 +121,9 @@ export default async function NewsPost({ params }: NewsPostProps) {
 }
 
 export async function generateStaticParams() {
-  const pageData = await getStrapiData<ApiNewsSingleNewsSingle[]>(
-    'fi',
-    '/api/news?pagination[pageSize]=100',
-    ['news-single'],
-  );
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::news-single.news-single'>
+  >('fi', '/api/news?pagination[pageSize]=100', ['news-single']);
 
   return pageData.data.map((news) => ({
     slug: news.attributes.slug,

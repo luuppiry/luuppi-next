@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { ApiStudiesFieldsOfStudyStudiesFieldsOfStudy } from '@/types/contentTypes';
+import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
@@ -19,12 +19,9 @@ export default async function StudiesFieldsOfStudy({
 }: StudiesFieldsOfStudyProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const pageData =
-    await getStrapiData<ApiStudiesFieldsOfStudyStudiesFieldsOfStudy>(
-      params.lang,
-      url,
-      tags,
-    );
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::studies-fields-of-study.studies-fields-of-study'>
+  >(params.lang, url, tags);
 
   return (
     <ContentPage
@@ -38,11 +35,9 @@ export default async function StudiesFieldsOfStudy({
 export async function generateMetadata({
   params,
 }: StudiesFieldsOfStudyProps): Promise<Metadata> {
-  const data = await getStrapiData<ApiStudiesFieldsOfStudyStudiesFieldsOfStudy>(
-    params.lang,
-    url,
-    tags,
-  );
+  const data = await getStrapiData<
+    APIResponseCollection<'api::studies-fields-of-study.studies-fields-of-study'>
+  >(params.lang, url, tags);
 
   const pathname = `/${params.lang}/studies/fields-of-study`;
 
