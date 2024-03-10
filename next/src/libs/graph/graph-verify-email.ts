@@ -1,4 +1,5 @@
 import 'server-only';
+import { logger } from '../utils/logger';
 
 /**
  * Verify if an email is already in use in the Microsoft Graph API
@@ -30,6 +31,7 @@ export const verifyGraphAPIEmail = async (
     }
     return false;
   } catch (error) {
+    logger.error('Graph API error', error);
     return null;
   }
 };

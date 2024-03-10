@@ -31,7 +31,7 @@ export async function sendVerifyEmail(
   const user = session?.user;
 
   if (!user) {
-    logger.error('Unauthorized, user not found in session');
+    logger.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -40,6 +40,7 @@ export async function sendVerifyEmail(
 
   const isLimited = await isRateLimited(user.azureId, cacheKey, 3);
   if (isLimited) {
+    logger.error(`User is being rate limited: ${user.email}`);
     return {
       message: dictionary.api.ratelimit,
       isError: true,
@@ -49,7 +50,7 @@ export async function sendVerifyEmail(
   const email = formData.get('email') as string;
 
   if (!email) {
-    logger.error('Email not found in form data');
+    logger.error('Email missing in form data');
     return {
       message: dictionary.api.invalid_email,
       isError: true,
@@ -59,7 +60,7 @@ export async function sendVerifyEmail(
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    logger.error('Invalid email');
+    logger.error('Email does not match regex');
     return {
       message: dictionary.api.invalid_email,
       isError: true,
@@ -68,7 +69,11 @@ export async function sendVerifyEmail(
   }
 
   if (user.email === email) {
-    logger.error('Email already in use, user email matches');
+    logger.error(
+      // eslint-disable-next-line quotes
+      "User's email is the same as the new email when trying to change",
+      email,
+    );
     return {
       message: dictionary.api.email_already_in_use,
       isError: true,
@@ -78,7 +83,7 @@ export async function sendVerifyEmail(
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
-    logger.error('Error getting access token');
+    logger.error('Error getting access token for Graph API');
     return {
       message: dictionary.api.server_error,
       isError: true,
@@ -87,7 +92,7 @@ export async function sendVerifyEmail(
   const result = await verifyGraphAPIEmail(accessToken, email);
 
   if (result === null) {
-    logger.error('Error verifying email');
+    logger.error('Error verifying email with Graph API, server error');
     return {
       message: dictionary.api.server_error,
       isError: true,
@@ -95,7 +100,7 @@ export async function sendVerifyEmail(
   }
 
   if (result) {
-    logger.error('Email already in use, Graph API returned true');
+    logger.error('Email already in use by another user');
     return {
       message: dictionary.api.email_already_in_use,
       isError: true,
@@ -141,16 +146,14 @@ export async function sendVerifyEmail(
   try {
     const poller = await emailClient.beginSend(message);
     await poller.pollUntilDone();
-    logger.info('Email change verification email sent to', email);
-
     await updateRateLimitCounter(user.azureId, cacheKey);
-
+    logger.info('Email change verification email sent to', email);
     return {
       message: dictionary.api.verify_email_sent,
       isError: false,
     };
   } catch (error) {
-    logger.error('Error sending email', error);
+    logger.error('Error sending verification email', error);
     return {
       message: dictionary.api.email_sending_failed,
       isError: true,

@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import NextAuth from 'next-auth';
 import AzureB2C from 'next-auth/providers/azure-ad-b2c';
+import 'server-only';
+import { logger } from './libs/utils/logger';
 
 export const {
   handlers: { GET, POST },
@@ -28,7 +30,13 @@ export const {
       if (account) {
         const idToken = account.id_token;
         if (!idToken) return token;
-        const decoded = jwt.decode(idToken) as { email: string; oid: string };
+        let decoded: null | { email: string; oid: string } = null;
+        try {
+          decoded = jwt.decode(idToken) as { email: string; oid: string };
+        } catch (e) {
+          logger.error('Error decoding JWT', e);
+        }
+        if (!decoded) return token;
         token.email = decoded.email;
         token.id = decoded.oid;
       }

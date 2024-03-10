@@ -25,7 +25,7 @@ export async function updateProfile(
   const user = session?.user;
 
   if (!user) {
-    logger.error('Unauthorized, user not found in session');
+    logger.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -34,6 +34,7 @@ export async function updateProfile(
 
   const isLimited = await isRateLimited(user.azureId, cacheKey, 10);
   if (isLimited) {
+    logger.error('User is being rate limited');
     return {
       message: dictionary.api.ratelimit,
       isError: true,
@@ -56,7 +57,7 @@ export async function updateProfile(
     /^(computer_science|mathematics|statistical_data_analysis|other)$/;
 
   if (!displaynameRegex.test(displayName)) {
-    logger.error('Invalid display name');
+    logger.error('Display name does not match regex');
     return {
       message: dictionary.api.invalid_display_name,
       isError: true,
@@ -65,7 +66,7 @@ export async function updateProfile(
   }
 
   if (givenName && !givenNameRegex.test(givenName)) {
-    logger.error('Invalid given name');
+    logger.error('Given name does not match regex');
     return {
       message: dictionary.api.invalid_given_name,
       isError: true,
@@ -74,7 +75,7 @@ export async function updateProfile(
   }
 
   if (surname && !surnameRegex.test(surname)) {
-    logger.error('Invalid surname');
+    logger.error('Surname does not match regex');
     return {
       message: dictionary.api.invalid_surname,
       isError: true,
@@ -83,7 +84,7 @@ export async function updateProfile(
   }
 
   if (domicle && !domicleRegex.test(domicle)) {
-    logger.error('Invalid domicle');
+    logger.error('Domicle does not match regex');
     return {
       message: dictionary.api.invalid_domicle,
       isError: true,
@@ -92,7 +93,7 @@ export async function updateProfile(
   }
 
   if (preferredFullName && !preferredFullNameRegex.test(preferredFullName)) {
-    logger.error('Invalid preferred full name');
+    logger.error('Preferred full name does not match regex');
     return {
       message: dictionary.api.invalid_preferred_full_name,
       isError: true,
@@ -101,7 +102,7 @@ export async function updateProfile(
   }
 
   if (major && !majorRegex.test(major)) {
-    logger.error('Invalid major');
+    logger.error('Major does not match regex');
     return {
       message: dictionary.api.invalid_major,
       isError: true,
@@ -111,7 +112,7 @@ export async function updateProfile(
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
-    logger.error('Error getting access token');
+    logger.error('Error getting access token for Graph API');
     return {
       message: dictionary.api.server_error,
       isError: true,
@@ -120,7 +121,7 @@ export async function updateProfile(
 
   const currentUserData = await getGraphAPIUser(accessToken, user.azureId);
   if (!currentUserData) {
-    logger.error('Error getting user data');
+    logger.error('Error getting user data using Graph API');
     return {
       message: dictionary.api.server_error,
       isError: true,
@@ -132,7 +133,7 @@ export async function updateProfile(
     user.azureId,
   );
   if (!currentUserGroups) {
-    logger.error('Error getting user groups');
+    logger.error('Error getting user groups using Graph API');
     return {
       message: dictionary.api.server_error,
       isError: true,
@@ -143,7 +144,9 @@ export async function updateProfile(
     (major || domicle) &&
     !currentUserGroups.value.some((group) => group.id === luuppiMemberGroupId)
   ) {
-    logger.error('Unauthorized, user is not a luuppi member');
+    logger.error(
+      'Tried to update major or domicle without being a member of Luuppi',
+    );
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -160,7 +163,7 @@ export async function updateProfile(
       preferredFullName &&
     currentUserData.extension_3c0a9d6308d649589e6b4e1f57006bcc_Major === major
   ) {
-    logger.error('No changes detected');
+    logger.error('Tried to update profile with no changes');
     return {
       message: dictionary.api.no_changes_detected,
       isError: true,

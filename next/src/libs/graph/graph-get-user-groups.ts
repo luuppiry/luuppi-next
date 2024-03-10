@@ -1,4 +1,5 @@
 import { Group } from '@microsoft/microsoft-graph-types';
+import { logger } from '../utils/logger';
 
 /**
  * Get the groups that a user is a member of
@@ -27,6 +28,7 @@ export const getGraphAPIUserGroups = async (
 
     return response.json();
   } catch (error) {
+    logger.error('Graph API error', error);
     return null;
   }
 };
