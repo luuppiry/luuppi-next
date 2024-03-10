@@ -1,5 +1,5 @@
 .fc .fc-button-primary {
-  @apply border-none bg-secondary-400 font-bold transition-colors duration-200 ease-in-out;
+  @apply border-none bg-secondary-400 font-semibold transition-colors duration-200 ease-in-out;
 }
 
 .fc .fc-button-primary:disabled {
@@ -58,7 +58,7 @@
 }
 
 .fc .fc-toolbar-title {
-  @apply text-2xl font-bold max-lg:text-xs;
+  @apply text-2xl font-semibold max-lg:text-xs;
 }
 
 .fc .fc-toolbar {

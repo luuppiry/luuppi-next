@@ -1,8 +1,9 @@
 'use client';
 import { Event } from '@/models/event';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import CopyInput from '../CopyInput/CopyInput';
+import { LuCalendarPlus } from 'react-icons/lu';
 import EventCalendar from '../EventCalendar/EventCalendar';
 import EventsList from '../EventsList/EventsList';
 import MobileCalendar from '../MobileCalendar/MobileCalendar';
@@ -44,49 +45,55 @@ export default function EventSelector({
   return (
     <div className="flex flex-col gap-8">
       <div className="flex w-full items-center justify-between rounded-lg bg-background-50/50 p-4 max-md:flex-col max-md:justify-center max-md:gap-4 max-md:px-2">
-        <div className="flex w-full items-center gap-4 max-lg:flex-col max-lg:items-start max-lg:gap-2">
+        <div className="flex w-full items-center gap-4 max-md:flex-col max-md:gap-2">
           <div
             className="tabs-boxed tabs border bg-white max-md:w-full"
             role="tablist"
           >
             <button
-              className={`tab font-bold ${selectedView === 'calendar' && 'tab-active'}`}
+              className={`tab text-nowrap font-semibold ${selectedView === 'calendar' && 'tab-active'}`}
               role="tab"
               onClick={() => setView('calendar')}
             >
               {dictionary.pages_events.calendar}
             </button>
             <button
-              className={`tab font-bold ${selectedView === 'list' && 'tab-active'}`}
+              className={`tab text-nowrap font-semibold ${selectedView === 'list' && 'tab-active'}`}
               role="tab"
               onClick={() => setView('list')}
             >
               {dictionary.pages_events.event_feed}
             </button>
           </div>
-          <div className="form-control w-48">
-            <label className="label cursor-pointer">
-              <span className="label-text">
-                {dictionary.pages_events.show_past}
-              </span>
-              <input
-                checked={showPastEvents}
-                className="toggle toggle-primary"
-                disabled={selectedView === 'calendar'}
-                type="checkbox"
-                onChange={toggleShowPastEvents}
-              />
-            </label>
+          <div className="flex  w-full items-center justify-between">
+            <div className="form-control w-48">
+              <label className="label cursor-pointer">
+                <span className="label-text">
+                  {dictionary.pages_events.show_past}
+                </span>
+                <input
+                  checked={showPastEvents}
+                  className="toggle toggle-primary"
+                  disabled={selectedView === 'calendar'}
+                  type="checkbox"
+                  onChange={toggleShowPastEvents}
+                />
+              </label>
+            </div>
+            <Link
+              className="btn btn-primary btn-sm text-white"
+              href={
+                lang === 'en'
+                  ? 'webcal://luuppi.fi/service/ics/events.ics?lang=eng'
+                  : 'webcal://luuppi.fi/service/ics/events.ics?lang=fin'
+              }
+              target="_blank"
+            >
+              <LuCalendarPlus size={24} />
+              iCal
+            </Link>
           </div>
         </div>
-        <CopyInput
-          dictionary={dictionary}
-          value={
-            lang === 'en'
-              ? 'https://luuppi.fi/service/ics/events.ics?lang=eng'
-              : 'https://luuppi.fi/service/ics/events.ics?lang=fin'
-          }
-        />
       </div>
       {selectedView === 'calendar' ? (
         <>
