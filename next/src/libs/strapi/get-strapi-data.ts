@@ -35,17 +35,13 @@ export const getStrapiData = async <T>(
     const data = await res.json();
 
     if (!data?.data) {
-      logConsoleError('no_data', data);
+      logger.error(`Failed to fetch data from ${url}`, data);
       throw new Error(`Failed to fetch data from ${url}`);
     }
 
     return data;
   } catch (error) {
-    logConsoleError('fetch_failed', error);
+    logger.error('Error fetching data from Strapi', error);
     throw new Error('Failed to fetch data from Strapi');
   }
 };
-
-function logConsoleError(type: 'fetch_failed' | 'no_data', error: any) {
-  logger.error(`Failed to fetch data from Strapi. Type: ${type}`, error);
-}

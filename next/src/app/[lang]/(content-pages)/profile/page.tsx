@@ -21,20 +21,20 @@ export default async function Profile({ params }: ProfileProps) {
 
   const session = await auth();
   if (!session?.user) {
-    logger.error('Error getting session');
+    logger.error('Error getting user');
     redirect(`/${params.lang}`);
   }
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
-    logger.error('Error getting access token');
+    logger.error('Error getting access token for Graph API');
     redirect(`/${params.lang}`);
   }
 
   const user = await getGraphAPIUser(accessToken, session.user.azureId);
   const groups = await getGraphAPIUserGroups(accessToken, session.user.azureId);
   if (!user || !groups) {
-    logger.error('Error getting user or groups');
+    logger.error('Error getting user or groups from Graph API');
     redirect(`/${params.lang}`);
   }
 

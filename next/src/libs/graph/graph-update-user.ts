@@ -1,5 +1,6 @@
 import { User } from '@microsoft/microsoft-graph-types';
 import 'server-only';
+import { logger } from '../utils/logger';
 
 /**
  * Update a user in the Microsoft Graph API
@@ -42,6 +43,7 @@ export const updateGraphAPIUser = async (
 
     return true;
   } catch (error) {
+    logger.error('Graph API error', error);
     return false;
   }
 };

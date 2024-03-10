@@ -1,5 +1,6 @@
 import { ConfidentialClientApplication } from '@azure/msal-node';
 import 'server-only';
+import { logger } from './utils/logger';
 
 const msalConfig = {
   auth: {
@@ -15,11 +16,16 @@ const msalConfig = {
  * @returns Access token or null if failed to get it.
  */
 export const getAccessToken = async (): Promise<string | null> => {
-  const cca = new ConfidentialClientApplication(msalConfig);
+  try {
+    const cca = new ConfidentialClientApplication(msalConfig);
 
-  const tokenRes = await cca.acquireTokenByClientCredential({
-    scopes: ['https://graph.microsoft.com/.default'],
-  });
+    const tokenRes = await cca.acquireTokenByClientCredential({
+      scopes: ['https://graph.microsoft.com/.default'],
+    });
 
-  return tokenRes?.accessToken ?? null;
+    return tokenRes?.accessToken ?? null;
+  } catch (error) {
+    logger.error('Error getting access token', error);
+    return null;
+  }
 };

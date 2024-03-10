@@ -2,6 +2,7 @@ import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import ical from 'node-ical';
 import 'server-only';
+import { logger } from '../utils/logger';
 
 /**
  * Get events from Luuppi's legacy ICS calendar.
@@ -11,28 +12,33 @@ import 'server-only';
 export const getLuuppiEvents = async (
   lang: SupportedLanguage,
 ): Promise<Event[]> => {
-  const langParam = lang === 'fi' ? 'fin' : 'eng';
+  try {
+    const langParam = lang === 'fi' ? 'fin' : 'eng';
 
-  const res = await fetch(
-    `https://luuppi.fi/service/ics/events.ics?lang=${langParam}`,
-    {
-      next: { revalidate: 300 },
-    },
-  );
-  const data = await res.text();
-  const eventsRaw = ical.parseICS(data);
-  const events = Object.values(eventsRaw) as ical.VEvent[];
+    const res = await fetch(
+      `https://luuppi.fi/service/ics/events.ics?lang=${langParam}`,
+      {
+        next: { revalidate: 300 },
+      },
+    );
+    const data = await res.text();
+    const eventsRaw = ical.parseICS(data);
+    const events = Object.values(eventsRaw) as ical.VEvent[];
 
-  const formattedEvents: Event[] = events.map((event) => ({
-    title: event.summary,
-    start: event.start,
-    end: event.end,
-    description: removeHtml(event.description) ?? '',
-    id: getIdFromUrl(event.url ?? ''),
-    location: event.location ?? '',
-  }));
+    const formattedEvents: Event[] = events.map((event) => ({
+      title: event.summary,
+      start: event.start,
+      end: event.end,
+      description: removeHtml(event.description) ?? '',
+      id: getIdFromUrl(event.url ?? ''),
+      location: event.location ?? '',
+    }));
 
-  return formattedEvents;
+    return formattedEvents;
+  } catch (error) {
+    logger.error('Error fetching Luuppi events', error);
+    return [];
+  }
 };
 
 /**
@@ -45,31 +51,36 @@ export const getLuuppiEventById = async (
   lang: SupportedLanguage,
   id: string,
 ): Promise<Event | undefined> => {
-  const langParam = lang === 'fi' ? 'fin' : 'eng';
+  try {
+    const langParam = lang === 'fi' ? 'fin' : 'eng';
 
-  const res = await fetch(
-    `https://luuppi.fi/service/ics/events.ics?lang=${langParam}`,
-    {
-      next: { revalidate: 300 },
-    },
-  );
-  const data = await res.text();
-  const eventsRaw = ical.parseICS(data);
-  const events = Object.values(eventsRaw) as ical.VEvent[];
+    const res = await fetch(
+      `https://luuppi.fi/service/ics/events.ics?lang=${langParam}`,
+      {
+        next: { revalidate: 300 },
+      },
+    );
+    const data = await res.text();
+    const eventsRaw = ical.parseICS(data);
+    const events = Object.values(eventsRaw) as ical.VEvent[];
 
-  const event = events.find((e) => e.url?.includes(`id=${id}`));
-  if (!event) return undefined;
+    const event = events.find((e) => e.url?.includes(`id=${id}`));
+    if (!event) return undefined;
 
-  const eventId = getIdFromUrl(event.url ?? '');
+    const eventId = getIdFromUrl(event.url ?? '');
 
-  return {
-    title: event.summary,
-    start: event.start,
-    end: event.end,
-    description: event.description ?? '',
-    id: eventId,
-    location: event.location ?? '',
-  };
+    return {
+      title: event.summary,
+      start: event.start,
+      end: event.end,
+      description: event.description ?? '',
+      id: eventId,
+      location: event.location ?? '',
+    };
+  } catch (error) {
+    logger.error('Error fetching Luuppi event by ID', error);
+    return undefined;
+  }
 };
 
 /**

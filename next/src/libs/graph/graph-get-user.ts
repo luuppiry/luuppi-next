@@ -1,5 +1,6 @@
 import { ExtendedUser } from '@/models/user';
 import 'server-only';
+import { logger } from '../utils/logger';
 
 /**
  * Get a user from the Microsoft Graph API
@@ -27,6 +28,7 @@ export const getGraphAPIUser = async (
 
     return response.json();
   } catch (error) {
+    logger.error('Graph API error', error);
     return null;
   }
 };

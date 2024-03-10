@@ -43,25 +43,25 @@ export default async function VerifyEmail({
     const { newMail, userId } = decoded;
 
     if (!newMail || !userId) {
-      logger.error('Invalid token, newEmail or userId not found');
+      logger.error('Invalid token, missing newMail or userId');
       redirect(`/${params.lang}/404`);
     }
 
     newEmailVerified = newMail;
     userIdVerified = userId;
   } catch (error) {
-    logger.error('Invalid token', error);
+    logger.error('Error verifying token', error);
     redirect(`/${params.lang}/404`);
   }
 
   if (session.user.azureId !== userIdVerified) {
-    logger.error('Unauthorized, userId does not match');
+    logger.error('User ID does not match token');
     redirect(`/${params.lang}/404`);
   }
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
-    logger.error('Unauthorized, getting access token failed');
+    logger.error('Error getting access token for Graph API');
     redirect(`/${params.lang}/404`);
   }
 

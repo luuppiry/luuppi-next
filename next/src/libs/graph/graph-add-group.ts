@@ -1,4 +1,5 @@
 import 'server-only';
+import { logger } from '../utils/logger';
 
 /**
  * Add a user to a group
@@ -32,6 +33,7 @@ export const addGraphAPIUserToGroup = async (
 
     return response.json();
   } catch (error) {
+    logger.error('Graph API error', error);
     return null;
   }
 };
