@@ -38,7 +38,6 @@ const getStaticPages = (lang: SupportedLanguage) => {
     // Collaboration
     `/${lang}/collaboration`,
     `/${lang}/collaboration/companies`,
-    `/${lang}/collaboration/benefits`,
 
     // Events
     `/${lang}/events`,

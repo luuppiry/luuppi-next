@@ -98,10 +98,6 @@ export const navLinks: NavLink[] = [
         translation: 'companies',
         href: '/collaboration/companies',
       },
-      {
-        translation: 'benefits',
-        href: '/collaboration/benefits',
-      },
     ],
   },
   {

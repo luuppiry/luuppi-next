@@ -69,10 +69,6 @@ export const footerLinks: FooterLink[] = [
         translation: 'companies',
         href: '/collaboration/companies',
       },
-      {
-        translation: 'benefits',
-        href: '/collaboration/benefits',
-      },
     ],
   },
   {
