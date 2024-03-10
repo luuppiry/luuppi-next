@@ -806,7 +806,6 @@ export interface ApiBoardBoard extends Schema.CollectionType {
       'manyToMany',
       'api::board-member.board-member'
     >;
-    Seo: Attribute.Component<'shared.seo'> & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

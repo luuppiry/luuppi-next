@@ -1,8 +1,10 @@
 import { getDictionary } from '@/dictionaries';
+import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -77,4 +79,20 @@ export default async function CollaborationCompanies({
       </div>
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: CollaborationCompaniesProps): Promise<Metadata> {
+  const url =
+    '/api/collaboration-company?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
+  const tags = ['collaboration-company'];
+
+  const data = await getStrapiData<
+    APIResponseCollection<'api::collaboration-company.collaboration-company'>
+  >(params.lang, url, tags);
+
+  const pathname = `/${params.lang}/collaboration/companies`;
+
+  return formatMetadata(data, pathname);
 }

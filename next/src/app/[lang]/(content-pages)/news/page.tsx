@@ -1,10 +1,12 @@
 import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
 import { flipNewsLocale } from '@/libs/strapi/flip-locale';
+import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaUserAlt } from 'react-icons/fa';
@@ -105,4 +107,20 @@ export default async function News({ params }: NewsProps) {
       </div>
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: NewsProps): Promise<Metadata> {
+  const url =
+    '/api/news-list?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
+  const tags = ['news-list'];
+
+  const data = await getStrapiData<
+    APIResponseCollection<'api::news-list.news-list'>
+  >(params.lang, url, tags);
+
+  const pathname = `/${params.lang}/news`;
+
+  return formatMetadata(data, pathname);
 }

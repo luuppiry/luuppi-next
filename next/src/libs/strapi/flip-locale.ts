@@ -56,6 +56,9 @@ export const flipNewsLocale = (
             banner: news.attributes.banner,
             authorImage: news.attributes.authorImage,
             slug: news.attributes.slug,
+            Seo: {
+              ...localeEn?.attributes.Seo,
+            },
           },
         };
       })
