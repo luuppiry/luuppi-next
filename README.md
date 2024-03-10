@@ -85,3 +85,13 @@ npm run dev
 ```
 
 The development server should now be up and running at [http://localhost:1337](http://localhost:1337).
+
+## Contributing
+We encourage you to contribute to making the weba™️ better! Please refer to the [Contributing Guidelines](.github/CONTRIBUTING.md) for instructions on how to proceed.
+
+Trying to report a possible security vulnerability in this repository? Please
+check out our [security policy](.github/SECURITY.md) for
+guidelines about how to proceed.
+
+## License
+This repository is released under the [MIT License](https://opensource.org/licenses/MIT).
