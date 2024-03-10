@@ -5,6 +5,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { groupBoardByYear } from '@/libs/strapi/group-board-by-year';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
+import { Metadata } from 'next';
 import Link from 'next/link';
 
 interface BoardProps {
@@ -112,4 +113,48 @@ export default async function Board({ params }: BoardProps) {
       </div>
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: BoardProps): Promise<Metadata> {
+  const dictionary = await getDictionary(params.lang);
+
+  const boardData = await getStrapiData<
+    APIResponseCollection<'api::board.board'>
+  >(
+    'fi',
+    '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
+    ['board', 'board-role', 'board-member'],
+  );
+
+  const boardGroupedByYear = groupBoardByYear(boardData.data);
+  const boardSortedByYear = Object.keys(boardGroupedByYear).sort(
+    (a, b) => Number(b) - Number(a),
+  );
+  const latestBoard = boardGroupedByYear[boardSortedByYear[0]];
+
+  const pathname = `/${params.lang}/organization/board`;
+
+  return {
+    title: `${dictionary.navigation.board} ${latestBoard.attributes.year} | Luuppi ry`,
+    description: `${dictionary.pages_board.seo_description} ${latestBoard.attributes.year}`,
+    alternates: {
+      canonical: pathname,
+      languages: {
+        fi: `/fi${pathname.slice(3)}`,
+        en: `/en${pathname.slice(3)}`,
+      },
+    },
+    openGraph: {
+      title: `${dictionary.navigation.board} ${latestBoard.attributes.year}`,
+      description: `${dictionary.pages_board.seo_description} ${latestBoard.attributes.year}`,
+      url: pathname,
+      siteName: 'Luuppi ry',
+    },
+    twitter: {
+      title: `${dictionary.navigation.board} ${latestBoard.attributes.year}`,
+      description: `${dictionary.pages_board.seo_description} ${latestBoard.attributes.year}`,
+    },
+  };
 }

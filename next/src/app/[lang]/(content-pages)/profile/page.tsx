@@ -6,8 +6,12 @@ import { getDictionary } from '@/dictionaries';
 import { getAccessToken } from '@/libs/get-access-token';
 import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
 import { getGraphAPIUserGroups } from '@/libs/graph/graph-get-user-groups';
+import { formatMetadata } from '@/libs/strapi/format-metadata';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
+import { APIResponseCollection } from '@/types/types';
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 const luuppiMemberGroupId = process.env.AZURE_LUUPPI_MEMBER_GROUP;
@@ -63,4 +67,20 @@ export default async function Profile({ params }: ProfileProps) {
       </div>
     </>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: ProfileProps): Promise<Metadata> {
+  const url =
+    '/api/profile?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
+  const tags = ['profile'];
+
+  const data = await getStrapiData<
+    APIResponseCollection<'api::profile.profile'>
+  >(params.lang, url, tags);
+
+  const pathname = `/${params.lang}/profile`;
+
+  return formatMetadata(data, pathname);
 }
