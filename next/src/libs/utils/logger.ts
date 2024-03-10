@@ -1,3 +1,5 @@
+import 'server-only';
+
 /* eslint-disable no-console */
 const LOGS_ENABLED = process.env.LOGS_ENABLED ?? true;
 
@@ -24,6 +26,13 @@ const colors = {
   red: '\x1b[31m',
   yellow: '\x1b[33m',
   reset: '\x1b[0m',
+  bold: '\x1b[1m',
+};
+
+const getPath = () => {
+  const path = __filename;
+  const pathSplit = path.split('/');
+  return pathSplit.slice(-2).join('/').replace('.js', '.ts');
 };
 
 /**
@@ -31,22 +40,15 @@ const colors = {
  */
 export const logger = {
   info: (...message: any[]) => {
-    console.log(process.env.NODE_ENV);
     if (!LOGS_ENABLED) return;
     console.log(
-      ` ${colors.green}✓${colors.reset} ${getFormattedDate()} ${colors.green}[INFO]${colors.reset} ${formatMessage(message)}`,
-    );
-  },
-  warn: (...message: any[]) => {
-    if (!LOGS_ENABLED) return;
-    console.log(
-      ` ${colors.yellow}⚠${colors.reset} ${getFormattedDate()} ${colors.yellow}[WARN]${colors.reset} ${formatMessage(message)}`,
+      ` ${colors.bold}${colors.green}✓${colors.reset} ${getFormattedDate()} ${colors.green}INFO ${colors.yellow}[${getPath()}]${colors.green} ${formatMessage(message)}`,
     );
   },
   error: (...message: any[]) => {
     if (!LOGS_ENABLED) return;
     console.log(
-      ` ${colors.red}✖${colors.reset} ${getFormattedDate()} ${colors.red}[ERROR]${colors.reset} ${formatMessage(message)}`,
+      ` ${colors.bold}${colors.red}✖${colors.reset} ${getFormattedDate()} ${colors.red}ERROR ${colors.yellow}[${getPath()}]${colors.red} ${formatMessage(message)}`,
     );
   },
 };
