@@ -3,6 +3,7 @@ import { getLuuppiEvents } from '@/libs/events/get-legacy-events';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
+import TodayBadge from '../TodayBadge/TodayBadge';
 
 interface RenderEventsProps {
   lang: SupportedLanguage;
@@ -30,11 +31,7 @@ export default async function RenderEvents({
           className="group relative flex flex-col rounded-lg bg-primary-800 text-white"
           href={`/${lang}/events/${event.id}`}
         >
-          {event.isToday && (
-            <span className="badge badge-accent absolute left-1/2 z-20 -translate-x-1/2 -translate-y-2 transform font-bold text-white">
-              {dictionary.general.today}!
-            </span>
-          )}
+          <TodayBadge dictionary={dictionary} event={event} />
           <div className="relative aspect-[7/5] overflow-hidden rounded-t-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:aspect-video max-sm:aspect-[7/3]">
             <Image
               alt="Event placeholder image"
