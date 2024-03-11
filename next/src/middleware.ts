@@ -48,6 +48,7 @@ export function middleware(request: NextRequest) {
       '/luuppi-cards.svg',
       '/luuppi.svg',
       '/banner.png',
+      '/banner_mobile.png',
       '/locale-icons/us.svg',
       '/locale-icons/fi.svg',
       '/images/news.jpg',

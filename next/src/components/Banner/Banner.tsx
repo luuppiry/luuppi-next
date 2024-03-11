@@ -13,7 +13,7 @@ export default function Banner({ lang }: BannerProps) {
           <div className="relative z-10 flex h-full w-full max-md:h-48">
             <Image
               alt="Luuppi banner text"
-              className="z-20 object-contain p-6 drop-shadow-[-6px_6px_#00000030] filter max-md:p-4"
+              className="z-20 object-contain p-6 drop-shadow-[-6px_6px_#00000030] filter max-lg:drop-shadow-[-4px_4px_#00000030] max-md:p-4"
               draggable={false}
               src={
                 lang === 'en'
@@ -34,10 +34,19 @@ export default function Banner({ lang }: BannerProps) {
           </div>
           <Image
             alt="Luuppi banner"
-            className="object-cover"
+            className="object-cover max-lg:hidden"
             draggable={false}
             quality={100}
             src="/banner.png"
+            fill
+            priority
+          />
+          <Image
+            alt="Luuppi banner"
+            className="object-cover lg:hidden"
+            draggable={false}
+            quality={100}
+            src="/banner_mobile.png"
             fill
             priority
           />
