@@ -41,74 +41,53 @@ export async function updateProfile(
     };
   }
 
-  const displayName = formData.get('displayName') as string;
-  const givenName = formData.get('givenName') as string;
-  const surname = formData.get('surname') as string;
-  const domicle = formData.get('domicle') as string;
-  const preferredFullName = formData.get('preferredFullName') as string;
-  const major = formData.get('major') as string;
+  const fields: Record<
+    string,
+    { value: FormDataEntryValue | null; regex: RegExp; required?: boolean }
+  > = {
+    displayName: {
+      value: formData.get('displayName'),
+      regex: /^[a-zA-Z0-9]{3,30}$/,
+      required: true,
+    },
+    givenName: { value: formData.get('givenName'), regex: /^.{2,70}$/ },
+    surname: { value: formData.get('surname'), regex: /^.{2,35}$/ },
+    extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle: {
+      value: formData.get('domicle'),
+      regex: /^.{2,35}$/,
+    },
+    extension_3c0a9d6308d649589e6b4e1f57006bcc_PreferredFullName: {
+      value: formData.get('preferredFullName'),
+      regex: /^.{2,100}$/,
+    },
+    extension_3c0a9d6308d649589e6b4e1f57006bcc_Major: {
+      value: formData.get('major'),
+      regex: /^(computer_science|mathematics|statistical_data_analysis|other)$/,
+    },
+  };
 
-  const displaynameRegex = /^[a-zA-Z0-9]{3,30}$/;
-  const givenNameRegex = /^.{2,70}$/;
-  const surnameRegex = /^.{2,35}$/;
-  const domicleRegex = /^.{2,35}$/;
-  const preferredFullNameRegex = /^.{2,100}$/;
-  const majorRegex =
-    /^(computer_science|mathematics|statistical_data_analysis|other)$/;
+  const errors = Object.entries(fields)
+    .map(([fieldName, { value, regex, required }]) =>
+      validateField(
+        value?.toString() ?? null,
+        regex,
+        dictionary,
+        fieldName,
+        required,
+      ),
+    )
+    .filter((error) => error !== null);
 
-  if (!displaynameRegex.test(displayName)) {
-    logger.error('Display name does not match regex');
-    return {
-      message: dictionary.api.invalid_display_name,
-      isError: true,
-      field: 'displayName',
-    };
+  if (errors.length > 0) {
+    return errors[0];
   }
 
-  if (givenName && !givenNameRegex.test(givenName)) {
-    logger.error('Given name does not match regex');
-    return {
-      message: dictionary.api.invalid_given_name,
-      isError: true,
-      field: 'givenName',
-    };
-  }
-
-  if (surname && !surnameRegex.test(surname)) {
-    logger.error('Surname does not match regex');
-    return {
-      message: dictionary.api.invalid_surname,
-      isError: true,
-      field: 'surname',
-    };
-  }
-
-  if (domicle && !domicleRegex.test(domicle)) {
-    logger.error('Domicle does not match regex');
-    return {
-      message: dictionary.api.invalid_domicle,
-      isError: true,
-      field: 'domicle',
-    };
-  }
-
-  if (preferredFullName && !preferredFullNameRegex.test(preferredFullName)) {
-    logger.error('Preferred full name does not match regex');
-    return {
-      message: dictionary.api.invalid_preferred_full_name,
-      isError: true,
-      field: 'preferredFullName',
-    };
-  }
-
-  if (major && !majorRegex.test(major)) {
-    logger.error('Major does not match regex');
-    return {
-      message: dictionary.api.invalid_major,
-      isError: true,
-      field: 'major',
-    };
-  }
+  const fieldsToUpdate = Object.fromEntries(
+    Object.entries(fields).map(([fieldName, { value }]) => [
+      fieldName,
+      value ? value.toString() : null,
+    ]),
+  );
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
@@ -141,7 +120,7 @@ export async function updateProfile(
   }
 
   if (
-    (major || domicle) &&
+    (fieldsToUpdate.major || fieldsToUpdate.domicle) &&
     !currentUserGroups.value.some((group) => group.id === luuppiMemberGroupId)
   ) {
     logger.error(
@@ -153,32 +132,7 @@ export async function updateProfile(
     };
   }
 
-  if (
-    currentUserData.displayName === displayName &&
-    currentUserData.givenName === givenName &&
-    currentUserData.surname === surname &&
-    currentUserData.extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle ===
-      domicle &&
-    currentUserData.extension_3c0a9d6308d649589e6b4e1f57006bcc_PreferredFullName ===
-      preferredFullName &&
-    currentUserData.extension_3c0a9d6308d649589e6b4e1f57006bcc_Major === major
-  ) {
-    logger.error('Tried to update profile with no changes');
-    return {
-      message: dictionary.api.no_changes_detected,
-      isError: true,
-    };
-  }
-
-  await updateGraphAPIUser(accessToken, user.azureId, {
-    displayName,
-    givenName,
-    surname,
-    extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle: domicle,
-    extension_3c0a9d6308d649589e6b4e1f57006bcc_PreferredFullName:
-      preferredFullName,
-    extension_3c0a9d6308d649589e6b4e1f57006bcc_Major: major,
-  });
+  await updateGraphAPIUser(accessToken, user.azureId, fieldsToUpdate);
 
   revalidatePath(`/${lang}/profile`);
 
@@ -188,4 +142,31 @@ export async function updateProfile(
     message: dictionary.api.profile_updated,
     isError: false,
   };
+}
+
+function validateField(
+  fieldValue: string | null,
+  regex: RegExp,
+  dictionary: any,
+  fieldName: string,
+  required?: boolean,
+) {
+  const fieldNameSnakeCase = fieldName.replace(/([A-Z])/g, '_$1').toLowerCase();
+
+  if (required && !fieldValue) {
+    return {
+      message: dictionary.api[`invalid_${fieldNameSnakeCase}`],
+      isError: true,
+      field: fieldName,
+    };
+  }
+
+  if (fieldValue && !regex.test(fieldValue)) {
+    return {
+      message: dictionary.api[`invalid_${fieldNameSnakeCase}`],
+      isError: true,
+      field: fieldName,
+    };
+  }
+  return null;
 }
