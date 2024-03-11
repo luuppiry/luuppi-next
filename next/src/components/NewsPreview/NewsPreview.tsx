@@ -9,7 +9,7 @@ interface NewsPreviewProps {
 
 export default function NewsPreview({ dictionary, lang }: NewsPreviewProps) {
   return (
-    <section className="mx-auto max-w-[1200px] px-4 py-20">
+    <section className="relative mx-auto max-w-[1200px] px-4 py-20">
       <p className="mb-1 text-xl font-bold max-md:text-base">
         {dictionary.pages_home.news.subtitle}
       </p>
@@ -29,6 +29,7 @@ export default function NewsPreview({ dictionary, lang }: NewsPreviewProps) {
           </Link>
         </div>
       </div>
+      <div className="luuppi-pattern max-md:.test absolute -left-40 top-0 -z-50 h-[801px] w-[901px] max-md:right-0 max-md:top-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </section>
   );
 }
