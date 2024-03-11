@@ -85,6 +85,8 @@
   .luuppi-pattern {
     @apply bg-[linear-gradient(#d6d6d650_1px,transparent_1px),linear-gradient(to_right,#d6d6d650_1px,#fff_1px)] opacity-80;
     background-size: 20px 20px;
+    border-radius: 50%;
+    box-shadow: 0 0 50px 50px #fff inset;
   }
 
   .luuppi-kolmio-pattern {

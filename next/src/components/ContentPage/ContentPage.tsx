@@ -38,7 +38,7 @@ export default async function ContentPage({
             fill
           />
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="relative flex flex-col gap-4">
           <h1>{contentData.attributes.Content.title}</h1>
           <div className="flex flex-col opacity-40">
             <p className="text-sm">
@@ -49,6 +49,7 @@ export default async function ContentPage({
               )}
             </p>
           </div>
+          <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
         </div>
         <article className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
           <BlockRendererClient
