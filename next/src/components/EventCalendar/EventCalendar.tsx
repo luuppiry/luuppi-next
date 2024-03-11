@@ -42,6 +42,19 @@ export default function EventCalendar({ events, lang }: EventCalendarProps) {
     <FullCalendar
       ref={calendarRef}
       aspectRatio={isMobile ? 0.8 : 1.35}
+      buttonText={
+        lang === 'fi'
+          ? {
+              today: 'Tänään',
+              month: 'Kuukausi',
+              week: 'Viikko',
+            }
+          : {
+              today: 'Today',
+              month: 'Month',
+              week: 'Week',
+            }
+      }
       datesSet={() => {
         setTimeout((): void => {
           calendarRef?.current?.getApi().updateSize();
