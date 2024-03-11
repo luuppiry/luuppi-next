@@ -33,7 +33,7 @@ export default function UserDropdown({ dictionary, lang }: UserDropdownProps) {
         className="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 text-black shadow"
         tabIndex={0}
       >
-        <div className="flex max-w-full flex-col p-2">
+        <div className="mb-2 flex max-w-full flex-col p-2">
           <span className="truncate font-bold" title={session.user?.name ?? ''}>
             {session.user?.name}
           </span>
