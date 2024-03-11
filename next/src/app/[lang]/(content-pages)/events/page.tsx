@@ -15,14 +15,15 @@ export default async function Events({ params }: EventsProps) {
   const dictionary = await getDictionary(params.lang);
   const events = await getLuuppiEvents(params.lang);
   return (
-    <>
+    <div className="relative">
       <h1 className="mb-12">{dictionary.navigation.events}</h1>
       <EventSelector
         dictionary={dictionary}
         events={events}
         lang={params.lang}
       />
-    </>
+      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:top-0 max-md:h-full max-md:w-full max-md:rounded-none" />
+    </div>
   );
 }
 

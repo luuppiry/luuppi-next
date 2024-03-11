@@ -48,10 +48,10 @@ export default async function Event({ params }: EventProps) {
   }
 
   return (
-    <div className="flex w-full gap-12">
+    <div className="relative flex w-full gap-12">
       <div className="flex w-full flex-col">
         <h1 className="mb-12">{event.title}</h1>
-        <div className="mb-6 flex gap-4 rounded-lg bg-background-50/50">
+        <div className="mb-6 flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm">
           <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
           <div className="flex max-w-full flex-col gap-2 rounded-lg py-4 pr-4 font-semibold max-sm:text-sm">
             <div className="flex items-center">
@@ -94,6 +94,7 @@ export default async function Event({ params }: EventProps) {
           />
         </div>
       </div>
+      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[401px] w-[801px] max-md:left-0 max-md:w-full max-md:rounded-none" />
     </div>
   );
 }

@@ -117,7 +117,7 @@ export default function MobileCalendar({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-white py-4">
       <ViewEventsDialog
         dictionary={dictionary}
         events={selectedEvents}
