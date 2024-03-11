@@ -38,7 +38,8 @@
     "preferredFullName": "Ensisijainen koko nimi",
     "domicle": "Kotikunta",
     "major": "Pääaine",
-    "today": "Tänään"
+    "today": "Tänään",
+    "tomorrow": "Huomenna"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat",

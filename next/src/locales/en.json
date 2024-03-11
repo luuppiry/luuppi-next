@@ -38,7 +38,8 @@
     "preferredFullName": "Preferred full name",
     "domicle": "Domicle",
     "major": "Major",
-    "today": "Today"
+    "today": "Today",
+    "tomorrow": "Tomorrow"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi",

@@ -79,7 +79,7 @@ export async function updateProfile(
     .filter((error) => error !== null);
 
   if (errors.length > 0) {
-    return errors[0];
+    return errors[0] as { message: string; isError: boolean; field: string };
   }
 
   const fieldsToUpdate = Object.fromEntries(
