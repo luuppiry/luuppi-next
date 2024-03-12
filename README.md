@@ -86,12 +86,23 @@ npm run dev
 
 The development server should now be up and running at [http://localhost:1337](http://localhost:1337).
 
-## Contributing
+## Contribution
 We encourage you to contribute to making the weba™️ better! Please refer to the [Contributing Guidelines](.github/CONTRIBUTING.md) for instructions on how to proceed.
 
 Trying to report a possible security vulnerability in this repository? Please
 check out our [Security Policy](.github/SECURITY.md) for
 guidelines about how to proceed.
+
+## Contributors ♥️ Thanks
+
+We extend our gratitude to all those who take the time to improve Luuppi's website. The main goal of this project being open-source is to enable everyone to be part of it and, most importantly, to learn from a "real project" with a very low threshold.
+
+<br/>
+
+<a href="https://github.com/luuppiry/luuppi-next/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=luuppiry/luuppi-next&max=400&columns=20" />
+</a>
+
 
 ## License
 This repository is released under the [MIT License](https://opensource.org/licenses/MIT).
