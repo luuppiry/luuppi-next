@@ -27,7 +27,7 @@ services:
     ports:
       - "127.0.0.1:1337:1337"
     networks:
-      - strapi
+      - weba-network
     depends_on:
       - strapiDB
 
@@ -48,12 +48,15 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - strapi
+      - weba-network
 
 volumes:
   strapi-data:
 
+#
+# External network handled by luuppi-proxy
+# https://github.com/luuppiry/luuppi-proxy
+#
 networks:
-  strapi:
-    name: Strapi
-    driver: bridge
+  weba-network:
+    external: true
