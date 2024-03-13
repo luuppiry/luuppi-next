@@ -29,7 +29,7 @@ export default async function RootLayout({
     <html data-theme="light" lang={params.lang}>
       <head>
         <PlausibleProvider
-          customDomain={process.env.NEXT_PUBLIC_ANALYTICS_BASE_URL}
+          customDomain={process.env.NEXT_PUBLIC_BASE_URL}
           domain={process.env.NEXT_PUBLIC_BASE_URL!?.replace('https://', '')}
           enabled={true}
           selfHosted
