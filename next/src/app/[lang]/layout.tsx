@@ -32,6 +32,13 @@ export default async function RootLayout({
           customDomain={process.env.NEXT_PUBLIC_BASE_URL}
           domain={process.env.NEXT_PUBLIC_BASE_URL!?.replace('https://', '')}
           enabled={true}
+          scriptProps={{
+            src: `${process.env.NEXT_PUBLIC_BASE_URL}/js/nuuhkija.js`,
+
+            // https://github.com/4lejandrito/next-plausible/issues/113
+            // @ts-expect-error missing types
+            'data-api': `${process.env.NEXT_PUBLIC_BASE_URL}/api/event`,
+          }}
           selfHosted
         />
       </head>
