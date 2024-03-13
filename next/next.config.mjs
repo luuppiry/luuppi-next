@@ -11,7 +11,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'cms.kassq.dev',
+        hostname: process.env.NEXT_PUBLIC_STRAPI_BASE_URL.replace(
+          'https://',
+          '',
+        ),
         pathname: '/uploads/**',
       },
     ],
