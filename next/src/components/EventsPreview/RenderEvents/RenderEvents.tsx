@@ -3,6 +3,7 @@ import { getLuuppiEvents } from '@/libs/events/get-legacy-events';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
+import eventPlaceholder from '../../../../public/images/event_placeholder.png';
 import DayBadge from '../DayBadge/DayBadge';
 
 interface RenderEventsProps {
@@ -38,7 +39,7 @@ export default async function RenderEvents({
               className="object-cover transition-all duration-300 group-hover:scale-105"
               draggable={false}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src="/images/event_placeholder.png"
+              src={eventPlaceholder}
               fill
             />
           </div>

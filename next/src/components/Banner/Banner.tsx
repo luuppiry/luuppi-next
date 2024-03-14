@@ -1,5 +1,7 @@
 import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
+import bannerDesktop from '../../../public/banner.png';
+import bannerMobile from '../../../public/banner_mobile.png';
 
 interface BannerProps {
   lang: SupportedLanguage;
@@ -37,7 +39,7 @@ export default function Banner({ lang }: BannerProps) {
             className="object-cover max-lg:hidden"
             draggable={false}
             quality={100}
-            src="/banner.png"
+            src={bannerDesktop}
             fill
             priority
           />
@@ -46,7 +48,7 @@ export default function Banner({ lang }: BannerProps) {
             className="object-cover lg:hidden"
             draggable={false}
             quality={100}
-            src="/banner_mobile.png"
+            src={bannerMobile}
             fill
             priority
           />

@@ -26,8 +26,6 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // // `/_next/` and `/api/` are ignored by the watcher, but we need to ignore files in `public` manually.
-  // ! Do not use ÄÖÅ. These are actually converted to %C3%84%C3%96%C3%85
   if (
     [
       '/manifest.webmanifest',
@@ -37,6 +35,15 @@ export function middleware(request: NextRequest) {
       '/apple-icon.png',
       '/icon1.png',
       '/icon2.png',
+      '/images/news.jpg',
+      '/images/collaboration.jpg',
+      '/images/contact.jpg',
+      '/images/events.jpg',
+      '/images/new_students.jpg',
+      '/images/organization.jpg',
+      '/images/event_placeholder.png',
+      '/banner.png',
+      '/banner_mobile.png',
     ].includes(pathname)
   ) {
     return NextResponse.next();
@@ -65,17 +72,8 @@ export function middleware(request: NextRequest) {
       '/kolmiot.svg',
       '/luuppi-cards.svg',
       '/luuppi.svg',
-      '/banner.png',
-      '/banner_mobile.png',
       '/locale-icons/us.svg',
       '/locale-icons/fi.svg',
-      '/images/news.jpg',
-      '/images/collaboration.jpg',
-      '/images/contact.jpg',
-      '/images/events.jpg',
-      '/images/new_students.jpg',
-      '/images/organization.jpg',
-      '/images/event_placeholder.png',
     ].includes(pathname)
   ) {
     const response = NextResponse.next();
