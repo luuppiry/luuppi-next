@@ -3,6 +3,7 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiArrowDropDownLine } from 'react-icons/ri';
+import luuppiSvg from '../../../public/luuppi.svg';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import MobileHamburger from '../MobileHamburger/MobileHamburger';
 import HeaderActions from './HeaderActions/HeaderActions';
@@ -37,7 +38,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                 className={'object-contain'}
                 draggable={false}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={'/luuppi.svg'}
+                src={luuppiSvg}
                 fill
                 priority
               />

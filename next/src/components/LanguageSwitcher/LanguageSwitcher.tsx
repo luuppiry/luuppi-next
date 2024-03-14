@@ -2,6 +2,8 @@
 import { Locale } from '@/i18n-config';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
+import fiSvg from '../../../public/locale-icons/fi.svg';
+import enSvg from '../../../public/locale-icons/us.svg';
 
 export default function LanguageSwitcher() {
   const pathName = usePathname();
@@ -29,7 +31,7 @@ export default function LanguageSwitcher() {
           alt="Suomi"
           draggable={false}
           height={38}
-          src={'/locale-icons/fi.svg'}
+          src={fiSvg}
           width={38}
         />
       ) : (
@@ -37,7 +39,7 @@ export default function LanguageSwitcher() {
           alt="English"
           draggable={false}
           height={38}
-          src={'/locale-icons/us.svg'}
+          src={enSvg}
           width={38}
         />
       )}

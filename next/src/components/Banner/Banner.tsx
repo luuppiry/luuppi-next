@@ -2,6 +2,9 @@ import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import bannerDesktop from '../../../public/banner.png';
 import bannerMobile from '../../../public/banner_mobile.png';
+import binarySvg from '../../../public/binary.svg';
+import luuppiBannerTextEn from '../../../public/luuppi_banner_text_en.svg';
+import luuppiBannerTextFi from '../../../public/luuppi_banner_text_fi.svg';
 
 interface BannerProps {
   lang: SupportedLanguage;
@@ -17,11 +20,7 @@ export default function Banner({ lang }: BannerProps) {
               alt="Luuppi banner text"
               className="z-20 object-contain p-6 drop-shadow-[-6px_6px_#00000030] filter max-lg:drop-shadow-[-4px_4px_#00000030] max-md:p-4"
               draggable={false}
-              src={
-                lang === 'en'
-                  ? '/luuppi_banner_text_en.svg'
-                  : '/luuppi_banner_text_fi.svg'
-              }
+              src={lang === 'en' ? luuppiBannerTextEn : luuppiBannerTextFi}
               fill
               priority
             />
@@ -29,9 +28,8 @@ export default function Banner({ lang }: BannerProps) {
               alt="Luuppi banner text"
               className="z-10 object-cover opacity-[0.05] max-lg:scale-[2] max-md:scale-[3]"
               draggable={false}
-              src={'/binary.svg'}
+              src={binarySvg}
               fill
-              priority
             />
           </div>
           <Image

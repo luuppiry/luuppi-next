@@ -3,6 +3,7 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef } from 'react';
+import luuppiCardsSvg from '../../../public/luuppi-cards.svg';
 
 interface HeroProps {
   dictionary: Dictionary;
@@ -71,7 +72,7 @@ export default function Hero({ dictionary, lang }: HeroProps) {
           className="luuppi-hero-cards"
           draggable={false}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          src="/luuppi-cards.svg"
+          src={luuppiCardsSvg}
           fill
         />
       </div>

@@ -3,6 +3,7 @@ import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import roboSvg from '../../../../../public/robo.svg';
 
 interface NotFoundProps {
   params: { lang: SupportedLanguage };
@@ -26,7 +27,7 @@ export default async function NotFound({ params }: NotFoundProps) {
         </div>
       </div>
       <div>
-        <Image alt="404" height={550} src="/robo.svg" width={550} />
+        <Image alt="404" height={550} src={roboSvg} width={550} />
       </div>
     </div>
   );

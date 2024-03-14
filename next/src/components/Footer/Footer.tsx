@@ -10,6 +10,7 @@ import {
   FaTelegram,
   FaTiktok,
 } from 'react-icons/fa';
+import luuppiSvg from '../../../public/luuppi.svg';
 
 interface FooterProps {
   dictionary: Dictionary;
@@ -59,7 +60,7 @@ export default function Footer({ dictionary, lang }: FooterProps) {
                 draggable={false}
                 height={80}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={'/luuppi.svg'}
+                src={luuppiSvg}
                 width={95}
               />
               <div className="flex flex-col text-sm text-white">

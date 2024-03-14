@@ -3,6 +3,7 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import ccchaosSvg from '../../../public/ccchaos.svg';
 
 interface DiscoverProps {
   dictionary: Dictionary;
@@ -16,7 +17,7 @@ export default function Discover({ dictionary, lang }: DiscoverProps) {
         alt="Luuppi background pattern"
         className="absolute -left-32 top-0 -z-10 max-md:hidden"
         height={400}
-        src="/ccchaos.svg"
+        src={ccchaosSvg}
         width={400}
       />
       <h2 className="mb-8 text-4xl font-extrabold max-md:text-3xl">
