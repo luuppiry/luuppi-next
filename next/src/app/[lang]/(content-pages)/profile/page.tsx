@@ -43,7 +43,7 @@ export default async function Profile({ params }: ProfileProps) {
   }
 
   return (
-    <>
+    <div className="relative">
       <h1 className="mb-12">{dictionary.navigation.profile}</h1>
       <div className="flex w-full flex-col gap-8">
         <ProfileEmailform
@@ -65,7 +65,8 @@ export default async function Profile({ params }: ProfileProps) {
           user={user}
         />
       </div>
-    </>
+      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
+    </div>
   );
 }
 

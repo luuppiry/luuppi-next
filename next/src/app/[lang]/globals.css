@@ -27,7 +27,7 @@
 }
 
 .card {
-  @apply rounded-lg bg-background-50/50;
+  @apply rounded-lg bg-background-50/50 backdrop-blur-sm;
 }
 
 @media screen and (max-width: 768px) {

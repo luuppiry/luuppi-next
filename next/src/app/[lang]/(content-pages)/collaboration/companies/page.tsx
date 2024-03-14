@@ -25,13 +25,13 @@ export default async function CollaborationCompanies({
   >(params.lang, url, tags);
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.companies}</h1>
       <div className="flex flex-col gap-8">
         {pageData.data.map((company) => (
           <div
             key={company.attributes.createdAt!.toString()}
-            className="flex gap-4 rounded-lg bg-background-50/50"
+            className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm"
           >
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
             <div className="flex gap-12 py-4 max-md:flex-col max-md:gap-6">
@@ -77,6 +77,7 @@ export default async function CollaborationCompanies({
           </div>
         ))}
       </div>
+      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
   );
 }

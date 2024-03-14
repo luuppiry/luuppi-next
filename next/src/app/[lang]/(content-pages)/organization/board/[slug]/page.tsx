@@ -55,7 +55,7 @@ export default async function OldBoard({ params }: OldBoardProps) {
   );
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="relative flex flex-col gap-12">
       <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
         <h1>
           {dictionary.navigation.board} {wantedBoard.attributes.year}
@@ -120,6 +120,7 @@ export default async function OldBoard({ params }: OldBoardProps) {
           </>
         )}
       </div>
+      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
   );
 }

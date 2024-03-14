@@ -36,14 +36,14 @@ export default async function News({ params }: NewsProps) {
     );
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.news}</h1>
       <div className="flex flex-col gap-12 max-md:gap-6">
         {sortedNews.map((news) => (
           <article
             key={news.attributes.title}
             className={
-              'flex gap-4 rounded-lg border border-gray-200/50 shadow-sm max-sm:flex-col'
+              'flex gap-4 rounded-lg border border-gray-200/50 bg-white shadow-sm max-sm:flex-col'
             }
           >
             <div
@@ -105,6 +105,7 @@ export default async function News({ params }: NewsProps) {
           </article>
         ))}
       </div>
+      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
   );
 }
