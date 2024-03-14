@@ -26,6 +26,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Public paths that should not be redirected
   if (
     [
       '/manifest.webmanifest',
@@ -44,24 +45,6 @@ export function middleware(request: NextRequest) {
       '/images/event_placeholder.png',
       '/banner.png',
       '/banner_mobile.png',
-    ].includes(pathname)
-  ) {
-    return NextResponse.next();
-  }
-
-  /**
-   * Next.js handles locally imported assets as immutable assets. However, if
-   * we use svg files those are not handled by Next.js. Following code handles
-   * caching, which is not ideal, but improves speed by caching the svgs as well.
-   *
-   * There might (and probably is) cache busting issues with this approach. If you
-   * decide to change any of the assets below, you should also change the filename
-   * to avoid caching issues.
-   *
-   * TODO: Find a better way to handle caching
-   */
-  if (
-    [
       '/partners_pattern.svg',
       '/robo.svg',
       '/binary.svg',
@@ -76,12 +59,7 @@ export function middleware(request: NextRequest) {
       '/locale-icons/fi.svg',
     ].includes(pathname)
   ) {
-    const response = NextResponse.next();
-    response.headers.set(
-      'cache-control',
-      'public, max-age=31536000, immutable',
-    );
-    return response;
+    return NextResponse.next();
   }
 
   // Check if there is any supported locale in the pathname
