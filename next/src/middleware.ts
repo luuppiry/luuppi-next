@@ -30,18 +30,36 @@ export function middleware(request: NextRequest) {
   // ! Do not use ÄÖÅ. These are actually converted to %C3%84%C3%96%C3%85
   if (
     [
+      '/manifest.webmanifest',
+      '/sitemap.xml',
+      '/robots.txt',
+      '/favicon.ico',
+      '/apple-icon.png',
+      '/icon1.png',
+      '/icon2.png',
+    ].includes(pathname)
+  ) {
+    return NextResponse.next();
+  }
+
+  /**
+   * Next.js handles locally imported assets as immutable assets. However, if
+   * we use svg files those are not handled by Next.js. Following code handles
+   * caching, which is not ideal, but improves speed by caching the svgs as well.
+   *
+   * There might (and probably is) cache busting issues with this approach. If you
+   * decide to change any of the assets below, you should also change the filename
+   * to avoid caching issues.
+   *
+   * TODO: Find a better way to handle caching
+   */
+  if (
+    [
       '/partners_pattern.svg',
       '/robo.svg',
       '/binary.svg',
       '/ccchaos.svg',
       '/blob.svg',
-      '/manifest.webmanifest',
-      '/favicon.ico',
-      '/sitemap.xml',
-      '/apple-icon.png',
-      '/icon1.png',
-      '/icon2.png',
-      '/robots.txt',
       '/luuppi_banner_text_fi.svg',
       '/luuppi_banner_text_en.svg',
       '/kolmiot.svg',
@@ -59,8 +77,14 @@ export function middleware(request: NextRequest) {
       '/images/organization.jpg',
       '/images/event_placeholder.png',
     ].includes(pathname)
-  )
-    return;
+  ) {
+    const response = NextResponse.next();
+    response.headers.set(
+      'cache-control',
+      'public, max-age=31536000, immutable',
+    );
+    return response;
+  }
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(
