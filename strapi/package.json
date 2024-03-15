@@ -16,13 +16,13 @@
   "dependencies": {
     "@strapi/plugin-i18n": "4.20.4",
     "@strapi/plugin-users-permissions": "4.20.4",
-    "@strapi/provider-email-nodemailer": "^4.20.3",
     "@strapi/strapi": "4.20.4",
     "better-sqlite3": "^9.4.3",
     "pg": "8.11.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "5.3.4",
+    "strapi-middleware-upload-plugin-cache": "^2.1.0",
     "styled-components": "5.3.3"
   },
   "engines": {
