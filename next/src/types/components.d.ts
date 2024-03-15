@@ -1,4 +1,4 @@
-import type { Attribute, Schema } from '@strapi/strapi';
+import type { Schema, Attribute } from '@strapi/strapi';
 
 export interface SharedContactBanner extends Schema.Component {
   collectionName: 'components_shared_contact_banners';
@@ -70,7 +70,6 @@ export interface SharedPageContent extends Schema.Component {
       Attribute.SetMinMaxLength<{
         maxLength: 100;
       }>;
-    subtitle: Attribute.String;
     content: Attribute.Blocks & Attribute.Required;
     banner: Attribute.Media & Attribute.Required;
   };

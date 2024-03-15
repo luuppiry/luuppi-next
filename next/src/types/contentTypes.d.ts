@@ -1,4 +1,4 @@
-import type { Attribute, Schema } from '@strapi/strapi';
+import type { Schema, Attribute } from '@strapi/strapi';
 
 export interface AdminPermission extends Schema.CollectionType {
   collectionName: 'admin_permissions';
@@ -806,7 +806,6 @@ export interface ApiBoardBoard extends Schema.CollectionType {
       'manyToMany',
       'api::board-member.board-member'
     >;
-    Seo: Attribute.Component<'shared.seo'> & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1165,6 +1164,7 @@ export interface ApiEventsCalendarEventsCalendar extends Schema.SingleType {
     singularName: 'events-calendar';
     pluralName: 'events-calendars';
     displayName: 'EventsCalendar';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1175,7 +1175,7 @@ export interface ApiEventsCalendarEventsCalendar extends Schema.SingleType {
     };
   };
   attributes: {
-    Seo: Attribute.Component<'shared.seo', true> &
+    Seo: Attribute.Component<'shared.seo'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
@@ -1354,6 +1354,59 @@ export interface ApiNewsSingleNewsSingle extends Schema.CollectionType {
       'api::news-single.news-single',
       'oneToMany',
       'api::news-single.news-single'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiNotificationNotification extends Schema.SingleType {
+  collectionName: 'notifications';
+  info: {
+    singularName: 'notification';
+    pluralName: 'notifications';
+    displayName: 'Notification';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    notification: Attribute.Blocks &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    showUntil: Attribute.DateTime &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::notification.notification',
+      'oneToMany',
+      'api::notification.notification'
     >;
     locale: Attribute.String;
   };
@@ -2216,6 +2269,7 @@ declare module '@strapi/types' {
       'api::events-calendar.events-calendar': ApiEventsCalendarEventsCalendar;
       'api::news-list.news-list': ApiNewsListNewsList;
       'api::news-single.news-single': ApiNewsSingleNewsSingle;
+      'api::notification.notification': ApiNotificationNotification;
       'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
       'api::organization-honorary-member.organization-honorary-member': ApiOrganizationHonoraryMemberOrganizationHonoraryMember;

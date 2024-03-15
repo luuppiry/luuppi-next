@@ -14,11 +14,15 @@ export const getStrapiData = async <T>(
   lang: SupportedLanguage,
   url: string,
   revalidateTags: string[],
+  ignoreError?: boolean,
 ): Promise<T> => {
   try {
-    let res = await fetch(getStrapiUrl(`${url}&locale=${lang}`), {
-      next: { tags: revalidateTags },
-    });
+    let res = await fetch(
+      getStrapiUrl(`${url}${url.includes('?') ? '&' : '?'}locale=${lang}`),
+      {
+        next: { tags: revalidateTags },
+      },
+    );
 
     /**
      * Strapi does not have any feature to fallback language? (or does it?)
@@ -26,15 +30,18 @@ export const getStrapiData = async <T>(
      * language does not have any data.
      * TODO: Remove this when Strapi has an automatic fallback
      */
-    if (!res.ok && res.status === 404) {
-      res = await fetch(getStrapiUrl(`${url}?locale=fi`), {
-        next: { tags: revalidateTags },
-      });
+    if (!res.ok && res.status === 404 && !ignoreError) {
+      res = await fetch(
+        getStrapiUrl(`${url.includes('?') ? '&' : '?'}locale=fi`),
+        {
+          next: { tags: revalidateTags },
+        },
+      );
     }
 
     const data = await res.json();
 
-    if (!data?.data) {
+    if (!data?.data && !ignoreError) {
       logger.error(`Failed to fetch data from ${url}`, data);
       throw new Error(`Failed to fetch data from ${url}`);
     }

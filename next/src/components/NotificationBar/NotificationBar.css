@@ -1,0 +1,3 @@
+.notification-area a {
+  @apply link;
+}

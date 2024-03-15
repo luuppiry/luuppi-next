@@ -1,7 +1,10 @@
 import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
+import NotificationBar from '@/components/NotificationBar/NotificationBar';
 import { getDictionary } from '@/dictionaries';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
+import { APIResponse } from '@/types/types';
 import type { Metadata, Viewport } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import PlausibleProvider from 'next-plausible';
@@ -25,6 +28,10 @@ export default async function RootLayout({
 }: RootLayoutProps) {
   const dictionary = await getDictionary(params.lang);
 
+  const notification = await getStrapiData<
+    APIResponse<'api::notification.notification'>
+  >(params.lang, '/api/notification', ['notification'], true);
+
   return (
     <html data-theme="light" lang={params.lang}>
       <head>
@@ -46,6 +53,7 @@ export default async function RootLayout({
           <Header dictionary={dictionary} lang={params.lang} />
           <div className="flex-1">{children}</div>
           <Footer dictionary={dictionary} lang={params.lang} />
+          <NotificationBar lang={params.lang} notification={notification} />
         </SessionProvider>
       </body>
     </html>

@@ -36,7 +36,7 @@ export default async function RenderNews({ lang }: RenderNewsProps) {
       {sortedNews.map((news, i) => (
         <article
           key={i}
-          className={`${i === 0 ? 'col-span-3 max-lg:col-span-1 max-lg:flex-col' : 'col-span-1 flex-col'} flex gap-4 rounded-lg border border-gray-200/50 bg-white shadow-sm`}
+          className={`${i === 0 ? 'col-span-3 max-lg:col-span-1 max-lg:flex-col' : 'col-span-1 flex-col'} flex gap-4 rounded-lg border border-gray-200/50 bg-background-50/50 shadow-sm backdrop-blur-sm`}
         >
           <div
             className={`${i !== 0 ? 'shrink-0 rounded-t-lg' : 'rounded-l-lg max-lg:shrink-0 max-lg:rounded-l-none max-lg:rounded-t-lg'} relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300

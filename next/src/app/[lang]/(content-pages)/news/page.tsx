@@ -43,7 +43,7 @@ export default async function News({ params }: NewsProps) {
           <article
             key={news.attributes.title}
             className={
-              'flex gap-4 rounded-lg border border-gray-200/50 bg-white shadow-sm max-sm:flex-col'
+              'flex gap-4 rounded-lg border border-gray-200/50 bg-background-50/50 shadow-sm backdrop-blur-sm max-sm:flex-col'
             }
           >
             <div
