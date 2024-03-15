@@ -1384,7 +1384,6 @@ export interface ApiNotificationNotification extends Schema.SingleType {
         };
       }>;
     showUntil: Attribute.DateTime &
-      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
