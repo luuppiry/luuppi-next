@@ -1359,6 +1359,60 @@ export interface ApiNewsSingleNewsSingle extends Schema.CollectionType {
   };
 }
 
+export interface ApiNotificationNotification extends Schema.SingleType {
+  collectionName: 'notifications';
+  info: {
+    singularName: 'notification';
+    pluralName: 'notifications';
+    displayName: 'Notification';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    notification: Attribute.Blocks &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    showUntil: Attribute.DateTime &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::notification.notification',
+      'oneToMany',
+      'api::notification.notification'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 export interface ApiOrganizationDocumentOrganizationDocument
   extends Schema.SingleType {
   collectionName: 'organization_documents';
@@ -2216,6 +2270,7 @@ declare module '@strapi/types' {
       'api::events-calendar.events-calendar': ApiEventsCalendarEventsCalendar;
       'api::news-list.news-list': ApiNewsListNewsList;
       'api::news-single.news-single': ApiNewsSingleNewsSingle;
+      'api::notification.notification': ApiNotificationNotification;
       'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
       'api::organization-honorary-member.organization-honorary-member': ApiOrganizationHonoraryMemberOrganizationHonoraryMember;

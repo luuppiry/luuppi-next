@@ -70,7 +70,6 @@ export interface SharedPageContent extends Schema.Component {
       Attribute.SetMinMaxLength<{
         maxLength: 100;
       }>;
-    subtitle: Attribute.String;
     content: Attribute.Blocks & Attribute.Required;
     banner: Attribute.Media & Attribute.Required;
   };

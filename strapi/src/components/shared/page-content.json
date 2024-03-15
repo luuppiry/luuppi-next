@@ -12,9 +12,6 @@
       "required": true,
       "maxLength": 100
     },
-    "subtitle": {
-      "type": "string"
-    },
     "content": {
       "type": "blocks",
       "required": true
