@@ -27,8 +27,9 @@ export default function NotificationBar({
         ?.trim() === '';
     const showUntil = notification?.data?.attributes.showUntil ?? null;
     const id = `notification-${lang}`;
-    const lastShowed = new Date(localStorage.getItem(id) ?? 0);
-    const isShowed = lastShowed.toDateString() === new Date().toDateString();
+    const prevUpdatedAt = new Date(localStorage.getItem(id) ?? 0);
+    const updatedAt = new Date(notification?.data?.attributes.updatedAt!);
+    const isShowed = prevUpdatedAt.toISOString() === updatedAt.toISOString();
     const isExpired = showUntil ? new Date(showUntil) < new Date() : false;
 
     if (!isShowed && !isExpired && !isEmpty) {
@@ -40,13 +41,13 @@ export default function NotificationBar({
     setShowNotification(false);
     const updatedAt = notification?.data?.attributes.updatedAt!;
     const id = `notification-${lang}`;
-    localStorage.setItem(id, updatedAt.toString());
+    localStorage.setItem(id, new Date(updatedAt).toISOString());
   };
 
   if (!showNotification || !notification?.data) return null;
 
   return (
-    <div className="notification-area fixed bottom-0 left-0 z-40 flex min-h-12 w-full flex-col items-center justify-center bg-accent-400  px-12 py-4 text-center text-white max-md:min-h-10 max-md:text-xs">
+    <div className="notification-area fixed bottom-0 left-0 z-40 flex min-h-12 w-full flex-col items-center justify-center bg-accent-400 px-12 py-4 text-center text-white max-md:min-h-10 max-md:text-xs">
       <BlockRendererClient
         content={notification.data.attributes.notification}
       />
