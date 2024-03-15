@@ -7,6 +7,8 @@ services:
     image: next:latest
     restart: unless-stopped
     env_file: .env.local
+    environment:
+      - REDIS_HOST=redisDB
     ports:
       - '3000:3000'
     depends_on:
