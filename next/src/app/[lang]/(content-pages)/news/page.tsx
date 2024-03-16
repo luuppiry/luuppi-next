@@ -52,12 +52,13 @@ export default async function News({ params }: NewsProps) {
             }
           >
             <div
-              className={`relative aspect-video w-full rounded-l-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-lg:rounded-l-none max-lg:rounded-t-lg
-                      `}
+              className={
+                'relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300 max-sm:rounded-t-lg sm:rounded-l-lg'
+              }
             >
               <Image
                 alt="News banner"
-                className={'rounded-t-lg object-cover'}
+                className={'object-cover max-sm:rounded-t-lg sm:rounded-l-lg'}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={getStrapiUrl(news.attributes.banner?.data.attributes.url)}
                 fill
