@@ -4,8 +4,13 @@ import { flipNewsLocale } from '@/libs/strapi/flip-locale';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
+import { analyzeReadTime } from '@/libs/utils/analyze-read-time';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponse, APIResponseCollection } from '@/types/types';
+import {
+  APIResponse,
+  APIResponseCollection,
+  APIResponseData,
+} from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -60,9 +65,21 @@ export default async function News({ params }: NewsProps) {
             </div>
             <div className="flex w-full flex-col justify-between gap-6 p-4">
               <div className="flex flex-col gap-1">
-                <span className="text-sm font-bold uppercase text-accent-400">
-                  {news.attributes.category}
-                </span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-bold uppercase text-accent-400">
+                    {news.attributes.category}
+                  </span>
+                  <p
+                    className={
+                      'flex items-center gap-1 text-sm font-semibold uppercase opacity-75'
+                    }
+                  >
+                    {analyzeReadTime(
+                      news as APIResponseData<'api::news-single.news-single'>,
+                    )}{' '}
+                    {dictionary.general.min_read}
+                  </p>
+                </div>
                 <Link
                   className={
                     'inline-block text-2xl font-bold hover:underline max-lg:text-xl'

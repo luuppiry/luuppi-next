@@ -39,7 +39,8 @@
     "domicle": "Kotikunta",
     "major": "Pääaine",
     "today": "Tänään",
-    "tomorrow": "Huomenna"
+    "tomorrow": "Huomenna",
+    "min_read": "min lukuaika"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat",

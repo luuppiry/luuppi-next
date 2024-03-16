@@ -39,7 +39,8 @@
     "domicle": "Domicle",
     "major": "Major",
     "today": "Today",
-    "tomorrow": "Tomorrow"
+    "tomorrow": "Tomorrow",
+    "min_read": "min read"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi",

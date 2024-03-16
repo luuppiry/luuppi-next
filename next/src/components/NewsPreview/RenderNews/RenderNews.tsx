@@ -2,17 +2,22 @@ import { dateFormat } from '@/libs/constants';
 import { flipNewsLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { analyzeReadTime } from '@/libs/utils/analyze-read-time';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { APIResponseCollection, APIResponseData } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaUserAlt } from 'react-icons/fa';
 
 interface RenderNewsProps {
   lang: SupportedLanguage;
+  dictionary: Dictionary;
 }
 
-export default async function RenderNews({ lang }: RenderNewsProps) {
+export default async function RenderNews({
+  lang,
+  dictionary,
+}: RenderNewsProps) {
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
   >(
@@ -52,9 +57,21 @@ export default async function RenderNews({ lang }: RenderNewsProps) {
           </div>
           <div className="flex h-full w-full flex-col justify-between gap-12 p-4">
             <div className="flex flex-col gap-1">
-              <span className="text-sm font-bold uppercase text-accent-400">
-                {news.attributes.category}
-              </span>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-sm font-bold uppercase text-accent-400">
+                  {news.attributes.category}
+                </span>
+                <p
+                  className={`flex items-center gap-1 text-sm font-semibold uppercase opacity-75 ${
+                    i === 0 ? 'max-lg:text-xs' : 'text-xs'
+                  }`}
+                >
+                  {analyzeReadTime(
+                    news as APIResponseData<'api::news-single.news-single'>,
+                  )}{' '}
+                  {dictionary.general.min_read}
+                </p>
+              </div>
               <Link
                 className={`inline-block font-bold ${i === 0 ? 'text-2xl max-lg:text-xl' : 'text-xl'} hover:underline`}
                 href={`/${lang}/news/${news.attributes.slug}`}
