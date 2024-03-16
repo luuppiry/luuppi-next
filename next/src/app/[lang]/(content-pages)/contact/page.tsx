@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
@@ -17,9 +17,11 @@ interface ContactProps {
 export default async function Contact({ params }: ContactProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const pageData = await getStrapiData<
-    APIResponseCollection<'api::contact.contact'>
-  >(params.lang, url, tags);
+  const pageData = await getStrapiData<APIResponse<'api::contact.contact'>>(
+    params.lang,
+    url,
+    tags,
+  );
 
   return (
     <ContentPage
@@ -33,9 +35,11 @@ export default async function Contact({ params }: ContactProps) {
 export async function generateMetadata({
   params,
 }: ContactProps): Promise<Metadata> {
-  const data = await getStrapiData<
-    APIResponseCollection<'api::contact.contact'>
-  >(params.lang, url, tags);
+  const data = await getStrapiData<APIResponse<'api::contact.contact'>>(
+    params.lang,
+    url,
+    tags,
+  );
 
   const pathname = `/${params.lang}/contact`;
 

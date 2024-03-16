@@ -836,7 +836,6 @@ export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
   };
   attributes: {
     fullName: Attribute.String & Attribute.Required;
-    email: Attribute.Email & Attribute.Required;
     image: Attribute.Media;
     isBoardMember: Attribute.Boolean &
       Attribute.Required &

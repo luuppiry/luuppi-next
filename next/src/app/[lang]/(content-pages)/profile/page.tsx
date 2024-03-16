@@ -10,7 +10,7 @@ import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
@@ -77,9 +77,11 @@ export async function generateMetadata({
     '/api/profile?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['profile'];
 
-  const data = await getStrapiData<
-    APIResponseCollection<'api::profile.profile'>
-  >(params.lang, url, tags);
+  const data = await getStrapiData<APIResponse<'api::profile.profile'>>(
+    params.lang,
+    url,
+    tags,
+  );
 
   const pathname = `/${params.lang}/profile`;
 

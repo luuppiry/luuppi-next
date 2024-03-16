@@ -4,7 +4,7 @@ import { getLuuppiEvents } from '@/libs/events/get-legacy-events';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 
 interface EventsProps {
@@ -35,7 +35,7 @@ export async function generateMetadata({
   const tags = ['events-calendar'];
 
   const data = await getStrapiData<
-    APIResponseCollection<'api::events-calendar.events-calendar'>
+    APIResponse<'api::events-calendar.events-calendar'>
   >(params.lang, url, tags);
 
   const pathname = `/${params.lang}/events`;

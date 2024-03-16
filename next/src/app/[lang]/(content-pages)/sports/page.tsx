@@ -3,7 +3,7 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
@@ -17,9 +17,11 @@ interface SportsProps {
 export default async function Organization({ params }: SportsProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const pageData = await getStrapiData<
-    APIResponseCollection<'api::sport.sport'>
-  >(params.lang, url, tags);
+  const pageData = await getStrapiData<APIResponse<'api::sport.sport'>>(
+    params.lang,
+    url,
+    tags,
+  );
 
   return (
     <ContentPage
@@ -33,7 +35,7 @@ export default async function Organization({ params }: SportsProps) {
 export async function generateMetadata({
   params,
 }: SportsProps): Promise<Metadata> {
-  const data = await getStrapiData<APIResponseCollection<'api::sport.sport'>>(
+  const data = await getStrapiData<APIResponse<'api::sport.sport'>>(
     params.lang,
     url,
     tags,
