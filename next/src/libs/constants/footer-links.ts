@@ -36,6 +36,10 @@ export const footerLinks: FooterLink[] = [
         href: '/organization/honorary-members',
       },
       {
+        translation: 'member_benefits',
+        href: '/organization/benefits',
+      },
+      {
         translation: 'documents',
         href: '/organization/documents',
       },

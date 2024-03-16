@@ -1411,6 +1411,60 @@ export interface ApiNotificationNotification extends Schema.SingleType {
   };
 }
 
+export interface ApiOrganizationBenefitOrganizationBenefit
+  extends Schema.SingleType {
+  collectionName: 'organization_benefits';
+  info: {
+    singularName: 'organization-benefit';
+    pluralName: 'organization-benefits';
+    displayName: 'OrganizationBenefits';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::organization-benefit.organization-benefit',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::organization-benefit.organization-benefit',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::organization-benefit.organization-benefit',
+      'oneToMany',
+      'api::organization-benefit.organization-benefit'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 export interface ApiOrganizationDocumentOrganizationDocument
   extends Schema.SingleType {
   collectionName: 'organization_documents';
@@ -2269,6 +2323,7 @@ declare module '@strapi/types' {
       'api::news-list.news-list': ApiNewsListNewsList;
       'api::news-single.news-single': ApiNewsSingleNewsSingle;
       'api::notification.notification': ApiNotificationNotification;
+      'api::organization-benefit.organization-benefit': ApiOrganizationBenefitOrganizationBenefit;
       'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
       'api::organization-honorary-member.organization-honorary-member': ApiOrganizationHonoraryMemberOrganizationHonoraryMember;

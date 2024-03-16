@@ -48,6 +48,10 @@ export const navLinks: NavLink[] = [
         href: '/organization/honorary-members',
       },
       {
+        translation: 'member_benefits',
+        href: '/organization/benefits',
+      },
+      {
         translation: 'documents',
         href: '/organization/documents',
       },
