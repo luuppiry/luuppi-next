@@ -17,11 +17,6 @@
       "type": "string",
       "required": true
     },
-    "email": {
-      "pluginOptions": {},
-      "type": "email",
-      "required": true
-    },
     "image": {
       "type": "media",
       "multiple": false,
