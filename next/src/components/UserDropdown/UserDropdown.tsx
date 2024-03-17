@@ -19,6 +19,7 @@ export default function UserDropdown({ dictionary, lang }: UserDropdownProps) {
   return (
     <div className="dropdown dropdown-end text-white">
       <div
+        aria-label={`${dictionary.general.open} ${dictionary.general.menu.toLowerCase()}`}
         className="btn btn-circle btn-ghost m-1 bg-primary-600 max-lg:bg-secondary-400"
         role="button"
         tabIndex={0}
