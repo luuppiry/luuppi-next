@@ -94,7 +94,7 @@ export default async function OldBoard({ params }: OldBoardProps) {
                   key={member.attributes.createdAt}
                   dictionary={dictionary}
                   member={member}
-                  showEmail={true}
+                  showEmail={false}
                 />
               ))}
             </div>
@@ -113,7 +113,7 @@ export default async function OldBoard({ params }: OldBoardProps) {
                   key={member.attributes.createdAt}
                   dictionary={dictionary}
                   member={member}
-                  showEmail={true}
+                  showEmail={false}
                 />
               ))}
             </div>
