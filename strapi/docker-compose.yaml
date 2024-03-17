@@ -2,8 +2,7 @@ version: "3"
 services:
   strapi:
     container_name: strapi
-    build: .
-    image: strapi:latest
+    image: luuppi.azurecr.io/strapi:latest
     restart: unless-stopped
     env_file: .env
     environment:

@@ -3,8 +3,7 @@ version: '3.8'
 services:
   next:
     container_name: next
-    build: .
-    image: next:latest
+    image: luuppi.azurecr.io/next:latest
     restart: unless-stopped
     env_file: .env.local
     environment:
