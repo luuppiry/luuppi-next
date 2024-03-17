@@ -37,11 +37,6 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Setup Node.js environment
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 20
-
             - name: Backup Strapi
               uses: appleboy/ssh-action@master
               with:
@@ -55,13 +50,15 @@ jobs:
                       docker cp strapi:/opt/app/backup.tar.gz backup-$(date +%Y-%m-%d-%H-%M-%S).tar.gz
                       docker compose exec -T strapi sh -c 'rm backup.tar.gz'
 
-            - name: Install dependencies
-              run: npm install
-              working-directory: ./strapi
-
-            - name: Build Strapi
-              run: npm run build
-              working-directory: ./strapi
+            - name: Build Strapi Docker image
+              uses: azure/docker-login@v1
+              with:
+                  login-server: ${{ secrets.REGISTRY }}
+                  username: ${{ secrets.REGISTRY_USERNAME }}
+                  password: ${{ secrets.REGISTRY_PASSWORD }}
+            - run: |
+                  docker build -t ${{ secrets.REGISTRY }}/strapi:latest ./strapi
+                  docker push ${{ secrets.REGISTRY }}/strapi:latest
 
             - name: Deploy Strapi
               uses: appleboy/ssh-action@master
@@ -71,13 +68,12 @@ jobs:
                   key: ${{ secrets.KEY }}
                   port: ${{ secrets.PORT }}
                   script: |
-                      cd luuppi-next
+                      cd luuppi-next/strapi
                       git pull
-                      cd strapi
-                      docker build -t strapi .
+                      docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
+                      docker pull ${{ secrets.REGISTRY }}/strapi:latest
                       docker compose down
                       docker compose up -d
-                      docker image prune -f
 
     next:
         needs: [changes, strapi]
@@ -91,15 +87,6 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Setup Node.js environment
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 20
-
-            - name: Install dependencies
-              run: npm install
-              working-directory: ./next
-
             - name: Add Next.js environment variables
               run: |
                   touch .env.local
@@ -107,9 +94,15 @@ jobs:
                   echo NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST }} >> .env.local
               working-directory: ./next
 
-            - name: Build Next.js
-              run: npm run build
-              working-directory: ./next
+            - name: Build Next.js Docker image
+              uses: azure/docker-login@v1
+              with:
+                  login-server: ${{ secrets.REGISTRY }}
+                  username: ${{ secrets.REGISTRY_USERNAME }}
+                  password: ${{ secrets.REGISTRY_PASSWORD }}
+            - run: |
+                  docker build -t ${{ secrets.REGISTRY }}/next:latest ./next
+                  docker push ${{ secrets.REGISTRY }}/next:latest
 
             - name: Deploy Next.js
               uses: appleboy/ssh-action@master
@@ -119,10 +112,9 @@ jobs:
                   key: ${{ secrets.KEY }}
                   port: ${{ secrets.PORT }}
                   script: |
-                      cd luuppi-next
+                      cd luuppi-next/next
                       git pull
-                      cd next
-                      docker build -t next:latest .
+                      docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
+                      docker pull ${{ secrets.REGISTRY }}/next:latest
                       docker compose down
                       docker compose up -d
-                      docker image prune -f
