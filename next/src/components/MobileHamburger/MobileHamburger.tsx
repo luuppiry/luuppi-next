@@ -31,7 +31,15 @@ export default function MobileHamburger({
 
   return (
     <>
-      <button className="btn btn-ghost lg:hidden" onClick={toggleMenu}>
+      <button
+        aria-label={
+          open
+            ? `${dictionary.general.close} ${dictionary.general.menu.toLowerCase()}`
+            : `${dictionary.general.open} ${dictionary.general.menu.toLowerCase()}`
+        }
+        className="btn btn-ghost lg:hidden"
+        onClick={toggleMenu}
+      >
         <HiMenu size={34} />
       </button>
       <dialog
@@ -96,6 +104,7 @@ export default function MobileHamburger({
           <div className="sticky top-0 z-10 flex justify-end">
             <div className="flex h-full flex-col items-center gap-4">
               <button
+                aria-label={`${dictionary.general.close} ${dictionary.general.menu.toLowerCase()}`}
                 className="btn btn-circle btn-primary text-white"
                 onClick={() => setOpen(false)}
               >
@@ -104,6 +113,7 @@ export default function MobileHamburger({
               <LanguageSwitcher />
               {session?.user ? (
                 <button
+                  aria-label={dictionary.general.logout}
                   className="btn btn-circle btn-ghost m-1 bg-error text-white"
                   type="submit"
                   onClick={async () => await signOut()}
@@ -112,6 +122,7 @@ export default function MobileHamburger({
                 </button>
               ) : (
                 <button
+                  aria-label={dictionary.general.login}
                   className="btn btn-circle btn-ghost m-1 bg-primary-500 text-white"
                   onClick={async () => await signIn()}
                 >

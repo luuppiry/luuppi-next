@@ -40,7 +40,9 @@
     "major": "Major",
     "today": "Today",
     "tomorrow": "Tomorrow",
-    "min_read": "min read"
+    "min_read": "min read",
+    "menu": "Menu",
+    "open": "Open"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi",

@@ -40,7 +40,9 @@
     "major": "Pääaine",
     "today": "Tänään",
     "tomorrow": "Huomenna",
-    "min_read": "min lukuaika"
+    "min_read": "min lukuaika",
+    "menu": "Valikko",
+    "open": "Avaa"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat",
