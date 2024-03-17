@@ -1,13 +1,16 @@
 'use client';
 import { Event } from '@/models/event';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { LuCalendarPlus } from 'react-icons/lu';
-import EventCalendar from '../EventCalendar/EventCalendar';
-import EventsList from '../EventsList/EventsList';
-import MobileCalendar from '../MobileCalendar/MobileCalendar';
 import './EventSelector.css';
+const EventCalendar = dynamic(() => import('../EventCalendar/EventCalendar'));
+const EventsList = dynamic(() => import('../EventsList/EventsList'));
+const MobileCalendar = dynamic(
+  () => import('../MobileCalendar/MobileCalendar'),
+);
 
 interface EventSelectorProps {
   events: Event[];
