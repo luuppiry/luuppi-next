@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "luuppi_sanomats",
+  "info": {
+    "singularName": "luuppi-sanomat",
+    "pluralName": "luuppi-sanomats",
+    "displayName": "LuuppiSanomat"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "pdf": {
+      "allowedTypes": [
+        "files"
+      ],
+      "type": "media",
+      "multiple": false,
+      "pluginOptions": {},
+      "required": true
+    },
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "pluginOptions": {},
+      "required": true
+    }
+  }
+}

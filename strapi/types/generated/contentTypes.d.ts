@@ -1204,6 +1204,36 @@ export interface ApiEventsCalendarEventsCalendar extends Schema.SingleType {
   };
 }
 
+export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
+  collectionName: 'luuppi_sanomats';
+  info: {
+    singularName: 'luuppi-sanomat';
+    pluralName: 'luuppi-sanomats';
+    displayName: 'LuuppiSanomat';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    pdf: Attribute.Media & Attribute.Required;
+    image: Attribute.Media & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::luuppi-sanomat.luuppi-sanomat',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::luuppi-sanomat.luuppi-sanomat',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiNewsListNewsList extends Schema.SingleType {
   collectionName: 'news_lists';
   info: {
@@ -2320,6 +2350,7 @@ declare module '@strapi/types' {
       'api::company.company': ApiCompanyCompany;
       'api::contact.contact': ApiContactContact;
       'api::events-calendar.events-calendar': ApiEventsCalendarEventsCalendar;
+      'api::luuppi-sanomat.luuppi-sanomat': ApiLuuppiSanomatLuuppiSanomat;
       'api::news-list.news-list': ApiNewsListNewsList;
       'api::news-single.news-single': ApiNewsSingleNewsSingle;
       'api::notification.notification': ApiNotificationNotification;
