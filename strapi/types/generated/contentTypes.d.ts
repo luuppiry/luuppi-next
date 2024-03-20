@@ -1214,9 +1214,33 @@ export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
   options: {
     draftAndPublish: false;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
-    pdf: Attribute.Media & Attribute.Required;
-    image: Attribute.Media & Attribute.Required;
+    image: Attribute.Media &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    pdf: Attribute.Media &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1231,6 +1255,12 @@ export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::luuppi-sanomat.luuppi-sanomat',
+      'oneToMany',
+      'api::luuppi-sanomat.luuppi-sanomat'
+    >;
+    locale: Attribute.String;
   };
 }
 
