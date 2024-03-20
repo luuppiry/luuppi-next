@@ -1,0 +1,16 @@
+.react-pdf__Page__canvas {
+  max-width: 100%;
+  object-fit: contain;
+  height: 100% !important;
+  max-height: 70vh;
+}
+
+.react-pdf__Page {
+  display: flex;
+  justify-content: center;
+  background-color: transparent !important;
+}
+
+.react-pdf__Page.prevPage {
+  display: none;
+}
