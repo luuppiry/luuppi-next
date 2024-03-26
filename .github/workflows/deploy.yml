@@ -92,6 +92,7 @@ jobs:
                   touch .env.local
                   echo NEXT_PUBLIC_STRAPI_BASE_URL=https://${{ secrets.CMS_HOST }} >> .env.local
                   echo NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST }} >> .env.local
+                  echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env.local
               working-directory: ./next
 
             - name: Build Next.js Docker image
