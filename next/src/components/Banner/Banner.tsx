@@ -26,7 +26,7 @@ export default function Banner({ lang }: BannerProps) {
             />
             <Image
               alt="Luuppi banner text"
-              className="z-10 object-cover opacity-[0.05] max-lg:scale-[2] max-md:scale-[3]"
+              className="z-10 object-cover opacity-[0.04] max-lg:scale-[2] max-md:scale-[3]"
               draggable={false}
               src={binarySvg}
               fill
