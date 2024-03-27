@@ -43,6 +43,8 @@
     "min_read": "min lukuaika",
     "menu": "Valikko",
     "open": "Avaa",
+    "page": "Sivu",
+    "publication": "Julkaisu",
     "install_pwa": "Asenna sovellus"
   },
   "mail_list": {
