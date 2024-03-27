@@ -30,11 +30,11 @@ export default async function LuuppiSanomat({ params }: LuuppiSanomatProps) {
   return (
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.sanomat}</h1>
-      <div className="grid grid-cols-3 gap-12 max-md:grid-cols-2">
+      <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
         {sortedData.map((publication) => (
           <a
             key={publication.id}
-            className="relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
+            className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
             href={`/${params.lang}/luuppi-sanomat/${publication.id}`}
           >
             {publication.attributes.image?.data.attributes.url && (
@@ -53,7 +53,7 @@ export default async function LuuppiSanomat({ params }: LuuppiSanomatProps) {
                 />
               </div>
             )}
-            <div className="absolute bottom-0 right-0 rounded-br-lg rounded-tl-lg bg-accent-400 px-2 py-1 font-bold text-white">
+            <div className="absolute bottom-0 right-0 z-20 rounded-br-lg rounded-tl-lg bg-accent-400 px-2 py-1 font-bold text-white">
               {firstLetterToUpperCase(
                 new Date(
                   publication.attributes.createdAt as string,
@@ -63,6 +63,9 @@ export default async function LuuppiSanomat({ params }: LuuppiSanomatProps) {
                 }),
               )}
             </div>
+            <div className="absolute bottom-0 z-10 h-full w-full rounded-lg bg-gradient-to-t from-black to-transparent opacity-25" />
+            <div className="absolute -bottom-1.5 left-1.5 -z-10 h-full w-full transform rounded-lg bg-gray-300 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5 group-hover:rotate-1" />
+            <div className="absolute -bottom-3 left-3 -z-20 h-full w-full transform rounded-lg bg-gray-200 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:rotate-2" />
           </a>
         ))}
       </div>
