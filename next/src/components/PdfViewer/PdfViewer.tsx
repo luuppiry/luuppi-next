@@ -1,5 +1,7 @@
 'use client';
+import { Dictionary } from '@/models/locale';
 import { useState } from 'react';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -9,14 +11,12 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 interface PdfViewerProps {
   pdfUrl: string | undefined;
+  dictionary: Dictionary;
 }
 
-export default function PdfViewer({ pdfUrl }: PdfViewerProps) {
+export default function PdfViewer({ pdfUrl, dictionary }: PdfViewerProps) {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const [renderedPageNumber, setRenderedPageNumber] = useState<number | null>(
-    null,
-  );
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
@@ -29,48 +29,53 @@ export default function PdfViewer({ pdfUrl }: PdfViewerProps) {
   const previousPage = () => changePage(-1);
   const nextPage = () => changePage(1);
 
-  const isLoading = renderedPageNumber !== pageNumber;
-
   return (
-    <div className="h-full w-full">
-      <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
-        {isLoading && renderedPageNumber ? (
+    <div className="justify-centerbg-red-50 flex h-full min-h-[70vh] w-full flex-col items-center gap-4">
+      <Document
+        file={pdfUrl}
+        loading={
+          <div className="flex h-full w-full justify-center">
+            <span className="loading loading-spinner loading-lg" />
+          </div>
+        }
+        onLoadSuccess={onDocumentLoadSuccess}
+      >
+        {Array.from(new Array(numPages), (_, index) => (
           <Page
-            key={renderedPageNumber}
-            className="prevPage"
-            pageNumber={renderedPageNumber}
-            renderAnnotationLayer={false}
-            renderTextLayer={false}
+            key={`page_${index + 1}`}
+            className={`pdf-page ${pageNumber === index + 1 ? 'active' : ''}`}
+            loading={
+              <div className="flex h-full w-full justify-center">
+                <span className="loading loading-spinner loading-lg" />
+              </div>
+            }
+            pageNumber={index + 1}
           />
-        ) : null}
-        <Page
-          key={pageNumber}
-          pageNumber={pageNumber}
-          renderAnnotationLayer={false}
-          renderTextLayer={false}
-          onRenderSuccess={() => setRenderedPageNumber(pageNumber)}
-        />
+        ))}
       </Document>
-      <div>
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex gap-2">
+          <button
+            className="btn btn-primary btn-sm text-white"
+            disabled={pageNumber <= 1}
+            type="button"
+            onClick={previousPage}
+          >
+            <FaAngleLeft />
+          </button>
+          <button
+            className="btn btn-primary btn-sm text-white"
+            disabled={pageNumber >= numPages!}
+            type="button"
+            onClick={nextPage}
+          >
+            <FaAngleRight />
+          </button>
+        </div>
         <p>
-          Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+          {dictionary.general.page} {pageNumber || (numPages ? 1 : '--')} /{' '}
+          {numPages || '--'}
         </p>
-        <button
-          className="btn btn-primary"
-          disabled={pageNumber <= 1}
-          type="button"
-          onClick={previousPage}
-        >
-          Previous
-        </button>
-        <button
-          className="btn btn-primary"
-          disabled={pageNumber >= numPages!}
-          type="button"
-          onClick={nextPage}
-        >
-          Next
-        </button>
       </div>
     </div>
   );
