@@ -103,7 +103,7 @@ export default async function News({ params }: NewsProps) {
                     width={50}
                   />
                 ) : (
-                  <div className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-gradient-to-r from-secondary-400 to-primary-300">
+                  <div className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-secondary-400 to-primary-300">
                     <FaUserAlt color="white" size={20} />
                   </div>
                 )}
