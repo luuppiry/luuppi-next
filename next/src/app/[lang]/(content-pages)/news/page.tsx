@@ -92,7 +92,7 @@ export default async function News({ params }: NewsProps) {
                 <p className="line-clamp-4">{news.attributes.description}</p>
               </div>
               <div className="flex items-center gap-2">
-                {news.attributes.authorImage?.data.attributes.url ? (
+                {news.attributes.authorImage?.data?.attributes?.url ? (
                   <Image
                     alt="News author avatar"
                     className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"

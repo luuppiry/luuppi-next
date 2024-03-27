@@ -57,7 +57,7 @@ export default async function NewsPost({ params }: NewsPostProps) {
         </div>
         <div className="relative flex flex-col gap-4">
           <div className="flex items-center gap-4">
-            {selectedNews.attributes.authorImage?.data.attributes.url ? (
+            {selectedNews.attributes.authorImage?.data?.attributes?.url ? (
               <Image
                 alt="News author avatar"
                 className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
