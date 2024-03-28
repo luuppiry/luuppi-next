@@ -23,6 +23,7 @@ const getStaticPages = (lang: SupportedLanguage) => {
     `/${lang}/organization/office`,
     `/${lang}/organization/tradition-guidelines`,
     `/${lang}/organization/honorary-members`,
+    `/${lang}/organization/benefits`,
     `/${lang}/organization/documents`,
 
     // Studies
@@ -47,6 +48,9 @@ const getStaticPages = (lang: SupportedLanguage) => {
 
     // Sports
     `/${lang}/sports`,
+
+    // Contact
+    `/${lang}/contact`,
 
     // Privacy policy
     `/${lang}/privacy-policy`,
