@@ -40,6 +40,11 @@ export default async function NewsPost({ params }: NewsPostProps) {
 
   const selectedNews = newsLocaleFlipped[0];
 
+  // No version of the content exists in the requested language
+  if (!selectedNews.attributes.content) {
+    redirect(`/${params.lang}/404`);
+  }
+
   return (
     <div className="flex w-full gap-12">
       <div className="flex w-full flex-col gap-12">
@@ -132,6 +137,11 @@ export async function generateMetadata({
   const newsLocaleFlipped = flipNewsLocale(params.lang, data.data);
   const selectedNews = newsLocaleFlipped[0];
   const pathname = `/${params.lang}/news/${params.slug}`;
+
+  // No version of the content exists in the requested language
+  if (!selectedNews.attributes.content) {
+    return {};
+  }
 
   return formatMetadata({ data: selectedNews }, pathname);
 }
