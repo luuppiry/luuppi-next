@@ -14,7 +14,18 @@ export const {
     AzureB2C({
       clientId: process.env.AZURE_P_CLIENT_ID,
       clientSecret: process.env.AZURE_P_CLIENT_SECRET,
+      authorization: {
+        url: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/authorize`,
+        params: {
+          code_challenge_method: undefined,
+          code_challenge: undefined,
+        },
+      },
       issuer: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/v2.0`,
+      token: {
+        url: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`,
+        grant_type: 'authorization_code',
+      },
     }),
   ],
   pages: {
