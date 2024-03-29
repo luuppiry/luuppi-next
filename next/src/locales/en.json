@@ -177,5 +177,14 @@
       "mathematics": "Mathematics",
       "statistical_data_analysis": "Statistical Data Analysis"
     }
+  },
+  "pages_error": {
+    "title": "Error",
+    "description": "An error occurred while processing your request.",
+    "auth_title": "Authentication error",
+    "auth_description": "There was an error during authentication. Please try again later.",
+    "seo_title": "Luuppi ry | Error",
+    "seo_description": "An error occurred while processing your request.",
+    "return_home": "Back to home"
   }
 }

@@ -177,5 +177,14 @@
       "mathematics": "Matematiikka",
       "statistical_data_analysis": "Tilastollinen data-analyysi"
     }
+  },
+  "pages_error": {
+    "title": "Odottamaton virhe",
+    "description": "Odottamaton virhe tapahtui käsitellessämme pyyntöäsi.",
+    "auth_title": "Virhe kirjautumisessa",
+    "auth_description": "Kirjautumisen yhteydessä tapahtui virhe. Yritä myöhemmin uudelleen.",
+    "seo_title": "Luuppi ry | Odottamaton virhe",
+    "seo_description": "Odottamaton virhe tapahtui käsitellessämme pyyntöäsi.",
+    "return_home": "Palaa kotisivulle"
   }
 }

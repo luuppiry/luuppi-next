@@ -17,6 +17,10 @@ export const {
       issuer: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/v2.0`,
     }),
   ],
+  pages: {
+    error: '/auth/error',
+  },
+  debug: true,
   trustHost: true,
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
