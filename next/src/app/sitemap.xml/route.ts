@@ -45,6 +45,9 @@ const getStaticPages = (lang: SupportedLanguage) => {
     // News
     `/${lang}/news`,
 
+    // Sanomat
+    `/${lang}/luuppi-sanomat`,
+
     // Sports
     `/${lang}/sports`,
 
@@ -99,6 +102,10 @@ export async function GET() {
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
   >('fi', '/api/boards', ['board']);
+
+  const luuppiSanomatData = await getStrapiData<
+    APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
+  >('fi', '/api/luuppi-sanomats', ['luuppi-sanomat']);
 
   const eventsData = await getLuuppiEvents('fi');
 
@@ -160,6 +167,25 @@ export async function GET() {
     }))
     .slice(1);
 
+  const sanomatPages: SitemapItemLoose[] = luuppiSanomatData.data.map(
+    (sanomat) => ({
+      url: `/fi/luuppi-sanomat/${sanomat.id}`,
+      lastmod: new Date(sanomat.attributes.updatedAt!).toISOString(),
+      links: [
+        {
+          hreflang: 'fi',
+          url: `/fi/luuppi-sanomat/${sanomat.id}`,
+          lang: 'fi',
+        },
+        {
+          hreflang: 'en',
+          url: `/en/luuppi-sanomat/${sanomat.id}`,
+          lang: 'en',
+        },
+      ],
+    }),
+  );
+
   const newsSiteMap: SitemapItemLoose[] = news.map((post) => ({
     url: post.url,
     lastmod: post.lastmod,
@@ -196,6 +222,26 @@ export async function GET() {
     ],
   }));
 
+  const sanomatPagesSiteMap: SitemapItemLoose[] = sanomatPages.map((page) => ({
+    url: page.url,
+    lastmod: page.lastmod,
+    links: [
+      { hreflang: 'fi', url: page.url, lang: 'fi' },
+      { hreflang: 'en', url: page.url.replace('/fi/', '/en/'), lang: 'en' },
+    ],
+  }));
+
+  const sanomatPagesSiteMapEn: SitemapItemLoose[] = sanomatPages.map(
+    (page) => ({
+      url: page.url.replace('/fi/', '/en/'),
+      lastmod: page.lastmod,
+      links: [
+        { hreflang: 'en', url: page.url.replace('/fi/', '/en/'), lang: 'en' },
+        { hreflang: 'fi', url: page.url, lang: 'fi' },
+      ],
+    }),
+  );
+
   const sitemap: SitemapItemLoose[] = [
     ...newsSiteMap,
     ...boardPagesSiteMap,
@@ -205,6 +251,8 @@ export async function GET() {
     ...staticEnglishSitemap,
     ...eventPagesSiteMap,
     ...eventPagesSiteMapEn,
+    ...sanomatPagesSiteMap,
+    ...sanomatPagesSiteMapEn,
   ];
 
   const smStream = new SitemapStream({
