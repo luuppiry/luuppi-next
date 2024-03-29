@@ -128,6 +128,15 @@
       "title": "Yhteistyökumppanit",
       "description": "Me olemme ylpeitä voidessamme työskennellä näiden yritysten kanssa. Jos olet kiinnostunut yhteistyöstä, älä epäröi ottaa meihin yhteyttä!",
       "read_more": "Lue lisää"
+    },
+    "telegram": {
+      "title": "Liity Telegram-ryhmään",
+      "description": "Akateemisessa maailmassa Telegram on suosittu viestintäkanava, ja Luupilla on omia ryhmiä, joissa voit liittyä seuraamaan tapahtumia ja muita ajankohtaisia asioita. Tule mukaan ja pysy kärryillä!",
+      "groups": "Ryhmät",
+      "information_channel_fin": "Tiedotuskanava (fi)",
+      "information_channel_eng": "Tiedotuskanava (en)",
+      "general_chat": "Yleinen keskusteluryhmä (fi/en)",
+      "new_student_group": "Oletko fuksi? Fukseille on myös vuosittain oma ryhmänsä, johon kannattaa ehdottomasti liittyä! Fuksiryhmän päivitetty linkki löytyy fuksisivulta fuksivuoden alkaessa!"
     }
   },
   "pages_board": {

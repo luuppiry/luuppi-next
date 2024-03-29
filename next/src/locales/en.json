@@ -128,6 +128,15 @@
       "title": "Partners",
       "description": "We are proud to work with these companies. If you are interested in collaboration don't hesitate to contact us!",
       "read_more": "Read more"
+    },
+    "telegram": {
+      "title": "Join our Telegram",
+      "description": "In the academic world, Telegram is a widely used communication channel, and Luupi has its own groups! Join us to stay updated on events and other current affairs.",
+      "groups": "Groups",
+      "information_channel_fin": "Information channel (fi)",
+      "information_channel_eng": "Information channel (en)",
+      "general_chat": "General chat (fi/en)",
+      "new_student_group": "Are you a first-year student? First-year students also have their own group annually, which you should definitely join! The updated link to the first-year student group can be found on the first-year student page at the beginning of the academic year!"
     }
   },
   "pages_board": {
