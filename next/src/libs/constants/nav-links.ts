@@ -65,10 +65,6 @@ export const navLinks: NavLink[] = [
         href: '/studies',
       },
       {
-        translation: 'fields_of_study',
-        href: '/studies/fields-of-study',
-      },
-      {
         translation: 'workshops',
         href: '/studies/workshops',
       },

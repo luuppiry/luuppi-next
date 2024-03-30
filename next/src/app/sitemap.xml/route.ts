@@ -28,7 +28,6 @@ const getStaticPages = (lang: SupportedLanguage) => {
 
     // Studies
     `/${lang}/studies`,
-    `/${lang}/studies/fields-of-study`,
     `/${lang}/studies/workshops`,
 
     // Tutoring

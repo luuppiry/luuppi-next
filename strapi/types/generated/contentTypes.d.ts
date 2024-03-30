@@ -2013,60 +2013,6 @@ export interface ApiSportSport extends Schema.SingleType {
   };
 }
 
-export interface ApiStudiesFieldsOfStudyStudiesFieldsOfStudy
-  extends Schema.SingleType {
-  collectionName: 'studies_fields_of_studies';
-  info: {
-    singularName: 'studies-fields-of-study';
-    pluralName: 'studies-fields-of-studies';
-    displayName: 'StudiesFieldsOfStudy';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    Content: Attribute.Component<'shared.page-content'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    Seo: Attribute.Component<'shared.seo'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::studies-fields-of-study.studies-fields-of-study',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::studies-fields-of-study.studies-fields-of-study',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::studies-fields-of-study.studies-fields-of-study',
-      'oneToMany',
-      'api::studies-fields-of-study.studies-fields-of-study'
-    >;
-    locale: Attribute.String;
-  };
-}
-
 export interface ApiStudiesGeneralStudiesGeneral extends Schema.SingleType {
   collectionName: 'studies_generals';
   info: {
@@ -2394,7 +2340,6 @@ declare module '@strapi/types' {
       'api::privacy-policy.privacy-policy': ApiPrivacyPolicyPrivacyPolicy;
       'api::profile.profile': ApiProfileProfile;
       'api::sport.sport': ApiSportSport;
-      'api::studies-fields-of-study.studies-fields-of-study': ApiStudiesFieldsOfStudyStudiesFieldsOfStudy;
       'api::studies-general.studies-general': ApiStudiesGeneralStudiesGeneral;
       'api::studies-workshop.studies-workshop': ApiStudiesWorkshopStudiesWorkshop;
       'api::tutoring-faq.tutoring-faq': ApiTutoringFaqTutoringFaq;
