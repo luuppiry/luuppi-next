@@ -136,6 +136,10 @@
       "information_channel_fin": "Information channel (fi)",
       "information_channel_eng": "Information channel (en)",
       "general_chat": "General chat (fi/en)",
+      "study_group_cs": "Luuppi's Study Group (Computer Science)",
+      "study_group_math": "Luuppi's Study Group (Mathematics)",
+      "flea_market": "Luuppi's flea market",
+      "kyykkä_group": "Luuppis Kyykkä group",
       "new_student_group": "Are you a first-year student? First-year students also have their own group annually, which you should definitely join! The updated link to the first-year student group can be found on the first-year student page at the beginning of the academic year!"
     }
   },

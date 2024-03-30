@@ -136,6 +136,10 @@
       "information_channel_fin": "Tiedotuskanava (fi)",
       "information_channel_eng": "Tiedotuskanava (en)",
       "general_chat": "Yleinen keskusteluryhmä (fi/en)",
+      "study_group_cs": "Luupin opiskeluryhmä (TKT)",
+      "study_group_math": "Luupin opiskeluryhmä (MTT)",
+      "flea_market": "Luupin kirppis",
+      "kyykkä_group": "Luupin kyykkäryhmä",
       "new_student_group": "Oletko fuksi? Fukseille on myös vuosittain oma ryhmänsä, johon kannattaa ehdottomasti liittyä! Fuksiryhmän päivitetty linkki löytyy fuksisivulta fuksivuoden alkaessa!"
     }
   },

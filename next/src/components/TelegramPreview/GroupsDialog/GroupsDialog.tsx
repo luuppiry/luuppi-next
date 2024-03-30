@@ -36,7 +36,7 @@ export default function GroupsDialog({ dictionary }: GroupsDialogProps) {
             {telegramGroups.map((group) => (
               <Link
                 key={group.link}
-                className="mb-4 flex items-center gap-2 rounded-lg bg-background-50/50 p-4 text-lg font-bold"
+                className="mb-4 flex items-center gap-2 rounded-lg bg-background-50/50 p-2 font-bold"
                 href={group.link}
                 target="_blank"
               >
