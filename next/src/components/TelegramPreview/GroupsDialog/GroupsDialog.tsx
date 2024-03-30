@@ -28,7 +28,7 @@ export default function GroupsDialog({ dictionary }: GroupsDialogProps) {
       <dialog
         className={`modal modal-bottom sm:modal-middle ${open ? 'modal-open' : ''}`}
       >
-        <div className="modal-box">
+        <div className="modal-box max-h-[calc(100dvh-6em)]">
           <h3 className="text-lg font-bold">
             {dictionary.pages_home.telegram.groups}
           </h3>
