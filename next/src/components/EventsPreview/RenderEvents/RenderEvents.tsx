@@ -44,7 +44,7 @@ export default async function RenderEvents({
             />
           </div>
           <div className="relative flex flex-grow flex-col overflow-hidden p-6 transition-all duration-300">
-            <p className="z-20 text-sm font-bold" suppressHydrationWarning>
+            <p className="z-20 text-sm font-bold">
               {new Date(event.start).toLocaleString(lang, dateFormat)}
             </p>
             <p className="z-20 line-clamp-3 text-lg font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-base">

@@ -102,7 +102,7 @@ export default async function RenderNews({
                 <span className="text-sm font-semibold">
                   {news.attributes.authorName}
                 </span>
-                <span className="text-sm opacity-60" suppressHydrationWarning>
+                <span className="text-sm opacity-60">
                   {new Date(news.attributes.createdAt!).toLocaleDateString(
                     lang,
                     dateFormat,
