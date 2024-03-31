@@ -30,7 +30,7 @@ export default function HideableLink({
   return (
     <Link
       key={sublink.translation}
-      className="truncate rounded-lg p-2 font-bold hover:bg-gray-200"
+      className={`${sublink.href === '/' ? 'disabled cursor-not-allowed opacity-50' : ''} truncate rounded-lg p-2 font-bold hover:bg-gray-200`} // TODO: Remove disabled links
       href={`/${lang}${sublink.href as string}`}
       onClick={hideAfterClick}
     >

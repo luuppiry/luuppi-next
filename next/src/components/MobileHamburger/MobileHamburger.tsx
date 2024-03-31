@@ -84,7 +84,7 @@ export default function MobileHamburger({
                       {link.sublinks.map((sublink) => (
                         <li key={sublink.translation}>
                           <Link
-                            className="font-bold"
+                            className={`${sublink.href === '/' ? 'disabled cursor-not-allowed opacity-50' : ''} font-bold`} // TODO: REMOVE DISABLED LINKS
                             href={`/${lang}${sublink.href as string}`}
                             onClick={() => setOpen(false)}
                           >

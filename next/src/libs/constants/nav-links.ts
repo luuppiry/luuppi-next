@@ -109,7 +109,7 @@ export const navLinks: NavLink[] = [
       },
       {
         translation: 'sanomat',
-        href: '/luuppi-sanomat',
+        href: '/',
       },
       {
         translation: 'gallery',
