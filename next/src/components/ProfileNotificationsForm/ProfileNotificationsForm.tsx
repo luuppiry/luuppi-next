@@ -15,13 +15,7 @@ export default function ProfileNotificationsForm({
   return (
     <form className="card card-body">
       <div className="flex w-full flex-col">
-        <FormCheckbox id="loop" title={dictionary.mail_list.loop} />
-        <FormCheckbox id="freeloop" title={dictionary.mail_list.freeloop} />
-        <FormCheckbox id="alumni" title={dictionary.mail_list.alumni} />
-        <FormCheckbox
-          id="new_students"
-          title={dictionary.mail_list.new_students}
-        />
+        <FormCheckbox id="loop" title={dictionary.mail_list.loop} disabled />
       </div>
     </form>
   );

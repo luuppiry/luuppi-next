@@ -2,12 +2,14 @@ interface FormCheckboxProps {
   title: string;
   id: string;
   checked?: boolean;
+  disabled?: boolean;
 }
 
 export default function FormCheckbox({
   title,
   id,
   checked = true,
+  disabled = false,
 }: FormCheckboxProps) {
   return (
     <div className="form-control ">
@@ -15,6 +17,7 @@ export default function FormCheckbox({
         <input
           className="checkbox"
           defaultChecked={checked}
+          disabled={disabled}
           id={id}
           type="checkbox"
         />
