@@ -73,14 +73,12 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                         ]
                       }
                     </span>
-                    {link.sublinks && link.sublinks.length > 0 && (
-                      <div className="w-6">
-                        <RiArrowDropDownLine
-                          className="transition-transform duration-300 group-hover:rotate-180"
-                          size={32}
-                        />
-                      </div>
-                    )}
+                    <div className="w-6">
+                      <RiArrowDropDownLine
+                        className="transition-transform duration-300 group-hover:rotate-180"
+                        size={32}
+                      />
+                    </div>
                   </div>
                 ) : (
                   <Link
