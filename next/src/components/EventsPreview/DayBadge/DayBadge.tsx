@@ -18,7 +18,10 @@ export default function DayBadge({ dictionary, event }: DayBadgeProps) {
   if (!isToday && !isTomorrow) return null;
 
   return (
-    <span className="badge badge-accent absolute left-1/2 z-20 -translate-x-1/2 -translate-y-2 transform font-bold text-white">
+    <span
+      className="badge badge-accent absolute left-1/2 z-20 -translate-x-1/2 -translate-y-2 transform font-bold text-white"
+      suppressHydrationWarning
+    >
       {isToday ? dictionary.general.today : dictionary.general.tomorrow}!
     </span>
   );
