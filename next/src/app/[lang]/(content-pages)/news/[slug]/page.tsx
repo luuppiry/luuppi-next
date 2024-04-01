@@ -41,7 +41,7 @@ export default async function NewsPost({ params }: NewsPostProps) {
   const selectedNews = newsLocaleFlipped[0];
 
   // No version of the content exists in the requested language
-  if (!selectedNews.attributes.content) {
+  if (!selectedNews?.attributes?.content) {
     redirect(`/${params.lang}/404`);
   }
 
@@ -139,7 +139,7 @@ export async function generateMetadata({
   const pathname = `/${params.lang}/news/${params.slug}`;
 
   // No version of the content exists in the requested language
-  if (!selectedNews.attributes.content) {
+  if (!selectedNews?.attributes?.content) {
     return {};
   }
 
