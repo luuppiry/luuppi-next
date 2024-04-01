@@ -31,7 +31,6 @@ export const {
   pages: {
     error: '/auth/error',
   },
-  debug: true,
   trustHost: true,
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
