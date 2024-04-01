@@ -141,6 +141,10 @@ export async function generateMetadata({
   const boardGroupedByYear = groupBoardByYear(boardData.data);
   const wantedBoard = boardGroupedByYear[params.slug];
 
+  if (!wantedBoard) {
+    return {};
+  }
+
   const pathname = `/${params.lang}/organization/board/${params.slug}`;
 
   return {
