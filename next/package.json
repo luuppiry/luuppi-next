@@ -44,7 +44,7 @@
   "devDependencies": {
     "@microsoft/microsoft-graph-types": "^2.40.0",
     "@strapi/strapi": "^4.20.4",
-    "@tailwindcss/typography": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.12",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/negotiator": "^0.6.3",
     "@types/node": "^20.11.24",
