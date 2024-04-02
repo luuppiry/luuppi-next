@@ -219,14 +219,7 @@ export async function GET() {
 
   const sitemapXml = (await streamToPromise(smStream)).toString();
 
-  // Thanks to this comment:
-  // https://github.com/ekalinin/sitemap.js/issues/397#issuecomment-1438062056
-  const sitemapXmlHttps = sitemapXml.replace(
-    new RegExp('http://', 'g'),
-    'https://',
-  );
-
-  const res = new Response(sitemapXmlHttps, {
+  const res = new Response(sitemapXml, {
     headers: {
       'Content-Type': 'application/xml',
     },
