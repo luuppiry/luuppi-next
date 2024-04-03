@@ -7,8 +7,11 @@ interface EventSelectorProviderProps {
 
 const initialState = {
   selectedView: 'calendar',
+  mobileCalendarMonth: new Date(),
   // eslint-disable-next-line no-unused-vars
   setView: (_: 'calendar' | 'list') => {},
+  // eslint-disable-next-line no-unused-vars
+  setMobileCalendarMonth: (_: Date) => {},
   showPastEvents: false,
   toggleShowPastEvents: () => {},
 };
@@ -23,6 +26,7 @@ export default function EventSelectorProvider({
     'calendar',
   );
   const [showPastEvents, setShowPastEvents] = useState(false);
+  const [mobileCalendarMonth, setMobileCalendarMonth] = useState(new Date());
 
   const setView = (view: 'calendar' | 'list') => {
     setSelectedView(view);
@@ -37,6 +41,8 @@ export default function EventSelectorProvider({
     setView,
     showPastEvents,
     toggleShowPastEvents,
+    mobileCalendarMonth,
+    setMobileCalendarMonth,
   };
 
   return (

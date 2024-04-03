@@ -1,6 +1,7 @@
 import { Event } from '@/models/event';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useMemo, useState } from 'react';
+import { SelectedViewContext } from '@/providers/EventSelectorProvider';
+import { useContext, useMemo, useState } from 'react';
 import { BiArrowToLeft, BiArrowToRight } from 'react-icons/bi';
 import ViewEventsDialog from './ViewEventsDialog/ViewEventsDialog';
 
@@ -86,18 +87,18 @@ export default function MobileCalendar({
   const todayMonth = today.getMonth();
   const todayYear = today.getFullYear();
 
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const ctx = useContext(SelectedViewContext);
   const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
 
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth();
+  const currentYear = ctx.mobileCalendarMonth.getFullYear();
+  const currentMonth = ctx.mobileCalendarMonth.getMonth();
 
   const handlePreviousMonth = () => {
-    setCurrentDate(new Date(currentYear, currentMonth - 1, 1));
+    ctx.setMobileCalendarMonth(new Date(currentYear, currentMonth - 1, 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
+    ctx.setMobileCalendarMonth(new Date(currentYear, currentMonth + 1, 1));
   };
 
   const daysOfWeek = useMemo(() => getDaysOfWeek(lang), [lang]);
