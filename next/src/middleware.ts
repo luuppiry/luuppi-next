@@ -77,11 +77,12 @@ export function middleware(request: NextRequest) {
   if (pathnameIsMissingLocale) {
     const locale = getLocale(request);
 
+    const newUrl = new URL(request.url);
+    newUrl.pathname = `/${locale}${pathname}`;
+
     // e.g. incoming request is /products
     // The new URL is now /en-US/products
-    return NextResponse.redirect(
-      new URL(`/${locale}/${pathname}`, request.url),
-    );
+    return NextResponse.redirect(newUrl);
   }
 
   return NextResponse.next();
