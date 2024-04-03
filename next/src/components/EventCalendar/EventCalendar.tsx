@@ -15,7 +15,7 @@ interface EventCalendarProps {
 }
 
 export default function EventCalendar({ events, lang }: EventCalendarProps) {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isSmallDesktop, setIsSmallDesktop] = useState(false);
 
   const router = useRouter();
 
@@ -29,7 +29,7 @@ export default function EventCalendar({ events, lang }: EventCalendarProps) {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
+      setIsSmallDesktop(window.innerWidth < 1280);
       calendarRef?.current?.getApi().updateSize();
     };
     window.addEventListener('resize', handleResize);
@@ -41,7 +41,7 @@ export default function EventCalendar({ events, lang }: EventCalendarProps) {
   return (
     <FullCalendar
       ref={calendarRef}
-      aspectRatio={isMobile ? 0.8 : 1.35}
+      aspectRatio={isSmallDesktop ? 0.8 : 1.35}
       buttonText={
         lang === 'fi'
           ? {
@@ -61,7 +61,7 @@ export default function EventCalendar({ events, lang }: EventCalendarProps) {
         }, 0);
       }}
       dayHeaderFormat={
-        isMobile
+        isSmallDesktop
           ? {
               weekday: 'short',
               day: 'numeric',
@@ -94,7 +94,7 @@ export default function EventCalendar({ events, lang }: EventCalendarProps) {
       }}
       events={events}
       headerToolbar={
-        !isMobile
+        !isSmallDesktop
           ? {
               left: 'prev,next today',
               center: 'title',
