@@ -1,9 +1,10 @@
 'use client';
 import { Event } from '@/models/event';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { SelectedViewContext } from '@/providers/EventSelectorProvider';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { LuCalendarPlus } from 'react-icons/lu';
 import './EventSelector.css';
 const EventCalendar = dynamic(() => import('../EventCalendar/EventCalendar'));
@@ -23,10 +24,7 @@ export default function EventSelector({
   lang,
   dictionary,
 }: EventSelectorProps) {
-  const [showPastEvents, setShowPastEvents] = useState(false);
-  const [selectedView, setSelectedView] = useState<'calendar' | 'list'>(
-    'calendar',
-  );
+  const ctx = useContext(SelectedViewContext);
   const [width, setWidth] = useState(1200);
 
   useEffect(() => {
@@ -38,11 +36,11 @@ export default function EventSelector({
   }, []);
 
   const setView = (view: 'calendar' | 'list') => {
-    setSelectedView(view);
+    ctx.setView(view);
   };
 
   const toggleShowPastEvents = () => {
-    setShowPastEvents(!showPastEvents);
+    setView('list');
   };
 
   return (
@@ -54,14 +52,14 @@ export default function EventSelector({
             role="tablist"
           >
             <button
-              className={`tab text-nowrap font-semibold ${selectedView === 'calendar' && 'tab-active'}`}
+              className={`tab text-nowrap font-semibold ${ctx.selectedView === 'calendar' && 'tab-active'}`}
               role="tab"
               onClick={() => setView('calendar')}
             >
               {dictionary.pages_events.calendar}
             </button>
             <button
-              className={`tab text-nowrap font-semibold ${selectedView === 'list' && 'tab-active'}`}
+              className={`tab text-nowrap font-semibold ${ctx.selectedView === 'list' && 'tab-active'}`}
               role="tab"
               onClick={() => setView('list')}
             >
@@ -75,9 +73,9 @@ export default function EventSelector({
                   {dictionary.pages_events.show_past}
                 </span>
                 <input
-                  checked={showPastEvents}
+                  checked={ctx.showPastEvents}
                   className="toggle toggle-primary"
-                  disabled={selectedView === 'calendar'}
+                  disabled={ctx.selectedView === 'calendar'}
                   type="checkbox"
                   onChange={toggleShowPastEvents}
                 />
@@ -98,7 +96,7 @@ export default function EventSelector({
           </div>
         </div>
       </div>
-      {selectedView === 'calendar' ? (
+      {ctx.selectedView === 'calendar' ? (
         <>
           {width > 960 ? (
             <EventCalendar events={events} lang={lang} />
@@ -114,7 +112,7 @@ export default function EventSelector({
         <EventsList
           events={events}
           lang={lang}
-          showPastEvents={showPastEvents}
+          showPastEvents={ctx.showPastEvents}
         />
       )}
     </div>

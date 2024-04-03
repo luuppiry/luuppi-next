@@ -4,6 +4,7 @@ import NotificationBar from '@/components/NotificationBar/NotificationBar';
 import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
+import EventSelectorProvider from '@/providers/EventSelectorProvider';
 import { APIResponse } from '@/types/types';
 import type { Metadata, Viewport } from 'next';
 import { SessionProvider } from 'next-auth/react';
@@ -51,7 +52,9 @@ export default async function RootLayout({
       <body className={titilliumFont.className}>
         <SessionProvider>
           <Header dictionary={dictionary} lang={params.lang} />
-          <div className="flex-1">{children}</div>
+          <EventSelectorProvider>
+            <div className="flex-1">{children}</div>
+          </EventSelectorProvider>
           <Footer dictionary={dictionary} lang={params.lang} />
           <NotificationBar lang={params.lang} notification={notification} />
         </SessionProvider>
