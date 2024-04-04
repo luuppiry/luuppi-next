@@ -83,7 +83,7 @@ export default function EventsList({
                     <p>-</p>
                     <p>{event.end.toLocaleTimeString(lang, shortDateFormat)}</p>
                   </div>
-                  <p className="line-clamp-3 max-w-xl text-sm text-gray-500 max-md:text-xs">
+                  <p className="line-clamp-3 max-w-xl pr-4 text-sm text-gray-500 max-md:text-xs max-sm:break-all">
                     {event.description}
                   </p>
                 </div>
