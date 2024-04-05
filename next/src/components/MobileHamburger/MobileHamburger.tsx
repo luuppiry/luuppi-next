@@ -3,6 +3,7 @@ import { signIn, signOut } from '@/actions/auth';
 import { navLinks } from '@/libs/constants';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useSession } from 'next-auth/react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BiLogOutCircle } from 'react-icons/bi';
@@ -10,8 +11,11 @@ import { HiMenu } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
-import InstallPwaButton from './InstallPwaButton';
 import './MobileHamburger.css';
+
+const InstallPwaButton = dynamic(() => import('./InstallPwaButton'), {
+  ssr: false,
+});
 
 interface MobileNavbarProps {
   dictionary: Dictionary;
