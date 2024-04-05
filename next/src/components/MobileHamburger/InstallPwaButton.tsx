@@ -39,10 +39,13 @@ export default function InstallPwaButton({
   const supportsPwa = () =>
     typeof window.matchMedia('(display-mode: standalone)') !== 'undefined';
 
+  const useragent = navigator.userAgent;
+  const isAndroid = useragent.indexOf('Android') > -1;
+
   return (
     <button
       className={`btn btn-primary w-full text-white ${
-        isPwa() || !supportsPwa() ? 'hidden' : ''
+        isPwa() || !supportsPwa() || !isAndroid ? 'hidden' : ''
       }`}
       onClick={installPwa}
     >
