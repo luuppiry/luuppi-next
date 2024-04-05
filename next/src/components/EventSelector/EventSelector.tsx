@@ -6,11 +6,20 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { LuCalendarPlus } from 'react-icons/lu';
+import EventCalendarSkeleton from '../EventCalendar/EventCalendarSkeleton';
+import EventListSkeleton from '../EventsList/EventListSkeleton';
+import MobileCalendarSkeleton from '../MobileCalendar/MobileCalendarSkeleton';
 import './EventSelector.css';
-const EventCalendar = dynamic(() => import('../EventCalendar/EventCalendar'));
-const EventsList = dynamic(() => import('../EventsList/EventsList'));
+
+const EventCalendar = dynamic(() => import('../EventCalendar/EventCalendar'), {
+  loading: () => <EventCalendarSkeleton />,
+});
+const EventsList = dynamic(() => import('../EventsList/EventsList'), {
+  loading: () => <EventListSkeleton />,
+});
 const MobileCalendar = dynamic(
   () => import('../MobileCalendar/MobileCalendar'),
+  { loading: () => <MobileCalendarSkeleton /> },
 );
 
 interface EventSelectorProps {
