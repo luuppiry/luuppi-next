@@ -42,7 +42,8 @@
     "tomorrow": "Tomorrow",
     "min_read": "min read",
     "menu": "Menu",
-    "open": "Open"
+    "open": "Open",
+    "install_pwa": "Install app"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"

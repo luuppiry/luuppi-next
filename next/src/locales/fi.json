@@ -42,7 +42,8 @@
     "tomorrow": "Huomenna",
     "min_read": "min lukuaika",
     "menu": "Valikko",
-    "open": "Avaa"
+    "open": "Avaa",
+    "install_pwa": "Asenna sovellus"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"

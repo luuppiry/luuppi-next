@@ -10,6 +10,7 @@ import { HiMenu } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+import InstallPwaButton from './InstallPwaButton';
 import './MobileHamburger.css';
 
 interface MobileNavbarProps {
@@ -100,6 +101,9 @@ export default function MobileHamburger({
                   )}
                 </li>
               ))}
+            <li>
+              <InstallPwaButton dictionary={dictionary} />
+            </li>
           </ul>
           <div className="sticky top-0 z-10 flex justify-end">
             <div className="flex h-full flex-col items-center gap-4">
