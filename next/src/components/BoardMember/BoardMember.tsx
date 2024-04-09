@@ -20,7 +20,7 @@ export default function BoardMember({
         {member.attributes.image.data?.attributes.url ? (
           <Image
             alt={`Picture of ${member.attributes.fullName}`}
-            className="rounded-t-lg object-cover"
+            className="rounded-t-lg object-cover object-top"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             src={getStrapiUrl(member.attributes.image.data.attributes.url)}
             fill
