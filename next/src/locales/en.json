@@ -45,7 +45,8 @@
     "open": "Open",
     "page": "Page",
     "publication": "Publication",
-    "install_pwa": "Install app"
+    "install_pwa": "Install app",
+    "open_pdf": "Open PDF"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"

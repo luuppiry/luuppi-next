@@ -44,7 +44,7 @@ export default async function LuuppiSanomatPublication({
           })
           .toLowerCase()}
       </h1>
-      <div className="h-full">
+      <div className="h-full overflow-x-hidden">
         <PdfViewer
           dictionary={dictionary}
           pdfUrl={getStrapiUrl(
