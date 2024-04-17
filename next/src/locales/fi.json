@@ -45,7 +45,8 @@
     "open": "Avaa",
     "page": "Sivu",
     "publication": "Julkaisu",
-    "install_pwa": "Asenna sovellus"
+    "install_pwa": "Asenna sovellus",
+    "open_pdf": "Avaa PDF"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
