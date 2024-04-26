@@ -80,7 +80,7 @@ export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
             value: email.email,
           }))}
           title={dictionary.pages_feedback.receiver}
-          value={'test'}
+          value={luuppiEmails[0].email}
           onChange={() => setFormResponse(initialState)}
         />
         <FormInput
