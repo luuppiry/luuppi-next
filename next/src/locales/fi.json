@@ -18,6 +18,27 @@
     "profile_updated": "Profiili päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen.",
     "ratelimit": "Liian monta pyyntöä. Yritä uudelleen myöhemmin."
   },
+  "roles": {
+    "entire_board": "Koko hallitus",
+    "chairperson": "Puheenjohtaja",
+    "vice_chairperson": "Varapuheenjohtaja",
+    "www_it_representative": "WWW/IT-vastaava",
+    "business": "Yritysvastaava",
+    "treasurer": "Rahastonhoitaja",
+    "education_representative": "Kopo-vastaava",
+    "communications_representative": "Viestintävastaava",
+    "kolmio_representative": "Kolmiovastaava",
+    "tutoring_representative": "Tutorointivastaava",
+    "international_representative": "KV-tuutorointivastaava",
+    "sports_representative": "Liikuntavastaava",
+    "event_representative": "Tapahtumavastaava",
+    "sustainable_development_representive": "Kestävän kehityksen vastaava",
+    "premises_representative": "Toimitilavastaava",
+    "social_policy_representative": "Sosiaalipoliittinen vastaava",
+    "equality_representative": "Tasa-arvovastaava",
+    "editor_in_chief_of_luuppisanomat": "LuuppiSanomien päätoimittaja",
+    "secretary": "Sihteeri"
+  },
   "general": {
     "email": "Sähköposti",
     "password": "Salasana",

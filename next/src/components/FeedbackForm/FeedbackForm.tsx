@@ -1,5 +1,6 @@
 'use client';
 import { sendVerifyEmail } from '@/actions/send-verify-email';
+import { luuppiEmails } from '@/libs/constants/emails';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useState } from 'react';
 import { BiErrorCircle } from 'react-icons/bi';
@@ -71,7 +72,13 @@ export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
         <FormSelect
           id="receiver"
           marginTop={false}
-          options={[{ label: 'Test', value: 'test' }]}
+          options={luuppiEmails.map((email) => ({
+            label:
+              dictionary.roles[
+                email.translation as keyof typeof dictionary.roles
+              ],
+            value: email.email,
+          }))}
           title={dictionary.pages_feedback.receiver}
           value={'test'}
           onChange={() => setFormResponse(initialState)}
