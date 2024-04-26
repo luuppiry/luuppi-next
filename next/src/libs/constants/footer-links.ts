@@ -112,6 +112,10 @@ export const footerLinks: FooterLink[] = [
         href: '/contact',
       },
       {
+        translation: 'feedback',
+        href: '/feedback',
+      },
+      {
         translation: 'privacy_policy',
         href: '/privacy-policy',
       },

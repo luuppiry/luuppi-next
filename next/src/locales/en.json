@@ -81,6 +81,7 @@
     "rules": "Rules",
     "board": "Board",
     "office": "Office",
+    "feedback": "Feedback",
     "honorary_members": "Honorary members",
     "member_benefits": "Member benefits",
     "documents": "Documents",
@@ -190,6 +191,16 @@
       "mathematics": "Mathematics",
       "statistical_data_analysis": "Statistical Data Analysis"
     }
+  },
+  "pages_feedback": {
+    "title": "Feedback",
+    "description": "Anonymous feedback is addressed in board meetings. The related discussion can be found in the minutes unless the feedback provider specifically requests otherwise. Feedback sent without contact information cannot be responded to personally.",
+    "name": "Your name",
+    "email": "Your email",
+    "receiver": "Receiver",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send"
   },
   "pages_error": {
     "title": "Error",

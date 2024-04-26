@@ -1,0 +1,21 @@
+import FeedbackForm from '@/components/FeedbackForm/FeedbackForm';
+import { getDictionary } from '@/dictionaries';
+import { SupportedLanguage } from '@/models/locale';
+
+interface FeedbackProps {
+  params: { lang: SupportedLanguage };
+}
+
+export default async function Feedback({ params }: FeedbackProps) {
+  const dictionary = await getDictionary(params.lang);
+  return (
+    <div className="relative">
+      <h1 className="mb-4">{dictionary.pages_feedback.title}</h1>
+      <p className="max-w-3xl">{dictionary.pages_feedback.description}</p>
+      <div className="mt-12">
+        <FeedbackForm dictionary={dictionary} lang={params.lang} />
+      </div>
+      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
+    </div>
+  );
+}
