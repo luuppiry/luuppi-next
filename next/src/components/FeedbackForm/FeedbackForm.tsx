@@ -104,6 +104,7 @@ export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
           error={formResponse.field === 'message' ? formResponse.message : ''}
           id="message"
           marginTop={false}
+          maxLength={5000}
           placeholder={dictionary.pages_feedback.message}
           title={dictionary.pages_feedback.message}
         />

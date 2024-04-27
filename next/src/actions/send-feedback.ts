@@ -92,7 +92,7 @@ export async function sendFeedback(
     };
   }
 
-  if (!message || !/^.{3,500}$/.test(message)) {
+  if (!message || !/^.{3,5000}$/.test(message)) {
     return {
       message: dictionary.api.invalid_message,
       isError: true,
