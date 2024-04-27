@@ -121,7 +121,7 @@ export async function sendFeedback(
     recipients: {
       to: [
         {
-          address: 'kasperi.pohtine@gmail.com',
+          address: receiver,
         },
       ],
     },
