@@ -11,6 +11,11 @@ const connectionString =
 
 const senderAddress = process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!;
 
+const turnstileVerifyEndpoint =
+  'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+
+const turnstileSecret = process.env.TURNSTILE_SECRET!;
+
 const cacheKey = 'feedback';
 
 export async function sendFeedback(
@@ -29,11 +34,27 @@ export async function sendFeedback(
     };
   }
 
+  const turnstileToken = formData.get('turnstileToken') as string | undefined;
   const name = formData.get('name') as string | undefined;
   const email = formData.get('email') as string | undefined;
   const receiver = formData.get('receiver') as string | undefined;
   const subject = formData.get('subject') as string | undefined;
   const message = formData.get('message') as string | undefined;
+
+  if (!turnstileToken || turnstileToken.length < 1) {
+    return {
+      message: dictionary.api.invalid_captcha,
+      isError: true,
+    };
+  }
+
+  const isVerified = await verifyTurnstileToken(turnstileToken);
+  if (!isVerified) {
+    return {
+      message: dictionary.api.invalid_captcha,
+      isError: true,
+    };
+  }
 
   if (name && !/^.{3,70}$/.test(name)) {
     return {
@@ -100,7 +121,7 @@ export async function sendFeedback(
     recipients: {
       to: [
         {
-          address: receiver,
+          address: 'kasperi.pohtine@gmail.com',
         },
       ],
     },
@@ -121,5 +142,24 @@ export async function sendFeedback(
       message: dictionary.api.email_sending_failed,
       isError: true,
     };
+  }
+}
+
+async function verifyTurnstileToken(token: string): Promise<boolean> {
+  try {
+    const res = await fetch(turnstileVerifyEndpoint, {
+      method: 'POST',
+      body: `secret=${encodeURIComponent(turnstileSecret)}&response=${encodeURIComponent(token)}`,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+    const data = await res.json();
+
+    return data.success;
+  } catch (error) {
+    logger.error('Error verifying turnstile token', error);
+    return false;
   }
 }

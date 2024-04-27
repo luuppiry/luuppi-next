@@ -2,7 +2,8 @@
 import { sendFeedback } from '@/actions/send-feedback';
 import { luuppiEmails } from '@/libs/constants/emails';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useState } from 'react';
+import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
+import { useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { BiErrorCircle } from 'react-icons/bi';
 import FormInput from '../FormInput/FormInput';
@@ -28,15 +29,23 @@ interface FeedbackFormProps {
 
 export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
   const handleFeedbackAction = sendFeedback.bind(null, lang);
+  const formRef = useRef<HTMLFormElement>(null);
+  const turnstileRef = useRef<TurnstileInstance>(null);
   const [formResponse, setFormResponse] = useState(initialState);
+  const [turnstileToken, setTurnstileToken] = useState('');
 
   const updateFeedback = async (formData: FormData) => {
+    formData.append('turnstileToken', turnstileToken);
     const response = await handleFeedbackAction(null, formData);
     setFormResponse(response);
+    if (!response.isError) {
+      formRef.current?.reset();
+      turnstileRef.current?.reset();
+    }
   };
 
   return (
-    <form action={updateFeedback} className="card card-body">
+    <form ref={formRef} action={updateFeedback} className="card card-body">
       <div className="flex w-full flex-col">
         {Boolean(
           formResponse.isError && formResponse.message && !formResponse.field,
@@ -97,6 +106,12 @@ export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
           marginTop={false}
           placeholder={dictionary.pages_feedback.message}
           title={dictionary.pages_feedback.message}
+        />
+        <Turnstile
+          ref={turnstileRef}
+          className="mb-4"
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+          onSuccess={setTurnstileToken}
         />
         <div>
           <SubmitButton dictionary={dictionary} />

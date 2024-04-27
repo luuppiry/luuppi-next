@@ -21,7 +21,8 @@
     "invalid_receiver": "Invalid receiver",
     "invalid_subject": "Invalid subject",
     "invalid_message": "Invalid message",
-    "feedback_sent": "Feedback sent"
+    "feedback_sent": "Feedback sent",
+    "invalid_captcha": "Invalid captcha"
   },
   "roles": {
     "entire_board": "Entire Board",

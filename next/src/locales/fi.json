@@ -21,7 +21,8 @@
     "invalid_receiver": "Kelvoton vastaanottaja",
     "invalid_subject": "Kelvoton aihe",
     "invalid_message": "Kelvoton viesti",
-    "feedback_sent": "Palaute lähetetty"
+    "feedback_sent": "Palaute lähetetty",
+    "invalid_captcha": "Kelvoton vahvistus"
   },
   "roles": {
     "entire_board": "Koko hallitus",
