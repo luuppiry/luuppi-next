@@ -54,6 +54,9 @@ const getStaticPages = (lang: SupportedLanguage) => {
     // Contact
     `/${lang}/contact`,
 
+    // Feedback
+    `/${lang}/feedback`,
+
     // Privacy policy
     `/${lang}/privacy-policy`,
   ];
