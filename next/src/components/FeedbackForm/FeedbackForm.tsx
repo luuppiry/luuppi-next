@@ -1,8 +1,9 @@
 'use client';
-import { sendVerifyEmail } from '@/actions/send-verify-email';
+import { sendFeedback } from '@/actions/send-feedback';
 import { luuppiEmails } from '@/libs/constants/emails';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { BiErrorCircle } from 'react-icons/bi';
 import FormInput from '../FormInput/FormInput';
 import FormSelect from '../FormSelect/FormSelect';
@@ -26,7 +27,7 @@ interface FeedbackFormProps {
 }
 
 export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
-  const handleFeedbackAction = sendVerifyEmail.bind(null, lang);
+  const handleFeedbackAction = sendFeedback.bind(null, lang);
   const [formResponse, setFormResponse] = useState(initialState);
 
   const updateFeedback = async (formData: FormData) => {
@@ -98,11 +99,33 @@ export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
           title={dictionary.pages_feedback.message}
         />
         <div>
-          <button className="btn btn-primary text-white">
-            {dictionary.pages_feedback.send}
-          </button>
+          <SubmitButton dictionary={dictionary} />
         </div>
       </div>
     </form>
+  );
+}
+
+interface SubmitButtonProps {
+  dictionary: Dictionary;
+}
+
+function SubmitButton({ dictionary }: SubmitButtonProps) {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      className="btn btn-primary text-white"
+      disabled={pending}
+      type="submit"
+    >
+      {pending ? (
+        <div className="min-w-16">
+          <span className="loading loading-spinner loading-md" />
+        </div>
+      ) : (
+        dictionary.pages_feedback.send
+      )}
+    </button>
   );
 }

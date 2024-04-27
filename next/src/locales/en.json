@@ -16,7 +16,12 @@
     "invalid_major": "Invalid major",
     "no_changes_detected": "No changes detected",
     "profile_updated": "Profile updated. Some changes require you to re-login to take effect.",
-    "ratelimit": "Too many requests. Please try again later."
+    "ratelimit": "Too many requests. Please try again later.",
+    "invalid_name": "Invalid name",
+    "invalid_receiver": "Invalid receiver",
+    "invalid_subject": "Invalid subject",
+    "invalid_message": "Invalid message",
+    "feedback_sent": "Feedback sent"
   },
   "roles": {
     "entire_board": "Entire Board",
