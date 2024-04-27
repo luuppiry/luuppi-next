@@ -38,9 +38,9 @@ export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
     formData.append('turnstileToken', turnstileToken);
     const response = await handleFeedbackAction(null, formData);
     setFormResponse(response);
+    turnstileRef.current?.reset();
     if (!response.isError) {
       formRef.current?.reset();
-      turnstileRef.current?.reset();
     }
   };
 
