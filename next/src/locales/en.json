@@ -16,7 +16,34 @@
     "invalid_major": "Invalid major",
     "no_changes_detected": "No changes detected",
     "profile_updated": "Profile updated. Some changes require you to re-login to take effect.",
-    "ratelimit": "Too many requests. Please try again later."
+    "ratelimit": "Too many requests. Please try again later.",
+    "invalid_name": "Invalid name",
+    "invalid_receiver": "Invalid receiver",
+    "invalid_subject": "Invalid subject",
+    "invalid_message": "Invalid message",
+    "feedback_sent": "Feedback sent",
+    "invalid_captcha": "Invalid captcha"
+  },
+  "roles": {
+    "entire_board": "Entire Board",
+    "chairperson": "Chairperson",
+    "vice_chairperson": "Vice Chairperson",
+    "www_it_representative": "WWW/IT representative",
+    "business": "Business Representative",
+    "treasurer": "Treasurer",
+    "education_representative": "Education Policy representative",
+    "communications_representative": "Communications representative",
+    "kolmio_representative": "Kolmio Party representative",
+    "tutoring_representative": "Tutoring representative",
+    "international_representative": "International representative",
+    "sports_representative": "Sports representative",
+    "event_representative": "Event representative",
+    "sustainable_development_representive": "Sustainable Development representative",
+    "premises_representative": "Premises representative",
+    "social_policy_representative": "Social Policy representative",
+    "equality_representative": "Equality representative",
+    "editor_in_chief_of_luuppisanomat": "Editor-in-Chief of Luuppisanomat",
+    "secretary": "Secretary"
   },
   "general": {
     "email": "Email",
@@ -81,6 +108,7 @@
     "rules": "Rules",
     "board": "Board",
     "office": "Office",
+    "feedback": "Feedback",
     "honorary_members": "Honorary members",
     "member_benefits": "Member benefits",
     "documents": "Documents",
@@ -190,6 +218,18 @@
       "mathematics": "Mathematics",
       "statistical_data_analysis": "Statistical Data Analysis"
     }
+  },
+  "pages_feedback": {
+    "title": "Feedback",
+    "description": "Anonymous feedback is addressed in board meetings. The related discussion can be found in the minutes unless the feedback provider specifically requests otherwise. Feedback sent without contact information cannot be responded to personally.",
+    "name": "Your name",
+    "email": "Your email",
+    "receiver": "Receiver",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send",
+    "seo_title": "Luuppi ry | Feedback",
+    "seo_description": "Send feedback to Luuppi ry anonymously or with contact information. Feedback is addressed in board meetings."
   },
   "pages_error": {
     "title": "Error",

@@ -127,6 +127,15 @@ export const navLinks: NavLink[] = [
   },
   {
     translation: 'contact',
-    href: '/contact',
+    sublinks: [
+      {
+        translation: 'contact',
+        href: '/contact',
+      },
+      {
+        translation: 'feedback',
+        href: '/feedback',
+      },
+    ],
   },
 ];

@@ -16,7 +16,34 @@
     "invalid_major": "Kelvoton pääaine",
     "no_changes_detected": "Muutoksia ei havaittu",
     "profile_updated": "Profiili päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen.",
-    "ratelimit": "Liian monta pyyntöä. Yritä uudelleen myöhemmin."
+    "ratelimit": "Liian monta pyyntöä. Yritä uudelleen myöhemmin.",
+    "invalid_name": "Kelvoton nimi",
+    "invalid_receiver": "Kelvoton vastaanottaja",
+    "invalid_subject": "Kelvoton aihe",
+    "invalid_message": "Kelvoton viesti",
+    "feedback_sent": "Palaute lähetetty",
+    "invalid_captcha": "Kelvoton vahvistus"
+  },
+  "roles": {
+    "entire_board": "Koko hallitus",
+    "chairperson": "Puheenjohtaja",
+    "vice_chairperson": "Varapuheenjohtaja",
+    "www_it_representative": "WWW/IT-vastaava",
+    "business": "Yritysvastaava",
+    "treasurer": "Rahastonhoitaja",
+    "education_representative": "Kopo-vastaava",
+    "communications_representative": "Viestintävastaava",
+    "kolmio_representative": "Kolmiovastaava",
+    "tutoring_representative": "Tutorointivastaava",
+    "international_representative": "KV-tuutorointivastaava",
+    "sports_representative": "Liikuntavastaava",
+    "event_representative": "Tapahtumavastaava",
+    "sustainable_development_representive": "Kestävän kehityksen vastaava",
+    "premises_representative": "Toimitilavastaava",
+    "social_policy_representative": "Sosiaalipoliittinen vastaava",
+    "equality_representative": "Tasa-arvovastaava",
+    "editor_in_chief_of_luuppisanomat": "LuuppiSanomien päätoimittaja",
+    "secretary": "Sihteeri"
   },
   "general": {
     "email": "Sähköposti",
@@ -81,6 +108,7 @@
     "rules": "Säännöt",
     "board": "Hallitus",
     "office": "Toimitila",
+    "feedback": "Palaute",
     "honorary_members": "Kunniajäsenet",
     "member_benefits": "Jäsenedut",
     "documents": "Dokumentit",
@@ -190,6 +218,18 @@
       "mathematics": "Matematiikka",
       "statistical_data_analysis": "Tilastollinen data-analyysi"
     }
+  },
+  "pages_feedback": {
+    "title": "Palaute",
+    "description": "Nimettömät palautteet käsitellään hallituksen kokouksissa. Niihin liittyvä keskustelu löytyy pöytäkirjoista, ellei palautteenantaja tätä erityisesti kiellä. Ilman yhteystietoja lähetettyyn palautteeseen ei voida vastata henkilökohtaisesti.",
+    "name": "Sinun nimesi",
+    "email": "Sähköpostiosoitteesi",
+    "receiver": "Vastaanottaja",
+    "subject": "Aihe",
+    "message": "Viesti",
+    "send": "Lähetä",
+    "seo_title": "Luuppi ry | Palaute",
+    "seo_description": "Anna palautetta Luupille. Nimettömät palautteet käsitellään hallituksen kokouksissa."
   },
   "pages_error": {
     "title": "Odottamaton virhe",
