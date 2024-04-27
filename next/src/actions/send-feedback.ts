@@ -131,7 +131,7 @@ export async function sendFeedback(
     const poller = await emailClient.beginSend(emailMessage);
     await poller.pollUntilDone();
     await updateRateLimitCounter(cacheKey, cacheKey);
-    logger.info('Feedback email sending failed', email);
+    logger.info('Feedback email sent', email);
     return {
       message: dictionary.api.feedback_sent,
       isError: false,
