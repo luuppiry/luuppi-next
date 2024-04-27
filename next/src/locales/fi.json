@@ -226,7 +226,9 @@
     "receiver": "Vastaanottaja",
     "subject": "Aihe",
     "message": "Viesti",
-    "send": "Lähetä"
+    "send": "Lähetä",
+    "seo_title": "Luuppi ry | Palaute",
+    "seo_description": "Anna palautetta Luupille. Nimettömät palautteet käsitellään hallituksen kokouksissa."
   },
   "pages_error": {
     "title": "Odottamaton virhe",

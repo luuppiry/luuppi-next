@@ -226,7 +226,9 @@
     "receiver": "Receiver",
     "subject": "Subject",
     "message": "Message",
-    "send": "Send"
+    "send": "Send",
+    "seo_title": "Luuppi ry | Feedback",
+    "seo_description": "Send feedback to Luuppi ry anonymously or with contact information. Feedback is addressed in board meetings."
   },
   "pages_error": {
     "title": "Error",
