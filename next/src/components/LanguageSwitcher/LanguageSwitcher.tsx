@@ -18,6 +18,7 @@ export default function LanguageSwitcher() {
 
   const switchLocale = (locale: Locale) => {
     router.push(redirectedPathName(locale));
+    document.cookie = `lang=${locale}; path=/; max-age=31536000`;
     (document.activeElement as HTMLElement)?.blur();
   };
 
