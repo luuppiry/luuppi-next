@@ -3,8 +3,18 @@ import Negotiator from 'negotiator';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { i18n } from './i18n-config';
+import { SupportedLanguage } from './models/locale';
 
 function getLocale(request: NextRequest): string | undefined {
+  // Use cookie if it exists and is valid
+  const langCookie = request.cookies.get('lang');
+  if (
+    langCookie &&
+    i18n.locales.includes(langCookie.value as SupportedLanguage)
+  ) {
+    return langCookie.value;
+  }
+
   // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
