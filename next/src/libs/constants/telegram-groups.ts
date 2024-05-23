@@ -27,4 +27,8 @@ export const telegramGroups = [
     translation: 'kyykkä_group',
     link: 'https://t.me/+19lL95IO2lU3ZDlk',
   },
+  {
+    translation: 'new_students',
+    link: 'https://t.me/+VHhrO-9miBg3OGQ8',
+  },
 ];
