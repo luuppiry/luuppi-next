@@ -41,7 +41,7 @@
     "react-turnstile": "^1.1.3",
     "server-only": "^0.0.1",
     "sharp": "^0.33.3",
-    "sitemap": "^7.1.1"
+    "sitemap": "^8.0.0"
   },
   "devDependencies": {
     "@microsoft/microsoft-graph-types": "^2.40.0",
