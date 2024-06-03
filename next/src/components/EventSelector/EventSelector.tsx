@@ -75,7 +75,7 @@ export default function EventSelector({
               {dictionary.pages_events.event_feed}
             </button>
           </div>
-          <div className="flex  w-full items-center justify-between">
+          <div className="flex w-full items-center justify-between">
             <div className="form-control w-48">
               <label className="label cursor-pointer">
                 <span className="label-text">

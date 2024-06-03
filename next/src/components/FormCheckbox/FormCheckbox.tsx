@@ -12,7 +12,7 @@ export default function FormCheckbox({
   disabled = false,
 }: FormCheckboxProps) {
   return (
-    <div className="form-control ">
+    <div className="form-control">
       <label className="label cursor-pointer justify-start gap-4">
         <input
           className="checkbox"
