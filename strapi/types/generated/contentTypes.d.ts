@@ -836,7 +836,7 @@ export interface ApiBoardMemberBoardMember extends Schema.CollectionType {
   };
   attributes: {
     fullName: Attribute.String & Attribute.Required;
-    image: Attribute.Media;
+    image: Attribute.Media<'images'>;
     isBoardMember: Attribute.Boolean &
       Attribute.Required &
       Attribute.DefaultTo<false>;
@@ -1073,7 +1073,7 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
           localized: true;
         };
       }>;
-    logo: Attribute.Media &
+    logo: Attribute.Media<'images'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
@@ -1220,14 +1220,14 @@ export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
     };
   };
   attributes: {
-    image: Attribute.Media &
+    image: Attribute.Media<'images'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
         };
       }>;
-    pdf: Attribute.Media &
+    pdf: Attribute.Media<'files'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
@@ -1341,7 +1341,7 @@ export interface ApiNewsSingleNewsSingle extends Schema.CollectionType {
           localized: false;
         };
       }>;
-    authorImage: Attribute.Media &
+    authorImage: Attribute.Media<'images'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
@@ -1361,7 +1361,7 @@ export interface ApiNewsSingleNewsSingle extends Schema.CollectionType {
           localized: true;
         };
       }>;
-    banner: Attribute.Media &
+    banner: Attribute.Media<'images'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {

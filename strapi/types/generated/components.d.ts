@@ -31,7 +31,7 @@ export interface SharedMetaOpenGraph extends Schema.Component {
       Attribute.SetMinMaxLength<{
         maxLength: 300;
       }>;
-    openGraphImage: Attribute.Media;
+    openGraphImage: Attribute.Media<'images'>;
   };
 }
 
@@ -53,7 +53,7 @@ export interface SharedMetaTwitter extends Schema.Component {
       Attribute.SetMinMaxLength<{
         maxLength: 300;
       }>;
-    twitterImage: Attribute.Media;
+    twitterImage: Attribute.Media<'images'>;
   };
 }
 
@@ -71,7 +71,7 @@ export interface SharedPageContent extends Schema.Component {
         maxLength: 100;
       }>;
     content: Attribute.Blocks & Attribute.Required;
-    banner: Attribute.Media & Attribute.Required;
+    banner: Attribute.Media<'images'> & Attribute.Required;
   };
 }
 
