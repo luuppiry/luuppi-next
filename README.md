@@ -97,10 +97,15 @@ guidelines about how to proceed.
 
 We extend our gratitude to all those who take the time to improve Luuppi's website. The main goal of this project being open-source is to enable everyone to be part of it and, most importantly, to learn from a "real project" with a very low threshold.
 
-<br/>
-
 <a href="https://github.com/luuppiry/luuppi-next/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=luuppiry/luuppi-next&max=400&columns=20" />
+</a>
+
+### Open Discussion
+We have public [Telegram-channel](https://t.me/luupinweba) for people interested about Luuppi's web development :)
+
+<a href="https://t.me/luupinweba">
+  <img src="tunkkailu_banner.png" alt="Luuppi ry web repository banner">
 </a>
 
 
