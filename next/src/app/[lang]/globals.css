@@ -122,20 +122,6 @@
     }
   }
 
-  .luuppi-custom-scroll::-webkit-scrollbar {
-    @apply w-2;
-  }
-
-  .luuppi-custom-scroll::-webkit-scrollbar-track {
-    @apply rounded-md;
-    background: #f1f1f1;
-  }
-
-  .luuppi-custom-scroll::-webkit-scrollbar-thumb {
-    @apply rounded-md;
-    background: #d1d1d1;
-  }
-
   .luuppi-questions-bg {
     @apply bg-[url('/blob.svg')] bg-cover bg-bottom bg-no-repeat;
   }
