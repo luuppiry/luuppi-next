@@ -73,7 +73,8 @@
     "page": "Sivu",
     "publication": "Julkaisu",
     "install_pwa": "Asenna sovellus",
-    "open_pdf": "Avaa PDF"
+    "open_pdf": "Avaa PDF",
+    "register_event": "Ilmoittaudu"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
@@ -182,7 +183,8 @@
     "calendar": "Kalenteri",
     "event_feed": "Tapahtumavirta",
     "show_past": "Näytä menneet tapahtumat",
-    "hide_past": "Piilota menneet tapahtumat"
+    "hide_past": "Piilota menneet tapahtumat",
+    "event_info": "Mikäli tapahtumassa on ilmoittautuminen, se tapahtuu vanhan verkkosivun kautta. Painaessasi 'Ilmoittaudu' -nappia, sinut ohjataan vanhalle sivulle."
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",

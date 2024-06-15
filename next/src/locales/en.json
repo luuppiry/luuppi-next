@@ -73,7 +73,8 @@
     "page": "Page",
     "publication": "Publication",
     "install_pwa": "Install app",
-    "open_pdf": "Open PDF"
+    "open_pdf": "Open PDF",
+    "register_event": "Register"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
@@ -182,7 +183,8 @@
     "calendar": "Calendar",
     "event_feed": "Event feed",
     "show_past": "Show past events",
-    "hide_past": "Hide past events"
+    "hide_past": "Hide past events",
+    "event_info": "If registration is required for the event, it will be done through the old website. When you click the 'Register' button, you will be redirected to the old site."
   },
   "pages_404": {
     "title": "Page not found",

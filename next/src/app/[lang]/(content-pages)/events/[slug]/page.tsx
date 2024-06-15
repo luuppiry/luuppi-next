@@ -10,6 +10,7 @@ import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 
@@ -85,6 +86,12 @@ export default async function Event({ params }: EventProps) {
           dangerouslySetInnerHTML={{ __html: event.description }}
           className="prose prose-custom max-w-full break-words decoration-secondary-400 transition-all duration-300 ease-in-out"
         />
+        <div className='mt-8'>
+          <Link className='btn btn-primary text-white' href={`https://legacy.luuppi.fi/tapahtumat/${params.lang === 'fi' ? 'tapahtuma' : 'event'}?id=${event.id}&lang=${params.lang}`}>
+            {dictionary.general.register_event}
+          </Link>
+          <p className='text-sm mt-4 max-w-md opacity-60'><i>{dictionary.pages_events.event_info}</i></p>
+        </div>
       </div>
       <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
         <div className="flex flex-col gap-4">
