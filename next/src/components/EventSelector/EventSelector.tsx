@@ -49,7 +49,7 @@ export default function EventSelector({
   };
 
   const toggleShowPastEvents = () => {
-    setView('list');
+    ctx.toggleShowPastEvents();
   };
 
   return (
