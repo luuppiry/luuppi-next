@@ -74,7 +74,9 @@
     "publication": "Julkaisu",
     "install_pwa": "Asenna sovellus",
     "open_pdf": "Avaa PDF",
-    "register_event": "Ilmoittaudu"
+    "register_event": "Ilmoittaudu",
+    "zoom_calendar_on": "Suurenna kalenteri",
+    "zoom_calendar_off": "Pienennä kalenteri"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"

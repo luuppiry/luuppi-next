@@ -8,12 +8,15 @@ interface EventSelectorProviderProps {
 const initialState = {
   selectedView: 'calendar',
   mobileCalendarMonth: new Date(),
+  desktopCalendarFullSize: false,
   // eslint-disable-next-line no-unused-vars
-  setView: (_: 'calendar' | 'list') => {},
+  setView: (_: 'calendar' | 'list') => { },
   // eslint-disable-next-line no-unused-vars
-  setMobileCalendarMonth: (_: Date) => {},
+  setMobileCalendarMonth: (_: Date) => { },
+  // eslint-disable-next-line no-unused-vars
+  setDesktopCalendarFullSize: (_: boolean) => { },
   showPastEvents: false,
-  toggleShowPastEvents: () => {},
+  toggleShowPastEvents: () => { },
 };
 
 export const SelectedViewContext =
@@ -27,6 +30,7 @@ export default function EventSelectorProvider({
   );
   const [showPastEvents, setShowPastEvents] = useState(false);
   const [mobileCalendarMonth, setMobileCalendarMonth] = useState(new Date());
+  const [desktopCalendarFullSize, setDesktopCalendarFullSize] = useState(false);
 
   const setView = (view: 'calendar' | 'list') => {
     setSelectedView(view);
@@ -43,6 +47,8 @@ export default function EventSelectorProvider({
     toggleShowPastEvents,
     mobileCalendarMonth,
     setMobileCalendarMonth,
+    desktopCalendarFullSize,
+    setDesktopCalendarFullSize,
   };
 
   return (

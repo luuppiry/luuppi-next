@@ -74,7 +74,9 @@
     "publication": "Publication",
     "install_pwa": "Install app",
     "open_pdf": "Open PDF",
-    "register_event": "Register"
+    "register_event": "Register",
+    "zoom_calendar_on": "Enlarge calendar",
+    "zoom_calendar_off": "Shrink calendar"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"

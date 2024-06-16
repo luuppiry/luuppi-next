@@ -2,6 +2,10 @@
   @apply bg-white;
 }
 
+.fc-media-screen {
+  @apply w-full;
+}
+
 .fc .fc-button-primary {
   @apply border-none bg-secondary-400 font-semibold transition-colors duration-200 ease-in-out;
 }
@@ -62,7 +66,7 @@
 }
 
 .fc .fc-toolbar-title {
-  @apply text-2xl font-semibold max-lg:text-xs;
+  @apply text-2xl font-semibold capitalize max-lg:text-xs;
 }
 
 .fc .fc-toolbar {

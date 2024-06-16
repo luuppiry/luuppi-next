@@ -1,22 +1,25 @@
 'use client';
 import { Event } from '@/models/event';
-import { SupportedLanguage } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { SelectedViewContext } from '@/providers/EventSelectorProvider';
 import fiLocale from '@fullcalendar/core/locales/fi';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import './EventCalendar.css';
 
 interface EventCalendarProps {
   events: Event[];
   lang: SupportedLanguage;
+  dictionary: Dictionary;
 }
 
-export default function EventCalendar({ events, lang }: EventCalendarProps) {
+export default function EventCalendar({ events, lang, dictionary }: EventCalendarProps) {
   const [isSmallDesktop, setIsSmallDesktop] = useState(false);
 
+  const ctx = useContext(SelectedViewContext);
   const router = useRouter();
 
   // Hacky solution to fix overlapping events styling
@@ -39,87 +42,96 @@ export default function EventCalendar({ events, lang }: EventCalendarProps) {
   }, []);
 
   return (
-    <FullCalendar
-      ref={calendarRef}
-      aspectRatio={isSmallDesktop ? 0.8 : 1.35}
-      buttonText={
-        lang === 'fi'
-          ? {
-              today: 'Tänään',
-              month: 'Kuukausi',
-              week: 'Viikko',
+    <div className={`${ctx.desktopCalendarFullSize ? 'fixed h-screen w-screen top-0 z-50 left-0' : ''}`}>
+      <div className={`${ctx.desktopCalendarFullSize ? 'p-6 bg-white flex w-full h-full' : ''}`}>
+        <FullCalendar
+          ref={calendarRef}
+          aspectRatio={isSmallDesktop ? 0.8 : 1.35}
+          buttonText={
+            lang === 'fi'
+              ? {
+                today: 'Tänään',
+                month: 'Kuukausi',
+                week: 'Viikko',
+              }
+              : {
+                today: 'Today',
+                month: 'Month',
+                week: 'Week',
+              }
+          }
+          customButtons={{
+            toggleSize: {
+              text: ctx.desktopCalendarFullSize
+                ? dictionary.general.zoom_calendar_off
+                : dictionary.general.zoom_calendar_on,
+              click: () => ctx.setDesktopCalendarFullSize(!ctx.desktopCalendarFullSize),
             }
-          : {
-              today: 'Today',
-              month: 'Month',
-              week: 'Week',
-            }
-      }
-      datesSet={() => {
-        setTimeout((): void => {
-          calendarRef?.current?.getApi().updateSize();
-        }, 0);
-      }}
-      dayHeaderFormat={
-        isSmallDesktop
-          ? {
-              weekday: 'short',
-              day: 'numeric',
-              omitCommas: true,
-            }
-          : {
-              weekday: 'long',
-              day: 'numeric',
-            }
-      }
-      dayMaxEventRows={4}
-      dayMaxEvents={4}
-      eventClick={handleEventClick}
-      eventContent={function (arg) {
-        return (
-          <span className="tooltip block w-full" data-tip={arg.event.title}>
-            <p className="overflow-hidden pl-[2px] text-left text-xs">
-              {arg.timeText}{' '}
-              <span className="font-bold">{arg.event.title}</span>
-            </p>
-          </span>
-        );
-      }}
-      eventOrderStrict={true}
-      eventTimeFormat={{
-        hour: 'numeric',
-        minute: '2-digit',
-        meridiem: false,
-        hour12: false,
-      }}
-      events={events}
-      headerToolbar={
-        !isSmallDesktop
-          ? {
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek',
-            }
-          : {
-              left: 'title',
-              center: 'prev,next today',
-              right: 'dayGridMonth',
-            }
-      }
-      initialView={'dayGridMonth'}
-      locale={lang === 'fi' ? fiLocale : ''}
-      plugins={[dayGridPlugin, timeGridPlugin]}
-      slotLabelFormat={{
-        hour: 'numeric',
-        minute: '2-digit',
-        meridiem: false,
-        hour12: false,
-      }}
-      titleFormat={{
-        year: 'numeric',
-        month: 'long',
-      }}
-      weekends={true}
-    />
+          }
+          }
+          dayHeaderFormat={
+            isSmallDesktop
+              ? {
+                weekday: 'short',
+                day: 'numeric',
+                omitCommas: true,
+              }
+              : {
+                weekday: 'long',
+                day: 'numeric',
+              }
+          }
+          dayMaxEventRows={4}
+          dayMaxEvents={4}
+          eventClick={handleEventClick}
+          eventContent={function (arg) {
+            return (
+              <span className="tooltip block w-full" data-tip={arg.event.title}>
+                <p className="overflow-hidden pl-[2px] text-left text-xs">
+                  {arg.timeText}{' '}
+                  <span className="font-bold">{arg.event.title}</span>
+                </p>
+              </span>
+            );
+          }}
+          eventOrderStrict={true}
+          eventTimeFormat={{
+            hour: 'numeric',
+            minute: '2-digit',
+            meridiem: false,
+            hour12: false,
+          }}
+          events={events}
+          headerToolbar={
+            !isSmallDesktop
+              ? {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek toggleSize',
+              }
+              : {
+                left: 'title',
+                center: 'prev,next today',
+                right: 'dayGridMonth toggleSize',
+              }
+          }
+          height={ctx.desktopCalendarFullSize ? '100%' : undefined}
+          initialView={'dayGridMonth'}
+          locale={lang === 'fi' ? fiLocale : ''}
+          plugins={[dayGridPlugin, timeGridPlugin]}
+          slotLabelFormat={{
+            hour: 'numeric',
+            minute: '2-digit',
+            meridiem: false,
+            hour12: false,
+          }}
+          titleFormat={{
+            year: 'numeric',
+            month: 'long',
+          }}
+          weekends={true}
+        />
+      </div>
+    </div>
   );
 }
