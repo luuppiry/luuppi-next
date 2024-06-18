@@ -1,4 +1,4 @@
-import { navLinks } from '@/libs/constants';
+import { navLinksDesktop } from '@/libs/constants';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -53,8 +53,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
           </div>
         </nav>
         <ul className="mx-auto flex max-w-[1200px] justify-center gap-1 px-4 max-lg:hidden">
-          {navLinks
-            .filter((link) => !link?.mobileOnly)
+          {navLinksDesktop
             .map((link) => (
               <li
                 key={link.translation}
@@ -69,7 +68,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                     <span>
                       {
                         dictionary.navigation[
-                          link.translation as keyof typeof dictionary.navigation
+                        link.translation as keyof typeof dictionary.navigation
                         ]
                       }
                     </span>
@@ -90,7 +89,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                     <span>
                       {
                         dictionary.navigation[
-                          link.translation as keyof typeof dictionary.navigation
+                        link.translation as keyof typeof dictionary.navigation
                         ]
                       }
                     </span>

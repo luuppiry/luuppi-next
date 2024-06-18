@@ -1,6 +1,6 @@
 'use client';
 import { signIn, signOut } from '@/actions/auth';
-import { navLinks } from '@/libs/constants';
+import { navLinksMobile } from '@/libs/constants';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
@@ -52,8 +52,8 @@ export default function MobileHamburger({
         id="mobileNavbar"
       >
         <div className="modal-box flex h-full min-h-dvh w-screen max-w-full gap-4 rounded-none">
-          <ul className="menu h-max w-full flex-nowrap gap-4">
-            {navLinks
+          <ul className="menu h-max w-full flex-nowrap gap-2">
+            {navLinksMobile
               .filter(
                 (link) =>
                   (link.authenticated && session?.user) || !link.authenticated,
@@ -61,13 +61,13 @@ export default function MobileHamburger({
               .map((link, index) => (
                 <li
                   key={link.translation}
-                  className={`${index === navLinks.length - 1 ? 'pb-6' : ''}`}
+                  className={`${index === navLinksMobile.length - 1 ? 'pb-6' : ''}`}
                 >
                   {link.sublinks && link.sublinks.length > 0 ? (
                     <div className="flex items-center justify-between bg-secondary-400 font-bold text-white hover:cursor-auto hover:bg-secondary-400">
                       {
                         dictionary.navigation[
-                          link.translation as keyof typeof dictionary.navigation
+                        link.translation as keyof typeof dictionary.navigation
                         ]
                       }
                     </div>
@@ -79,7 +79,7 @@ export default function MobileHamburger({
                     >
                       {
                         dictionary.navigation[
-                          link.translation as keyof typeof dictionary.navigation
+                        link.translation as keyof typeof dictionary.navigation
                         ]
                       }
                     </Link>
@@ -95,7 +95,7 @@ export default function MobileHamburger({
                           >
                             {
                               dictionary.navigation[
-                                sublink.translation as keyof typeof dictionary.navigation
+                              sublink.translation as keyof typeof dictionary.navigation
                               ]
                             }
                           </Link>
