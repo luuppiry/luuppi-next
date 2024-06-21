@@ -1,7 +1,7 @@
 {
   "collectionName": "components_events_quotas",
   "info": {
-    "displayName": "Quotas",
+    "displayName": "TicketTypes",
     "icon": "television",
     "description": ""
   },
@@ -37,6 +37,14 @@
       "required": true,
       "default": 0,
       "min": 0
+    },
+    "NameFi": {
+      "type": "string",
+      "required": true
+    },
+    "NameEn": {
+      "type": "string",
+      "required": true
     }
   }
 }

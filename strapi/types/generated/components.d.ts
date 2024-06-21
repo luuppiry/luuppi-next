@@ -47,7 +47,7 @@ export interface EventsQuestionsText extends Schema.Component {
 export interface EventsQuotas extends Schema.Component {
   collectionName: 'components_events_quotas';
   info: {
-    displayName: 'Quotas';
+    displayName: 'TicketTypes';
     icon: 'television';
     description: '';
   };
@@ -86,6 +86,8 @@ export interface EventsQuotas extends Schema.Component {
         number
       > &
       Attribute.DefaultTo<0>;
+    NameFi: Attribute.String & Attribute.Required;
+    NameEn: Attribute.String & Attribute.Required;
   };
 }
 
@@ -97,7 +99,7 @@ export interface EventsRegistration extends Schema.Component {
     description: '';
   };
   attributes: {
-    Quotas: Attribute.Component<'events.quotas', true> &
+    TicketTypes: Attribute.Component<'events.quotas', true> &
       Attribute.Required &
       Attribute.SetMinMax<
         {

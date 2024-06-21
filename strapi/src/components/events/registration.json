@@ -7,7 +7,7 @@
   },
   "options": {},
   "attributes": {
-    "Quotas": {
+    "TicketTypes": {
       "type": "component",
       "repeatable": true,
       "component": "events.quotas",
