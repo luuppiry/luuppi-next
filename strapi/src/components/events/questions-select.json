@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_events_questions_selects",
+  "info": {
+    "displayName": "QuestionsSelect"
+  },
+  "options": {},
+  "attributes": {
+    "QuestionEn": {
+      "type": "string",
+      "required": true
+    },
+    "QuestionFi": {
+      "type": "string",
+      "required": true
+    },
+    "ChoicesFi": {
+      "type": "string",
+      "regex": "^\\s*[a-zA-Z0-9öäÖÄ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ]+)*\\s*$",
+      "required": true
+    },
+    "ChoicesEn": {
+      "type": "string",
+      "regex": "^\\s*[a-zA-Z0-9öäÖÄ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ]+)*\\s*$",
+      "required": true
+    }
+  }
+}

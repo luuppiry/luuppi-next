@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_events_questions_texts",
+  "info": {
+    "displayName": "QuestionsText"
+  },
+  "options": {},
+  "attributes": {
+    "QuestionFi": {
+      "type": "string",
+      "required": true
+    },
+    "QuestionEn": {
+      "type": "string",
+      "required": true
+    },
+    "MinLength": {
+      "type": "integer",
+      "required": true,
+      "default": 10
+    },
+    "MaxLength": {
+      "type": "integer",
+      "required": true,
+      "default": 500
+    },
+    "Required": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    }
+  }
+}

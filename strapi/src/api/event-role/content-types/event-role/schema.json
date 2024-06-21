@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "event_roles",
+  "info": {
+    "singularName": "event-role",
+    "pluralName": "event-roles",
+    "displayName": "EventRoles"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": true
+    },
+    "RoleId": {
+      "type": "uid",
+      "required": true
+    },
+    "Description": {
+      "type": "text",
+      "required": true,
+      "private": true
+    }
+  }
+}

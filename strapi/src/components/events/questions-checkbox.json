@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_events_questions_checkboxes",
+  "info": {
+    "displayName": "QuestionsCheckbox"
+  },
+  "options": {},
+  "attributes": {
+    "QuestionFi": {
+      "type": "string",
+      "required": true
+    },
+    "QuestionEn": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

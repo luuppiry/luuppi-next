@@ -1,0 +1,42 @@
+{
+  "collectionName": "components_events_quotas",
+  "info": {
+    "displayName": "Quotas",
+    "icon": "television",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "RegistrationStartsAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "RegistrationEndsAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "TicketsTotal": {
+      "type": "integer",
+      "default": 10,
+      "min": 1,
+      "required": true
+    },
+    "RequiredRole": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event-role.event-role"
+    },
+    "TicketsAllowedToBuy": {
+      "type": "integer",
+      "min": 1,
+      "default": 1,
+      "required": true
+    },
+    "Price": {
+      "type": "decimal",
+      "required": true,
+      "default": 0,
+      "min": 0
+    }
+  }
+}

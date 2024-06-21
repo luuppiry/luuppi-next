@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_events_registrations",
+  "info": {
+    "displayName": "Registration",
+    "icon": "key",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Quotas": {
+      "type": "component",
+      "repeatable": true,
+      "component": "events.quotas",
+      "required": true,
+      "min": 1
+    },
+    "RolesToGive": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::event-role.event-role"
+    },
+    "QuestionsText": {
+      "displayName": "QuestionsText",
+      "type": "component",
+      "repeatable": true,
+      "component": "events.questions-text"
+    },
+    "QuestionsSelect": {
+      "displayName": "QuestionsSelect",
+      "type": "component",
+      "repeatable": true,
+      "component": "events.questions-select"
+    },
+    "QuestionsCheckbox": {
+      "displayName": "QuestionsCheckbox",
+      "type": "component",
+      "repeatable": true,
+      "component": "events.questions-checkbox"
+    }
+  }
+}
