@@ -100,7 +100,7 @@ function getIdFromUrl(url: string) {
  * TODO: Remove this function when we our ics calendar has plaintext description and formatted description
  * as some non standard property: https://www.rfc-editor.org/rfc/rfc5545#section-3.8.8.2
  */
-function removeHtml(text: string | undefined) {
+export function removeHtml(text: string | undefined) {
   const removeHtml = text?.replace(/(<([^>]+)>)/gi, '');
 
   // Replace &auml; with ä, etc.

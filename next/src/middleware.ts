@@ -42,6 +42,7 @@ export function middleware(request: NextRequest) {
   // Public paths that should not be redirected
   if (
     [
+      '/logo.png',
       '/telegram.svg',
       '/manifest.webmanifest',
       '/sitemap.xml',
