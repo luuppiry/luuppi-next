@@ -8,13 +8,11 @@
   "attributes": {
     "QuestionFi": {
       "type": "string",
-      "required": true,
-      "regex": "^\\s*[a-zA-Z0-9öäÖÄ ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ ]+)*\\s*$"
+      "required": true
     },
     "QuestionEn": {
       "type": "string",
-      "required": true,
-      "regex": "^\\s*[a-zA-Z0-9öäÖÄ ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ ]+)*\\s*$"
+      "required": true
     }
   }
 }
