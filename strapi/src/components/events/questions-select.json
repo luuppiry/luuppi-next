@@ -1,7 +1,8 @@
 {
   "collectionName": "components_events_questions_selects",
   "info": {
-    "displayName": "QuestionsSelect"
+    "displayName": "QuestionsSelect",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -15,7 +16,7 @@
     },
     "ChoicesFi": {
       "type": "string",
-      "regex": "^\\s*[a-zA-Z0-9öäÖÄ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ]+)*\\s*$",
+      "regex": "^\\s*[a-zA-Z0-9öäÖÄ ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ ]+)*\\s*$",
       "required": true
     },
     "ChoicesEn": {

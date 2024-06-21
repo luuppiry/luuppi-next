@@ -1,17 +1,20 @@
 {
   "collectionName": "components_events_questions_checkboxes",
   "info": {
-    "displayName": "QuestionsCheckbox"
+    "displayName": "QuestionsCheckbox",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "QuestionFi": {
       "type": "string",
-      "required": true
+      "required": true,
+      "regex": "^\\s*[a-zA-Z0-9öäÖÄ ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ ]+)*\\s*$"
     },
     "QuestionEn": {
       "type": "string",
-      "required": true
+      "required": true,
+      "regex": "^\\s*[a-zA-Z0-9öäÖÄ ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ ]+)*\\s*$"
     }
   }
 }

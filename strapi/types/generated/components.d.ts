@@ -4,6 +4,7 @@ export interface EventsQuestionsCheckbox extends Schema.Component {
   collectionName: 'components_events_questions_checkboxes';
   info: {
     displayName: 'QuestionsCheckbox';
+    description: '';
   };
   attributes: {
     QuestionFi: Attribute.String & Attribute.Required;
@@ -15,6 +16,7 @@ export interface EventsQuestionsSelect extends Schema.Component {
   collectionName: 'components_events_questions_selects';
   info: {
     displayName: 'QuestionsSelect';
+    description: '';
   };
   attributes: {
     QuestionEn: Attribute.String & Attribute.Required;
