@@ -21,7 +21,7 @@
     },
     "ChoicesEn": {
       "type": "string",
-      "regex": "^\\s*[a-zA-Z0-9öäÖÄ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ]+)*\\s*$",
+      "regex": "^\\s*[a-zA-Z0-9öäÖÄ ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ ]+)*\\s*$",
       "required": true
     }
   }
