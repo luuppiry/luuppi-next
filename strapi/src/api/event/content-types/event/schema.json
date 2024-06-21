@@ -10,54 +10,30 @@
   "options": {
     "draftAndPublish": false
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": true
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
-    "Name": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+    "NameFi": {
+      "pluginOptions": {},
       "type": "string",
       "required": true
     },
-    "Location": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+    "LocationFi": {
+      "pluginOptions": {},
       "type": "string",
       "required": true
     },
-    "Description": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+    "DescriptionFi": {
+      "pluginOptions": {},
       "type": "blocks",
       "required": true
     },
     "StartDate": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
+      "pluginOptions": {},
       "type": "datetime",
       "required": true
     },
     "EndDate": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
+      "pluginOptions": {},
       "type": "datetime",
       "required": true
     },
@@ -68,22 +44,26 @@
       "allowedTypes": [
         "images"
       ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      }
+      "pluginOptions": {}
     },
     "Registration": {
       "displayName": "Registration",
       "type": "component",
       "repeatable": false,
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
+      "pluginOptions": {},
       "component": "events.registration"
+    },
+    "LocationEn": {
+      "type": "string",
+      "required": true
+    },
+    "NameEn": {
+      "type": "string",
+      "required": true
+    },
+    "DescriptionEn": {
+      "type": "blocks",
+      "required": true
     }
   }
 }

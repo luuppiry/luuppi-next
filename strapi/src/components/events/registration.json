@@ -14,9 +14,9 @@
       "required": true,
       "min": 1
     },
-    "RolesToGive": {
+    "RoleToGive": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "api::event-role.event-role"
     },
     "QuestionsText": {

@@ -1168,59 +1168,17 @@ export interface ApiEventEvent extends Schema.CollectionType {
   options: {
     draftAndPublish: false;
   };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
   attributes: {
-    Name: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    Location: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    Description: Attribute.Blocks &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    StartDate: Attribute.DateTime &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    EndDate: Attribute.DateTime &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    Image: Attribute.Media<'images'> &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    Registration: Attribute.Component<'events.registration'> &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
+    NameFi: Attribute.String & Attribute.Required;
+    LocationFi: Attribute.String & Attribute.Required;
+    DescriptionFi: Attribute.Blocks & Attribute.Required;
+    StartDate: Attribute.DateTime & Attribute.Required;
+    EndDate: Attribute.DateTime & Attribute.Required;
+    Image: Attribute.Media<'images'>;
+    Registration: Attribute.Component<'events.registration'>;
+    LocationEn: Attribute.String & Attribute.Required;
+    NameEn: Attribute.String & Attribute.Required;
+    DescriptionEn: Attribute.Blocks & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1235,12 +1193,6 @@ export interface ApiEventEvent extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::event.event',
-      'oneToMany',
-      'api::event.event'
-    >;
-    locale: Attribute.String;
   };
 }
 

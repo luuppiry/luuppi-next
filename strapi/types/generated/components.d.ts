@@ -61,7 +61,7 @@ export interface EventsQuotas extends Schema.Component {
         number
       > &
       Attribute.DefaultTo<10>;
-    RequiredRole: Attribute.Relation<
+    Role: Attribute.Relation<
       'events.quotas',
       'oneToOne',
       'api::event-role.event-role'
@@ -103,9 +103,9 @@ export interface EventsRegistration extends Schema.Component {
         },
         number
       >;
-    RolesToGive: Attribute.Relation<
+    RoleToGive: Attribute.Relation<
       'events.registration',
-      'oneToMany',
+      'oneToOne',
       'api::event-role.event-role'
     >;
     QuestionsText: Attribute.Component<'events.questions-text', true>;
