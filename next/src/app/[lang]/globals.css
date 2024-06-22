@@ -36,6 +36,14 @@
   }
 }
 
+.btn-primary {
+  @apply text-white;
+}
+
+.badge-primary {
+  @apply text-white;
+}
+
 .skeleton {
   @apply rounded-lg;
 }

@@ -20,7 +20,7 @@ export default function GroupsDialog({ dictionary }: GroupsDialogProps) {
   return (
     <>
       <button
-        className="btn btn-primary text-lg font-bold text-white max-md:text-base"
+        className="btn btn-primary text-lg font-bold max-md:text-base"
         onClick={() => setOpen(true)}
       >
         {dictionary.pages_home.telegram.groups}
@@ -36,18 +36,17 @@ export default function GroupsDialog({ dictionary }: GroupsDialogProps) {
             {telegramGroups.map((group) => (
               <Link
                 key={group.link}
-                className={`mb-4 flex items-center gap-2 rounded-lg p-2 font-bold ${
-                  group.translation === 'new_students'
-                    ? 'bg-accent-400 text-white'
-                    : 'bg-background-50/50'
-                }`}
+                className={`mb-4 flex items-center gap-2 rounded-lg p-2 font-bold ${group.translation === 'new_students'
+                  ? 'bg-accent-400 text-white'
+                  : 'bg-background-50/50'
+                  }`}
                 href={group.link}
                 target="_blank"
               >
                 <BsTelegram size={24} />
                 {
                   dictionary.pages_home.telegram[
-                    group.translation as keyof typeof dictionary.pages_home.telegram
+                  group.translation as keyof typeof dictionary.pages_home.telegram
                   ]
                 }
               </Link>

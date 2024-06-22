@@ -113,7 +113,7 @@ export default function MobileHamburger({
             <div className="flex h-full flex-col items-center gap-4">
               <button
                 aria-label={`${dictionary.general.close} ${dictionary.general.menu.toLowerCase()}`}
-                className="btn btn-circle btn-primary text-white"
+                className="btn btn-circle btn-primary"
                 onClick={() => setOpen(false)}
               >
                 <IoMdClose size={32} />
@@ -131,7 +131,7 @@ export default function MobileHamburger({
               ) : (
                 <button
                   aria-label={dictionary.general.login}
-                  className="btn btn-circle btn-ghost m-1 bg-primary-400 text-white"
+                  className="btn btn-circle btn-ghost m-1 bg-primary-400"
                   onClick={async () => await signIn()}
                 >
                   <RiLoginCircleLine size={32} />
