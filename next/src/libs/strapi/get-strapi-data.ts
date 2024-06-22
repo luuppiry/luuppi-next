@@ -1,21 +1,29 @@
-import { logger } from '@/libs/utils/logger';
+/* eslint-disable no-unused-vars */
 import { SupportedLanguage } from '@/models/locale';
-import 'server-only';
+import { logger } from '../utils/logger';
 import { getStrapiUrl } from './get-strapi-url';
 
-/**
- * Fetch data from Strapi and revalidate it with given tags.
- * @param lang 'en' or 'fi'
- * @param url API endpoint URL
- * @param revalidateTags Tags for revalidation
- * @returns Data from Strapi
- */
-export const getStrapiData = async <T>(
+// Define the function overloads
+export function getStrapiData<T>(
+  lang: SupportedLanguage,
+  url: string,
+  revalidateTags: string[],
+  ignoreError: true,
+): Promise<T | null>;
+
+export function getStrapiData<T>(
+  lang: SupportedLanguage,
+  url: string,
+  revalidateTags: string[],
+  ignoreError?: false,
+): Promise<T>;
+
+export async function getStrapiData<T>(
   lang: SupportedLanguage,
   url: string,
   revalidateTags: string[],
   ignoreError?: boolean,
-): Promise<T> => {
+): Promise<T | null> {
   try {
     let res = await fetch(
       getStrapiUrl(`${url}${url.includes('?') ? '&' : '?'}locale=${lang}`),
@@ -32,7 +40,7 @@ export const getStrapiData = async <T>(
      */
     if (!res.ok && res.status === 404 && !ignoreError) {
       res = await fetch(
-        getStrapiUrl(`${url.includes('?') ? '&' : '?'}locale=fi`),
+        getStrapiUrl(`${url}${url.includes('?') ? '&' : '?'}locale=fi`),
         {
           next: { tags: revalidateTags },
         },
@@ -41,14 +49,16 @@ export const getStrapiData = async <T>(
 
     const data = await res.json();
 
-    if (!data?.data && !ignoreError) {
+    if (!data?.data) {
       logger.error(`Failed to fetch data from ${url}`, data);
+      if (ignoreError) return null;
       throw new Error(`Failed to fetch data from ${url}`);
     }
 
-    return data;
+    return data as T;
   } catch (error) {
     logger.error('Error fetching data from Strapi', error);
+    if (ignoreError) return null;
     throw new Error('Failed to fetch data from Strapi');
   }
-};
+}
