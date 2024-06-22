@@ -1,5 +1,5 @@
 {
-  "extends": ["next/babel", "next/core-web-vitals"],
+  "extends": ["next/core-web-vitals"],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "spaced-comment": "error",
