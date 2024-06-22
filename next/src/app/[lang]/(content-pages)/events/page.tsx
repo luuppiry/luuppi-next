@@ -1,11 +1,14 @@
 import EventSelector from '@/components/EventSelector/EventSelector';
 import { getDictionary } from '@/dictionaries';
-import { getLuuppiEvents } from '@/libs/events/get-legacy-events';
+import { getPlainText } from '@/libs/strapi/blocks-converter';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
+import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponse } from '@/types/types';
+import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
+
+const url = '/api/events?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
 
 interface EventsProps {
   params: { lang: SupportedLanguage };
@@ -13,7 +16,20 @@ interface EventsProps {
 
 export default async function Events({ params }: EventsProps) {
   const dictionary = await getDictionary(params.lang);
-  const events = await getLuuppiEvents(params.lang);
+
+  const data = await getStrapiData<
+    APIResponseCollection<'api::event.event'>
+  >(params.lang, url, ['event']);
+
+  const events: Event[] = data.data.map((event) => ({
+    description: getPlainText(event.attributes[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']),
+    end: new Date(event.attributes.EndDate),
+    start: new Date(event.attributes.StartDate),
+    id: event.id.toString(),
+    location: event.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
+    title: event.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'],
+  }));
+
   return (
     <div className="relative">
       <h1 className="mb-12">{dictionary.navigation.events}</h1>

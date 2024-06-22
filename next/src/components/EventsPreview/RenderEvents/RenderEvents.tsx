@@ -1,6 +1,8 @@
 import { dateFormat } from '@/libs/constants';
-import { getLuuppiEvents } from '@/libs/events/get-legacy-events';
+import { getPlainText } from '@/libs/strapi/blocks-converter';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import eventPlaceholder from '../../../../public/images/event_placeholder.png';
@@ -15,18 +17,31 @@ export default async function RenderEvents({
   lang,
   dictionary,
 }: RenderEventsProps) {
-  const events = await getLuuppiEvents(lang);
-  const upcomingEvents = events
-    .filter((event) => event.end > new Date())
-    .sort((a, b) => a.end.getTime() - b.end.getTime())
+  const url = '/api/events?pagination[limit]=9999&sort[0]=createdAt:desc';
+
+  const eventsData = await getStrapiData<
+    APIResponseCollection<'api::event.event'>
+  >('fi', url, ['event']);
+
+  const upcomingEvents = eventsData.data
+    .filter((event) => new Date(event.attributes.EndDate) > new Date())
     .map((e) => ({
       ...e,
-      isToday: new Date(e.start).toDateString() === new Date().toDateString(),
+      isToday: new Date(e.attributes.StartDate).toDateString() === new Date().toDateString(),
     }));
+
+  const formattedEvents = upcomingEvents.map((event) => ({
+    description: getPlainText(event.attributes[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']),
+    end: new Date(event.attributes.EndDate),
+    id: event.id.toString(),
+    location: event.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
+    start: new Date(event.attributes.StartDate),
+    title: event.attributes[lang === 'en' ? 'NameEn' : 'NameFi'],
+  }));
 
   return (
     <>
-      {upcomingEvents.slice(0, 4).map((event, i) => (
+      {formattedEvents.slice(0, 4).map((event, i) => (
         <Link
           key={i}
           className="group relative flex flex-col rounded-lg bg-primary-800 text-white"
