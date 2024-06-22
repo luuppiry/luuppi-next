@@ -1,4 +1,3 @@
-import { getLuuppiEvents } from '@/libs/events/get-legacy-events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
@@ -110,12 +109,14 @@ export async function GET() {
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
   >('fi', '/api/luuppi-sanomats', ['luuppi-sanomat']);
 
-  const eventsData = await getLuuppiEvents('fi');
+  const url = '/api/events?pagination[limit]=9999&sort[0]=createdAt:desc';
 
-  const eventPagesSiteMap: SitemapItemLoose[] = eventsData
-    .filter((e) => e.start)
-    .sort((a, b) => b.start.getTime() - a.start.getTime())
-    .map((event) => ({
+  const eventsData = await getStrapiData<
+    APIResponseCollection<'api::event.event'>
+  >('fi', url, ['event']);
+
+  const eventPagesSiteMap: SitemapItemLoose[] = eventsData.data.map(
+    (event) => ({
       url: `/fi/events/${event.id}`,
       links: [
         {
@@ -129,12 +130,11 @@ export async function GET() {
           lang: 'en',
         },
       ],
-    }));
+    }),
+  );
 
-  const eventPagesSiteMapEn: SitemapItemLoose[] = eventsData
-    .filter((e) => e.start)
-    .sort((a, b) => b.start.getTime() - a.start.getTime())
-    .map((event) => ({
+  const eventPagesSiteMapEn: SitemapItemLoose[] = eventsData.data.map(
+    (event) => ({
       url: `/en/events/${event.id}`,
       links: [
         {
@@ -148,7 +148,8 @@ export async function GET() {
           lang: 'fi',
         },
       ],
-    }));
+    }),
+  );
 
   const boardPages: SitemapItemLoose[] = boardData.data
     .sort((a, b) => b.attributes.year - a.attributes.year)
