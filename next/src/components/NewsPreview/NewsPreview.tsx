@@ -22,7 +22,7 @@ export default function NewsPreview({ dictionary, lang }: NewsPreviewProps) {
         </div>
         <div className="flex justify-center">
           <Link
-            className="btn btn-primary text-lg font-bold text-white max-md:text-base"
+            className="btn btn-primary text-lg font-bold max-md:text-base"
             href={`/${lang}/news`}
           >
             {dictionary.pages_home.news.see_all}

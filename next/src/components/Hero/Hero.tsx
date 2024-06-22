@@ -59,7 +59,7 @@ export default function Hero({ dictionary, lang }: HeroProps) {
         </p>
         <div>
           <Link
-            className="btn btn-primary text-lg text-white max-md:text-base"
+            className="btn btn-primary text-lg max-md:text-base"
             href={`/${lang}/organization`}
           >
             {dictionary.pages_home.hero.read_more}
