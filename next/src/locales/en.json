@@ -74,10 +74,12 @@
     "publication": "Publication",
     "install_pwa": "Install app",
     "open_pdf": "Open PDF",
-    "register_event": "Register",
     "zoom_calendar_on": "Enlarge calendar",
     "zoom_calendar_off": "Shrink calendar",
-    "buy_tickets": "Buy ticket"
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "seconds": "seconds"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
@@ -187,7 +189,11 @@
     "event_feed": "Event feed",
     "show_past": "Show past events",
     "hide_past": "Hide past events",
-    "event_info": "If registration is required for the event, it will be done through the old website. When you click the 'Register' button, you will be redirected to the old site."
+    "event_info": "If registration is required for the event, it will be done through the old website. When you click the 'Register' button, you will be redirected to the old site.",
+    "register_event": "Register",
+    "buy_tickets": "Buy ticket",
+    "registration_starts": "Registration starts",
+    "tickets": "Tickets"
   },
   "pages_404": {
     "title": "Page not found",
