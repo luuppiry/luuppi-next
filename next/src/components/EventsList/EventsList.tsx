@@ -1,5 +1,6 @@
-import { longDateFormat, shortTimeFormat } from '@/libs/constants';
+import { longDateFormat } from '@/libs/constants';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
+import { formatDateRange } from '@/libs/utils/format-date-range';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
@@ -77,11 +78,11 @@ export default function EventsList({
                     {event.title}
                   </h3>
                   <div className="flex gap-2">
-                    <p>
-                      {event.start.toLocaleTimeString(lang, shortTimeFormat)}
-                    </p>
-                    <p>-</p>
-                    <p>{event.end.toLocaleTimeString(lang, shortTimeFormat)}</p>
+                    {formatDateRange(
+                      new Date(event.start),
+                      new Date(event.end),
+                      lang,
+                    )}
                   </div>
                   <p className="line-clamp-3 max-w-xl pr-4 text-sm text-gray-500 max-md:text-xs max-sm:break-all">
                     {event.description}
