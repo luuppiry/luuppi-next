@@ -193,7 +193,8 @@
     "register_event": "Register",
     "buy_tickets": "Buy ticket",
     "registration_starts": "Registration starts",
-    "tickets": "Tickets"
+    "tickets": "Tickets",
+    "login_required": "You must be logged in to register for events."
   },
   "pages_404": {
     "title": "Page not found",
