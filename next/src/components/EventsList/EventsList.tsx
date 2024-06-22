@@ -1,4 +1,4 @@
-import { longDateFormat, shortDateFormat } from '@/libs/constants';
+import { longDateFormat, shortTimeFormat } from '@/libs/constants';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
@@ -78,10 +78,10 @@ export default function EventsList({
                   </h3>
                   <div className="flex gap-2">
                     <p>
-                      {event.start.toLocaleTimeString(lang, shortDateFormat)}
+                      {event.start.toLocaleTimeString(lang, shortTimeFormat)}
                     </p>
                     <p>-</p>
-                    <p>{event.end.toLocaleTimeString(lang, shortDateFormat)}</p>
+                    <p>{event.end.toLocaleTimeString(lang, shortTimeFormat)}</p>
                   </div>
                   <p className="line-clamp-3 max-w-xl pr-4 text-sm text-gray-500 max-md:text-xs max-sm:break-all">
                     {event.description}

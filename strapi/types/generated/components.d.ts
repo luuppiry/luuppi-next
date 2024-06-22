@@ -1,4 +1,4 @@
-import type { Schema, Attribute } from '@strapi/strapi';
+import type { Attribute, Schema } from "@strapi/strapi";
 
 export interface SharedSeo extends Schema.Component {
   collectionName: 'components_shared_seos';
@@ -129,11 +129,11 @@ export interface EventsRegistration extends Schema.Component {
 }
 
 export interface EventsQuotas extends Schema.Component {
-  collectionName: 'components_events_quotas';
+  collectionName: "components_events_quotas";
   info: {
-    displayName: 'TicketTypes';
-    icon: 'television';
-    description: '';
+    displayName: "TicketTypes";
+    icon: "television";
+    description: "";
   };
   attributes: {
     RegistrationStartsAt: Attribute.DateTime & Attribute.Required;
@@ -148,9 +148,9 @@ export interface EventsQuotas extends Schema.Component {
       > &
       Attribute.DefaultTo<10>;
     Role: Attribute.Relation<
-      'events.quotas',
-      'oneToOne',
-      'api::event-role.event-role'
+      "events.quotas",
+      "oneToOne",
+      "api::event-role.event-role"
     >;
     TicketsAllowedToBuy: Attribute.Integer &
       Attribute.Required &
@@ -229,7 +229,7 @@ export interface EventsQuestionsCheckbox extends Schema.Component {
   };
 }
 
-declare module '@strapi/types' {
+declare module "@strapi/types" {
   export module Shared {
     export interface Components {
       'shared.seo': SharedSeo;

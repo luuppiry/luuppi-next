@@ -1,17 +1,16 @@
+import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import SidePartners from '@/components/SidePartners/SidePartners';
 import { getDictionary } from '@/dictionaries';
-import { longDateFormat, shortDateFormat } from '@/libs/constants';
-import {
-  getLuuppiEventById,
-  getLuuppiEvents,
-  removeHtml,
-} from '@/libs/events/get-legacy-events';
+import { dateFormat } from '@/libs/constants';
+import { getPlainText } from '@/libs/strapi/blocks-converter';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
+import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
+import { formatDateRange } from '@/libs/utils/format-date-range';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
-import Link from 'next/link';
+import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 import { Event as EventSchema, WithContext } from 'schema-dts';
@@ -28,7 +27,11 @@ export default async function Event({ params }: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const event = await getLuuppiEventById(params.lang, params.slug);
+  const url = `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=Image&populate=Registration.TicketTypes.Role`;
+
+  const event = await getStrapiData<
+    APIResponse<'api::event.event'>
+  >(params.lang, url, ['event']);
 
   const partnersData = await getStrapiData<
     APIResponseCollection<'api::company.company'>
@@ -41,27 +44,19 @@ export default async function Event({ params }: EventProps) {
   const jsonLd: WithContext<EventSchema> = {
     '@context': 'https://schema.org',
     '@type': 'Event',
-    name: event.title,
-    startDate: event.start.toISOString(),
-    endDate: event.end.toISOString(),
-    description: removeHtml(event.description),
+    name: event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'],
+    startDate: new Date(event.data.attributes.StartDate).toISOString(),
+    endDate: new Date(event.data.attributes.EndDate).toISOString(),
+    description: getPlainText(event.data.attributes[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']).slice(0, 300),
     location: {
       '@type': 'Place',
-      name: event.location,
+      name: event.data.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
     },
   };
 
-  // Remove empty paragraphs
-  event.description = event.description.replace(/<p>&nbsp;<\/p>/g, '');
+  const imageUrl = event.data.attributes.Image?.data.attributes.url ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url) : undefined;
 
-  // Replace h1 with h2
-  event.description = event.description.replace(/<h1/g, '<h2');
-  event.description = event.description.replace(/<\/h1>/g, '</h2>');
-
-  const index = event.description.indexOf('--\n');
-  if (index !== -1) {
-    event.description = event.description.substring(0, index);
-  }
+  const ticketTypes = event.data.attributes.Registration?.TicketTypes;
 
   return (
     <>
@@ -71,34 +66,49 @@ export default async function Event({ params }: EventProps) {
       />
       <div className="relative flex w-full gap-12">
         <div className="flex w-full flex-col">
-          <h1 className="mb-12 break-words">{event.title}</h1>
-          <div className="mb-6 flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm">
+          <div className="relative h-64 rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:h-44 mb-12" >
+            {imageUrl && (
+              <Image
+                alt="Page banner image"
+                className="rounded-lg object-cover"
+                src={imageUrl}
+                fill
+              />
+            )}
+          </div>
+          <div className="relative flex flex-col gap-4">
+            <h1 className="break-words">{
+              event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi']
+            }</h1>
+            <div className="flex flex-col opacity-40">
+              <p className="text-sm">
+                {dictionary.general.content_updated}:{' '}
+                {new Date(event.data.attributes.updatedAt!).toLocaleString(
+                  params.lang,
+                  dateFormat,
+                )}
+              </p>
+            </div>
+            <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
+          </div>
+          <div className="mb-12 mt-4 flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm">
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
             <div className="flex max-w-full flex-col gap-2 rounded-lg py-4 pr-4 font-semibold max-sm:text-sm">
               <div className="flex items-center">
                 <IoCalendarOutline className="mr-2 shrink-0 text-2xl" />
                 <p className="line-clamp-2">
-                  {firstLetterToUpperCase(
-                    new Date(event.start).toLocaleString(
-                      params.lang,
-                      longDateFormat,
-                    ),
-                  )}{' '}
-                  -{' '}
-                  {new Date(event.start).toLocaleString(
+                  {formatDateRange(
+                    new Date(event.data.attributes.StartDate),
+                    new Date(event.data.attributes.EndDate),
                     params.lang,
-                    shortDateFormat,
-                  )}
-                  {'-'}
-                  {new Date(event.end).toLocaleString(
-                    params.lang,
-                    shortDateFormat,
                   )}
                 </p>
               </div>
               <div className="flex items-center">
                 <IoLocationOutline className="mr-2 shrink-0 text-2xl" />
-                <p className="line-clamp-2">{event.location}</p>
+                <p className="line-clamp-2">{
+                  event.data.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi']
+                }</p>
               </div>
             </div>
           </div>
@@ -126,7 +136,6 @@ export default async function Event({ params }: EventProps) {
             />
           </div>
         </div>
-        <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[401px] w-[801px] max-md:left-0 max-md:w-full max-md:rounded-none" />
       </div>
     </>
   );
@@ -136,9 +145,14 @@ export default async function Event({ params }: EventProps) {
 export async function generateMetadata({
   params,
 }: EventProps): Promise<Metadata> {
-  const event = await getLuuppiEventById(params.lang, params.slug);
+  const event = await getStrapiData<
+    APIResponse<'api::event.event'>
+  >(params.lang, `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage`, ['event']);
 
   const pathname = `/${params.lang}/events/${params.slug}`;
+
+  const description = getPlainText(event.data.attributes[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']).slice(0, 300);
+  const title = event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
 
   return {
     title: `${event?.title} | Luuppi ry`,
@@ -164,11 +178,15 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const eventData = await getLuuppiEvents('fi');
+  const url = '/api/events';
 
-  return eventData
+  const data = await getStrapiData<
+    APIResponseCollection<'api::event.event'>
+  >('fi', url, ['event']);
+
+  return data.data
     .filter((e) => e.id)
     .map((event) => ({
-      slug: event.id,
+      slug: event.id.toString(),
     }));
 }
