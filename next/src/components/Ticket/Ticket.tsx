@@ -14,9 +14,10 @@ interface TicketProps {
     eventStartsAt: Date;
     lang: SupportedLanguage;
     dictionary: Dictionary;
+    disabled?: boolean;
 }
 
-export default function Ticket({ ticket, eventStartsAt, lang, dictionary }: TicketProps) {
+export default function Ticket({ ticket, eventStartsAt, lang, dictionary, disabled = false }: TicketProps) {
     const [days, setDays] = useState(0);
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
@@ -41,7 +42,7 @@ export default function Ticket({ ticket, eventStartsAt, lang, dictionary }: Tick
     return (
         <div key={ticket.name} className='relative h-full'>
             {registrationStarted ? (
-                <div className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm">
+                <div className={`flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm ${disabled ? 'grayscale' : ''}`}>
                     <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
                     <div className='flex p-4  flex-col items-center justify-center max-md:px-0'>
                         <p className='font-semibold text-accent-400 text-4xl max-md:text-2xl'>
@@ -59,48 +60,45 @@ export default function Ticket({ ticket, eventStartsAt, lang, dictionary }: Tick
                         <p className="text-lg font-semibold max-md:text-base line-clamp-2">{ticket.name}</p>
                         <div className='flex justify-between'>
                             <p className="text-sm line-clamp-1 break-all">{ticket.location}</p>
-                            <p className="badge-primary whitespace-nowrap  badge md:hidden">{ticket.price} €</p>
+                            <p className="badge-primary whitespace-nowrap badge badge-lg max-md:badge-md">{ticket.price} €</p>
                         </div>
-                    </div>
-                    <div className="flex-col flex p-4 items-end justify-center flex-1 max-md:hidden">
-                        <div className="flex flex-col items-center">
-                            <p className="text-lg font-semibold">{ticket.price}€</p>
-                            <button className='btn btn-primary whitespace-nowrap btn-sm'>
+                        <div>
+                            <button className='btn btn-primary whitespace-nowrap btn-sm max-md:btn-xs' disabled={disabled}>
                                 {dictionary.pages_events.buy_tickets}
                             </button>
                         </div>
                     </div>
                 </div>
             ) : (
-                <div className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm">
+                <div className={`flex rounded-lg bg-background-50/50 backdrop-blur-sm ${disabled ? 'grayscale' : ''}`}>
                     <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
                     <div className='flex flex-col p-4 gap-2'>
                         <p className="text-lg font-semibold max-md:text-base line-clamp-2">{ticket.name}</p>
                         {days < 30 ? (
                             <div className="flex gap-5">
-                                <div>
-                                    <span className="countdown font-mono text-2xl">
+                                <div className='text-sm'>
+                                    <span className="countdown font-mono text-2xl max-md:text-lg text-accent-400">
                                         {/* @ts-expect-error */}
                                         <span style={{ '--value': days }} />
                                     </span>
                                     {dictionary.general.days}
                                 </div>
-                                <div>
-                                    <span className="countdown font-mono text-2xl">
+                                <div className='text-sm'>
+                                    <span className="countdown font-mono text-2xl max-md:text-lg text-accent-400">
                                         {/* @ts-expect-error */}
                                         <span style={{ '--value': hours }} />
                                     </span>
                                     {dictionary.general.hours}
                                 </div>
-                                <div>
-                                    <span className="countdown font-mono text-2xl">
+                                <div className='text-sm'>
+                                    <span className="countdown font-mono text-2xl max-md:text-lg text-accent-400">
                                         {/* @ts-expect-error */}
                                         <span style={{ '--value': minutes }} />
                                     </span>
                                     {dictionary.general.minutes}
                                 </div>
-                                <div>
-                                    <span className="countdown font-mono text-2xl">
+                                <div className='text-sm'>
+                                    <span className="countdown font-mono text-2xl max-md:text-lg text-accent-400">
                                         {/* @ts-expect-error */}
                                         <span style={{ '--value': seconds }} />
                                     </span>
@@ -117,11 +115,12 @@ export default function Ticket({ ticket, eventStartsAt, lang, dictionary }: Tick
                                 </p>
                             </div>
                         )}
+                        <div className='flex items-center justify-start flex-1 md:hidden'>
+                            <p className="badge-primary whitespace-nowrap badge badge-lg max-md:badge-md">{ticket.price} €</p>
+                        </div>
                     </div>
-                    <div className='flex items-center justify-end p-4 flex-1'>
-                        <p className="text-2xl font-semibold whitespace-nowrap">
-                            {ticket.price} €
-                        </p>
+                    <div className='flex items-center justify-end p-4 flex-1 max-md:hidden'>
+                        <p className="badge-primary whitespace-nowrap badge badge-lg max-md:badge-md">{ticket.price} €</p>
                     </div>
                 </div>
             )}

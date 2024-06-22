@@ -131,7 +131,7 @@ export default function MobileHamburger({
               ) : (
                 <button
                   aria-label={dictionary.general.login}
-                  className="btn btn-circle btn-ghost m-1 bg-primary-400"
+                  className="btn btn-circle btn-ghost m-1 bg-primary-400 text-white"
                   onClick={async () => await signIn()}
                 >
                   <RiLoginCircleLine size={32} />

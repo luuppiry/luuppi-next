@@ -193,7 +193,8 @@
     "register_event": "Ilmoittaudu",
     "buy_tickets": "Osta lippu",
     "registration_starts": "Myynti alkaa",
-    "tickets": "Lipunmyynti"
+    "tickets": "Lipunmyynti",
+    "login_required": "Sinun täytyy kirjautua sisään ostaaksesi lippuja."
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",

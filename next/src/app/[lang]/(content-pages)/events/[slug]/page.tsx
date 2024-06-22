@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import SidePartners from '@/components/SidePartners/SidePartners';
 import Ticket from '@/components/Ticket/Ticket';
@@ -12,6 +13,7 @@ import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import { BiErrorCircle } from 'react-icons/bi';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 import { Event as EventSchema, WithContext } from 'schema-dts';
 
@@ -21,6 +23,7 @@ interface EventProps {
 
 export default async function Event({ params }: EventProps) {
   const dictionary = await getDictionary(params.lang);
+  const session = await auth();
 
   const id = parseInt(params.slug, 10);
   if (isNaN(id)) {
@@ -31,13 +34,17 @@ export default async function Event({ params }: EventProps) {
 
   const event = await getStrapiData<
     APIResponse<'api::event.event'>
-  >(params.lang, url, ['event']);
+  >(params.lang, url, ['event'], true);
+
+  if (!event) {
+    redirect(`/${params.lang}/404`);
+  }
 
   const partnersData = await getStrapiData<
     APIResponseCollection<'api::company.company'>
   >(params.lang, '/api/companies?populate=*', ['company']);
 
-  if (!event) {
+  if (!event || !partnersData) {
     redirect(`/${params.lang}/404`);
   }
 
@@ -102,7 +109,9 @@ export default async function Event({ params }: EventProps) {
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
             <div className="flex max-w-full flex-col gap-2 rounded-lg py-4 pr-4 font-semibold max-sm:text-sm">
               <div className="flex items-center">
-                <IoCalendarOutline className="mr-2 shrink-0 text-2xl" />
+                <div className="flex items-center rounded-full bg-primary-400 text-white p-2 mr-2 justify-center">
+                  <IoCalendarOutline className="shrink-0 text-2xl" />
+                </div>
                 <p className="line-clamp-2">
                   {formatDateRange(
                     new Date(event.data.attributes.StartDate),
@@ -112,7 +121,9 @@ export default async function Event({ params }: EventProps) {
                 </p>
               </div>
               <div className="flex items-center">
-                <IoLocationOutline className="mr-2 shrink-0 text-2xl" />
+                <div className="flex items-center rounded-full bg-primary-400 text-white p-2 mr-2 justify-center">
+                  <IoLocationOutline className="shrink-0 text-2xl" />
+                </div>
                 <p className="line-clamp-2">{
                   event.data.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi']
                 }</p>
@@ -148,13 +159,14 @@ export default async function Event({ params }: EventProps) {
   );
 }
 
-// TODO: Change when we have events on Strapi :)
 export async function generateMetadata({
   params,
 }: EventProps): Promise<Metadata> {
   const event = await getStrapiData<
     APIResponse<'api::event.event'>
-  >(params.lang, `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage`, ['event']);
+  >(params.lang, `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage`, ['event'], true);
+
+  if (!event) return {};
 
   const pathname = `/${params.lang}/events/${params.slug}`;
 
@@ -189,9 +201,9 @@ export async function generateStaticParams() {
 
   const data = await getStrapiData<
     APIResponseCollection<'api::event.event'>
-  >('fi', url, ['event']);
+  >('fi', url, ['event'], true);
 
-  return data.data
+  return data?.data
     .filter((e) => e.id)
     .map((event) => ({
       slug: event.id.toString(),
