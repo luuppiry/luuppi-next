@@ -1,10 +1,10 @@
-import type { Schema, Attribute } from '@strapi/strapi';
+import type { Attribute, Schema } from "@strapi/strapi";
 
 export interface EventsQuestionsCheckbox extends Schema.Component {
-  collectionName: 'components_events_questions_checkboxes';
+  collectionName: "components_events_questions_checkboxes";
   info: {
-    displayName: 'QuestionsCheckbox';
-    description: '';
+    displayName: "QuestionsCheckbox";
+    description: "";
   };
   attributes: {
     QuestionFi: Attribute.String & Attribute.Required;
@@ -13,10 +13,10 @@ export interface EventsQuestionsCheckbox extends Schema.Component {
 }
 
 export interface EventsQuestionsSelect extends Schema.Component {
-  collectionName: 'components_events_questions_selects';
+  collectionName: "components_events_questions_selects";
   info: {
-    displayName: 'QuestionsSelect';
-    description: '';
+    displayName: "QuestionsSelect";
+    description: "";
   };
   attributes: {
     QuestionEn: Attribute.String & Attribute.Required;
@@ -27,9 +27,9 @@ export interface EventsQuestionsSelect extends Schema.Component {
 }
 
 export interface EventsQuestionsText extends Schema.Component {
-  collectionName: 'components_events_questions_texts';
+  collectionName: "components_events_questions_texts";
   info: {
-    displayName: 'QuestionsText';
+    displayName: "QuestionsText";
   };
   attributes: {
     QuestionFi: Attribute.String & Attribute.Required;
@@ -45,11 +45,11 @@ export interface EventsQuestionsText extends Schema.Component {
 }
 
 export interface EventsQuotas extends Schema.Component {
-  collectionName: 'components_events_quotas';
+  collectionName: "components_events_quotas";
   info: {
-    displayName: 'TicketTypes';
-    icon: 'television';
-    description: '';
+    displayName: "TicketTypes";
+    icon: "television";
+    description: "";
   };
   attributes: {
     RegistrationStartsAt: Attribute.DateTime & Attribute.Required;
@@ -64,9 +64,9 @@ export interface EventsQuotas extends Schema.Component {
       > &
       Attribute.DefaultTo<10>;
     Role: Attribute.Relation<
-      'events.quotas',
-      'oneToOne',
-      'api::event-role.event-role'
+      "events.quotas",
+      "oneToOne",
+      "api::event-role.event-role"
     >;
     TicketsAllowedToBuy: Attribute.Integer &
       Attribute.Required &
@@ -101,14 +101,14 @@ export interface EventsQuotas extends Schema.Component {
 }
 
 export interface EventsRegistration extends Schema.Component {
-  collectionName: 'components_events_registrations';
+  collectionName: "components_events_registrations";
   info: {
-    displayName: 'Registration';
-    icon: 'key';
-    description: '';
+    displayName: "Registration";
+    icon: "key";
+    description: "";
   };
   attributes: {
-    TicketTypes: Attribute.Component<'events.quotas', true> &
+    TicketTypes: Attribute.Component<"events.quotas", true> &
       Attribute.Required &
       Attribute.SetMinMax<
         {
@@ -117,21 +117,21 @@ export interface EventsRegistration extends Schema.Component {
         number
       >;
     RoleToGive: Attribute.Relation<
-      'events.registration',
-      'oneToOne',
-      'api::event-role.event-role'
+      "events.registration",
+      "oneToOne",
+      "api::event-role.event-role"
     >;
-    QuestionsText: Attribute.Component<'events.questions-text', true>;
-    QuestionsSelect: Attribute.Component<'events.questions-select', true>;
-    QuestionsCheckbox: Attribute.Component<'events.questions-checkbox', true>;
+    QuestionsText: Attribute.Component<"events.questions-text", true>;
+    QuestionsSelect: Attribute.Component<"events.questions-select", true>;
+    QuestionsCheckbox: Attribute.Component<"events.questions-checkbox", true>;
   };
 }
 
 export interface SharedContactBanner extends Schema.Component {
-  collectionName: 'components_shared_contact_banners';
+  collectionName: "components_shared_contact_banners";
   info: {
-    displayName: 'ContactBanner';
-    icon: 'message';
+    displayName: "ContactBanner";
+    icon: "message";
   };
   attributes: {
     title: Attribute.String & Attribute.Required;
@@ -141,11 +141,11 @@ export interface SharedContactBanner extends Schema.Component {
 }
 
 export interface SharedMetaOpenGraph extends Schema.Component {
-  collectionName: 'components_shared_meta_open_graphs';
+  collectionName: "components_shared_meta_open_graphs";
   info: {
-    displayName: 'metaOpenGraph';
-    icon: 'link';
-    description: '';
+    displayName: "metaOpenGraph";
+    icon: "link";
+    description: "";
   };
   attributes: {
     openGraphTitle: Attribute.String &
@@ -158,16 +158,16 @@ export interface SharedMetaOpenGraph extends Schema.Component {
       Attribute.SetMinMaxLength<{
         maxLength: 300;
       }>;
-    openGraphImage: Attribute.Media<'images'>;
+    openGraphImage: Attribute.Media<"images">;
   };
 }
 
 export interface SharedMetaTwitter extends Schema.Component {
-  collectionName: 'components_shared_meta_twitters';
+  collectionName: "components_shared_meta_twitters";
   info: {
-    displayName: 'MetaTwitter';
-    icon: 'twitter';
-    description: '';
+    displayName: "MetaTwitter";
+    icon: "twitter";
+    description: "";
   };
   attributes: {
     twitterTitle: Attribute.String &
@@ -180,16 +180,16 @@ export interface SharedMetaTwitter extends Schema.Component {
       Attribute.SetMinMaxLength<{
         maxLength: 300;
       }>;
-    twitterImage: Attribute.Media<'images'>;
+    twitterImage: Attribute.Media<"images">;
   };
 }
 
 export interface SharedPageContent extends Schema.Component {
-  collectionName: 'components_shared_page_contents';
+  collectionName: "components_shared_page_contents";
   info: {
-    displayName: 'PageContent';
-    icon: 'write';
-    description: '';
+    displayName: "PageContent";
+    icon: "write";
+    description: "";
   };
   attributes: {
     title: Attribute.String &
@@ -198,16 +198,16 @@ export interface SharedPageContent extends Schema.Component {
         maxLength: 100;
       }>;
     content: Attribute.Blocks & Attribute.Required;
-    banner: Attribute.Media<'images'> & Attribute.Required;
+    banner: Attribute.Media<"images"> & Attribute.Required;
   };
 }
 
 export interface SharedSeo extends Schema.Component {
-  collectionName: 'components_shared_seos';
+  collectionName: "components_shared_seos";
   info: {
-    displayName: 'Seo';
-    icon: 'search';
-    description: '';
+    displayName: "Seo";
+    icon: "search";
+    description: "";
   };
   attributes: {
     metaTitle: Attribute.String &
@@ -222,24 +222,24 @@ export interface SharedSeo extends Schema.Component {
       }>;
     metaAuthor: Attribute.String;
     metaKeywords: Attribute.String;
-    openGraph: Attribute.Component<'shared.meta-open-graph'>;
-    twitter: Attribute.Component<'shared.meta-twitter'>;
+    openGraph: Attribute.Component<"shared.meta-open-graph">;
+    twitter: Attribute.Component<"shared.meta-twitter">;
   };
 }
 
-declare module '@strapi/types' {
+declare module "@strapi/types" {
   export module Shared {
     export interface Components {
-      'events.questions-checkbox': EventsQuestionsCheckbox;
-      'events.questions-select': EventsQuestionsSelect;
-      'events.questions-text': EventsQuestionsText;
-      'events.quotas': EventsQuotas;
-      'events.registration': EventsRegistration;
-      'shared.contact-banner': SharedContactBanner;
-      'shared.meta-open-graph': SharedMetaOpenGraph;
-      'shared.meta-twitter': SharedMetaTwitter;
-      'shared.page-content': SharedPageContent;
-      'shared.seo': SharedSeo;
+      "events.questions-checkbox": EventsQuestionsCheckbox;
+      "events.questions-select": EventsQuestionsSelect;
+      "events.questions-text": EventsQuestionsText;
+      "events.quotas": EventsQuotas;
+      "events.registration": EventsRegistration;
+      "shared.contact-banner": SharedContactBanner;
+      "shared.meta-open-graph": SharedMetaOpenGraph;
+      "shared.meta-twitter": SharedMetaTwitter;
+      "shared.page-content": SharedPageContent;
+      "shared.seo": SharedSeo;
     }
   }
 }
