@@ -91,7 +91,7 @@ export default function EventSelector({
               </label>
             </div>
             <Link
-              className="btn btn-primary btn-sm text-white"
+              className="btn btn-primary btn-sm"
               href={
                 lang === 'en'
                   ? 'webcal://luuppi.fi/service/ics/events.ics?lang=eng'

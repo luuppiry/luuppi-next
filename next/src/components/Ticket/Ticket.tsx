@@ -40,9 +40,8 @@ export default function Ticket({ ticket, eventStartsAt, lang, dictionary }: Tick
 
     return (
         <div key={ticket.name} className='relative h-full'>
-            {/* Center name and when registration starts */}
             {registrationStarted ? (
-                <div className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm grayscale blur-sm">
+                <div className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm">
                     <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
                     <div className='flex p-4  flex-col items-center justify-center max-md:px-0'>
                         <p className='font-semibold text-accent-400 text-4xl max-md:text-2xl'>
@@ -60,20 +59,20 @@ export default function Ticket({ ticket, eventStartsAt, lang, dictionary }: Tick
                         <p className="text-lg font-semibold max-md:text-base line-clamp-2">{ticket.name}</p>
                         <div className='flex justify-between'>
                             <p className="text-sm line-clamp-1 break-all">{ticket.location}</p>
-                            <p className="badge-primary whitespace-nowrap text-white badge md:hidden">{ticket.price} €</p>
+                            <p className="badge-primary whitespace-nowrap  badge md:hidden">{ticket.price} €</p>
                         </div>
                     </div>
                     <div className="flex-col flex p-4 items-end justify-center flex-1 max-md:hidden">
                         <div className="flex flex-col items-center">
                             <p className="text-lg font-semibold">{ticket.price}€</p>
-                            <button className='btn btn-primary whitespace-nowrap btn-sm text-white'>
+                            <button className='btn btn-primary whitespace-nowrap btn-sm'>
                                 {dictionary.pages_events.buy_tickets}
                             </button>
                         </div>
                     </div>
                 </div>
             ) : (
-                <div className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm grayscale">
+                <div className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm">
                     <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
                     <div className='flex flex-col p-4 gap-2'>
                         <p className="text-lg font-semibold max-md:text-base line-clamp-2">{ticket.name}</p>

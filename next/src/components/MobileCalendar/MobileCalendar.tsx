@@ -127,7 +127,7 @@ export default function MobileCalendar({
       />
       <div className="mb-4 flex items-center justify-between">
         <button
-          className="btn btn-primary btn-sm text-white"
+          className="btn btn-primary btn-sm"
           onClick={handlePreviousMonth}
         >
           <BiArrowToLeft size={26} />
@@ -139,7 +139,7 @@ export default function MobileCalendar({
           })}
         </h2>
         <button
-          className="btn btn-primary btn-sm text-white"
+          className="btn btn-primary btn-sm"
           onClick={handleNextMonth}
         >
           <BiArrowToRight size={26} />
