@@ -92,11 +92,11 @@ export interface EventsQuotas extends Schema.Component {
       Attribute.Required &
       Attribute.SetMinMax<
         {
-          min: 0;
+          min: 1;
         },
         number
       > &
-      Attribute.DefaultTo<0>;
+      Attribute.DefaultTo<1>;
   };
 }
 
