@@ -1,11 +1,11 @@
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import SidePartners from '@/components/SidePartners/SidePartners';
+import Ticket from '@/components/Ticket/Ticket';
 import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { formatDateRange } from '@/libs/utils/format-date-range';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
@@ -55,8 +55,15 @@ export default async function Event({ params }: EventProps) {
   };
 
   const imageUrl = event.data.attributes.Image?.data.attributes.url ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url) : undefined;
-
   const ticketTypes = event.data.attributes.Registration?.TicketTypes;
+
+  const ticketTypesTranslated = ticketTypes?.map((ticketType) => ({
+    name: ticketType[params.lang === 'en' ? 'NameEn' : 'NameFi'],
+    location: event.data.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
+    price: ticketType.Price,
+    registrationStartsAt: new Date(ticketType.RegistrationStartsAt),
+    registrationEndsAt: new Date(ticketType.RegistrationEndsAt)
+  }))
 
   return (
     <>
@@ -112,38 +119,12 @@ export default async function Event({ params }: EventProps) {
               </div>
             </div>
           </div>
-          <div>
-            {ticketTypes?.map((ticketType, index) => (
-              <div key={index} className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm">
-                <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
-                <div className='flex p-4  flex-col items-center justify-center max-md:px-0'>
-                  <p className='font-semibold text-accent-400 text-4xl max-md:text-2xl'>
-                    {new Date(event.data.attributes.StartDate).toLocaleDateString(params.lang, { day: '2-digit' })}
-                  </p>
-                  <p className='font-semibold text-lg truncate max-md:text-base'>
-                    {firstLetterToUpperCase(new Date(event.data.attributes.StartDate).toLocaleDateString(params.lang, { month: 'short', year: 'numeric' }))}
-                  </p>
-                  <p className='text-sm'>
-                    {firstLetterToUpperCase(new Date(event.data.attributes.StartDate).toLocaleDateString(params.lang, { weekday: 'long' }))}
-                  </p>
-                </div>
-                <span className="w-0.5 shrink-0 rounded-l-lg bg-gray-400/10" />
-                <div className="flex flex-col p-4 justify-center w-full gap-1">
-                  <p className="text-lg font-semibold max-md:text-base line-clamp-2">{ticketType[params.lang === 'en' ? 'NameEn' : 'NameFi']}</p>
-                  <div className='flex justify-between'>
-                    <p className="text-sm line-clamp-1 break-all">{event.data.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi']}</p>
-                    <p className="badge-primary whitespace-nowrap text-white badge md:hidden">{ticketType.Price} €</p>
-                  </div>
-                </div>
-                <div className="flex-col flex p-4 items-end justify-center flex-1 max-md:hidden">
-                  <div className="flex flex-col items-center">
-                    <p className="text-lg font-semibold">{ticketType.Price}€</p>
-                    <button className='btn btn-primary whitespace-nowrap btn-sm text-white'>
-                      {dictionary.general.buy_tickets}
-                    </button>
-                  </div>
-                </div>
-              </div>
+          <div className='mb-12'>
+            <h2 className="text-2xl font-bold mb-4">
+              {dictionary.pages_events.tickets}
+            </h2>
+            {ticketTypesTranslated?.map((ticket) => (
+              <Ticket key={ticket.name} dictionary={dictionary} eventStartsAt={new Date(event.data.attributes.StartDate)} lang={params.lang} ticket={ticket} />
             ))}
           </div>
           <div className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
@@ -153,7 +134,7 @@ export default async function Event({ params }: EventProps) {
           </div>
           <div className='mt-8'>
             <button className='btn btn-primary text-white'>
-              {dictionary.general.register_event}
+              {dictionary.pages_events.register_event}
             </button>
             <p className='text-sm mt-4 max-w-md opacity-60'><i>{dictionary.pages_events.event_info}</i></p>
           </div>
