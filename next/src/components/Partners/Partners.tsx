@@ -20,7 +20,7 @@ export default function Partners({ dictionary, lang }: PartnersProps) {
           </p>
           <div className="flex">
             <Link
-              className="btn btn-primary text-lg font-bold text-white max-md:text-base"
+              className="btn btn-primary text-lg font-bold max-md:text-base"
               href={`/${lang}/collaboration`}
             >
               {dictionary.pages_home.partners.read_more}

@@ -30,7 +30,7 @@ export default async function AuthError({
         </p>
         <div>
           <Link
-            className="btn btn-primary text-lg text-white"
+            className="btn btn-primary text-lg"
             href={`/${params.lang}`}
           >
             {dictionary.pages_error.return_home}

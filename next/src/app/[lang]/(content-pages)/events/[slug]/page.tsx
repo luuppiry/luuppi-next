@@ -133,7 +133,7 @@ export default async function Event({ params }: EventProps) {
             } />
           </div>
           <div className='mt-8'>
-            <button className='btn btn-primary text-white'>
+            <button className='btn btn-primary'>
               {dictionary.pages_events.register_event}
             </button>
             <p className='text-sm mt-4 max-w-md opacity-60'><i>{dictionary.pages_events.event_info}</i></p>
