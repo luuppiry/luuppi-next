@@ -74,10 +74,12 @@
     "publication": "Julkaisu",
     "install_pwa": "Asenna sovellus",
     "open_pdf": "Avaa PDF",
-    "register_event": "Ilmoittaudu",
     "zoom_calendar_on": "Suurenna kalenteri",
     "zoom_calendar_off": "Pienennä kalenteri",
-    "buy_tickets": "Osta lippu"
+    "days": "päivää",
+    "hours": "tuntia",
+    "minutes": "minuuttia",
+    "seconds": "sekuntia"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
@@ -187,7 +189,11 @@
     "event_feed": "Tapahtumavirta",
     "show_past": "Näytä menneet tapahtumat",
     "hide_past": "Piilota menneet tapahtumat",
-    "event_info": "Mikäli tapahtumassa on ilmoittautuminen, se tapahtuu vanhan verkkosivun kautta. Painaessasi 'Ilmoittaudu' -nappia, sinut ohjataan vanhalle sivulle."
+    "event_info": "Mikäli tapahtumassa on ilmoittautuminen, se tapahtuu vanhan verkkosivun kautta. Painaessasi 'Ilmoittaudu' -nappia, sinut ohjataan vanhalle sivulle.",
+    "register_event": "Ilmoittaudu",
+    "buy_tickets": "Osta lippu",
+    "registration_starts": "Myynti alkaa",
+    "tickets": "Lipunmyynti"
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",

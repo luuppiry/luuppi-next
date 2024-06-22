@@ -1,11 +1,11 @@
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import SidePartners from '@/components/SidePartners/SidePartners';
+import Ticket from '@/components/Ticket/Ticket';
 import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { formatDateRange } from '@/libs/utils/format-date-range';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
@@ -55,8 +55,15 @@ export default async function Event({ params }: EventProps) {
   };
 
   const imageUrl = event.data.attributes.Image?.data.attributes.url ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url) : undefined;
-
   const ticketTypes = event.data.attributes.Registration?.TicketTypes;
+
+  const ticketTypesTranslated = ticketTypes?.map((ticketType) => ({
+    name: ticketType[params.lang === 'en' ? 'NameEn' : 'NameFi'],
+    location: event.data.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
+    price: ticketType.Price,
+    registrationStartsAt: new Date(ticketType.RegistrationStartsAt),
+    registrationEndsAt: new Date(ticketType.RegistrationEndsAt)
+  }))
 
   return (
     <>
