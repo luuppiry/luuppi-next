@@ -45,6 +45,12 @@
     "NameEn": {
       "type": "string",
       "required": true
+    },
+    "Weight": {
+      "type": "integer",
+      "default": 0,
+      "required": true,
+      "min": 0
     }
   }
 }

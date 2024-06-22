@@ -88,6 +88,15 @@ export interface EventsQuotas extends Schema.Component {
       Attribute.DefaultTo<0>;
     NameFi: Attribute.String & Attribute.Required;
     NameEn: Attribute.String & Attribute.Required;
+    Weight: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Attribute.DefaultTo<0>;
   };
 }
 
