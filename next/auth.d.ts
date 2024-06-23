@@ -3,7 +3,7 @@ import 'next-auth';
 
 declare module 'next-auth' {
   interface User {
-    azureId: string;
+    entraUserUuid: string;
   }
 
   interface Session extends DefaultSession {

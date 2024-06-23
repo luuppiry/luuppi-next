@@ -36,7 +36,7 @@ export const {
   callbacks: {
     async session({ session, token }) {
       if (token) {
-        session.user.azureId = token.id as string;
+        session.user.entraUserUuid = token.id as string;
       }
       return session;
     },

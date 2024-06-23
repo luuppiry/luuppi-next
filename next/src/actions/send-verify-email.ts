@@ -38,7 +38,7 @@ export async function sendVerifyEmail(
     };
   }
 
-  const isLimited = await isRateLimited(user.azureId, cacheKey, 3);
+  const isLimited = await isRateLimited(user.entraUserUuid, cacheKey, 3);
   if (isLimited) {
     logger.error(`User is being rate limited: ${user.email}`);
     return {
@@ -110,7 +110,7 @@ export async function sendVerifyEmail(
 
   const payload = {
     newMail: email,
-    userId: user.azureId,
+    userId: user.entraUserUuid,
   } as JwtPayload & { newMail: string; userId: string };
 
   const token = jwt.sign(payload, jwtSecret, {
@@ -146,7 +146,7 @@ export async function sendVerifyEmail(
   try {
     const poller = await emailClient.beginSend(message);
     await poller.pollUntilDone();
-    await updateRateLimitCounter(user.azureId, cacheKey);
+    await updateRateLimitCounter(user.entraUserUuid, cacheKey);
     logger.info('Email change verification email sent to', email);
     return {
       message: dictionary.api.verify_email_sent,

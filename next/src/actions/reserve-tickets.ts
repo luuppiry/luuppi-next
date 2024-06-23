@@ -54,43 +54,46 @@ export async function reserveTickets(
 
   const [localUser, eventRegistrations] = await getUserAndRegistrations(
     eventId,
-    session.user.azureId,
+    session.user.entraUserUuid,
   );
 
-  const userRoleUuids = localUser?.roles.map((role) => role.role.uuid) ?? [];
+  const strapiRoleUuids =
+    localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
   const ticketTypes = strapiEvent.data.attributes.Registration?.TicketTypes;
 
   const eventRolesWithWeights =
     ticketTypes?.map((ticketType) => ({
-      uuid: ticketType.Role?.data.attributes.RoleId,
+      strapiRoleUuid: ticketType.Role?.data.attributes.RoleId,
       weight: ticketType.Weight,
     })) ?? [];
 
   const hasDefaultRoleWeight = eventRolesWithWeights.find(
-    (role) => role.uuid === process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+    (role) => role.strapiRoleUuid === process.env.NEXT_PUBLIC_NO_ROLE_ID!,
   );
 
-  const targetedRole = userRoleUuids.reduce(
-    (acc, userRoleUuid) => {
+  const targetedRole = strapiRoleUuids.reduce(
+    (acc, strapiRoleUuid) => {
       const roleWeight =
-        eventRolesWithWeights.find((role) => role.uuid === userRoleUuid)
-          ?.weight ?? 0;
+        eventRolesWithWeights.find(
+          (role) => role.strapiRoleUuid === strapiRoleUuid,
+        )?.weight ?? 0;
       return roleWeight > acc.weight
-        ? { uuid: userRoleUuid, weight: roleWeight }
+        ? { strapiRoleUuid, weight: roleWeight }
         : acc;
     },
     {
-      uuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+      strapiRoleUuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
       weight: hasDefaultRoleWeight?.weight ?? 0,
     },
   );
 
   const ownQuota = ticketTypes?.find(
-    (type) => type.Role?.data.attributes.RoleId === targetedRole.uuid,
+    (type) => type.Role?.data.attributes.RoleId === targetedRole.strapiRoleUuid,
   );
 
   const totalRegistrationWithRole = eventRegistrations.filter(
-    (registration) => registration.purchaseRole.uuid === targetedRole.uuid,
+    (registration) =>
+      registration.purchaseRole.strapiRoleUuid === targetedRole.strapiRoleUuid,
   ).length;
 
   // Validate that the user has a role that can reserve tickets
@@ -123,8 +126,9 @@ export async function reserveTickets(
   const currentUserReservations = localUser
     ? eventRegistrations.filter(
         (registration) =>
-          registration.userId === localUser.id &&
-          registration.purchaseRole.uuid === targetedRole.uuid &&
+          registration.entraUserUuid === localUser.entraUserUuid &&
+          registration.purchaseRole.strapiRoleUuid ===
+            targetedRole.strapiRoleUuid &&
           (registration.reservedUntil > new Date() ||
             registration.paymentCompleted),
       )
@@ -157,66 +161,90 @@ export async function reserveTickets(
     };
   }
 
-  await upsertDataAndRegisterEvents(session, targetedRole, eventId, amount);
+  const result = await prisma
+    .$transaction(async (prisma) => {
+      const lockedRegistrations: any[] = await prisma.$queryRaw`
+      SELECT * FROM "EventRegistration"
+      WHERE "eventId" = ${eventId} AND "strapiRoleUuid" = ${targetedRole.strapiRoleUuid}
+      FOR UPDATE
+    `;
+
+      const totalRegistrationWithRoleLocked = lockedRegistrations.length;
+
+      if (totalRegistrationWithRoleLocked >= ownQuota.TicketsTotal) {
+        throw new Error(dictionary.api.sold_out);
+      }
+
+      await upsertDataAndRegisterEvents(
+        session,
+        targetedRole.strapiRoleUuid,
+        eventId,
+        amount,
+      );
+
+      return {
+        message: `Nyt sinulle olisi varattu ${amount} lippua tapahtumaan ja sinut ohjattaisiin maksamaan ne. Sinulla olisi 60 minuuttia aikaa maksaa liput ennen kuin varaus raukeaa.`,
+        isError: false,
+      };
+    })
+    .catch((error) => ({
+      message: error.message,
+      isError: true,
+    }));
 
   logger.info(
-    `User ${session.user.azureId} reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
+    `User ${session.user.entraUserUuid} reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
       currentUserReservations.length + amount
     }`,
   );
 
-  return {
-    message: `Nyt sinulle olisi varattu ${amount} lippua tapahtumaan ja sinut ohjattaisiin maksamaan ne. Sinulla olisi 60 minuuttia aikaa maksaa liput ennen kuin varaus raukeaa.`,
-    isError: false,
-  };
+  return result;
 }
 
 async function upsertDataAndRegisterEvents(
   session: Session,
-  targetedRole: { uuid: string; weight: number },
+  strapiRoleUuid: string,
   eventId: number,
   amount: number,
 ) {
-  await prisma.$transaction(async (prisma) => {
-    const user = await prisma.user.upsert({
-      where: { uuid: session.user!.azureId },
-      update: {},
-      create: { uuid: session.user!.azureId },
-    });
+  const user = await prisma.user.upsert({
+    where: { entraUserUuid: session.user!.entraUserUuid },
+    update: {},
+    create: { entraUserUuid: session.user!.entraUserUuid },
+  });
 
-    const role = await prisma.role.upsert({
-      where: { uuid: targetedRole.uuid },
-      update: {},
-      create: { uuid: targetedRole.uuid },
-    });
+  const role = await prisma.role.upsert({
+    where: { strapiRoleUuid },
+    update: {},
+    create: { strapiRoleUuid },
+  });
 
-    await prisma.rolesOnUsers.upsert({
-      where: {
-        roleId_userId: {
-          roleId: role.id,
-          userId: user.id,
-        },
+  await prisma.rolesOnUsers.upsert({
+    where: {
+      strapiRoleUuid_entraUserUuid: {
+        strapiRoleUuid: role.strapiRoleUuid,
+        entraUserUuid: user.entraUserUuid,
       },
-      update: {},
-      create: {
-        roleId: role.id,
-        userId: user.id,
-      },
-    });
+    },
+    update: {},
+    create: {
+      strapiRoleUuid: role.strapiRoleUuid,
+      entraUserUuid: user.entraUserUuid,
+    },
+  });
 
-    const eventRegistrations = Array.from({ length: amount }).map(() => ({
-      eventId,
-      userId: user.id,
-      purchaseRoleId: role.id,
-    }));
+  const eventRegistrations = Array.from({ length: amount }).map(() => ({
+    eventId,
+    entraUserUuid: user.entraUserUuid,
+    strapiRoleUuid: role.strapiRoleUuid,
+  }));
 
-    await prisma.eventRegistration.createMany({
-      data: eventRegistrations,
-    });
+  await prisma.eventRegistration.createMany({
+    data: eventRegistrations,
   });
 }
 
-async function getUserAndRegistrations(eventId: number, azureId: string) {
+async function getUserAndRegistrations(eventId: number, entraUserUuid: string) {
   const eventRegistrationsPromise = await prisma.eventRegistration.findMany({
     where: {
       eventId,
@@ -238,7 +266,7 @@ async function getUserAndRegistrations(eventId: number, azureId: string) {
 
   const localUserPromise = await prisma.user.findFirst({
     where: {
-      uuid: azureId,
+      entraUserUuid,
     },
     include: {
       roles: {

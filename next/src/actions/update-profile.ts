@@ -32,7 +32,7 @@ export async function updateProfile(
     };
   }
 
-  const isLimited = await isRateLimited(user.azureId, cacheKey, 10);
+  const isLimited = await isRateLimited(user.entraUserUuid, cacheKey, 10);
   if (isLimited) {
     logger.error('User is being rate limited');
     return {
@@ -98,7 +98,10 @@ export async function updateProfile(
     };
   }
 
-  const currentUserData = await getGraphAPIUser(accessToken, user.azureId);
+  const currentUserData = await getGraphAPIUser(
+    accessToken,
+    user.entraUserUuid,
+  );
   if (!currentUserData) {
     logger.error('Error getting user data using Graph API');
     return {
@@ -109,7 +112,7 @@ export async function updateProfile(
 
   const currentUserGroups = await getGraphAPIUserGroups(
     accessToken,
-    user.azureId,
+    user.entraUserUuid,
   );
   if (!currentUserGroups) {
     logger.error('Error getting user groups using Graph API');
@@ -132,11 +135,11 @@ export async function updateProfile(
     };
   }
 
-  await updateGraphAPIUser(accessToken, user.azureId, fieldsToUpdate);
+  await updateGraphAPIUser(accessToken, user.entraUserUuid, fieldsToUpdate);
 
   revalidatePath(`/${lang}/profile`);
 
-  await updateRateLimitCounter(user.azureId, cacheKey);
+  await updateRateLimitCounter(user.entraUserUuid, cacheKey);
 
   return {
     message: dictionary.api.profile_updated,

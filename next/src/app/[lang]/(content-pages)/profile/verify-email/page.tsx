@@ -54,7 +54,7 @@ export default async function VerifyEmail({
     redirect(`/${params.lang}/404`);
   }
 
-  if (session.user.azureId !== userIdVerified) {
+  if (session.user.entraUserUuid !== userIdVerified) {
     logger.error('User ID does not match token');
     redirect(`/${params.lang}/404`);
   }
@@ -67,7 +67,7 @@ export default async function VerifyEmail({
 
   const emailUpdated = await updateGraphAPIUser(
     accessToken,
-    session.user.azureId,
+    session.user.entraUserUuid,
     {
       identities: [
         {

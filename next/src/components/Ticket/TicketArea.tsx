@@ -20,7 +20,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const localUserPromise = session?.user
     ? await prisma.user.findFirst({
         where: {
-          uuid: session?.user?.azureId!,
+          entraUserUuid: session?.user?.entraUserUuid!,
         },
         include: {
           roles: {
@@ -57,41 +57,43 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     eventRegistrationsPromise,
   ]);
 
-  const userRoleUuids = localUser?.roles.map((role) => role.role.uuid) ?? [];
+  const strapiRoleUuids =
+    localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
   const eventRolesWithWeights =
     ticketTypes?.map((ticketType) => ({
-      uuid: ticketType.Role?.data.attributes.RoleId,
+      strapiRoleUuid: ticketType.Role?.data.attributes.RoleId,
       weight: ticketType.Weight,
     })) ?? [];
 
   const hasDefaultRoleWeight = eventRolesWithWeights.find(
-    (role) => role.uuid === process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+    (role) => role.strapiRoleUuid === process.env.NEXT_PUBLIC_NO_ROLE_ID!,
   );
 
-  const targetedRole = userRoleUuids.reduce(
-    (acc, userRoleUuid) => {
+  const targetedRole = strapiRoleUuids.reduce(
+    (acc, strapiRoleUuid) => {
       const roleWeight =
-        eventRolesWithWeights.find((role) => role.uuid === userRoleUuid)
-          ?.weight ?? 0;
+        eventRolesWithWeights.find(
+          (role) => role.strapiRoleUuid === strapiRoleUuid,
+        )?.weight ?? 0;
       return roleWeight > acc.weight
-        ? { uuid: userRoleUuid, weight: roleWeight }
+        ? { strapiRoleUuid: strapiRoleUuid, weight: roleWeight }
         : acc;
     },
     {
-      uuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+      strapiRoleUuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
       weight: hasDefaultRoleWeight?.weight ?? 0,
     },
   );
 
   const isOwnQuota = (role: string) => {
     if (!session?.user) return false;
-    return targetedRole.uuid === role;
+    return targetedRole.strapiRoleUuid === role;
   };
 
   const isSoldOut = (total: number, roleUuid: string) => {
     if (!eventRegistrations) return false;
     const totalRegistrationWithRole = eventRegistrations.filter(
-      (registration) => registration.purchaseRole.uuid === roleUuid,
+      (registration) => registration.purchaseRole.strapiRoleUuid === roleUuid,
     ).length;
     return totalRegistrationWithRole >= total;
   };
@@ -102,16 +104,16 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const hasBoughtMaxTickets = (roleUuid: string, maxAmount: number) => {
     if (!eventRegistrations || !localUser) return false;
     const userPurchases = eventRegistrations.filter(
-      (registration) => registration.userId === localUser?.id,
+      (registration) => registration.entraUserUuid === localUser?.entraUserUuid,
     );
     const userPurchasesWithRole = userPurchases.filter(
-      (registration) => registration.purchaseRole.uuid === roleUuid,
+      (registration) => registration.purchaseRole.strapiRoleUuid === roleUuid,
     );
     return userPurchasesWithRole.length >= maxAmount;
   };
 
   const ownQuota = ticketTypes?.find(
-    (type) => type.Role?.data.attributes.RoleId === targetedRole.uuid,
+    (type) => type.Role?.data.attributes.RoleId === targetedRole.strapiRoleUuid,
   );
 
   const isSoldOutOwnQuota = ownQuota

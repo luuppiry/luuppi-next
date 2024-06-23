@@ -35,8 +35,11 @@ export default async function Profile({ params }: ProfileProps) {
     redirect(`/${params.lang}`);
   }
 
-  const user = await getGraphAPIUser(accessToken, session.user.azureId);
-  const groups = await getGraphAPIUserGroups(accessToken, session.user.azureId);
+  const user = await getGraphAPIUser(accessToken, session.user.entraUserUuid);
+  const groups = await getGraphAPIUserGroups(
+    accessToken,
+    session.user.entraUserUuid,
+  );
   if (!user || !groups) {
     logger.error('Error getting user or groups from Graph API');
     redirect(`/${params.lang}`);
