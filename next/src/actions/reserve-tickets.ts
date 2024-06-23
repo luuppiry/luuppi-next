@@ -6,7 +6,6 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
-import { Session } from 'next-auth';
 
 export async function reserveTickets(
   eventId: number,
@@ -163,24 +162,77 @@ export async function reserveTickets(
 
   const result = await prisma
     .$transaction(async (prisma) => {
-      const lockedRegistrations: any[] = await prisma.$queryRaw`
-      SELECT * FROM "EventRegistration"
-      WHERE "eventId" = ${eventId} AND "strapiRoleUuid" = ${targetedRole.strapiRoleUuid}
-      FOR UPDATE
-    `;
+      // Lock whole table to prevent overbooking
+      await prisma.$executeRaw`LOCK TABLE "EventRegistration" IN ACCESS EXCLUSIVE MODE`;
+
+      const lockedRegistrations: any[] =
+        await prisma.eventRegistration.findMany({
+          where: {
+            eventId,
+            OR: [
+              {
+                reservedUntil: {
+                  gte: new Date(),
+                },
+              },
+              {
+                paymentCompleted: true,
+              },
+            ],
+          },
+          select: { id: true },
+        });
 
       const totalRegistrationWithRoleLocked = lockedRegistrations.length;
+      const strapiRoleUuid = targetedRole.strapiRoleUuid;
+      const entraUserUuid = session.user!.entraUserUuid;
 
-      if (totalRegistrationWithRoleLocked >= ownQuota.TicketsTotal) {
+      if (totalRegistrationWithRoleLocked + amount > ownQuota.TicketsTotal) {
         throw new Error(dictionary.api.sold_out);
       }
 
-      await upsertDataAndRegisterEvents(
-        session,
-        targetedRole.strapiRoleUuid,
+      const userPromise = prisma.user.upsert({
+        where: { entraUserUuid },
+        update: {},
+        create: { entraUserUuid },
+      });
+
+      const rolePromise = prisma.role.upsert({
+        where: { strapiRoleUuid },
+        update: {},
+        create: { strapiRoleUuid },
+      });
+
+      const rolesOnUsersPromise = prisma.rolesOnUsers.upsert({
+        where: {
+          strapiRoleUuid_entraUserUuid: {
+            strapiRoleUuid: strapiRoleUuid,
+            entraUserUuid: entraUserUuid,
+          },
+        },
+        update: {},
+        create: {
+          strapiRoleUuid,
+          entraUserUuid,
+        },
+      });
+
+      const eventRegistrations = Array.from({ length: amount }).map(() => ({
         eventId,
-        amount,
-      );
+        entraUserUuid,
+        strapiRoleUuid,
+      }));
+
+      const eventsPromise = prisma.eventRegistration.createMany({
+        data: eventRegistrations,
+      });
+
+      await Promise.all([
+        userPromise,
+        rolePromise,
+        rolesOnUsersPromise,
+        eventsPromise,
+      ]);
 
       return {
         message: `Nyt sinulle olisi varattu ${amount} lippua tapahtumaan ja sinut ohjattaisiin maksamaan ne. Sinulla olisi 60 minuuttia aikaa maksaa liput ennen kuin varaus raukeaa.`,
@@ -199,49 +251,6 @@ export async function reserveTickets(
   );
 
   return result;
-}
-
-async function upsertDataAndRegisterEvents(
-  session: Session,
-  strapiRoleUuid: string,
-  eventId: number,
-  amount: number,
-) {
-  const user = await prisma.user.upsert({
-    where: { entraUserUuid: session.user!.entraUserUuid },
-    update: {},
-    create: { entraUserUuid: session.user!.entraUserUuid },
-  });
-
-  const role = await prisma.role.upsert({
-    where: { strapiRoleUuid },
-    update: {},
-    create: { strapiRoleUuid },
-  });
-
-  await prisma.rolesOnUsers.upsert({
-    where: {
-      strapiRoleUuid_entraUserUuid: {
-        strapiRoleUuid: role.strapiRoleUuid,
-        entraUserUuid: user.entraUserUuid,
-      },
-    },
-    update: {},
-    create: {
-      strapiRoleUuid: role.strapiRoleUuid,
-      entraUserUuid: user.entraUserUuid,
-    },
-  });
-
-  const eventRegistrations = Array.from({ length: amount }).map(() => ({
-    eventId,
-    entraUserUuid: user.entraUserUuid,
-    strapiRoleUuid: role.strapiRoleUuid,
-  }));
-
-  await prisma.eventRegistration.createMany({
-    data: eventRegistrations,
-  });
 }
 
 async function getUserAndRegistrations(eventId: number, entraUserUuid: string) {
