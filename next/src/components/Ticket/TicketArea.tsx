@@ -148,30 +148,24 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
 
   if (!ticketTypesFormatted?.length) return null;
 
+  const getError = () => {
+    if (!session?.user) return dictionary.pages_events.login_required;
+    if (isSoldOutOwnQuota) return dictionary.pages_events.sold_out_info;
+    if (hasBoughtMaxTicketsOwnQuota)
+      return dictionary.pages_events.max_tickets_bought;
+    if (!isRegistrationOpenOwnQuota)
+      return dictionary.pages_events.registration_closed;
+    return null;
+  };
+
+  const error = getError();
+
   return (
     <>
-      {!session?.user && (
+      {error && (
         <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
           <BiErrorCircle size={24} />
-          {dictionary.pages_events.login_required}
-        </div>
-      )}
-      {isSoldOutOwnQuota && (
-        <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
-          <BiErrorCircle size={24} />
-          {dictionary.pages_events.sold_out_info}
-        </div>
-      )}
-      {hasBoughtMaxTicketsOwnQuota && (
-        <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
-          <BiErrorCircle size={24} />
-          {dictionary.pages_events.max_tickets_bought}
-        </div>
-      )}
-      {!isRegistrationOpenOwnQuota && (
-        <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
-          <BiErrorCircle size={24} />
-          {dictionary.pages_events.registration_closed}
+          {error}
         </div>
       )}
       <div className="flex flex-col gap-4">
