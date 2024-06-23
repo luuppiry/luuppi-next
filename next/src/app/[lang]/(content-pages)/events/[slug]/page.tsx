@@ -1,7 +1,6 @@
-import { auth } from '@/auth';
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import SidePartners from '@/components/SidePartners/SidePartners';
-import Ticket from '@/components/Ticket/Ticket';
+import TicketArea from '@/components/Ticket/TicketArea';
 import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
@@ -13,7 +12,7 @@ import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import { BiErrorCircle } from 'react-icons/bi';
+import { Suspense } from 'react';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 import { Event as EventSchema, WithContext } from 'schema-dts';
 
@@ -23,7 +22,6 @@ interface EventProps {
 
 export default async function Event({ params }: EventProps) {
   const dictionary = await getDictionary(params.lang);
-  const session = await auth();
 
   const id = parseInt(params.slug, 10);
   if (isNaN(id)) {
@@ -32,9 +30,12 @@ export default async function Event({ params }: EventProps) {
 
   const url = `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=Image&populate=Registration.TicketTypes.Role`;
 
-  const event = await getStrapiData<
-    APIResponse<'api::event.event'>
-  >(params.lang, url, ['event'], true);
+  const event = await getStrapiData<APIResponse<'api::event.event'>>(
+    params.lang,
+    url,
+    ['event'],
+    true,
+  );
 
   if (!event) {
     redirect(`/${params.lang}/404`);
@@ -54,23 +55,22 @@ export default async function Event({ params }: EventProps) {
     name: event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'],
     startDate: new Date(event.data.attributes.StartDate).toISOString(),
     endDate: new Date(event.data.attributes.EndDate).toISOString(),
-    description: getPlainText(event.data.attributes[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']).slice(0, 300),
+    description: getPlainText(
+      event.data.attributes[
+        params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
+      ],
+    ).slice(0, 300),
     location: {
       '@type': 'Place',
-      name: event.data.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
+      name: event.data.attributes[
+        params.lang === 'en' ? 'LocationEn' : 'LocationFi'
+      ],
     },
   };
 
-  const imageUrl = event.data.attributes.Image?.data.attributes.url ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url) : undefined;
-  const ticketTypes = event.data.attributes.Registration?.TicketTypes;
-
-  const ticketTypesTranslated = ticketTypes?.map((ticketType) => ({
-    name: ticketType[params.lang === 'en' ? 'NameEn' : 'NameFi'],
-    location: event.data.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
-    price: ticketType.Price,
-    registrationStartsAt: new Date(ticketType.RegistrationStartsAt),
-    registrationEndsAt: new Date(ticketType.RegistrationEndsAt)
-  }))
+  const imageUrl = event.data.attributes.Image?.data.attributes.url
+    ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
+    : undefined;
 
   return (
     <>
@@ -80,7 +80,7 @@ export default async function Event({ params }: EventProps) {
       />
       <div className="relative flex w-full gap-12">
         <div className="flex w-full flex-col">
-          <div className="relative h-64 rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:h-44 mb-12" >
+          <div className="relative mb-12 h-64 rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:h-44">
             {imageUrl && (
               <Image
                 alt="Page banner image"
@@ -91,9 +91,13 @@ export default async function Event({ params }: EventProps) {
             )}
           </div>
           <div className="relative flex flex-col gap-4">
-            <h1 className="break-words">{
-              event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi']
-            }</h1>
+            <h1 className="break-words">
+              {
+                event.data.attributes[
+                  params.lang === 'en' ? 'NameEn' : 'NameFi'
+                ]
+              }
+            </h1>
             <div className="flex flex-col opacity-40">
               <p className="text-sm">
                 {dictionary.general.content_updated}:{' '}
@@ -109,7 +113,7 @@ export default async function Event({ params }: EventProps) {
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
             <div className="flex max-w-full flex-col gap-2 rounded-lg py-4 pr-4 font-semibold max-sm:text-sm">
               <div className="flex items-center">
-                <div className="flex items-center rounded-full bg-primary-400 text-white p-2 mr-2 justify-center">
+                <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
                   <IoCalendarOutline className="shrink-0 text-2xl" />
                 </div>
                 <p className="line-clamp-2">
@@ -121,41 +125,50 @@ export default async function Event({ params }: EventProps) {
                 </p>
               </div>
               <div className="flex items-center">
-                <div className="flex items-center rounded-full bg-primary-400 text-white p-2 mr-2 justify-center">
+                <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
                   <IoLocationOutline className="shrink-0 text-2xl" />
                 </div>
-                <p className="line-clamp-2">{
-                  event.data.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi']
-                }</p>
+                <p className="line-clamp-2">
+                  {
+                    event.data.attributes[
+                      params.lang === 'en' ? 'LocationEn' : 'LocationFi'
+                    ]
+                  }
+                </p>
               </div>
             </div>
           </div>
-          <div className='mb-12'>
-            <h2 className="text-2xl font-bold mb-4">
+          <div className="mb-12">
+            <h2 className="mb-4 text-2xl font-bold">
               {dictionary.pages_events.tickets}
             </h2>
-            {!session?.user && (
-              <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
-                <BiErrorCircle size={24} />
-                {dictionary.pages_events.login_required}
-              </div>
-            )}
-            {ticketTypesTranslated?.map((ticket) => (
-              <Ticket key={ticket.name} dictionary={dictionary} disabled={
-                !session?.user
-              } eventStartsAt={new Date(event.data.attributes.StartDate)} lang={params.lang} ticket={ticket} />
-            ))}
+            <Suspense
+              fallback={
+                <div>
+                  {/* TODO: ADD LOADING TICKET DATA INDICATOR */}
+                  Loading...
+                </div>
+              }
+            >
+              <TicketArea event={event} lang={params.lang} />
+            </Suspense>
           </div>
           <div className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
-            <BlockRendererClient content={
-              event.data.attributes[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']
-            } />
+            <BlockRendererClient
+              content={
+                event.data.attributes[
+                  params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
+                ]
+              }
+            />
           </div>
-          <div className='mt-8'>
-            <button className='btn btn-primary'>
+          <div className="mt-8">
+            <button className="btn btn-primary">
               {dictionary.pages_events.register_event}
             </button>
-            <p className='text-sm mt-4 max-w-md opacity-60'><i>{dictionary.pages_events.event_info}</i></p>
+            <p className="mt-4 max-w-md text-sm opacity-60">
+              <i>{dictionary.pages_events.event_info}</i>
+            </p>
           </div>
         </div>
         <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
@@ -174,20 +187,32 @@ export default async function Event({ params }: EventProps) {
 export async function generateMetadata({
   params,
 }: EventProps): Promise<Metadata> {
-  const event = await getStrapiData<
-    APIResponse<'api::event.event'>
-  >(params.lang, `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage`, ['event'], true);
+  const event = await getStrapiData<APIResponse<'api::event.event'>>(
+    params.lang,
+    `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage`,
+    ['event'],
+    true,
+  );
 
   if (!event) return {};
 
   const pathname = `/${params.lang}/events/${params.slug}`;
 
-  const description = getPlainText(event.data.attributes[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']).slice(0, 300);
-  const title = event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
+  const description = getPlainText(
+    event.data.attributes[
+      params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
+    ],
+  ).slice(0, 300);
+  const title =
+    event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
 
   return {
     title: `${title} | Luuppi ry`,
-    description: getPlainText(event?.data.attributes[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']).slice(0, 300),
+    description: getPlainText(
+      event?.data.attributes[
+        params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
+      ],
+    ).slice(0, 300),
     alternates: {
       canonical: pathname,
       languages: {
@@ -203,7 +228,7 @@ export async function generateMetadata({
     },
     twitter: {
       title,
-      description
+      description,
     },
   };
 }
@@ -211,9 +236,12 @@ export async function generateMetadata({
 export async function generateStaticParams() {
   const url = '/api/events';
 
-  const data = await getStrapiData<
-    APIResponseCollection<'api::event.event'>
-  >('fi', url, ['event'], true);
+  const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
+    'fi',
+    url,
+    ['event'],
+    true,
+  );
 
   return data?.data
     .filter((e) => e.id)

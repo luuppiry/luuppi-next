@@ -22,7 +22,14 @@
     "invalid_subject": "Invalid subject",
     "invalid_message": "Invalid message",
     "feedback_sent": "Feedback sent",
-    "invalid_captcha": "Invalid captcha"
+    "invalid_captcha": "Invalid captcha",
+    "invalid_amount": "Invalid amount",
+    "invalid_event": "Invalid event",
+    "maximum_tickets_reached": "You have purchased the maximum number of tickets for this quota. If you have not completed your purchase, you can do so now.",
+    "sold_out": "All tickets are sold out for this quota.",
+    "registration_closed": "Registration for this quota is closed.",
+    "not_enough_tickets": "Not enough tickets available for this quota.",
+    "no_room_own_limit": "You cannot purchase more tickets, as you have reached the event's per-user limit."
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -77,9 +84,15 @@
     "zoom_calendar_on": "Enlarge calendar",
     "zoom_calendar_off": "Shrink calendar",
     "days": "days",
+    "days_short": "d",
     "hours": "hours",
+    "hours_short": "h",
     "minutes": "minutes",
-    "seconds": "seconds"
+    "minutes_short": "min",
+    "seconds": "seconds",
+    "seconds_short": "s",
+    "error": "Error",
+    "success": "Success"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
@@ -194,7 +207,12 @@
     "buy_tickets": "Buy ticket",
     "registration_starts": "Registration starts",
     "tickets": "Tickets",
-    "login_required": "You must be logged in to register for events."
+    "login_required": "You must be logged in to register for events.",
+    "quota_info": "There are several ticket quotas for the event. Only the quota you belong to is shown as available to you.",
+    "sold_out_info": "Unfortunately, all tickets are sold out for the quota you belong to.",
+    "max_tickets_bought": "You have already bought the maximum number of tickets for this event.",
+    "your_quota": "Your quota",
+    "registration_closed": "Registration for your quota is closed."
   },
   "pages_404": {
     "title": "Page not found",
