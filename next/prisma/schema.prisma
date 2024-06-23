@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id            Int                 @id @default(autoincrement())
-  uuid          String              @unique /// User's EntraID UUID
+  entraUserUuid String              @unique /// User's EntraID UUID
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
   registrations EventRegistration[]
@@ -23,37 +23,37 @@ model User {
 }
 
 model Role {
-  id            Int                 @id @default(autoincrement())
-  uuid          String              @unique /// UUID from Strapi role
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
-  users         RolesOnUsers[]
-  registrations EventRegistration[]
+  id             Int                 @id @default(autoincrement())
+  strapiRoleUuid String              @unique /// UUID from Strapi role
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  users          RolesOnUsers[]
+  registrations  EventRegistration[]
 }
 
 model RolesOnUsers {
-  roleId    Int
-  role      Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  expiresAt DateTime?
+  strapiRoleUuid String
+  role           Role      @relation(fields: [strapiRoleUuid], references: [strapiRoleUuid], onDelete: Cascade)
+  entraUserUuid  String
+  user           User      @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  expiresAt      DateTime?
 
-  @@id([roleId, userId])
+  @@id([strapiRoleUuid, entraUserUuid])
 }
 
 model EventRegistration {
   id               Int      @id @default(autoincrement())
   eventId          Int /// Strapi Event ID
-  purchaseRoleId   Int
-  purchaseRole     Role     @relation(fields: [purchaseRoleId], references: [id])
+  strapiRoleUuid   String /// UUID from Strapi role
+  purchaseRole     Role     @relation(fields: [strapiRoleUuid], references: [strapiRoleUuid])
   paymentCompleted Boolean  @default(false)
   reservedUntil    DateTime @default(dbgenerated("now() + interval '60 minutes'"))
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  userId           Int
-  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entraUserUuid    String
+  user             User     @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
 
   @@index([eventId])
 }
