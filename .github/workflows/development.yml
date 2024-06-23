@@ -19,11 +19,12 @@ jobs:
 
       - name: Add Next.js environment variables
         run: |
-          touch .env.local
-          echo NEXT_PUBLIC_STRAPI_BASE_URL=https://${{ secrets.CMS_HOST }} >> .env.local
-          echo NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST_DEV }} >> .env.local
-          echo NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} >> .env.local
-          echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env.local
+          touch .env
+          echo NEXT_PUBLIC_STRAPI_BASE_URL=https://${{ secrets.CMS_HOST }} >> .env
+          echo NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST_DEV }} >> .env
+          echo NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} >> .env
+          echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL_DEV }} >> .env
         working-directory: ./next
 
       - name: Build Next.js Docker image
