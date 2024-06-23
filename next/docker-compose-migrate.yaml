@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  prisma:
+    image: node:latest
+    env_file: .env
+    working_dir: /app
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    volumes:
+      - .:/app
+    networks:
+      - weba-network
+    command: sh -c "npx prisma generate && npx prisma migrate deploy"
+
+#
+# External network handled by luuppi-proxy
+# https://github.com/luuppiry/luuppi-proxy
+#
+networks:
+  weba-network:
+    external: true
