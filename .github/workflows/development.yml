@@ -50,4 +50,4 @@ jobs:
             docker pull ${{ secrets.REGISTRY }}/next-beta:latest
             docker compose down
             docker compose up -d
-            docker-compose exec -T next-beta npx prisma migrate deploy
+            docker compose exec -T next-beta npx prisma migrate deploy
