@@ -27,11 +27,15 @@ export default async function RenderEvents({
     .filter((event) => new Date(event.attributes.EndDate) > new Date())
     .map((e) => ({
       ...e,
-      isToday: new Date(e.attributes.StartDate).toDateString() === new Date().toDateString(),
+      isToday:
+        new Date(e.attributes.StartDate).toDateString() ===
+        new Date().toDateString(),
     }));
 
   const formattedEvents = upcomingEvents.map((event) => ({
-    description: getPlainText(event.attributes[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']),
+    description: getPlainText(
+      event.attributes[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
+    ),
     end: new Date(event.attributes.EndDate),
     id: event.id.toString(),
     location: event.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],

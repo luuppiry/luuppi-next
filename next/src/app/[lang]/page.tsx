@@ -38,17 +38,18 @@ export default async function Home({ params }: HomeProps) {
       '@type': 'ContactPoint',
       contactType: dictionary.navigation.board,
       email: 'hallitus@luuppi.fi',
-      availableLanguage: ['Finnish', 'English']
+      availableLanguage: ['Finnish', 'English'],
     },
     sameAs: [
       'https://www.facebook.com/luuppiry',
       'https://www.tiktok.com/@luuppiry',
       'https://www.instagram.com/luuppiry/',
       'https://www.linkedin.com/company/luuppi-ry',
-      'https://fi.wikipedia.org/wiki/Luuppi_(ainej%C3%A4rjest%C3%B6)'
+      'https://fi.wikipedia.org/wiki/Luuppi_(ainej%C3%A4rjest%C3%B6)',
     ],
-    hasMap: 'https://www.google.com/maps/d/viewer?mid=1udxC-9jUfnpF5-bZyxiT3SlEcPMRnAh9'
-  }
+    hasMap:
+      'https://www.google.com/maps/d/viewer?mid=1udxC-9jUfnpF5-bZyxiT3SlEcPMRnAh9',
+  };
 
   return (
     <>

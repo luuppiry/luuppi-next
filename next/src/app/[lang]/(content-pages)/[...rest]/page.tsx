@@ -18,10 +18,7 @@ export default async function NotFound({ params }: NotFoundProps) {
         <h1>{dictionary.pages_404.title}</h1>
         <p className="max-w-xl text-lg">{dictionary.pages_404.description}</p>
         <div>
-          <Link
-            className="btn btn-primary text-lg"
-            href={`/${params.lang}`}
-          >
+          <Link className="btn btn-primary text-lg" href={`/${params.lang}`}>
             {dictionary.pages_404.return_home}
           </Link>
         </div>

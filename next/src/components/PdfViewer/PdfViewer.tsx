@@ -47,10 +47,7 @@ export default function PdfViewer({ pdfUrl, dictionary }: PdfViewerProps) {
 
   return (
     <>
-      <button
-        className="btn btn-primary mb-4"
-        onClick={handleDownload}
-      >
+      <button className="btn btn-primary mb-4" onClick={handleDownload}>
         {dictionary.general.open_pdf}
         <FaExternalLinkAlt />
       </button>
