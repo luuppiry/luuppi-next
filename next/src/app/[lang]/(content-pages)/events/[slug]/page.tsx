@@ -243,9 +243,11 @@ export async function generateStaticParams() {
     true,
   );
 
-  return data?.data
-    .filter((e) => e.id)
-    .map((event) => ({
-      slug: event.id.toString(),
-    }));
+  return (
+    data?.data
+      .filter((e) => e.id)
+      .map((event) => ({
+        slug: event.id.toString(),
+      })) ?? []
+  );
 }
