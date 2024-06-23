@@ -96,8 +96,8 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     return totalRegistrationWithRole >= total;
   };
 
-  const isRegistrationOpen = (registrationStartsAt: Date) =>
-    new Date().getTime() > registrationStartsAt.getTime();
+  const isRegistrationOpen = (registrationEndsAt: Date) =>
+    new Date() < new Date(registrationEndsAt);
 
   const hasBoughtMaxTickets = (roleUuid: string, maxAmount: number) => {
     if (!eventRegistrations || !localUser) return false;
@@ -126,7 +126,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     : false;
 
   const isRegistrationOpenOwnQuota = ownQuota
-    ? isRegistrationOpen(new Date(ownQuota.RegistrationStartsAt))
+    ? isRegistrationOpen(new Date(ownQuota.RegistrationEndsAt))
     : false;
 
   const ticketTypesFormatted = ticketTypes
