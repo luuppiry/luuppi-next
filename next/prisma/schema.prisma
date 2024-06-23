@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int                 @id @default(autoincrement())
+  uuid          String              @unique /// User's EntraID UUID
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  registrations EventRegistration[]
+  roles         RolesOnUsers[]
+}
+
+model Role {
+  id            Int                 @id @default(autoincrement())
+  uuid          String              @unique /// UUID from Strapi role
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  users         RolesOnUsers[]
+  registrations EventRegistration[]
+}
+
+model RolesOnUsers {
+  roleId    Int
+  role      Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  expiresAt DateTime?
+
+  @@id([roleId, userId])
+}
+
+model EventRegistration {
+  id               Int      @id @default(autoincrement())
+  eventId          Int /// Strapi Event ID
+  purchaseRoleId   Int
+  purchaseRole     Role     @relation(fields: [purchaseRoleId], references: [id])
+  paymentCompleted Boolean  @default(false)
+  reservedUntil    DateTime @default(dbgenerated("now() + interval '60 minutes'"))
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  userId           Int
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
