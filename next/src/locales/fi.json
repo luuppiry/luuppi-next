@@ -22,7 +22,14 @@
     "invalid_subject": "Kelvoton aihe",
     "invalid_message": "Kelvoton viesti",
     "feedback_sent": "Palaute lähetetty",
-    "invalid_captcha": "Kelvoton vahvistus"
+    "invalid_captcha": "Kelvoton vahvistus",
+    "invalid_amount": "Kelvoton määrä",
+    "invalid_event": "Kelvoton tapahtuma",
+    "maximum_tickets_reached": "Olet ostanut maksimimäärän lippuja tälle kiintiölle. Mikäli et ole viimeistellyt ostoa, voit tehdä sen nyt.",
+    "sold_out": "Valitettavasti kaikki liput ovat loppuunmyyty kiintiöltä, johon kuulut.",
+    "registration_closed": "Ilmoittautuminen on sulkeutunut kiintiösi osalta.",
+    "not_enough_tickets": "Kiintiössä ei ole enää tarpeeksi lippuja.",
+    "no_room_own_limit": "Et voi ostaa enempää lippuja, sillä olet saavuttanut tapahtuman käyttäjäkohtaisen enimmäismäärän."
   },
   "roles": {
     "entire_board": "Koko hallitus",
@@ -77,9 +84,15 @@
     "zoom_calendar_on": "Suurenna kalenteri",
     "zoom_calendar_off": "Pienennä kalenteri",
     "days": "päivää",
+    "days_short": "pv",
     "hours": "tuntia",
+    "hours_short": "h",
     "minutes": "minuuttia",
-    "seconds": "sekuntia"
+    "minutes_short": "min",
+    "seconds": "sekuntia",
+    "seconds_short": "s",
+    "error": "Virhe",
+    "success": "Onnistui"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
@@ -194,7 +207,12 @@
     "buy_tickets": "Osta lippu",
     "registration_starts": "Myynti alkaa",
     "tickets": "Lipunmyynti",
-    "login_required": "Sinun täytyy kirjautua sisään ostaaksesi lippuja."
+    "login_required": "Sinun täytyy kirjautua sisään ostaaksesi lippuja.",
+    "quota_info": "Tapahtumassa on useita lippukiintiöitä. Sinulle näytetään saatavilla olevana vain kiintiö johon kuulut.",
+    "sold_out_info": "Valitettavasti kaikki liput ovat loppuunmyyty kiintiöltä, johon kuulut.",
+    "max_tickets_bought": "Olet ostanut maksimimäärän lippuja tälle kiintiölle.",
+    "your_quota": "Sinun kiintiösi",
+    "registration_closed": "Ilmoittautuminen on sulkeutunut kiintiösi osalta."
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",
