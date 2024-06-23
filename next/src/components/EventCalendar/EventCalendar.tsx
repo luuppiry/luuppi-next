@@ -16,7 +16,11 @@ interface EventCalendarProps {
   dictionary: Dictionary;
 }
 
-export default function EventCalendar({ events, lang, dictionary }: EventCalendarProps) {
+export default function EventCalendar({
+  events,
+  lang,
+  dictionary,
+}: EventCalendarProps) {
   const [isSmallDesktop, setIsSmallDesktop] = useState(false);
 
   const ctx = useContext(SelectedViewContext);
@@ -42,44 +46,48 @@ export default function EventCalendar({ events, lang, dictionary }: EventCalenda
   }, []);
 
   return (
-    <div className={`${ctx.desktopCalendarFullSize ? 'fixed h-screen w-screen top-0 z-50 left-0' : ''}`}>
-      <div className={`${ctx.desktopCalendarFullSize ? 'p-6 bg-white flex w-full h-full' : ''}`}>
+    <div
+      className={`${ctx.desktopCalendarFullSize ? 'fixed left-0 top-0 z-50 h-screen w-screen' : ''}`}
+    >
+      <div
+        className={`${ctx.desktopCalendarFullSize ? 'flex h-full w-full bg-white p-6' : ''}`}
+      >
         <FullCalendar
           ref={calendarRef}
           aspectRatio={isSmallDesktop ? 0.8 : 1.35}
           buttonText={
             lang === 'fi'
               ? {
-                today: 'Tänään',
-                month: 'Kuukausi',
-                week: 'Viikko',
-              }
+                  today: 'Tänään',
+                  month: 'Kuukausi',
+                  week: 'Viikko',
+                }
               : {
-                today: 'Today',
-                month: 'Month',
-                week: 'Week',
-              }
+                  today: 'Today',
+                  month: 'Month',
+                  week: 'Week',
+                }
           }
           customButtons={{
             toggleSize: {
               text: ctx.desktopCalendarFullSize
                 ? dictionary.general.zoom_calendar_off
                 : dictionary.general.zoom_calendar_on,
-              click: () => ctx.setDesktopCalendarFullSize(!ctx.desktopCalendarFullSize),
-            }
-          }
-          }
+              click: () =>
+                ctx.setDesktopCalendarFullSize(!ctx.desktopCalendarFullSize),
+            },
+          }}
           dayHeaderFormat={
             isSmallDesktop
               ? {
-                weekday: 'short',
-                day: 'numeric',
-                omitCommas: true,
-              }
+                  weekday: 'short',
+                  day: 'numeric',
+                  omitCommas: true,
+                }
               : {
-                weekday: 'long',
-                day: 'numeric',
-              }
+                  weekday: 'long',
+                  day: 'numeric',
+                }
           }
           dayMaxEventRows={4}
           dayMaxEvents={4}
@@ -105,15 +113,15 @@ export default function EventCalendar({ events, lang, dictionary }: EventCalenda
           headerToolbar={
             !isSmallDesktop
               ? {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek toggleSize',
-              }
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'dayGridMonth,timeGridWeek toggleSize',
+                }
               : {
-                left: 'title',
-                center: 'prev,next today',
-                right: 'dayGridMonth toggleSize',
-              }
+                  left: 'title',
+                  center: 'prev,next today',
+                  right: 'dayGridMonth toggleSize',
+                }
           }
           height={ctx.desktopCalendarFullSize ? '100%' : undefined}
           initialView={'dayGridMonth'}
