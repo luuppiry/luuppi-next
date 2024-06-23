@@ -50,4 +50,6 @@ jobs:
             docker pull ${{ secrets.REGISTRY }}/next-beta:latest
             docker compose down
             docker compose up -d
-            docker compose exec -T next-beta npx prisma migrate deploy
+            echo "Sleeping for 10 seconds"
+            sleep 10
+            docker compose -f docker-compose-migrate.yaml up -d
