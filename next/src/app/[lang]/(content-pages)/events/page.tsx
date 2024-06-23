@@ -8,7 +8,8 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 
-const url = '/api/events?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
+const url =
+  '/api/events?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
 
 interface EventsProps {
   params: { lang: SupportedLanguage };
@@ -17,16 +18,23 @@ interface EventsProps {
 export default async function Events({ params }: EventsProps) {
   const dictionary = await getDictionary(params.lang);
 
-  const data = await getStrapiData<
-    APIResponseCollection<'api::event.event'>
-  >(params.lang, url, ['event']);
+  const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
+    params.lang,
+    url,
+    ['event'],
+  );
 
   const events: Event[] = data.data.map((event) => ({
-    description: getPlainText(event.attributes[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']),
+    description: getPlainText(
+      event.attributes[
+        params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
+      ],
+    ),
     end: new Date(event.attributes.EndDate),
     start: new Date(event.attributes.StartDate),
     id: event.id.toString(),
-    location: event.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
+    location:
+      event.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
     title: event.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'],
   }));
 

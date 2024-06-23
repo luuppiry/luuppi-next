@@ -138,10 +138,7 @@ export default function MobileCalendar({
             year: 'numeric',
           })}
         </h2>
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={handleNextMonth}
-        >
+        <button className="btn btn-primary btn-sm" onClick={handleNextMonth}>
           <BiArrowToRight size={26} />
         </button>
       </div>

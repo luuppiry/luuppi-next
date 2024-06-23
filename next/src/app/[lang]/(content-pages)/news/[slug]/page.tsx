@@ -56,7 +56,7 @@ export default async function NewsPost({ params }: NewsPostProps) {
       '@type': 'Person',
       name: selectedNews.attributes.authorName,
     },
-  }
+  };
 
   return (
     <>
