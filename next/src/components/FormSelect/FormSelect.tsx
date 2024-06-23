@@ -8,7 +8,8 @@ interface FormSelectProps {
   marginBottom?: boolean;
   labelTopRight?: React.ReactNode;
   disabled?: boolean;
-  onChange?: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onChange?: (e: any) => void;
 }
 
 export default function FormSelect({

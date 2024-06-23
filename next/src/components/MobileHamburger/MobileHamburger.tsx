@@ -67,7 +67,7 @@ export default function MobileHamburger({
                     <div className="flex items-center justify-between bg-secondary-400 font-bold text-white hover:cursor-auto hover:bg-secondary-400">
                       {
                         dictionary.navigation[
-                        link.translation as keyof typeof dictionary.navigation
+                          link.translation as keyof typeof dictionary.navigation
                         ]
                       }
                     </div>
@@ -79,7 +79,7 @@ export default function MobileHamburger({
                     >
                       {
                         dictionary.navigation[
-                        link.translation as keyof typeof dictionary.navigation
+                          link.translation as keyof typeof dictionary.navigation
                         ]
                       }
                     </Link>
@@ -95,7 +95,7 @@ export default function MobileHamburger({
                           >
                             {
                               dictionary.navigation[
-                              sublink.translation as keyof typeof dictionary.navigation
+                                sublink.translation as keyof typeof dictionary.navigation
                               ]
                             }
                           </Link>

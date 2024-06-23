@@ -108,7 +108,11 @@ export default function EventSelector({
       {ctx.selectedView === 'calendar' ? (
         <>
           {width > 960 ? (
-            <EventCalendar dictionary={dictionary} events={events} lang={lang} />
+            <EventCalendar
+              dictionary={dictionary}
+              events={events}
+              lang={lang}
+            />
           ) : (
             <MobileCalendar
               dictionary={dictionary}
