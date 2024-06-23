@@ -24,7 +24,6 @@ jobs:
           echo NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST_DEV }} >> .env
           echo NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} >> .env
           echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env
-          echo DATABASE_URL=${{ secrets.DATABASE_URL_DEV }} >> .env
         working-directory: ./next
 
       - name: Build Next.js Docker image
@@ -51,3 +50,4 @@ jobs:
             docker pull ${{ secrets.REGISTRY }}/next-beta:latest
             docker compose down
             docker compose up -d
+            docker-compose exec -T next-beta npx prisma migrate deploy
