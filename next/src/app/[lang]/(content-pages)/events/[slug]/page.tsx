@@ -144,9 +144,9 @@ export default async function Event({ params }: EventProps) {
             </h2>
             <Suspense
               fallback={
-                <div>
-                  {/* TODO: ADD LOADING TICKET DATA INDICATOR */}
-                  Loading...
+                <div className="flex flex-col gap-4">
+                  <div className="skeleton h-24 w-full" />
+                  <div className="skeleton h-24 w-full" />
                 </div>
               }
             >
