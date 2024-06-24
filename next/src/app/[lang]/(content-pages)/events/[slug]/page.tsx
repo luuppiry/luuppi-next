@@ -33,7 +33,7 @@ export default async function Event({ params }: EventProps) {
   const event = await getStrapiData<APIResponse<'api::event.event'>>(
     params.lang,
     url,
-    ['event'],
+    [`event-${params.slug}`],
     true,
   );
 
@@ -173,7 +173,7 @@ export async function generateMetadata({
   const event = await getStrapiData<APIResponse<'api::event.event'>>(
     params.lang,
     `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage`,
-    ['event'],
+    [`event-${params.slug}`],
     true,
   );
 
