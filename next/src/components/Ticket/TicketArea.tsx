@@ -18,7 +18,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const ticketTypes = event.data.attributes.Registration?.TicketTypes;
 
   const localUserPromise = session?.user
-    ? await prisma.user.findFirst({
+    ? prisma.user.findFirst({
         where: {
           entraUserUuid: session?.user?.entraUserUuid!,
         },
@@ -34,7 +34,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       })
     : null;
 
-  const eventRegistrationsPromise = await prisma.eventRegistration.findMany({
+  const eventRegistrationsPromise = prisma.eventRegistration.findMany({
     where: {
       eventId: event.data.id,
       OR: [
