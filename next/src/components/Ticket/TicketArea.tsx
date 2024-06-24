@@ -22,7 +22,8 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         where: {
           entraUserUuid: session?.user?.entraUserUuid!,
         },
-        include: {
+        select: {
+          entraUserUuid: true,
           roles: {
             include: {
               role: true,
@@ -47,8 +48,13 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         },
       ],
     },
-    include: {
-      purchaseRole: true,
+    select: {
+      entraUserUuid: true,
+      purchaseRole: {
+        select: {
+          strapiRoleUuid: true,
+        },
+      },
     },
   });
 
