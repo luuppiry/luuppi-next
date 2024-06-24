@@ -183,22 +183,22 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         message: dictionary.pages_events.login_required,
         level: 'error',
       });
-    if (isSoldOutOwnQuota)
+    if (isSoldOutOwnQuota && ownQuota)
       errors.push({
         message: dictionary.pages_events.sold_out_info,
         level: 'warn',
       });
-    if (hasBoughtMaxTicketsOwnQuota)
+    if (hasBoughtMaxTicketsOwnQuota && ownQuota)
       errors.push({
         message: dictionary.pages_events.max_tickets_bought,
         level: 'info',
       });
-    if (!isRegistrationOpenOwnQuota)
+    if (!isRegistrationOpenOwnQuota && ownQuota)
       errors.push({
         message: dictionary.pages_events.registration_closed,
         level: 'info',
       });
-    if (hasUnpaidReservationsOwnQuota)
+    if (hasUnpaidReservationsOwnQuota && ownQuota)
       errors.push({
         message: dictionary.pages_events.unpaid_reservations,
         level: 'warn',
