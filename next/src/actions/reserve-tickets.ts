@@ -40,7 +40,7 @@ export async function reserveTickets(
   const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
     lang,
     strapiUrl,
-    ['event'],
+    [`event-${eventId}`],
     true,
   );
 

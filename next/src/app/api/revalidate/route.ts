@@ -19,6 +19,10 @@ export async function POST(request: Request) {
   if (model) {
     logger.info(`Revalidating ${model}`);
     revalidateTag(model);
+
+    if (model === 'event') {
+      revalidateTag(`event-${body.id}`);
+    }
   }
 
   return new Response('OK');
