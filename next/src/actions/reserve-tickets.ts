@@ -191,48 +191,76 @@ export async function reserveTickets(
         throw new Error(dictionary.api.sold_out);
       }
 
-      const userPromise = prisma.user.upsert({
-        where: { entraUserUuid },
-        update: {},
-        create: { entraUserUuid },
-      });
+      const promisesArray: Promise<any>[] = [];
 
-      const rolePromise = prisma.role.upsert({
-        where: { strapiRoleUuid },
-        update: {},
-        create: { strapiRoleUuid },
-      });
+      // No local user, create one
+      if (!localUser) {
+        const userPromise = prisma.user.upsert({
+          where: { entraUserUuid },
+          update: {},
+          create: { entraUserUuid },
+        });
 
-      const rolesOnUsersPromise = prisma.rolesOnUsers.upsert({
-        where: {
-          strapiRoleUuid_entraUserUuid: {
-            strapiRoleUuid: strapiRoleUuid,
-            entraUserUuid: entraUserUuid,
+        promisesArray.push(userPromise);
+      }
+
+      // If there is no registrations with this role it MIGHT not exist in the database
+      if (
+        !eventRegistrations.find(
+          (registration) => registration.strapiRoleUuid === strapiRoleUuid,
+        )
+      ) {
+        const rolePromise = prisma.role.upsert({
+          where: { strapiRoleUuid },
+          update: {},
+          create: { strapiRoleUuid },
+        });
+
+        promisesArray.push(rolePromise);
+      }
+
+      // If user has no default role, add it
+      // No local user = guaranteed no default role
+      // Local user = check if user has default role and add if not
+      if (
+        !localUser ||
+        !localUser.roles.find(
+          (role) => role.strapiRoleUuid === process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+        )
+      ) {
+        const rolesOnUsersPromise = prisma.rolesOnUsers.upsert({
+          where: {
+            strapiRoleUuid_entraUserUuid: {
+              strapiRoleUuid: strapiRoleUuid,
+              entraUserUuid: entraUserUuid,
+            },
           },
-        },
-        update: {},
-        create: {
-          strapiRoleUuid,
-          entraUserUuid,
-        },
-      });
+          update: {},
+          create: {
+            strapiRoleUuid,
+            entraUserUuid,
+          },
+        });
 
-      const eventRegistrations = Array.from({ length: amount }).map(() => ({
-        eventId,
-        entraUserUuid,
-        strapiRoleUuid,
-      }));
+        promisesArray.push(rolesOnUsersPromise);
+      }
+
+      // Create event registrations. This is the actual reservation.
+      const eventRegistrationsPromise = Array.from({ length: amount }).map(
+        () => ({
+          eventId,
+          entraUserUuid,
+          strapiRoleUuid,
+        }),
+      );
 
       const eventsPromise = prisma.eventRegistration.createMany({
-        data: eventRegistrations,
+        data: eventRegistrationsPromise,
       });
 
-      await Promise.all([
-        userPromise,
-        rolePromise,
-        rolesOnUsersPromise,
-        eventsPromise,
-      ]);
+      promisesArray.push(eventsPromise);
+
+      await Promise.all(promisesArray);
 
       return {
         message: `Nyt sinulle olisi varattu ${amount} lippua tapahtumaan ja sinut ohjattaisiin maksamaan ne. Sinulla olisi 60 minuuttia aikaa maksaa liput ennen kuin varaus raukeaa.`,
