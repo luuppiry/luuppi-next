@@ -165,29 +165,26 @@ export async function reserveTickets(
       // Lock whole table to prevent overbooking
       await prisma.$executeRaw`LOCK TABLE "EventRegistration" IN ACCESS EXCLUSIVE MODE`;
 
-      const lockedRegistrations: any[] =
-        await prisma.eventRegistration.findMany({
-          where: {
-            eventId,
-            OR: [
-              {
-                reservedUntil: {
-                  gte: new Date(),
-                },
+      const totalRegistrations = await prisma.eventRegistration.count({
+        where: {
+          eventId,
+          OR: [
+            {
+              reservedUntil: {
+                gte: new Date(),
               },
-              {
-                paymentCompleted: true,
-              },
-            ],
-          },
-          select: { id: true },
-        });
+            },
+            {
+              paymentCompleted: true,
+            },
+          ],
+        },
+      });
 
-      const totalRegistrationWithRoleLocked = lockedRegistrations.length;
       const strapiRoleUuid = targetedRole.strapiRoleUuid;
       const entraUserUuid = session.user!.entraUserUuid;
 
-      if (totalRegistrationWithRoleLocked + amount > ownQuota.TicketsTotal) {
+      if (totalRegistrations + amount > ownQuota.TicketsTotal) {
         throw new Error(dictionary.api.sold_out);
       }
 
