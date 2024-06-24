@@ -4,6 +4,8 @@ import prisma from '@/libs/db/prisma';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { BiErrorCircle } from 'react-icons/bi';
+import { IoIosInformationCircleOutline } from 'react-icons/io';
+import { IoWarningOutline } from 'react-icons/io5';
 import Ticket from './Ticket';
 
 interface TicketAreaProps {
@@ -50,6 +52,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     },
     select: {
       entraUserUuid: true,
+      paymentCompleted: true,
       purchaseRole: {
         select: {
           strapiRoleUuid: true,
@@ -118,12 +121,29 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     return userPurchasesWithRole.length >= maxAmount;
   };
 
+  const hasUnpaidReservations = (roleUuid: string) => {
+    if (!eventRegistrations || !localUser) return false;
+    const userPurchases = eventRegistrations.filter(
+      (registration) => registration.entraUserUuid === localUser?.entraUserUuid,
+    );
+    const userPurchasesWithRole = userPurchases.filter(
+      (registration) => registration.purchaseRole.strapiRoleUuid === roleUuid,
+    );
+    return userPurchasesWithRole.some(
+      (registration) => !registration.paymentCompleted,
+    );
+  };
+
   const ownQuota = ticketTypes?.find(
     (type) => type.Role?.data.attributes.RoleId === targetedRole.strapiRoleUuid,
   );
 
   const isSoldOutOwnQuota = ownQuota
     ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.data.attributes.RoleId!)
+    : false;
+
+  const hasUnpaidReservationsOwnQuota = ownQuota
+    ? hasUnpaidReservations(ownQuota.Role?.data.attributes.RoleId!)
     : false;
 
   const hasBoughtMaxTicketsOwnQuota = ownQuota
@@ -156,26 +176,59 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
 
   if (!ticketTypesFormatted?.length) return null;
 
-  const getError = () => {
-    if (!session?.user) return dictionary.pages_events.login_required;
-    if (isSoldOutOwnQuota) return dictionary.pages_events.sold_out_info;
+  const getErrors = () => {
+    const errors = [];
+    if (!session?.user)
+      errors.push({
+        message: dictionary.pages_events.login_required,
+        level: 'error',
+      });
+    if (isSoldOutOwnQuota)
+      errors.push({
+        message: dictionary.pages_events.sold_out_info,
+        level: 'warn',
+      });
     if (hasBoughtMaxTicketsOwnQuota)
-      return dictionary.pages_events.max_tickets_bought;
+      errors.push({
+        message: dictionary.pages_events.max_tickets_bought,
+        level: 'info',
+      });
     if (!isRegistrationOpenOwnQuota)
-      return dictionary.pages_events.registration_closed;
-    return null;
+      errors.push({
+        message: dictionary.pages_events.registration_closed,
+        level: 'info',
+      });
+    if (hasUnpaidReservationsOwnQuota)
+      errors.push({
+        message: dictionary.pages_events.unpaid_reservations,
+        level: 'warn',
+      });
+    return errors;
   };
 
-  const error = getError();
+  const errors = getErrors();
 
-  return (
+  return ticketTypesFormatted.length > 0 ? (
     <>
-      {error && (
-        <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
-          <BiErrorCircle size={24} />
-          {error}
+      {errors.map((error, i) => (
+        <div
+          key={error.message}
+          className={`alert rounded-lg text-sm ${
+            error.level === 'warn'
+              ? 'bg-yellow-200/50 text-yellow-800'
+              : error.level === 'info'
+                ? 'bg-blue-200 text-blue-800'
+                : 'bg-red-200 text-sm text-red-800'
+          } ${i === errors.length - 1 ? 'mb-8' : 'mb-4'}`}
+        >
+          {error.level === 'error' && <BiErrorCircle size={24} />}
+          {error.level === 'warn' && <IoWarningOutline size={24} />}
+          {error.level === 'info' && (
+            <IoIosInformationCircleOutline size={24} />
+          )}
+          {error.message}
         </div>
-      )}
+      ))}
       <div className="flex flex-col gap-4">
         {ticketTypesFormatted?.map((ticket) => (
           <Ticket
@@ -196,5 +249,10 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         ))}
       </div>
     </>
+  ) : (
+    <div className="'bg-blue-200 text-blue-800' alert rounded-lg">
+      <BiErrorCircle size={24} />
+      {dictionary.pages_events.no_tickets}
+    </div>
   );
 }
