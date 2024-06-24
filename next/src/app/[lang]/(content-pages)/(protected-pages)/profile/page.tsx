@@ -3,9 +3,9 @@ import ProfileEmailform from '@/components/ProfileEmailForm/ProfileEmailForm';
 import ProfileNotificationsForm from '@/components/ProfileNotificationsForm/ProfileNotificationsForm';
 import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInfoForm';
 import { getDictionary } from '@/dictionaries';
+import prisma from '@/libs/db/prisma';
 import { getAccessToken } from '@/libs/get-access-token';
 import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
-import { getGraphAPIUserGroups } from '@/libs/graph/graph-get-user-groups';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
@@ -13,8 +13,6 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-
-const luuppiMemberGroupId = process.env.AZURE_LUUPPI_MEMBER_GROUP;
 
 interface ProfileProps {
   params: { lang: SupportedLanguage };
@@ -36,14 +34,30 @@ export default async function Profile({ params }: ProfileProps) {
   }
 
   const user = await getGraphAPIUser(accessToken, session.user.entraUserUuid);
-  const groups = await getGraphAPIUserGroups(
-    accessToken,
-    session.user.entraUserUuid,
-  );
-  if (!user || !groups) {
+
+  if (!user) {
     logger.error('Error getting user or groups from Graph API');
     redirect(`/${params.lang}`);
   }
+
+  const localUser = await prisma.user.findFirst({
+    where: {
+      entraUserUuid: session.user.entraUserUuid,
+    },
+    include: {
+      roles: {
+        include: {
+          role: true,
+        },
+      },
+    },
+  });
+
+  const roles = localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
+
+  const isLuuppiMember = roles.includes(
+    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+  );
 
   return (
     <div className="relative">
@@ -56,9 +70,7 @@ export default async function Profile({ params }: ProfileProps) {
         />
         <ProfileUserInfoForm
           dictionary={dictionary}
-          isLuuppiMember={groups.value.some(
-            (group) => group.id === luuppiMemberGroupId,
-          )}
+          isLuuppiMember={isLuuppiMember}
           lang={params.lang}
           user={user}
         />
