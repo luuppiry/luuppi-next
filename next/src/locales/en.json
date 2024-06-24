@@ -212,7 +212,9 @@
     "sold_out_info": "Unfortunately, all tickets are sold out for the quota you belong to.",
     "max_tickets_bought": "You have already bought the maximum number of tickets for this event.",
     "your_quota": "Your quota",
-    "registration_closed": "Registration for your quota is closed."
+    "registration_closed": "Registration for your quota is closed.",
+    "unpaid_reservations": "You have reservations that have not been paid yet. Go to your own profile to pay for them.",
+    "no_tickets": "This event does not have tickets for sale or require registration."
   },
   "pages_404": {
     "title": "Page not found",

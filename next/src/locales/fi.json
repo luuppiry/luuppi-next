@@ -212,7 +212,9 @@
     "sold_out_info": "Valitettavasti kaikki liput ovat loppuunmyyty kiintiöltä, johon kuulut.",
     "max_tickets_bought": "Olet ostanut maksimimäärän lippuja tälle kiintiölle.",
     "your_quota": "Sinun kiintiösi",
-    "registration_closed": "Ilmoittautuminen on sulkeutunut kiintiösi osalta."
+    "registration_closed": "Ilmoittautuminen on sulkeutunut kiintiösi osalta.",
+    "unpaid_reservations": "Sinulla on maksamattomia varauksia. Voit maksaa ne omasta profiilistasi.",
+    "no_tickets": "Tällä tapahtumalla ei ole lipunmyyntiä, eikä ilmoittautumista."
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",
