@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BiLogOutCircle } from 'react-icons/bi';
+import { FaLockOpen } from 'react-icons/fa';
 import { HiMenu } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
 import { RiLoginCircleLine } from 'react-icons/ri';
@@ -73,15 +74,20 @@ export default function MobileHamburger({
                     </div>
                   ) : (
                     <Link
-                      className="font-bold"
+                      className="flex items-center justify-between font-bold"
                       href={`/${lang}${link.href as string}`}
                       onClick={() => setOpen(false)}
                     >
-                      {
-                        dictionary.navigation[
-                          link.translation as keyof typeof dictionary.navigation
-                        ]
-                      }
+                      <span>
+                        {
+                          dictionary.navigation[
+                            link.translation as keyof typeof dictionary.navigation
+                          ]
+                        }
+                      </span>
+                      {link.authenticated && (
+                        <FaLockOpen className="text-gray-400/50" size={18} />
+                      )}
                     </Link>
                   )}
                   {link.sublinks && link.sublinks.length > 0 && (
