@@ -1,9 +1,9 @@
 'use server';
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
+import prisma from '@/libs/db/prisma';
 import { getAccessToken } from '@/libs/get-access-token';
 import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
-import { getGraphAPIUserGroups } from '@/libs/graph/graph-get-user-groups';
 import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
@@ -11,8 +11,6 @@ import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath } from 'next/cache';
 
 const cacheKey = 'update-profile';
-
-const luuppiMemberGroupId = process.env.AZURE_LUUPPI_MEMBER_GROUP;
 
 export async function updateProfile(
   lang: SupportedLanguage,
@@ -22,9 +20,8 @@ export async function updateProfile(
   const dictionary = await getDictionary(lang);
 
   const session = await auth();
-  const user = session?.user;
 
-  if (!user) {
+  if (!session?.user) {
     logger.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
@@ -32,7 +29,11 @@ export async function updateProfile(
     };
   }
 
-  const isLimited = await isRateLimited(user.entraUserUuid, cacheKey, 10);
+  const isLimited = await isRateLimited(
+    session.user.entraUserUuid,
+    cacheKey,
+    10,
+  );
   if (isLimited) {
     logger.error('User is being rate limited');
     return {
@@ -100,7 +101,7 @@ export async function updateProfile(
 
   const currentUserData = await getGraphAPIUser(
     accessToken,
-    user.entraUserUuid,
+    session.user.entraUserUuid,
   );
   if (!currentUserData) {
     logger.error('Error getting user data using Graph API');
@@ -110,22 +111,26 @@ export async function updateProfile(
     };
   }
 
-  const currentUserGroups = await getGraphAPIUserGroups(
-    accessToken,
-    user.entraUserUuid,
-  );
-  if (!currentUserGroups) {
-    logger.error('Error getting user groups using Graph API');
-    return {
-      message: dictionary.api.server_error,
-      isError: true,
-    };
-  }
+  const localUser = await prisma.user.findFirst({
+    where: {
+      entraUserUuid: session.user.entraUserUuid,
+    },
+    include: {
+      roles: {
+        include: {
+          role: true,
+        },
+      },
+    },
+  });
 
-  if (
-    (fieldsToUpdate.major || fieldsToUpdate.domicle) &&
-    !currentUserGroups.value.some((group) => group.id === luuppiMemberGroupId)
-  ) {
+  const roles = localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
+
+  const isLuuppiMember = roles.includes(
+    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+  );
+
+  if ((fieldsToUpdate.major || fieldsToUpdate.domicle) && !isLuuppiMember) {
     logger.error(
       'Tried to update major or domicle without being a member of Luuppi',
     );
@@ -135,11 +140,15 @@ export async function updateProfile(
     };
   }
 
-  await updateGraphAPIUser(accessToken, user.entraUserUuid, fieldsToUpdate);
+  await updateGraphAPIUser(
+    accessToken,
+    session.user.entraUserUuid,
+    fieldsToUpdate,
+  );
 
   revalidatePath(`/${lang}/profile`);
 
-  await updateRateLimitCounter(user.entraUserUuid, cacheKey);
+  await updateRateLimitCounter(session.user.entraUserUuid, cacheKey);
 
   return {
     message: dictionary.api.profile_updated,
