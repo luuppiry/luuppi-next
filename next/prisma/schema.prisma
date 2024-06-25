@@ -44,16 +44,18 @@ model RolesOnUsers {
 }
 
 model EventRegistration {
-  id               Int      @id @default(autoincrement())
+  id               Int       @id @default(autoincrement())
   eventId          Int /// Strapi Event ID
   strapiRoleUuid   String /// UUID from Strapi role
-  purchaseRole     Role     @relation(fields: [strapiRoleUuid], references: [strapiRoleUuid])
-  paymentCompleted Boolean  @default(false)
-  reservedUntil    DateTime @default(dbgenerated("now() + interval '60 minutes'"))
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  purchaseRole     Role      @relation(fields: [strapiRoleUuid], references: [strapiRoleUuid])
+  paymentCompleted Boolean   @default(false)
+  paidPrice        Float     @default(0)
+  reservedUntil    DateTime  @default(dbgenerated("now() + interval '60 minutes'"))
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
   entraUserUuid    String
-  user             User     @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
+  user             User      @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
 
   @@index([eventId])
 }
