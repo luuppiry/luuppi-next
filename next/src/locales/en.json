@@ -29,7 +29,9 @@
     "sold_out": "All tickets are sold out for this quota.",
     "registration_closed": "Registration for this quota is closed.",
     "not_enough_tickets": "Not enough tickets available for this quota.",
-    "no_room_own_limit": "You cannot purchase more tickets, as you have reached the event's per-user limit."
+    "no_room_own_limit": "You cannot purchase more tickets, as you have reached the event's per-user limit.",
+    "invalid_registration": "Invalid registration. Maybe it has expired or is not valid.",
+    "reservation_cancelled": "Reservation cancelled"
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -92,7 +94,8 @@
     "seconds": "seconds",
     "seconds_short": "s",
     "error": "Error",
-    "success": "Success"
+    "success": "Success",
+    "cancelled": "Cancelled"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
@@ -139,7 +142,8 @@
     "privacy_policy": "Privacy policy",
     "miscellaneous": "Miscellaneous",
     "companies": "Companies",
-    "profile": "Profile"
+    "profile": "Profile",
+    "own_events": "Own events"
   },
   "pages_home": {
     "hero": {
@@ -214,7 +218,14 @@
     "your_quota": "Your quota",
     "registration_closed": "Registration for your quota is closed.",
     "unpaid_reservations": "You have reservations that have not been paid yet. Go to your own profile to pay for them.",
-    "no_tickets": "This event does not have tickets for sale or require registration."
+    "no_tickets": "This event does not have tickets for sale or require registration.",
+    "paid": "Paid",
+    "reserved": "Reserved",
+    "cancel_reservation": "Cancel reservation",
+    "pay": "Pay",
+    "unpaid_reservations_info": "You have unpaid reservations. Please pay them before they expire.",
+    "no_reservations": "You have no reservation history.",
+    "ticket_amount": "Choose the amount of tickets you want to buy"
   },
   "pages_404": {
     "title": "Page not found",
