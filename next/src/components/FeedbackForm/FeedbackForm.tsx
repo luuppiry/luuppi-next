@@ -130,7 +130,7 @@ function SubmitButton({ dictionary }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
   return (
-    <button className="btn btn-primary" disabled={pending} type="submit">
+    <button className="btn btn-primary btn-sm" disabled={pending} type="submit">
       {pending ? (
         <div className="min-w-16">
           <span className="loading loading-spinner loading-md" />
