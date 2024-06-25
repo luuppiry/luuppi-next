@@ -31,11 +31,12 @@ export default function TicketAmountDialog({
       <form className="modal-box max-h-[calc(100dvh-6em)]" onSubmit={submit}>
         <FormSelect
           id="amount"
+          marginTop={false}
           options={Array.from({ length: maxAmount }, (_, i) => i + 1).map(
             (i) => ({ value: i.toString(), label: i.toString() }),
           )}
           required={true}
-          title="Amount"
+          title={dictionary.pages_events.ticket_amount}
           value={amount.toString()}
           onChange={(e) => setAmount(parseInt(e.target.value))}
         />

@@ -162,14 +162,6 @@ export default async function Event({ params }: EventProps) {
               }
             />
           </div>
-          <div className="mt-8">
-            <button className="btn btn-primary">
-              {dictionary.pages_events.register_event}
-            </button>
-            <p className="mt-4 max-w-md text-sm opacity-60">
-              <i>{dictionary.pages_events.event_info}</i>
-            </p>
-          </div>
         </div>
         <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
           <div className="flex flex-col gap-4">

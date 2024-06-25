@@ -168,6 +168,7 @@ export async function reserveTickets(
       const totalRegistrations = await prisma.eventRegistration.count({
         where: {
           eventId,
+          deletedAt: null,
           OR: [
             {
               reservedUntil: {
@@ -248,6 +249,7 @@ export async function reserveTickets(
           eventId,
           entraUserUuid,
           strapiRoleUuid,
+          paidPrice: ownQuota.Price,
         }),
       );
 
@@ -282,6 +284,7 @@ async function getUserAndRegistrations(eventId: number, entraUserUuid: string) {
   const eventRegistrationsPromise = await prisma.eventRegistration.findMany({
     where: {
       eventId,
+      deletedAt: null,
       OR: [
         {
           reservedUntil: {

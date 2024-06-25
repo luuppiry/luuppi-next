@@ -29,7 +29,9 @@
     "sold_out": "Valitettavasti kaikki liput ovat loppuunmyyty kiintiöltä, johon kuulut.",
     "registration_closed": "Ilmoittautuminen on sulkeutunut kiintiösi osalta.",
     "not_enough_tickets": "Kiintiössä ei ole enää tarpeeksi lippuja.",
-    "no_room_own_limit": "Et voi ostaa enempää lippuja, sillä olet saavuttanut tapahtuman käyttäjäkohtaisen enimmäismäärän."
+    "no_room_own_limit": "Et voi ostaa enempää lippuja, sillä olet saavuttanut tapahtuman käyttäjäkohtaisen enimmäismäärän.",
+    "invalid_registration": "Kelvoton ilmoittautuminen. Ilmoittautuminen on voinut jo vanhentua, tai se on peruttu.",
+    "reservation_cancelled": "Varaus peruttu"
   },
   "roles": {
     "entire_board": "Koko hallitus",
@@ -92,7 +94,8 @@
     "seconds": "sekuntia",
     "seconds_short": "s",
     "error": "Virhe",
-    "success": "Onnistui"
+    "success": "Onnistui",
+    "cancelled": "Peruutettu"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
@@ -139,7 +142,8 @@
     "privacy_policy": "Tietosuojaseloste",
     "miscellaneous": "Muuta",
     "companies": "Yritykset",
-    "profile": "Profiili"
+    "profile": "Profiili",
+    "own_events": "Omat tapahtumat"
   },
   "pages_home": {
     "hero": {
@@ -214,7 +218,14 @@
     "your_quota": "Sinun kiintiösi",
     "registration_closed": "Ilmoittautuminen on sulkeutunut kiintiösi osalta.",
     "unpaid_reservations": "Sinulla on maksamattomia varauksia. Voit maksaa ne omasta profiilistasi.",
-    "no_tickets": "Tällä tapahtumalla ei ole lipunmyyntiä, eikä ilmoittautumista."
+    "no_tickets": "Tällä tapahtumalla ei ole lipunmyyntiä, eikä ilmoittautumista.",
+    "paid": "Maksettu",
+    "reserved": "Varattu",
+    "cancel_reservation": "Peruuta varaus",
+    "pay": "Maksa",
+    "unpaid_reservations_info": "Sinulla on maksamattomia varauksia. Maksa varauksesi ennen kuin ne vanhenevat.",
+    "no_reservations": "Sinulla ei ole tapahtumahistoriaa.",
+    "ticket_amount": "Valitse lippujen määrä"
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",
