@@ -4,7 +4,7 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useSession } from 'next-auth/react';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { RiUser3Fill } from 'react-icons/ri';
-import CloseableLink from './CloseableLink/CloseableLink';
+import CloseableLinks from './CloseableLinks/CloseableLinks';
 
 interface UserDropdownProps {
   dictionary: Dictionary;
@@ -42,7 +42,7 @@ export default function UserDropdown({ dictionary, lang }: UserDropdownProps) {
             {session.user?.email}
           </span>
         </div>
-        <CloseableLink dictionary={dictionary} lang={lang} />
+        <CloseableLinks dictionary={dictionary} lang={lang} />
         <div className="divider my-1" />
         <form action={async () => await signOut()}>
           <button
