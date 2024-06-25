@@ -39,6 +39,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const eventRegistrationsPromise = prisma.eventRegistration.findMany({
     where: {
       eventId: event.data.id,
+      deletedAt: null,
       OR: [
         {
           reservedUntil: {
@@ -250,7 +251,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       </div>
     </>
   ) : (
-    <div className="'bg-blue-200 text-blue-800' alert rounded-lg">
+    <div className="alert rounded-lg bg-blue-200 text-blue-800">
       <BiErrorCircle size={24} />
       {dictionary.pages_events.no_tickets}
     </div>

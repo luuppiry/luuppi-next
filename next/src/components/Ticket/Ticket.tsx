@@ -146,7 +146,7 @@ export default function Ticket({
                 {ticket.location}
               </p>
               <p className="badge badge-primary badge-lg whitespace-nowrap max-md:badge-md">
-                {ticket.price} €
+                {ticket.price.toFixed(2)} €
               </p>
             </div>
             <div>
@@ -208,7 +208,7 @@ export default function Ticket({
                 {ticket.location}
               </p>
               <p className="badge badge-primary badge-lg whitespace-nowrap max-md:badge-md">
-                {ticket.price} €
+                {ticket.price.toFixed(2)} €
               </p>
             </div>
             <div className="mt-2">
