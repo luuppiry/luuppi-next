@@ -147,6 +147,11 @@ export const navLinksMobile: NavLink[] = [
     authenticated: true,
   },
   {
+    translation: 'own_events',
+    href: '/own-events',
+    authenticated: true,
+  },
+  {
     translation: 'sports',
     href: '/sports',
   },
