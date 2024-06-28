@@ -1,5 +1,6 @@
 import { cancelReservation } from '@/actions/cancel-reservation';
 import { auth } from '@/auth';
+import SubmitButton from '@/components/SubmitButton/SubmitButton';
 import { getDictionary } from '@/dictionaries';
 import { longDateFormat, shortTimeFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
@@ -28,6 +29,7 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
   const userEventRegistrations = await prisma.eventRegistration.findMany({
     where: {
       entraUserUuid: session.user.entraUserUuid,
+      deletedAt: null,
       OR: [
         {
           reservedUntil: {
@@ -36,11 +38,6 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
         },
         {
           paymentCompleted: true,
-        },
-        {
-          deletedAt: {
-            not: null,
-          },
         },
       ],
     },
@@ -143,9 +140,7 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
                   >
                     {registration.paymentCompleted
                       ? dictionary.pages_events.paid
-                      : registration.deletedAt
-                        ? dictionary.general.cancelled
-                        : dictionary.pages_events.reserved}
+                      : dictionary.pages_events.reserved}
                   </span>
                 </h2>
                 <div className="flex items-center justify-between gap-4">
@@ -173,12 +168,12 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
                         type="hidden"
                         value={registration.id}
                       />
-                      <button
-                        className="btn btn-outline btn-error btn-sm max-md:btn-xs"
-                        type="submit"
-                      >
-                        {dictionary.pages_events.cancel_reservation}
-                      </button>
+                      <SubmitButton
+                        className="btn-outline max-md:hidden"
+                        size="sm"
+                        text={dictionary.pages_events.cancel_reservation}
+                        variant="error"
+                      />
                     </form>
                   )}
                 {registration.reservedUntil >= new Date() &&

@@ -3,11 +3,11 @@ import { updateProfile } from '@/actions/update-profile';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { ExtendedUser } from '@/models/user';
 import { useState } from 'react';
-import { useFormStatus } from 'react-dom';
 import { BiErrorCircle } from 'react-icons/bi';
 import { FaQuestion } from 'react-icons/fa';
 import FormInput from '../FormInput/FormInput';
 import FormSelect from '../FormSelect/FormSelect';
+import SubmitButton from '../SubmitButton/SubmitButton';
 
 interface ProfileFormResponse {
   message: string;
@@ -209,29 +209,9 @@ export default function ProfileUserInfoForm({
           </>
         )}
         <div>
-          <SubmitButton dictionary={dictionary} />
+          <SubmitButton text={dictionary.general.submit} />
         </div>
       </div>
     </form>
-  );
-}
-
-interface SubmitButtonProps {
-  dictionary: Dictionary;
-}
-
-function SubmitButton({ dictionary }: SubmitButtonProps) {
-  const { pending } = useFormStatus();
-
-  return (
-    <button className="btn btn-primary" disabled={pending} type="submit">
-      {pending ? (
-        <div className="min-w-16">
-          <span className="loading loading-spinner loading-md" />
-        </div>
-      ) : (
-        dictionary.general.submit
-      )}
-    </button>
   );
 }
