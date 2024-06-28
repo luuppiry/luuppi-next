@@ -4,11 +4,11 @@ import { luuppiEmails } from '@/libs/constants/emails';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 import { useRef, useState } from 'react';
-import { useFormStatus } from 'react-dom';
 import { BiErrorCircle } from 'react-icons/bi';
 import FormInput from '../FormInput/FormInput';
 import FormSelect from '../FormSelect/FormSelect';
 import FormTextArea from '../FormTextArea/FormTextArea';
+import SubmitButton from '../SubmitButton/SubmitButton';
 
 interface FeedbackResponse {
   message: string;
@@ -115,29 +115,9 @@ export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
           onSuccess={setTurnstileToken}
         />
         <div>
-          <SubmitButton dictionary={dictionary} />
+          <SubmitButton text={dictionary.pages_feedback.send} />
         </div>
       </div>
     </form>
-  );
-}
-
-interface SubmitButtonProps {
-  dictionary: Dictionary;
-}
-
-function SubmitButton({ dictionary }: SubmitButtonProps) {
-  const { pending } = useFormStatus();
-
-  return (
-    <button className="btn btn-primary btn-sm" disabled={pending} type="submit">
-      {pending ? (
-        <div className="min-w-16">
-          <span className="loading loading-spinner loading-md" />
-        </div>
-      ) : (
-        dictionary.pages_feedback.send
-      )}
-    </button>
   );
 }

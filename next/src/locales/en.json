@@ -94,8 +94,7 @@
     "seconds": "seconds",
     "seconds_short": "s",
     "error": "Error",
-    "success": "Success",
-    "cancelled": "Cancelled"
+    "success": "Success"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
