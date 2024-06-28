@@ -94,8 +94,7 @@
     "seconds": "sekuntia",
     "seconds_short": "s",
     "error": "Virhe",
-    "success": "Onnistui",
-    "cancelled": "Peruutettu"
+    "success": "Onnistui"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
