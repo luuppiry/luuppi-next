@@ -31,7 +31,9 @@
     "not_enough_tickets": "Kiintiössä ei ole enää tarpeeksi lippuja.",
     "no_room_own_limit": "Et voi ostaa enempää lippuja, sillä olet saavuttanut tapahtuman käyttäjäkohtaisen enimmäismäärän.",
     "invalid_registration": "Kelvoton ilmoittautuminen. Ilmoittautuminen on voinut jo vanhentua, tai se on peruttu.",
-    "reservation_cancelled": "Varaus peruttu"
+    "reservation_cancelled": "Varaus peruttu",
+    "payment_failed": "Maksu epäonnistui",
+    "pending_payment": "Sinulla on jo maksupyyntö vireillä. Odota, että edellinen maksu suoritetaan ennen uuden maksun tekemistä. Tämä varmistaa, ettei sinua veloiteta useita kertoja."
   },
   "roles": {
     "entire_board": "Koko hallitus",
@@ -224,7 +226,14 @@
     "pay": "Maksa",
     "unpaid_reservations_info": "Sinulla on maksamattomia varauksia. Maksa varauksesi ennen kuin ne vanhenevat.",
     "no_reservations": "Sinulla ei ole tapahtumahistoriaa.",
-    "ticket_amount": "Valitse lippujen määrä"
+    "ticket_amount": "Valitse lippujen määrä",
+    "unpaid_registrations": "Maksamattomat tapahtumat",
+    "paid_registrations": "Maksetut tapahtumat",
+    "pay_all": "Maksa kaikki",
+    "payment_completed": "Maksu suoritettu",
+    "payment_failed": "Maksu epäonnistui",
+    "payment_failed_description": "Maksusi epäonnistui. Jos sinulta on veloitettu, ota yhteyttä WWW/IT-vastaaviin osoitteessa webmaster@luuppi.fi",
+    "payment_completed_description": "Maksusi on suoritettu onnistuneesti. Saat sähköpostiisi kuitin maksusta ja voit sulkea tämän sivun."
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",

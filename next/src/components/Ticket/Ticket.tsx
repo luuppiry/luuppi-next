@@ -1,5 +1,5 @@
 'use client';
-import { reserveTickets } from '@/actions/reserve-tickets';
+import { reservationCreate } from '@/actions/reservation-create';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useRouter } from 'next/navigation';
@@ -71,7 +71,7 @@ export default function Ticket({
   const handleSubmit = async (e?: any) => {
     e?.preventDefault();
     setLoading(true);
-    const res = await reserveTickets(eventId, amount, lang);
+    const res = await reservationCreate(eventId, amount, lang);
     router.refresh();
     setAmountModalOpen(false);
     setResponse(res);

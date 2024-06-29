@@ -31,7 +31,9 @@
     "not_enough_tickets": "Not enough tickets available for this quota.",
     "no_room_own_limit": "You cannot purchase more tickets, as you have reached the event's per-user limit.",
     "invalid_registration": "Invalid registration. Maybe it has expired or is not valid.",
-    "reservation_cancelled": "Reservation cancelled"
+    "reservation_cancelled": "Reservation cancelled",
+    "payment_failed": "Payment failed",
+    "pending_payment": "You already have a pending payment. Please wait for the previous payment to complete before making a new one. This ensures that you won't be charged multiple times."
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -224,7 +226,14 @@
     "pay": "Pay",
     "unpaid_reservations_info": "You have unpaid reservations. Please pay them before they expire.",
     "no_reservations": "You have no reservation history.",
-    "ticket_amount": "Choose the amount of tickets you want to buy"
+    "ticket_amount": "Choose the amount of tickets you want to buy",
+    "unpaid_registrations": "Unpaid registrations",
+    "paid_registrations": "Paid registrations",
+    "pay_all": "Pay all",
+    "payment_completed": "Payment completed",
+    "payment_failed": "Payment failed",
+    "payment_failed_description": "Your payment has failed. If you got charged, please contact WWW/IT representatives at webmaster@luuppi.fi",
+    "payment_completed_description": "Your payment has been completed. You will receive a receipt via email. You can now close this window."
   },
   "pages_404": {
     "title": "Page not found",

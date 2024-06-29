@@ -1,5 +1,5 @@
 'use client';
-import { sendVerifyEmail } from '@/actions/send-verify-email';
+import { emailSendVerify } from '@/actions/email-send-verify';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { User } from '@microsoft/microsoft-graph-types';
 import { useState } from 'react';
@@ -30,7 +30,7 @@ export default function ProfileEmailform({
   lang,
   dictionary,
 }: ProfileEmailFormProps) {
-  const handleEmailUpdateAction = sendVerifyEmail.bind(null, lang);
+  const handleEmailUpdateAction = emailSendVerify.bind(null, lang);
   const [formResponse, setFormResponse] = useState(initialState);
 
   const updateEmailUpdate = async (formData: FormData) => {
