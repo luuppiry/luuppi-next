@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { SupportedLanguage } from '@/models/locale';
+import { redirect } from 'next/navigation';
 
 export async function reservationCancel(
   lang: SupportedLanguage,
@@ -54,8 +55,5 @@ export async function reservationCancel(
     },
   });
 
-  return {
-    message: dictionary.api.reservation_cancelled,
-    isError: false,
-  };
+  redirect(`/${lang}/own-events`);
 }
