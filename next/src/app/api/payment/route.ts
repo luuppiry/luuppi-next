@@ -1,11 +1,13 @@
 import prisma from '@/libs/db/prisma';
 import { checkReturn } from '@/libs/payments/check-return';
+import { logger } from '@/libs/utils/logger';
 import url from 'url';
 
 export async function GET(request: Request) {
   const queryParams = url.parse(request.url, true).query;
 
   try {
+    logger.info('Checking return', { queryParams });
     const { orderId, successful } = await checkReturn(queryParams);
 
     // TODO: Cache this query. Result should not change for the same orderId.
