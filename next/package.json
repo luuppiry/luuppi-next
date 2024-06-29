@@ -43,7 +43,8 @@
     "schema-dts": "^1.1.2",
     "server-only": "^0.0.1",
     "sharp": "^0.33.4",
-    "sitemap": "^8.0.0"
+    "sitemap": "^8.0.0",
+    "visma-pay": "^2.0.3"
   },
   "devDependencies": {
     "@microsoft/microsoft-graph-types": "^2.40.0",

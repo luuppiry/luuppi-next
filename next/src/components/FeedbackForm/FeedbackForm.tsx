@@ -1,5 +1,5 @@
 'use client';
-import { sendFeedback } from '@/actions/send-feedback';
+import { emailSendFeedback } from '@/actions/email-send-feedback';
 import { luuppiEmails } from '@/libs/constants/emails';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
@@ -28,7 +28,7 @@ interface FeedbackFormProps {
 }
 
 export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
-  const handleFeedbackAction = sendFeedback.bind(null, lang);
+  const handleFeedbackAction = emailSendFeedback.bind(null, lang);
   const formRef = useRef<HTMLFormElement>(null);
   const turnstileRef = useRef<TurnstileInstance>(null);
   const [formResponse, setFormResponse] = useState(initialState);

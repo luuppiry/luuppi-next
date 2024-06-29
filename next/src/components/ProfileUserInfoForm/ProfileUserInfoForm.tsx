@@ -1,5 +1,5 @@
 'use client';
-import { updateProfile } from '@/actions/update-profile';
+import { profileUpdate } from '@/actions/profile-update';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { ExtendedUser } from '@/models/user';
 import { useState } from 'react';
@@ -34,7 +34,7 @@ export default function ProfileUserInfoForm({
   dictionary,
   isLuuppiMember,
 }: ProfileUserInfoFormProps) {
-  const updateProfileAction = updateProfile.bind(null, lang);
+  const updateProfileAction = profileUpdate.bind(null, lang);
   const [formResponse, setFormResponse] = useState(initialState);
 
   const handleProfileUpdate = async (formData: FormData) => {

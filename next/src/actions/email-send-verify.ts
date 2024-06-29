@@ -9,18 +9,15 @@ import { SupportedLanguage } from '@/models/locale';
 import { EmailClient, EmailMessage } from '@azure/communication-email';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
-const connectionString =
-  process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!;
+const options = {
+  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
+  senderAddress: process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!,
+  baseUrl: process.env.NEXT_PUBLIC_BASE_URL!,
+  jwtSecret: process.env.JWT_SECRET!,
+  cacheKey: 'email-verification',
+};
 
-const senderAddress = process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!;
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
-
-const jwtSecret = process.env.JWT_SECRET!;
-
-const cacheKey = 'email-verification';
-
-export async function sendVerifyEmail(
+export async function emailSendVerify(
   lang: SupportedLanguage,
   _: any,
   formData: FormData,
@@ -38,7 +35,11 @@ export async function sendVerifyEmail(
     };
   }
 
-  const isLimited = await isRateLimited(user.entraUserUuid, cacheKey, 3);
+  const isLimited = await isRateLimited(
+    user.entraUserUuid,
+    options.cacheKey,
+    3,
+  );
   if (isLimited) {
     logger.error(`User is being rate limited: ${user.email}`);
     return {
@@ -113,16 +114,16 @@ export async function sendVerifyEmail(
     userId: user.entraUserUuid,
   } as JwtPayload & { newMail: string; userId: string };
 
-  const token = jwt.sign(payload, jwtSecret, {
+  const token = jwt.sign(payload, options.jwtSecret, {
     expiresIn: '30m',
   });
 
-  const link = `${baseUrl}/${lang}/profile/verify-email?token=${token}`;
+  const link = `${options.baseUrl}/${lang}/profile/verify-email?token=${token}`;
 
-  const emailClient = new EmailClient(connectionString);
+  const emailClient = new EmailClient(options.connectionString);
 
   const message: EmailMessage = {
-    senderAddress,
+    senderAddress: options.senderAddress,
     content: {
       subject: dictionary.api.email_change_mail_subject,
       html: `
@@ -146,7 +147,7 @@ export async function sendVerifyEmail(
   try {
     const poller = await emailClient.beginSend(message);
     await poller.pollUntilDone();
-    await updateRateLimitCounter(user.entraUserUuid, cacheKey);
+    await updateRateLimitCounter(user.entraUserUuid, options.cacheKey);
     logger.info('Email change verification email sent to', email);
     return {
       message: dictionary.api.verify_email_sent,

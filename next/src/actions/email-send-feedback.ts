@@ -6,26 +6,23 @@ import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { EmailClient, EmailMessage } from '@azure/communication-email';
 
-const connectionString =
-  process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!;
+const options = {
+  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
+  senderAddress: process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!,
+  turnstileVerifyEndpoint:
+    'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+  turnstileSecret: process.env.TURNSTILE_SECRET!,
+  cacheKey: 'feedback',
+};
 
-const senderAddress = process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!;
-
-const turnstileVerifyEndpoint =
-  'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-
-const turnstileSecret = process.env.TURNSTILE_SECRET!;
-
-const cacheKey = 'feedback';
-
-export async function sendFeedback(
+export async function emailSendFeedback(
   lang: SupportedLanguage,
   _: any,
   formData: FormData,
 ) {
   const dictionary = await getDictionary(lang);
 
-  const isLimited = await isRateLimited(cacheKey, cacheKey, 10);
+  const isLimited = await isRateLimited(options.cacheKey, options.cacheKey, 10);
   if (isLimited) {
     logger.error('Feedback is being rate limited');
     return {
@@ -100,10 +97,10 @@ export async function sendFeedback(
     };
   }
 
-  const emailClient = new EmailClient(connectionString);
+  const emailClient = new EmailClient(options.connectionString);
 
   const emailMessage: EmailMessage = {
-    senderAddress,
+    senderAddress: options.senderAddress,
     content: {
       subject: `Palautelomake: ${subject}`,
       html: `
@@ -130,7 +127,7 @@ export async function sendFeedback(
   try {
     const poller = await emailClient.beginSend(emailMessage);
     await poller.pollUntilDone();
-    await updateRateLimitCounter(cacheKey, cacheKey);
+    await updateRateLimitCounter(options.cacheKey, options.cacheKey);
     logger.info('Feedback email sent', email);
     return {
       message: dictionary.api.feedback_sent,
@@ -147,9 +144,9 @@ export async function sendFeedback(
 
 async function verifyTurnstileToken(token: string): Promise<boolean> {
   try {
-    const res = await fetch(turnstileVerifyEndpoint, {
+    const res = await fetch(options.turnstileVerifyEndpoint, {
       method: 'POST',
-      body: `secret=${encodeURIComponent(turnstileSecret)}&response=${encodeURIComponent(token)}`,
+      body: `secret=${encodeURIComponent(options.turnstileSecret)}&response=${encodeURIComponent(token)}`,
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
       },
