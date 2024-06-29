@@ -15,7 +15,8 @@ datasource db {
 
 model User {
   id            Int                 @id @default(autoincrement())
-  entraUserUuid String              @unique /// User's EntraID UUID
+  /// User's EntraID UUID
+  entraUserUuid String              @unique
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
   registrations EventRegistration[]
@@ -24,20 +25,28 @@ model User {
 
 model Role {
   id             Int                 @id @default(autoincrement())
-  strapiRoleUuid String              @unique /// UUID from Strapi role
+  /// UUID from Strapi role
+  strapiRoleUuid String              @unique
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
   users          RolesOnUsers[]
   registrations  EventRegistration[]
 }
 
+// This is an "explicit" many-to-many relation table
+// https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/many-to-many-relations#explicit-many-to-many-relations
 model RolesOnUsers {
+  /// UUID from Strapi role
   strapiRoleUuid String
   role           Role      @relation(fields: [strapiRoleUuid], references: [strapiRoleUuid], onDelete: Cascade)
+  /// User's EntraID UUID
   entraUserUuid  String
   user           User      @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+  /// Some roles might have expiration time. For example, if the user
+  /// is Luuppi member, but only one year membership, this field
+  /// should be set to the expiration time of the role.
   expiresAt      DateTime?
 
   @@id([strapiRoleUuid, entraUserUuid])
@@ -45,17 +54,58 @@ model RolesOnUsers {
 
 model EventRegistration {
   id               Int       @id @default(autoincrement())
-  eventId          Int /// Strapi Event ID
-  strapiRoleUuid   String /// UUID from Strapi role
+  /// UUID from Strapi role
+  strapiRoleUuid   String
   purchaseRole     Role      @relation(fields: [strapiRoleUuid], references: [strapiRoleUuid])
+  /// Final state of payment
   paymentCompleted Boolean   @default(false)
-  paidPrice        Float     @default(0)
+  price            Float     @default(0)
+  /// Database generated expiration time for the registration. Default is 60 minutes
   reservedUntil    DateTime  @default(dbgenerated("now() + interval '60 minutes'"))
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
+  /// Soft delete. If this is set, the registration is not valid anymore
   deletedAt        DateTime?
+  /// User's EntraID UUID
   entraUserUuid    String
   user             User      @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
+  /// Strapi Event ID
+  eventId          Int
+  event            Event     @relation(fields: [eventId], references: [eventId])
+  payments         Payment[]
 
   @@index([eventId])
+}
+
+model Payment {
+  id           Int                 @id @default(autoincrement())
+  orderId      String              @unique
+  status       PaymentStatus       @default(PENDING)
+  amount       Float
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  registration EventRegistration[]
+}
+
+// User to store some event metadata "locally" so
+// we don't have to fetch it from Strapi every time.
+model Event {
+  id            Int                 @id @default(autoincrement())
+  /// Strapi Event ID
+  eventId       Int                 @unique
+  nameEn        String
+  nameFi        String
+  startDate     DateTime
+  endDate       DateTime
+  locationEn    String
+  locationFi    String
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  registrations EventRegistration[]
+}
+
+enum PaymentStatus {
+  PENDING /// Charge is created, but no status received yet
+  COMPLETED /// Payment is confirmed to be completed
+  CANCELLED /// Payment was failed or cancelled
 }

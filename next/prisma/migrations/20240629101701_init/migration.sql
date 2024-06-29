@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'COMPLETED', 'CANCELLED');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -32,15 +35,51 @@ CREATE TABLE "RolesOnUsers" (
 -- CreateTable
 CREATE TABLE "EventRegistration" (
     "id" SERIAL NOT NULL,
-    "eventId" INTEGER NOT NULL,
     "strapiRoleUuid" TEXT NOT NULL,
     "paymentCompleted" BOOLEAN NOT NULL DEFAULT false,
+    "price" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "reservedUntil" TIMESTAMP(3) NOT NULL DEFAULT now() + interval '60 minutes',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
     "entraUserUuid" TEXT NOT NULL,
+    "eventId" INTEGER NOT NULL,
 
     CONSTRAINT "EventRegistration_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Payment" (
+    "id" SERIAL NOT NULL,
+    "orderId" TEXT NOT NULL,
+    "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
+    "amount" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Payment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Event" (
+    "id" SERIAL NOT NULL,
+    "eventId" INTEGER NOT NULL,
+    "nameEn" TEXT NOT NULL,
+    "nameFi" TEXT NOT NULL,
+    "startDate" TIMESTAMP(3) NOT NULL,
+    "endDate" TIMESTAMP(3) NOT NULL,
+    "locationEn" TEXT NOT NULL,
+    "locationFi" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "_EventRegistrationToPayment" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
 );
 
 -- CreateIndex
@@ -51,6 +90,18 @@ CREATE UNIQUE INDEX "Role_strapiRoleUuid_key" ON "Role"("strapiRoleUuid");
 
 -- CreateIndex
 CREATE INDEX "EventRegistration_eventId_idx" ON "EventRegistration"("eventId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Payment_orderId_key" ON "Payment"("orderId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Event_eventId_key" ON "Event"("eventId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_EventRegistrationToPayment_AB_unique" ON "_EventRegistrationToPayment"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_EventRegistrationToPayment_B_index" ON "_EventRegistrationToPayment"("B");
 
 -- AddForeignKey
 ALTER TABLE "RolesOnUsers" ADD CONSTRAINT "RolesOnUsers_strapiRoleUuid_fkey" FOREIGN KEY ("strapiRoleUuid") REFERENCES "Role"("strapiRoleUuid") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -63,3 +114,12 @@ ALTER TABLE "EventRegistration" ADD CONSTRAINT "EventRegistration_strapiRoleUuid
 
 -- AddForeignKey
 ALTER TABLE "EventRegistration" ADD CONSTRAINT "EventRegistration_entraUserUuid_fkey" FOREIGN KEY ("entraUserUuid") REFERENCES "User"("entraUserUuid") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "EventRegistration" ADD CONSTRAINT "EventRegistration_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "Event"("eventId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_EventRegistrationToPayment" ADD CONSTRAINT "_EventRegistrationToPayment_A_fkey" FOREIGN KEY ("A") REFERENCES "EventRegistration"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_EventRegistrationToPayment" ADD CONSTRAINT "_EventRegistrationToPayment_B_fkey" FOREIGN KEY ("B") REFERENCES "Payment"("id") ON DELETE CASCADE ON UPDATE CASCADE;
