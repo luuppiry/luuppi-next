@@ -10,9 +10,11 @@ import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath } from 'next/cache';
 
-const cacheKey = 'update-profile';
+const options = {
+  cacheKey: 'update-profile',
+};
 
-export async function updateProfile(
+export async function profileUpdate(
   lang: SupportedLanguage,
   _: any,
   formData: FormData,
@@ -31,7 +33,7 @@ export async function updateProfile(
 
   const isLimited = await isRateLimited(
     session.user.entraUserUuid,
-    cacheKey,
+    options.cacheKey,
     10,
   );
   if (isLimited) {
@@ -148,7 +150,7 @@ export async function updateProfile(
 
   revalidatePath(`/${lang}/profile`);
 
-  await updateRateLimitCounter(session.user.entraUserUuid, cacheKey);
+  await updateRateLimitCounter(session.user.entraUserUuid, options.cacheKey);
 
   return {
     message: dictionary.api.profile_updated,

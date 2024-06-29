@@ -7,7 +7,11 @@ import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 
-export async function reserveTickets(
+const options = {
+  noRoleId: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+};
+
+export async function reservationCreate(
   eventId: number,
   amount: number,
   lang: SupportedLanguage,
@@ -67,7 +71,7 @@ export async function reserveTickets(
     })) ?? [];
 
   const hasDefaultRoleWeight = eventRolesWithWeights.find(
-    (role) => role.strapiRoleUuid === process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+    (role) => role.strapiRoleUuid === options.noRoleId!,
   );
 
   const targetedRole = strapiRoleUuids.reduce(
@@ -81,7 +85,7 @@ export async function reserveTickets(
         : acc;
     },
     {
-      strapiRoleUuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+      strapiRoleUuid: options.noRoleId!,
       weight: hasDefaultRoleWeight?.weight ?? 0,
     },
   );
@@ -169,6 +173,11 @@ export async function reserveTickets(
         where: {
           eventId,
           deletedAt: null,
+
+          // Ticket is consired reserved if one of the following is true:
+          // - Reserved until is in the future
+          // - Payment is completed
+          // - There is a pending payment and payment is not completed
           OR: [
             {
               reservedUntil: {
@@ -177,6 +186,14 @@ export async function reserveTickets(
             },
             {
               paymentCompleted: true,
+            },
+            {
+              paymentCompleted: false,
+              payments: {
+                some: {
+                  status: 'PENDING',
+                },
+              },
             },
           ],
         },
@@ -193,37 +210,25 @@ export async function reserveTickets(
 
       // No local user, create one
       if (!localUser) {
-        const userPromise = prisma.user.upsert({
-          where: { entraUserUuid },
-          update: {},
-          create: { entraUserUuid },
+        const userPromise = prisma.user.create({
+          data: {
+            entraUserUuid,
+            roles: {
+              create: {
+                strapiRoleUuid,
+              },
+            },
+          },
         });
 
         promisesArray.push(userPromise);
       }
 
-      // If there is no registrations with this role it MIGHT not exist in the database
-      if (
-        !eventRegistrations.find(
-          (registration) => registration.strapiRoleUuid === strapiRoleUuid,
-        )
-      ) {
-        const rolePromise = prisma.role.upsert({
-          where: { strapiRoleUuid },
-          update: {},
-          create: { strapiRoleUuid },
-        });
-
-        promisesArray.push(rolePromise);
-      }
-
       // If user has no default role, add it
-      // No local user = guaranteed no default role
-      // Local user = check if user has default role and add if not
       if (
-        !localUser ||
+        localUser &&
         !localUser.roles.find(
-          (role) => role.strapiRoleUuid === process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+          (role) => role.strapiRoleUuid === options.noRoleId!,
         )
       ) {
         const rolesOnUsersPromise = prisma.rolesOnUsers.upsert({
@@ -249,7 +254,7 @@ export async function reserveTickets(
           eventId,
           entraUserUuid,
           strapiRoleUuid,
-          paidPrice: ownQuota.Price,
+          price: ownQuota.Price,
         }),
       );
 

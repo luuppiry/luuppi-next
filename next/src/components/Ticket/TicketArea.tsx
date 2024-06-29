@@ -49,6 +49,16 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         {
           paymentCompleted: true,
         },
+        {
+          paymentCompleted: false,
+          payments: {
+            some: {
+              status: {
+                not: 'CANCELLED',
+              },
+            },
+          },
+        },
       ],
     },
     select: {
