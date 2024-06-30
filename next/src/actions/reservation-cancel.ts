@@ -52,6 +52,9 @@ export async function reservationCancel(
     },
     data: {
       deletedAt: new Date(),
+      answers: {
+        deleteMany: {},
+      },
     },
   });
 
