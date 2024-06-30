@@ -2,6 +2,8 @@ import { reservationCancel } from '@/actions/reservation-cancel';
 import { longDateFormat, shortTimeFormat } from '@/libs/constants';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { $Enums } from '@prisma/client';
+import QuestionButton from '../QuestionButton/QuestionButton';
 import SubmitButton from '../SubmitButton/SubmitButton';
 
 interface RegistrationProps {
@@ -17,6 +19,20 @@ interface RegistrationProps {
     deletedAt: Date | null;
     id: number;
   };
+  questions: {
+    eventId: number;
+    text: any[];
+    select: any[];
+    checkbox: any[];
+  };
+  answers: {
+    id: number;
+    type: $Enums.QuestionType;
+    question: string;
+    answer: string;
+    entraUserUuid: string;
+    registrationId: number;
+  }[];
   dictionary: Dictionary;
   lang: SupportedLanguage;
 }
@@ -25,8 +41,15 @@ export default function Registration({
   registration,
   dictionary,
   lang,
+  questions,
+  answers,
 }: RegistrationProps) {
   const reservationCancelAction = reservationCancel.bind(null, lang);
+
+  const hasQuestions =
+    questions.text.length > 0 ||
+    questions.select.length > 0 ||
+    questions.checkbox.length > 0;
 
   return (
     <div
@@ -69,18 +92,28 @@ export default function Registration({
           {registration.reservedUntil >= new Date() &&
             !registration.paymentCompleted &&
             registration.deletedAt === null && (
-              <form action={reservationCancelAction}>
-                <input
-                  name="registrationId"
-                  type="hidden"
-                  value={registration.id}
-                />
-                <SubmitButton
-                  className="btn-outline max-md:btn-xs"
-                  text={dictionary.pages_events.cancel_reservation}
-                  variant="error"
-                />
-              </form>
+              <>
+                {hasQuestions && (
+                  <QuestionButton
+                    answers={answers}
+                    dictionary={dictionary}
+                    questions={questions}
+                    reservationId={registration.id}
+                  />
+                )}
+                <form action={reservationCancelAction}>
+                  <input
+                    name="registrationId"
+                    type="hidden"
+                    value={registration.id}
+                  />
+                  <SubmitButton
+                    className="btn-outline max-md:btn-xs"
+                    text={dictionary.pages_events.cancel_reservation}
+                    variant="error"
+                  />
+                </form>
+              </>
             )}
         </div>
       </div>

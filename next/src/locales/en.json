@@ -33,7 +33,9 @@
     "invalid_registration": "Invalid registration. Maybe it has expired or is not valid.",
     "reservation_cancelled": "Reservation cancelled",
     "payment_failed": "Payment failed",
-    "pending_payment": "You already have a pending payment. Please wait for the previous payment to complete before making a new one. This ensures that you won't be charged multiple times."
+    "pending_payment": "You already have a pending payment. Please wait for the previous payment to complete before making a new one. This ensures that you won't be charged multiple times.",
+    "invalid_answer_count": "Invalid answer count",
+    "invalid_answer": "Invalid answer"
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -233,7 +235,10 @@
     "payment_completed": "Payment completed",
     "payment_failed": "Payment failed",
     "payment_failed_description": "Your payment has failed. If you got charged, please contact WWW/IT representatives at webmaster@luuppi.fi",
-    "payment_completed_description": "Your payment has been completed. You will receive a receipt via email. You can now close this window."
+    "payment_completed_description": "Your payment has been completed. You will receive a receipt via email. You can now close this window.",
+    "addition_info": "Details",
+    "unanswered_questions": "Unanswered questions!",
+    "unanswered_questions_description": "One or more of your unpaid reservations require additional information. Please respond to the reservation questions by pressing the \"Additional Information\" button and completing the questions. Once you have answered the questions for all your unpaid reservations, you can proceed to make the payment."
   },
   "pages_404": {
     "title": "Page not found",

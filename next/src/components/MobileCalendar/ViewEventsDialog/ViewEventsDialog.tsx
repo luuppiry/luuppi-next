@@ -45,7 +45,7 @@ export default function ViewEventsDialog({
         )}
         <div className="modal-action">
           <form method="dialog">
-            <button className="btn" onClick={onClose}>
+            <button className="btn btn-sm" onClick={onClose}>
               {dictionary.general.close}
             </button>
           </form>

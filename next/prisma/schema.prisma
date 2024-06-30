@@ -21,6 +21,7 @@ model User {
   updatedAt     DateTime            @updatedAt
   registrations EventRegistration[]
   roles         RolesOnUsers[]
+  answers       Answer[]
 }
 
 model Role {
@@ -73,8 +74,21 @@ model EventRegistration {
   eventId          Int
   event            Event     @relation(fields: [eventId], references: [eventId])
   payments         Payment[]
+  answers          Answer[]
 
   @@index([eventId])
+}
+
+model Answer {
+  id             Int               @id @default(autoincrement())
+  type           QuestionType
+  question       String
+  answer         String
+  /// User's EntraID UUID
+  entraUserUuid  String
+  user           User              @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
+  registrationId Int
+  registration   EventRegistration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 }
 
 model Payment {
@@ -108,4 +122,10 @@ enum PaymentStatus {
   PENDING /// Charge is created, but no status received yet
   COMPLETED /// Payment is confirmed to be completed
   CANCELLED /// Payment was failed or cancelled
+}
+
+enum QuestionType {
+  TEXT
+  SELECT
+  CHECKBOX
 }

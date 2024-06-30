@@ -1,32 +1,26 @@
 import { Dictionary } from '@/models/locale';
 
-interface ErrorDialogProps {
-  dictionary: Dictionary;
+interface QuestionConfirmDialogProps {
   open: boolean;
   onClose: () => void;
-  response: {
-    message: string;
-    isError: boolean;
-  } | null;
+  dictionary: Dictionary;
 }
 
-export default function ErrorDialog({
-  dictionary,
+export default function QuestionConfirmDialog({
   open,
   onClose,
-  response,
-}: ErrorDialogProps) {
-  if (!response) return null;
+  dictionary,
+}: QuestionConfirmDialogProps) {
   return (
-    <dialog className={`modal ${open ? 'modal-open' : ''}`}>
+    <dialog
+      className={`modal modal-bottom sm:modal-middle ${open ? 'modal-open' : ''}`}
+    >
       <div className="modal-box max-h-[calc(100dvh-6em)]">
         <h3 className="text-lg font-bold">
-          {response.isError
-            ? dictionary.general.error
-            : dictionary.general.success}
+          {dictionary.pages_events.unanswered_questions}
         </h3>
         <div className="flex flex-col py-4 text-sm">
-          <p>{response.message}</p>
+          <p>{dictionary.pages_events.unanswered_questions_description}</p>
         </div>
         <div className="modal-action">
           <form method="dialog">
