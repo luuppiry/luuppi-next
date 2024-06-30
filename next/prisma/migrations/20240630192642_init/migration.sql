@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'COMPLETED', 'CANCELLED');
 
+-- CreateEnum
+CREATE TYPE "QuestionType" AS ENUM ('TEXT', 'SELECT', 'CHECKBOX');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -46,6 +49,18 @@ CREATE TABLE "EventRegistration" (
     "eventId" INTEGER NOT NULL,
 
     CONSTRAINT "EventRegistration_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Answer" (
+    "id" SERIAL NOT NULL,
+    "type" "QuestionType" NOT NULL,
+    "question" TEXT NOT NULL,
+    "answer" TEXT NOT NULL,
+    "entraUserUuid" TEXT NOT NULL,
+    "registrationId" INTEGER NOT NULL,
+
+    CONSTRAINT "Answer_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -117,6 +132,12 @@ ALTER TABLE "EventRegistration" ADD CONSTRAINT "EventRegistration_entraUserUuid_
 
 -- AddForeignKey
 ALTER TABLE "EventRegistration" ADD CONSTRAINT "EventRegistration_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "Event"("eventId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Answer" ADD CONSTRAINT "Answer_entraUserUuid_fkey" FOREIGN KEY ("entraUserUuid") REFERENCES "User"("entraUserUuid") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Answer" ADD CONSTRAINT "Answer_registrationId_fkey" FOREIGN KEY ("registrationId") REFERENCES "EventRegistration"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_EventRegistrationToPayment" ADD CONSTRAINT "_EventRegistrationToPayment_A_fkey" FOREIGN KEY ("A") REFERENCES "EventRegistration"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -9,6 +9,8 @@ interface FormInputProps {
   marginTop?: boolean;
   marginBottom?: boolean;
   disabled?: boolean;
+  minLength?: number;
+  maxLength?: number;
   labelTopRight?: React.ReactNode;
   onChange?: () => void;
 }
@@ -25,6 +27,8 @@ export default function FormInput({
   disabled = false,
   marginTop = true,
   marginBottom = true,
+  minLength,
+  maxLength,
   onChange,
 }: FormInputProps) {
   return (
@@ -44,6 +48,8 @@ export default function FormInput({
         defaultValue={value ?? ''}
         disabled={disabled}
         id={id}
+        maxLength={maxLength}
+        minLength={minLength}
         name={id}
         placeholder={placeholder}
         required={required}
