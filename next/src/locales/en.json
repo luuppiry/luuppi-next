@@ -238,7 +238,7 @@
     "payment_completed_description": "Your payment has been completed. You will receive a receipt via email. You can now close this window.",
     "addition_info": "Details",
     "unanswered_questions": "Unanswered questions!",
-    "unanswered_questions_description": "One or more of your unpaid reservations require additional information. Please respond to the reservation questions by pressing the \"Additional Information\" button and completing the questions. Once you have answered the questions for all your unpaid reservations, you can proceed to make the payment."
+    "unanswered_questions_description": "One or more of your unpaid reservations require additional information. Please respond to the reservation questions by pressing the \"Details\" button and completing the questions. Once you have answered the questions for all your unpaid reservations, you can proceed to make the payment."
   },
   "pages_404": {
     "title": "Page not found",
