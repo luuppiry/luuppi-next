@@ -6,6 +6,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
+import { redirect } from 'next/navigation';
 
 const options = {
   noRoleId: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
@@ -267,7 +268,7 @@ export async function reservationCreate(
       await Promise.all(promisesArray);
 
       return {
-        message: `Nyt sinulle olisi varattu ${amount} lippua tapahtumaan ja sinut ohjattaisiin maksamaan ne. Sinulla olisi 60 minuuttia aikaa maksaa liput ennen kuin varaus raukeaa.`,
+        message: dictionary.general.success,
         isError: false,
       };
     })
@@ -282,7 +283,11 @@ export async function reservationCreate(
     }`,
   );
 
-  return result;
+  if (result.isError) {
+    return result;
+  }
+
+  redirect(`/${lang}/own-events`);
 }
 
 async function getUserAndRegistrations(eventId: number, entraUserUuid: string) {
