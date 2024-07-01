@@ -78,6 +78,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
       data: {
         orderId,
         amount: priceInCents,
+        language: lang === 'en' ? 'EN' : 'FI',
         registration: {
           connect: registrations.map((registration) => ({
             id: registration.id,

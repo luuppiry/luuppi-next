@@ -1,10 +1,11 @@
 'use server';
 import { getDictionary } from '@/dictionaries';
 import { luuppiEmails } from '@/libs/constants/emails';
+import { emailClient } from '@/libs/email/get-email-client';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { EmailClient, EmailMessage } from '@azure/communication-email';
+import { EmailMessage } from '@azure/communication-email';
 
 const options = {
   connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
@@ -96,8 +97,6 @@ export async function emailSendFeedback(
       field: 'message',
     };
   }
-
-  const emailClient = new EmailClient(options.connectionString);
 
   const emailMessage: EmailMessage = {
     senderAddress: options.senderAddress,

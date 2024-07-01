@@ -96,6 +96,7 @@ model Payment {
   orderId      String              @unique
   status       PaymentStatus       @default(PENDING)
   amount       Float
+  language     Language            @default(FI)
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
   registration EventRegistration[]
@@ -128,4 +129,9 @@ enum QuestionType {
   TEXT
   SELECT
   CHECKBOX
+}
+
+enum Language {
+  EN
+  FI
 }
