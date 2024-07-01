@@ -35,7 +35,8 @@
     "payment_failed": "Maksu epäonnistui",
     "pending_payment": "Sinulla on jo maksupyyntö vireillä. Odota, että edellinen maksu suoritetaan ennen uuden maksun tekemistä. Tämä varmistaa, ettei sinua veloiteta useita kertoja.",
     "invalid_answer_count": "Kelvoton vastausmäärä",
-    "invalid_answer": "Kelvoton vastaus"
+    "invalid_answer": "Kelvoton vastaus",
+    "email_registration_confirmation_subject": "Vahvistus tapahtumailmoittautumisesta"
   },
   "roles": {
     "entire_board": "Koko hallitus",

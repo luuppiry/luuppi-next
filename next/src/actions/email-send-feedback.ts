@@ -1,18 +1,20 @@
 'use server';
+import { LuuppiFeedback } from '@/../emails/feedback';
 import { getDictionary } from '@/dictionaries';
 import { luuppiEmails } from '@/libs/constants/emails';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { EmailClient, EmailMessage } from '@azure/communication-email';
+import { render } from '@react-email/components';
 
 const options = {
-  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
   senderAddress: process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!,
   turnstileVerifyEndpoint:
     'https://challenges.cloudflare.com/turnstile/v0/siteverify',
   turnstileSecret: process.env.TURNSTILE_SECRET!,
   cacheKey: 'feedback',
+  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
 };
 
 export async function emailSendFeedback(
@@ -97,23 +99,21 @@ export async function emailSendFeedback(
     };
   }
 
-  const emailClient = new EmailClient(options.connectionString);
+  const emailHtml = render(
+    LuuppiFeedback({
+      message,
+      receiver,
+      senderEmail: !email || email === '' ? '<ei sähköpostia>' : email,
+      senderName: !name || name === '' ? '<anonyymi lähettäjä>' : name,
+      subject,
+    }),
+  );
 
   const emailMessage: EmailMessage = {
     senderAddress: options.senderAddress,
     content: {
-      subject: `Palautelomake: ${subject}`,
-      html: `
-      <html>
-        <body>
-          <p>Lähettäjä: ${!name || name === '' ? 'Anonyymi' : name} (${!email || email === '' ? 'ei sähköpostia' : email})</p>
-          <p>Vastaanottaja: ${receiver}</p>
-          <p>Viesti:</p>
-          <p>${message}</p>
-          <p style="font-size: 0.6em;">Tämä viesti on lähetetty palautelomakkeen kautta, eikä tähän viestiin voi vastata</p>
-        </body>
-      </html>
-      `,
+      subject: 'Palautetta vastaanotettu',
+      html: emailHtml,
     },
     recipients: {
       to: [
@@ -125,6 +125,7 @@ export async function emailSendFeedback(
   };
 
   try {
+    const emailClient = new EmailClient(options.connectionString);
     const poller = await emailClient.beginSend(emailMessage);
     await poller.pollUntilDone();
     await updateRateLimitCounter(options.cacheKey, options.cacheKey);

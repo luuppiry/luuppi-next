@@ -1,4 +1,6 @@
 'use server';
+import { LuuppiEmailVerify as LuuppiEmailVerifyEn } from '@/../emails/email-verify-en';
+import { LuuppiEmailVerify as LuuppiEmailVerifyFi } from '@/../emails/email-verify-fi';
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import { getAccessToken } from '@/libs/get-access-token';
@@ -7,14 +9,15 @@ import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { EmailClient, EmailMessage } from '@azure/communication-email';
+import { render } from '@react-email/components';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const options = {
-  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
   senderAddress: process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!,
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL!,
   jwtSecret: process.env.JWT_SECRET!,
   cacheKey: 'email-verification',
+  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
 };
 
 export async function emailSendVerify(
@@ -120,20 +123,23 @@ export async function emailSendVerify(
 
   const link = `${options.baseUrl}/${lang}/profile/verify-email?token=${token}`;
 
-  const emailClient = new EmailClient(options.connectionString);
+  const emailHtml = render(
+    lang === 'fi'
+      ? LuuppiEmailVerifyFi({
+          name: user.name || user.email!,
+          link,
+        })
+      : LuuppiEmailVerifyEn({
+          name: user.name || user.email!,
+          link,
+        }),
+  );
 
   const message: EmailMessage = {
     senderAddress: options.senderAddress,
     content: {
       subject: dictionary.api.email_change_mail_subject,
-      html: `
-      <html>
-        <body>
-          <p>${dictionary.api.email_change_mail_text}</p>
-          <a href="${link}">${link}</a>
-        </body>
-      </html>
-      `,
+      html: emailHtml,
     },
     recipients: {
       to: [
@@ -145,6 +151,7 @@ export async function emailSendVerify(
   };
 
   try {
+    const emailClient = new EmailClient(options.connectionString);
     const poller = await emailClient.beginSend(message);
     await poller.pollUntilDone();
     await updateRateLimitCounter(user.entraUserUuid, options.cacheKey);
