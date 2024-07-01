@@ -8,7 +8,6 @@ import { SupportedLanguage } from '@/models/locale';
 import { EmailMessage } from '@azure/communication-email';
 
 const options = {
-  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
   senderAddress: process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!,
   turnstileVerifyEndpoint:
     'https://challenges.cloudflare.com/turnstile/v0/siteverify',

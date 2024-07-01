@@ -13,7 +13,6 @@ import { render } from '@react-email/components';
 import url from 'url';
 
 const options = {
-  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
   senderAddress: process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!,
 };
 

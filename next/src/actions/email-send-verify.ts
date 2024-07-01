@@ -14,7 +14,6 @@ import { render } from '@react-email/components';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const options = {
-  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
   senderAddress: process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!,
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL!,
   jwtSecret: process.env.JWT_SECRET!,
