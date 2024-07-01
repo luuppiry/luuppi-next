@@ -1,7 +1,9 @@
+import { debugRemoveHistory } from '@/actions/debug-remove-history';
 import { auth } from '@/auth';
 import PayButton from '@/components/PayButton/PayButton';
 import QuestionDialog from '@/components/QuestionDialog/QuestionDialog';
 import Registration from '@/components/Registration/Registration';
+import SubmitButton from '@/components/SubmitButton/SubmitButton';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
@@ -18,6 +20,7 @@ interface OwnEventsProps {
 
 export default async function OwnEvents({ params }: OwnEventsProps) {
   const dictionary = await getDictionary(params.lang);
+  const debugRemoveHistoryAction = debugRemoveHistory.bind(null, params.lang);
 
   const session = await auth();
   if (!session?.user) {
@@ -194,6 +197,18 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
               </div>
             </div>
           )}
+          {/* TODO: REMOVE BELOW */}
+          {/* TODO: REMOVE BELOW */}
+          {/* TODO: REMOVE BELOW */}
+          <form action={debugRemoveHistoryAction} className="mt-4">
+            <SubmitButton
+              className="btn-error"
+              text="Debug: Poista oma tapahtumahistoria"
+            />
+          </form>
+          {/* TODO: REMOVE ABOVE */}
+          {/* TODO: REMOVE ABOVE */}
+          {/* TODO: REMOVE ABOVE */}
         </div>
         <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
       </QuestionProvider>
