@@ -1,4 +1,4 @@
-FROM node:22.1-alpine AS base
+FROM node:22.3-alpine3.19 AS base
 
 # Manually force timezone to Helsinki
 RUN apk add --no-cache tzdata \
