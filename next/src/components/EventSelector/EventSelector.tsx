@@ -22,6 +22,11 @@ const MobileCalendar = dynamic(
   { loading: () => <MobileCalendarSkeleton /> },
 );
 
+const baseUrlWithoutHttp = process.env.NEXT_PUBLIC_BASE_URL?.replace(
+  /https?:\/\//,
+  '',
+);
+
 interface EventSelectorProps {
   events: Event[];
   dictionary: Dictionary;
@@ -94,8 +99,8 @@ export default function EventSelector({
               className="btn btn-primary btn-sm"
               href={
                 lang === 'en'
-                  ? 'webcal://luuppi.fi/service/ics/events.ics?lang=eng'
-                  : 'webcal://luuppi.fi/service/ics/events.ics?lang=fin'
+                  ? `webcal://${baseUrlWithoutHttp}/api/ics?lang=en`
+                  : `webcal://${baseUrlWithoutHttp}/api/ics?lang=fi`
               }
               target="_blank"
             >
