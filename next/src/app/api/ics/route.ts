@@ -52,7 +52,7 @@ export async function GET(request: Request) {
       summary: event.name,
       location: event.location,
       description: event.description,
-      url: `https://luuppi.fi/${lang}/events/${event.id}`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/events/${event.id}`,
     });
   });
 
