@@ -22,5 +22,11 @@ export async function debugRemoveHistory(lang: SupportedLanguage) {
     },
   });
 
+  await prisma.rolesOnUsers.deleteMany({
+    where: {
+      entraUserUuid: session.user.entraUserUuid!,
+    },
+  });
+
   return redirect(`/${lang}/own-events`);
 }
