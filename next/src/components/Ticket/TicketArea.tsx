@@ -30,6 +30,18 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
             include: {
               role: true,
             },
+            where: {
+              OR: [
+                {
+                  expiresAt: {
+                    gte: new Date(),
+                  },
+                },
+                {
+                  expiresAt: null,
+                },
+              ],
+            },
           },
           registrations: true,
         },

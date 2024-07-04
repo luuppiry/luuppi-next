@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 import ProfileEmailform from '@/components/ProfileEmailForm/ProfileEmailForm';
+import ProfileLegacyMigrate from '@/components/ProfileLegacyMigrate/ProfileLegacyMigrate';
 import ProfileNotificationsForm from '@/components/ProfileNotificationsForm/ProfileNotificationsForm';
 import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInfoForm';
 import { getDictionary } from '@/dictionaries';
@@ -49,6 +50,18 @@ export default async function Profile({ params }: ProfileProps) {
         include: {
           role: true,
         },
+        where: {
+          OR: [
+            {
+              expiresAt: {
+                gte: new Date(),
+              },
+            },
+            {
+              expiresAt: null,
+            },
+          ],
+        },
       },
     },
   });
@@ -74,6 +87,9 @@ export default async function Profile({ params }: ProfileProps) {
           lang={params.lang}
           user={user}
         />
+        {!isLuuppiMember && (
+          <ProfileLegacyMigrate dictionary={dictionary} lang={params.lang} />
+        )}
         <ProfileNotificationsForm
           dictionary={dictionary}
           lang={params.lang}

@@ -320,6 +320,18 @@ async function getUserAndRegistrations(eventId: number, entraUserUuid: string) {
         include: {
           role: true,
         },
+        where: {
+          OR: [
+            {
+              expiresAt: {
+                gte: new Date(),
+              },
+            },
+            {
+              expiresAt: null,
+            },
+          ],
+        },
       },
       registrations: true,
     },

@@ -19,7 +19,6 @@ const options = {
 
 export async function emailSendFeedback(
   lang: SupportedLanguage,
-  _: any,
   formData: FormData,
 ) {
   const dictionary = await getDictionary(lang);

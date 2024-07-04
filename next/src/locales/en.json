@@ -36,7 +36,9 @@
     "pending_payment": "You already have a pending payment. Please wait for the previous payment to complete before making a new one. This ensures that you won't be charged multiple times.",
     "invalid_answer_count": "Invalid answer count",
     "invalid_answer": "Invalid answer",
-    "email_registration_confirmation_subject": "Confirmation of event registration"
+    "email_registration_confirmation_subject": "Confirmation of event registration",
+    "invalid_credentials": "Invalid credentials",
+    "legacy_account_migrated": "Your old Luuppi account has been linked to your new account, and you now have a member role!"
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -275,7 +277,9 @@
       "computer_science": "Computer Science",
       "mathematics": "Mathematics",
       "statistical_data_analysis": "Statistical Data Analysis"
-    }
+    },
+    "legacy_migrate_info": "You can link your old website's Luuppi account using this form. Enter your old website username and password in the fields below and press 'Submit'.",
+    "migrate_account": "Migrate account"
   },
   "pages_feedback": {
     "title": "Feedback",

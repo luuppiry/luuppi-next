@@ -28,7 +28,6 @@ interface FeedbackFormProps {
 }
 
 export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
-  const handleFeedbackAction = emailSendFeedback.bind(null, lang);
   const formRef = useRef<HTMLFormElement>(null);
   const turnstileRef = useRef<TurnstileInstance>(null);
   const [formResponse, setFormResponse] = useState(initialState);
@@ -36,7 +35,7 @@ export default function FeedbackForm({ lang, dictionary }: FeedbackFormProps) {
 
   const updateFeedback = async (formData: FormData) => {
     formData.append('turnstileToken', turnstileToken);
-    const response = await handleFeedbackAction(null, formData);
+    const response = await emailSendFeedback(lang, formData);
     setFormResponse(response);
     turnstileRef.current?.reset();
     if (!response.isError) {

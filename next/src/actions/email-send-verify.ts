@@ -22,7 +22,6 @@ const options = {
 
 export async function emailSendVerify(
   lang: SupportedLanguage,
-  _: any,
   formData: FormData,
 ) {
   const dictionary = await getDictionary(lang);

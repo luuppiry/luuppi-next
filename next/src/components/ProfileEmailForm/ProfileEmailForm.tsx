@@ -30,11 +30,10 @@ export default function ProfileEmailform({
   lang,
   dictionary,
 }: ProfileEmailFormProps) {
-  const handleEmailUpdateAction = emailSendVerify.bind(null, lang);
   const [formResponse, setFormResponse] = useState(initialState);
 
   const updateEmailUpdate = async (formData: FormData) => {
-    const response = await handleEmailUpdateAction(null, formData);
+    const response = await emailSendVerify(lang, formData);
     setFormResponse(response);
   };
 
