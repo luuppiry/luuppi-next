@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { SupportedLanguage } from '@/models/locale';
+import 'server-only';
 import { logger } from '../utils/logger';
 import { getStrapiUrl } from './get-strapi-url';
 
@@ -28,6 +29,9 @@ export async function getStrapiData<T>(
     let res = await fetch(
       getStrapiUrl(`${url}${url.includes('?') ? '&' : '?'}locale=${lang}`),
       {
+        headers: {
+          Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
+        },
         next: { tags: revalidateTags },
       },
     );
@@ -42,6 +46,9 @@ export async function getStrapiData<T>(
       res = await fetch(
         getStrapiUrl(`${url}${url.includes('?') ? '&' : '?'}locale=fi`),
         {
+          headers: {
+            Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
+          },
           next: { tags: revalidateTags },
         },
       );
