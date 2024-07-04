@@ -24,6 +24,7 @@ jobs:
           echo NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST_DEV }} >> .env
           echo NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} >> .env
           echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env
+          echo STRAPI_API_KEY=${{ secrets.STRAPI_API_KEY }} >> .env
         working-directory: ./next
 
       - name: Build Next.js Docker image
