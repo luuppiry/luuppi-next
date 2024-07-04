@@ -16,7 +16,6 @@ const options = {
 
 export async function profileUpdate(
   lang: SupportedLanguage,
-  _: any,
   formData: FormData,
 ) {
   const dictionary = await getDictionary(lang);
@@ -121,6 +120,18 @@ export async function profileUpdate(
       roles: {
         include: {
           role: true,
+        },
+        where: {
+          OR: [
+            {
+              expiresAt: {
+                gte: new Date(),
+              },
+            },
+            {
+              expiresAt: null,
+            },
+          ],
         },
       },
     },

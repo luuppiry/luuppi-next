@@ -34,11 +34,10 @@ export default function ProfileUserInfoForm({
   dictionary,
   isLuuppiMember,
 }: ProfileUserInfoFormProps) {
-  const updateProfileAction = profileUpdate.bind(null, lang);
   const [formResponse, setFormResponse] = useState(initialState);
 
   const handleProfileUpdate = async (formData: FormData) => {
-    const response = await updateProfileAction(null, formData);
+    const response = await profileUpdate(lang, formData);
     setFormResponse(response);
   };
 

@@ -36,7 +36,9 @@
     "pending_payment": "Sinulla on jo maksupyyntö vireillä. Odota, että edellinen maksu suoritetaan ennen uuden maksun tekemistä. Tämä varmistaa, ettei sinua veloiteta useita kertoja.",
     "invalid_answer_count": "Kelvoton vastausmäärä",
     "invalid_answer": "Kelvoton vastaus",
-    "email_registration_confirmation_subject": "Vahvistus tapahtumailmoittautumisesta"
+    "email_registration_confirmation_subject": "Vahvistus tapahtumailmoittautumisesta",
+    "invalid_credentials": "Virheellinen käyttäjä",
+    "legacy_account_migrated": "Vanhan verkkosivun Luuppi-tilisi on linkitetty uuteen tiliisi ja sinulla on nyt jäsen-rooli!"
   },
   "roles": {
     "entire_board": "Koko hallitus",
@@ -275,7 +277,9 @@
       "computer_science": "Tietojenkäsittelytiede",
       "mathematics": "Matematiikka",
       "statistical_data_analysis": "Tilastollinen data-analyysi"
-    }
+    },
+    "legacy_migrate_info": "Voit linkittää vanhan verkkosivuston Luuppi-tilisi tämän lomakkeen avulla. Syötä vanhan verkkosivuston käyttäjätunnuksesi ja salasanasi alla oleviin kenttiin ja paina 'Lähetä'.",
+    "migrate_account": "Linkitä vanha Luuppi-tili"
   },
   "pages_feedback": {
     "title": "Palaute",
