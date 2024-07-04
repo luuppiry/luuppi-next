@@ -46,7 +46,7 @@ export async function migrateLegacyAccount(
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  if (!user || !password) {
+  if (!email || !password) {
     logger.error('Email or password missing in form data');
     return {
       message: dictionary.api.invalid_credentials,
