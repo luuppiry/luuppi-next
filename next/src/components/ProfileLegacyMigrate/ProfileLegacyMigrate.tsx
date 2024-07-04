@@ -34,6 +34,7 @@ export default function ProfileLegacyMigrate({
       </span>
       <form
         action={handleAccountMigrate}
+        autoComplete="off"
         className="card card-body bg-background-50"
       >
         <div className="flex w-full flex-col">
