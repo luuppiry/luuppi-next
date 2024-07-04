@@ -41,6 +41,8 @@ export async function migrateLegacyAccount(
     };
   }
 
+  await updateRateLimitCounter(user.entraUserUuid, options.cacheKey);
+
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
@@ -89,8 +91,6 @@ export async function migrateLegacyAccount(
       expiresAt: endsAt,
     },
   });
-
-  await updateRateLimitCounter(user.entraUserUuid, options.cacheKey);
 
   logger.info(
     `User ${user.entraUserUuid} migrated legacy account with expiresAt: ${endsAt}`,
