@@ -52,7 +52,7 @@ export async function migrateLegacyAccount(
     };
   }
 
-  const legacyMigrateResponse = await fetch('http://localhost:4444/login', {
+  const legacyMigrateResponse = await fetch('http://legacy-mig:4444/login', {
     body: JSON.stringify({ user: email, pass: password }),
     headers: {
       'Content-Type': 'application/json',
