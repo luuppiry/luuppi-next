@@ -279,7 +279,8 @@
       "statistical_data_analysis": "Statistical Data Analysis"
     },
     "legacy_migrate_info": "You can link your old website's Luuppi account using this form. Enter your old website username and password in the fields below and press 'Submit'.",
-    "migrate_account": "Migrate account"
+    "migrate_account": "Migrate account",
+    "missing_required_fields": "You are a member of Luuppi, but you are missing some required information. Please provide the missing details. Required fields are marked with an asterisk."
   },
   "pages_feedback": {
     "title": "Feedback",

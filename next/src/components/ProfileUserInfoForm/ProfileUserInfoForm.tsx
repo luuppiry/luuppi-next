@@ -41,12 +41,25 @@ export default function ProfileUserInfoForm({
     setFormResponse(response);
   };
 
+  const hasMissingInformation =
+    isLuuppiMember &&
+    (!user.givenName ||
+      !user.surname ||
+      !user.extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle ||
+      !user.extension_3c0a9d6308d649589e6b4e1f57006bcc_Major);
+
   return (
     <form
       action={handleProfileUpdate}
       className="card card-body bg-background-50"
     >
       <div className="flex w-full flex-col">
+        {hasMissingInformation && (
+          <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+            <BiErrorCircle size={24} />
+            {dictionary.pages_profile.missing_required_fields}
+          </div>
+        )}
         {Boolean(
           formResponse.isError &&
             formResponse.message &&
