@@ -19,7 +19,6 @@ export async function profileUpdate(
   formData: FormData,
 ) {
   const dictionary = await getDictionary(lang);
-
   const session = await auth();
 
   if (!session?.user) {
@@ -42,54 +41,6 @@ export async function profileUpdate(
       isError: true,
     };
   }
-
-  const fields: Record<
-    string,
-    { value: FormDataEntryValue | null; regex: RegExp; required?: boolean }
-  > = {
-    displayName: {
-      value: formData.get('displayName'),
-      regex: /^[a-zA-Z0-9]{3,30}$/,
-      required: true,
-    },
-    givenName: { value: formData.get('givenName'), regex: /^.{2,70}$/ },
-    surname: { value: formData.get('surname'), regex: /^.{2,35}$/ },
-    extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle: {
-      value: formData.get('domicle'),
-      regex: /^.{2,35}$/,
-    },
-    extension_3c0a9d6308d649589e6b4e1f57006bcc_PreferredFullName: {
-      value: formData.get('preferredFullName'),
-      regex: /^.{2,100}$/,
-    },
-    extension_3c0a9d6308d649589e6b4e1f57006bcc_Major: {
-      value: formData.get('major'),
-      regex: /^(computer_science|mathematics|statistical_data_analysis|other)$/,
-    },
-  };
-
-  const errors = Object.entries(fields)
-    .map(([fieldName, { value, regex, required }]) =>
-      validateField(
-        value?.toString() ?? null,
-        regex,
-        dictionary,
-        fieldName,
-        required,
-      ),
-    )
-    .filter((error) => error !== null);
-
-  if (errors.length > 0) {
-    return errors[0] as { message: string; isError: boolean; field: string };
-  }
-
-  const fieldsToUpdate = Object.fromEntries(
-    Object.entries(fields).map(([fieldName, { value }]) => [
-      fieldName,
-      value ? value.toString() : null,
-    ]),
-  );
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
@@ -141,6 +92,64 @@ export async function profileUpdate(
 
   const isLuuppiMember = roles.includes(
     process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+  );
+
+  const fields: Record<
+    string,
+    { value: FormDataEntryValue | null; regex: RegExp; required?: boolean }
+  > = {
+    displayName: {
+      value: formData.get('displayName'),
+      regex: /^[a-zA-Z0-9]{3,30}$/,
+      required: true,
+    },
+    givenName: {
+      value: formData.get('givenName'),
+      regex: /^.{2,70}$/,
+      required: isLuuppiMember,
+    },
+    surname: {
+      value: formData.get('surname'),
+      regex: /^.{2,35}$/,
+      required: isLuuppiMember,
+    },
+    extension_3c0a9d6308d649589e6b4e1f57006bcc_Domicle: {
+      value: formData.get('domicle'),
+      regex: /^.{2,35}$/,
+      required: isLuuppiMember,
+    },
+    extension_3c0a9d6308d649589e6b4e1f57006bcc_PreferredFullName: {
+      value: formData.get('preferredFullName'),
+      regex: /^.{2,100}$/,
+    },
+    extension_3c0a9d6308d649589e6b4e1f57006bcc_Major: {
+      value: formData.get('major'),
+      regex: /^(computer_science|mathematics|statistical_data_analysis|other)$/,
+      required: isLuuppiMember,
+    },
+  };
+
+  const errors = Object.entries(fields)
+    .map(([fieldName, { value, regex, required }]) =>
+      validateField(
+        value?.toString() ?? null,
+        regex,
+        dictionary,
+        fieldName,
+        required,
+      ),
+    )
+    .filter((error) => error !== null);
+
+  if (errors.length > 0) {
+    return errors[0] as { message: string; isError: boolean; field: string };
+  }
+
+  const fieldsToUpdate = Object.fromEntries(
+    Object.entries(fields).map(([fieldName, { value }]) => [
+      fieldName,
+      value ? value.toString() : null,
+    ]),
   );
 
   if ((fieldsToUpdate.major || fieldsToUpdate.domicle) && !isLuuppiMember) {
