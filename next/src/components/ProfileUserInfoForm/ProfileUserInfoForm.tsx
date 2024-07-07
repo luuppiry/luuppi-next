@@ -99,7 +99,7 @@ export default function ProfileUserInfoForm({
           }
           marginTop={false}
           placeholder={dictionary.general.firstNames}
-          required={false}
+          required={isLuuppiMember}
           title={dictionary.general.firstNames}
           type="text"
           value={user.givenName ?? ''}
@@ -118,7 +118,7 @@ export default function ProfileUserInfoForm({
           }
           marginTop={false}
           placeholder={dictionary.general.lastName}
-          required={false}
+          required={isLuuppiMember}
           title={dictionary.general.lastName}
           type="text"
           value={user.surname ?? ''}
@@ -169,7 +169,7 @@ export default function ProfileUserInfoForm({
               }
               marginTop={false}
               placeholder={dictionary.general.domicle}
-              required={false}
+              required={isLuuppiMember}
               title={dictionary.general.domicle}
               type="text"
               value={
@@ -197,7 +197,7 @@ export default function ProfileUserInfoForm({
                     ],
                 }),
               )}
-              required={false}
+              required={true}
               title={dictionary.general.major}
               value={
                 user.extension_3c0a9d6308d649589e6b4e1f57006bcc_Major ??
