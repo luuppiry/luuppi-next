@@ -138,20 +138,29 @@ export default async function Event({ params }: EventProps) {
               </div>
             </div>
           </div>
-          <div
-            dangerouslySetInnerHTML={{ __html: event.description }}
-            className="prose prose-custom max-w-full break-words decoration-secondary-400 transition-all duration-300 ease-in-out"
-          />
-          <div className="mt-8">
-            <Link
-              className="btn btn-primary text-white"
-              href={`https://legacy.luuppi.fi/tapahtumat/${params.lang === 'fi' ? 'tapahtuma' : 'event'}?id=${event.id}&lang=${params.lang}`}
+          <div className="mb-12">
+            <h2 className="mb-4 text-2xl font-bold">
+              {dictionary.pages_events.tickets}
+            </h2>
+            <Suspense
+              fallback={
+                <div className="flex flex-col gap-4">
+                  <div className="skeleton h-24 w-full" />
+                  <div className="skeleton h-24 w-full" />
+                </div>
+              }
             >
-              {dictionary.general.register_event}
-            </Link>
-            <p className="mt-4 max-w-md text-sm opacity-60">
-              <i>{dictionary.pages_events.event_info}</i>
-            </p>
+              <TicketArea event={event} lang={params.lang} />
+            </Suspense>
+          </div>
+          <div className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
+            <BlockRendererClient
+              content={
+                event.data.attributes[
+                  params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
+                ]
+              }
+            />
           </div>
         </div>
         <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
@@ -190,8 +199,12 @@ export async function generateMetadata({
     event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
 
   return {
-    title: `${event?.title} | Luuppi ry`,
-    description: removeHtml(event?.description)?.slice(0, 160) + '...',
+    title: `${title} | Luuppi ry`,
+    description: getPlainText(
+      event?.data.attributes[
+        params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
+      ],
+    ).slice(0, 300),
     alternates: {
       canonical: pathname,
       languages: {
@@ -200,14 +213,14 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: event?.title,
-      description: removeHtml(event?.description)?.slice(0, 160) + '...',
+      title,
+      description,
       url: pathname,
       siteName: 'Luuppi ry',
     },
     twitter: {
-      title: event?.title,
-      description: removeHtml(event?.description)?.slice(0, 160) + '...',
+      title,
+      description,
     },
   };
 }
