@@ -121,6 +121,8 @@ export function removeHtml(text: string | undefined) {
       Uuml: 'Ü',
       aring: 'å',
       Aring: 'Å',
+      hellip: '…',
+      euro: '€',
     };
     return entities[entity] ?? match;
   });
