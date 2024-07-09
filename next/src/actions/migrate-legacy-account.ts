@@ -75,20 +75,33 @@ export async function migrateLegacyAccount(
     ? new Date(legacyMigrateData.endsAt)
     : null;
 
-  await prisma.rolesOnUsers.upsert({
+  const connectOrCreate = {
     where: {
       strapiRoleUuid_entraUserUuid: {
         entraUserUuid: user.entraUserUuid,
         strapiRoleUuid: options.memberRole,
       },
     },
-    update: {
+    create: {
       expiresAt: endsAt,
+      strapiRoleUuid: options.memberRole,
+    },
+  };
+
+  await prisma.user.upsert({
+    where: {
+      entraUserUuid: user.entraUserUuid,
     },
     create: {
       entraUserUuid: user.entraUserUuid,
-      strapiRoleUuid: options.memberRole,
-      expiresAt: endsAt,
+      roles: {
+        connectOrCreate: connectOrCreate,
+      },
+    },
+    update: {
+      roles: {
+        connectOrCreate: connectOrCreate,
+      },
     },
   });
 
