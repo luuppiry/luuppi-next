@@ -20,7 +20,7 @@ export default async function AuthError({
   const errorSearchParam = searchParams?.error;
 
   return (
-    <div className="flex items-center justify-between gap-12 max-lg:flex-col max-md:items-start">
+    <div className="relative flex items-center justify-between gap-12 max-lg:flex-col max-md:items-start">
       <div className="flex flex-col gap-4">
         <h1>{dictionary.pages_error.auth_title}</h1>
         <p className="max-w-xl text-lg">
@@ -37,6 +37,7 @@ export default async function AuthError({
       <div>
         <Image alt="404" height={550} src={roboSvg} width={550} />
       </div>
+      <div className="luuppi-pattern absolute -left-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
     </div>
   );
 }
