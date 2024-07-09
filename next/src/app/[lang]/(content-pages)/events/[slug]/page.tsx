@@ -217,7 +217,9 @@ export async function generateStaticParams() {
 
   if (!data) return [];
 
-  const events = data.data.filter((e) => e.id).map((event) => event.id);
+  const events = data.data
+    .filter((e) => e.id)
+    .map((event) => event.id.toString());
 
   return events.map((eventId) => ({
     slug: eventId,
