@@ -10,10 +10,13 @@ import 'server-only';
  * @param data Board members data
  * @returns Board members data with correct locale
  */
-export const flipBoardLocale = (lang: SupportedLanguage, data: any) =>
+export const flipBoardLocale = (
+  lang: SupportedLanguage,
+  data: APIResponseData<'api::board.board'>,
+) =>
   lang === 'en'
-    ? data.attributes.boardMembers.data.map((member: any) => {
-        const flippedLocales = member.attributes.boardRoles.data.map(
+    ? (data.attributes.boardMembers!?.data.map((member) => {
+        const flippedLocales = member.attributes.boardRoles?.data.map(
           (role: any) => {
             const localeEn = role.attributes.localizations.data[0];
             return {
@@ -31,8 +34,8 @@ export const flipBoardLocale = (lang: SupportedLanguage, data: any) =>
             },
           },
         };
-      })
-    : data.attributes.boardMembers.data;
+      }) as APIResponseData<'api::board-member.board-member'>[])
+    : data.attributes.boardMembers!?.data;
 
 /**
  * Strapi does not support direct localization in a case where we
@@ -47,7 +50,7 @@ export const flipNewsLocale = (
   data: APIResponseData<'api::news-single.news-single'>[],
 ) =>
   lang === 'en'
-    ? data.map((news) => {
+    ? (data.map((news) => {
         const localeEn = news.attributes.localizations?.data[0];
         return {
           ...news,
@@ -61,7 +64,7 @@ export const flipNewsLocale = (
             },
           },
         };
-      })
+      }) as APIResponseData<'api::news-single.news-single'>[])
     : data;
 
 /**
@@ -77,7 +80,7 @@ export const flipSanomatLocale = (
   data: APIResponseData<'api::luuppi-sanomat.luuppi-sanomat'>[],
 ) =>
   lang === 'en'
-    ? data.map((publication) => {
+    ? (data.map((publication) => {
         const localeEn = publication.attributes.localizations?.data[0];
         return {
           ...publication,
@@ -91,5 +94,5 @@ export const flipSanomatLocale = (
             },
           },
         };
-      })
+      }) as APIResponseData<'api::luuppi-sanomat.luuppi-sanomat'>[])
     : data;

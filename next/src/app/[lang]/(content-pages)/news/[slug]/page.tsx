@@ -7,13 +7,13 @@ import { flipNewsLocale } from '@/libs/strapi/flip-locale';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
+import { getNewsJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { FaUserAlt } from 'react-icons/fa';
-import { NewsArticle, WithContext } from 'schema-dts';
 
 const baseUrl =
   '/api/news?populate[0]=banner&populate[1]=authorImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[slug][$eq]=';
@@ -46,22 +46,12 @@ export default async function NewsPost({ params }: NewsPostProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const jsonLd: WithContext<NewsArticle> = {
-    '@context': 'https://schema.org',
-    '@type': 'NewsArticle',
-    headline: selectedNews.attributes.title,
-    datePublished: new Date(selectedNews.attributes.createdAt!).toISOString(),
-    dateModified: new Date(selectedNews.attributes.updatedAt!).toISOString(),
-    author: {
-      '@type': 'Person',
-      name: selectedNews.attributes.authorName,
-    },
-  };
-
   return (
     <>
       <script
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getNewsJsonLd(selectedNews)),
+        }}
         type="application/ld+json"
       />
       <div className="flex w-full gap-12">
