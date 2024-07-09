@@ -7,6 +7,7 @@ import { getPlainText } from '@/libs/strapi/blocks-converter';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { formatDateRange } from '@/libs/utils/format-date-range';
+import { getEventJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
@@ -14,7 +15,6 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
-import { Event as EventSchema, WithContext } from 'schema-dts';
 
 interface EventProps {
   params: { slug: string; lang: SupportedLanguage };
@@ -49,33 +49,16 @@ export default async function Event({ params }: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const jsonLd: WithContext<EventSchema> = {
-    '@context': 'https://schema.org',
-    '@type': 'Event',
-    name: event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'],
-    startDate: new Date(event.data.attributes.StartDate).toISOString(),
-    endDate: new Date(event.data.attributes.EndDate).toISOString(),
-    description: getPlainText(
-      event.data.attributes[
-        params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
-      ],
-    ).slice(0, 300),
-    location: {
-      '@type': 'Place',
-      name: event.data.attributes[
-        params.lang === 'en' ? 'LocationEn' : 'LocationFi'
-      ],
-    },
-  };
-
   const imageUrl = event.data.attributes.Image?.data.attributes.url
     ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
-    : undefined;
+    : null;
 
   return (
     <>
       <script
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getEventJsonLd(event, params.lang)),
+        }}
         type="application/ld+json"
       />
       <div className="relative flex w-full gap-12">
@@ -194,17 +177,14 @@ export async function generateMetadata({
     event.data.attributes[
       params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
     ],
-  ).slice(0, 300);
+  );
+
   const title =
     event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
 
   return {
     title: `${title} | Luuppi ry`,
-    description: getPlainText(
-      event?.data.attributes[
-        params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
-      ],
-    ).slice(0, 300),
+    description: description.slice(0, 300),
     alternates: {
       canonical: pathname,
       languages: {
@@ -235,11 +215,11 @@ export async function generateStaticParams() {
     true,
   );
 
-  return (
-    data?.data
-      .filter((e) => e.id)
-      .map((event) => ({
-        slug: event.id.toString(),
-      })) ?? []
-  );
+  if (!data) return [];
+
+  const events = data.data.filter((e) => e.id).map((event) => event.id);
+
+  return events.map((eventId) => ({
+    slug: eventId,
+  }));
 }
