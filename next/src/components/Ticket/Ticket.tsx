@@ -68,8 +68,7 @@ export default function Ticket({
     return () => clearInterval(interval);
   });
 
-  const handleSubmit = async (e?: any) => {
-    e?.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
     const res = await reservationCreate(eventId, amount, lang);
     router.refresh();
@@ -95,7 +94,7 @@ export default function Ticket({
         maxAmount={ticket.maxTicketsPerUser}
         open={amountModalOpen}
         setAmount={setAmount}
-        submit={(e: any) => handleSubmit(e)}
+        submit={() => handleSubmit()}
         onClose={() => setAmountModalOpen(false)}
       />
       <ErrorDialog
