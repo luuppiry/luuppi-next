@@ -22,13 +22,14 @@ export async function POST(request: Request) {
     revalidateTag(model);
 
     if (model === 'event') {
-      logger.info(`Revalidating event-${body.id}`);
-      revalidateTag(`event-${body.id}`);
+      logger.info(`Revalidating event-${body.entry.id}`);
 
-      if (!body.entry) {
-        logger.error(`No entry found for event-${body.id}`);
+      if (!body.entry?.id) {
+        logger.error(`No entry found for event-${body.entry.id}`);
         return new Response('No entry found', { status: 400 });
       }
+
+      revalidateTag(`event-${body.entry.id}`);
 
       const { NameFi, NameEn, LocationFi, LocationEn, StartDate, EndDate, id } =
         body.entry;
