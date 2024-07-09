@@ -1,5 +1,6 @@
 import { Dictionary } from '@/models/locale';
 import FormSelect from '../FormSelect/FormSelect';
+import SubmitButton from '../SubmitButton/SubmitButton';
 
 interface TicketAmountDialogProps {
   dictionary: Dictionary;
@@ -22,13 +23,12 @@ export default function TicketAmountDialog({
   amount,
   setAmount,
   submit,
-  loading,
 }: TicketAmountDialogProps) {
   return (
     <dialog
       className={`modal modal-bottom sm:modal-middle ${open ? 'modal-open' : ''}`}
     >
-      <form className="modal-box max-h-[calc(100dvh-6em)]" onSubmit={submit}>
+      <form action={submit} className="modal-box max-h-[calc(100dvh-6em)]">
         <FormSelect
           id="amount"
           marginTop={false}
@@ -40,15 +40,7 @@ export default function TicketAmountDialog({
           value={amount.toString()}
           onChange={(e) => setAmount(parseInt(e.target.value))}
         />
-        <button className="btn" type="submit">
-          {loading ? (
-            <div className="min-w-16">
-              <span className="loading loading-spinner loading-md" />
-            </div>
-          ) : (
-            dictionary.general.submit
-          )}
-        </button>
+        <SubmitButton text={dictionary.general.submit} variant="secondary" />
       </form>
       <label className="modal-backdrop" onClick={onClose}>
         Close
