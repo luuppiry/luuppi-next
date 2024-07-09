@@ -182,6 +182,8 @@ export async function generateMetadata({
   const title =
     event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
 
+  const image = event.data.attributes.Image?.data.attributes.url;
+
   return {
     title: `${title} | Luuppi ry`,
     description: description.slice(0, 300),
@@ -197,10 +199,13 @@ export async function generateMetadata({
       description,
       url: pathname,
       siteName: 'Luuppi ry',
+      images: image ? [getStrapiUrl(image)] : undefined,
     },
     twitter: {
       title,
       description,
+      card: 'summary_large_image',
+      images: image ? [getStrapiUrl(image)] : undefined,
     },
   };
 }
