@@ -22,9 +22,11 @@ export async function POST(request: Request) {
     revalidateTag(model);
 
     if (model === 'event') {
+      logger.info(`Revalidating event-${body.id}`);
       revalidateTag(`event-${body.id}`);
 
       if (!body.entry) {
+        logger.error(`No entry found for event-${body.id}`);
         return new Response('No entry found', { status: 400 });
       }
 
@@ -44,11 +46,11 @@ export async function POST(request: Request) {
 
     if (model === 'event-role') {
       if (!body.entry) {
+        logger.error('No entry found for event-role');
         return new Response('No entry found', { status: 400 });
       }
 
       const { RoleId } = body.entry;
-
       await createRole(RoleId);
     }
   }
