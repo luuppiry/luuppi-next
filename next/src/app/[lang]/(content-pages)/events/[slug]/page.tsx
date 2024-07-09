@@ -164,7 +164,7 @@ export async function generateMetadata({
 }: EventProps): Promise<Metadata> {
   const event = await getStrapiData<APIResponse<'api::event.event'>>(
     params.lang,
-    `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage`,
+    `/api/events/${params.slug}?populate=Image`,
     [`event-${params.slug}`],
     true,
   );
