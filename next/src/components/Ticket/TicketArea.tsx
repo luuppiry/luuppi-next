@@ -206,6 +206,12 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         message: dictionary.pages_events.login_required,
         level: 'error',
       });
+    if (session?.user && !ownQuota) {
+      errors.push({
+        message: dictionary.pages_events.no_quota,
+        level: 'error',
+      });
+    }
     if (isSoldOutOwnQuota && ownQuota)
       errors.push({
         message: dictionary.pages_events.sold_out_info,
