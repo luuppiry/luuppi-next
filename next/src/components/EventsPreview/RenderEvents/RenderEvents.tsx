@@ -1,6 +1,7 @@
 import { dateFormat } from '@/libs/constants';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
+import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
@@ -17,20 +18,18 @@ export default async function RenderEvents({
   lang,
   dictionary,
 }: RenderEventsProps) {
-  const url = '/api/events?pagination[limit]=9999&sort[0]=createdAt:desc';
+  const url = `/api/events?pagination[limit]=9999&sort[0]=StartDate&filters[EndDate][$gte]=${new Date().toISOString()}&populate=Image`;
 
   const eventsData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
   >('fi', url, ['event']);
 
-  const upcomingEvents = eventsData.data
-    .filter((event) => new Date(event.attributes.EndDate) > new Date())
-    .map((e) => ({
-      ...e,
-      isToday:
-        new Date(e.attributes.StartDate).toDateString() ===
-        new Date().toDateString(),
-    }));
+  const upcomingEvents = eventsData.data.map((e) => ({
+    ...e,
+    isToday:
+      new Date(e.attributes.StartDate).toDateString() ===
+      new Date().toDateString(),
+  }));
 
   const formattedEvents = upcomingEvents.map((event) => ({
     description: getPlainText(
@@ -41,6 +40,9 @@ export default async function RenderEvents({
     location: event.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
     start: new Date(event.attributes.StartDate),
     title: event.attributes[lang === 'en' ? 'NameEn' : 'NameFi'],
+    image: event.attributes.Image?.data.attributes.url
+      ? getStrapiUrl(event.attributes.Image.data.attributes.url)
+      : eventPlaceholder,
   }));
 
   return (
@@ -58,9 +60,10 @@ export default async function RenderEvents({
               className="object-cover transition-all duration-300 group-hover:scale-105"
               draggable={false}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src={eventPlaceholder}
+              src={event.image}
               fill
             />
+            <div className="absolute bottom-0 h-1/3 w-full bg-gradient-to-t from-secondary-400 to-transparent opacity-80" />
           </div>
           <div className="relative flex flex-grow flex-col overflow-hidden p-6 transition-all duration-300">
             <p className="z-20 text-sm font-bold">
