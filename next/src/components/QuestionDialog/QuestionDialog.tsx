@@ -65,6 +65,10 @@ export default function QuestionDialog({
 
   if (!ctx.data) return null;
 
+  const hasAnswers = ctx.data.answers.find(
+    (answer) => answer.registrationId === ctx.data?.reservationId,
+  );
+
   return (
     <dialog className={'modal modal-open modal-bottom sm:modal-middle'}>
       <form
@@ -73,7 +77,9 @@ export default function QuestionDialog({
         className="modal-box max-h-[calc(100dvh-6em)]"
       >
         <h3 className="text-lg font-bold">
-          {dictionary.pages_events.addition_info}
+          {hasAnswers
+            ? dictionary.pages_events.edit_additional_info
+            : dictionary.pages_events.fill_additional_info}
         </h3>
         {response && response.isError && (
           <div className="alert mt-2 rounded-lg bg-red-200 text-sm text-red-800">
