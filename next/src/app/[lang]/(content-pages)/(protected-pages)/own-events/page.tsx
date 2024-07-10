@@ -76,6 +76,12 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
         text: event?.data?.attributes.Registration?.QuestionsText ?? [],
         select: event?.data?.attributes.Registration?.QuestionsSelect ?? [],
         checkbox: event?.data?.attributes.Registration?.QuestionsCheckbox ?? [],
+        answerableUntil: event?.data?.attributes.Registration
+          ?.AllowQuestionEditUntil
+          ? new Date(
+              event?.data?.attributes.Registration?.AllowQuestionEditUntil,
+            )
+          : null,
       };
     }),
   );
@@ -111,7 +117,7 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
   const getQuestionsForEvent = (eventId: number) =>
     upcomingEventQuestions.find(
       (eventQuestions) => eventQuestions.eventId === eventId,
-    ) ?? { text: [], select: [], checkbox: [], eventId };
+    ) ?? { text: [], select: [], checkbox: [], eventId, answerableUntil: null };
 
   const getAnswersForReservation = (registrationId: number) =>
     userEventRegistrations.find(

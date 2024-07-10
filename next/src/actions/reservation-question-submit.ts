@@ -57,6 +57,22 @@ export async function reservationQuestionSubmit(
     };
   }
 
+  // Fallback to the day before the event if the registration does not have an answerableUntil date
+  const eventStart = new Date(event.data.attributes.StartDate);
+  const dayBeforeEvent = new Date(eventStart.valueOf() - 1000 * 60 * 60 * 24);
+
+  const allowAnswerChangesUntil = event.data.attributes.Registration
+    ?.AllowQuestionEditUntil
+    ? new Date(event.data.attributes.Registration?.AllowQuestionEditUntil)
+    : dayBeforeEvent;
+
+  if (allowAnswerChangesUntil < new Date()) {
+    return {
+      message: dictionary.api.invalid_answer_time,
+      isError: true,
+    };
+  }
+
   const allowedTextQuestions =
     event.data.attributes.Registration?.QuestionsText?.length ?? 0;
   const allowedSelectQuestions =

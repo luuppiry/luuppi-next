@@ -38,7 +38,8 @@
     "invalid_answer": "Invalid answer",
     "email_registration_confirmation_subject": "Confirmation of event registration",
     "invalid_credentials": "Invalid credentials",
-    "legacy_account_migrated": "Your old Luuppi account has been linked to your new account, and you now have a member role!"
+    "legacy_account_migrated": "Your old Luuppi account has been linked to your new account, and you now have a member role!",
+    "invalid_answer_time": "You cannot change your answers any more. If you need to make changes, please contact the event organizer."
   },
   "roles": {
     "entire_board": "Entire Board",
