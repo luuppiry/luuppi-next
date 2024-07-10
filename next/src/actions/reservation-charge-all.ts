@@ -57,7 +57,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
 
   let redirectUrl: string | null = null;
   try {
-    const orderId = `${randomUUID()}-${new Date().getTime()}`;
+    const orderId = randomUUID();
 
     redirectUrl = await createCharge(
       {
