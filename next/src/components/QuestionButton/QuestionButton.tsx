@@ -53,12 +53,18 @@ export default function QuestionButton({
     ctx.setData({ reservationId, questions, answers });
   };
 
+  const hasAnswers = answers.some(
+    (answer) => answer.registrationId === reservationId,
+  );
+
   return (
     <button
       className="btn btn-primary btn-sm max-md:btn-xs"
       onClick={handleClick}
     >
-      {dictionary.pages_events.addition_info}
+      {hasAnswers
+        ? dictionary.pages_events.edit_additional_info
+        : dictionary.pages_events.fill_additional_info}
     </button>
   );
 }

@@ -240,7 +240,8 @@
     "payment_failed": "Maksu epäonnistui",
     "payment_failed_description": "Maksusi epäonnistui. Jos sinulta on veloitettu, ota yhteyttä WWW/IT-vastaaviin osoitteessa webmaster@luuppi.fi",
     "payment_completed_description": "Maksusi on suoritettu onnistuneesti. Saat sähköpostiisi kuitin maksusta ja voit sulkea tämän sivun.",
-    "addition_info": "Lisätiedot",
+    "fill_additional_info": "Anna lisätietoja",
+    "edit_additional_info": "Muokkaa lisätietoja",
     "unanswered_questions": "Vastaamattomia kysymyksiä!",
     "unanswered_questions_description": "Yksi tai useampi maksamaton varauksesi vaatii lisätietoja. Vastaa varauksen kysymyksiin painamalla \"Lisätiedot\"-nappia ja täyttämällä kysymykset. Kun olet vastannut kaikkien maksamattomien varauksiesi kysymyksiin, voit maksaa varaukset.",
     "no_quota": "Roolillesi ei ole kiintiötä tässä tapahtumassa."
