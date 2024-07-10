@@ -1179,7 +1179,6 @@ export interface ApiEventEvent extends Schema.CollectionType {
     LocationEn: Attribute.String & Attribute.Required;
     NameEn: Attribute.String & Attribute.Required;
     DescriptionEn: Attribute.Blocks & Attribute.Required;
-    Seo: Attribute.Component<'shared.seo'> & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

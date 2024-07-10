@@ -1,7 +1,8 @@
 {
   "collectionName": "components_events_questions_texts",
   "info": {
-    "displayName": "QuestionsText"
+    "displayName": "QuestionsText",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -16,7 +17,7 @@
     "MinLength": {
       "type": "integer",
       "required": true,
-      "default": 10
+      "default": 3
     },
     "MaxLength": {
       "type": "integer",

@@ -1157,6 +1157,76 @@ export interface ApiContactContact extends Schema.SingleType {
   };
 }
 
+export interface ApiEventEvent extends Schema.CollectionType {
+  collectionName: 'events';
+  info: {
+    singularName: 'event';
+    pluralName: 'events';
+    displayName: 'Events';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    NameFi: Attribute.String & Attribute.Required;
+    LocationFi: Attribute.String & Attribute.Required;
+    DescriptionFi: Attribute.Blocks & Attribute.Required;
+    StartDate: Attribute.DateTime & Attribute.Required;
+    EndDate: Attribute.DateTime & Attribute.Required;
+    Image: Attribute.Media<'images'>;
+    Registration: Attribute.Component<'events.registration'>;
+    LocationEn: Attribute.String & Attribute.Required;
+    NameEn: Attribute.String & Attribute.Required;
+    DescriptionEn: Attribute.Blocks & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::event.event',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::event.event',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiEventRoleEventRole extends Schema.CollectionType {
+  collectionName: 'event_roles';
+  info: {
+    singularName: 'event-role';
+    pluralName: 'event-roles';
+    displayName: 'EventRoles';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    Title: Attribute.String & Attribute.Required & Attribute.Private;
+    RoleId: Attribute.UID & Attribute.Required;
+    Description: Attribute.Text & Attribute.Required & Attribute.Private;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::event-role.event-role',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::event-role.event-role',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiEventsCalendarEventsCalendar extends Schema.SingleType {
   collectionName: 'events_calendars';
   info: {
@@ -2325,6 +2395,8 @@ declare module '@strapi/types' {
       'api::collaboration-general.collaboration-general': ApiCollaborationGeneralCollaborationGeneral;
       'api::company.company': ApiCompanyCompany;
       'api::contact.contact': ApiContactContact;
+      'api::event.event': ApiEventEvent;
+      'api::event-role.event-role': ApiEventRoleEventRole;
       'api::events-calendar.events-calendar': ApiEventsCalendarEventsCalendar;
       'api::luuppi-sanomat.luuppi-sanomat': ApiLuuppiSanomatLuuppiSanomat;
       'api::news-list.news-list': ApiNewsListNewsList;

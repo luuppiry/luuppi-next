@@ -36,6 +36,10 @@
       "type": "component",
       "repeatable": true,
       "component": "events.questions-checkbox"
+    },
+    "AllowQuestionEditUntil": {
+      "type": "datetime",
+      "required": false
     }
   }
 }
