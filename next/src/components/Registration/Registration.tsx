@@ -68,10 +68,8 @@ export default function Registration({
             <span
               className={`badge max-md:badge-sm ${
                 registration.paymentCompleted
-                  ? 'badge-success'
-                  : registration.deletedAt
-                    ? 'badge-neutral'
-                    : 'badge-warning'
+                  ? 'badge-success text-white'
+                  : 'badge-warning text-gray-800'
               }`}
             >
               {registration.paymentCompleted
