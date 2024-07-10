@@ -38,7 +38,8 @@
     "invalid_answer": "Kelvoton vastaus",
     "email_registration_confirmation_subject": "Vahvistus tapahtumailmoittautumisesta",
     "invalid_credentials": "Virheellinen käyttäjä",
-    "legacy_account_migrated": "Vanhan verkkosivun Luuppi-tilisi on linkitetty uuteen tiliisi ja sinulla on nyt jäsen-rooli!"
+    "legacy_account_migrated": "Vanhan verkkosivun Luuppi-tilisi on linkitetty uuteen tiliisi ja sinulla on nyt jäsen-rooli!",
+    "invalid_answer_time": "Et voi enää muuttaa vastauksiasi. Jos sinun täytyy tehdä muutoksia, ota yhteyttä tapahtuman järjestäjään."
   },
   "roles": {
     "entire_board": "Koko hallitus",

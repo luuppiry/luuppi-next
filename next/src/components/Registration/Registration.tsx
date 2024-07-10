@@ -21,6 +21,7 @@ interface RegistrationProps {
     id: number;
   };
   questions: {
+    answerableUntil: Date | null;
     eventId: number;
     text: any[];
     select: any[];
@@ -47,10 +48,37 @@ export default function Registration({
 }: RegistrationProps) {
   const reservationCancelAction = reservationCancel.bind(null, lang);
 
-  const hasQuestions =
-    questions.text.length > 0 ||
-    questions.select.length > 0 ||
-    questions.checkbox.length > 0;
+  const displayQuestionButton = (
+    registration: RegistrationProps['registration'],
+    questions: RegistrationProps['questions'],
+  ) => {
+    // Fallback to the day before the event if the registration does not have an answerableUntil date
+    const eventStart = new Date(registration.startDate);
+    const dayBeforeEvent = new Date(eventStart.valueOf() - 1000 * 60 * 60 * 24);
+
+    const answersChangeable = questions.answerableUntil
+      ? questions.answerableUntil >= new Date()
+      : dayBeforeEvent >= new Date();
+
+    const hasQuestions =
+      questions.text.length > 0 ||
+      questions.select.length > 0 ||
+      questions.checkbox.length > 0;
+
+    const registrationCancelled = registration.deletedAt !== null;
+
+    return answersChangeable && !registrationCancelled && hasQuestions;
+  };
+
+  const displayCancelReservationButton = (
+    registration: RegistrationProps['registration'],
+  ) => {
+    const reservationExpired = registration.reservedUntil < new Date();
+    const registrationCancelled = registration.deletedAt !== null;
+    const paymentCompleted = registration.paymentCompleted;
+
+    return !reservationExpired && !registrationCancelled && !paymentCompleted;
+  };
 
   return (
     <div
@@ -91,32 +119,28 @@ export default function Registration({
           </div>
         </div>
         <div className="flex items-end gap-2">
-          {registration.reservedUntil >= new Date() &&
-            !registration.paymentCompleted &&
-            registration.deletedAt === null && (
-              <>
-                {hasQuestions && (
-                  <QuestionButton
-                    answers={answers}
-                    dictionary={dictionary}
-                    questions={questions}
-                    reservationId={registration.id}
-                  />
-                )}
-                <form action={reservationCancelAction}>
-                  <input
-                    name="registrationId"
-                    type="hidden"
-                    value={registration.id}
-                  />
-                  <SubmitButton
-                    className="btn-outline max-md:btn-xs"
-                    text={dictionary.pages_events.cancel_reservation}
-                    variant="error"
-                  />
-                </form>
-              </>
-            )}
+          {displayQuestionButton(registration, questions) && (
+            <QuestionButton
+              answers={answers}
+              dictionary={dictionary}
+              questions={questions}
+              reservationId={registration.id}
+            />
+          )}
+          {displayCancelReservationButton(registration) && (
+            <form action={reservationCancelAction}>
+              <input
+                name="registrationId"
+                type="hidden"
+                value={registration.id}
+              />
+              <SubmitButton
+                className="btn-outline max-md:btn-xs"
+                text={dictionary.pages_events.cancel_reservation}
+                variant="error"
+              />
+            </form>
+          )}
         </div>
       </div>
     </div>
