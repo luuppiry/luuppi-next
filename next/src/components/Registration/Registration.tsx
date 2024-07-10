@@ -5,6 +5,7 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { $Enums } from '@prisma/client';
 import QuestionButton from '../QuestionButton/QuestionButton';
 import SubmitButton from '../SubmitButton/SubmitButton';
+import RegistrationCounter from './RegistrationCounter';
 
 interface RegistrationProps {
   registration: {
@@ -59,9 +60,8 @@ export default function Registration({
       <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
       <div className="flex w-full justify-between gap-4 p-4 max-md:flex-col">
         <div className="flex flex-1 flex-col gap-2">
-          <h2 className="flex items-center gap-2 text-lg font-semibold max-md:text-base">
-            <span className="max-w-xs truncate">{registration.name}</span>
-            <span className="text-xs">(#{registration.id})</span>
+          <h2 className="line-clamp-2 break-all text-lg font-semibold max-md:text-base">
+            {registration.name}
           </h2>
           <h2 className="flex items-center gap-4 text-xl font-semibold max-md:text-lg">
             <span>{registration.price?.toFixed(2)} €</span>
@@ -78,8 +78,12 @@ export default function Registration({
                 ? dictionary.pages_events.paid
                 : dictionary.pages_events.reserved}
             </span>
+            {registration.reservedUntil >= new Date() &&
+              !registration.paymentCompleted && (
+                <RegistrationCounter expiresAt={registration.reservedUntil} />
+              )}
           </h2>
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
             <p className="text-sm">
               {firstLetterToUpperCase(
                 registration.createdAt.toLocaleString(lang, longDateFormat),
