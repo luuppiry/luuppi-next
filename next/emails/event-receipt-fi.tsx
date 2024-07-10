@@ -14,6 +14,8 @@ import {
 
 interface LuuppiEventReceiptProps {
   name: string;
+  orderId: string;
+  orderDate: Date;
   events: {
     name: string;
     date: string;
@@ -25,6 +27,8 @@ interface LuuppiEventReceiptProps {
 export const LuuppiEventReceipt = ({
   name,
   events,
+  orderId,
+  orderDate,
 }: LuuppiEventReceiptProps) => (
   <Html>
     <Head />
@@ -43,6 +47,13 @@ export const LuuppiEventReceipt = ({
           Kiitos tapahtumaan ilmoittautumisesta! Tässä on vahvistus
           ilmoittautumisestasi.
         </Text>
+        <Text style={orderDetailsText}>
+          <strong>Tilausnumero:</strong> {orderId}
+        </Text>
+        <Text style={orderDetailsText}>
+          <strong>Päivämäärä:</strong> {orderDate.toDateString()}
+        </Text>
+        <Hr style={hr} />
         {events.map((event, index) => (
           <Section
             key={index}
@@ -94,6 +105,8 @@ export const LuuppiEventReceipt = ({
 
 LuuppiEventReceipt.PreviewProps = {
   name: 'Luuppilainen',
+  orderId: '41fda444-3b22-4d3e-84d1-8404e4f8da03',
+  orderDate: new Date(),
   events: [
     {
       name: 'Hämeenkadun appro',
@@ -116,6 +129,13 @@ const main = {
   backgroundColor: '#ffffff',
   fontFamily:
     '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
+};
+
+const orderDetailsText = {
+  color: '#1f2937',
+  fontSize: '12px',
+  margin: '0',
+  fontFamily: 'monospace',
 };
 
 const container = {

@@ -95,6 +95,8 @@ export async function GET(request: Request) {
 
     const emailFi = LuuppiEventReceiptFi({
       name: name,
+      orderDate: payments.createdAt,
+      orderId: payments.orderId,
       events: payments.registration.map((registration) => ({
         name: registration.event.nameFi,
         date: registration.event.startDate.toLocaleString(
@@ -108,6 +110,8 @@ export async function GET(request: Request) {
 
     const emailEn = LuuppiEventReceiptEn({
       name: name,
+      orderDate: payments.createdAt,
+      orderId: payments.orderId,
       events: payments.registration.map((registration) => ({
         name: registration.event.nameEn,
         date: registration.event.startDate.toLocaleString(
