@@ -2,10 +2,10 @@ import { navLinksDesktop } from '@/libs/constants';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import luuppiSvg from '../../../public/luuppi.svg';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
-import MobileHamburger from '../MobileHamburger/MobileHamburger';
 import HeaderActions from './HeaderActions/HeaderActions';
 import HideableLink from './HideableLinks/HideableLink';
 import ScrollListener from './ScrollListener/ScrollListener';
@@ -47,8 +47,9 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               <div className="flex items-center justify-center max-lg:hidden">
                 <LanguageSwitcher />
               </div>
-              <HeaderActions dictionary={dictionary} lang={lang} />
-              <MobileHamburger dictionary={dictionary} lang={lang} />
+              <Suspense fallback={null}>
+                <HeaderActions dictionary={dictionary} lang={lang} />
+              </Suspense>
             </div>
           </div>
         </nav>
