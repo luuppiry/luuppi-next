@@ -2,7 +2,7 @@
 import { signIn, signOut } from '@/actions/auth';
 import { navLinksMobile } from '@/libs/constants';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -21,14 +21,14 @@ const InstallPwaButton = dynamic(() => import('./InstallPwaButton'), {
 interface MobileNavbarProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
+  session: Session | null;
 }
 
 export default function MobileHamburger({
   dictionary,
   lang,
+  session,
 }: MobileNavbarProps) {
-  const { data } = useSession();
-  const session = data;
   const [open, setOpen] = useState(false);
 
   const toggleMenu = () => {

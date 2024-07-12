@@ -1,7 +1,6 @@
-'use client';
 import { signOut } from '@/actions/auth';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { RiUser3Fill } from 'react-icons/ri';
 import CloseableLinks from './CloseableLinks/CloseableLinks';
@@ -9,13 +8,15 @@ import CloseableLinks from './CloseableLinks/CloseableLinks';
 interface UserDropdownProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
+  session: Session | null;
 }
 
-export default function UserDropdown({ dictionary, lang }: UserDropdownProps) {
-  const { data } = useSession();
-  const session = data;
+export default function UserDropdown({
+  dictionary,
+  lang,
+  session,
+}: UserDropdownProps) {
   if (!session) return null;
-
   return (
     <div className="dropdown dropdown-end text-white">
       <div
@@ -44,7 +45,7 @@ export default function UserDropdown({ dictionary, lang }: UserDropdownProps) {
         </div>
         <CloseableLinks dictionary={dictionary} lang={lang} />
         <div className="divider my-1" />
-        <form action={async () => await signOut()}>
+        <form action={signOut}>
           <button
             className="btn btn-error btn-sm w-full justify-start text-white"
             type="submit"
