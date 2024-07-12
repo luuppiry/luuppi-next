@@ -1,16 +1,18 @@
 'use client';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
-import { RiCalendarEventLine, RiUser3Fill } from 'react-icons/ri';
+import { RiAdminLine, RiCalendarEventLine, RiUser3Fill } from 'react-icons/ri';
 
 interface CloseableLinkProps {
   lang: SupportedLanguage;
   dictionary: Dictionary;
+  isLuuppiHato?: boolean;
 }
 
 export default function CloseableLink({
   lang,
   dictionary,
+  isLuuppiHato,
 }: CloseableLinkProps) {
   const handleClick = () => {
     const elem = document.activeElement as HTMLElement;
@@ -37,6 +39,16 @@ export default function CloseableLink({
         <RiCalendarEventLine size={22} />
         {dictionary.navigation.own_events}
       </Link>
+      {isLuuppiHato && (
+        <Link
+          className="btn btn-ghost btn-sm justify-start"
+          href={`/${lang}/admin`}
+          onClick={handleClick}
+        >
+          <RiAdminLine size={22} />
+          {dictionary.navigation.admin}
+        </Link>
+      )}
     </div>
   );
 }

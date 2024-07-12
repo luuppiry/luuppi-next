@@ -43,7 +43,11 @@ export default function UserDropdown({
             {session.user?.email}
           </span>
         </div>
-        <CloseableLinks dictionary={dictionary} lang={lang} />
+        <CloseableLinks
+          dictionary={dictionary}
+          isLuuppiHato={session.user?.isLuuppiHato ?? false}
+          lang={lang}
+        />
         <div className="divider my-1" />
         <form action={signOut}>
           <button

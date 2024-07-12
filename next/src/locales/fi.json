@@ -150,7 +150,8 @@
     "miscellaneous": "Muuta",
     "companies": "Yritykset",
     "profile": "Profiili",
-    "own_events": "Omat tapahtumat"
+    "own_events": "Omat tapahtumat",
+    "admin": "Ylläpito"
   },
   "pages_home": {
     "hero": {
