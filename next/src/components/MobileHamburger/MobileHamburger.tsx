@@ -1,6 +1,6 @@
 'use client';
 import { signIn, signOut } from '@/actions/auth';
-import { navLinksMobile } from '@/libs/constants';
+import { NavLink, navLinksMobile } from '@/libs/constants';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { Session } from 'next-auth';
 import dynamic from 'next/dynamic';
@@ -35,6 +35,18 @@ export default function MobileHamburger({
     setOpen(!open);
   };
 
+  const displayLink = (link: NavLink): boolean => {
+    const isAuthenticated = Boolean(
+      link.authenticationLevel === 'authenticated' && session?.user,
+    );
+    const isLuuppiHato = Boolean(
+      link.authenticationLevel === 'luuppi-hato' && session?.user?.isLuuppiHato,
+    );
+    const isUnrestricted = !link.authenticationLevel;
+
+    return isAuthenticated || isLuuppiHato || isUnrestricted;
+  };
+
   return (
     <>
       <button
@@ -55,10 +67,7 @@ export default function MobileHamburger({
         <div className="modal-box flex h-full min-h-dvh w-screen max-w-full gap-4 rounded-none">
           <ul className="menu h-max w-full flex-nowrap gap-2">
             {navLinksMobile
-              .filter(
-                (link) =>
-                  (link.authenticated && session?.user) || !link.authenticated,
-              )
+              .filter((link) => displayLink(link))
               .map((link, index) => (
                 <li
                   key={link.translation}
@@ -85,7 +94,7 @@ export default function MobileHamburger({
                           ]
                         }
                       </span>
-                      {link.authenticated && (
+                      {link.authenticationLevel && (
                         <FaLockOpen className="text-gray-400/50" size={18} />
                       )}
                     </Link>

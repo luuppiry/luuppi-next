@@ -150,7 +150,8 @@
     "miscellaneous": "Miscellaneous",
     "companies": "Companies",
     "profile": "Profile",
-    "own_events": "My events"
+    "own_events": "My events",
+    "admin": "Admin"
   },
   "pages_home": {
     "hero": {

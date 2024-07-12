@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import NextAuth from 'next-auth';
 import AzureB2C from 'next-auth/providers/azure-ad-b2c';
 import 'server-only';
+import prisma from './libs/db/prisma';
 import { logger } from './libs/utils/logger';
 
 export const {
@@ -37,6 +38,7 @@ export const {
     async session({ session, token }) {
       if (token) {
         session.user.entraUserUuid = token.id as string;
+        session.user.isLuuppiHato = token.isLuuppiHato as boolean;
       }
       return session;
     },
@@ -53,6 +55,19 @@ export const {
         if (!decoded) return token;
         token.email = decoded.email;
         token.id = decoded.oid;
+
+        const isLuuppiHato = await prisma.rolesOnUsers.findFirst({
+          where: {
+            entraUserUuid: decoded.oid,
+            strapiRoleUuid: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
+          },
+        });
+
+        if (isLuuppiHato) {
+          token.isLuuppiHato = true;
+        } else {
+          token.isLuuppiHato = false;
+        }
       }
       return token;
     },
