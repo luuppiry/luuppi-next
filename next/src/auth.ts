@@ -60,6 +60,16 @@ export const {
           where: {
             entraUserUuid: decoded.oid,
             strapiRoleUuid: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
+            OR: [
+              {
+                expiresAt: {
+                  gte: new Date(),
+                },
+              },
+              {
+                expiresAt: null,
+              },
+            ],
           },
         });
 
