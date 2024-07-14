@@ -39,7 +39,22 @@ export const {
       if (token) {
         session.user.entraUserUuid = token.id as string;
         session.user.isLuuppiHato = token.isLuuppiHato as boolean;
+        session.user.isLuuppiMember = token.isLuuppiMember as boolean;
+        session.user.name = token.username as string;
       }
+
+      // Forces user to sign in again if token version is outdated.
+      // Useful for forcing users to sign in again after updating token version if
+      // major changes have been made to the token structure.
+      if (!token.version || token.version !== process.env.TOKEN_VERSION) {
+        throw new Error('Token version mismatch');
+      }
+
+      // This should never happen, but just in case
+      if (!session.user.entraUserUuid) {
+        throw new Error('Malformed token');
+      }
+
       return session;
     },
     async jwt({ token, account }) {
@@ -56,28 +71,74 @@ export const {
         token.email = decoded.email;
         token.id = decoded.oid;
 
-        const isLuuppiHato = await prisma.rolesOnUsers.findFirst({
+        // Update user to local database
+        const localUser = await prisma.user.upsert({
           where: {
             entraUserUuid: decoded.oid,
-            strapiRoleUuid: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
-            OR: [
-              {
-                expiresAt: {
-                  gte: new Date(),
+          },
+          update: {
+            email: decoded.email,
+            roles: {
+              connectOrCreate: {
+                where: {
+                  strapiRoleUuid_entraUserUuid: {
+                    entraUserUuid: decoded.oid,
+                    strapiRoleUuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+                  },
+                },
+                create: {
+                  role: {
+                    connect: {
+                      strapiRoleUuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+                    },
+                  },
                 },
               },
-              {
-                expiresAt: null,
+            },
+          },
+          create: {
+            entraUserUuid: decoded.oid,
+            email: decoded.email,
+            roles: {
+              create: {
+                role: {
+                  connect: {
+                    strapiRoleUuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+                  },
+                },
               },
-            ],
+            },
+          },
+          include: {
+            roles: {
+              include: {
+                role: true,
+              },
+              where: {
+                OR: [
+                  {
+                    expiresAt: {
+                      gte: new Date(),
+                    },
+                  },
+                  {
+                    expiresAt: null,
+                  },
+                ],
+              },
+            },
           },
         });
 
-        if (isLuuppiHato) {
-          token.isLuuppiHato = true;
-        } else {
-          token.isLuuppiHato = false;
-        }
+        const hasRole = (roleUuid: string) =>
+          localUser.roles.some((role) => role.role.strapiRoleUuid === roleUuid);
+
+        token.isLuuppiHato = hasRole(process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!);
+        token.isLuuppiMember = hasRole(
+          process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+        );
+        token.username = localUser.username;
+        token.version = process.env.TOKEN_VERSION;
       }
       return token;
     },

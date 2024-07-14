@@ -1,19 +1,30 @@
 import { auth } from '@/auth';
+import AdminUserEditor from '@/components/AdminUserEditor/AdminUserEditor';
+import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 interface AdminProps {
   params: { lang: SupportedLanguage };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function Admin({ params }: AdminProps) {
+export default async function Admin({ params, searchParams }: AdminProps) {
   const session = await auth();
+  const dictionary = await getDictionary(params.lang);
+  const mode = searchParams.mode;
 
-  if (!session?.user?.isLuuppiHato) {
-    logger.error('Error getting user');
+  if (!session?.user || !session.user.isLuuppiHato) {
+    logger.error('User not found in session or does not have required role');
     redirect(`/${params.lang}`);
+  }
+
+  const allowedModes = ['user', 'event'];
+  if (!mode || typeof mode !== 'string' || !allowedModes.includes(mode)) {
+    redirect(`/${params.lang}/admin?mode=user`);
   }
 
   const hasHatoRole = await prisma.rolesOnUsers.findFirst({
@@ -39,10 +50,57 @@ export default async function Admin({ params }: AdminProps) {
     redirect('/api/auth/force-signout');
   }
 
-  // TODO???: Add admin page content here
+  // TODO: These could be fetched using server action on the client
+  // on demand, but for now we'll just fetch them here
+  const availableRoles = await prisma.role.findMany({
+    select: {
+      strapiRoleUuid: true,
+    },
+  });
+
+  // Hato role cannot be given or removed via UI. No role also filtered out
+  // because it's not relevant in any way.
+  const availableRolesFiltered = availableRoles
+    .filter(
+      (role) =>
+        role.strapiRoleUuid !== process.env.NEXT_PUBLIC_LUUPPI_HATO_ID &&
+        role.strapiRoleUuid !== process.env.NEXT_PUBLIC_NO_ROLE_ID,
+    )
+    .map((role) => role.strapiRoleUuid);
+
   return (
-    <div>
-      <h1>Admin</h1>
+    <div className="relative">
+      <h1 className="mb-12">{dictionary.navigation.admin}</h1>
+      <div className="mb-8 flex w-full items-center justify-between rounded-lg bg-background-50/50 p-4 backdrop-blur-sm max-md:flex-col max-md:justify-center max-md:gap-4 max-md:px-2">
+        <div
+          className="tabs-boxed tabs border bg-white max-md:w-full"
+          role="tablist"
+        >
+          <Link
+            className={`tab text-nowrap font-semibold ${mode === 'user' && 'tab-active'}`}
+            href={`/${params.lang}/admin?mode=user`}
+            role="tab"
+          >
+            {dictionary.pages_admin.user_management}
+          </Link>
+          <Link
+            className={`tab text-nowrap font-semibold ${mode === 'event' && 'tab-active'}`}
+            href={`/${params.lang}/admin?mode=event`}
+            role="tab"
+          >
+            {dictionary.pages_admin.event_management}
+          </Link>
+        </div>
+      </div>
+      {mode === 'user' && (
+        <AdminUserEditor
+          dictionary={dictionary}
+          lang={params.lang}
+          roles={availableRolesFiltered}
+        />
+      )}
+      {mode === 'event' && <p>TODO</p>}
+      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
   );
 }

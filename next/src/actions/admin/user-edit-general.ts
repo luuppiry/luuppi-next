@@ -2,23 +2,20 @@
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
-import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { revalidatePath } from 'next/cache';
 
-const options = {
-  cacheKey: 'update-profile',
-};
-
-export async function profileUpdate(
-  lang: SupportedLanguage,
+export async function userEditGeneral(
   formData: FormData,
+  lang: SupportedLanguage,
+  userToEditEntraUuid: string,
 ) {
   const dictionary = await getDictionary(lang);
-  const session = await auth();
 
-  if (!session?.user) {
+  const session = await auth();
+  const user = session?.user;
+
+  if (!user) {
     logger.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
@@ -26,51 +23,30 @@ export async function profileUpdate(
     };
   }
 
-  const isLimited = await isRateLimited(
-    session.user.entraUserUuid,
-    options.cacheKey,
-    10,
-  );
-  if (isLimited) {
-    logger.error('User is being rate limited');
-    return {
-      message: dictionary.api.ratelimit,
-      isError: true,
-    };
-  } else {
-    await updateRateLimitCounter(session.user.entraUserUuid, options.cacheKey);
-  }
-
-  const localUser = await prisma.user.findFirst({
+  const hasHatoRole = await prisma.rolesOnUsers.findFirst({
     where: {
-      entraUserUuid: session.user.entraUserUuid,
-    },
-    include: {
-      roles: {
-        include: {
-          role: true,
+      entraUserUuid: user.entraUserUuid,
+      strapiRoleUuid: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
+      OR: [
+        {
+          expiresAt: {
+            gte: new Date(),
+          },
         },
-        where: {
-          OR: [
-            {
-              expiresAt: {
-                gte: new Date(),
-              },
-            },
-            {
-              expiresAt: null,
-            },
-          ],
+        {
+          expiresAt: null,
         },
-      },
+      ],
     },
   });
 
-  const roles = localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
-
-  const isLuuppiMember = roles.includes(
-    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
-  );
+  if (!hasHatoRole) {
+    logger.error('User does not have the required role');
+    return {
+      message: dictionary.api.unauthorized,
+      isError: true,
+    };
+  }
 
   const fields: Record<
     string,
@@ -83,17 +59,14 @@ export async function profileUpdate(
     firstName: {
       value: formData.get('firstName'),
       regex: /^.{2,70}$/,
-      required: isLuuppiMember,
     },
     lastName: {
       value: formData.get('lastName'),
       regex: /^.{2,35}$/,
-      required: isLuuppiMember,
     },
     domicle: {
       value: formData.get('domicle'),
       regex: /^.{2,35}$/,
-      required: isLuuppiMember,
     },
     preferredFullName: {
       value: formData.get('preferredFullName'),
@@ -102,7 +75,7 @@ export async function profileUpdate(
     major: {
       value: formData.get('major'),
       regex: /^(COMPUTER_SCIENCE|MATHEMATICS|STATISTICAL_DATA_ANALYSIS|OTHER)$/,
-      required: isLuuppiMember,
+      required: true,
     },
   };
 
@@ -129,19 +102,9 @@ export async function profileUpdate(
     ]),
   );
 
-  if ((fieldsToUpdate.major || fieldsToUpdate.domicle) && !isLuuppiMember) {
-    logger.error(
-      'Tried to update major or domicle without being a member of Luuppi',
-    );
-    return {
-      message: dictionary.api.unauthorized,
-      isError: true,
-    };
-  }
-
   await prisma.user.update({
     where: {
-      entraUserUuid: session.user.entraUserUuid,
+      entraUserUuid: userToEditEntraUuid,
     },
     data: {
       lastName: fieldsToUpdate.lastName,
@@ -160,10 +123,8 @@ export async function profileUpdate(
     },
   });
 
-  revalidatePath(`/${lang}/profile`);
-
   return {
-    message: dictionary.api.profile_updated,
+    message: dictionary.api.user_updated,
     isError: false,
   };
 }

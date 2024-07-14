@@ -37,7 +37,7 @@ export default function UserDropdown({
       >
         <div className="mb-2 flex max-w-full flex-col p-2">
           <span className="truncate font-bold" title={session.user?.name ?? ''}>
-            {session.user?.name}
+            {session.user?.name ?? session.user?.email}
           </span>
           <span className="truncate text-sm" title={session.user?.email ?? ''}>
             {session.user?.email}

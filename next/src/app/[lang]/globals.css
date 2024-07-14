@@ -142,4 +142,14 @@
       @apply bg-[-512px_-512px];
     }
   }
+
+  .tabs-boxed .tab-active:not(.tab-disabled):not([disabled]):hover,
+  .tabs-boxed :is(input:checked):hover {
+    @apply bg-secondary-400 text-white;
+  }
+
+  .tabs-boxed .tab-active:not(.tab-disabled):not([disabled]),
+  .tabs-boxed :is(input:checked) {
+    @apply bg-secondary-400 text-white;
+  }
 }

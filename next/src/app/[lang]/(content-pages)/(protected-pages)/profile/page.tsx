@@ -5,8 +5,6 @@ import ProfileNotificationsForm from '@/components/ProfileNotificationsForm/Prof
 import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInfoForm';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
-import { getAccessToken } from '@/libs/get-access-token';
-import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
@@ -25,19 +23,6 @@ export default async function Profile({ params }: ProfileProps) {
   const session = await auth();
   if (!session?.user) {
     logger.error('Error getting user');
-    redirect(`/${params.lang}`);
-  }
-
-  const accessToken = await getAccessToken();
-  if (!accessToken) {
-    logger.error('Error getting access token for Graph API');
-    redirect(`/${params.lang}`);
-  }
-
-  const user = await getGraphAPIUser(accessToken, session.user.entraUserUuid);
-
-  if (!user) {
-    logger.error('Error getting user or groups from Graph API');
     redirect(`/${params.lang}`);
   }
 
@@ -66,6 +51,11 @@ export default async function Profile({ params }: ProfileProps) {
     },
   });
 
+  if (!localUser) {
+    logger.error('User not found in database. This should not happen.');
+    redirect(`/${params.lang}/404`);
+  }
+
   const roles = localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
 
   const isLuuppiMember = roles.includes(
@@ -79,13 +69,13 @@ export default async function Profile({ params }: ProfileProps) {
         <ProfileEmailform
           dictionary={dictionary}
           lang={params.lang}
-          user={user}
+          user={localUser}
         />
         <ProfileUserInfoForm
           dictionary={dictionary}
           isLuuppiMember={isLuuppiMember}
           lang={params.lang}
-          user={user}
+          user={localUser}
         />
         {!isLuuppiMember && (
           <ProfileLegacyMigrate dictionary={dictionary} lang={params.lang} />
@@ -93,7 +83,7 @@ export default async function Profile({ params }: ProfileProps) {
         <ProfileNotificationsForm
           dictionary={dictionary}
           lang={params.lang}
-          user={user}
+          user={localUser}
         />
       </div>
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />

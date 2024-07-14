@@ -25,6 +25,9 @@ jobs:
           echo NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} >> .env
           echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env
           echo STRAPI_API_KEY=${{ secrets.STRAPI_API_KEY }} >> .env
+          echo NEXT_PUBLIC_NO_ROLE_ID=${{ secrets.NEXT_PUBLIC_NO_ROLE_ID }} >> .env
+          echo NEXT_PUBLIC_LUUPPI_MEMBER_ID=${{ secrets.NEXT_PUBLIC_LUUPPI_MEMBER_ID }} >> .env
+          echo NEXT_PUBLIC_LUUPPI_HATO_ID=${{ secrets.NEXT_PUBLIC_LUUPPI_HATO_ID }} >> .env
         working-directory: ./next
 
       - name: Build Next.js Docker image

@@ -8,8 +8,7 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 
-const url =
-  '/api/events?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
+const url = '/api/events';
 
 interface EventsProps {
   params: { lang: SupportedLanguage };
