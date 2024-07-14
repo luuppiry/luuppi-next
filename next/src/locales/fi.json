@@ -125,7 +125,10 @@
     "answer": "Vastaus",
     "payments": "Maksut",
     "order_id": "Tilausnumero",
-    "cancelled": "Peruttu"
+    "cancelled": "Peruttu",
+    "no_answers": "Ei vastauksia",
+    "no_payments": "Ei maksuja",
+    "no_events": "Ei tapahtuma ilmoittautumisia"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
@@ -305,7 +308,8 @@
     "role_management": "Roolien hallinta",
     "registration_info": "Ilmoittautumistiedot",
     "user_management": "Käyttäjähallinta",
-    "event_management": "Tapahtumahallinta"
+    "event_management": "Tapahtumahallinta",
+    "user_required_info_missing": "Käyttäjä on Luupin jäsen, mutta häneltä puuttuu pakollisia tietoja!"
   },
   "pages_profile": {
     "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",
