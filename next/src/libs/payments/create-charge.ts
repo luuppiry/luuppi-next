@@ -6,6 +6,7 @@ import {
 } from '@/types/vismapay';
 import 'server-only';
 import { vismapayClient } from '.';
+import { logger } from '../utils/logger';
 
 /**
  * Initializes a VismaPay charge and returns URL to redirect
@@ -47,6 +48,7 @@ export const createCharge = async (
     const token = result.token;
     redirectUrl = `https://www.vismapay.com/pbwapi/token/${token}`;
   } catch (error) {
+    logger.error('Error creating charge', error);
     const vismapayError = error as VismapayError;
     if (vismapayError.type) {
       switch (vismapayError.type) {

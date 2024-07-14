@@ -1,5 +1,6 @@
 import 'server-only';
 import { vismapayClient } from '.';
+import { logger } from '../utils/logger';
 
 export const checkReturn = async (query: {
   [key: string]: string | string[] | undefined;
@@ -34,6 +35,7 @@ export const checkReturn = async (query: {
       successful,
     };
   } catch (error) {
+    logger.error('Error checking return', error);
     throw new Error('Error checking return');
   }
 };

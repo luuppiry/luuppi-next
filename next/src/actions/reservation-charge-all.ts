@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { createCharge } from '@/libs/payments/create-charge';
+import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { randomUUID } from 'crypto';
 import { redirect } from 'next/navigation';
@@ -87,6 +88,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
       },
     });
   } catch (error) {
+    logger.error('Error creating charge', error);
     return {
       message: dictionary.api.payment_failed,
       isError: true,
