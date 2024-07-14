@@ -5,7 +5,7 @@ import SubmitButton from '@/components/SubmitButton/SubmitButton';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useState } from 'react';
 import { BiErrorCircle } from 'react-icons/bi';
-import { FindUserResult } from '../AdminUserEditor';
+import { FindUserResult } from '../AdminUserManagement';
 
 interface UserEditGeneralResponse {
   message: string;
