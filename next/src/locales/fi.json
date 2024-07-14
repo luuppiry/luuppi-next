@@ -8,9 +8,9 @@
     "email_change_mail_text": "Olet pyytänyt sähköpostiosoitteesi vaihtamista. Vahvista uusi sähköpostiosoitteesi klikkaamalla alla olevaa linkkiä. Jos et ole pyytänyt tätä, voit jättää tämän viestin huomiotta.",
     "verify_email_sent": "Vahvistuslinkki on lähetetty uuteen sähköpostiosoitteeseesi. Linkki on voimassa 30 minuuttia.",
     "email_sending_failed": "Sähköpostin lähetys epäonnistui. Tämä voi johtua väärästä sähköpostiosoitteesta tai teknisestä ongelmasta.",
-    "invalid_display_name": "Kelvoton käyttäjänimi. Käyttäjänimen tulee olla 3-30 merkkiä pitkä ja se voi sisältää vain kirjaimia, numeroita ja seuraavia erikoismerkkejä: ._-",
-    "invalid_given_name": "Kelvottomat etunimet. Etunimien yhteispituuden tulee olla 2-70 merkkiä pitkä.",
-    "invalid_surname": "Kelvoton sukunimi. Sukunimen tulee olla 2-35 merkkiä pitkä.",
+    "invalid_username": "Kelvoton käyttäjänimi. Käyttäjänimen tulee olla 3-30 merkkiä pitkä ja se voi sisältää vain kirjaimia, numeroita ja seuraavia erikoismerkkejä: ._-",
+    "invalid_first_name": "Kelvottomat etunimet. Etunimien yhteispituuden tulee olla 2-70 merkkiä pitkä.",
+    "invalid_last_name": "Kelvoton sukunimi. Sukunimen tulee olla 2-35 merkkiä pitkä.",
     "invalid_domicle": "Kelvoton kotikunta. Kotikunnan tulee olla 2-35 merkkiä pitkä.",
     "invalid_preferred_full_name": "Kelvoton haluttu koko nimi. Halutun koko nimen tulee olla 2-100 merkkiä pitkä.",
     "invalid_major": "Kelvoton pääaine",
@@ -39,7 +39,12 @@
     "email_registration_confirmation_subject": "Vahvistus tapahtumailmoittautumisesta",
     "invalid_credentials": "Virheellinen käyttäjä",
     "legacy_account_migrated": "Vanhan verkkosivun Luuppi-tilisi on linkitetty uuteen tiliisi ja sinulla on nyt jäsen-rooli!",
-    "invalid_answer_time": "Et voi enää muuttaa vastauksiasi. Jos sinun täytyy tehdä muutoksia, ota yhteyttä tapahtuman järjestäjään."
+    "invalid_answer_time": "Et voi enää muuttaa vastauksiasi. Jos sinun täytyy tehdä muutoksia, ota yhteyttä tapahtuman järjestäjään.",
+    "user_not_found": "Käyttäjää ei löytynyt",
+    "user_updated": "Käyttäjän tiedot päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen.",
+    "invalid_roles": "Kelvottomat roolit",
+    "user_roles_updated": "Käyttäjän roolit päivitetty onnistuneesti",
+    "already_member_role": "Sinulla on jo jäsen-rooli"
   },
   "roles": {
     "entire_board": "Koko hallitus",
@@ -102,7 +107,25 @@
     "seconds": "sekuntia",
     "seconds_short": "s",
     "error": "Virhe",
-    "success": "Onnistui"
+    "success": "Onnistui",
+    "search": "Hae",
+    "save": "Tallenna",
+    "no_results": "Ei tuloksia",
+    "expires": "Vanhenee",
+    "created_at": "Luotu",
+    "delete": "Poista",
+    "general_info": "Perustiedot",
+    "expiration_date": "Vanhentumispäivä",
+    "event": "Tapahtuma",
+    "status": "Tila",
+    "price": "Hinta",
+    "actions": "Toiminnot",
+    "questions": "Kysymykset",
+    "question": "Kysymys",
+    "answer": "Vastaus",
+    "payments": "Maksut",
+    "order_id": "Tilausnumero",
+    "cancelled": "Peruttu"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
@@ -236,7 +259,7 @@
     "ticket_amount": "Valitse lippujen määrä",
     "unpaid_registrations": "Maksamattomat tapahtumat",
     "paid_registrations": "Maksetut tapahtumat",
-    "pay_all": "Maksa kaikki",
+    "move_to_checkout": "Siirry maksamaan",
     "payment_completed": "Maksu suoritettu",
     "payment_failed": "Maksu epäonnistui",
     "payment_failed_description": "Maksusi epäonnistui. Jos sinulta on veloitettu, ota yhteyttä WWW/IT-vastaaviin osoitteessa webmaster@luuppi.fi",
@@ -267,12 +290,27 @@
     "open_jobs": "Avoimet työpaikat"
   },
   "pages_verify_email": {
-    "title": "Email verification"
+    "new_email": "Uusi sähköposti",
+    "email_changed": "Sähköpostiosoite muutettu onnistuneesti",
+    "email_changed_description": "Sähköpostiosoitteesi on muutettu onnistuneesti. Ole hyvä ja kirjaudu ulos ja takaisin sisään viimeistelläksesi prosessin."
+  },
+  "pages_admin": {
+    "user_general_info": "Voit etsiä käyttäjää sähköpostin perusteella sekä tarkastella ja muokata heidän yleisiä tietojaan.",
+    "user_roles_info": "Katso ja muokkaa käyttäjän rooleja. Huomaa, että roolien antaminen ei vaikuta käyttäjän tapahtumailmoittautumisiin, vaikka antaisit roolin, joka normaalisti saadaan ilmoittautumalla tapahtumaan.",
+    "read_only": "Vain luku",
+    "search_for_role": "Etsi roolia",
+    "user_roles": "Käyttäjän roolit",
+    "no_roles": "Käyttäjällä ei ole rooleja.",
+    "event_history": "Tapahtumahistoria",
+    "role_management": "Roolien hallinta",
+    "registration_info": "Ilmoittautumistiedot",
+    "user_management": "Käyttäjähallinta",
+    "event_management": "Tapahtumahallinta"
   },
   "pages_profile": {
     "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",
-    "given_name_explanation": "Kaikki viralliset etunimesi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
-    "surname_explanation": "Virallinen sukunimi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
+    "first_name_explanation": "Kaikki viralliset etunimesi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
+    "lastname_explanation": "Virallinen sukunimi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "preferred_full_name_explanation": "Haluttu koko nimi. Tämä on nimi, jolla sinua kutsutaan yhdistyksen sisällä. Tämä voi olla esimerkiksi lempinimi tai muu nimi, jolla haluat tulla kutsutuksi. Tätä tietoa käytetään esimerkiksi tapahtumien pöytäplaseerauksissa.",
     "domicle_explanation": "Kotikunta. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "major_explanation": "Pääaine. Valitse muu jos et halua kertoa pääainettasi tai jos pääaineesi ei ole listalla.",
@@ -284,7 +322,8 @@
     },
     "legacy_migrate_info": "Voit linkittää vanhan verkkosivuston Luuppi-tilisi tämän lomakkeen avulla. Syötä vanhan verkkosivuston käyttäjätunnuksesi ja salasanasi alla oleviin kenttiin ja paina 'Lähetä'.",
     "migrate_account": "Linkitä vanha Luuppi-tili",
-    "missing_required_fields": "Olet Luupin jäsen, mutta sinulta puuttuu pakollisia tietoja. Olet hyvä ja täytät puuttuvat tiedot. Pakolliset kentät on merkitty tähdellä."
+    "missing_required_fields": "Olet Luupin jäsen, mutta sinulta puuttuu pakollisia tietoja. Olet hyvä ja täytät puuttuvat tiedot. Pakolliset kentät on merkitty tähdellä.",
+    "email_subscription": "Sähköpostilistat"
   },
   "pages_feedback": {
     "title": "Palaute",
@@ -296,7 +335,8 @@
     "message": "Viesti",
     "send": "Lähetä",
     "seo_title": "Luuppi ry | Palaute",
-    "seo_description": "Anna palautetta Luupille. Nimettömät palautteet käsitellään hallituksen kokouksissa."
+    "seo_description": "Anna palautetta Luupille. Nimettömät palautteet käsitellään hallituksen kokouksissa.",
+    "send_feedback": "Lähetä palautetta"
   },
   "pages_error": {
     "title": "Odottamaton virhe",

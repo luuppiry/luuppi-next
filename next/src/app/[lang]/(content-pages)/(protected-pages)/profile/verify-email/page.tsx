@@ -1,4 +1,8 @@
+import { signOut } from '@/actions/auth';
 import { auth } from '@/auth';
+import SubmitButton from '@/components/SubmitButton/SubmitButton';
+import { getDictionary } from '@/dictionaries';
+import prisma from '@/libs/db/prisma';
 import { getAccessToken } from '@/libs/get-access-token';
 import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
 import { logger } from '@/libs/utils/logger';
@@ -18,7 +22,7 @@ export default async function VerifyEmail({
   params,
   searchParams,
 }: VerifyEmailProps) {
-  // const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary(params.lang);
 
   const emailChangeToken = searchParams.token as string;
 
@@ -65,7 +69,7 @@ export default async function VerifyEmail({
     redirect(`/${params.lang}/404`);
   }
 
-  const emailUpdated = await updateGraphAPIUser(
+  const graphEmailUpdated = await updateGraphAPIUser(
     accessToken,
     session.user.entraUserUuid,
     {
@@ -80,17 +84,36 @@ export default async function VerifyEmail({
     },
   );
 
-  if (!emailUpdated) {
+  if (!graphEmailUpdated) {
     logger.error('Error updating user email');
     redirect(`/${params.lang}/404`);
   }
 
+  await prisma.user.update({
+    where: {
+      entraUserUuid: session.user.entraUserUuid,
+    },
+    data: {
+      email: newEmailVerified,
+    },
+  });
+
   revalidatePath(`/${params.lang}/profile`);
 
-  // TODO: Proper UI
   return (
-    <>
-      <h1>Email changed to {newEmailVerified}</h1>
-    </>
+    <div className="relative flex flex-col items-center justify-center gap-6 text-center max-md:items-start max-md:text-start">
+      <h1>{dictionary.pages_verify_email.email_changed}</h1>
+      <p className="text-sm">
+        <strong>{dictionary.pages_verify_email.new_email}:</strong>{' '}
+        {newEmailVerified}
+      </p>
+      <p className="max-w-xl text-lg max-md:text-base">
+        {dictionary.pages_verify_email.email_changed_description}
+      </p>
+      <form action={signOut}>
+        <SubmitButton text={dictionary.general.logout} />
+      </form>
+      <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
+    </div>
   );
 }

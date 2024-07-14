@@ -9,7 +9,6 @@ import { LuCalendarPlus } from 'react-icons/lu';
 import EventCalendarSkeleton from '../EventCalendar/EventCalendarSkeleton';
 import EventListSkeleton from '../EventsList/EventListSkeleton';
 import MobileCalendarSkeleton from '../MobileCalendar/MobileCalendarSkeleton';
-import './EventSelector.css';
 
 const EventCalendar = dynamic(() => import('../EventCalendar/EventCalendar'), {
   loading: () => <EventCalendarSkeleton />,

@@ -61,8 +61,15 @@ export async function reservationCreate(
     session.user.entraUserUuid,
   );
 
+  if (!localUser) {
+    return {
+      message: dictionary.api.unauthorized,
+      isError: true,
+    };
+  }
+
   const strapiRoleUuids =
-    localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
+    localUser.roles.map((role) => role.role.strapiRoleUuid) ?? [];
   const ticketTypes = strapiEvent.data.attributes.Registration?.TicketTypes;
 
   const eventRolesWithWeights =
@@ -127,16 +134,14 @@ export async function reservationCreate(
   const ticketsAvailable = ownQuota.TicketsTotal - totalRegistrationWithRole;
   const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
 
-  const currentUserReservations = localUser
-    ? eventRegistrations.filter(
-        (registration) =>
-          registration.entraUserUuid === localUser.entraUserUuid &&
-          registration.purchaseRole.strapiRoleUuid ===
-            targetedRole.strapiRoleUuid &&
-          (registration.reservedUntil > new Date() ||
-            registration.paymentCompleted),
-      )
-    : [];
+  const currentUserReservations = eventRegistrations.filter(
+    (registration) =>
+      registration.entraUserUuid === localUser.entraUserUuid &&
+      registration.purchaseRole.strapiRoleUuid ===
+        targetedRole.strapiRoleUuid &&
+      (registration.reservedUntil > new Date() ||
+        registration.paymentCompleted),
+  );
 
   // Validate that the user has not already reserved the maximum amount of tickets
   if (currentUserReservations.length >= ticketsAllowedToBuy) {
@@ -164,6 +169,9 @@ export async function reservationCreate(
       isError: true,
     };
   }
+
+  const strapiRoleUuid = targetedRole.strapiRoleUuid;
+  const entraUserUuid = localUser.entraUserUuid;
 
   const result = await prisma
     .$transaction(async (prisma) => {
@@ -200,53 +208,22 @@ export async function reservationCreate(
         },
       });
 
-      const strapiRoleUuid = targetedRole.strapiRoleUuid;
-      const entraUserUuid = session.user!.entraUserUuid;
-
       if (totalRegistrations + amount > ownQuota.TicketsTotal) {
         throw new Error(dictionary.api.sold_out);
       }
 
       const promisesArray: Promise<any>[] = [];
 
-      // No local user, create one
-      if (!localUser) {
-        const userPromise = prisma.user.create({
-          data: {
-            entraUserUuid,
-            roles: {
-              create: {
-                strapiRoleUuid,
-              },
-            },
-          },
-        });
-
-        promisesArray.push(userPromise);
-      }
-
-      // If user has no default role, add it
-      if (
-        localUser &&
-        !localUser.roles.find(
-          (role) => role.strapiRoleUuid === options.noRoleId!,
-        )
-      ) {
-        const rolesOnUsersPromise = prisma.rolesOnUsers.upsert({
-          where: {
-            strapiRoleUuid_entraUserUuid: {
-              strapiRoleUuid: strapiRoleUuid,
-              entraUserUuid: entraUserUuid,
-            },
-          },
-          update: {},
-          create: {
-            strapiRoleUuid,
-            entraUserUuid,
-          },
-        });
-
-        promisesArray.push(rolesOnUsersPromise);
+      const hasDefaultRole = localUser.roles.find(
+        (role) => role.strapiRoleUuid === options.noRoleId!,
+      );
+      if (!hasDefaultRole) {
+        // User should always have a default role
+        logger.error(
+          'User doesnt have a default role. This should never happen.',
+          localUser.entraUserUuid,
+        );
+        throw new Error(dictionary.api.server_error);
       }
 
       // Create event registrations. This is the actual reservation.
@@ -277,15 +254,15 @@ export async function reservationCreate(
       isError: true,
     }));
 
-  logger.info(
-    `User ${session.user.entraUserUuid} reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
-      currentUserReservations.length + amount
-    }`,
-  );
-
   if (result.isError) {
     return result;
   }
+
+  logger.info(
+    `User ${localUser.entraUserUuid} reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
+      currentUserReservations.length + amount
+    }`,
+  );
 
   redirect(`/${lang}/own-events`);
 }

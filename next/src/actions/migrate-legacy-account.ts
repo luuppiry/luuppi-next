@@ -39,9 +39,53 @@ export async function migrateLegacyAccount(
       message: dictionary.api.ratelimit,
       isError: true,
     };
+  } else {
+    await updateRateLimitCounter(user.entraUserUuid, options.cacheKey);
   }
 
-  await updateRateLimitCounter(user.entraUserUuid, options.cacheKey);
+  const localUser = await prisma.user.findFirst({
+    where: {
+      entraUserUuid: user.entraUserUuid,
+    },
+    include: {
+      roles: {
+        include: {
+          role: true,
+        },
+        where: {
+          OR: [
+            {
+              expiresAt: {
+                gte: new Date(),
+              },
+            },
+            {
+              expiresAt: null,
+            },
+          ],
+        },
+      },
+    },
+  });
+
+  if (!localUser) {
+    logger.error('User not found in database');
+    return {
+      message: dictionary.api.invalid_credentials,
+      isError: true,
+    };
+  }
+
+  const hasMemberRole = localUser.roles.some(
+    (r) => r.role.strapiRoleUuid === options.memberRole,
+  );
+  if (hasMemberRole) {
+    logger.error('User already has member role');
+    return {
+      message: dictionary.api.already_member_role,
+      isError: true,
+    };
+  }
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -75,33 +119,19 @@ export async function migrateLegacyAccount(
     ? new Date(legacyMigrateData.endsAt)
     : null;
 
-  const connectOrCreate = {
+  await prisma.rolesOnUsers.upsert({
     where: {
       strapiRoleUuid_entraUserUuid: {
         entraUserUuid: user.entraUserUuid,
         strapiRoleUuid: options.memberRole,
       },
     },
-    create: {
-      expiresAt: endsAt,
-      strapiRoleUuid: options.memberRole,
-    },
-  };
-
-  await prisma.user.upsert({
-    where: {
-      entraUserUuid: user.entraUserUuid,
-    },
-    create: {
-      entraUserUuid: user.entraUserUuid,
-      roles: {
-        connectOrCreate: connectOrCreate,
-      },
-    },
     update: {
-      roles: {
-        connectOrCreate: connectOrCreate,
-      },
+      expiresAt: endsAt,
+    },
+    create: {
+      strapiRoleUuid: options.memberRole,
+      entraUserUuid: user.entraUserUuid,
     },
   });
 

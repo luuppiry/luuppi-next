@@ -1,6 +1,6 @@
 'use client';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { User } from '@microsoft/microsoft-graph-types';
+import { User } from '@prisma/client';
 import FormCheckbox from '../FormCheckbox/FormCheckbox';
 
 interface ProfileNotificationsFormProps {
@@ -14,9 +14,10 @@ export default function ProfileNotificationsForm({
 }: ProfileNotificationsFormProps) {
   return (
     <form className="card card-body">
-      <div className="flex w-full flex-col">
-        <FormCheckbox id="loop" title={dictionary.mail_list.loop} disabled />
-      </div>
+      <h2 className="mb-4 text-lg font-semibold">
+        {dictionary.pages_profile.email_subscription}
+      </h2>
+      <FormCheckbox id="loop" title={dictionary.mail_list.loop} disabled />
     </form>
   );
 }

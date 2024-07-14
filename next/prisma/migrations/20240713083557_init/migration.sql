@@ -4,10 +4,23 @@ CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'COMPLETED', 'CANCELLED');
 -- CreateEnum
 CREATE TYPE "QuestionType" AS ENUM ('TEXT', 'SELECT', 'CHECKBOX');
 
+-- CreateEnum
+CREATE TYPE "Language" AS ENUM ('EN', 'FI');
+
+-- CreateEnum
+CREATE TYPE "Major" AS ENUM ('COMPUTER_SCIENCE', 'MATHEMATICS', 'STATISTICAL_DATA_ANALYSIS', 'OTHER');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "entraUserUuid" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "username" TEXT,
+    "firstName" TEXT,
+    "lastName" TEXT,
+    "domicle" TEXT,
+    "preferredFullName" TEXT,
+    "major" "Major" NOT NULL DEFAULT 'OTHER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -69,6 +82,7 @@ CREATE TABLE "Payment" (
     "orderId" TEXT NOT NULL,
     "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
     "amount" DOUBLE PRECISION NOT NULL,
+    "language" "Language" NOT NULL DEFAULT 'FI',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -99,6 +113,9 @@ CREATE TABLE "_EventRegistrationToPayment" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_entraUserUuid_key" ON "User"("entraUserUuid");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Role_strapiRoleUuid_key" ON "Role"("strapiRoleUuid");

@@ -30,6 +30,8 @@ export async function emailSendFeedback(
       message: dictionary.api.ratelimit,
       isError: true,
     };
+  } else {
+    await updateRateLimitCounter(options.cacheKey, options.cacheKey);
   }
 
   const turnstileToken = formData.get('turnstileToken') as string | undefined;
@@ -127,7 +129,6 @@ export async function emailSendFeedback(
     const emailClient = new EmailClient(options.connectionString);
     const poller = await emailClient.beginSend(emailMessage);
     await poller.pollUntilDone();
-    await updateRateLimitCounter(options.cacheKey, options.cacheKey);
     logger.info('Feedback email sent', email);
     return {
       message: dictionary.api.feedback_sent,

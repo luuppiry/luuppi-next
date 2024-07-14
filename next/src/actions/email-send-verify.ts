@@ -48,6 +48,8 @@ export async function emailSendVerify(
       message: dictionary.api.ratelimit,
       isError: true,
     };
+  } else {
+    await updateRateLimitCounter(user.entraUserUuid, options.cacheKey);
   }
 
   const email = formData.get('email') as string;
@@ -153,7 +155,6 @@ export async function emailSendVerify(
     const emailClient = new EmailClient(options.connectionString);
     const poller = await emailClient.beginSend(message);
     await poller.pollUntilDone();
-    await updateRateLimitCounter(user.entraUserUuid, options.cacheKey);
     logger.info('Email change verification email sent to', email);
     return {
       message: dictionary.api.verify_email_sent,

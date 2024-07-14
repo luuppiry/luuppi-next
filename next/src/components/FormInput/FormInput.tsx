@@ -12,6 +12,7 @@ interface FormInputProps {
   minLength?: number;
   maxLength?: number;
   labelTopRight?: React.ReactNode;
+  readonly?: boolean;
   onChange?: () => void;
 }
 
@@ -29,6 +30,7 @@ export default function FormInput({
   marginBottom = true,
   minLength,
   maxLength,
+  readonly,
   onChange,
 }: FormInputProps) {
   return (
@@ -52,6 +54,7 @@ export default function FormInput({
         minLength={minLength}
         name={id}
         placeholder={placeholder}
+        readOnly={readonly}
         required={required}
         type={type ?? 'text'}
         onChange={onChange}

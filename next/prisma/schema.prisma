@@ -14,14 +14,21 @@ datasource db {
 }
 
 model User {
-  id            Int                 @id @default(autoincrement())
+  id                Int                 @id @default(autoincrement())
   /// User's EntraID UUID
-  entraUserUuid String              @unique
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
-  registrations EventRegistration[]
-  roles         RolesOnUsers[]
-  answers       Answer[]
+  entraUserUuid     String              @unique
+  email             String              @unique
+  username          String?
+  firstName         String?
+  lastName          String?
+  domicle           String?
+  preferredFullName String?
+  major             Major               @default(OTHER)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  registrations     EventRegistration[]
+  roles             RolesOnUsers[]
+  answers           Answer[]
 }
 
 model Role {
@@ -134,4 +141,11 @@ enum QuestionType {
 enum Language {
   EN
   FI
+}
+
+enum Major {
+  COMPUTER_SCIENCE
+  MATHEMATICS
+  STATISTICAL_DATA_ANALYSIS
+  OTHER
 }

@@ -8,9 +8,9 @@
     "email_change_mail_text": "You have requested an email change. Please verify your new email address by clicking the link below. If you did not request this change you can ignore this email.",
     "verify_email_sent": "Verification link sent to your email. Link is valid for 30 minutes.",
     "email_sending_failed": "Email sending failed. This could be caused by invalid email address or server error.",
-    "invalid_display_name": "Invalid display name. Display name must be 3-30 characters long.",
-    "invalid_given_name": "Invalid first names. First names must be 2-70 characters long.",
-    "invalid_surname": "Invalid last name. Last name must be 2-35 characters long..",
+    "invalid_username": "Invalid username. Username must be 3-30 characters long.",
+    "invalid_first_name": "Invalid first names. First names must be 2-70 characters long.",
+    "invalid_last_name": "Invalid last name. Last name must be 2-35 characters long..",
     "invalid_domicle": "Invalid domicle. Domicle must be 2-35 characters long.",
     "invalid_preferred_full_name": "Invalid preferred full name. Preferred full name must be 2-100 characters long.",
     "invalid_major": "Invalid major",
@@ -39,7 +39,12 @@
     "email_registration_confirmation_subject": "Confirmation of event registration",
     "invalid_credentials": "Invalid credentials",
     "legacy_account_migrated": "Your old Luuppi account has been linked to your new account, and you now have a member role!",
-    "invalid_answer_time": "You cannot change your answers any more. If you need to make changes, please contact the event organizer."
+    "invalid_answer_time": "You cannot change your answers any more. If you need to make changes, please contact the event organizer.",
+    "user_not_found": "User not found",
+    "user_updated": "User updated. Some changes require the user to re-login to take effect.",
+    "invalid_roles": "Invalid roles",
+    "user_roles_updated": "User roles updated successfully",
+    "already_member_role": "You already have member role"
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -102,7 +107,25 @@
     "seconds": "seconds",
     "seconds_short": "s",
     "error": "Error",
-    "success": "Success"
+    "success": "Success",
+    "search": "Search",
+    "save": "Save",
+    "no_results": "No results",
+    "expires": "Expires",
+    "created_at": "Created at",
+    "delete": "Delete",
+    "general_info": "General info",
+    "expiration_date": "Expiration date",
+    "event": "Event",
+    "status": "Status",
+    "price": "Price",
+    "actions": "Actions",
+    "questions": "Questions",
+    "question": "Question",
+    "answer": "Answer",
+    "payments": "Payments",
+    "order_id": "Order ID",
+    "cancelled": "Cancelled"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
@@ -236,7 +259,7 @@
     "ticket_amount": "Choose the amount of tickets you want to buy",
     "unpaid_registrations": "Unpaid registrations",
     "paid_registrations": "Paid registrations",
-    "pay_all": "Pay all",
+    "move_to_checkout": "Move to checkout",
     "payment_completed": "Payment completed",
     "payment_failed": "Payment failed",
     "payment_failed_description": "Your payment has failed. If you got charged, please contact WWW/IT representatives at webmaster@luuppi.fi",
@@ -267,12 +290,27 @@
     "open_jobs": "Open jobs"
   },
   "pages_verify_email": {
-    "title": "Email verification"
+    "new_email": "New email",
+    "email_changed": "Email changed successfully",
+    "email_changed_description": "Your email has been successfully changed. Please log out and login again to finish the process."
+  },
+  "pages_admin": {
+    "user_general_info": "You can search for a user by their email and view and edit their general information.",
+    "user_roles_info": "View and edit a user's roles. Keep in mind that assigning roles does not affect a user's event registrations, even if you assign a role that is typically obtained by registering for an event.",
+    "read_only": "Read only",
+    "search_for_role": "Search for a role",
+    "user_roles": "User roles",
+    "no_roles": "No roles",
+    "event_history": "Event history",
+    "role_management": "Role management",
+    "registration_info": "Registration info",
+    "user_management": "User management",
+    "event_management": "Event management"
   },
   "pages_profile": {
     "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",
-    "given_name_explanation": "All your official first names. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
-    "surname_explanation": "Official surname. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
+    "first_name_explanation": "All your official first names. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
+    "lastname_explanation": "Official surname. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
     "preferred_full_name_explanation": "Desired full name. This is the name by which you will be called within the association. This could be, for example, a nickname or another name you wish to be called by. This information is used, for example, in seating arrangements at events.",
     "domicle_explanation": "Your official domicle. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
     "major_explanation": "Your major. Select other if your major is something else than computer science, mathematics, or statistical data analysis.",
@@ -284,7 +322,8 @@
     },
     "legacy_migrate_info": "You can link your old website's Luuppi account using this form. Enter your old website username and password in the fields below and press 'Submit'.",
     "migrate_account": "Migrate account",
-    "missing_required_fields": "You are a member of Luuppi, but you are missing some required information. Please provide the missing details. Required fields are marked with an asterisk."
+    "missing_required_fields": "You are a member of Luuppi, but you are missing some required information. Please provide the missing details. Required fields are marked with an asterisk.",
+    "email_subscription": "Email subscription"
   },
   "pages_feedback": {
     "title": "Feedback",
@@ -296,7 +335,8 @@
     "message": "Message",
     "send": "Send",
     "seo_title": "Luuppi ry | Feedback",
-    "seo_description": "Send feedback to Luuppi ry anonymously or with contact information. Feedback is addressed in board meetings."
+    "seo_description": "Send feedback to Luuppi ry anonymously or with contact information. Feedback is addressed in board meetings.",
+    "send_feedback": "Send feedback"
   },
   "pages_error": {
     "title": "Error",

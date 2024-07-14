@@ -48,7 +48,7 @@ export default function PayButton({
         }}
         className="mt-4"
       >
-        <SubmitButton text={dictionary.pages_events.pay_all} />
+        <SubmitButton text={dictionary.pages_events.move_to_checkout} />
       </form>
     </>
   );

@@ -3,8 +3,6 @@ import { LuuppiEventReceipt as LuuppiEventReceiptFi } from '@/../emails/event-re
 import { getDictionary } from '@/dictionaries';
 import { shortDateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
-import { getAccessToken } from '@/libs/get-access-token';
-import { getGraphAPIUser } from '@/libs/graph/graph-get-user';
 import { checkReturn } from '@/libs/payments/check-return';
 import { logger } from '@/libs/utils/logger';
 import { EmailClient, EmailMessage } from '@azure/communication-email';
@@ -63,30 +61,27 @@ export async function GET(request: Request) {
       return new Response('Error getting entraUserUuid', { status: 400 });
     }
 
-    const accessToken = await getAccessToken();
-    if (!accessToken) {
-      logger.error('Error getting access token for Graph API');
-      return new Response('Error getting access token for Graph API', {
-        status: 400,
-      });
-    }
-    const user = await getGraphAPIUser(
-      accessToken,
-      payments.registration[0].entraUserUuid,
-    );
+    // Always same entraUserUuid for all registrations
+    const entraUserUuid = payments.registration[0].entraUserUuid;
 
-    if (!user) {
+    if (!entraUserUuid) {
+      logger.error('Error getting entraUserUuid');
+      return new Response('Error getting entraUserUuid', { status: 400 });
+    }
+
+    const localUser = await prisma.user.findFirst({
+      where: {
+        entraUserUuid,
+      },
+    });
+
+    if (!localUser) {
       logger.error('Error getting user');
       return new Response('Error getting user', { status: 400 });
     }
 
-    const name =
-      user?.displayName ??
-      user?.preferredName ??
-      user?.givenName ??
-      user?.surname ??
-      '';
-    const email = user?.mail;
+    const name = localUser.username ?? localUser.firstName ?? '';
+    const email = localUser.email;
 
     if (!email) {
       logger.error('Error getting email');

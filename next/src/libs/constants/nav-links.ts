@@ -155,7 +155,7 @@ export const navLinksMobile: NavLink[] = [
   },
   {
     translation: 'admin',
-    href: '/admin',
+    href: '/admin?mode=user',
     authenticationLevel: 'luuppi-hato',
   },
   {
