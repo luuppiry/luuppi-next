@@ -4,7 +4,7 @@ import SubmitButton from '@/components/SubmitButton/SubmitButton';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useEffect, useState } from 'react';
 import { BiErrorCircle, BiInfinite } from 'react-icons/bi';
-import { FindUserResult } from '../AdminUserEditor';
+import { FindUserResult } from '../AdminUserManagement';
 
 const initialState = {
   message: '',

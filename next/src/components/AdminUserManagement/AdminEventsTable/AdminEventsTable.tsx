@@ -1,7 +1,7 @@
 import { Dictionary } from '@/models/locale';
 import { useState } from 'react';
 import { IoOpenOutline } from 'react-icons/io5';
-import { FindUserResult } from '../AdminUserEditor';
+import { FindUserResult } from '../AdminUserManagement';
 
 interface AdminEventsTableProps {
   dictionary: Dictionary;

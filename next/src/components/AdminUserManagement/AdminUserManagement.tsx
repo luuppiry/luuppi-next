@@ -14,7 +14,7 @@ const initialState = {
   isError: false,
 };
 
-interface AdminUserEditorProps {
+interface AdminUserManagementProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
   roles: string[];
@@ -24,11 +24,11 @@ export type FindUserResult =
   | null
   | Awaited<ReturnType<typeof userFind>>['user'];
 
-export default function AdminUserEditor({
+export default function AdminUserManagement({
   dictionary,
   lang,
   roles,
-}: AdminUserEditorProps) {
+}: AdminUserManagementProps) {
   const [formResponse, setFormResponse] = useState(initialState);
   const [user, setUser] = useState<FindUserResult>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -52,6 +52,9 @@ export default function AdminUserEditor({
           action={handleFindUser}
           className="card card-body mb-6 bg-background-50"
         >
+          <h2 className="mb-4 text-lg font-semibold">
+            {dictionary.pages_admin.user_management}
+          </h2>
           <p className="mb-4 max-w-2xl text-sm text-gray-500">
             {dictionary.pages_admin.user_general_info}
           </p>

@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import AdminUserEditor from '@/components/AdminUserEditor/AdminUserEditor';
+import AdminUserManagement from '@/components/AdminUserManagement/AdminUserManagement';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
@@ -93,7 +93,7 @@ export default async function Admin({ params, searchParams }: AdminProps) {
         </div>
       </div>
       {mode === 'user' && (
-        <AdminUserEditor
+        <AdminUserManagement
           dictionary={dictionary}
           lang={params.lang}
           roles={availableRolesFiltered}
