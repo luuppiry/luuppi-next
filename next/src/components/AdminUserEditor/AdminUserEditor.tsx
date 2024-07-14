@@ -1,7 +1,7 @@
 'use client';
 import { userFind } from '@/actions/admin/user-find';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { BiErrorCircle } from 'react-icons/bi';
 import FormInput from '../FormInput/FormInput';
 import SubmitButton from '../SubmitButton/SubmitButton';
@@ -31,6 +31,7 @@ export default function AdminUserEditor({
 }: AdminUserEditorProps) {
   const [formResponse, setFormResponse] = useState(initialState);
   const [user, setUser] = useState<FindUserResult>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleFindUser = async (formData: FormData) => {
     const response = await userFind(formData, lang);
@@ -47,6 +48,7 @@ export default function AdminUserEditor({
     <>
       <div className="flex w-full flex-col">
         <form
+          ref={formRef}
           action={handleFindUser}
           className="card card-body mb-6 bg-background-50"
         >
@@ -76,7 +78,21 @@ export default function AdminUserEditor({
         </form>
         {user && (
           <>
-            <h2 className="mb-4 text-xl font-semibold">{user.email}</h2>
+            <div className="mb-4 flex items-center justify-between gap-6">
+              <h2 className="line-clamp-1 break-all text-xl font-semibold">
+                {user.email}
+              </h2>
+              <button
+                className="btn btn-ghost btn-sm"
+                onClick={() => {
+                  setUser(null);
+                  formRef.current?.reset();
+                  setFormResponse(initialState);
+                }}
+              >
+                {dictionary.general.close}
+              </button>
+            </div>
             <AdminUserGeneral dictionary={dictionary} lang={lang} user={user} />
             <AdminRoleEditor
               availableRoles={roles}
