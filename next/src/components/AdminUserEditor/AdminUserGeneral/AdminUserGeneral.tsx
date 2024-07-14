@@ -53,7 +53,7 @@ export default function AdminUserGeneral({
       {hasMissingInformation && (
         <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
           <BiErrorCircle size={24} />
-          {dictionary.pages_profile.missing_required_fields}
+          {dictionary.pages_admin.user_required_info_missing}
         </div>
       )}
       {Boolean(
@@ -95,7 +95,7 @@ export default function AdminUserGeneral({
         id={'username'}
         marginTop={false}
         placeholder={dictionary.general.username}
-        required={true}
+        required={false}
         title={dictionary.general.username}
         value={user.username ?? ''}
         onChange={() => setFormResponse(initialState)}

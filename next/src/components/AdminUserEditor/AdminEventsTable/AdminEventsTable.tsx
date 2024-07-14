@@ -43,9 +43,14 @@ export default function AdminEventsTable({
               </div>
             )}
             {!detailsModalOpen?.paymentCompleted && (
-              <span className="badge badge-warning badge-sm font-semibold">
-                {dictionary.pages_events.reserved}
-              </span>
+              <div className="flex py-2 max-md:flex-col">
+                <span className="flex-1 font-semibold">
+                  {dictionary.general.status}
+                </span>
+                <span className="badge badge-warning badge-sm font-semibold">
+                  {dictionary.pages_events.reserved}
+                </span>
+              </div>
             )}
             {detailsModalOpen?.reservedUntil &&
               !detailsModalOpen?.paymentCompleted &&
@@ -68,66 +73,74 @@ export default function AdminEventsTable({
               <span className="flex-1 font-semibold">
                 {dictionary.general.questions}
               </span>
-              <div className="overflow-x-auto">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th />
-                      <th>{dictionary.general.question}</th>
-                      <th>{dictionary.general.answer}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
-                    {detailsModalOpen?.answers.map((registration, index) => (
-                      <tr key={index}>
-                        <th>{index + 1}</th>
-                        <td className="truncate">{registration.question}</td>
-                        <td className="truncate">{registration.answer}</td>
+              {detailsModalOpen?.answers.length ? (
+                <div className="overflow-x-auto">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th />
+                        <th>{dictionary.general.question}</th>
+                        <th>{dictionary.general.answer}</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
+                      {detailsModalOpen?.answers.map((registration, index) => (
+                        <tr key={index}>
+                          <th>{index + 1}</th>
+                          <td className="truncate">{registration.question}</td>
+                          <td className="truncate">{registration.answer}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p className="mt-2 text-sm">{dictionary.general.no_answers}</p>
+              )}
             </div>
             <span className="divider h-px opacity-30" />
             <div>
               <span className="flex-1 font-semibold">
                 {dictionary.general.payments}
               </span>
-              <div className="overflow-x-auto">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th />
-                      <th>{dictionary.general.order_id}</th>
-                      <th>{dictionary.general.status}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
-                    {detailsModalOpen?.payments.map((payment, index) => (
-                      <tr key={index}>
-                        <th>{index + 1}</th>
-                        <td className="truncate">{payment.orderId}</td>
-                        <td className="truncate font-semibold">
-                          {payment.status === 'CANCELLED' ? (
-                            <span className="badge badge-neutral badge-sm">
-                              {dictionary.general.cancelled}
-                            </span>
-                          ) : payment.status === 'COMPLETED' ? (
-                            <span className="badge badge-success badge-sm text-white">
-                              {dictionary.pages_events.paid}
-                            </span>
-                          ) : (
-                            <span className="badge badge-warning badge-sm">
-                              {dictionary.pages_events.reserved}
-                            </span>
-                          )}
-                        </td>
+              {detailsModalOpen?.payments.length ? (
+                <div className="overflow-x-auto">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th />
+                        <th>{dictionary.general.order_id}</th>
+                        <th>{dictionary.general.status}</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
+                      {detailsModalOpen?.payments.map((payment, index) => (
+                        <tr key={index}>
+                          <th>{index + 1}</th>
+                          <td className="truncate">{payment.orderId}</td>
+                          <td className="truncate font-semibold">
+                            {payment.status === 'CANCELLED' ? (
+                              <span className="badge badge-neutral badge-sm">
+                                {dictionary.general.cancelled}
+                              </span>
+                            ) : payment.status === 'COMPLETED' ? (
+                              <span className="badge badge-success badge-sm text-white">
+                                {dictionary.pages_events.paid}
+                              </span>
+                            ) : (
+                              <span className="badge badge-warning badge-sm">
+                                {dictionary.pages_events.reserved}
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p className="mt-2 text-sm">{dictionary.general.no_payments}</p>
+              )}
             </div>
           </div>
           <div className="modal-action">
@@ -154,56 +167,60 @@ export default function AdminEventsTable({
         <h2 className="mb-4 text-lg font-semibold">
           {dictionary.pages_admin.event_history}
         </h2>
-        <div className="overflow-x-auto">
-          <table className="table">
-            <thead>
-              <tr>
-                <th />
-                <th>{dictionary.general.event}</th>
-                <th>{dictionary.general.status}</th>
-                <th>{dictionary.general.price}</th>
-                <th>
-                  <span className="flex justify-end">
-                    {dictionary.general.actions}
-                  </span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
-              {user?.registrations?.map((registration, index) => (
-                <tr key={registration.id}>
-                  <th>{index + 1}</th>
-                  <td className="truncate">{registration.ticketType.name}</td>
-                  <td>
-                    <span
-                      className={`badge badge-sm font-semibold ${
-                        registration.paymentCompleted
-                          ? 'badge-success text-white'
-                          : 'badge-warning text-gray-800'
-                      }`}
-                    >
-                      {registration.paymentCompleted
-                        ? dictionary.pages_events.paid
-                        : dictionary.pages_events.reserved}
+        {Boolean(user.registrations.length) ? (
+          <div className="overflow-x-auto">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th />
+                  <th>{dictionary.general.event}</th>
+                  <th>{dictionary.general.status}</th>
+                  <th>{dictionary.general.price}</th>
+                  <th>
+                    <span className="flex justify-end">
+                      {dictionary.general.actions}
                     </span>
-                  </td>
-                  <td>{registration.ticketType.price} €</td>
-                  <td>
-                    <div className="flex items-center justify-end">
-                      <button
-                        className="btn btn-circle btn-ghost btn-sm"
-                        type="button"
-                        onClick={() => setDetailsModalOpen(registration)}
-                      >
-                        <IoOpenOutline size={24} />
-                      </button>
-                    </div>
-                  </td>
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
+                {user?.registrations?.map((registration, index) => (
+                  <tr key={registration.id}>
+                    <th>{index + 1}</th>
+                    <td className="truncate">{registration.ticketType.name}</td>
+                    <td>
+                      <span
+                        className={`badge badge-sm font-semibold ${
+                          registration.paymentCompleted
+                            ? 'badge-success text-white'
+                            : 'badge-warning text-gray-800'
+                        }`}
+                      >
+                        {registration.paymentCompleted
+                          ? dictionary.pages_events.paid
+                          : dictionary.pages_events.reserved}
+                      </span>
+                    </td>
+                    <td>{registration.ticketType.price} €</td>
+                    <td>
+                      <div className="flex items-center justify-end">
+                        <button
+                          className="btn btn-circle btn-ghost btn-sm"
+                          type="button"
+                          onClick={() => setDetailsModalOpen(registration)}
+                        >
+                          <IoOpenOutline size={24} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-sm">{dictionary.general.no_events}</p>
+        )}
       </div>
     </>
   );

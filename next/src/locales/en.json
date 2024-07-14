@@ -125,7 +125,10 @@
     "answer": "Answer",
     "payments": "Payments",
     "order_id": "Order ID",
-    "cancelled": "Cancelled"
+    "cancelled": "Cancelled",
+    "no_answers": "No answers",
+    "no_payments": "No payments",
+    "no_events": "No event registrations"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
@@ -305,7 +308,8 @@
     "role_management": "Role management",
     "registration_info": "Registration info",
     "user_management": "User management",
-    "event_management": "Event management"
+    "event_management": "Event management",
+    "user_required_info_missing": "User is Luuppi's member but is missing required information!"
   },
   "pages_profile": {
     "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",
