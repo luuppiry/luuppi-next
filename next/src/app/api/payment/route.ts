@@ -140,6 +140,7 @@ export async function GET(request: Request) {
     await poller.pollUntilDone();
     logger.info('Event confirmation email sent', { email });
   } catch (error) {
+    logger.error('Error checking return', error);
     return new Response('Error checking return', { status: 400 });
   }
 
