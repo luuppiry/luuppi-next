@@ -64,7 +64,7 @@ export const getEventJsonLd = (
     startDate: new Date(event.data.attributes.StartDate).toISOString(),
     endDate: new Date(event.data.attributes.EndDate).toISOString(),
     description: description.slice(0, 300),
-    image: event.data.attributes.Image?.data.attributes.url
+    image: event.data.attributes.Image?.data?.attributes?.url
       ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
       : undefined,
     location: {
@@ -109,13 +109,14 @@ export const getNewsJsonLd = (
   news: APIResponseData<'api::news-single.news-single'>,
   lang: SupportedLanguage,
 ) => {
+  // eslint-disable-next-line no-console
   const jsonLd: WithContext<NewsArticle> = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: news.attributes.title,
     description: news.attributes.description,
-    image: news.attributes.banner?.data.attributes.url
-      ? getStrapiUrl(news.attributes.banner?.data.attributes.url)
+    image: news.attributes.banner?.data?.attributes?.url
+      ? getStrapiUrl(news.attributes.banner.data.attributes.url)
       : undefined,
     datePublished: new Date(news.attributes.createdAt!).toISOString(),
     dateModified: new Date(news.attributes.updatedAt!).toISOString(),
@@ -130,8 +131,8 @@ export const getNewsJsonLd = (
     author: {
       '@type': 'Person',
       name: news.attributes.authorName,
-      image: news.attributes.authorImage?.data.attributes.url
-        ? getStrapiUrl(news.attributes.authorImage?.data.attributes.url)
+      image: news.attributes.authorImage?.data?.attributes?.url
+        ? getStrapiUrl(news.attributes.authorImage.data.attributes.url)
         : undefined,
     },
     inLanguage: {
