@@ -14,7 +14,7 @@ export async function userFind(formData: FormData, lang: SupportedLanguage) {
   const session = await auth();
   const user = session?.user;
 
-  if (!user) {
+  if (!user || !user.isLuuppiHato) {
     logger.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
