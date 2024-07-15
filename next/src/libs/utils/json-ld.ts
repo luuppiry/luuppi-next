@@ -7,6 +7,7 @@ import {
   WithContext,
 } from 'schema-dts';
 import { getPlainText } from '../strapi/blocks-converter';
+import { getStrapiUrl } from '../strapi/get-strapi-url';
 
 export const getOrganizationJsonLd = (dictionary: Dictionary) => {
   const jsonLd: WithContext<EducationalOrganization> = {
@@ -59,12 +60,45 @@ export const getEventJsonLd = (
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: event.data.attributes[lang === 'en' ? 'NameEn' : 'NameFi'],
+    url: `https://luuppi.fi/${lang}/events/${event.data.id}`,
     startDate: new Date(event.data.attributes.StartDate).toISOString(),
     endDate: new Date(event.data.attributes.EndDate).toISOString(),
     description: description.slice(0, 300),
+    image: event.data.attributes.Image?.data.attributes.url
+      ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
+      : undefined,
     location: {
       '@type': 'Place',
       name: event.data.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
+    },
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    offers: event.data.attributes.Registration?.TicketTypes.map((ticket) => ({
+      '@type': 'Offer',
+      name: lang === 'en' ? ticket.NameEn : ticket.NameFi,
+      price: ticket.Price,
+      priceCurrency: 'EUR',
+      url: `https://luuppi.fi/${lang}/events/${event.data.id}`,
+      validFrom: new Date(event.data.attributes.StartDate).toISOString(),
+      seller: {
+        '@type': 'Organization',
+        name: 'Luuppi ry',
+        url: 'https://luuppi.fi',
+      },
+    })),
+    organizer: {
+      '@type': 'Organization',
+      name: 'Luuppi ry',
+      url: 'https://luuppi.fi',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://luuppi.fi/logo.png',
+      },
+    },
+    inLanguage: {
+      '@type': 'Language',
+      name: lang === 'en' ? 'English' : 'Finnish',
+      alternateName: lang === 'en' ? 'en' : 'fi',
     },
   };
 
@@ -73,16 +107,37 @@ export const getEventJsonLd = (
 
 export const getNewsJsonLd = (
   news: APIResponseData<'api::news-single.news-single'>,
+  lang: SupportedLanguage,
 ) => {
   const jsonLd: WithContext<NewsArticle> = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: news.attributes.title,
+    description: news.attributes.description,
+    image: news.attributes.banner?.data.attributes.url
+      ? getStrapiUrl(news.attributes.banner?.data.attributes.url)
+      : undefined,
     datePublished: new Date(news.attributes.createdAt!).toISOString(),
     dateModified: new Date(news.attributes.updatedAt!).toISOString(),
+    publisher: {
+      '@type': 'Organization',
+      name: 'Luuppi ry',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://luuppi.fi/logo.png',
+      },
+    },
     author: {
       '@type': 'Person',
       name: news.attributes.authorName,
+      image: news.attributes.authorImage?.data.attributes.url
+        ? getStrapiUrl(news.attributes.authorImage?.data.attributes.url)
+        : undefined,
+    },
+    inLanguage: {
+      '@type': 'Language',
+      name: lang === 'en' ? 'English' : 'Finnish',
+      alternateName: lang === 'en' ? 'en' : 'fi',
     },
   };
 

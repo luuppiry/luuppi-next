@@ -50,7 +50,7 @@ export default async function NewsPost({ params }: NewsPostProps) {
     <>
       <script
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getNewsJsonLd(selectedNews)),
+          __html: JSON.stringify(getNewsJsonLd(selectedNews, params.lang)),
         }}
         type="application/ld+json"
       />
