@@ -249,10 +249,13 @@ export async function reservationCreate(
         isError: false,
       };
     })
-    .catch((error) => ({
-      message: error.message,
-      isError: true,
-    }));
+    .catch((error) => {
+      logger.error('Error creating reservation', error);
+      return {
+        message: dictionary.api.server_error,
+        isError: true,
+      };
+    });
 
   if (result.isError) {
     return result;
