@@ -136,7 +136,13 @@ export default async function Event({ params }: EventProps) {
             >
               <TicketArea event={event} lang={params.lang} />
             </Suspense>
-            <Suspense>
+            <Suspense
+              fallback={
+                <div className="mt-6">
+                  <div className="skeleton h-8 w-48" />
+                </div>
+              }
+            >
               <ShowParticipants eventId={id} lang={params.lang} />
             </Suspense>
           </div>
