@@ -6,6 +6,7 @@ interface SubmitButtonProps {
   variant?: 'primary' | 'error' | 'secondary';
   size?: 'sm' | 'md' | 'lg';
   className?: any;
+  children?: React.ReactNode;
 }
 
 export default function SubmitButton({
@@ -13,6 +14,7 @@ export default function SubmitButton({
   variant = 'primary',
   size = 'sm',
   className,
+  children,
 }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
@@ -27,7 +29,9 @@ export default function SubmitButton({
           <span className="loading loading-spinner loading-md" />
         </div>
       ) : (
-        text
+        <>
+          {children} {text}
+        </>
       )}
     </button>
   );
