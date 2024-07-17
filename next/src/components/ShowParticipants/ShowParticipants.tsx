@@ -22,9 +22,9 @@ export default async function ShowParticipants({
 
   const dictionary = await getDictionary(lang);
   const registrations = await getEventRegistrations(eventId);
-  const participants = registrations
-    .map((registration) => registration.user.username)
-    .filter((participant) => Boolean(participant)) as string[];
+  const participants = registrations.map(
+    (registration) => registration.user.username ?? '???',
+  );
 
   return (
     Boolean(registrations.length) && (
