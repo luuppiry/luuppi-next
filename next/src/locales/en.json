@@ -128,7 +128,8 @@
     "cancelled": "Cancelled",
     "no_answers": "No answers",
     "no_payments": "No payments",
-    "no_events": "No event registrations"
+    "no_events": "No event registrations",
+    "participants": "Participants"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
@@ -271,7 +272,8 @@
     "edit_additional_info": "Edit details",
     "unanswered_questions": "Unanswered questions!",
     "unanswered_questions_description": "One or more of your unpaid reservations require additional information. Please respond to the reservation questions by pressing the \"Details\" button and completing the questions. Once you have answered the questions for all your unpaid reservations, you can proceed to make the payment.",
-    "no_quota": "There is no quota for your role in this event."
+    "no_quota": "There is no quota for your role in this event.",
+    "show_participants": "Show participants"
   },
   "pages_404": {
     "title": "Page not found",

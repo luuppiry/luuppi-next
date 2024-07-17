@@ -1,4 +1,5 @@
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
+import ShowParticipants from '@/components/ShowParticipants/ShowParticipants';
 import SidePartners from '@/components/SidePartners/SidePartners';
 import TicketArea from '@/components/Ticket/TicketArea';
 import { getDictionary } from '@/dictionaries';
@@ -49,7 +50,7 @@ export default async function Event({ params }: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const imageUrl = event.data.attributes.Image?.data.attributes.url
+  const imageUrl = event.data.attributes.Image?.data?.attributes?.url
     ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
     : null;
 
@@ -134,6 +135,9 @@ export default async function Event({ params }: EventProps) {
               }
             >
               <TicketArea event={event} lang={params.lang} />
+            </Suspense>
+            <Suspense>
+              <ShowParticipants eventId={id} lang={params.lang} />
             </Suspense>
           </div>
           <div className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">

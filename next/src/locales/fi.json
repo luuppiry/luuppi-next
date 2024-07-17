@@ -128,7 +128,8 @@
     "cancelled": "Peruttu",
     "no_answers": "Ei vastauksia",
     "no_payments": "Ei maksuja",
-    "no_events": "Ei tapahtuma ilmoittautumisia"
+    "no_events": "Ei tapahtuma ilmoittautumisia",
+    "participants": "Osallistujat"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
@@ -271,7 +272,8 @@
     "edit_additional_info": "Muokkaa lisätietoja",
     "unanswered_questions": "Vastaamattomia kysymyksiä!",
     "unanswered_questions_description": "Yksi tai useampi maksamaton varauksesi vaatii lisätietoja. Vastaa varauksen kysymyksiin painamalla \"Lisätiedot\"-nappia ja täyttämällä kysymykset. Kun olet vastannut kaikkien maksamattomien varauksiesi kysymyksiin, voit maksaa varaukset.",
-    "no_quota": "Roolillesi ei ole kiintiötä tässä tapahtumassa."
+    "no_quota": "Roolillesi ei ole kiintiötä tässä tapahtumassa.",
+    "show_participants": "Näytä osallistujat"
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",
