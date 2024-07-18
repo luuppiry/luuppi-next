@@ -21,7 +21,7 @@ export default function AdminEventsTable({
       <dialog
         className={`modal modal-bottom sm:modal-middle ${detailsModalOpen ? 'modal-open' : ''}`}
       >
-        <div className="modal-box max-h-[calc(100dvh-6em)] sm:w-11/12 sm:max-w-[1000px]">
+        <div className="modal-box max-h-[calc(100dvh-6em)] sm:w-11/12 sm:max-w-[800px]">
           <h3 className="text-lg font-bold">
             {dictionary.pages_admin.registration_info}
           </h3>
