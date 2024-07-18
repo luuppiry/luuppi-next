@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import { shortDateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
+import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { redirect } from 'next/navigation';
@@ -79,7 +80,9 @@ export default async function AdminEventManagement({
                   <th>{index + 1}</th>
                   <td className="truncate">{event.name}</td>
                   <td>
-                    {event.startDate.toLocaleString(lang, shortDateFormat)}
+                    {firstLetterToUpperCase(
+                      event.startDate.toLocaleString(lang, shortDateFormat),
+                    )}
                   </td>
                   <td>
                     <span className="badge badge-primary">
