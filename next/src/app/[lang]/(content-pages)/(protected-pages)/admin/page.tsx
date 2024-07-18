@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import AdminEventManagement from '@/components/AdminEventManagement/AdminEventManagement';
 import AdminUserManagement from '@/components/AdminUserManagement/AdminUserManagement';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
@@ -99,7 +100,9 @@ export default async function Admin({ params, searchParams }: AdminProps) {
           roles={availableRolesFiltered}
         />
       )}
-      {mode === 'event' && <p>TODO</p>}
+      {mode === 'event' && (
+        <AdminEventManagement dictionary={dictionary} lang={params.lang} />
+      )}
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
   );

@@ -129,7 +129,9 @@
     "no_answers": "Ei vastauksia",
     "no_payments": "Ei maksuja",
     "no_events": "Ei tapahtuma ilmoittautumisia",
-    "participants": "Osallistujat"
+    "participants": "Osallistujat",
+    "starts_at": "Alkaa",
+    "registrations": "Ilmoittautumiset"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
