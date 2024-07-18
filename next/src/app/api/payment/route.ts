@@ -4,6 +4,7 @@ import { getDictionary } from '@/dictionaries';
 import { shortDateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
 import { checkReturn } from '@/libs/payments/check-return';
+import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
 import { EmailClient, EmailMessage } from '@azure/communication-email';
 import { render } from '@react-email/components';
@@ -94,9 +95,8 @@ export async function GET(request: Request) {
       orderId: payments.orderId,
       events: payments.registration.map((registration) => ({
         name: registration.event.nameFi,
-        date: registration.event.startDate.toLocaleString(
-          'fi',
-          shortDateFormat,
+        date: firstLetterToUpperCase(
+          registration.event.startDate.toLocaleString('fi', shortDateFormat),
         ),
         location: registration.event.locationFi,
         price: registration.price,
@@ -109,9 +109,8 @@ export async function GET(request: Request) {
       orderId: payments.orderId,
       events: payments.registration.map((registration) => ({
         name: registration.event.nameEn,
-        date: registration.event.startDate.toLocaleString(
-          'en',
-          shortDateFormat,
+        date: firstLetterToUpperCase(
+          registration.event.startDate.toLocaleString('en', shortDateFormat),
         ),
         location: registration.event.locationEn,
         price: registration.price,

@@ -51,7 +51,7 @@ export const LuuppiEventReceipt = ({
           <strong>Order ID:</strong> {orderId}
         </Text>
         <Text style={orderDetailsText}>
-          <strong>Date:</strong> {orderDate.toDateString()}
+          <strong>Date:</strong> {orderDate.toLocaleDateString('en')}
         </Text>
         <Hr style={hr} />
         {events.map((event, index) => (
