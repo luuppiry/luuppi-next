@@ -1,7 +1,6 @@
 'use server';
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
-import { dateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
@@ -66,6 +65,11 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
           user: true,
           answers: true,
         },
+        orderBy: {
+          user: {
+            email: 'asc',
+          },
+        },
       },
     },
   });
@@ -94,6 +98,9 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
     );
 
     const baseData = {
+      [dictionary.general.created_at]: registration.createdAt
+        .toISOString()
+        .slice(0, -5),
       [dictionary.general.username]: registration.user.username ?? '',
       [dictionary.general.email]: registration.user.email,
       [dictionary.general.firstNames]: registration.user.firstName ?? '',
@@ -128,10 +135,9 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
       .join(',')}`,
   );
 
-  const startDateFormatted = new Date(event.startDate).toLocaleString(
-    lang,
-    dateFormat,
-  );
+  const startDateFormatted = new Date(event.startDate)
+    .toISOString()
+    .slice(0, -5);
 
   const eventName = lang === 'fi' ? event.nameFi : event.nameEn;
   const eventLocation = lang === 'fi' ? event.locationFi : event.locationEn;
