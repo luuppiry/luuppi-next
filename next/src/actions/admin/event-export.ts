@@ -128,6 +128,22 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
   const csv = eventRegistrations.reduce(
     (acc, registration) => {
       const row = Object.values(registration).join(',');
+
+      // If less keys than the most keys, fill with empty strings
+      if (
+        Object.keys(registration).length < Object.keys(mostKeysObject).length
+      ) {
+        const emptyCols = Array.from(
+          {
+            length:
+              Object.keys(mostKeysObject).length -
+              Object.keys(registration).length,
+          },
+          () => '',
+        ).join(',');
+        return `${acc}\n${row},${emptyCols}`;
+      }
+
       return `${acc}\n${row}`;
     },
     `${Object.keys(mostKeysObject)

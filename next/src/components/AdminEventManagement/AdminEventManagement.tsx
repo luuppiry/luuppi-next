@@ -79,7 +79,7 @@ export default async function AdminEventManagement({
                 <tr key={event.id}>
                   <th>{index + 1}</th>
                   <td className="truncate">{event.name}</td>
-                  <td>
+                  <td className="truncate">
                     {firstLetterToUpperCase(
                       event.startDate.toLocaleString(lang, shortDateFormat),
                     )}
