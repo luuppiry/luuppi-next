@@ -131,7 +131,11 @@
     "no_events": "Ei tapahtuma ilmoittautumisia",
     "participants": "Osallistujat",
     "starts_at": "Alkaa",
-    "registrations": "Ilmoittautumiset"
+    "registrations": "Ilmoittautumiset",
+    "total_paid": "Maksettu yhteensä",
+    "location": "Paikka",
+    "paid": "Maksettu",
+    "quota": "Kiintiö"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
@@ -256,7 +260,6 @@
     "registration_closed": "Ilmoittautuminen on sulkeutunut kiintiösi osalta.",
     "unpaid_reservations": "Sinulla on maksamattomia varauksia. Voit maksaa ne omasta profiilistasi.",
     "no_tickets": "Tällä tapahtumalla ei ole lipunmyyntiä, eikä ilmoittautumista.",
-    "paid": "Maksettu",
     "reserved": "Varattu",
     "cancel_reservation": "Peruuta varaus",
     "pay": "Maksa",

@@ -16,13 +16,15 @@ export default function AdminExportEventButton({
   const handleEventExport = async () => {
     const response = await eventExport(lang, eventId);
     if (response.data) {
-      // Data is csv file as a string. Download it
-      const element = document.createElement('a');
-      const file = new Blob([response.data], { type: 'text/csv' });
-      element.href = URL.createObjectURL(file);
-      element.download = `event_${eventId}.csv`;
-      document.body.appendChild(element);
-      element.click();
+      const bom = '\uFEFF';
+      const blob = new Blob([bom + response.data], {
+        type: 'text/csv;charset=utf-8',
+      });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `event_${eventId}_export.csv`;
+      a.click();
     }
   };
 

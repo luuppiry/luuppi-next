@@ -131,7 +131,11 @@
     "no_events": "No event registrations",
     "participants": "Participants",
     "starts_at": "Starts at",
-    "registrations": "Registrations"
+    "registrations": "Registrations",
+    "total_paid": "Total paid",
+    "location": "Location",
+    "paid": "Paid",
+    "quota": "Quota"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
@@ -256,7 +260,6 @@
     "registration_closed": "Registration for your quota is closed.",
     "unpaid_reservations": "You have reservations that have not been paid yet. Go to your own profile to pay for them.",
     "no_tickets": "This event does not have tickets for sale or require registration.",
-    "paid": "Paid",
     "reserved": "Reserved",
     "cancel_reservation": "Cancel reservation",
     "pay": "Pay",

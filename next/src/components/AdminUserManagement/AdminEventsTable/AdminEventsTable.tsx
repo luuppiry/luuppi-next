@@ -38,7 +38,7 @@ export default function AdminEventsTable({
                   {dictionary.general.status}
                 </span>
                 <span className="badge badge-success badge-sm font-semibold text-white">
-                  {dictionary.pages_events.paid}
+                  {dictionary.general.paid}
                 </span>
               </div>
             )}
@@ -125,7 +125,7 @@ export default function AdminEventsTable({
                               </span>
                             ) : payment.status === 'COMPLETED' ? (
                               <span className="badge badge-success badge-sm text-white">
-                                {dictionary.pages_events.paid}
+                                {dictionary.general.paid}
                               </span>
                             ) : (
                               <span className="badge badge-warning badge-sm">
@@ -197,7 +197,7 @@ export default function AdminEventsTable({
                         }`}
                       >
                         {registration.paymentCompleted
-                          ? dictionary.pages_events.paid
+                          ? dictionary.general.paid
                           : dictionary.pages_events.reserved}
                       </span>
                     </td>

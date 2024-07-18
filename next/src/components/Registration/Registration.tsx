@@ -101,7 +101,7 @@ export default function Registration({
               }`}
             >
               {registration.paymentCompleted
-                ? dictionary.pages_events.paid
+                ? dictionary.general.paid
                 : dictionary.pages_events.reserved}
             </span>
             {registration.reservedUntil >= new Date() &&
