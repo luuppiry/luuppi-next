@@ -63,7 +63,6 @@ export default async function RenderEvents({
               src={event.image}
               fill
             />
-            <div className="absolute bottom-0 h-1/4 w-full bg-gradient-to-t from-secondary-400 to-transparent opacity-75" />
           </div>
           <div className="relative flex flex-grow flex-col overflow-hidden p-6 transition-all duration-300">
             <p className="z-20 text-sm font-bold">
