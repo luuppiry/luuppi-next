@@ -1,6 +1,7 @@
 'use server';
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
+import { dateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
@@ -93,14 +94,15 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
     );
 
     const baseData = {
-      username: registration.user.username ?? '',
-      email: registration.user.email,
-      'first-name': registration.user.firstName ?? '',
-      'last-name': registration.user.lastName ?? '',
-      'preferred-name': registration.user.preferredFullName ?? '',
-      paid: registration.price,
-      quota: registration.strapiRoleUuid,
-    };
+      [dictionary.general.username]: registration.user.username ?? '',
+      [dictionary.general.email]: registration.user.email,
+      [dictionary.general.firstNames]: registration.user.firstName ?? '',
+      [dictionary.general.lastName]: registration.user.lastName ?? '',
+      [dictionary.general.preferredFullName]:
+        registration.user.preferredFullName ?? '',
+      [dictionary.general.paid]: registration.price,
+      [dictionary.general.quota]: registration.strapiRoleUuid,
+    } as Record<string, string>;
 
     return {
       ...baseData,
@@ -126,9 +128,34 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
       .join(',')}`,
   );
 
+  const startDateFormatted = new Date(event.startDate).toLocaleString(
+    lang,
+    dateFormat,
+  );
+
+  const eventName = lang === 'fi' ? event.nameFi : event.nameEn;
+  const eventLocation = lang === 'fi' ? event.locationFi : event.locationEn;
+
+  const keys = {
+    event: dictionary.general.event.toUpperCase(),
+    location: dictionary.general.location.toUpperCase(),
+    date: dictionary.general.starts_at.toUpperCase(),
+    registrations: dictionary.general.registrations.toUpperCase(),
+    total_paid: dictionary.general.total_paid.toUpperCase(),
+  };
+
+  const totalPaid = event.registrations.reduce(
+    (acc, registration) => acc + registration.price,
+    0,
+  );
+
+  const metadata = `${keys.event}: ${eventName}\n${keys.location}: ${eventLocation}\n${keys.date}: ${startDateFormatted}\n${keys.registrations}: ${eventRegistrations.length}\n${keys.total_paid}: ${totalPaid}`;
+
+  const finalCsv = `${metadata}\n\n${csv}`;
+
   return {
     message: dictionary.general.success,
     isError: false,
-    data: csv,
+    data: finalCsv,
   };
 }
