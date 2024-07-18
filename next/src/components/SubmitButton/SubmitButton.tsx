@@ -2,7 +2,7 @@
 import { useFormStatus } from 'react-dom';
 
 interface SubmitButtonProps {
-  text: string;
+  text?: string;
   variant?: 'primary' | 'error' | 'secondary';
   size?: 'sm' | 'md' | 'lg';
   className?: any;

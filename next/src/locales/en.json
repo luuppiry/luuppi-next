@@ -129,7 +129,9 @@
     "no_answers": "No answers",
     "no_payments": "No payments",
     "no_events": "No event registrations",
-    "participants": "Participants"
+    "participants": "Participants",
+    "starts_at": "Starts at",
+    "registrations": "Registrations"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
