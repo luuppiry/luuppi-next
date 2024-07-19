@@ -9,7 +9,7 @@ services:
     environment:
       - REDIS_HOST=redisDB
     ports:
-      - '3000:3000'
+      - '127.0.0.1:3000:3000'
     depends_on:
       - redisDB
     networks:
@@ -19,7 +19,7 @@ services:
     image: redis/redis-stack-server:latest
     restart: unless-stopped
     ports:
-      - '6379:6379'
+      - '127.0.0.1:6379:6379'
     networks:
       - weba-network
 
