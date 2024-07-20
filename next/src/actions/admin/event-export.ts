@@ -2,8 +2,12 @@
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
+import { getQuestion } from '@/libs/strapi/get-question';
+import { getSelectChoice } from '@/libs/strapi/get-select-choice';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
+import { APIResponse } from '@/types/types';
 
 export async function eventExport(lang: SupportedLanguage, eventId: number) {
   const dictionary = await getDictionary(lang);
@@ -51,6 +55,22 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
     };
   }
 
+  const url = `/api/events/${eventId}?populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
+
+  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
+    lang,
+    url,
+    [`event-${eventId}`],
+    true,
+  );
+
+  if (!strapiEvent) {
+    return {
+      message: dictionary.api.invalid_event,
+      isError: true,
+    };
+  }
+
   const event = await prisma.event.findUnique({
     where: {
       id: eventId,
@@ -84,8 +104,17 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
   // Format nice json object to be converted to CSV
   const eventRegistrations = event.registrations.map((registration) => {
     const answers = registration.answers.map((answer) => ({
-      question: answer.question,
-      answer: answer.answer,
+      question:
+        getQuestion(strapiEvent.data, lang, answer.question, answer.type) ?? '',
+      answer:
+        answer.type === 'SELECT'
+          ? getSelectChoice(
+              strapiEvent.data,
+              lang,
+              answer.question,
+              answer.answer,
+            )
+          : answer.answer,
     }));
 
     // Flatten the answers to be in the same object because all users have the same questions

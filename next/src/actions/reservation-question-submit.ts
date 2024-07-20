@@ -99,15 +99,15 @@ export async function reservationQuestionSubmit(
   }
 
   // Check if select questions have valid values
-  const allowedSelectAnswers =
+  const allowedSelectChoices =
     event.data.attributes.Registration?.QuestionsSelect?.map((q) => ({
       en: q.ChoicesEn.split(',').map((c) => c.trim()),
       fi: q.ChoicesFi.split(',').map((c) => c.trim()),
     })) ?? [];
 
-  for (let i = 0; i < allowedSelectAnswers.length; i++) {
+  for (let i = 0; i < allowedSelectChoices.length; i++) {
     const answer = selectQuestions[i];
-    const allowedAnswers = allowedSelectAnswers[i];
+    const allowedAnswers = allowedSelectChoices[i];
 
     if (lang === 'en') {
       if (!allowedAnswers.en.includes(answer.value as string)) {
@@ -179,18 +179,43 @@ export async function reservationQuestionSubmit(
 
     // Insert new answers
     await prisma.answer.createMany({
-      data: answers.map((answer) => ({
-        answer: answer.value.toString(),
-        entraUserUuid: session.user?.entraUserUuid!,
-        question: answer.id,
-        registrationId: reservationId,
-        type:
-          answer.type === 'checkbox'
-            ? 'CHECKBOX'
-            : answer.type === 'select'
-              ? 'SELECT'
-              : 'TEXT',
-      })),
+      data: answers.map((answer) => {
+        let selectIndex: number | null = null;
+        if (answer.type === 'select') {
+          const allowedAnswers = allowedSelectChoices.find((a) =>
+            lang === 'en'
+              ? a.en.includes(answer.value as string)
+              : a.fi.includes(answer.value as string),
+          );
+
+          selectIndex = allowedAnswers
+            ? lang === 'en'
+              ? allowedAnswers.en.indexOf(answer.value as string)
+              : allowedAnswers.fi.indexOf(answer.value as string)
+            : null;
+        }
+
+        if (selectIndex === null && answer.type === 'select') {
+          logger.error('Invalid answer:', answer.value);
+          throw new Error(dictionary.api.invalid_answer);
+        }
+
+        return {
+          answer:
+            answer.type === 'select'
+              ? selectIndex!.toString()
+              : answer.value.toString(),
+          entraUserUuid: session.user?.entraUserUuid!,
+          question: answer.id,
+          registrationId: reservationId,
+          type:
+            answer.type === 'checkbox'
+              ? 'CHECKBOX'
+              : answer.type === 'select'
+                ? 'SELECT'
+                : 'TEXT',
+        };
+      }),
     });
   });
 

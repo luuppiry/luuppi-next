@@ -2,11 +2,12 @@
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
+import { getQuestion } from '@/libs/strapi/get-question';
+import { getSelectChoice } from '@/libs/strapi/get-select-choice';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
-import { QuestionType } from '@prisma/client';
 
 export async function userFind(formData: FormData, lang: SupportedLanguage) {
   const dictionary = await getDictionary(lang);
@@ -98,6 +99,13 @@ export async function userFind(formData: FormData, lang: SupportedLanguage) {
     APIResponseCollection<'api::event.event'>
   >('fi', url, ['events'], true);
 
+  if (!strapiEventData) {
+    return {
+      isError: true,
+      message: dictionary.api.invalid_event,
+    };
+  }
+
   const registrationsFormatted = localUser?.registrations.map(
     (registration) => {
       const event = strapiEventData?.data.find(
@@ -109,36 +117,6 @@ export async function userFind(formData: FormData, lang: SupportedLanguage) {
           ticketType.Role?.data.attributes.RoleId ===
           registration.strapiRoleUuid,
       );
-
-      const findQuestion = (type: QuestionType, question: string) => {
-        // Question is type text-index, select-index or checkbox-index so take the index
-        const questionIndex = parseInt(question.split('-')[1], 10);
-
-        switch (type) {
-          case 'TEXT':
-            return lang === 'en'
-              ? event?.attributes.Registration?.QuestionsText?.[questionIndex]
-                  ?.QuestionEn
-              : event?.attributes.Registration?.QuestionsText?.[questionIndex]
-                  ?.QuestionFi;
-          case 'SELECT':
-            return lang === 'en'
-              ? event?.attributes.Registration?.QuestionsSelect?.[questionIndex]
-                  ?.QuestionEn
-              : event?.attributes.Registration?.QuestionsSelect?.[questionIndex]
-                  ?.QuestionFi;
-          case 'CHECKBOX':
-            return lang === 'en'
-              ? event?.attributes.Registration?.QuestionsCheckbox?.[
-                  questionIndex
-                ]?.QuestionEn
-              : event?.attributes.Registration?.QuestionsCheckbox?.[
-                  questionIndex
-                ]?.QuestionFi;
-          default:
-            return '';
-        }
-      };
 
       return {
         id: registration.id,
@@ -156,8 +134,11 @@ export async function userFind(formData: FormData, lang: SupportedLanguage) {
           orderId: payment.orderId,
         })),
         answers: registration.answers.map((answer) => ({
-          question: findQuestion(answer.type, answer.question),
-          answer: answer.answer,
+          question: getQuestion(event, lang, answer.question, answer.type),
+          answer:
+            answer.type === 'SELECT'
+              ? getSelectChoice(event, lang, answer.question, answer.answer)
+              : answer.answer,
         })),
       };
     },
