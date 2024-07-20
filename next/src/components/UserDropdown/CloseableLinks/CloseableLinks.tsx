@@ -1,18 +1,21 @@
 'use client';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
+import { MdOutlineBackup } from 'react-icons/md';
 import { RiAdminLine, RiCalendarEventLine, RiUser3Fill } from 'react-icons/ri';
 
 interface CloseableLinkProps {
   lang: SupportedLanguage;
   dictionary: Dictionary;
   isLuuppiHato?: boolean;
+  isLuuppiMember?: boolean;
 }
 
 export default function CloseableLink({
   lang,
   dictionary,
   isLuuppiHato,
+  isLuuppiMember,
 }: CloseableLinkProps) {
   const handleClick = () => {
     const elem = document.activeElement as HTMLElement;
@@ -39,6 +42,15 @@ export default function CloseableLink({
         <RiCalendarEventLine size={22} />
         {dictionary.navigation.own_events}
       </Link>
+      {!isLuuppiMember && (
+        <Link
+          className="btn btn-ghost btn-sm w-full justify-start"
+          href={`/${lang}/migrate-account`}
+        >
+          <MdOutlineBackup size={22} />
+          {dictionary.navigation.migrate_account}
+        </Link>
+      )}
       {isLuuppiHato && (
         <Link
           className="btn btn-ghost btn-sm justify-start"

@@ -44,6 +44,14 @@ export default function MobileHamburger({
     );
     const isUnrestricted = !link.authenticationLevel;
 
+    // TODO: Remove this when migration period is over
+    if (
+      link.translation === 'migrate_account' &&
+      session?.user?.isLuuppiMember
+    ) {
+      return false;
+    }
+
     return isAuthenticated || isLuuppiHato || isUnrestricted;
   };
 
@@ -73,7 +81,7 @@ export default function MobileHamburger({
                   key={link.translation}
                   className={`${index === navLinksMobile.length - 1 ? 'pb-6' : ''}`}
                 >
-                  {link.sublinks && link.sublinks.length > 0 ? (
+                  {Boolean(link.sublinks?.length) ? (
                     <div className="flex items-center justify-between bg-secondary-400 font-bold text-white hover:cursor-auto hover:bg-secondary-400">
                       {
                         dictionary.navigation[
@@ -99,9 +107,9 @@ export default function MobileHamburger({
                       )}
                     </Link>
                   )}
-                  {link.sublinks && link.sublinks.length > 0 && (
+                  {Boolean(link.sublinks?.length) && (
                     <ul className="my-4">
-                      {link.sublinks.map((sublink) => (
+                      {link.sublinks?.map((sublink) => (
                         <li key={sublink.translation}>
                           <Link
                             className={`${sublink.href === '/' ? 'disabled cursor-not-allowed opacity-50' : ''} font-bold`} // TODO: REMOVE DISABLED LINKS
