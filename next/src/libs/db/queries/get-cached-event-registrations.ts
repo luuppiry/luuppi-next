@@ -42,6 +42,7 @@ export const getCachedEventRegistrations = unstable_cache(
   },
   ['get-cached-event-registrations'],
   {
-    revalidate: 20,
+    revalidate: 180,
+    tags: ['event-registrations'],
   },
 );

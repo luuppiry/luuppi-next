@@ -7,6 +7,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
+import { revalidateTag } from 'next/cache';
 
 const options = {
   noRoleId: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
@@ -272,7 +273,8 @@ export async function reservationCreate(
         };
       }
 
-      if (amount + totalRegistrationWithRole === ownQuota.TicketsTotal) {
+      // Buys the last tickets
+      if (amount + totalRegistrationWithRole >= ownQuota.TicketsTotal) {
         // Set event as sold out for this role in redis for 3 minutes
         // to prevent unnecessary database locks & backend calculations
         logger.info(
@@ -284,6 +286,9 @@ export async function reservationCreate(
           'EX',
           180, // 3 minutes
         );
+
+        // Revalidates cache for event registrations so that the sold out status is updated
+        revalidateTag('event-registrations');
       }
 
       const hasDefaultRole = localUser.roles.find(
