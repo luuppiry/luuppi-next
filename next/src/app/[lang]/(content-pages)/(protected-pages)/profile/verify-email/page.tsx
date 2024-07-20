@@ -8,6 +8,7 @@ import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { Metadata } from 'next';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -116,4 +117,13 @@ export default async function VerifyEmail({
       <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: VerifyEmailProps): Promise<Metadata> {
+  const dictionary = await getDictionary(params.lang);
+  return {
+    title: dictionary.pages_verify_email.email_changed,
+  };
 }

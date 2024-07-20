@@ -1,15 +1,11 @@
 import { auth } from '@/auth';
 import ProfileEmailform from '@/components/ProfileEmailForm/ProfileEmailForm';
-import ProfileLegacyMigrate from '@/components/ProfileLegacyMigrate/ProfileLegacyMigrate';
 import ProfileNotificationsForm from '@/components/ProfileNotificationsForm/ProfileNotificationsForm';
 import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInfoForm';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
-import { formatMetadata } from '@/libs/strapi/format-metadata';
-import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
@@ -77,9 +73,6 @@ export default async function Profile({ params }: ProfileProps) {
           lang={params.lang}
           user={localUser}
         />
-        {!isLuuppiMember && (
-          <ProfileLegacyMigrate dictionary={dictionary} lang={params.lang} />
-        )}
         <ProfileNotificationsForm
           dictionary={dictionary}
           lang={params.lang}
@@ -94,17 +87,8 @@ export default async function Profile({ params }: ProfileProps) {
 export async function generateMetadata({
   params,
 }: ProfileProps): Promise<Metadata> {
-  const url =
-    '/api/profile?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
-  const tags = ['profile'];
-
-  const data = await getStrapiData<APIResponse<'api::profile.profile'>>(
-    params.lang,
-    url,
-    tags,
-  );
-
-  const pathname = `/${params.lang}/profile`;
-
-  return formatMetadata(data, pathname);
+  const dictionary = await getDictionary(params.lang);
+  return {
+    title: dictionary.navigation.profile,
+  };
 }
