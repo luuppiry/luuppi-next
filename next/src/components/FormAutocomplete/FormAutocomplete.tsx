@@ -72,7 +72,7 @@ export default function FormAutocomplete({
       <label
         className={`input input-bordered flex items-center gap-2 ${Boolean(error) && 'input-error'}`}
       >
-        <BiSearch color="currentColor" size={20} />
+        <BiSearch className="shrink-0" color="currentColor" size={20} />
         <input
           className={'grow'}
           placeholder={placeholder}
