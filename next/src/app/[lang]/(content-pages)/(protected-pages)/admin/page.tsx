@@ -5,6 +5,7 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -106,4 +107,13 @@ export default async function Admin({ params, searchParams }: AdminProps) {
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: AdminProps): Promise<Metadata> {
+  const dictionary = await getDictionary(params.lang);
+  return {
+    title: dictionary.navigation.admin,
+  };
 }

@@ -11,6 +11,7 @@ import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import QuestionProvider from '@/providers/QuestionProvider';
 import { APIResponse } from '@/types/types';
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { BiErrorCircle } from 'react-icons/bi';
 
@@ -220,4 +221,13 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
       </QuestionProvider>
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: OwnEventsProps): Promise<Metadata> {
+  const dictionary = await getDictionary(params.lang);
+  return {
+    title: dictionary.navigation.own_events,
+  };
 }
