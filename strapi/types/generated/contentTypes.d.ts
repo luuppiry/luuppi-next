@@ -1977,52 +1977,6 @@ export interface ApiPrivacyPolicyPrivacyPolicy extends Schema.SingleType {
   };
 }
 
-export interface ApiProfileProfile extends Schema.SingleType {
-  collectionName: 'profiles';
-  info: {
-    singularName: 'profile';
-    pluralName: 'profiles';
-    displayName: 'Profile';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    Seo: Attribute.Component<'shared.seo'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::profile.profile',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::profile.profile',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::profile.profile',
-      'oneToMany',
-      'api::profile.profile'
-    >;
-    locale: Attribute.String;
-  };
-}
-
 export interface ApiSportSport extends Schema.SingleType {
   collectionName: 'sports';
   info: {
@@ -2410,7 +2364,6 @@ declare module '@strapi/types' {
       'api::organization-rule.organization-rule': ApiOrganizationRuleOrganizationRule;
       'api::organization-tradition-guideline.organization-tradition-guideline': ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline;
       'api::privacy-policy.privacy-policy': ApiPrivacyPolicyPrivacyPolicy;
-      'api::profile.profile': ApiProfileProfile;
       'api::sport.sport': ApiSportSport;
       'api::studies-general.studies-general': ApiStudiesGeneralStudiesGeneral;
       'api::studies-workshop.studies-workshop': ApiStudiesWorkshopStudiesWorkshop;
