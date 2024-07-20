@@ -160,7 +160,7 @@ export async function profileUpdate(
     },
   });
 
-  revalidatePath(`/${lang}/profile`);
+  revalidatePath('/[lang]/profile', 'page');
 
   return {
     message: dictionary.api.profile_updated,
