@@ -185,7 +185,8 @@
     "companies": "Companies",
     "profile": "Profile",
     "own_events": "My events",
-    "admin": "Admin"
+    "admin": "Admin",
+    "migrate_account": "Migrate account"
   },
   "pages_home": {
     "hero": {

@@ -6,7 +6,7 @@ import { BiErrorCircle } from 'react-icons/bi';
 import FormInput from '../FormInput/FormInput';
 import SubmitButton from '../SubmitButton/SubmitButton';
 
-interface ProfileLegacyMigrateProps {
+interface LegacyAccountMigrateProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
 }
@@ -16,10 +16,10 @@ const initialState = {
   isError: false,
 };
 
-export default function ProfileLegacyMigrate({
+export default function LegacyAccountMigrate({
   lang,
   dictionary,
-}: ProfileLegacyMigrateProps) {
+}: LegacyAccountMigrateProps) {
   const [formResponse, setFormResponse] = useState(initialState);
 
   const handleAccountMigrate = async (formData: FormData) => {

@@ -185,7 +185,8 @@
     "companies": "Yritykset",
     "profile": "Profiili",
     "own_events": "Omat tapahtumat",
-    "admin": "Ylläpito"
+    "admin": "Ylläpito",
+    "migrate_account": "Linkitä vanha tili"
   },
   "pages_home": {
     "hero": {
