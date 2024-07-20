@@ -6,7 +6,6 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
-import { redirect } from 'next/navigation';
 
 const options = {
   noRoleId: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
@@ -119,6 +118,14 @@ export async function reservationCreate(
   if (new Date(ownQuota.RegistrationEndsAt) < new Date()) {
     return {
       message: dictionary.api.registration_closed,
+      isError: true,
+    };
+  }
+
+  // Validate that registration is open
+  if (new Date(ownQuota.RegistrationStartsAt) > new Date()) {
+    return {
+      message: dictionary.api.registration_not_open,
       isError: true,
     };
   }
@@ -267,7 +274,10 @@ export async function reservationCreate(
     }`,
   );
 
-  redirect(`/${lang}/own-events`);
+  return {
+    message: dictionary.general.success,
+    isError: false,
+  };
 }
 
 async function getUserAndRegistrations(eventId: number, entraUserUuid: string) {

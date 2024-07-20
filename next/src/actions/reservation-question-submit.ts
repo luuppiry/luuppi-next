@@ -194,5 +194,5 @@ export async function reservationQuestionSubmit(
     });
   });
 
-  return redirect(`/${lang}/own-events`);
+  redirect(`/${lang}/own-events`);
 }
