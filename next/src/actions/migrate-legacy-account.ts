@@ -5,6 +5,7 @@ import prisma from '@/libs/db/prisma';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
+import { revalidatePath } from 'next/cache';
 
 const options = {
   cacheKey: 'migrate-legacy-account',
@@ -138,6 +139,9 @@ export async function migrateLegacyAccount(
   logger.info(
     `User ${user.entraUserUuid} migrated legacy account with expiresAt: ${endsAt}`,
   );
+
+  revalidatePath('/[lang]/events/[slug]', 'page');
+  revalidatePath('/[lang]/profile', 'page');
 
   return {
     message: dictionary.api.legacy_account_migrated,

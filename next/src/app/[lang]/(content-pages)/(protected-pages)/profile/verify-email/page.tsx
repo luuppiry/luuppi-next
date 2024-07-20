@@ -99,7 +99,7 @@ export default async function VerifyEmail({
     },
   });
 
-  revalidatePath(`/${params.lang}/profile`);
+  revalidatePath('/[lang]/profile', 'page');
 
   return (
     <div className="relative flex flex-col items-center justify-center gap-6 text-center max-md:items-start max-md:text-start">
