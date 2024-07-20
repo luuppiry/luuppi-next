@@ -68,7 +68,7 @@ export default function EventsList({
                   event.end.toISOString() +
                   event.title
                 }
-                className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm transition-all delay-300 ease-in-out"
+                className="flex gap-4 rounded-lg bg-background-50 transition-all delay-300 ease-in-out"
                 href={`/${lang}/events/${event.id}`}
                 id={event.start.toDateString() + event.title}
               >

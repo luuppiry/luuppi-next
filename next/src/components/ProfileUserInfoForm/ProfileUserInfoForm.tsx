@@ -46,10 +46,7 @@ export default function ProfileUserInfoForm({
     (!user.firstName || !user.lastName || !user.domicle || !user.major);
 
   return (
-    <form
-      action={handleProfileUpdate}
-      className="card card-body bg-background-50"
-    >
+    <form action={handleProfileUpdate} className="card card-body">
       <h2 className="mb-4 text-lg font-semibold">
         {dictionary.general.general_info}
       </h2>

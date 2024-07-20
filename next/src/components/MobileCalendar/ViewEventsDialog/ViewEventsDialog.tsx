@@ -34,7 +34,7 @@ export default function ViewEventsDialog({
             {events.map((event) => (
               <Link
                 key={event.id}
-                className="mb-4 block rounded-lg bg-background-50/50 p-4"
+                className="mb-4 block rounded-lg bg-background-50 p-4"
                 href={`/${lang}/events/${event.id}`}
               >
                 <h3 className="text-lg font-bold">{event.title}</h3>

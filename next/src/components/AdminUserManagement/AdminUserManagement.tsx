@@ -50,7 +50,7 @@ export default function AdminUserManagement({
         <form
           ref={formRef}
           action={handleFindUser}
-          className="card card-body mb-6 bg-background-50"
+          className="card card-body mb-6"
         >
           <h2 className="mb-4 text-lg font-semibold">
             {dictionary.pages_admin.user_management}

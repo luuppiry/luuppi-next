@@ -39,7 +39,7 @@ export default function GroupsDialog({ dictionary }: GroupsDialogProps) {
                 className={`mb-4 flex items-center gap-2 rounded-lg p-2 font-bold ${
                   group.translation === 'new_students'
                     ? 'bg-accent-400 text-white'
-                    : 'bg-background-50/50'
+                    : 'bg-background-50'
                 }`}
                 href={group.link}
                 target="_blank"
