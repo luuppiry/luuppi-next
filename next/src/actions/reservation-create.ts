@@ -2,6 +2,7 @@
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
+import { redisClient } from '@/libs/db/redis';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
@@ -16,6 +17,7 @@ export async function reservationCreate(
   amount: number,
   lang: SupportedLanguage,
   selectedQuota: string,
+  userProvidedTargetedRole: string | undefined,
 ) {
   const dictionary = await getDictionary(lang);
   const session = await auth();
@@ -25,6 +27,27 @@ export async function reservationCreate(
       message: dictionary.api.unauthorized,
       isError: true,
     };
+  }
+
+  // User provided targeted role cannot be trusted (can be manipulated by user), but this
+  // prevents unnecessary database queries most of the time
+  if (
+    userProvidedTargetedRole &&
+    typeof userProvidedTargetedRole === 'string'
+  ) {
+    // Check if the event is sold out for the user's role
+    const isSoldOut = await redisClient.get(
+      `event-sold-out:${eventId}:${userProvidedTargetedRole}`,
+    );
+    if (isSoldOut) {
+      logger.info(
+        `Cache hit: Event ${eventId} is sold out for role ${userProvidedTargetedRole}`,
+      );
+      return {
+        message: dictionary.api.sold_out,
+        isError: true,
+      };
+    }
   }
 
   if (!amount || isNaN(amount) || amount < 1) {
@@ -225,8 +248,25 @@ export async function reservationCreate(
         },
       });
 
+      if (totalRegistrations === ownQuota.TicketsTotal) {
+        // Set event as sold out for this role in redis for 3 minutes
+        // to prevent unnecessary database locks
+        logger.info(
+          `Event ${eventId} is sold out for role ${strapiRoleUuid}. Setting sold out in redis for 3 minutes.`,
+        );
+        await redisClient.set(
+          `event-sold-out:${eventId}:${strapiRoleUuid}`,
+          'true',
+          'EX',
+          180, // 3 minutes
+        );
+      }
+
       if (totalRegistrations + amount > ownQuota.TicketsTotal) {
-        throw new Error(dictionary.api.sold_out);
+        return {
+          message: dictionary.api.sold_out,
+          isError: true,
+        };
       }
 
       const hasDefaultRole = localUser.roles.find(
@@ -295,6 +335,14 @@ async function getUserAndRegistrations(eventId: number, entraUserUuid: string) {
         },
         {
           paymentCompleted: true,
+        },
+        {
+          paymentCompleted: false,
+          payments: {
+            some: {
+              status: 'PENDING',
+            },
+          },
         },
       ],
     },

@@ -23,6 +23,7 @@ interface TicketProps {
   dictionary: Dictionary;
   disabled?: boolean;
   isOwnQuota?: boolean;
+  targetedRole?: string;
 }
 
 export default function Ticket({
@@ -33,6 +34,7 @@ export default function Ticket({
   disabled = false,
   isOwnQuota = false,
   eventId,
+  targetedRole,
 }: TicketProps) {
   const [amount, setAmount] = useState(1);
   const [amountModalOpen, setAmountModalOpen] = useState(false);
@@ -70,7 +72,13 @@ export default function Ticket({
 
   const handleSubmit = async () => {
     setLoading(true);
-    const res = await reservationCreate(eventId, amount, lang, ticket.role!);
+    const res = await reservationCreate(
+      eventId,
+      amount,
+      lang,
+      ticket.role!,
+      targetedRole,
+    );
     setAmountModalOpen(false);
     setLoading(false);
     if (res.reloadCache) {
