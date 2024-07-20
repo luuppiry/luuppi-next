@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
-import prisma from '@/libs/db/prisma';
+import { getCachedEventRegistrations } from '@/libs/db/queries/get-cached-event-registrations';
+import { getCachedUser } from '@/libs/db/queries/get-cached-user';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { BiErrorCircle } from 'react-icons/bi';
@@ -19,70 +20,11 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
 
   const ticketTypes = event.data.attributes.Registration?.TicketTypes;
 
-  const localUserPromise = session?.user
-    ? prisma.user.findFirst({
-        where: {
-          entraUserUuid: session?.user?.entraUserUuid!,
-        },
-        select: {
-          entraUserUuid: true,
-          roles: {
-            include: {
-              role: true,
-            },
-            where: {
-              OR: [
-                {
-                  expiresAt: {
-                    gte: new Date(),
-                  },
-                },
-                {
-                  expiresAt: null,
-                },
-              ],
-            },
-          },
-          registrations: true,
-        },
-      })
+  const localUserPromise = session?.user?.entraUserUuid
+    ? getCachedUser(session.user.entraUserUuid)
     : null;
 
-  const eventRegistrationsPromise = prisma.eventRegistration.findMany({
-    where: {
-      eventId: event.data.id,
-      deletedAt: null,
-      OR: [
-        {
-          reservedUntil: {
-            gte: new Date(),
-          },
-        },
-        {
-          paymentCompleted: true,
-        },
-        {
-          paymentCompleted: false,
-          payments: {
-            some: {
-              status: {
-                not: 'CANCELLED',
-              },
-            },
-          },
-        },
-      ],
-    },
-    select: {
-      entraUserUuid: true,
-      paymentCompleted: true,
-      purchaseRole: {
-        select: {
-          strapiRoleUuid: true,
-        },
-      },
-    },
-  });
+  const eventRegistrationsPromise = getCachedEventRegistrations(event.data.id);
 
   const [localUser, eventRegistrations] = await Promise.all([
     localUserPromise,
@@ -273,6 +215,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
             eventStartsAt={new Date(event.data.attributes.StartDate)}
             isOwnQuota={isOwnQuota(ticket.role!)}
             lang={lang}
+            targetedRole={targetedRole.strapiRoleUuid}
             ticket={ticket}
           />
         ))}

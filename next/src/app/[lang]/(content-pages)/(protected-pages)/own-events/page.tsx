@@ -42,6 +42,14 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
         {
           paymentCompleted: true,
         },
+        {
+          paymentCompleted: false,
+          payments: {
+            some: {
+              status: 'PENDING',
+            },
+          },
+        },
       ],
     },
     include: {

@@ -1,5 +1,5 @@
 import { getDictionary } from '@/dictionaries';
-import { getEventRegistrations } from '@/libs/db/queries/get-cached-registrations';
+import { getCachedEventParticipants } from '@/libs/db/queries/get-cached-event-participants';
 import { SupportedLanguage } from '@/models/locale';
 import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 import ShowParticipantsModal from './ShowParticipantsDialog/ShowParticipantsDialog';
@@ -21,7 +21,7 @@ export default async function ShowParticipants({
   }
 
   const dictionary = await getDictionary(lang);
-  const registrations = await getEventRegistrations(eventId);
+  const registrations = await getCachedEventParticipants(eventId);
   const participants = registrations.map(
     (registration) => registration.user.username ?? '???',
   );
