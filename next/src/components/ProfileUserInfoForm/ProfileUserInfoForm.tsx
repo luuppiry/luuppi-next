@@ -88,6 +88,7 @@ export default function ProfileUserInfoForm({
         }
         marginTop={false}
         placeholder={dictionary.general.username}
+        required={false}
         title={dictionary.general.username}
         type="text"
         value={user.username ?? ''}
