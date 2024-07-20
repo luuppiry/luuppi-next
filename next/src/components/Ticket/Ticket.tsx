@@ -108,7 +108,7 @@ export default function Ticket({
       />
       {registrationStarted ? (
         <div
-          className={`indicator flex w-full gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm ${disabled ? 'grayscale' : ''}`}
+          className={`indicator flex w-full gap-4 rounded-lg bg-background-50 ${disabled ? 'grayscale' : ''}`}
         >
           {isOwnQuota && (
             <span className="badge indicator-item badge-primary badge-sm indicator-center">
@@ -170,7 +170,7 @@ export default function Ticket({
         </div>
       ) : (
         <div
-          className={`indicator flex w-full gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm ${disabled ? 'grayscale' : ''}`}
+          className={`indicator flex w-full gap-4 rounded-lg bg-background-50 ${disabled ? 'grayscale' : ''}`}
         >
           {isOwnQuota && (
             <span className="badge indicator-item badge-primary badge-sm indicator-center">

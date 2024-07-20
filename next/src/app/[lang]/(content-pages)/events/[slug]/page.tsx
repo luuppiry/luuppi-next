@@ -93,7 +93,7 @@ export default async function Event({ params }: EventProps) {
             </div>
             <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
           </div>
-          <div className="mb-12 mt-4 flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm">
+          <div className="mb-12 mt-4 flex gap-4 rounded-lg bg-background-50">
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
             <div className="flex max-w-full flex-col gap-2 rounded-lg py-4 pr-4 font-semibold max-sm:text-sm">
               <div className="flex items-center">

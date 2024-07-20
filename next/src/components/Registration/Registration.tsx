@@ -83,7 +83,7 @@ export default function Registration({
   return (
     <div
       key={registration.id}
-      className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm"
+      className="flex gap-4 rounded-lg bg-background-50"
     >
       <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
       <div className="flex w-full justify-between gap-4 p-4 max-md:flex-col">

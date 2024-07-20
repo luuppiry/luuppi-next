@@ -163,7 +163,7 @@ export default function AdminEventsTable({
           Close
         </label>
       </dialog>
-      <div className="card card-body mt-6 bg-background-50">
+      <div className="card card-body mt-6">
         <h2 className="mb-4 text-lg font-semibold">
           {dictionary.pages_admin.event_history}
         </h2>

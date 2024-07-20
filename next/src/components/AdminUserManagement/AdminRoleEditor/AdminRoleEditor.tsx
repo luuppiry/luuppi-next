@@ -136,10 +136,7 @@ export default function AdminRoleEditor({
           Close
         </label>
       </dialog>
-      <form
-        action={handleRoleEdit}
-        className="card card-body mt-6 bg-background-50"
-      >
+      <form action={handleRoleEdit} className="card card-body mt-6">
         <h2 className="mb-4 text-lg font-semibold">
           {dictionary.pages_admin.role_management}
         </h2>
