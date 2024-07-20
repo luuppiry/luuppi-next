@@ -71,10 +71,13 @@ export default function Ticket({
   const handleSubmit = async () => {
     setLoading(true);
     const res = await reservationCreate(eventId, amount, lang);
-    router.refresh();
     setAmountModalOpen(false);
-    setResponse(res);
     setLoading(false);
+    if (!res.isError) {
+      router.push(`/${lang}/own-events`);
+      return router.refresh(); // TODO: Redirect from server would be better but it does not scroll to the top of the page :(
+    }
+    return setResponse(res);
   };
 
   const handlePurchaseClick = () => {

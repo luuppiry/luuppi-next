@@ -28,6 +28,7 @@
     "maximum_tickets_reached": "You have purchased the maximum number of tickets for this quota. If you have not completed your purchase, you can do so now.",
     "sold_out": "All tickets are sold out for this quota.",
     "registration_closed": "Registration for this quota is closed.",
+    "registration_not_open": "Registration for this quota is not open yet.",
     "not_enough_tickets": "Not enough tickets available for this quota.",
     "no_room_own_limit": "You cannot purchase more tickets, as you have reached the event's per-user limit.",
     "invalid_registration": "Invalid registration. Maybe it has expired or is not valid.",
