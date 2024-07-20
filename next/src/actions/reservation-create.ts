@@ -15,6 +15,7 @@ export async function reservationCreate(
   eventId: number,
   amount: number,
   lang: SupportedLanguage,
+  selectedQuota: string,
 ) {
   const dictionary = await getDictionary(lang);
   const session = await auth();
@@ -96,6 +97,15 @@ export async function reservationCreate(
       weight: hasDefaultRoleWeight?.weight ?? 0,
     },
   );
+
+  // This might happen if somehow user is sending stale data
+  if (targetedRole.strapiRoleUuid !== selectedQuota) {
+    return {
+      message: dictionary.api.server_error,
+      isError: true,
+      reloadCache: true,
+    };
+  }
 
   const ownQuota = ticketTypes?.find(
     (type) => type.Role?.data.attributes.RoleId === targetedRole.strapiRoleUuid,

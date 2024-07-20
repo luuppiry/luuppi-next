@@ -70,9 +70,14 @@ export default function Ticket({
 
   const handleSubmit = async () => {
     setLoading(true);
-    const res = await reservationCreate(eventId, amount, lang);
+    const res = await reservationCreate(eventId, amount, lang, ticket.role!);
     setAmountModalOpen(false);
     setLoading(false);
+    if (res.reloadCache) {
+      router.refresh();
+      setAmountModalOpen(false);
+      return;
+    }
     if (!res.isError) {
       router.push(`/${lang}/own-events`);
       return router.refresh(); // TODO: Redirect from server would be better but it does not scroll to the top of the page :(
