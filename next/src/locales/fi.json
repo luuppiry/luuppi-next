@@ -29,7 +29,7 @@
     "sold_out": "Valitettavasti kaikki liput ovat loppuunmyyty kiintiöltä, johon kuulut.",
     "registration_closed": "Ilmoittautuminen on sulkeutunut kiintiösi osalta.",
     "registration_not_open": "Ilmoittautuminen ei ole vielä avautunut.",
-    "not_enough_tickets": "Kiintiössä ei ole enää tarpeeksi lippuja.",
+    "not_enough_tickets": "Kiintiössä ei ole enää tarpeeksi lippuja. Kokeile pienempää määrää.",
     "no_room_own_limit": "Et voi ostaa enempää lippuja, sillä olet saavuttanut tapahtuman käyttäjäkohtaisen enimmäismäärän.",
     "invalid_registration": "Kelvoton ilmoittautuminen. Ilmoittautuminen on voinut jo vanhentua, tai se on peruttu.",
     "reservation_cancelled": "Varaus peruttu",

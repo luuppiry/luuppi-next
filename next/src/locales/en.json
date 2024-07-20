@@ -29,7 +29,7 @@
     "sold_out": "All tickets are sold out for this quota.",
     "registration_closed": "Registration for this quota is closed.",
     "registration_not_open": "Registration for this quota is not open yet.",
-    "not_enough_tickets": "Not enough tickets available for this quota.",
+    "not_enough_tickets": "Not enough tickets available for this quota. Try smaller amount.",
     "no_room_own_limit": "You cannot purchase more tickets, as you have reached the event's per-user limit.",
     "invalid_registration": "Invalid registration. Maybe it has expired or is not valid.",
     "reservation_cancelled": "Reservation cancelled",
