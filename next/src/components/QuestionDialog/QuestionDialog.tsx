@@ -69,6 +69,25 @@ export default function QuestionDialog({
     (answer) => answer.registrationId === ctx.data?.reservationId,
   );
 
+  const getSelectValue = (
+    question: {
+      ChoicesFi: string;
+      ChoicesEn: string;
+    },
+    index: number,
+  ) => {
+    const choicesFiArray = question.ChoicesFi.split(',');
+    const choicesEnArray = question.ChoicesEn.split(',');
+
+    const answer = ctx.data?.answers.find(
+      (answer) => answer.question === `select-${index}`,
+    )?.answer;
+
+    return lang === 'fi'
+      ? choicesFiArray[parseInt(answer ?? '0', 10)]
+      : choicesEnArray[parseInt(answer ?? '0', 10)];
+  };
+
   return (
     <dialog className={'modal modal-open modal-bottom sm:modal-middle'}>
       <form
@@ -117,11 +136,7 @@ export default function QuestionDialog({
               )}
               required={true}
               title={lang === 'fi' ? question.QuestionFi : question.QuestionEn}
-              value={
-                ctx.data?.answers.find(
-                  (answer) => answer.question === `select-${index}`,
-                )?.answer ?? ''
-              }
+              value={getSelectValue(question, index)}
             />
           ))}
           {ctx.data.questions.checkbox.map((question, index) => (
