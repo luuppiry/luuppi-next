@@ -219,8 +219,6 @@ export async function reservationCreate(
         throw new Error(dictionary.api.sold_out);
       }
 
-      const promisesArray: Promise<any>[] = [];
-
       const hasDefaultRole = localUser.roles.find(
         (role) => role.strapiRoleUuid === options.noRoleId!,
       );
@@ -234,22 +232,16 @@ export async function reservationCreate(
       }
 
       // Create event registrations. This is the actual reservation.
-      const eventRegistrationsPromise = Array.from({ length: amount }).map(
-        () => ({
-          eventId,
-          entraUserUuid,
-          strapiRoleUuid,
-          price: ownQuota.Price,
-        }),
-      );
+      const eventRegistrations = Array.from({ length: amount }).map(() => ({
+        eventId,
+        entraUserUuid,
+        strapiRoleUuid,
+        price: ownQuota.Price,
+      }));
 
-      const eventsPromise = prisma.eventRegistration.createMany({
-        data: eventRegistrationsPromise,
+      await prisma.eventRegistration.createMany({
+        data: eventRegistrations,
       });
-
-      promisesArray.push(eventsPromise);
-
-      await Promise.all(promisesArray);
 
       return {
         message: dictionary.general.success,
