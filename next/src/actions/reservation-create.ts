@@ -79,10 +79,31 @@ export async function reservationCreate(
     };
   }
 
-  const [localUser, eventRegistrations] = await getUserAndRegistrations(
-    eventId,
-    session.user.entraUserUuid,
-  );
+  const localUser = await prisma.user.findFirst({
+    where: {
+      entraUserUuid: session.user.entraUserUuid,
+    },
+    include: {
+      roles: {
+        include: {
+          role: true,
+        },
+        where: {
+          OR: [
+            {
+              expiresAt: {
+                gte: new Date(),
+              },
+            },
+            {
+              expiresAt: null,
+            },
+          ],
+        },
+      },
+      registrations: true,
+    },
+  });
 
   if (!localUser) {
     return {
@@ -134,11 +155,6 @@ export async function reservationCreate(
     (type) => type.Role?.data.attributes.RoleId === targetedRole.strapiRoleUuid,
   );
 
-  const totalRegistrationWithRole = eventRegistrations.filter(
-    (registration) =>
-      registration.purchaseRole.strapiRoleUuid === targetedRole.strapiRoleUuid,
-  ).length;
-
   // Validate that the user has a role that can reserve tickets
   if (!ownQuota) {
     return {
@@ -163,53 +179,6 @@ export async function reservationCreate(
     };
   }
 
-  // Validate that the event is not sold out for the user's role
-  if (totalRegistrationWithRole >= ownQuota.TicketsTotal) {
-    return {
-      message: dictionary.api.sold_out,
-      isError: true,
-    };
-  }
-
-  const ticketsAvailable = ownQuota.TicketsTotal - totalRegistrationWithRole;
-  const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
-
-  const currentUserReservations = eventRegistrations.filter(
-    (registration) =>
-      registration.entraUserUuid === localUser.entraUserUuid &&
-      registration.purchaseRole.strapiRoleUuid ===
-        targetedRole.strapiRoleUuid &&
-      (registration.reservedUntil > new Date() ||
-        registration.paymentCompleted),
-  );
-
-  // Validate that the user has not already reserved the maximum amount of tickets
-  if (currentUserReservations.length >= ticketsAllowedToBuy) {
-    return {
-      message: dictionary.api.maximum_tickets_reached,
-      isError: true,
-    };
-  }
-
-  // Validate per user limit still allows the user to reserve the amount
-  const canReserveAmount =
-    amount + currentUserReservations.length <= ticketsAllowedToBuy;
-  if (!canReserveAmount) {
-    return {
-      message: dictionary.api.no_room_own_limit,
-      isError: true,
-    };
-  }
-
-  // Validate that there are still enough tickets available
-  const isAvailable = amount <= ticketsAvailable;
-  if (!isAvailable) {
-    return {
-      message: dictionary.api.not_enough_tickets,
-      isError: true,
-    };
-  }
-
   const strapiRoleUuid = targetedRole.strapiRoleUuid;
   const entraUserUuid = localUser.entraUserUuid;
 
@@ -218,7 +187,7 @@ export async function reservationCreate(
       // Lock whole table to prevent overbooking
       await prisma.$executeRaw`LOCK TABLE "EventRegistration" IN ACCESS EXCLUSIVE MODE`;
 
-      const totalRegistrations = await prisma.eventRegistration.count({
+      const eventRegistrations = await prisma.eventRegistration.findMany({
         where: {
           eventId,
           deletedAt: null,
@@ -246,11 +215,66 @@ export async function reservationCreate(
             },
           ],
         },
+        include: {
+          purchaseRole: true,
+        },
       });
 
-      if (totalRegistrations === ownQuota.TicketsTotal) {
+      const totalRegistrationWithRole = eventRegistrations.filter(
+        (registration) =>
+          registration.purchaseRole.strapiRoleUuid ===
+          targetedRole.strapiRoleUuid,
+      ).length;
+
+      // Validate that the event is not sold out for the user's role
+      if (totalRegistrationWithRole >= ownQuota.TicketsTotal) {
+        return {
+          message: dictionary.api.sold_out,
+          isError: true,
+        };
+      }
+
+      const ticketsAvailable =
+        ownQuota.TicketsTotal - totalRegistrationWithRole;
+      const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
+
+      const currentUserReservations = eventRegistrations.filter(
+        (registration) =>
+          registration.entraUserUuid === localUser.entraUserUuid &&
+          registration.purchaseRole.strapiRoleUuid ===
+            targetedRole.strapiRoleUuid,
+      );
+
+      // Validate that the user has not already reserved the maximum amount of tickets
+      if (currentUserReservations.length >= ticketsAllowedToBuy) {
+        return {
+          message: dictionary.api.maximum_tickets_reached,
+          isError: true,
+        };
+      }
+
+      // Validate per user limit still allows the user to reserve the amount
+      const canReserveAmount =
+        amount + currentUserReservations.length <= ticketsAllowedToBuy;
+      if (!canReserveAmount) {
+        return {
+          message: dictionary.api.no_room_own_limit,
+          isError: true,
+        };
+      }
+
+      // Validate that there are still enough tickets available
+      const isAvailable = amount <= ticketsAvailable;
+      if (!isAvailable) {
+        return {
+          message: dictionary.api.not_enough_tickets,
+          isError: true,
+        };
+      }
+
+      if (amount + totalRegistrationWithRole === ownQuota.TicketsTotal) {
         // Set event as sold out for this role in redis for 3 minutes
-        // to prevent unnecessary database locks
+        // to prevent unnecessary database locks & backend calculations
         logger.info(
           `Event ${eventId} is sold out for role ${strapiRoleUuid}. Setting sold out in redis for 3 minutes.`,
         );
@@ -260,13 +284,6 @@ export async function reservationCreate(
           'EX',
           180, // 3 minutes
         );
-      }
-
-      if (totalRegistrations + amount > ownQuota.TicketsTotal) {
-        return {
-          message: dictionary.api.sold_out,
-          isError: true,
-        };
       }
 
       const hasDefaultRole = localUser.roles.find(
@@ -282,16 +299,24 @@ export async function reservationCreate(
       }
 
       // Create event registrations. This is the actual reservation.
-      const eventRegistrations = Array.from({ length: amount }).map(() => ({
-        eventId,
-        entraUserUuid,
-        strapiRoleUuid,
-        price: ownQuota.Price,
-      }));
+      const eventRegistrationsFormatted = Array.from({ length: amount }).map(
+        () => ({
+          eventId,
+          entraUserUuid,
+          strapiRoleUuid,
+          price: ownQuota.Price,
+        }),
+      );
 
       await prisma.eventRegistration.createMany({
-        data: eventRegistrations,
+        data: eventRegistrationsFormatted,
       });
+
+      logger.info(
+        `User ${localUser.entraUserUuid} reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
+          currentUserReservations.length + amount
+        }`,
+      );
 
       return {
         message: dictionary.general.success,
@@ -310,72 +335,8 @@ export async function reservationCreate(
     return result;
   }
 
-  logger.info(
-    `User ${localUser.entraUserUuid} reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
-      currentUserReservations.length + amount
-    }`,
-  );
-
   return {
     message: dictionary.general.success,
     isError: false,
   };
-}
-
-async function getUserAndRegistrations(eventId: number, entraUserUuid: string) {
-  const eventRegistrationsPromise = await prisma.eventRegistration.findMany({
-    where: {
-      eventId,
-      deletedAt: null,
-      OR: [
-        {
-          reservedUntil: {
-            gte: new Date(),
-          },
-        },
-        {
-          paymentCompleted: true,
-        },
-        {
-          paymentCompleted: false,
-          payments: {
-            some: {
-              status: 'PENDING',
-            },
-          },
-        },
-      ],
-    },
-    include: {
-      purchaseRole: true,
-    },
-  });
-
-  const localUserPromise = await prisma.user.findFirst({
-    where: {
-      entraUserUuid,
-    },
-    include: {
-      roles: {
-        include: {
-          role: true,
-        },
-        where: {
-          OR: [
-            {
-              expiresAt: {
-                gte: new Date(),
-              },
-            },
-            {
-              expiresAt: null,
-            },
-          ],
-        },
-      },
-      registrations: true,
-    },
-  });
-
-  return Promise.all([localUserPromise, eventRegistrationsPromise]);
 }
