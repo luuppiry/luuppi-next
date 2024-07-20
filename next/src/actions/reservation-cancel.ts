@@ -33,20 +33,14 @@ export async function reservationCancel(
       entraUserUuid: session.user.entraUserUuid,
       paymentCompleted: false,
       deletedAt: null,
-      OR: [
-        {
-          reservedUntil: {
-            gte: new Date(),
-          },
+      reservedUntil: {
+        gte: new Date(),
+      },
+      payments: {
+        none: {
+          status: 'PENDING', // If there is pending payment, there is a risk of charging the user for a cancelled reservation
         },
-        {
-          payments: {
-            some: {
-              status: 'PENDING',
-            },
-          },
-        },
-      ],
+      },
     },
   });
 
