@@ -1,7 +1,8 @@
+'use client';
 import { signIn } from '@/actions/auth';
-import { auth } from '@/auth';
 import MobileHamburger from '@/components/MobileHamburger/MobileHamburger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { useSession } from 'next-auth/react';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import UserDropdown from '../../UserDropdown/UserDropdown';
 
@@ -10,11 +11,12 @@ interface HeaderActionsProps {
   lang: SupportedLanguage;
 }
 
-export default async function HeaderActions({
+export default function HeaderActions({
   dictionary,
   lang,
 }: HeaderActionsProps) {
-  const session = await auth();
+  const { data } = useSession();
+  const session = data;
 
   return (
     <>
