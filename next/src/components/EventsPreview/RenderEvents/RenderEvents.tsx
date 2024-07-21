@@ -40,7 +40,7 @@ export default async function RenderEvents({
     location: event.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
     start: new Date(event.attributes.StartDate),
     title: event.attributes[lang === 'en' ? 'NameEn' : 'NameFi'],
-    image: event.attributes.Image?.data.attributes.url
+    image: event.attributes.Image?.data?.attributes?.url
       ? getStrapiUrl(event.attributes.Image.data.attributes.url)
       : eventPlaceholder,
   }));
