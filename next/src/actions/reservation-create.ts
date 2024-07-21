@@ -288,7 +288,7 @@ export async function reservationCreate(
         );
 
         // Revalidates cache for event registrations so that the sold out status is updated
-        revalidateTag('event-registrations');
+        revalidateTag(`get-cached-event-registrations:${eventId}`);
       }
 
       const hasDefaultRole = localUser.roles.find(
