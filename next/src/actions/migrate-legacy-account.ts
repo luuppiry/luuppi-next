@@ -5,7 +5,7 @@ import prisma from '@/libs/db/prisma';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 const options = {
   cacheKey: 'migrate-legacy-account',
@@ -140,6 +140,7 @@ export async function migrateLegacyAccount(
     `User ${user.entraUserUuid} migrated legacy account with expiresAt: ${endsAt}`,
   );
 
+  revalidateTag(`get-cached-user:${user.entraUserUuid}`);
   revalidatePath('/[lang]/events/[slug]', 'page');
   revalidatePath('/[lang]/profile', 'page');
 

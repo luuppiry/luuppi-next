@@ -2,7 +2,7 @@
 import prisma from '@/libs/db/prisma';
 import { unstable_cache } from 'next/cache';
 
-export const getCachedEventRegistrations = unstable_cache(
+export const getCachedEventRegistrations = (eventId: number) => unstable_cache(
   async (eventId: number) => {
     const res = await prisma.eventRegistration.findMany({
       where: {
@@ -43,6 +43,6 @@ export const getCachedEventRegistrations = unstable_cache(
   ['get-cached-event-registrations'],
   {
     revalidate: 180,
-    tags: ['event-registrations'],
+    tags: [`get-cached-event-registrations:${eventId}`],
   },
-);
+)(eventId);
