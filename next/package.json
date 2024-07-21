@@ -10,6 +10,7 @@
   "description": "Luuppi's core website built with Next.js",
   "homepage": "https://luuppi.fi",
   "scripts": {
+    "preinstall": "npx only-allow npm",
     "dev": "prisma generate && next dev",
     "build": "prisma generate && next build",
     "start": "next start",
@@ -19,14 +20,14 @@
   },
   "dependencies": {
     "@azure/communication-email": "^1.0.0",
-    "@azure/msal-node": "^2.11.0",
+    "@azure/msal-node": "^2.11.1",
     "@formatjs/intl-localematcher": "^0.5.4",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "@marsidev/react-turnstile": "^0.7.2",
-    "@prisma/client": "^5.16.2",
+    "@prisma/client": "^5.17.0",
     "@react-email/components": "0.0.21",
     "@strapi/blocks-react-renderer": "^1.0.1",
     "ical-generator": "^7.1.0",
@@ -52,26 +53,27 @@
   },
   "devDependencies": {
     "@microsoft/microsoft-graph-types": "^2.40.0",
-    "@strapi/strapi": "^4.25.3",
+    "@strapi/strapi": "^4.25.4",
     "@tailwindcss/typography": "^0.5.13",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/negotiator": "^0.6.3",
-    "@types/node": "^20.14.10",
+    "@types/node": "^20.14.11",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",
     "daisyui": "^4.12.10",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
-    "husky": "^9.0.11",
+    "husky": "^9.1.1",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "prisma": "^5.16.2",
-    "tailwindcss": "^3.4.4",
+    "prisma": "^5.17.0",
+    "tailwindcss": "^3.4.6",
     "typescript": "^5"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20",
+    "npm": ">=10"
   }
 }
