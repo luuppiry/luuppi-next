@@ -2,7 +2,8 @@
 import prisma from '@/libs/db/prisma';
 import { unstable_cache } from 'next/cache';
 
-export const getCachedUser = (entraUserUuid: string) => unstable_cache(
+export const getCachedUser = (entraUserUuid: string) =>
+  unstable_cache(
     async (entraUserUuid: string) => {
       const res = await prisma.user.findFirst({
         where: {
@@ -38,4 +39,4 @@ export const getCachedUser = (entraUserUuid: string) => unstable_cache(
       revalidate: 300,
       tags: [`get-cached-user:${entraUserUuid}`],
     },
-  )(entraUserUuid)
+  )(entraUserUuid);
