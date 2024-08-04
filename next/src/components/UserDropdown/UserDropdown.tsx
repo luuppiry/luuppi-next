@@ -1,21 +1,22 @@
-'use client';
 import { signOut } from '@/actions/auth';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { RiUser3Fill } from 'react-icons/ri';
-import CloseableLink from './CloseableLink/CloseableLink';
+import CloseableLinks from './CloseableLinks/CloseableLinks';
 
 interface UserDropdownProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
+  session: Session | null;
 }
 
-export default function UserDropdown({ dictionary, lang }: UserDropdownProps) {
-  const { data } = useSession();
-  const session = data;
+export default function UserDropdown({
+  dictionary,
+  lang,
+  session,
+}: UserDropdownProps) {
   if (!session) return null;
-
   return (
     <div className="dropdown dropdown-end text-white">
       <div
@@ -36,15 +37,20 @@ export default function UserDropdown({ dictionary, lang }: UserDropdownProps) {
       >
         <div className="mb-2 flex max-w-full flex-col p-2">
           <span className="truncate font-bold" title={session.user?.name ?? ''}>
-            {session.user?.name}
+            {session.user?.name ?? session.user?.email}
           </span>
           <span className="truncate text-sm" title={session.user?.email ?? ''}>
             {session.user?.email}
           </span>
         </div>
-        <CloseableLink dictionary={dictionary} lang={lang} />
+        <CloseableLinks
+          dictionary={dictionary}
+          isLuuppiHato={session.user?.isLuuppiHato ?? false}
+          isLuuppiMember={session.user?.isLuuppiMember ?? false}
+          lang={lang}
+        />
         <div className="divider my-1" />
-        <form action={async () => await signOut()}>
+        <form action={signOut}>
           <button
             className="btn btn-error btn-sm w-full justify-start text-white"
             type="submit"

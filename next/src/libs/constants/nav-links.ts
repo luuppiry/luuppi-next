@@ -1,7 +1,9 @@
-interface NavLink {
+type AuthenticationLevel = 'authenticated' | 'luuppi-hato' | 'luuppi-member';
+
+export interface NavLink {
   translation: string;
   href?: string;
-  authenticated?: boolean;
+  authenticationLevel?: AuthenticationLevel;
   sublinks?: {
     translation: string;
     href: string;
@@ -144,7 +146,22 @@ export const navLinksMobile: NavLink[] = [
   {
     translation: 'profile',
     href: '/profile',
-    authenticated: true,
+    authenticationLevel: 'authenticated',
+  },
+  {
+    translation: 'own_events',
+    href: '/own-events',
+    authenticationLevel: 'authenticated',
+  },
+  {
+    translation: 'migrate_account',
+    href: '/migrate-account',
+    authenticationLevel: 'authenticated',
+  },
+  {
+    translation: 'admin',
+    href: '/admin?mode=user',
+    authenticationLevel: 'luuppi-hato',
   },
   {
     translation: 'sports',

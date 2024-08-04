@@ -1,0 +1,122 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+concurrency:
+  group: build-deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Check for changes
+    runs-on: ubuntu-latest
+    outputs:
+      strapi: ${{ steps.filter.outputs.strapi }}
+      next: ${{ steps.filter.outputs.next }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            strapi:
+              - 'strapi/**'
+            next:
+              - 'next/**'
+
+  strapi:
+    needs: changes
+    if: ${{ needs.changes.outputs.strapi == 'true' }}
+    name: Build and Deploy Strapi
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Backup Strapi
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd luuppi-next/strapi
+            docker compose exec -T strapi sh -c 'npm run strapi export -- --no-encrypt --file backup'
+            docker cp strapi:/opt/app/backup.tar.gz backup-$(date +%Y-%m-%d-%H-%M-%S).tar.gz
+            docker compose exec -T strapi sh -c 'rm backup.tar.gz'
+
+      - name: Build Strapi Docker image
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          docker build -t ${{ secrets.REGISTRY }}/strapi:latest ./strapi
+          docker push ${{ secrets.REGISTRY }}/strapi:latest
+
+      - name: Deploy Strapi
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd luuppi-next/strapi
+            git pull
+            docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
+            docker pull ${{ secrets.REGISTRY }}/strapi:latest
+            docker compose down
+            docker compose up -d
+
+  next:
+    needs: [changes, strapi]
+    if: |
+      always() &&
+      needs.changes.outputs.next == 'true' &&
+      (needs.strapi.result == 'success' || needs.strapi.result == 'skipped')
+    name: Build and Deploy Next.js
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add Next.js environment variables
+        run: |
+          touch .env.local
+          echo NEXT_PUBLIC_STRAPI_BASE_URL=https://${{ secrets.CMS_HOST }} >> .env.local
+          echo NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST }} >> .env.local
+          echo NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} >> .env.local
+          echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env.local
+        working-directory: ./next
+
+      - name: Build Next.js Docker image
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          docker build -t ${{ secrets.REGISTRY }}/next:latest ./next
+          docker push ${{ secrets.REGISTRY }}/next:latest
+
+      - name: Deploy Next.js
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd luuppi-next/next
+            git pull
+            docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
+            docker pull ${{ secrets.REGISTRY }}/next:latest
+            docker compose down
+            docker compose up -d

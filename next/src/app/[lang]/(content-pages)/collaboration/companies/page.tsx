@@ -7,6 +7,7 @@ import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 
 const url = '/api/companies?populate=logo';
 const tags = ['company'];
@@ -31,7 +32,7 @@ export default async function CollaborationCompanies({
         {pageData.data.map((company) => (
           <div
             key={company.attributes.createdAt!.toString()}
-            className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm"
+            className="flex gap-4 rounded-lg bg-background-50"
           >
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
             <div className="flex gap-12 py-4 max-md:flex-col max-md:gap-6">
@@ -45,17 +46,20 @@ export default async function CollaborationCompanies({
                   )}
                   width={300}
                 />
-                <div className="font-semibold">
-                  <p>
+                <div className="flex flex-col gap-1 font-semibold">
+                  <p className="flex items-center gap-1">
                     {dictionary.pages_companies.founded}:{' '}
-                    {company.attributes.foundedYear}
+                    <span className="badge badge-primary">
+                      {company.attributes.foundedYear}
+                    </span>
                   </p>
                   <div>
                     <Link
-                      className="link"
+                      className="link flex items-center gap-1"
                       href={company.attributes.homepageUrl}
                     >
                       {dictionary.pages_companies.homepage}
+                      <FaExternalLinkAlt size={14} />
                     </Link>
                   </div>
                   {company.attributes.openJobsUrl && (
@@ -64,7 +68,8 @@ export default async function CollaborationCompanies({
                         className="link flex items-center gap-1"
                         href={company.attributes.openJobsUrl}
                       >
-                        {dictionary.pages_companies.open_jobs}
+                        {dictionary.pages_companies.open_jobs}{' '}
+                        <FaExternalLinkAlt size={14} />
                       </Link>
                     </div>
                   )}

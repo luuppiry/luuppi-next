@@ -20,7 +20,7 @@ export default function GroupsDialog({ dictionary }: GroupsDialogProps) {
   return (
     <>
       <button
-        className="btn btn-primary text-lg font-bold text-white max-md:text-base"
+        className="btn btn-primary text-lg font-bold max-md:text-base"
         onClick={() => setOpen(true)}
       >
         {dictionary.pages_home.telegram.groups}
@@ -39,7 +39,7 @@ export default function GroupsDialog({ dictionary }: GroupsDialogProps) {
                 className={`mb-4 flex items-center gap-2 rounded-lg p-2 font-bold ${
                   group.translation === 'new_students'
                     ? 'bg-accent-400 text-white'
-                    : 'bg-background-50/50'
+                    : 'bg-background-50'
                 }`}
                 href={group.link}
                 target="_blank"
@@ -56,7 +56,7 @@ export default function GroupsDialog({ dictionary }: GroupsDialogProps) {
           </div>
           <div className="modal-action">
             <form method="dialog">
-              <button className="btn" onClick={onClose}>
+              <button className="btn btn-sm" onClick={onClose}>
                 {dictionary.general.close}
               </button>
             </form>

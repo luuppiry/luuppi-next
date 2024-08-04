@@ -34,7 +34,7 @@ const config: Config = {
           950: '#050714',
         },
         background: {
-          50: '#ececf8',
+          50: '#f5f5fb',
           100: '#dadaf1',
           200: '#b4b4e4',
           300: '#8f8fd6',

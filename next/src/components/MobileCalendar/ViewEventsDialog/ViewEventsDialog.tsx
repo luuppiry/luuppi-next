@@ -34,7 +34,7 @@ export default function ViewEventsDialog({
             {events.map((event) => (
               <Link
                 key={event.id}
-                className="mb-4 block rounded-lg bg-background-50/50 p-4"
+                className="mb-4 block rounded-lg bg-background-50 p-4"
                 href={`/${lang}/events/${event.id}`}
               >
                 <h3 className="text-lg font-bold">{event.title}</h3>
@@ -45,7 +45,7 @@ export default function ViewEventsDialog({
         )}
         <div className="modal-action">
           <form method="dialog">
-            <button className="btn" onClick={onClose}>
+            <button className="btn btn-sm" onClick={onClose}>
               {dictionary.general.close}
             </button>
           </form>

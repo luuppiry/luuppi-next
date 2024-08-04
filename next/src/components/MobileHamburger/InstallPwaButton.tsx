@@ -44,7 +44,7 @@ export default function InstallPwaButton({
 
   return (
     <button
-      className={`btn btn-primary w-full text-white ${
+      className={`btn btn-primary w-full ${
         isPwa() || !supportsPwa() || !isAndroid ? 'hidden' : ''
       }`}
       onClick={installPwa}

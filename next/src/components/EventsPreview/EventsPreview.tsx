@@ -12,7 +12,7 @@ export default function EventsPreview({
   lang,
 }: EventsPreviewProps) {
   return (
-    <section className="relative bg-background-50/50">
+    <section className="relative bg-background-50">
       <div className="relative z-[10] mx-auto max-w-[1200px] px-4 py-20">
         <p className="mb-1 text-xl font-bold">
           {dictionary.pages_home.events_preview.subtitle}
@@ -25,7 +25,7 @@ export default function EventsPreview({
         </div>
         <div className="mt-8 flex justify-center">
           <Link
-            className="btn btn-primary z-10 px-4 py-2 text-lg text-white max-md:text-base"
+            className="btn btn-primary z-10 px-4 py-2 text-lg max-md:text-base"
             href={`/${lang}/events`}
           >
             {dictionary.pages_home.events_preview.see_all}

@@ -1,6 +1,9 @@
 import { dateFormat } from '@/libs/constants';
-import { getLuuppiEvents } from '@/libs/events/get-legacy-events';
+import { getPlainText } from '@/libs/strapi/blocks-converter';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
+import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import eventPlaceholder from '../../../../public/images/event_placeholder.png';
@@ -15,18 +18,36 @@ export default async function RenderEvents({
   lang,
   dictionary,
 }: RenderEventsProps) {
-  const events = await getLuuppiEvents(lang);
-  const upcomingEvents = events
-    .filter((event) => event.end > new Date())
-    .sort((a, b) => a.end.getTime() - b.end.getTime())
-    .map((e) => ({
-      ...e,
-      isToday: new Date(e.start).toDateString() === new Date().toDateString(),
-    }));
+  const url = `/api/events?pagination[limit]=9999&sort[0]=StartDate&filters[EndDate][$gte]=${new Date().toISOString()}&populate=Image`;
+
+  const eventsData = await getStrapiData<
+    APIResponseCollection<'api::event.event'>
+  >('fi', url, ['event']);
+
+  const upcomingEvents = eventsData.data.map((e) => ({
+    ...e,
+    isToday:
+      new Date(e.attributes.StartDate).toDateString() ===
+      new Date().toDateString(),
+  }));
+
+  const formattedEvents = upcomingEvents.map((event) => ({
+    description: getPlainText(
+      event.attributes[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
+    ),
+    end: new Date(event.attributes.EndDate),
+    id: event.id.toString(),
+    location: event.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
+    start: new Date(event.attributes.StartDate),
+    title: event.attributes[lang === 'en' ? 'NameEn' : 'NameFi'],
+    image: event.attributes.Image?.data?.attributes?.url
+      ? getStrapiUrl(event.attributes.Image.data.attributes.url)
+      : eventPlaceholder,
+  }));
 
   return (
     <>
-      {upcomingEvents.slice(0, 4).map((event, i) => (
+      {formattedEvents.slice(0, 4).map((event, i) => (
         <Link
           key={i}
           className="group relative flex flex-col rounded-lg bg-primary-800 text-white"
@@ -39,7 +60,7 @@ export default async function RenderEvents({
               className="object-cover transition-all duration-300 group-hover:scale-105"
               draggable={false}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src={eventPlaceholder}
+              src={event.image}
               fill
             />
           </div>

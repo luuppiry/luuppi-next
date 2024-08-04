@@ -1,5 +1,6 @@
-import { longDateFormat, shortDateFormat } from '@/libs/constants';
+import { longDateFormat } from '@/libs/constants';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
+import { formatDateRange } from '@/libs/utils/format-date-range';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
@@ -67,7 +68,7 @@ export default function EventsList({
                   event.end.toISOString() +
                   event.title
                 }
-                className="flex gap-4 rounded-lg bg-background-50/50 backdrop-blur-sm transition-all delay-300 ease-in-out"
+                className="flex gap-4 rounded-lg bg-background-50 transition-all delay-300 ease-in-out"
                 href={`/${lang}/events/${event.id}`}
                 id={event.start.toDateString() + event.title}
               >
@@ -77,11 +78,11 @@ export default function EventsList({
                     {event.title}
                   </h3>
                   <div className="flex gap-2">
-                    <p>
-                      {event.start.toLocaleTimeString(lang, shortDateFormat)}
-                    </p>
-                    <p>-</p>
-                    <p>{event.end.toLocaleTimeString(lang, shortDateFormat)}</p>
+                    {formatDateRange(
+                      new Date(event.start),
+                      new Date(event.end),
+                      lang,
+                    )}
                   </div>
                   <p className="line-clamp-3 max-w-xl pr-4 text-sm text-gray-500 max-md:text-xs max-sm:break-all">
                     {event.description}

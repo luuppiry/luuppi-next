@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import NextAuth from 'next-auth';
 import AzureB2C from 'next-auth/providers/azure-ad-b2c';
 import 'server-only';
+import prisma from './libs/db/prisma';
 import { logger } from './libs/utils/logger';
 
 export const {
@@ -36,8 +37,24 @@ export const {
   callbacks: {
     async session({ session, token }) {
       if (token) {
-        session.user.azureId = token.id as string;
+        session.user.entraUserUuid = token.id as string;
+        session.user.isLuuppiHato = token.isLuuppiHato as boolean;
+        session.user.isLuuppiMember = token.isLuuppiMember as boolean;
+        session.user.name = token.username as string;
       }
+
+      // Forces user to sign in again if token version is outdated.
+      // Useful for forcing users to sign in again after updating token version if
+      // major changes have been made to the token structure.
+      if (!token.version || token.version !== process.env.TOKEN_VERSION) {
+        throw new Error('Token version mismatch');
+      }
+
+      // This should never happen, but just in case
+      if (!session.user.entraUserUuid) {
+        throw new Error('Malformed token');
+      }
+
       return session;
     },
     async jwt({ token, account }) {
@@ -53,6 +70,75 @@ export const {
         if (!decoded) return token;
         token.email = decoded.email;
         token.id = decoded.oid;
+
+        // Update user to local database
+        const localUser = await prisma.user.upsert({
+          where: {
+            entraUserUuid: decoded.oid,
+          },
+          update: {
+            email: decoded.email,
+            roles: {
+              connectOrCreate: {
+                where: {
+                  strapiRoleUuid_entraUserUuid: {
+                    entraUserUuid: decoded.oid,
+                    strapiRoleUuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+                  },
+                },
+                create: {
+                  role: {
+                    connect: {
+                      strapiRoleUuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          create: {
+            entraUserUuid: decoded.oid,
+            email: decoded.email,
+            roles: {
+              create: {
+                role: {
+                  connect: {
+                    strapiRoleUuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+                  },
+                },
+              },
+            },
+          },
+          include: {
+            roles: {
+              include: {
+                role: true,
+              },
+              where: {
+                OR: [
+                  {
+                    expiresAt: {
+                      gte: new Date(),
+                    },
+                  },
+                  {
+                    expiresAt: null,
+                  },
+                ],
+              },
+            },
+          },
+        });
+
+        const hasRole = (roleUuid: string) =>
+          localUser.roles.some((role) => role.role.strapiRoleUuid === roleUuid);
+
+        token.isLuuppiHato = hasRole(process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!);
+        token.isLuuppiMember = hasRole(
+          process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+        );
+        token.username = localUser.username;
+        token.version = process.env.TOKEN_VERSION;
       }
       return token;
     },

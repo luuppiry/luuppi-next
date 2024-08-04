@@ -1,27 +1,23 @@
 import { redisClient } from './db/redis';
 import { logger } from './utils/logger';
 
-export async function isRateLimited(
-  azureId: string,
-  action: string,
-  limit = 10,
-) {
-  const key = `rate-limit:${action}:${azureId}`;
+export async function isRateLimited(id: string, event: string, limit = 10) {
+  const key = `rate-limit:${event}:${id}`;
   const hasVerification = await redisClient.get(key);
 
   if (hasVerification && parseInt(hasVerification) >= limit) {
-    logger.error(`${action}: Too many requests, rate limited`);
+    logger.error(`${event}: Too many requests, rate limited`);
     return parseInt(hasVerification);
   }
   return null;
 }
 
 export async function updateRateLimitCounter(
-  azureId: string,
-  action: string,
+  id: string,
+  event: string,
   expiration = 1800,
 ) {
-  const key = `rate-limit:${action}:${azureId}`;
+  const key = `rate-limit:${event}:${id}`;
   const hasVerification = await redisClient.get(key);
   const currentVerification = hasVerification ? parseInt(hasVerification) : 0;
 

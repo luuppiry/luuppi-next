@@ -47,10 +47,7 @@ export default function PdfViewer({ pdfUrl, dictionary }: PdfViewerProps) {
 
   return (
     <>
-      <button
-        className="btn btn-primary mb-4 text-white"
-        onClick={handleDownload}
-      >
+      <button className="btn btn-primary btn-sm mb-4" onClick={handleDownload}>
         {dictionary.general.open_pdf}
         <FaExternalLinkAlt />
       </button>
@@ -81,7 +78,7 @@ export default function PdfViewer({ pdfUrl, dictionary }: PdfViewerProps) {
         <div className="flex flex-col items-center gap-2">
           <div className="flex gap-2">
             <button
-              className="btn btn-primary btn-sm text-white"
+              className="btn btn-primary btn-sm"
               disabled={pageNumber <= 1}
               type="button"
               onClick={previousPage}
@@ -89,7 +86,7 @@ export default function PdfViewer({ pdfUrl, dictionary }: PdfViewerProps) {
               <FaAngleLeft />
             </button>
             <button
-              className="btn btn-primary btn-sm text-white"
+              className="btn btn-primary btn-sm"
               disabled={pageNumber >= numPages!}
               type="button"
               onClick={nextPage}

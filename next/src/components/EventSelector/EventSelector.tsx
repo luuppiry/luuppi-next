@@ -9,7 +9,6 @@ import { LuCalendarPlus } from 'react-icons/lu';
 import EventCalendarSkeleton from '../EventCalendar/EventCalendarSkeleton';
 import EventListSkeleton from '../EventsList/EventListSkeleton';
 import MobileCalendarSkeleton from '../MobileCalendar/MobileCalendarSkeleton';
-import './EventSelector.css';
 
 const EventCalendar = dynamic(() => import('../EventCalendar/EventCalendar'), {
   loading: () => <EventCalendarSkeleton />,
@@ -20,6 +19,11 @@ const EventsList = dynamic(() => import('../EventsList/EventsList'), {
 const MobileCalendar = dynamic(
   () => import('../MobileCalendar/MobileCalendar'),
   { loading: () => <MobileCalendarSkeleton /> },
+);
+
+const baseUrlWithoutHttp = process.env.NEXT_PUBLIC_BASE_URL?.replace(
+  /https?:\/\//,
+  '',
 );
 
 interface EventSelectorProps {
@@ -54,7 +58,7 @@ export default function EventSelector({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex w-full items-center justify-between rounded-lg bg-background-50/50 p-4 backdrop-blur-sm max-md:flex-col max-md:justify-center max-md:gap-4 max-md:px-2">
+      <div className="flex w-full items-center justify-between rounded-lg bg-background-50 p-4 max-md:flex-col max-md:justify-center max-md:gap-4 max-md:px-2">
         <div className="flex w-full items-center gap-4 max-md:flex-col max-md:gap-2">
           <div
             className="tabs-boxed tabs border bg-white max-md:w-full"
@@ -91,11 +95,11 @@ export default function EventSelector({
               </label>
             </div>
             <Link
-              className="btn btn-primary btn-sm text-white"
+              className="btn btn-primary btn-sm"
               href={
                 lang === 'en'
-                  ? 'webcal://luuppi.fi/service/ics/events.ics?lang=eng'
-                  : 'webcal://luuppi.fi/service/ics/events.ics?lang=fin'
+                  ? `webcal://${baseUrlWithoutHttp}/api/ics?lang=en`
+                  : `webcal://${baseUrlWithoutHttp}/api/ics?lang=fi`
               }
               target="_blank"
             >
@@ -108,7 +112,11 @@ export default function EventSelector({
       {ctx.selectedView === 'calendar' ? (
         <>
           {width > 960 ? (
-            <EventCalendar dictionary={dictionary} events={events} lang={lang} />
+            <EventCalendar
+              dictionary={dictionary}
+              events={events}
+              lang={lang}
+            />
           ) : (
             <MobileCalendar
               dictionary={dictionary}

@@ -9,7 +9,7 @@ interface PartnersProps {
 
 export default function Partners({ dictionary, lang }: PartnersProps) {
   return (
-    <section className="relative overflow-hidden bg-background-50/50 px-4 py-20">
+    <section className="relative overflow-hidden bg-background-50 px-4 py-20">
       <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-col gap-6">
           <h2 className="text-4xl font-extrabold max-md:text-3xl">
@@ -20,7 +20,7 @@ export default function Partners({ dictionary, lang }: PartnersProps) {
           </p>
           <div className="flex">
             <Link
-              className="btn btn-primary text-lg font-bold text-white max-md:text-base"
+              className="btn btn-primary text-lg font-bold max-md:text-base"
               href={`/${lang}/collaboration`}
             >
               {dictionary.pages_home.partners.read_more}

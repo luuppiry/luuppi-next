@@ -3,7 +3,11 @@ import 'next-auth';
 
 declare module 'next-auth' {
   interface User {
-    azureId: string;
+    entraUserUuid: string;
+    isLuuppiHato: boolean;
+    isLuuppiMember: boolean;
+    username: string;
+    tokenVersion: number;
   }
 
   interface Session extends DefaultSession {

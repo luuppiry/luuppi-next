@@ -10,13 +10,13 @@ const initialState = {
   mobileCalendarMonth: new Date(),
   desktopCalendarFullSize: false,
   // eslint-disable-next-line no-unused-vars
-  setView: (_: 'calendar' | 'list') => { },
+  setView: (_: 'calendar' | 'list') => {},
   // eslint-disable-next-line no-unused-vars
-  setMobileCalendarMonth: (_: Date) => { },
+  setMobileCalendarMonth: (_: Date) => {},
   // eslint-disable-next-line no-unused-vars
-  setDesktopCalendarFullSize: (_: boolean) => { },
+  setDesktopCalendarFullSize: (_: boolean) => {},
   showPastEvents: false,
-  toggleShowPastEvents: () => { },
+  toggleShowPastEvents: () => {},
 };
 
 export const SelectedViewContext =

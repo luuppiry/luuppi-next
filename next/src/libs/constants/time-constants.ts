@@ -8,7 +8,16 @@ export const dateFormat = {
 } as const;
 
 /** Example: "14:00" */
+export const shortTimeFormat = {
+  hour: '2-digit',
+  minute: '2-digit',
+} as const;
+
+/** Example: "Mon, 1.1. 14:00" */
 export const shortDateFormat = {
+  weekday: 'short',
+  day: 'numeric',
+  month: 'numeric',
   hour: '2-digit',
   minute: '2-digit',
 } as const;

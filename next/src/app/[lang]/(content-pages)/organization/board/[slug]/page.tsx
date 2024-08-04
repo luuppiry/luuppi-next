@@ -60,7 +60,7 @@ export default async function OldBoard({ params }: OldBoardProps) {
         <h1>
           {dictionary.navigation.board} {wantedBoard.attributes.year}
         </h1>
-        {!!otherBoards.length && (
+        {Boolean(otherBoards.length) && (
           <div className="dropdown sm:dropdown-end">
             <div className="btn m-1" role="button" tabIndex={0}>
               {dictionary.pages_board.other_boards}

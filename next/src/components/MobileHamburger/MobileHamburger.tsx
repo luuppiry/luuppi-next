@@ -1,12 +1,13 @@
 'use client';
 import { signIn, signOut } from '@/actions/auth';
-import { navLinksMobile } from '@/libs/constants';
+import { NavLink, navLinksMobile } from '@/libs/constants';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BiLogOutCircle } from 'react-icons/bi';
+import { FaLockOpen } from 'react-icons/fa';
 import { HiMenu } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
 import { RiLoginCircleLine } from 'react-icons/ri';
@@ -20,18 +21,38 @@ const InstallPwaButton = dynamic(() => import('./InstallPwaButton'), {
 interface MobileNavbarProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
+  session: Session | null;
 }
 
 export default function MobileHamburger({
   dictionary,
   lang,
+  session,
 }: MobileNavbarProps) {
-  const { data } = useSession();
-  const session = data;
   const [open, setOpen] = useState(false);
 
   const toggleMenu = () => {
     setOpen(!open);
+  };
+
+  const displayLink = (link: NavLink): boolean => {
+    const isAuthenticated = Boolean(
+      link.authenticationLevel === 'authenticated' && session?.user,
+    );
+    const isLuuppiHato = Boolean(
+      link.authenticationLevel === 'luuppi-hato' && session?.user?.isLuuppiHato,
+    );
+    const isUnrestricted = !link.authenticationLevel;
+
+    // TODO: Remove this when migration period is over
+    if (
+      link.translation === 'migrate_account' &&
+      session?.user?.isLuuppiMember
+    ) {
+      return false;
+    }
+
+    return isAuthenticated || isLuuppiHato || isUnrestricted;
   };
 
   return (
@@ -54,39 +75,41 @@ export default function MobileHamburger({
         <div className="modal-box flex h-full min-h-dvh w-screen max-w-full gap-4 rounded-none">
           <ul className="menu h-max w-full flex-nowrap gap-2">
             {navLinksMobile
-              .filter(
-                (link) =>
-                  (link.authenticated && session?.user) || !link.authenticated,
-              )
+              .filter((link) => displayLink(link))
               .map((link, index) => (
                 <li
                   key={link.translation}
                   className={`${index === navLinksMobile.length - 1 ? 'pb-6' : ''}`}
                 >
-                  {link.sublinks && link.sublinks.length > 0 ? (
+                  {Boolean(link.sublinks?.length) ? (
                     <div className="flex items-center justify-between bg-secondary-400 font-bold text-white hover:cursor-auto hover:bg-secondary-400">
                       {
                         dictionary.navigation[
-                        link.translation as keyof typeof dictionary.navigation
+                          link.translation as keyof typeof dictionary.navigation
                         ]
                       }
                     </div>
                   ) : (
                     <Link
-                      className="font-bold"
+                      className="flex items-center justify-between font-bold"
                       href={`/${lang}${link.href as string}`}
                       onClick={() => setOpen(false)}
                     >
-                      {
-                        dictionary.navigation[
-                        link.translation as keyof typeof dictionary.navigation
-                        ]
-                      }
+                      <span>
+                        {
+                          dictionary.navigation[
+                            link.translation as keyof typeof dictionary.navigation
+                          ]
+                        }
+                      </span>
+                      {link.authenticationLevel && (
+                        <FaLockOpen className="text-gray-400/50" size={18} />
+                      )}
                     </Link>
                   )}
-                  {link.sublinks && link.sublinks.length > 0 && (
+                  {Boolean(link.sublinks?.length) && (
                     <ul className="my-4">
-                      {link.sublinks.map((sublink) => (
+                      {link.sublinks?.map((sublink) => (
                         <li key={sublink.translation}>
                           <Link
                             className={`${sublink.href === '/' ? 'disabled cursor-not-allowed opacity-50' : ''} font-bold`} // TODO: REMOVE DISABLED LINKS
@@ -95,7 +118,7 @@ export default function MobileHamburger({
                           >
                             {
                               dictionary.navigation[
-                              sublink.translation as keyof typeof dictionary.navigation
+                                sublink.translation as keyof typeof dictionary.navigation
                               ]
                             }
                           </Link>
@@ -113,7 +136,7 @@ export default function MobileHamburger({
             <div className="flex h-full flex-col items-center gap-4">
               <button
                 aria-label={`${dictionary.general.close} ${dictionary.general.menu.toLowerCase()}`}
-                className="btn btn-circle btn-primary text-white"
+                className="btn btn-circle btn-primary"
                 onClick={() => setOpen(false)}
               >
                 <IoMdClose size={32} />
