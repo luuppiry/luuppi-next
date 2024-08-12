@@ -210,7 +210,7 @@ export async function generateMetadata({
 
   return {
     title: `${title} | Luuppi ry`,
-    description: description.slice(0, 300) + descriptionCutted ? '...' : '',
+    description: description.slice(0, 300) + (descriptionCutted ? '...' : ''),
     alternates: {
       canonical: pathname,
       languages: {
@@ -220,14 +220,14 @@ export async function generateMetadata({
     },
     openGraph: {
       title,
-      description: description.slice(0, 300) + descriptionCutted ? '...' : '',
+      description: description.slice(0, 300) + (descriptionCutted ? '...' : ''),
       url: pathname,
       siteName: 'Luuppi ry',
       images: imageUrl,
     },
     twitter: {
       title,
-      description: description.slice(0, 300) + descriptionCutted ? '...' : '',
+      description: description.slice(0, 300) + (descriptionCutted ? '...' : ''),
       card: 'summary_large_image',
       images: imageUrl,
     },
