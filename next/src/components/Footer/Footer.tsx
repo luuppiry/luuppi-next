@@ -93,7 +93,7 @@ export default function Footer({ dictionary, lang }: FooterProps) {
             >
               <FaInstagram className="text-white" size={20} />
             </Link>
-            <Link aria-label="Discord" href="https://discord.gg/ZcREUWmYZs">
+            <Link aria-label="Discord" href="https://discord.gg/HZkwtwFmDK">
               <FaDiscord className="text-white" size={20} />
             </Link>
           </div>
