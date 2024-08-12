@@ -84,16 +84,21 @@ jobs:
     name: Build and Deploy Next.js
     timeout-minutes: 15
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Add Next.js environment variables
         run: |
-          touch .env.local
-          echo NEXT_PUBLIC_STRAPI_BASE_URL=https://${{ secrets.CMS_HOST }} >> .env.local
-          echo NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST }} >> .env.local
-          echo NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} >> .env.local
-          echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env.local
+          touch .env
+          echo NEXT_PUBLIC_STRAPI_BASE_URL=https://${{ secrets.CMS_HOST }} >> .env
+          echo NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST }} >> .env
+          echo NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} >> .env
+          echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env
+          echo STRAPI_API_KEY=${{ secrets.STRAPI_API_KEY }} >> .env
+          echo NEXT_PUBLIC_NO_ROLE_ID=${{ secrets.NEXT_PUBLIC_NO_ROLE_ID }} >> .env
+          echo NEXT_PUBLIC_LUUPPI_MEMBER_ID=${{ secrets.NEXT_PUBLIC_LUUPPI_MEMBER_ID }} >> .env
+          echo NEXT_PUBLIC_LUUPPI_HATO_ID=${{ secrets.NEXT_PUBLIC_LUUPPI_HATO_ID }} >> .env
         working-directory: ./next
 
       - name: Build Next.js Docker image
@@ -115,8 +120,12 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd luuppi-next/next
+            git reset --hard origin/main
             git pull
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
             docker pull ${{ secrets.REGISTRY }}/next:latest
             docker compose down
             docker compose up -d
+            echo "Sleeping for 10 seconds"
+            sleep 10
+            docker compose -f docker-compose-migrate.yaml up -d
