@@ -8,14 +8,17 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 
-const url = '/api/events';
-
 interface EventsProps {
   params: { lang: SupportedLanguage };
 }
 
 export default async function Events({ params }: EventsProps) {
   const dictionary = await getDictionary(params.lang);
+
+  const sixMonthsAgo = new Date();
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+  const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString()}`;
 
   const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,
