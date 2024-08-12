@@ -16,6 +16,7 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
+import { PiImageBroken } from 'react-icons/pi';
 
 interface EventProps {
   params: { slug: string; lang: SupportedLanguage };
@@ -54,6 +55,9 @@ export default async function Event({ params }: EventProps) {
     ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
     : null;
 
+  const hasRegistration =
+    event.data.attributes?.Registration?.TicketTypes?.length;
+
   return (
     <>
       <script
@@ -65,13 +69,17 @@ export default async function Event({ params }: EventProps) {
       <div className="relative flex w-full gap-12">
         <div className="flex w-full flex-col">
           <div className="relative mb-12 h-64 rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:h-44">
-            {imageUrl && (
+            {imageUrl ? (
               <Image
                 alt="Page banner image"
                 className="rounded-lg object-cover"
                 src={imageUrl}
                 fill
               />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <PiImageBroken className="text-8xl text-white" />
+              </div>
             )}
           </div>
           <div className="relative flex flex-col gap-4">
@@ -122,30 +130,32 @@ export default async function Event({ params }: EventProps) {
               </div>
             </div>
           </div>
-          <div className="mb-12">
-            <h2 className="mb-4 text-2xl font-bold">
-              {dictionary.pages_events.tickets}
-            </h2>
-            <Suspense
-              fallback={
-                <div className="flex flex-col gap-4">
-                  <div className="skeleton h-24 w-full" />
-                  <div className="skeleton h-24 w-full" />
-                </div>
-              }
-            >
-              <TicketArea event={event} lang={params.lang} />
-            </Suspense>
-            <Suspense
-              fallback={
-                <div className="mt-6">
-                  <div className="skeleton h-8 w-48" />
-                </div>
-              }
-            >
-              <ShowParticipants eventId={id} lang={params.lang} />
-            </Suspense>
-          </div>
+          {hasRegistration && (
+            <div className="mb-12">
+              <h2 className="mb-4 text-2xl font-bold">
+                {dictionary.pages_events.tickets}
+              </h2>
+              <Suspense
+                fallback={
+                  <div className="flex flex-col gap-4">
+                    <div className="skeleton h-24 w-full" />
+                    <div className="skeleton h-24 w-full" />
+                  </div>
+                }
+              >
+                <TicketArea event={event} lang={params.lang} />
+              </Suspense>
+              <Suspense
+                fallback={
+                  <div className="mt-6">
+                    <div className="skeleton h-8 w-48" />
+                  </div>
+                }
+              >
+                <ShowParticipants eventId={id} lang={params.lang} />
+              </Suspense>
+            </div>
+          )}
           <div className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
             <BlockRendererClient
               content={
@@ -192,7 +202,9 @@ export async function generateMetadata({
   const title =
     event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
 
-  const image = event.data.attributes.Image?.data.attributes.url;
+  const imageUrl = event.data.attributes.Image?.data?.attributes?.url
+    ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
+    : undefined;
 
   const descriptionCutted = description.length > 300;
 
@@ -211,13 +223,13 @@ export async function generateMetadata({
       description: description.slice(0, 300) + descriptionCutted ? '...' : '',
       url: pathname,
       siteName: 'Luuppi ry',
-      images: image ? [getStrapiUrl(image)] : undefined,
+      images: imageUrl,
     },
     twitter: {
       title,
       description: description.slice(0, 300) + descriptionCutted ? '...' : '',
       card: 'summary_large_image',
-      images: image ? [getStrapiUrl(image)] : undefined,
+      images: imageUrl,
     },
   };
 }
