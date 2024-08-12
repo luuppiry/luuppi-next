@@ -35,7 +35,7 @@
     "jsonwebtoken": "^9.0.2",
     "negotiator": "^0.6.3",
     "next": "^14.2.5",
-    "next-auth": "^5.0.0-beta.19",
+    "next-auth": "^5.0.0-beta.20",
     "next-plausible": "^3.12.0",
     "node-ical": "^0.18.0",
     "react": "^18",
