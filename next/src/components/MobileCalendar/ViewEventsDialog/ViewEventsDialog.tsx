@@ -1,3 +1,4 @@
+import { formatDateRangeShort } from '@/libs/utils/format-date-range';
 import { Event } from '@/models/event';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
@@ -38,6 +39,7 @@ export default function ViewEventsDialog({
                 href={`/${lang}/events/${event.id}`}
               >
                 <h3 className="text-lg font-bold">{event.title}</h3>
+                <h4>{formatDateRangeShort(event.start, event.end, lang)} </h4>
                 <p className="line-clamp-3 text-sm">{event.description}</p>
               </Link>
             ))}

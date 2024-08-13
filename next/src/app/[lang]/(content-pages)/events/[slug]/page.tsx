@@ -7,7 +7,7 @@ import { dateFormat } from '@/libs/constants';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { formatDateRange } from '@/libs/utils/format-date-range';
+import { formatDateRangeLong } from '@/libs/utils/format-date-range';
 import { getEventJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
@@ -109,7 +109,7 @@ export default async function Event({ params }: EventProps) {
                   <IoCalendarOutline className="shrink-0 text-2xl" />
                 </div>
                 <p className="line-clamp-2">
-                  {formatDateRange(
+                  {formatDateRangeLong(
                     new Date(event.data.attributes.StartDate),
                     new Date(event.data.attributes.EndDate),
                     params.lang,

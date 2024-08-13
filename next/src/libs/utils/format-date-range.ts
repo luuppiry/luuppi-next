@@ -2,7 +2,7 @@ import { SupportedLanguage } from '@/models/locale';
 import { longDateFormat, shortDateFormat, shortTimeFormat } from '../constants';
 import { firstLetterToUpperCase } from './first-letter-uppercase';
 
-export const formatDateRange = (
+export const formatDateRangeLong = (
   start: Date,
   end: Date,
   lang: SupportedLanguage,
@@ -14,4 +14,32 @@ export const formatDateRange = (
   }
 
   return `${firstLetterToUpperCase(start.toLocaleString(lang, shortDateFormat))} - ${firstLetterToUpperCase(end.toLocaleString(lang, shortDateFormat))}`;
+};
+
+export const formatDateRangeShort = (
+  start: Date,
+  end: Date,
+  lang: SupportedLanguage,
+): string => {
+  if (start.getDate() === end.getDate()) {
+    return `${new Intl.DateTimeFormat(lang, {
+      hour: 'numeric',
+      minute: 'numeric',
+    }).format(start)} - ${new Intl.DateTimeFormat(lang, {
+      hour: 'numeric',
+      minute: 'numeric',
+    }).format(end)}`;
+  } else {
+    return `${new Intl.DateTimeFormat(lang, {
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    }).format(start)} - ${new Intl.DateTimeFormat(lang, {
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    }).format(end)}`;
+  }
 };

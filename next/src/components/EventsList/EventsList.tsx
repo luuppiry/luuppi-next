@@ -1,6 +1,6 @@
 import { longDateFormat } from '@/libs/constants';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
-import { formatDateRange } from '@/libs/utils/format-date-range';
+import { formatDateRangeLong } from '@/libs/utils/format-date-range';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
@@ -78,7 +78,7 @@ export default function EventsList({
                     {event.title}
                   </h3>
                   <div className="flex gap-2">
-                    {formatDateRange(
+                    {formatDateRangeLong(
                       new Date(event.start),
                       new Date(event.end),
                       lang,
