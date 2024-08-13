@@ -7,6 +7,22 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import './PdfViewer.css';
 
+// Polyfill for Promise.withResolvers
+// https://github.com/wojtekmaj/react-pdf/issues/1811#issuecomment-2171064960
+if (typeof Promise.withResolvers === 'undefined') {
+  if (window)
+    // eslint-disable-next-line lines-around-comment
+    // @ts-expect-error This does not exist outside of polyfill which this is doing
+    window.Promise.withResolvers = function () {
+      let resolve, reject;
+      const promise = new Promise((res, rej) => {
+        resolve = res;
+        reject = rej;
+      });
+      return { promise, resolve, reject };
+    };
+}
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 interface PdfViewerProps {
