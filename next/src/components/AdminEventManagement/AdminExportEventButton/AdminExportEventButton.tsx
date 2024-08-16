@@ -8,11 +8,13 @@ import { PiFileCsv, PiFileHtml } from 'react-icons/pi';
 interface AdminExportEventButtonProps {
   lang: SupportedLanguage;
   eventId: number;
+  disabled?: boolean;
 }
 
 export default function AdminExportEventButton({
   lang,
   eventId,
+  disabled,
 }: AdminExportEventButtonProps) {
   const handleEventExport = async (type: 'csv' | 'html') => {
     const response = await eventExport(lang, eventId);
@@ -46,16 +48,22 @@ export default function AdminExportEventButton({
         action={() => handleEventExport('html')}
         className="flex items-center justify-end"
       >
-        <SubmitButton className="btn btn-circle btn-ghost">
-          <PiFileHtml className="text-gray-800" size={26} />
+        <SubmitButton className="btn btn-circle btn-ghost" disabled={disabled}>
+          <PiFileHtml
+            className={disabled ? 'text-gray-400' : 'text-gray-800'}
+            size={26}
+          />
         </SubmitButton>
       </form>
       <form
         action={() => handleEventExport('csv')}
         className="flex items-center justify-end"
       >
-        <SubmitButton className="btn btn-circle btn-ghost">
-          <PiFileCsv className="text-gray-800" size={26} />
+        <SubmitButton className="btn btn-circle btn-ghost" disabled={disabled}>
+          <PiFileCsv
+            className={disabled ? 'text-gray-400' : 'text-gray-800'}
+            size={26}
+          />
         </SubmitButton>
       </form>
     </div>

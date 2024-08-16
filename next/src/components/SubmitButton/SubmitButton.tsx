@@ -7,6 +7,7 @@ interface SubmitButtonProps {
   size?: 'sm' | 'md' | 'lg';
   className?: any;
   children?: React.ReactNode;
+  disabled?: boolean;
 }
 
 export default function SubmitButton({
@@ -15,13 +16,14 @@ export default function SubmitButton({
   size = 'sm',
   className,
   children,
+  disabled = false,
 }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
   return (
     <button
       className={`btn-${variant} btn btn-${size} ${className}`}
-      disabled={pending}
+      disabled={pending || disabled}
       type="submit"
     >
       {pending ? (

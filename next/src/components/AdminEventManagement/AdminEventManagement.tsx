@@ -90,7 +90,11 @@ export default async function AdminEventManagement({
                     </span>
                   </td>
                   <td>
-                    <AdminExportEventButton eventId={event.id} lang={lang} />
+                    <AdminExportEventButton
+                      disabled={!event.registrations}
+                      eventId={event.id}
+                      lang={lang}
+                    />
                   </td>
                 </tr>
               ))}
