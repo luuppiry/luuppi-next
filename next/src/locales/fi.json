@@ -8,7 +8,7 @@
     "email_change_mail_text": "Olet pyytänyt sähköpostiosoitteesi vaihtamista. Vahvista uusi sähköpostiosoitteesi klikkaamalla alla olevaa linkkiä. Jos et ole pyytänyt tätä, voit jättää tämän viestin huomiotta.",
     "verify_email_sent": "Vahvistuslinkki on lähetetty uuteen sähköpostiosoitteeseesi. Linkki on voimassa 30 minuuttia.",
     "email_sending_failed": "Sähköpostin lähetys epäonnistui. Tämä voi johtua väärästä sähköpostiosoitteesta tai teknisestä ongelmasta.",
-    "invalid_username": "Kelvoton käyttäjänimi. Käyttäjänimen tulee olla 2-255 merkkiä pitkä.",
+    "invalid_username": "Kelvoton käyttäjänimi. Käyttäjänimen tulee olla 2-50 merkkiä pitkä.",
     "invalid_first_name": "Kelvottomat etunimet. Etunimien yhteispituuden tulee olla 2-70 merkkiä pitkä.",
     "invalid_last_name": "Kelvoton sukunimi. Sukunimen tulee olla 2-35 merkkiä pitkä.",
     "invalid_domicle": "Kelvoton kotikunta. Kotikunnan tulee olla 2-35 merkkiä pitkä.",
