@@ -144,6 +144,8 @@ export async function userFind(formData: FormData, lang: SupportedLanguage) {
     },
   );
 
+  const SUPER_ADMINS = process.env.XXX_SUPER_ADMIN_XXX!.split(',');
+
   const foundUserFormatted = {
     entraUserUuid: localUser.entraUserUuid,
     email: localUser.email,
@@ -157,8 +159,9 @@ export async function userFind(formData: FormData, lang: SupportedLanguage) {
       localUser?.roles
         .filter(
           (role) =>
-            role.strapiRoleUuid !== process.env.NEXT_PUBLIC_LUUPPI_HATO_ID &&
-            role.strapiRoleUuid !== process.env.NEXT_PUBLIC_NO_ROLE_ID,
+            SUPER_ADMINS.includes(user.entraUserUuid) ||
+            (role.strapiRoleUuid !== process.env.NEXT_PUBLIC_LUUPPI_HATO_ID &&
+              role.strapiRoleUuid !== process.env.NEXT_PUBLIC_NO_ROLE_ID),
         )
         .map((role) => ({
           strapiRoleUuid: role.strapiRoleUuid,

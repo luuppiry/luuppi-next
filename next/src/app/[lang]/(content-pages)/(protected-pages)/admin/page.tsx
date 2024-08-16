@@ -19,7 +19,9 @@ export default async function Admin({ params, searchParams }: AdminProps) {
   const dictionary = await getDictionary(params.lang);
   const mode = searchParams.mode;
 
-  if (!session?.user || !session.user.isLuuppiHato) {
+  const user = session?.user;
+
+  if (!user?.entraUserUuid || !user?.isLuuppiHato) {
     logger.error('User not found in session or does not have required role');
     redirect(`/${params.lang}`);
   }
@@ -31,7 +33,7 @@ export default async function Admin({ params, searchParams }: AdminProps) {
 
   const hasHatoRole = await prisma.rolesOnUsers.findFirst({
     where: {
-      entraUserUuid: session.user.entraUserUuid,
+      entraUserUuid: user.entraUserUuid,
       strapiRoleUuid: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID,
       OR: [
         {
@@ -48,7 +50,7 @@ export default async function Admin({ params, searchParams }: AdminProps) {
 
   // In case of an expired token, force sign out so next sign in will get a new token
   if (!hasHatoRole) {
-    logger.error(`User ${session.user.entraUserUuid} had expired hato role`);
+    logger.error(`User ${user.entraUserUuid} had expired hato role`);
     redirect('/api/auth/force-signout');
   }
 
@@ -62,11 +64,14 @@ export default async function Admin({ params, searchParams }: AdminProps) {
 
   // Hato role cannot be given or removed via UI. No role also filtered out
   // because it's not relevant in any way.
+  const SUPER_ADMINS = process.env.XXX_SUPER_ADMIN_XXX!.split(',');
+
   const availableRolesFiltered = availableRoles
     .filter(
       (role) =>
-        role.strapiRoleUuid !== process.env.NEXT_PUBLIC_LUUPPI_HATO_ID &&
-        role.strapiRoleUuid !== process.env.NEXT_PUBLIC_NO_ROLE_ID,
+        SUPER_ADMINS.includes(user.entraUserUuid) ||
+        (role.strapiRoleUuid !== process.env.NEXT_PUBLIC_LUUPPI_HATO_ID &&
+          role.strapiRoleUuid !== process.env.NEXT_PUBLIC_NO_ROLE_ID),
     )
     .map((role) => role.strapiRoleUuid);
 

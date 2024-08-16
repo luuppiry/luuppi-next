@@ -94,10 +94,14 @@ export async function userEditRoles(
     };
   }
 
-  const illegalRoles = [
-    process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
-    process.env.NEXT_PUBLIC_NO_ROLE_ID!,
-  ];
+  const SUPER_ADMINS = process.env.XXX_SUPER_ADMIN_XXX!.split(',');
+
+  const illegalRoles = SUPER_ADMINS.includes(user.entraUserUuid)
+    ? []
+    : [
+        process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
+        process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+      ];
 
   const includesIllegalRoles = strapiRoleUuids.some((role) =>
     illegalRoles.includes(role),
