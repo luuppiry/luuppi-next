@@ -78,7 +78,7 @@ export async function profileUpdate(
   > = {
     username: {
       value: formData.get('username'),
-      regex: /^.{2,255}$/,
+      regex: /^.{2,50}$/,
     },
     firstName: {
       value: formData.get('firstName'),
@@ -97,7 +97,7 @@ export async function profileUpdate(
     },
     preferredFullName: {
       value: formData.get('preferredFullName'),
-      regex: /^[a-zA-ZäÄöÖÅå\-\.]{2,100}$/,
+      regex: /^[a-zA-ZäÄöÖÅå\-\. ]{2,100}$/,
     },
     major: {
       value: formData.get('major'),
