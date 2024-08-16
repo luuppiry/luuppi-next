@@ -108,7 +108,7 @@ export default async function NewsPost({ params }: NewsPostProps) {
             <div className="flex flex-col opacity-40">
               <p className="text-sm">
                 {dictionary.general.content_updated}:{' '}
-                {new Date(selectedNews.attributes.createdAt!).toLocaleString(
+                {new Date(selectedNews.attributes.updatedAt!).toLocaleString(
                   params.lang,
                   dateFormat,
                 )}
