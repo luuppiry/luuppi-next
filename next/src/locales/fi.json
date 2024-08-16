@@ -321,7 +321,7 @@
     "user_required_info_missing": "Käyttäjä on Luupin jäsen, mutta häneltä puuttuu pakollisia tietoja!"
   },
   "pages_profile": {
-    "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",
+    "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 2-50 merkkiä pitkä. Käyttäjänimi voidaan näyttää julkisesti.",
     "first_name_explanation": "Kaikki viralliset etunimesi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "lastname_explanation": "Virallinen sukunimi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "preferred_full_name_explanation": "Haluttu koko nimi. Tämä on nimi, jolla sinua kutsutaan yhdistyksen sisällä. Tämä voi olla esimerkiksi lempinimi tai muu nimi, jolla haluat tulla kutsutuksi. Tätä tietoa käytetään esimerkiksi tapahtumien pöytäplaseerauksissa.",
