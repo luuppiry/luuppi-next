@@ -1387,6 +1387,7 @@ export interface ApiNewsSingleNewsSingle extends Schema.CollectionType {
     singularName: 'news-single';
     pluralName: 'news';
     displayName: 'News';
+    description: '';
   };
   options: {
     draftAndPublish: false;

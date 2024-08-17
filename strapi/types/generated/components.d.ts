@@ -20,8 +20,9 @@ export interface SharedSeo extends Schema.Component {
       }>;
     metaAuthor: Attribute.String;
     metaKeywords: Attribute.String;
-    openGraph: Attribute.Component<'shared.meta-open-graph'>;
-    twitter: Attribute.Component<'shared.meta-twitter'>;
+    openGraph: Attribute.Component<'shared.meta-open-graph'> &
+      Attribute.Required;
+    twitter: Attribute.Component<'shared.meta-twitter'> & Attribute.Required;
   };
 }
 
