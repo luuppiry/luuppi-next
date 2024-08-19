@@ -54,11 +54,10 @@ export default function Registration({
   ) => {
     // Fallback to the day before the event if the registration does not have an answerableUntil date
     const eventStart = new Date(registration.startDate);
-    const dayBeforeEvent = new Date(eventStart.valueOf() - 1000 * 60 * 60 * 24);
 
     const answersChangeable = questions.answerableUntil
       ? questions.answerableUntil >= new Date()
-      : dayBeforeEvent >= new Date();
+      : eventStart >= new Date();
 
     const hasQuestions =
       questions.text.length > 0 ||
