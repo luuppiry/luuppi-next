@@ -97,7 +97,7 @@ export async function profileUpdate(
     },
     preferredFullName: {
       value: formData.get('preferredFullName'),
-      regex: /^[a-zA-ZäÄöÖÅå\-\. ]{2,100}$/,
+      regex: /^[a-zA-ZäÄöÖåÅ\-\s]{2,100}$/,
     },
     major: {
       value: formData.get('major'),
