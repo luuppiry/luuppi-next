@@ -27,7 +27,9 @@ export async function getStrapiData<T>(
 ): Promise<T | null> {
   try {
     let res = await fetch(
-      getStrapiUrl(`${url}${url.includes('?') ? '&' : '?'}locale=${lang}`),
+      getStrapiUrl(
+        `${url}${url.includes('?') ? '&' : '?'}locale=${lang}&publicationState=${process.env.NEXT_PUBLIC_BASE_URL?.includes('beta.luuppi.fi') ? 'preview' : 'live'}`,
+      ),
       {
         headers: {
           Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,

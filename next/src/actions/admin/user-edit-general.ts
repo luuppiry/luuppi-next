@@ -70,7 +70,7 @@ export async function userEditGeneral(
     },
     preferredFullName: {
       value: formData.get('preferredFullName'),
-      regex: /^.{2,100}$/,
+      regex: /^[a-zA-ZäÄöÖÅå\-\. ]{2,100}$/,
     },
     major: {
       value: formData.get('major'),
