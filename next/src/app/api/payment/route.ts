@@ -83,7 +83,7 @@ export async function GET(request: Request) {
       return new Response('Error getting user', { status: 400 });
     }
 
-    const eventId = payments.registration?.[0]?.event?.id;
+    const eventId = payments.registration?.[0]?.event?.eventId;
     const strapiUrl = `/api/events/${eventId}?populate=Registration.RoleToGive`;
     const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
       'fi', // Does not matter here. We only need the role to give.
