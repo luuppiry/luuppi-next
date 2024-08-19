@@ -4,6 +4,7 @@ import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { BuyTicketsButton } from './BuyTicketsButton';
 import ErrorDialog from './ErrorDialog';
 import TicketAmountDialog from './TicketAmountDialog';
 
@@ -165,19 +166,11 @@ export default function Ticket({
               </p>
             </div>
             <div>
-              <button
-                className="btn btn-primary btn-sm whitespace-nowrap max-md:btn-xs"
+              <BuyTicketsButton
+                dictionary={dictionary}
                 disabled={disabled}
                 onClick={handlePurchaseClick}
-              >
-                {loading && !hasSelectableAmount ? (
-                  <div className="min-w-16">
-                    <span className="loading loading-spinner loading-md" />
-                  </div>
-                ) : (
-                  dictionary.pages_events.buy_tickets
-                )}
-              </button>
+              />
             </div>
           </div>
         </div>
