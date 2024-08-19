@@ -4,8 +4,10 @@ import { getDictionary } from '@/dictionaries';
 import { shortDateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
 import { checkReturn } from '@/libs/payments/check-return';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
+import { APIResponse } from '@/types/types';
 import { EmailClient, EmailMessage } from '@azure/communication-email';
 import { render } from '@react-email/components';
 import url from 'url';
@@ -79,6 +81,44 @@ export async function GET(request: Request) {
     if (!localUser) {
       logger.error('Error getting user');
       return new Response('Error getting user', { status: 400 });
+    }
+
+    const eventId = payments.registration?.[0]?.event?.id;
+    const strapiUrl = `/api/events/${eventId}?populate=Registration.RoleToGive`;
+    const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
+      'fi', // Does not matter here. We only need the role to give.
+      strapiUrl,
+      [`event-${eventId}`],
+      true,
+    );
+
+    const roleToGive =
+      strapiEvent?.data?.attributes?.Registration?.RoleToGive?.data?.attributes
+        ?.RoleId;
+
+    const illegalRoles = [
+      process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
+      process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+    ];
+
+    if (roleToGive && !illegalRoles.includes(roleToGive)) {
+      logger.info(
+        `Event ${eventId} has role to give ${roleToGive}. Giving role to user ${entraUserUuid}`,
+      );
+
+      await prisma.rolesOnUsers.upsert({
+        where: {
+          strapiRoleUuid_entraUserUuid: {
+            entraUserUuid,
+            strapiRoleUuid: roleToGive,
+          },
+        },
+        update: {},
+        create: {
+          entraUserUuid,
+          strapiRoleUuid: roleToGive,
+        },
+      });
     }
 
     const name = localUser.username ?? localUser.firstName ?? '';
