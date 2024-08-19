@@ -317,34 +317,6 @@ export async function reservationCreate(
         data: eventRegistrationsFormatted,
       });
 
-      const roleToGive =
-        strapiEvent.data.attributes.Registration?.RoleToGive?.data?.attributes
-          ?.RoleId;
-
-      const illegalRoles = [
-        process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
-        process.env.NEXT_PUBLIC_NO_ROLE_ID!,
-      ];
-
-      if (roleToGive && !illegalRoles.includes(roleToGive)) {
-        logger.info(
-          `Event ${eventId} has role to give ${roleToGive}. Giving role to user ${entraUserUuid}`,
-        );
-        await prisma.rolesOnUsers.upsert({
-          where: {
-            strapiRoleUuid_entraUserUuid: {
-              entraUserUuid,
-              strapiRoleUuid: roleToGive,
-            },
-          },
-          update: {},
-          create: {
-            entraUserUuid,
-            strapiRoleUuid: roleToGive,
-          },
-        });
-      }
-
       logger.info(
         `User ${localUser.entraUserUuid} reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
           currentUserReservations.length + amount
