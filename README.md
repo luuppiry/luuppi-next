@@ -108,6 +108,19 @@ We have public [Telegram-channel](https://t.me/luupinweba) for people interested
   <img src="tunkkailu_banner.png" alt="Luuppi ry web repository banner">
 </a>
 
-
 ## License
 This repository is released under the [MIT License](https://opensource.org/licenses/MIT).
+
+<details>
+
+<summary>Bonus</summary>
+
+# Time lost graveyard 🪦
+_Beginning of time starts from January 1, 1970, 00:00:00 UTC_
+
+Feel free to bring your meter here:
+
+#### Kasperi Pohtinen
+[![wakatime](https://wakatime.com/badge/user/a04247ba-6c76-456e-b04a-3dfa0bc6df41/project/018d2279-a88c-4764-afbe-c443f3ae9726.svg)](https://wakatime.com/badge/user/a04247ba-6c76-456e-b04a-3dfa0bc6df41/project/018d2279-a88c-4764-afbe-c443f3ae9726)
+
+</details>
