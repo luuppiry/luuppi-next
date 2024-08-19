@@ -273,7 +273,7 @@
     "payment_completed": "Payment completed",
     "payment_failed": "Payment failed",
     "payment_failed_description": "Your payment has failed. If you got charged, please contact WWW/IT representatives at webmaster@luuppi.fi",
-    "payment_completed_description": "Your payment has been completed. You will receive a receipt via email. You can now close this window.",
+    "payment_completed_description": "Your payment has been successfully completed. You will receive a receipt via email shortly, and you can now close this page. You can view your transactions on the 'Own events' page, where you can also edit any additional information for the event if editing is permitted.",
     "fill_additional_info": "Fill details",
     "edit_additional_info": "Edit details",
     "unanswered_questions": "Unanswered questions!",
