@@ -18,6 +18,9 @@ import { Suspense } from 'react';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 import { PiImageBroken } from 'react-icons/pi';
 
+// TODO: Remove when partial pre-rendering is available in Nextjs 15
+export const dynamic = 'force-dynamic';
+
 interface EventProps {
   params: { slug: string; lang: SupportedLanguage };
 }
@@ -234,23 +237,24 @@ export async function generateMetadata({
   };
 }
 
-export async function generateStaticParams() {
-  const url = '/api/events';
+// TODO: Remove when partial pre-rendering is available in Nextjs 15
+// export async function generateStaticParams() {
+//   const url = '/api/events';
 
-  const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    'fi',
-    url,
-    ['event'],
-    true,
-  );
+//   const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
+//     'fi',
+//     url,
+//     ['event'],
+//     true,
+//   );
 
-  if (!data) return [];
+//   if (!data) return [];
 
-  const events = data.data
-    .filter((e) => e.id)
-    .map((event) => event.id.toString());
+//   const events = data.data
+//     .filter((e) => e.id)
+//     .map((event) => event.id.toString());
 
-  return events.map((eventId) => ({
-    slug: eventId,
-  }));
-}
+//   return events.map((eventId) => ({
+//     slug: eventId,
+//   }));
+// }
