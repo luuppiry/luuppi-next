@@ -1166,7 +1166,7 @@ export interface ApiEventEvent extends Schema.CollectionType {
     description: '';
   };
   options: {
-    draftAndPublish: false;
+    draftAndPublish: true;
   };
   attributes: {
     NameFi: Attribute.String & Attribute.Required;
@@ -1181,6 +1181,7 @@ export interface ApiEventEvent extends Schema.CollectionType {
     DescriptionEn: Attribute.Blocks & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::event.event',
       'oneToOne',
@@ -1280,9 +1281,10 @@ export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
     singularName: 'luuppi-sanomat';
     pluralName: 'luuppi-sanomats';
     displayName: 'LuuppiSanomat';
+    description: '';
   };
   options: {
-    draftAndPublish: false;
+    draftAndPublish: true;
   };
   pluginOptions: {
     i18n: {
@@ -1313,6 +1315,7 @@ export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
       }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::luuppi-sanomat.luuppi-sanomat',
       'oneToOne',
@@ -1390,7 +1393,7 @@ export interface ApiNewsSingleNewsSingle extends Schema.CollectionType {
     description: '';
   };
   options: {
-    draftAndPublish: false;
+    draftAndPublish: true;
   };
   pluginOptions: {
     i18n: {
@@ -1468,6 +1471,7 @@ export interface ApiNewsSingleNewsSingle extends Schema.CollectionType {
       }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::news-single.news-single',
       'oneToOne',
