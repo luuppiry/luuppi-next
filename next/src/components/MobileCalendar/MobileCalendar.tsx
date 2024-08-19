@@ -90,15 +90,15 @@ export default function MobileCalendar({
   const ctx = useContext(SelectedViewContext);
   const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
 
-  const currentYear = ctx.mobileCalendarMonth.getFullYear();
-  const currentMonth = ctx.mobileCalendarMonth.getMonth();
+  const currentYear = ctx.activeCalendarMonth.getFullYear();
+  const currentMonth = ctx.activeCalendarMonth.getMonth();
 
   const handlePreviousMonth = () => {
-    ctx.setMobileCalendarMonth(new Date(currentYear, currentMonth - 1, 1));
+    ctx.setActiveCalendarMonth(new Date(currentYear, currentMonth - 1, 1));
   };
 
   const handleNextMonth = () => {
-    ctx.setMobileCalendarMonth(new Date(currentYear, currentMonth + 1, 1));
+    ctx.setActiveCalendarMonth(new Date(currentYear, currentMonth + 1, 1));
   };
 
   const daysOfWeek = useMemo(() => getDaysOfWeek(lang), [lang]);

@@ -26,6 +26,9 @@ export default function EventCalendar({
   const ctx = useContext(SelectedViewContext);
   const router = useRouter();
 
+  const currentYear = ctx.activeCalendarMonth.getFullYear();
+  const currentMonth = ctx.activeCalendarMonth.getMonth();
+
   // Hacky solution to fix overlapping events styling
   const calendarRef = useRef<FullCalendar>(null);
 
@@ -77,6 +80,27 @@ export default function EventCalendar({
                 ctx.setDesktopCalendarFullSize(!ctx.desktopCalendarFullSize),
             },
           }}
+          datesSet={(args) => {
+            const visibleStart = new Date(args.start);
+
+            if (visibleStart.getDate() === 1) {
+              ctx.setActiveCalendarMonth(
+                new Date(
+                  visibleStart.getFullYear(),
+                  visibleStart.getMonth(),
+                  1,
+                ),
+              );
+            } else {
+              ctx.setActiveCalendarMonth(
+                new Date(
+                  visibleStart.getFullYear(),
+                  visibleStart.getMonth() + 1,
+                  1,
+                ),
+              );
+            }
+          }}
           dayHeaderFormat={
             isSmallDesktop
               ? {
@@ -124,6 +148,7 @@ export default function EventCalendar({
                 }
           }
           height={ctx.desktopCalendarFullSize ? '100%' : undefined}
+          initialDate={new Date(currentYear, currentMonth, 1)}
           initialView={'dayGridMonth'}
           locale={lang === 'fi' ? fiLocale : ''}
           plugins={[dayGridPlugin, timeGridPlugin]}
