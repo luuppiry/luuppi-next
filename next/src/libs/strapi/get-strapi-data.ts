@@ -59,15 +59,15 @@ export async function getStrapiData<T>(
     const data = await res.json();
 
     if (!data?.data) {
-      logger.error(`Failed to fetch data from ${url}`, data);
       if (ignoreError) return null;
+      logger.error(`Failed to fetch data from ${url}`, data);
       throw new Error(`Failed to fetch data from ${url}`);
     }
 
     return data as T;
   } catch (error) {
-    logger.error('Error fetching data from Strapi', error);
     if (ignoreError) return null;
+    logger.error('Error fetching data from Strapi', error);
     throw new Error('Failed to fetch data from Strapi');
   }
 }
