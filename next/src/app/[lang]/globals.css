@@ -49,6 +49,24 @@
 }
 
 @layer components {
+  .animate-gradient {
+    background-size: 400%;
+
+    -webkit-animation: gradientAnimation 3s ease infinite;
+    -moz-animation: gradientAnimation 3s ease infinite;
+    animation: gradientAnimation 3s ease infinite;
+  }
+
+  @keyframes gradientAnimation {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
   @keyframes slideRight {
     from {
       transform: translate(0, 0);
