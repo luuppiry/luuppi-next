@@ -51,13 +51,12 @@
 @layer components {
   @keyframes slideRight {
     from {
-      background-position: 0 0;
+      transform: translate(0, 0);
     }
     to {
-      background-position: -200px -200px;
+      transform: translate(-200px, -200px);
     }
   }
-
   .luuppi-hero-cards {
     @apply rounded-2xl transition-transform delay-[0s] duration-[1s] ease-[ease] hover:rotate-0 hover:scale-[1.3];
     transform: rotateY(0) scale(1.25) rotate(-2deg);
@@ -98,9 +97,23 @@
   }
 
   .luuppi-kolmio-pattern {
-    @apply bg-[url('/kolmiot.svg')] opacity-[0.03];
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .luuppi-kolmio-pattern::before {
+    @apply transform-gpu;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: url('/kolmiot.svg') repeat;
+    opacity: 0.03;
     filter: grayscale();
-    background-position: 0 0;
     background-size: 200px 200px;
     animation: slideRight 10s linear infinite;
   }
