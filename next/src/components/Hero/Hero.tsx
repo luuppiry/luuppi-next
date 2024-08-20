@@ -1,9 +1,7 @@
 'use client';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef } from 'react';
-import luuppiCardsSvg from '../../../public/luuppi-cards.svg';
 
 interface HeroProps {
   dictionary: Dictionary;
@@ -67,14 +65,9 @@ export default function Hero({ dictionary, lang }: HeroProps) {
         </div>
       </div>
       <div className="luuppi-hero-container relative flex w-1/2 max-xl:h-80 max-xl:w-full">
-        <Image
-          alt="Luuppi hero card image"
-          className="luuppi-hero-cards"
-          draggable={false}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          src={luuppiCardsSvg}
-          fill
-        />
+        <div className="luuppi-hero-cards flex h-full w-[100vw] items-center justify-center max-xl:max-w-[450px] max-md:max-w-[400px] max-sm:max-w-[380px]">
+          <object data="/luuppi-cards.svg" type="image/svg+xml" />
+        </div>
       </div>
       <div className="absolute left-0 top-1/3 -z-10 h-96 w-96 rounded-full bg-[#d4e1fc] bg-gradient-to-r blur-[200px]" />
       <div className="luuppi-pattern absolute -left-48 top-0 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:top-0 max-md:h-full max-md:w-full max-md:rounded-none" />
