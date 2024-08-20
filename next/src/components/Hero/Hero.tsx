@@ -66,7 +66,11 @@ export default function Hero({ dictionary, lang }: HeroProps) {
       </div>
       <div className="luuppi-hero-container relative flex w-1/2 max-xl:h-80 max-xl:w-full">
         <div className="luuppi-hero-cards flex h-full w-[100vw] items-center justify-center max-xl:max-w-[450px] max-md:max-w-[400px] max-sm:max-w-[380px]">
-          <object data="/luuppi-cards.svg" type="image/svg+xml" />
+          <object
+            className="h-full w-full"
+            data="/luuppi-cards.svg"
+            type="image/svg+xml"
+          />
         </div>
       </div>
       <div className="absolute left-0 top-1/3 -z-10 h-96 w-96 rounded-full bg-[#d4e1fc] bg-gradient-to-r blur-[200px]" />
