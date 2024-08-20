@@ -86,6 +86,7 @@
 
   .luuppi-hero-container {
     @apply -rotate-2 rounded-[10px];
+    justify-content: center;
     background: #efeff6;
   }
 
