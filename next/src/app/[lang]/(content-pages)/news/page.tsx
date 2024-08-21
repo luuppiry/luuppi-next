@@ -15,6 +15,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaUserAlt } from 'react-icons/fa';
+import { PiImageBroken } from 'react-icons/pi';
 
 interface NewsProps {
   params: { lang: SupportedLanguage };
@@ -56,13 +57,21 @@ export default async function News({ params }: NewsProps) {
                 'relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300 max-sm:rounded-t-lg sm:rounded-l-lg'
               }
             >
-              <Image
-                alt="News banner"
-                className={'object-cover max-sm:rounded-t-lg sm:rounded-l-lg'}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={getStrapiUrl(news.attributes.banner?.data.attributes.url)}
-                fill
-              />
+              {news.attributes.banner?.data?.attributes?.url ? (
+                <Image
+                  alt="News banner"
+                  className={'object-cover max-sm:rounded-t-lg sm:rounded-l-lg'}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  src={getStrapiUrl(
+                    news.attributes.banner?.data.attributes.url,
+                  )}
+                  fill
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center">
+                  <PiImageBroken className="text-8xl text-white" />
+                </div>
+              )}
             </div>
             <div className="flex w-full flex-col justify-between gap-6 p-4">
               <div className="flex flex-col gap-1">
