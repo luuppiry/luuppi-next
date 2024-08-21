@@ -8,6 +8,7 @@ import { APIResponseCollection, APIResponseData } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaUserAlt } from 'react-icons/fa';
+import { PiImageBroken } from 'react-icons/pi';
 
 interface RenderNewsProps {
   lang: SupportedLanguage;
@@ -46,13 +47,19 @@ export default async function RenderNews({
           <div
             className={`${i !== 0 ? 'shrink-0 rounded-t-lg' : 'rounded-l-lg max-lg:shrink-0 max-lg:rounded-l-none max-lg:rounded-t-lg'} relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300`}
           >
-            <Image
-              alt="News banner"
-              className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} object-cover`}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src={getStrapiUrl(news.attributes.banner?.data.attributes.url)}
-              fill
-            />
+            {news.attributes.banner?.data?.attributes?.url ? (
+              <Image
+                alt="News banner"
+                className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} object-cover`}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                src={getStrapiUrl(news.attributes.banner?.data.attributes.url)}
+                fill
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <PiImageBroken className="text-8xl text-white" />
+              </div>
+            )}
           </div>
           <div className="flex h-full w-full flex-col justify-between gap-12 p-4">
             <div className="flex flex-col gap-1">

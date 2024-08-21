@@ -14,6 +14,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { FaUserAlt } from 'react-icons/fa';
+import { PiImageBroken } from 'react-icons/pi';
 
 const baseUrl =
   '/api/news?populate[0]=banner&populate[1]=authorImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[slug][$eq]=';
@@ -57,16 +58,22 @@ export default async function NewsPost({ params }: NewsPostProps) {
       <div className="flex w-full gap-12">
         <div className="flex w-full flex-col gap-12">
           <div className="relative aspect-[2/1] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
-            <Image
-              alt="News banner"
-              className={'rounded-lg object-cover'}
-              quality={100}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src={getStrapiUrl(
-                selectedNews.attributes.banner?.data.attributes.url,
-              )}
-              fill
-            />
+            {selectedNews.attributes.banner?.data?.attributes?.url ? (
+              <Image
+                alt="News banner"
+                className={'rounded-lg object-cover'}
+                quality={100}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                src={getStrapiUrl(
+                  selectedNews.attributes.banner?.data.attributes.url,
+                )}
+                fill
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <PiImageBroken className="text-8xl text-white" />
+              </div>
+            )}
           </div>
           <div className="relative flex flex-col gap-4">
             <div className="flex items-center gap-4">
