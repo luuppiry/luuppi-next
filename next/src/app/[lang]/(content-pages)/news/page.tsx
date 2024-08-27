@@ -35,11 +35,16 @@ export default async function News({ params }: NewsProps) {
 
   const sortedNews = newsLocaleFlipped
     .filter((n) => n.attributes.createdAt)
-    .sort(
-      (a, b) =>
-        new Date(b.attributes.createdAt!).getTime() -
-        new Date(a.attributes.createdAt!).getTime(),
-    );
+    .sort((a, b) => {
+      const dateA = a.attributes?.publishedAt
+        ? new Date(a.attributes.publishedAt).getTime()
+        : new Date(a.attributes.createdAt || new Date()).getTime();
+      const dateB = b.attributes.publishedAt
+        ? new Date(b.attributes.publishedAt).getTime()
+        : new Date(b.attributes.createdAt || new Date()).getTime();
+
+      return dateB - dateA;
+    });
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -121,10 +126,10 @@ export default async function News({ params }: NewsProps) {
                     {news.attributes.authorName}
                   </span>
                   <span className="text-sm opacity-60">
-                    {new Date(news.attributes.createdAt!).toLocaleDateString(
-                      params.lang,
-                      dateFormat,
-                    )}
+                    {new Date(
+                      news.attributes?.publishedAt ||
+                        news.attributes.createdAt!,
+                    ).toLocaleDateString(params.lang, dateFormat)}
                   </span>
                 </div>
               </div>

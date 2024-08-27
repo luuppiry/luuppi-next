@@ -37,7 +37,10 @@ export default async function LuuppiSanomatPublication({
     <article className="relative flex flex-col gap-12">
       <h1>
         {dictionary.general.publication}{' '}
-        {new Date(selectedPublication.attributes.createdAt as string)
+        {new Date(
+          selectedPublication.attributes?.publishedAt ||
+            selectedPublication.attributes.createdAt!,
+        )
           .toLocaleDateString(params.lang, {
             month: 'short',
             year: 'numeric',

@@ -100,10 +100,10 @@ export default async function NewsPost({ params }: NewsPostProps) {
                   </span>
                 </span>
                 <span className="text-sm opacity-75">
-                  {new Date(selectedNews.attributes.createdAt!).toLocaleString(
-                    params.lang,
-                    dateFormat,
-                  )}
+                  {new Date(
+                    selectedNews.attributes?.publishedAt ||
+                      selectedNews.attributes.createdAt!,
+                  ).toLocaleString(params.lang, dateFormat)}
                 </span>
               </div>
             </div>

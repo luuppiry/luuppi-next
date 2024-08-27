@@ -30,11 +30,16 @@ export default async function RenderNews({
   const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);
 
   const sortedNews = newsLocaleFlipped
-    .sort(
-      (a, b) =>
-        new Date(b.attributes.createdAt!).getTime() -
-        new Date(a.attributes.createdAt!).getTime(),
-    )
+    .sort((a, b) => {
+      const dateA = a.attributes?.publishedAt
+        ? new Date(a.attributes.publishedAt).getTime()
+        : new Date(a.attributes.createdAt || new Date()).getTime();
+      const dateB = b.attributes.publishedAt
+        ? new Date(b.attributes.publishedAt).getTime()
+        : new Date(b.attributes.createdAt || new Date()).getTime();
+
+      return dateB - dateA;
+    })
     .slice(0, 4);
 
   return (
@@ -109,10 +114,9 @@ export default async function RenderNews({
                   {news.attributes.authorName}
                 </span>
                 <span className="text-sm opacity-60">
-                  {new Date(news.attributes.createdAt!).toLocaleDateString(
-                    lang,
-                    dateFormat,
-                  )}
+                  {new Date(
+                    news.attributes?.publishedAt || news.attributes.createdAt!,
+                  ).toLocaleDateString(lang, dateFormat)}
                 </span>
               </div>
             </div>

@@ -21,11 +21,16 @@ export default async function LuuppiSanomat({ params }: LuuppiSanomatProps) {
 
   const sortedData = pageData.data
     .filter((publication) => publication.attributes.createdAt)
-    .sort(
-      (a, b) =>
-        new Date(b.attributes.createdAt as string).getTime() -
-        new Date(a.attributes.createdAt as string).getTime(),
-    );
+    .sort((a, b) => {
+      const dateA = a.attributes?.publishedAt
+        ? new Date(a.attributes.publishedAt).getTime()
+        : new Date(a.attributes.createdAt || new Date()).getTime();
+      const dateB = b.attributes.publishedAt
+        ? new Date(b.attributes.publishedAt).getTime()
+        : new Date(b.attributes.createdAt || new Date()).getTime();
+
+      return dateB - dateA;
+    });
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -56,7 +61,8 @@ export default async function LuuppiSanomat({ params }: LuuppiSanomatProps) {
             <div className="absolute bottom-0 right-0 z-20 rounded-br-lg rounded-tl-lg bg-accent-400 px-2 py-1 font-bold text-white">
               {firstLetterToUpperCase(
                 new Date(
-                  publication.attributes.createdAt as string,
+                  publication.attributes?.publishedAt ||
+                    publication.attributes.createdAt!,
                 ).toLocaleDateString(params.lang, {
                   month: 'short',
                   year: 'numeric',
