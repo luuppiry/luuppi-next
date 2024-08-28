@@ -54,7 +54,7 @@ export async function userEditGeneral(
   > = {
     username: {
       value: formData.get('username'),
-      regex: /^[a-zA-Z0-9]{3,30}$/,
+      regex: /^[a-zA-Z0-9äÄöÖåÅ]{3,30}$/,
     },
     firstName: {
       value: formData.get('firstName'),
