@@ -13,6 +13,8 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { BiErrorCircle } from 'react-icons/bi';
 
+export const dynamic = 'force-dynamic';
+
 interface OwnEventsProps {
   params: { lang: SupportedLanguage };
 }
