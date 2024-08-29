@@ -7,7 +7,13 @@ export const formatDateRangeLong = (
   end: Date,
   lang: SupportedLanguage,
 ): string => {
-  const isMultipleDays = start.getDate() !== end.getDate();
+  const startUTC = new Date(
+    start.getTime() + start.getTimezoneOffset() * 60000,
+  );
+
+  const endUTC = new Date(end.getTime() + end.getTimezoneOffset() * 60000);
+
+  const isMultipleDays = startUTC.toDateString() !== endUTC.toDateString();
 
   if (!isMultipleDays) {
     return `${firstLetterToUpperCase(start.toLocaleString(lang, longDateFormat))} - ${start.toLocaleString(lang, shortTimeFormat)}-${end.toLocaleString(lang, shortTimeFormat)}`;
@@ -21,13 +27,19 @@ export const formatDateRangeShort = (
   end: Date,
   lang: SupportedLanguage,
 ): string => {
-  if (start.getDate() === end.getDate()) {
+  const startUTC = new Date(
+    start.getTime() + start.getTimezoneOffset() * 60000,
+  );
+  const endUTC = new Date(end.getTime() + end.getTimezoneOffset() * 60000);
+  if (startUTC.toDateString() === endUTC.toDateString()) {
     return `${new Intl.DateTimeFormat(lang, {
       hour: 'numeric',
       minute: 'numeric',
+      timeZone: 'Europe/Helsinki',
     }).format(start)} - ${new Intl.DateTimeFormat(lang, {
       hour: 'numeric',
       minute: 'numeric',
+      timeZone: 'Europe/Helsinki',
     }).format(end)}`;
   } else {
     return `${new Intl.DateTimeFormat(lang, {
@@ -35,11 +47,13 @@ export const formatDateRangeShort = (
       day: 'numeric',
       hour: 'numeric',
       minute: 'numeric',
+      timeZone: 'Europe/Helsinki',
     }).format(start)} - ${new Intl.DateTimeFormat(lang, {
       month: 'numeric',
       day: 'numeric',
       hour: 'numeric',
       minute: 'numeric',
+      timeZone: 'Europe/Helsinki',
     }).format(end)}`;
   }
 };
