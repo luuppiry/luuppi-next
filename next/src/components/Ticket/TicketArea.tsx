@@ -77,22 +77,18 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
 
   const hasBoughtMaxTickets = (roleUuid: string, maxAmount: number) => {
     if (!eventRegistrations || !localUser) return false;
-    const userPurchases = eventRegistrations.filter(
-      (registration) => registration.entraUserUuid === localUser?.entraUserUuid,
-    );
+    const userPurchases = localUser.registrations;
     const userPurchasesWithRole = userPurchases.filter(
-      (registration) => registration.purchaseRole.strapiRoleUuid === roleUuid,
+      (registration) => registration.strapiRoleUuid === roleUuid,
     );
     return userPurchasesWithRole.length >= maxAmount;
   };
 
   const hasUnpaidReservations = (roleUuid: string) => {
     if (!eventRegistrations || !localUser) return false;
-    const userPurchases = eventRegistrations.filter(
-      (registration) => registration.entraUserUuid === localUser?.entraUserUuid,
-    );
+    const userPurchases = localUser.registrations;
     const userPurchasesWithRole = userPurchases.filter(
-      (registration) => registration.purchaseRole.strapiRoleUuid === roleUuid,
+      (registration) => registration.strapiRoleUuid === roleUuid,
     );
     return userPurchasesWithRole.some(
       (registration) => !registration.paymentCompleted,
