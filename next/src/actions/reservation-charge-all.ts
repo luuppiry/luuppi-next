@@ -79,19 +79,33 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
       redirectUrl = `/${lang}/payment/free-event/${orderId}`;
     }
 
-    await prisma.payment.create({
-      data: {
-        orderId,
-        amount: priceInCents,
-        status: priceInCents === 0 ? 'COMPLETED' : 'PENDING',
-        language: lang === 'en' ? 'EN' : 'FI',
-        registration: {
-          connect: registrations.map((registration) => ({
-            id: registration.id,
-            paymentCompleted: priceInCents === 0,
-          })),
+    await prisma.$transaction(async (prisma) => {
+      await prisma.payment.create({
+        data: {
+          orderId,
+          amount: priceInCents,
+          status: priceInCents === 0 ? 'COMPLETED' : 'PENDING',
+          language: lang === 'en' ? 'EN' : 'FI',
+          registration: {
+            connect: registrations.map((registration) => ({
+              id: registration.id,
+            })),
+          },
         },
-      },
+      });
+
+      if (priceInCents === 0) {
+        await prisma.eventRegistration.updateMany({
+          where: {
+            id: {
+              in: registrations.map((registration) => registration.id),
+            },
+          },
+          data: {
+            paymentCompleted: true,
+          },
+        });
+      }
     });
   } catch (error) {
     logger.error('Error creating charge', error);
