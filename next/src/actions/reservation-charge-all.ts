@@ -60,29 +60,35 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
   try {
     const orderId = randomUUID();
 
-    redirectUrl = await createCharge(
-      {
-        amountInCents: priceInCents,
-        id: orderId,
-        reservations: registrations.map((registration) => ({
-          id: registration.id.toString(),
-          priceInCents: registration.price * 100,
-          name: registration.event[lang === 'fi' ? 'nameFi' : 'nameEn'],
-          confirmationTime: registration.createdAt.toISOString(),
-        })),
-      },
-      lang,
-      session.user.email!,
-    );
+    if (priceInCents) {
+      redirectUrl = await createCharge(
+        {
+          amountInCents: priceInCents,
+          id: orderId,
+          reservations: registrations.map((registration) => ({
+            id: registration.id.toString(),
+            priceInCents: registration.price * 100,
+            name: registration.event[lang === 'fi' ? 'nameFi' : 'nameEn'],
+            confirmationTime: registration.createdAt.toISOString(),
+          })),
+        },
+        lang,
+        session.user.email!,
+      );
+    } else {
+      redirectUrl = `/${lang}/payment/free-event/${orderId}`;
+    }
 
     await prisma.payment.create({
       data: {
         orderId,
         amount: priceInCents,
+        status: priceInCents === 0 ? 'COMPLETED' : 'PENDING',
         language: lang === 'en' ? 'EN' : 'FI',
         registration: {
           connect: registrations.map((registration) => ({
             id: registration.id,
+            paymentCompleted: priceInCents === 0,
           })),
         },
       },
