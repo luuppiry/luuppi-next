@@ -84,7 +84,11 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                   className={
                     'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 max-xl:text-base'
                   }
-                  href={`/${lang}${link.href as string}`}
+                  href={
+                    link.href?.startsWith('/')
+                      ? `/${lang}${link.href as string}`
+                      : link.href!
+                  }
                 >
                   <span>
                     {

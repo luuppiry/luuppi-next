@@ -92,7 +92,11 @@ export default function MobileHamburger({
                   ) : (
                     <Link
                       className="flex items-center justify-between font-bold"
-                      href={`/${lang}${link.href as string}`}
+                      href={
+                        link.href?.startsWith('/')
+                          ? `/${lang}${link.href as string}`
+                          : link.href!
+                      }
                       onClick={() => setOpen(false)}
                     >
                       <span>
@@ -113,7 +117,11 @@ export default function MobileHamburger({
                         <li key={sublink.translation}>
                           <Link
                             className={`${sublink.href === '/' ? 'disabled cursor-not-allowed opacity-50' : ''} font-bold`} // TODO: REMOVE DISABLED LINKS
-                            href={`/${lang}${sublink.href as string}`}
+                            href={
+                              sublink.href.startsWith('/')
+                                ? `/${lang}${sublink.href as string}`
+                                : sublink.href
+                            }
                             onClick={() => setOpen(false)}
                           >
                             {

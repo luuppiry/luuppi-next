@@ -108,7 +108,7 @@ export const navLinksDesktop: NavLink[] = [
       },
       {
         translation: 'gallery',
-        href: '/', // TODO: Add photos page (external link?)
+        href: 'https://luuppiry.kuvat.fi/kuvat/',
       },
     ],
   },
@@ -264,7 +264,7 @@ export const navLinksMobile: NavLink[] = [
       },
       {
         translation: 'gallery',
-        href: '/', // TODO: Add photos page (external link?)
+        href: 'https://luuppiry.kuvat.fi/kuvat/',
       },
     ],
   },
