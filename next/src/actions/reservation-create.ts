@@ -340,6 +340,8 @@ export async function reservationCreate(
     return result;
   }
 
+  revalidateTag(`get-cached-user:${localUser.entraUserUuid}`);
+
   return {
     message: dictionary.general.success,
     isError: false,
