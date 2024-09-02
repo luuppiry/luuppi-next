@@ -44,14 +44,19 @@ export default async function AdminEventManagement({
         },
       },
     },
+    orderBy: {
+      startDate: 'asc',
+    },
   });
 
-  const eventLanguageFormatted = eventData.map((event) => ({
-    id: event.id,
-    name: lang === 'fi' ? event.nameFi : event.nameEn,
-    startDate: new Date(event.startDate),
-    registrations: event.registrations.length,
-  }));
+  const eventLanguageFormatted = eventData
+    .filter((event) => event.registrations.length)
+    .map((event) => ({
+      id: event.id,
+      name: lang === 'fi' ? event.nameFi : event.nameEn,
+      startDate: new Date(event.startDate),
+      registrations: event.registrations.length,
+    }));
 
   return (
     <div className="card card-body">
