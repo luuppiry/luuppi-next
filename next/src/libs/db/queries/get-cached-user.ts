@@ -28,7 +28,11 @@ export const getCachedUser = (entraUserUuid: string) =>
               ],
             },
           },
-          registrations: true,
+          registrations: {
+            where: {
+              deletedAt: null,
+            },
+          },
         },
       });
 
