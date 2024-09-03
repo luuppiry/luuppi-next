@@ -55,22 +55,6 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
     };
   }
 
-  const url = `/api/events/${eventId}?populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
-
-  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
-    lang,
-    url,
-    [`event-${eventId}`],
-    true,
-  );
-
-  if (!strapiEvent) {
-    return {
-      message: dictionary.api.invalid_event,
-      isError: true,
-    };
-  }
-
   const event = await prisma.event.findUnique({
     where: {
       id: eventId,
@@ -95,6 +79,22 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
   });
 
   if (!event) {
+    return {
+      message: dictionary.api.invalid_event,
+      isError: true,
+    };
+  }
+
+  const url = `/api/events/${event.eventId}?populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
+
+  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
+    lang,
+    url,
+    [`event-${eventId}`],
+    true,
+  );
+
+  if (!strapiEvent) {
     return {
       message: dictionary.api.invalid_event,
       isError: true,
