@@ -31,6 +31,16 @@ export const getCachedUser = (entraUserUuid: string) =>
           registrations: {
             where: {
               deletedAt: null,
+              OR: [
+                {
+                  paymentCompleted: true,
+                },
+                {
+                  reservedUntil: {
+                    gte: new Date(),
+                  },
+                },
+              ],
             },
           },
         },
