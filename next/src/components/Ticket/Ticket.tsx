@@ -220,7 +220,7 @@ export default function Ticket({
               </p>
             </div>
             <div className="mt-2">
-              {days < 30 ? (
+              {hours < 24 ? (
                 <div className="flex gap-5">
                   <div className="text-sm">
                     <span className="countdown font-mono text-2xl max-md:text-lg">
