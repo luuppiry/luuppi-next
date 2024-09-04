@@ -109,7 +109,10 @@ export async function GET() {
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
   >('fi', '/api/luuppi-sanomats', ['luuppi-sanomat']);
 
-  const url = '/api/events?pagination[limit]=9999&sort[0]=createdAt:desc';
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+
+  const url = `/api/events?filters[StartDate][$gte]=${weekAgo.toISOString()}&pagination[limit]=9999&sort[0]=createdAt:desc`;
 
   const eventsData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
