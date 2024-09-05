@@ -1,21 +1,10 @@
-import { LuuppiEventReceipt as LuuppiEventReceiptEn } from '@/../emails/event-receipt-en';
-import { LuuppiEventReceipt as LuuppiEventReceiptFi } from '@/../emails/event-receipt-fi';
-import { getDictionary } from '@/dictionaries';
-import { shortDateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
+import { sendEventReceiptEmail } from '@/libs/emails/send-event-verify';
 import { checkReturn } from '@/libs/payments/check-return';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
-import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
 import { APIResponse } from '@/types/types';
-import { EmailClient, EmailMessage } from '@azure/communication-email';
-import { render } from '@react-email/components';
 import url from 'url';
-
-const options = {
-  senderAddress: process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!,
-  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
-};
 
 export async function GET(request: Request) {
   const queryParams = url.parse(request.url, true).query;
@@ -25,7 +14,7 @@ export async function GET(request: Request) {
     const { orderId, successful } = await checkReturn(queryParams);
 
     // TODO: Cache this query. Result should not change for the same orderId.
-    const payments = await prisma.payment.update({
+    const payment = await prisma.payment.update({
       where: {
         orderId,
       },
@@ -55,17 +44,13 @@ export async function GET(request: Request) {
       return new Response('OK', { status: 200 });
     }
 
-    const dictionary = await getDictionary(
-      payments.language === 'EN' ? 'en' : 'fi',
-    );
-
-    if (!payments.registration?.[0]?.entraUserUuid) {
+    if (!payment.registration?.[0]?.entraUserUuid) {
       logger.error('Error getting entraUserUuid');
       return new Response('Error getting entraUserUuid', { status: 400 });
     }
 
     // Always same entraUserUuid for all registrations
-    const entraUserUuid = payments.registration[0].entraUserUuid;
+    const entraUserUuid = payment.registration[0].entraUserUuid;
 
     if (!entraUserUuid) {
       logger.error('Error getting entraUserUuid');
@@ -83,7 +68,7 @@ export async function GET(request: Request) {
       return new Response('Error getting user', { status: 400 });
     }
 
-    const eventId = payments.registration?.[0]?.event?.eventId;
+    const eventId = payment.registration?.[0]?.event?.eventId;
     const strapiUrl = `/api/events/${eventId}?populate=Registration.RoleToGive`;
     const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
       'fi', // Does not matter here. We only need the role to give.
@@ -129,54 +114,27 @@ export async function GET(request: Request) {
       return new Response('Error getting email', { status: 400 });
     }
 
-    const emailFi = LuuppiEventReceiptFi({
-      name: name,
-      orderDate: payments.createdAt,
-      orderId: payments.orderId,
-      events: payments.registration.map((registration) => ({
-        name: registration.event.nameFi,
-        date: firstLetterToUpperCase(
-          registration.event.startDate.toLocaleString('fi', shortDateFormat),
-        ),
-        location: registration.event.locationFi,
-        price: registration.price,
-      })),
-    });
+    if (!payment.confirmationSentAt && successful) {
+      const success = await sendEventReceiptEmail({
+        name,
+        email,
+        payment,
+      });
 
-    const emailEn = LuuppiEventReceiptEn({
-      name: name,
-      orderDate: payments.createdAt,
-      orderId: payments.orderId,
-      events: payments.registration.map((registration) => ({
-        name: registration.event.nameEn,
-        date: firstLetterToUpperCase(
-          registration.event.startDate.toLocaleString('en', shortDateFormat),
-        ),
-        location: registration.event.locationEn,
-        price: registration.price,
-      })),
-    });
+      if (!success) {
+        logger.error('Error sending email');
+        return new Response('Error sending email', { status: 400 });
+      }
 
-    const emailHtml = render(payments.language === 'FI' ? emailFi : emailEn);
-
-    const emailMessage: EmailMessage = {
-      senderAddress: options.senderAddress,
-      content: {
-        subject: dictionary.api.email_registration_confirmation_subject,
-        html: emailHtml,
-      },
-      recipients: {
-        to: [
-          {
-            address: email,
-          },
-        ],
-      },
-    };
-
-    const emailClient = new EmailClient(options.connectionString);
-    const poller = await emailClient.beginSend(emailMessage);
-    await poller.pollUntilDone();
+      await prisma.payment.update({
+        where: {
+          orderId,
+        },
+        data: {
+          confirmationSentAt: new Date(),
+        },
+      });
+    }
     logger.info('Event confirmation email sent', { email });
   } catch (error) {
     logger.error('Error checking return', error);
