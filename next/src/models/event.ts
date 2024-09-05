@@ -5,4 +5,5 @@ export interface Event {
   start: Date;
   end: Date;
   location: string;
+  hasTickets: boolean;
 }

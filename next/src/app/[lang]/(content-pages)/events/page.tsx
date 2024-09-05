@@ -18,7 +18,7 @@ export default async function Events({ params }: EventsProps) {
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-  const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString()}`;
+  const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role`;
 
   const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,
@@ -38,6 +38,7 @@ export default async function Events({ params }: EventsProps) {
     location:
       event.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
     title: event.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'],
+    hasTickets: Boolean(event.attributes.Registration?.TicketTypes.length),
   }));
 
   return (

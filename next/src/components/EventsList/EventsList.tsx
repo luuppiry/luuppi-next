@@ -4,6 +4,7 @@ import { formatDateRangeLong } from '@/libs/utils/format-date-range';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
+import { IoTicketSharp } from 'react-icons/io5';
 
 interface EventListProps {
   events: Event[];
@@ -74,9 +75,12 @@ export default function EventsList({
               >
                 <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
                 <div className="flex flex-col py-2">
-                  <h3 className="text-lg font-bold max-md:text-base">
-                    {event.title}
-                  </h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-lg font-bold max-md:text-base">
+                      {event.title}
+                    </h3>
+                    {event.hasTickets && <IoTicketSharp className="inline" />}
+                  </div>
                   <div className="flex gap-2">
                     {formatDateRangeLong(
                       new Date(event.start),
