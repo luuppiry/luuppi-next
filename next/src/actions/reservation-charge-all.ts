@@ -128,8 +128,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
         });
 
         if (!success) {
-          logger.error('Error sending email');
-          throw new Error('Error sending email');
+          logger.error('Error sending email, failing silently');
         }
       }
     });
