@@ -18,7 +18,7 @@ export default async function RenderEvents({
   lang,
   dictionary,
 }: RenderEventsProps) {
-  const url = `/api/events?pagination[limit]=9999&sort[0]=StartDate&filters[EndDate][$gte]=${new Date().toISOString()}&populate=Image`;
+  const url = `/api/events?pagination[limit]=9999&sort[0]=StartDate&filters[EndDate][$gte]=${new Date().toISOString()}&populate=Image&populate=Registration.TicketTypes.Role`;
 
   const eventsData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
@@ -43,6 +43,7 @@ export default async function RenderEvents({
     image: event.attributes.Image?.data?.attributes?.url
       ? getStrapiUrl(event.attributes.Image.data.attributes.url)
       : eventPlaceholder,
+    hasTickets: Boolean(event.attributes.Registration?.TicketTypes.length),
   }));
 
   return (
