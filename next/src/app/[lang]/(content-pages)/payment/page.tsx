@@ -1,6 +1,8 @@
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
+import { sendEventReceiptEmail } from '@/libs/emails/send-event-verify';
 import { checkReturn } from '@/libs/payments/check-return';
+import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 
@@ -15,7 +17,7 @@ export default async function Payment({ params, searchParams }: PaymentProps) {
   const { orderId, successful } = await checkReturn(searchParams);
 
   // TODO: Cache this query. Result should not change for the same orderId.
-  await prisma.payment.update({
+  const payment = await prisma.payment.update({
     where: {
       orderId,
     },
@@ -32,7 +34,41 @@ export default async function Payment({ params, searchParams }: PaymentProps) {
           : undefined,
       },
     },
+    include: {
+      registration: {
+        include: {
+          event: true,
+          user: true,
+        },
+      },
+    },
   });
+
+  if (payment && successful && !payment.confirmationSentAt) {
+    const email = payment.registration[0].user.email;
+    const user = payment.registration[0].user;
+    const name = user.username ?? user.firstName ?? '';
+
+    const success = await sendEventReceiptEmail({
+      name,
+      email,
+      payment,
+    });
+
+    if (!success) {
+      logger.error('Error sending email');
+      throw new Error('Error sending email');
+    }
+
+    await prisma.payment.update({
+      where: {
+        orderId,
+      },
+      data: {
+        confirmationSentAt: new Date(),
+      },
+    });
+  }
 
   return (
     <div className="relative flex flex-col items-center justify-center gap-6 text-center max-md:items-start max-md:text-start">

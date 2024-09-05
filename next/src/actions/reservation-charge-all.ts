@@ -2,6 +2,7 @@
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
+import { sendEventReceiptEmail } from '@/libs/emails/send-event-verify';
 import { createCharge } from '@/libs/payments/create-charge';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
@@ -81,16 +82,25 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
     }
 
     await prisma.$transaction(async (prisma) => {
-      await prisma.payment.create({
+      const payment = await prisma.payment.create({
         data: {
           orderId,
           amount: priceInCents,
           status: priceInCents === 0 ? 'COMPLETED' : 'PENDING',
           language: lang === 'en' ? 'EN' : 'FI',
+          confirmationSentAt: priceInCents === 0 ? new Date() : null,
           registration: {
             connect: registrations.map((registration) => ({
               id: registration.id,
             })),
+          },
+        },
+        include: {
+          registration: {
+            include: {
+              event: true,
+              user: true,
+            },
           },
         },
       });
@@ -106,6 +116,21 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
             paymentCompleted: true,
           },
         });
+
+        const email = payment.registration[0].user.email;
+        const user = payment.registration[0].user;
+        const name = user.username ?? user.firstName ?? '';
+
+        const success = await sendEventReceiptEmail({
+          name,
+          email,
+          payment,
+        });
+
+        if (!success) {
+          logger.error('Error sending email');
+          throw new Error('Error sending email');
+        }
       }
     });
 

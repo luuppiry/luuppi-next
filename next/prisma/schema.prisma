@@ -99,14 +99,15 @@ model Answer {
 }
 
 model Payment {
-  id           Int                 @id @default(autoincrement())
-  orderId      String              @unique
-  status       PaymentStatus       @default(PENDING)
-  amount       Float
-  language     Language            @default(FI)
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
-  registration EventRegistration[]
+  id                 Int                 @id @default(autoincrement())
+  orderId            String              @unique
+  status             PaymentStatus       @default(PENDING)
+  amount             Float
+  language           Language            @default(FI)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  confirmationSentAt DateTime?
+  registration       EventRegistration[]
 }
 
 // User to store some event metadata "locally" so
