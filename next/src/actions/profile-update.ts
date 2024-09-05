@@ -78,7 +78,12 @@ export async function profileUpdate(
   > = {
     username: {
       value: formData.get('username'),
-      regex: /^[a-zA-Z0-9äÄöÖåÅ]{3,30}$/,
+
+      // Regex checks for:
+      // - 3-30 characters
+      // - No consecutive underscores or hyphens
+      // - Only letters, numbers, underscores, hyphens, and Finnish/Swedish characters
+      regex: /^(?!.*[-_]{2})[a-zA-Z0-9äÄöÖåÅ_-]{3,30}$/,
     },
     firstName: {
       value: formData.get('firstName'),
