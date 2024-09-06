@@ -124,7 +124,7 @@ export async function emailSendVerify(
 
   const link = `${options.baseUrl}/${lang}/profile/verify-email?token=${token}`;
 
-  const emailHtml = render(
+  const emailHtml = await render(
     lang === 'fi'
       ? LuuppiEmailVerifyFi({
           name: user.name || user.email!,

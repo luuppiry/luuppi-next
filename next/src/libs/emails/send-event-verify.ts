@@ -62,7 +62,9 @@ export const sendEventReceiptEmail = async ({
       })),
     });
 
-    const emailHtml = render(payment.language === 'FI' ? emailFi : emailEn);
+    const emailHtml = await render(
+      payment.language === 'FI' ? emailFi : emailEn,
+    );
 
     const emailMessage: EmailMessage = {
       senderAddress: options.senderAddress,

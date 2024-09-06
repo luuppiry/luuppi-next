@@ -14,10 +14,10 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@strapi/plugin-i18n": "4.25.8",
-    "@strapi/plugin-users-permissions": "4.25.8",
-    "@strapi/strapi": "4.25.8",
-    "better-sqlite3": "^11.1.2",
+    "@strapi/plugin-i18n": "4.25.10",
+    "@strapi/plugin-users-permissions": "4.25.10",
+    "@strapi/strapi": "4.25.10",
+    "better-sqlite3": "^11.2.1",
     "pg": "8.12.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

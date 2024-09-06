@@ -100,7 +100,7 @@ export async function emailSendFeedback(
     };
   }
 
-  const emailHtml = render(
+  const emailHtml = await render(
     LuuppiFeedback({
       message,
       receiver,
