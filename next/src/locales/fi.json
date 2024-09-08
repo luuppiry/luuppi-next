@@ -260,7 +260,7 @@
     "max_tickets_bought": "Olet ostanut maksimimäärän lippuja tälle kiintiölle.",
     "your_quota": "Sinun kiintiösi",
     "registration_closed": "Ilmoittautuminen on sulkeutunut kiintiösi osalta.",
-    "unpaid_reservations": "Sinulla on maksamattomia varauksia. Voit maksaa ne omasta profiilistasi.",
+    "unpaid_reservations": "Sinulla on maksamattomia varauksia. Voit maksaa tai peruuttaa varauksia 'Omat tapahtumat'-sivulta.",
     "no_tickets": "Tällä tapahtumalla ei ole lipunmyyntiä, eikä ilmoittautumista.",
     "reserved": "Varattu",
     "cancel_reservation": "Peruuta varaus",
