@@ -43,7 +43,7 @@ export const getCachedEventRegistrations = (eventId: number) =>
     },
     ['get-cached-event-registrations'],
     {
-      revalidate: 180,
+      revalidate: 60,
       tags: [`get-cached-event-registrations:${eventId}`],
     },
   )(eventId);
