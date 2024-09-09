@@ -30,7 +30,7 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
     redirect(`/${params.lang}`);
   }
 
-  const userEventRegistrations = await prisma.eventRegistration.findMany({
+  let userEventRegistrations = await prisma.eventRegistration.findMany({
     where: {
       entraUserUuid: session.user.entraUserUuid,
       deletedAt: null,
@@ -86,6 +86,16 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
           },
         },
       },
+    });
+
+    userEventRegistrations = userEventRegistrations.map((registration) => {
+      if (registration.payments.some((p) => p.id === payment.id)) {
+        return {
+          ...registration,
+          paymentCompleted,
+        };
+      }
+      return registration;
     });
   };
 
