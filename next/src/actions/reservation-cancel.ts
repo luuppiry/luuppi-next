@@ -37,11 +37,6 @@ export async function reservationCancel(
       reservedUntil: {
         gte: new Date(),
       },
-      payments: {
-        none: {
-          status: 'PENDING', // If there is pending payment, there is a risk of charging the user for a cancelled reservation
-        },
-      },
     },
   });
 
