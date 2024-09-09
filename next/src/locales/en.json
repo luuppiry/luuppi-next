@@ -34,7 +34,6 @@
     "invalid_registration": "Invalid registration. Maybe it has expired or is not valid.",
     "reservation_cancelled": "Reservation cancelled",
     "payment_failed": "Payment failed",
-    "pending_payment": "You already have a pending payment. Please wait for the previous payment to complete before making a new one. This ensures that you won't be charged multiple times.",
     "invalid_answer_count": "Invalid answer count",
     "invalid_answer": "Invalid answer",
     "email_registration_confirmation_subject": "Confirmation of event registration",

@@ -43,17 +43,6 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
     };
   }
 
-  const hasPendingRegistration = registrations.some((registration) =>
-    registration.payments.some((payment) => payment.status === 'PENDING'),
-  );
-
-  if (hasPendingRegistration) {
-    return {
-      message: dictionary.api.pending_payment,
-      isError: true,
-    };
-  }
-
   const priceInCents =
     registrations.reduce((acc, registration) => acc + registration.price, 0) *
     100;
