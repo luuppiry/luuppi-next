@@ -4,7 +4,7 @@ import { logger } from '../utils/logger';
 
 export const checkStatus = async (orderNumber: string) => {
   try {
-    const status = await vismapayClient.checkStatus(orderNumber);
+    const status = await vismapayClient.checkStatusWithOrderNumber(orderNumber);
     const settled = status.settled;
     const result = status.result;
 
