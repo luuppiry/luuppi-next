@@ -4,11 +4,13 @@ import QuestionDialog from '@/components/QuestionDialog/QuestionDialog';
 import Registration from '@/components/Registration/Registration';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
+import { checkStatus } from '@/libs/payments/check-status';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import QuestionProvider from '@/providers/QuestionProvider';
 import { APIResponse } from '@/types/types';
+import { Payment, PaymentStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { BiErrorCircle } from 'react-icons/bi';
@@ -55,8 +57,52 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
       user: true,
       answers: true,
       event: true,
+      payments: true,
     },
   });
+
+  const payments = userEventRegistrations.flatMap(
+    (registration) => registration.payments,
+  );
+
+  const pendingPayments = payments.filter(
+    (payment) => payment.status === 'PENDING',
+  );
+
+  const updatePaymentStatus = async (
+    payment: Payment,
+    status: PaymentStatus,
+    paymentCompleted: boolean,
+  ) => {
+    logger.info('Setting pending payment status to', status);
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: {
+        status,
+        registration: {
+          updateMany: {
+            where: {},
+            data: { paymentCompleted },
+          },
+        },
+      },
+    });
+  };
+
+  const processPendingPayments = async () => {
+    if (!pendingPayments.length) return;
+
+    for await (const payment of pendingPayments) {
+      const paymentStatus = await checkStatus(payment.orderId);
+      if (paymentStatus && (paymentStatus.successful || paymentStatus.failed)) {
+        const status = paymentStatus.successful ? 'COMPLETED' : 'CANCELLED';
+        const paymentCompleted = paymentStatus.successful;
+        await updatePaymentStatus(payment, status, paymentCompleted);
+      }
+    }
+  };
+
+  await processPendingPayments();
 
   const uniqueUpcomingEventIds = Array.from(
     new Set(
