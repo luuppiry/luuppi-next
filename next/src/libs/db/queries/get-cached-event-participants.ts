@@ -28,6 +28,6 @@ export const getCachedEventParticipants = unstable_cache(
   },
   ['get-cached-event-participants'],
   {
-    revalidate: 120,
+    revalidate: 60,
   },
 );

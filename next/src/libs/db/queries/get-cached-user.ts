@@ -50,7 +50,7 @@ export const getCachedUser = (entraUserUuid: string) =>
     },
     ['get-cached-user'],
     {
-      revalidate: 300,
+      revalidate: 60,
       tags: [`get-cached-user:${entraUserUuid}`],
     },
   )(entraUserUuid);
