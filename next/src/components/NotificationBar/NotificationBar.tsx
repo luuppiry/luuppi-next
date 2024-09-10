@@ -18,6 +18,8 @@ export default function NotificationBar({
   const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
+    if (!notification?.data?.attributes?.notification) return;
+
     const isEmpty =
       notification?.data?.attributes.notification
         ?.map((n) =>
@@ -25,6 +27,7 @@ export default function NotificationBar({
         )
         ?.join('')
         ?.trim() === '';
+
     const showUntil = notification?.data?.attributes.showUntil ?? null;
     const id = `notification-${lang}`;
     const prevUpdatedAt = new Date(localStorage.getItem(id) ?? 0);
