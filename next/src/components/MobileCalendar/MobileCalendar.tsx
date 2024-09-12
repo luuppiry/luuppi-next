@@ -29,11 +29,18 @@ const groupEventsByStartDate = (events: Event[]): Record<string, Event[]> =>
     .filter((e) => e.start)
     .reduce(
       (acc, event) => {
-        const startDate = event.start.toISOString().split('T')[0];
-        if (!acc[startDate]) {
-          acc[startDate] = [];
+        const startDate = new Intl.DateTimeFormat('fi', {
+          timeZone: 'Europe/Helsinki',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        }).format(new Date(event.start));
+
+        const formattedDate = startDate.split('.').reverse().join('-').trim();
+        if (!acc[formattedDate]) {
+          acc[formattedDate] = [];
         }
-        acc[startDate].push(event);
+        acc[formattedDate].push(event);
         return acc;
       },
       {} as Record<string, Event[]>,
