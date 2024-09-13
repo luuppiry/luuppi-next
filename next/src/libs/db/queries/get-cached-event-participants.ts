@@ -18,9 +18,6 @@ export const getCachedEventParticipants = unstable_cache(
       include: {
         user: true,
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
       distinct: ['entraUserUuid'],
     });
 
