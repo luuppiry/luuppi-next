@@ -7,6 +7,7 @@ import {
   FaFacebook,
   FaGithub,
   FaInstagram,
+  FaLinkedin,
   FaTelegram,
   FaTiktok,
 } from 'react-icons/fa';
@@ -95,6 +96,12 @@ export default function Footer({ dictionary, lang }: FooterProps) {
             </Link>
             <Link aria-label="Discord" href="https://discord.gg/HZkwtwFmDK">
               <FaDiscord className="text-white" size={20} />
+            </Link>
+            <Link
+              aria-label="Discord"
+              href="https://www.linkedin.com/company/luuppi-ry"
+            >
+              <FaLinkedin className="text-white" size={20} />
             </Link>
           </div>
         </div>

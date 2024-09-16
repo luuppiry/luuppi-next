@@ -40,6 +40,7 @@ export const getOrganizationJsonLd = (dictionary: Dictionary) => {
       'https://www.instagram.com/luuppiry/',
       'https://www.linkedin.com/company/luuppi-ry',
       'https://fi.wikipedia.org/wiki/Luuppi_(ainej%C3%A4rjest%C3%B6)',
+      'https://www.linkedin.com/company/luuppi-ry',
     ],
     hasMap:
       'https://www.google.com/maps/d/viewer?mid=1udxC-9jUfnpF5-bZyxiT3SlEcPMRnAh9',
