@@ -1,6 +1,6 @@
 export const luuppiEmails = [
   {
-    email: 'hallitus@luuppi.fi',
+    email: 'hallitus-sisainen@luuppi.fi',
     translation: 'entire_board',
   },
   {
