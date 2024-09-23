@@ -31,6 +31,13 @@ export const formatDateRangeShort = (
     start.getTime() + start.getTimezoneOffset() * 60000,
   );
   const endUTC = new Date(end.getTime() + end.getTimezoneOffset() * 60000);
+  if (start.toISOString() === end.toISOString()) {
+    return `${new Intl.DateTimeFormat(lang, {
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZone: 'Europe/Helsinki',
+    }).format(start)}`;
+  }
   if (startUTC.toDateString() === endUTC.toDateString()) {
     return `${new Intl.DateTimeFormat(lang, {
       hour: 'numeric',
