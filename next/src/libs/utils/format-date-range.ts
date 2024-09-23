@@ -16,6 +16,17 @@ export const formatDateRangeLong = (
   const isMultipleDays = startUTC.toDateString() !== endUTC.toDateString();
 
   if (!isMultipleDays) {
+    if (start.toISOString() === end.toISOString()) {
+      return `${firstLetterToUpperCase(
+        new Intl.DateTimeFormat(lang, {
+          hour: 'numeric',
+          minute: 'numeric',
+          weekday: 'long',
+          timeZone: 'Europe/Helsinki',
+        }).format(start),
+      )}`;
+    }
+
     return `${firstLetterToUpperCase(start.toLocaleString(lang, longDateFormat))} - ${start.toLocaleString(lang, shortTimeFormat)}-${end.toLocaleString(lang, shortTimeFormat)}`;
   }
 
