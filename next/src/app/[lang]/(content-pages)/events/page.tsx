@@ -62,12 +62,6 @@ export default async function Events({ params }: EventsProps) {
       return [...acc, formatEvent(event)];
     }
 
-    // Just a hack to add a EndDate because it doesn't seem to work with same date
-    // adding 1 second should probably not have any side effects :^)
-    const originalDate = new Date(memberSaleStartsAt.RegistrationStartsAt);
-    const EndDate = new Date(originalDate);
-    EndDate.setSeconds(originalDate.getSeconds() + 1);
-
     return [
       ...acc,
       formatEvent(event),
@@ -76,7 +70,7 @@ export default async function Events({ params }: EventsProps) {
         attributes: {
           ...event.attributes,
           StartDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
-          EndDate,
+          EndDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
           NameEn: `${event.attributes['NameEn']} ${dictionary.general.opens}`,
           NameFi: `${event.attributes['NameFi']} ${dictionary.general.opens}`,
         },
