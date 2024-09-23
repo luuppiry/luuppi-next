@@ -21,6 +21,8 @@ export const formatDateRangeLong = (
         new Intl.DateTimeFormat(lang, {
           hour: 'numeric',
           minute: 'numeric',
+          day: 'numeric',
+          month: 'short',
           weekday: 'long',
           timeZone: 'Europe/Helsinki',
         }).format(start),
