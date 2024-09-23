@@ -45,6 +45,8 @@ export default async function Events({ params }: EventsProps) {
     title: event.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'],
     hasTickets: Boolean(event.attributes.Registration?.TicketTypes.length),
   });
+  const luuppiMember = process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!;
+  const luuppiNonMember = process.env.NEXT_PUBLIC_NO_ROLE_ID!;
 
   // Incase an event has a Registeration for luuppi-members or non-members ("default"), add a duplicate event
   // to show the opening time in the calendar
@@ -52,7 +54,7 @@ export default async function Events({ params }: EventsProps) {
     const memberSaleStartsAt = event.attributes.Registration?.TicketTypes.find(
       (type) =>
         type.Role?.data.attributes.RoleId &&
-        ['luuppi-member', 'default'].includes(
+        [luuppiMember, luuppiNonMember].includes(
           type.Role?.data.attributes.RoleId,
         ),
     );
