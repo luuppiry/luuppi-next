@@ -1,25 +1,36 @@
+import { getDictionary } from '@/dictionaries';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
+import { addEventRegisterationOpensAtInfo } from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponseCollection, APIResponseData } from '@/types/types';
 import ical from 'ical-generator';
 import url from 'url';
+
+interface IcsEvent {
+  name: string;
+  id: number;
+  startDate: Date;
+  endDate: Date;
+  location: string;
+  description: string;
+}
 
 export async function GET(request: Request) {
   const queryParams = url.parse(request.url, true).query;
 
   const lang = queryParams.lang as SupportedLanguage | undefined;
-
   const allowedLangs = ['en', 'fi'];
 
   if (!lang || !allowedLangs.includes(lang)) {
     return new Response('Invalid lang parameter', { status: 400 });
   }
+  const dictionary = await getDictionary(lang);
 
   const threeMonthsAgo = new Date();
   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
-  const strapiUrl = `/api/events?filters[StartDate][$gte]=${threeMonthsAgo.toISOString()}`;
+  const strapiUrl = `/api/events?filters[StartDate][$gte]=${threeMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role`;
 
   const eventData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
@@ -29,7 +40,8 @@ export async function GET(request: Request) {
     return new Response('Error fetching event data', { status: 500 });
   }
 
-  const eventLanguageFormatted = eventData.data.map((event) => ({
+  // Format event from raw event data
+  const formatEvent = (event: APIResponseData<'api::event.event'>) => ({
     name: event.attributes[lang === 'fi' ? 'NameFi' : 'NameEn'],
     id: event.id,
     startDate: new Date(event.attributes.StartDate),
@@ -38,7 +50,18 @@ export async function GET(request: Request) {
     description: getPlainText(
       event.attributes[lang === 'fi' ? 'DescriptionFi' : 'DescriptionEn'],
     ),
-  }));
+  });
+
+  const eventLanguageFormatted = eventData.data.reduce(
+    (acc, event) =>
+      addEventRegisterationOpensAtInfo<IcsEvent>(
+        acc,
+        event,
+        formatEvent,
+        dictionary,
+      ),
+    [] as IcsEvent[],
+  );
 
   const ics = ical({
     name: 'Luuppi Events',

@@ -1,6 +1,7 @@
 import EventSelector from '@/components/EventSelector/EventSelector';
 import { getDictionary } from '@/dictionaries';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
+import { addEventRegisterationOpensAtInfo } from '@/libs/strapi/events';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { Event } from '@/models/event';
@@ -45,38 +46,17 @@ export default async function Events({ params }: EventsProps) {
     title: event.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'],
     hasTickets: Boolean(event.attributes.Registration?.TicketTypes.length),
   });
-  const luuppiMember = process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!;
-  const luuppiNonMember = process.env.NEXT_PUBLIC_NO_ROLE_ID!;
 
-  // Incase an event has a Registeration for luuppi-members or non-members ("default"), add a duplicate event
-  // to show the opening time in the calendar
-  const events = data.data.reduce((acc, event) => {
-    const memberSaleStartsAt = event.attributes.Registration?.TicketTypes.find(
-      (type) =>
-        type.Role?.data.attributes.RoleId &&
-        [luuppiMember, luuppiNonMember].includes(
-          type.Role?.data.attributes.RoleId,
-        ),
-    );
-    if (!memberSaleStartsAt) {
-      return [...acc, formatEvent(event)];
-    }
-
-    return [
-      ...acc,
-      formatEvent(event),
-      formatEvent({
-        ...event,
-        attributes: {
-          ...event.attributes,
-          StartDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
-          EndDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
-          NameEn: `${event.attributes['NameEn']} ${dictionary.general.opens}`,
-          NameFi: `${event.attributes['NameFi']} ${dictionary.general.opens}`,
-        },
-      }),
-    ];
-  }, [] as Event[]);
+  const events = data.data.reduce(
+    (acc, event) =>
+      addEventRegisterationOpensAtInfo<Event>(
+        acc,
+        event,
+        formatEvent,
+        dictionary,
+      ),
+    [] as Event[],
+  );
 
   return (
     <div className="relative">
