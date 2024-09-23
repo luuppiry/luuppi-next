@@ -136,7 +136,8 @@
     "location": "Location",
     "paid": "Paid",
     "quota": "Quota",
-    "ongoing": "Ongoing"
+    "ongoing": "Ongoing",
+    "opens": "opens"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"

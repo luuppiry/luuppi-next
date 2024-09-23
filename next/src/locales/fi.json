@@ -136,7 +136,8 @@
     "location": "Paikka",
     "paid": "Maksettu",
     "quota": "Kiintiö",
-    "ongoing": "Meneillään"
+    "ongoing": "Meneillään",
+    "opens": "aukeaa"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"

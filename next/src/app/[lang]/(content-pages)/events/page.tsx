@@ -5,7 +5,11 @@ import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { Event } from '@/models/event';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponse, APIResponseCollection } from '@/types/types';
+import {
+  APIResponse,
+  APIResponseCollection,
+  APIResponseData,
+} from '@/types/types';
 import { Metadata } from 'next';
 
 interface EventsProps {
@@ -26,7 +30,8 @@ export default async function Events({ params }: EventsProps) {
     ['event'],
   );
 
-  const events: Event[] = data.data.map((event) => ({
+  // Format event from raw event data
+  const formatEvent = (event: APIResponseData<'api::event.event'>): Event => ({
     description: getPlainText(
       event.attributes[
         params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
@@ -39,7 +44,43 @@ export default async function Events({ params }: EventsProps) {
       event.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
     title: event.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'],
     hasTickets: Boolean(event.attributes.Registration?.TicketTypes.length),
-  }));
+  });
+
+  // Incase an event has a Registeration for luuppi-members or non-members ("default"), add a duplicate event
+  // to show the opening time in the calendar
+  const events = data.data.reduce((acc, event) => {
+    const memberSaleStartsAt = event.attributes.Registration?.TicketTypes.find(
+      (type) =>
+        type.Role?.data.attributes.RoleId &&
+        ['luuppi-member', 'default'].includes(
+          type.Role?.data.attributes.RoleId,
+        ),
+    );
+    if (!memberSaleStartsAt) {
+      return [...acc, formatEvent(event)];
+    }
+
+    // Just a hack to add a EndDate because it doesn't seem to work with same date
+    // adding 1 second should probably not have any side effects :^)
+    const originalDate = new Date(memberSaleStartsAt.RegistrationStartsAt);
+    const EndDate = new Date(originalDate);
+    EndDate.setSeconds(originalDate.getSeconds() + 1);
+
+    return [
+      ...acc,
+      formatEvent(event),
+      formatEvent({
+        ...event,
+        attributes: {
+          ...event.attributes,
+          StartDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
+          EndDate,
+          NameEn: `${event.attributes['NameEn']} ${dictionary.general.opens}`,
+          NameFi: `${event.attributes['NameFi']} ${dictionary.general.opens}`,
+        },
+      }),
+    ];
+  }, [] as Event[]);
 
   return (
     <div className="relative">
