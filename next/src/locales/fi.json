@@ -274,7 +274,7 @@
     "payment_completed": "Maksu suoritettu",
     "payment_failed": "Maksu epäonnistui",
     "payment_failed_description": "Maksusi epäonnistui. Jos sinulta on veloitettu, ota yhteyttä WWW/IT-vastaaviin osoitteessa webmaster@luuppi.fi",
-    "payment_completed_description": "Maksusi on suoritettu onnistuneesti. Saat sähköpostiisi kuitin maksusta hetken päästä ja voit nyt sulkea tämän sivun. Näät omat tapahtumasi 'Omat tapahtumat' -sivulta jossa voit myös muokata tapahtuman mahdollisia lisätietoja, mikäli niiden muokkaus on sallittu.",
+    "payment_completed_description": "Maksusi on suoritettu onnistuneesti. Saat sähköpostiisi kuitin maksusta hetken päästä ja voit nyt sulkea tämän sivun. Näet omat tapahtumasi 'Omat tapahtumat' -sivulta jossa voit myös muokata tapahtuman mahdollisia lisätietoja, mikäli niiden muokkaus on sallittu.",
     "fill_additional_info": "Anna lisätietoja",
     "edit_additional_info": "Muokkaa lisätietoja",
     "unanswered_questions": "Vastaamattomia kysymyksiä!",
