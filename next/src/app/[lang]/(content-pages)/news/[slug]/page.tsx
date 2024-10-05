@@ -80,7 +80,7 @@ export default async function NewsPost({ params }: NewsPostProps) {
               {selectedNews.attributes.authorImage?.data?.attributes?.url ? (
                 <Image
                   alt="News author avatar"
-                  className="rounded-full bg-gradient-to-r from-secondary-400 to-primary-300"
+                  className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
                   height={50}
                   src={getStrapiUrl(
                     selectedNews.attributes.authorImage.data?.attributes.url,
