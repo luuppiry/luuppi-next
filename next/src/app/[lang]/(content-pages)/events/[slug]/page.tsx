@@ -159,7 +159,7 @@ export default async function Event({ params }: EventProps) {
               </Suspense>
             </div>
           )}
-          <div className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
+          <div className="organization-page prose prose-custom max-w-full break-words decoration-secondary-400 transition-all duration-300 ease-in-out">
             <BlockRendererClient
               content={
                 event.data.attributes[
