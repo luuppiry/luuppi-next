@@ -9,6 +9,19 @@ import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 
+function escapeCsvField(field: any): string {
+  if (field === null || field === undefined) return '""';
+  const stringField = String(field);
+  if (
+    stringField.includes(',') ||
+    stringField.includes('"') ||
+    stringField.includes('\n')
+  ) {
+    return `"${stringField.replace(/"/g, '""')}"`;
+  }
+  return stringField;
+}
+
 export async function eventExport(lang: SupportedLanguage, eventId: number) {
   const dictionary = await getDictionary(lang);
 
@@ -156,7 +169,7 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
   // Create the CSV
   const csv = eventRegistrations.reduce(
     (acc, registration) => {
-      const row = Object.values(registration).join(',');
+      const row = Object.values(registration).map(escapeCsvField).join(',');
 
       // If less keys than the most keys, fill with empty strings
       if (
@@ -168,7 +181,7 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
               Object.keys(mostKeysObject).length -
               Object.keys(registration).length,
           },
-          () => '',
+          () => '""',
         ).join(',');
         return `${acc}\n${row},${emptyCols}`;
       }
@@ -176,7 +189,7 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
       return `${acc}\n${row}`;
     },
     `${Object.keys(mostKeysObject)
-      .map((key) => key.toUpperCase())
+      .map((key) => escapeCsvField(key.toUpperCase()))
       .join(',')}`,
   );
 
