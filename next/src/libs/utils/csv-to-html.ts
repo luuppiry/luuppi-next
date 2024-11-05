@@ -51,8 +51,7 @@ export const csvToHtml = (csv: string) => {
       }
 
       .container {
-        max-width: 1200px;
-        margin: 0 auto;
+        max-width: 1800px;
         padding: 0 1rem;
       }
 
@@ -72,7 +71,7 @@ export const csvToHtml = (csv: string) => {
         padding: 1rem;
         text-align: left;
         font-weight: 600;
-        width: 200px;
+        width: 400px;
       }
 
       .metadata-table td {
@@ -97,7 +96,7 @@ export const csvToHtml = (csv: string) => {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 200px;
+        max-width: 400px;
       }
 
       .data-table th {
