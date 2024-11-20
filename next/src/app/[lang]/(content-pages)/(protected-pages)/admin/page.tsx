@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 import AdminEventManagement from '@/components/AdminEventManagement/AdminEventManagement';
-import AdminUserManagement from '@/components/AdminUserManagement/AdminUserManagement';
+import AdminUsersTable from '@/components/AdminUserManagement/AdminUsersTable/AdminUsersTable';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
@@ -54,27 +54,6 @@ export default async function Admin({ params, searchParams }: AdminProps) {
     redirect('/api/auth/force-signout');
   }
 
-  // TODO: These could be fetched using server action on the client
-  // on demand, but for now we'll just fetch them here
-  const availableRoles = await prisma.role.findMany({
-    select: {
-      strapiRoleUuid: true,
-    },
-  });
-
-  // Hato role cannot be given or removed via UI. No role also filtered out
-  // because it's not relevant in any way.
-  const SUPER_ADMINS = process.env.XXX_SUPER_ADMIN_XXX!.split(',');
-
-  const availableRolesFiltered = availableRoles
-    .filter(
-      (role) =>
-        SUPER_ADMINS.includes(user.entraUserUuid) ||
-        (role.strapiRoleUuid !== process.env.NEXT_PUBLIC_LUUPPI_HATO_ID &&
-          role.strapiRoleUuid !== process.env.NEXT_PUBLIC_NO_ROLE_ID),
-    )
-    .map((role) => role.strapiRoleUuid);
-
   return (
     <div className="relative">
       <h1 className="mb-12">{dictionary.navigation.admin}</h1>
@@ -100,11 +79,7 @@ export default async function Admin({ params, searchParams }: AdminProps) {
         </div>
       </div>
       {mode === 'user' && (
-        <AdminUserManagement
-          dictionary={dictionary}
-          lang={params.lang}
-          roles={availableRolesFiltered}
-        />
+        <AdminUsersTable dictionary={dictionary} lang={params.lang} />
       )}
       {mode === 'event' && (
         <AdminEventManagement dictionary={dictionary} lang={params.lang} />

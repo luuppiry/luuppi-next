@@ -1,10 +1,11 @@
+'use client';
 import { userEditRoles } from '@/actions/admin/user-edit-roles';
+import { UserWithRegistrations } from '@/app/[lang]/(content-pages)/(protected-pages)/admin/user/[slug]/page';
 import FormAutocomplete from '@/components/FormAutocomplete/FormAutocomplete';
 import SubmitButton from '@/components/SubmitButton/SubmitButton';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useEffect, useState } from 'react';
 import { BiErrorCircle, BiInfinite } from 'react-icons/bi';
-import { FindUserResult } from '../AdminUserManagement';
 
 const initialState = {
   message: '',
@@ -13,7 +14,7 @@ const initialState = {
 
 interface AdminRoleEditorProps {
   availableRoles: string[];
-  user: NonNullable<FindUserResult>;
+  user: UserWithRegistrations;
   dictionary: Dictionary;
   lang: SupportedLanguage;
 }
@@ -39,15 +40,10 @@ export default function AdminRoleEditor({
   >([]);
 
   useEffect(() => {
-    if (user) {
-      setFormResponse(initialState);
-      setSelectedRoles(user.roles);
-    }
+    setSelectedRoles(user.roles);
   }, [user]);
 
   const handleRoleEdit = async () => {
-    setFormResponse(initialState);
-
     const response = await userEditRoles(
       selectedRoles.map((role) => ({
         strapiRoleUuid: role.strapiRoleUuid,

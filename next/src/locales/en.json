@@ -44,7 +44,9 @@
     "user_updated": "User updated. Some changes require the user to re-login to take effect.",
     "invalid_roles": "Invalid roles",
     "user_roles_updated": "User roles updated successfully",
-    "already_member_role": "You already have member role"
+    "already_member_role": "You already have member role",
+    "no_users": "No users found",
+    "no_search_results": "No users found matching your search"
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -88,6 +90,9 @@
     "domicle": "Domicle",
     "major": "Major",
     "today": "Today",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "total": "Total",
     "tomorrow": "Tomorrow",
     "min_read": "min read",
     "menu": "Menu",
@@ -137,7 +142,13 @@
     "paid": "Paid",
     "quota": "Quota",
     "ongoing": "Ongoing",
-    "opens": "opens"
+    "opens": "opens",
+    "membership": "Membership",
+    "yes": "Yes",
+    "no": "No",
+    "never": "Never",
+    "no_users": "No users found",
+    "no_search_results": "No users found matching your search"
   },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
@@ -318,7 +329,8 @@
     "registration_info": "Registration info",
     "user_management": "User management",
     "event_management": "Event management",
-    "user_required_info_missing": "User is Luuppi's member but is missing required information!"
+    "user_required_info_missing": "User is Luuppi's member but is missing required information!",
+    "user_management_description": "View and manage all users in the system. Use search to filter by email, username, or name."
   },
   "pages_profile": {
     "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",

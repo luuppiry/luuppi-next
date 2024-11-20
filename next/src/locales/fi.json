@@ -44,7 +44,9 @@
     "user_updated": "Käyttäjän tiedot päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen.",
     "invalid_roles": "Kelvottomat roolit",
     "user_roles_updated": "Käyttäjän roolit päivitetty onnistuneesti",
-    "already_member_role": "Sinulla on jo jäsen-rooli"
+    "already_member_role": "Sinulla on jo jäsen-rooli",
+    "no_users": "Käyttäjiä ei löytynyt",
+    "no_search_results": "Haulla ei löytynyt käyttäjiä"
   },
   "roles": {
     "entire_board": "Koko hallitus",
@@ -103,6 +105,9 @@
     "hours": "tuntia",
     "hours_short": "h",
     "minutes": "minuuttia",
+    "first_name": "Etunimi",
+    "last_name": "Sukunimi",
+    "total": "Yhteensä",
     "minutes_short": "min",
     "seconds": "sekuntia",
     "seconds_short": "s",
@@ -137,7 +142,13 @@
     "paid": "Maksettu",
     "quota": "Kiintiö",
     "ongoing": "Meneillään",
-    "opens": "aukeaa"
+    "opens": "aukeaa",
+    "membership": "Jäsenyys",
+    "yes": "Kyllä",
+    "no": "Ei",
+    "never": "Ei koskaan",
+    "no_users": "Käyttäjiä ei löytynyt",
+    "no_search_results": "Haulla ei löytynyt käyttäjiä"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
@@ -318,7 +329,8 @@
     "registration_info": "Ilmoittautumistiedot",
     "user_management": "Käyttäjähallinta",
     "event_management": "Tapahtumahallinta",
-    "user_required_info_missing": "Käyttäjä on Luupin jäsen, mutta häneltä puuttuu pakollisia tietoja!"
+    "user_required_info_missing": "Käyttäjä on Luupin jäsen, mutta häneltä puuttuu pakollisia tietoja!",
+    "user_management_description": "Selaa ja hallinnoi järjestelmän käyttäjiä. Käytä hakua suodattaaksesi sähköpostin, käyttäjänimen tai nimen perusteella."
   },
   "pages_profile": {
     "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",

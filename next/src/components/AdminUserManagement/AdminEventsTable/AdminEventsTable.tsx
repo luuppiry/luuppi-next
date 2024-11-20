@@ -1,11 +1,12 @@
+'use client';
+import { UserWithRegistrations } from '@/app/[lang]/(content-pages)/(protected-pages)/admin/user/[slug]/page';
 import { Dictionary } from '@/models/locale';
 import { useState } from 'react';
 import { IoOpenOutline } from 'react-icons/io5';
-import { FindUserResult } from '../AdminUserManagement';
 
 interface AdminEventsTableProps {
   dictionary: Dictionary;
-  user: NonNullable<FindUserResult>;
+  user: UserWithRegistrations;
 }
 
 export default function AdminEventsTable({
