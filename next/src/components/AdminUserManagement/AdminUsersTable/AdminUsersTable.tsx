@@ -7,6 +7,7 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { BiErrorCircle, BiSearch } from 'react-icons/bi';
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 
 interface AdminUsersTableProps {
   dictionary: Dictionary;
@@ -225,18 +226,23 @@ export default function AdminUsersTable({
             )}
           </div>
           <div className="join">
-            {Array.from({ length: Math.max(1, totalPages) }, (_, i) => (
-              <button
-                key={i + 1}
-                className={`btn join-item btn-sm ${
-                  page === i + 1 ? 'btn-primary' : ''
-                }`}
-                disabled={isLoading || totalPages <= 1 || page === i + 1}
-                onClick={() => setPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            ))}
+            <button
+              className="btn join-item btn-sm"
+              disabled={isLoading || page === 1}
+              onClick={() => setPage(page - 1)}
+            >
+              <MdChevronLeft size={24} />
+            </button>
+            <button className="btn btn-disabled join-item no-animation btn-sm">
+              {page} / {totalPages}
+            </button>
+            <button
+              className="btn join-item btn-sm"
+              disabled={isLoading || page === totalPages}
+              onClick={() => setPage(page + 1)}
+            >
+              <MdChevronRight size={24} />
+            </button>
           </div>
         </div>
       </div>
