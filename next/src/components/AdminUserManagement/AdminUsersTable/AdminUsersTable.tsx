@@ -217,26 +217,27 @@ export default function AdminUsersTable({
 
         <div className="mt-4 flex flex-wrap items-center justify-end gap-4">
           <div className="flex flex-1 items-center gap-2 text-sm text-gray-600">
-            <span>{dictionary.general.total}:</span>
             {isLoading ? (
               <div className="h-4 w-8 animate-pulse rounded bg-gray-200" />
             ) : (
-              <span className="font-medium">{total}</span>
+              <span className="font-medium">
+                {`${(page - 1) * PAGE_SIZE + 1}-${Math.min(
+                  page * PAGE_SIZE,
+                  total,
+                )} / ${total}`}
+              </span>
             )}
           </div>
-          <div className="join">
+          <div className="flex gap-2">
             <button
-              className="btn join-item btn-sm"
+              className="btn btn-primary btn-sm"
               disabled={isLoading || page === 1}
               onClick={() => setPage(page - 1)}
             >
               <MdChevronLeft size={24} />
             </button>
-            <button className="btn btn-disabled join-item no-animation btn-sm">
-              {page} / {totalPages}
-            </button>
             <button
-              className="btn join-item btn-sm"
+              className="btn btn-primary btn-sm"
               disabled={isLoading || page === totalPages}
               onClick={() => setPage(page + 1)}
             >
