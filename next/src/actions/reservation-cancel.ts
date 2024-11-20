@@ -1,6 +1,5 @@
 'use server';
 import { auth } from '@/auth';
-import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath, revalidateTag } from 'next/cache';
@@ -10,22 +9,13 @@ export async function reservationCancel(
   lang: SupportedLanguage,
   formData: FormData,
 ) {
-  const dictionary = await getDictionary(lang);
   const session = await auth();
 
-  if (!session?.user) {
-    return {
-      message: dictionary.api.unauthorized,
-      isError: true,
-    };
-  }
+  if (!session?.user) return;
 
   const registrationId = Number(formData.get('registrationId'));
   if (!registrationId || isNaN(registrationId) || registrationId < 1) {
-    return {
-      message: dictionary.api.invalid_registration,
-      isError: true,
-    };
+    return;
   }
 
   const registration = await prisma.eventRegistration.findUnique({
@@ -41,10 +31,7 @@ export async function reservationCancel(
   });
 
   if (!registration) {
-    return {
-      message: dictionary.api.invalid_registration,
-      isError: true,
-    };
+    return;
   }
 
   await prisma.eventRegistration.update({
@@ -61,6 +48,5 @@ export async function reservationCancel(
 
   revalidateTag(`get-cached-user:${session.user.entraUserUuid}`);
   revalidatePath('/[lang]/events/[slug]', 'page');
-
   redirect(`/${lang}/own-events`);
 }
