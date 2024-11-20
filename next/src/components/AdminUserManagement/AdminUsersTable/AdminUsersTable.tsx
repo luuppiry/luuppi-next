@@ -191,12 +191,11 @@ export default function AdminUsersTable({
                       </td>
                       <td className="text-center">
                         {isMember ? (
-                          <span className="badge badge-success badge-sm gap-1 text-white">
-                            <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                          <span className="badge badge-success badge-sm text-white">
                             {dictionary.general.yes}
                           </span>
                         ) : (
-                          <span className="badge badge-ghost badge-sm">
+                          <span className="badge badge-error badge-sm text-white">
                             {dictionary.general.no}
                           </span>
                         )}
