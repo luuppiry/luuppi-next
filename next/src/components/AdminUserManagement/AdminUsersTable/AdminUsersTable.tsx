@@ -170,7 +170,7 @@ export default function AdminUsersTable({
                   </td>
                 </tr>
               ) : (
-                users.map((user, index) => {
+                users.map((user) => {
                   const { isMember, expiresAt } = getMembershipInfo(user);
                   return (
                     <tr
@@ -180,7 +180,7 @@ export default function AdminUsersTable({
                         router.push(`/admin/user/${user.entraUserUuid}`)
                       }
                     >
-                      <th>{index + 1}</th>
+                      <th className="truncate">{user.id}</th>
                       <td className="max-w-xs font-medium">
                         <div className="truncate">{user.email}</div>
                       </td>
