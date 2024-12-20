@@ -15,13 +15,12 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { BiErrorCircle } from 'react-icons/bi';
 
-export const dynamic = 'force-dynamic';
-
 interface OwnEventsProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function OwnEvents({ params }: OwnEventsProps) {
+export default async function OwnEvents(props: OwnEventsProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const session = await auth();
@@ -274,9 +273,10 @@ export default async function OwnEvents({ params }: OwnEventsProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: OwnEventsProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: OwnEventsProps,
+): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {
     title: dictionary.navigation.own_events,

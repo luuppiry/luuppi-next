@@ -18,14 +18,12 @@ import { Suspense } from 'react';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 import { PiImageBroken } from 'react-icons/pi';
 
-// TODO: Remove when partial pre-rendering is available in Nextjs 15
-export const dynamic = 'force-dynamic';
-
 interface EventProps {
-  params: { slug: string; lang: SupportedLanguage };
+  params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
 
-export default async function Event({ params }: EventProps) {
+export default async function Event(props: EventProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const id = parseInt(params.slug, 10);
@@ -182,9 +180,8 @@ export default async function Event({ params }: EventProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: EventProps): Promise<Metadata> {
+export async function generateMetadata(props: EventProps): Promise<Metadata> {
+  const params = await props.params;
   const event = await getStrapiData<APIResponse<'api::event.event'>>(
     params.lang,
     `/api/events/${params.slug}?populate=Image`,

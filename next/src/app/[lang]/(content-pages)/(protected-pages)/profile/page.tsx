@@ -10,10 +10,11 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 interface ProfileProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function Profile({ params }: ProfileProps) {
+export default async function Profile(props: ProfileProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const session = await auth();
@@ -84,9 +85,8 @@ export default async function Profile({ params }: ProfileProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: ProfileProps): Promise<Metadata> {
+export async function generateMetadata(props: ProfileProps): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {
     title: dictionary.navigation.profile,

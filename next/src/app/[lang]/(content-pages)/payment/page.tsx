@@ -7,11 +7,13 @@ import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 
 interface PaymentProps {
-  params: { lang: SupportedLanguage };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ lang: SupportedLanguage }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function Payment({ params, searchParams }: PaymentProps) {
+export default async function Payment(props: PaymentProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const { orderId, successful } = await checkReturn(searchParams);

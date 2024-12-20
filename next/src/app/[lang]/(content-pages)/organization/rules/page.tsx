@@ -11,12 +11,11 @@ const url =
 const tags = ['organization-rule'];
 
 interface OrganizationRulesProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function OrganizationRules({
-  params,
-}: OrganizationRulesProps) {
+export default async function OrganizationRules(props: OrganizationRulesProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -32,9 +31,8 @@ export default async function OrganizationRules({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: OrganizationRulesProps): Promise<Metadata> {
+export async function generateMetadata(props: OrganizationRulesProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::organization-rule.organization-rule'>
   >(params.lang, url, tags);

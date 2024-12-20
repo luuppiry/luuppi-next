@@ -9,10 +9,11 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 interface BoardProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function Board({ params }: BoardProps) {
+export default async function Board(props: BoardProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   /**
@@ -116,9 +117,8 @@ export default async function Board({ params }: BoardProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: BoardProps): Promise<Metadata> {
+export async function generateMetadata(props: BoardProps): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const boardData = await getStrapiData<

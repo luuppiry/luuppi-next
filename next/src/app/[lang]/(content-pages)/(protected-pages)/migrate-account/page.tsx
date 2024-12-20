@@ -7,10 +7,11 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 interface MigrateAccountProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function MigrateAccount({ params }: MigrateAccountProps) {
+export default async function MigrateAccount(props: MigrateAccountProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const session = await auth();
@@ -35,9 +36,8 @@ export default async function MigrateAccount({ params }: MigrateAccountProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: MigrateAccountProps): Promise<Metadata> {
+export async function generateMetadata(props: MigrateAccountProps): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {
     title: dictionary.navigation.migrate_account,

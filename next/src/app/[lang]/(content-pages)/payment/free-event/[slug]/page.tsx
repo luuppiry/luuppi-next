@@ -4,13 +4,12 @@ import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
-
 interface FreeEventProps {
-  params: { slug: string; lang: SupportedLanguage };
+  params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
 
-export default async function Event({ params }: FreeEventProps) {
+export default async function Event(props: FreeEventProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const uuid = params.slug;

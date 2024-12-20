@@ -18,10 +18,11 @@ import { FaUserAlt } from 'react-icons/fa';
 import { PiImageBroken } from 'react-icons/pi';
 
 interface NewsProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function News({ params }: NewsProps) {
+export default async function News(props: NewsProps) {
+  const params = await props.params;
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
   >(
@@ -142,9 +143,8 @@ export default async function News({ params }: NewsProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: NewsProps): Promise<Metadata> {
+export async function generateMetadata(props: NewsProps): Promise<Metadata> {
+  const params = await props.params;
   const url =
     '/api/news-list?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
   const tags = ['news-list'];

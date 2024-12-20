@@ -13,12 +13,11 @@ const url = '/api/companies?populate=logo';
 const tags = ['company'];
 
 interface CollaborationCompaniesProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function CollaborationCompanies({
-  params,
-}: CollaborationCompaniesProps) {
+export default async function CollaborationCompanies(props: CollaborationCompaniesProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -87,9 +86,8 @@ export default async function CollaborationCompanies({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: CollaborationCompaniesProps): Promise<Metadata> {
+export async function generateMetadata(props: CollaborationCompaniesProps): Promise<Metadata> {
+  const params = await props.params;
   const url =
     '/api/collaboration-company?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
   const tags = ['collaboration-company'];

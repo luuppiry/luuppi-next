@@ -201,9 +201,9 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         </div>
       ))}
       <div className="flex flex-col gap-4">
-        {ticketTypesFormatted?.map((ticket) => (
+        {ticketTypesFormatted?.map((ticket, index) => (
           <Ticket
-            key={ticket.name}
+            key={`${ticket.name}-${index}`}
             dictionary={dictionary}
             disabled={
               !ticket.isOwnQuota ||

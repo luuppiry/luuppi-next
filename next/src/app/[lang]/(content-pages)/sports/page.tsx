@@ -11,10 +11,11 @@ const url =
 const tags = ['sport'];
 
 interface SportsProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function Organization({ params }: SportsProps) {
+export default async function Organization(props: SportsProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<APIResponse<'api::sport.sport'>>(
@@ -32,9 +33,8 @@ export default async function Organization({ params }: SportsProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: SportsProps): Promise<Metadata> {
+export async function generateMetadata(props: SportsProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<APIResponse<'api::sport.sport'>>(
     params.lang,
     url,

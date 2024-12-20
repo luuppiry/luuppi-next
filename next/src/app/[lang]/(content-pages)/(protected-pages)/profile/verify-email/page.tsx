@@ -15,14 +15,13 @@ import { redirect } from 'next/navigation';
 const tenantName = process.env.AZURE_TENANT_NAME!;
 
 interface VerifyEmailProps {
-  params: { lang: SupportedLanguage };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ lang: SupportedLanguage }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function VerifyEmail({
-  params,
-  searchParams,
-}: VerifyEmailProps) {
+export default async function VerifyEmail(props: VerifyEmailProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const emailChangeToken = searchParams.token as string;
@@ -119,9 +118,8 @@ export default async function VerifyEmail({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: VerifyEmailProps): Promise<Metadata> {
+export async function generateMetadata(props: VerifyEmailProps): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {
     title: dictionary.pages_verify_email.email_changed,

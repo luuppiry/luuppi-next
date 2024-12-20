@@ -10,10 +10,11 @@ import { getOrganizationJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
 
 interface HomeProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function Home({ params }: HomeProps) {
+export default async function Home(props: HomeProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   return (
