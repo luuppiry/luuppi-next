@@ -10,10 +10,11 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 interface OldBoardProps {
-  params: { slug: string; lang: SupportedLanguage };
+  params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
 
-export default async function OldBoard({ params }: OldBoardProps) {
+export default async function OldBoard(props: OldBoardProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const year = parseInt(params.slug, 10);
@@ -125,9 +126,8 @@ export default async function OldBoard({ params }: OldBoardProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: OldBoardProps): Promise<Metadata> {
+export async function generateMetadata(props: OldBoardProps): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const boardData = await getStrapiData<

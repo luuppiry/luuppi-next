@@ -4,10 +4,11 @@ import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 
 interface FeedbackProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function Feedback({ params }: FeedbackProps) {
+export default async function Feedback(props: FeedbackProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return (
     <div className="relative">
@@ -21,9 +22,8 @@ export default async function Feedback({ params }: FeedbackProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: FeedbackProps): Promise<Metadata> {
+export async function generateMetadata(props: FeedbackProps): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {
     title: dictionary.pages_feedback.seo_title,

@@ -11,10 +11,11 @@ const url =
 const tags = ['tutoring-faq'];
 
 interface TutoringFaqProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function TutoringFaq({ params }: TutoringFaqProps) {
+export default async function TutoringFaq(props: TutoringFaqProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -30,9 +31,8 @@ export default async function TutoringFaq({ params }: TutoringFaqProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: TutoringFaqProps): Promise<Metadata> {
+export async function generateMetadata(props: TutoringFaqProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::tutoring-faq.tutoring-faq'>
   >(params.lang, url, tags);

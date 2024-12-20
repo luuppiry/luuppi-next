@@ -11,10 +11,11 @@ const url =
 const tags = ['contact'];
 
 interface ContactProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function Contact({ params }: ContactProps) {
+export default async function Contact(props: ContactProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<APIResponse<'api::contact.contact'>>(
@@ -32,9 +33,8 @@ export default async function Contact({ params }: ContactProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: ContactProps): Promise<Metadata> {
+export async function generateMetadata(props: ContactProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<APIResponse<'api::contact.contact'>>(
     params.lang,
     url,

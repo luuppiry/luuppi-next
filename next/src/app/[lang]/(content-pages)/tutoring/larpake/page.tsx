@@ -11,12 +11,11 @@ const url =
 const tags = ['tutoring-larpake'];
 
 interface TutoringLarpakeProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function TutoringLarpake({
-  params,
-}: TutoringLarpakeProps) {
+export default async function TutoringLarpake(props: TutoringLarpakeProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -32,9 +31,8 @@ export default async function TutoringLarpake({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: TutoringLarpakeProps): Promise<Metadata> {
+export async function generateMetadata(props: TutoringLarpakeProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::tutoring-larpake.tutoring-larpake'>
   >(params.lang, url, tags);

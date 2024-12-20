@@ -7,10 +7,11 @@ import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
 
 interface LuuppiSanomatProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function LuuppiSanomat({ params }: LuuppiSanomatProps) {
+export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<

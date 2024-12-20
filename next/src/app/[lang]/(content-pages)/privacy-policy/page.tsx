@@ -11,10 +11,11 @@ const url =
 const tags = ['privacy-policy'];
 
 interface PrivacyPolicyProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function PrivacyPolicy({ params }: PrivacyPolicyProps) {
+export default async function PrivacyPolicy(props: PrivacyPolicyProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -30,9 +31,8 @@ export default async function PrivacyPolicy({ params }: PrivacyPolicyProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: PrivacyPolicyProps): Promise<Metadata> {
+export async function generateMetadata(props: PrivacyPolicyProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::privacy-policy.privacy-policy'>
   >(params.lang, url, tags);

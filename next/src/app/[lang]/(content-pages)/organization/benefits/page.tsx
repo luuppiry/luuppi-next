@@ -11,12 +11,11 @@ const url =
 const tags = ['organization-benefit'];
 
 interface OrganizationBenefitsProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function OrganizationBenefits({
-  params,
-}: OrganizationBenefitsProps) {
+export default async function OrganizationBenefits(props: OrganizationBenefitsProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -32,9 +31,8 @@ export default async function OrganizationBenefits({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: OrganizationBenefitsProps): Promise<Metadata> {
+export async function generateMetadata(props: OrganizationBenefitsProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::organization-benefit.organization-benefit'>
   >(params.lang, url, tags);

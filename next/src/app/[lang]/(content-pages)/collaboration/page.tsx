@@ -11,12 +11,11 @@ const url =
 const tags = ['collaboration-general'];
 
 interface CollaborationGeneralProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function CollaborationGeneral({
-  params,
-}: CollaborationGeneralProps) {
+export default async function CollaborationGeneral(props: CollaborationGeneralProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -32,9 +31,8 @@ export default async function CollaborationGeneral({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: CollaborationGeneralProps): Promise<Metadata> {
+export async function generateMetadata(props: CollaborationGeneralProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::collaboration-general.collaboration-general'>
   >(params.lang, url, tags);

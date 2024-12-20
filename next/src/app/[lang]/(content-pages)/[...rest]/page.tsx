@@ -6,10 +6,11 @@ import Link from 'next/link';
 import roboSvg from '../../../../../public/robo_404.svg';
 
 interface NotFoundProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function NotFound({ params }: NotFoundProps) {
+export default async function NotFound(props: NotFoundProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   return (
@@ -36,9 +37,8 @@ export default async function NotFound({ params }: NotFoundProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: NotFoundProps): Promise<Metadata> {
+export async function generateMetadata(props: NotFoundProps): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {
     title: dictionary.pages_404.seo_title,

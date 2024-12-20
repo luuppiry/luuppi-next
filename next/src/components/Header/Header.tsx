@@ -2,7 +2,6 @@ import { navLinksDesktop } from '@/libs/constants';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import luuppiSvg from '../../../public/luuppi.svg';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
@@ -47,9 +46,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               <div className="flex items-center justify-center max-lg:hidden">
                 <LanguageSwitcher />
               </div>
-              <Suspense fallback={null}>
-                <HeaderActions dictionary={dictionary} lang={lang} />
-              </Suspense>
+              <HeaderActions dictionary={dictionary} lang={lang} />
             </div>
           </div>
         </nav>

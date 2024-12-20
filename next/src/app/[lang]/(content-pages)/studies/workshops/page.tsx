@@ -11,12 +11,11 @@ const url =
 const tags = ['studies-workshop'];
 
 interface StudiesWorkshopProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function StudiesWorkshop({
-  params,
-}: StudiesWorkshopProps) {
+export default async function StudiesWorkshop(props: StudiesWorkshopProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -32,9 +31,8 @@ export default async function StudiesWorkshop({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: StudiesWorkshopProps): Promise<Metadata> {
+export async function generateMetadata(props: StudiesWorkshopProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::studies-workshop.studies-workshop'>
   >(params.lang, url, tags);

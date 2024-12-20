@@ -6,16 +6,15 @@ import Link from 'next/link';
 import roboSvg from '../../../../../../public/robo_500.svg';
 
 interface AuthErrorProps {
-  params: {
+  params: Promise<{
     lang: SupportedLanguage;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
+  }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function AuthError({
-  params,
-  searchParams,
-}: AuthErrorProps) {
+export default async function AuthError(props: AuthErrorProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   const errorSearchParam = searchParams?.error;
 
@@ -42,9 +41,8 @@ export default async function AuthError({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: AuthErrorProps): Promise<Metadata> {
+export async function generateMetadata(props: AuthErrorProps): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {
     title: dictionary.pages_error.seo_title,

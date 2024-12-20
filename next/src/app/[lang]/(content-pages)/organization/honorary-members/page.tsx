@@ -11,12 +11,11 @@ const url =
 const tags = ['organization-honorary-member'];
 
 interface OrganizationHonoraryMembersProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function OrganizationHonoraryMembers({
-  params,
-}: OrganizationHonoraryMembersProps) {
+export default async function OrganizationHonoraryMembers(props: OrganizationHonoraryMembersProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -32,9 +31,8 @@ export default async function OrganizationHonoraryMembers({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: OrganizationHonoraryMembersProps): Promise<Metadata> {
+export async function generateMetadata(props: OrganizationHonoraryMembersProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::organization-honorary-member.organization-honorary-member'>
   >(params.lang, url, tags);

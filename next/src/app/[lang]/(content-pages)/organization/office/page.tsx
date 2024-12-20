@@ -11,12 +11,11 @@ const url =
 const tags = ['organization-office'];
 
 interface OrganizationOfficeProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function OrganizationOffice({
-  params,
-}: OrganizationOfficeProps) {
+export default async function OrganizationOffice(props: OrganizationOfficeProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -32,9 +31,8 @@ export default async function OrganizationOffice({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: OrganizationOfficeProps): Promise<Metadata> {
+export async function generateMetadata(props: OrganizationOfficeProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::organization-office.organization-office'>
   >(params.lang, url, tags);

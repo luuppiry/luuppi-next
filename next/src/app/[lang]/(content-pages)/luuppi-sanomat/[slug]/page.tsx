@@ -13,12 +13,11 @@ const baseUrl =
   '/api/luuppi-sanomats?populate[0]=image&populate[1]=pdf&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[id][$eq]=';
 
 interface LuuppiSanomatProps {
-  params: { slug: string; lang: SupportedLanguage };
+  params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
 
-export default async function LuuppiSanomatPublication({
-  params,
-}: LuuppiSanomatProps) {
+export default async function LuuppiSanomatPublication(props: LuuppiSanomatProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
@@ -60,9 +59,8 @@ export default async function LuuppiSanomatPublication({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: LuuppiSanomatProps): Promise<Metadata> {
+export async function generateMetadata(props: LuuppiSanomatProps): Promise<Metadata> {
+  const params = await props.params;
   const data = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
   >('fi', `${baseUrl}${params.slug}`, ['luuppi-sanomat']);

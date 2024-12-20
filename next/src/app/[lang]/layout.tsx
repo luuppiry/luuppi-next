@@ -13,6 +13,8 @@ import { Poppins } from 'next/font/google';
 import { i18n } from '../../i18n-config';
 import './globals.css';
 
+export const experimental_ppr = true;
+
 const titilliumFont = Poppins({
   subsets: ['latin'],
   weight: ['200', '300', '400', '600', '700', '900'],
@@ -20,13 +22,14 @@ const titilliumFont = Poppins({
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function RootLayout({
-  children,
-  params,
-}: RootLayoutProps) {
+export default async function RootLayout(props: RootLayoutProps) {
+  const params = await props.params;
+
+  const { children } = props;
+
   const dictionary = await getDictionary(params.lang);
 
   const notification = await getStrapiData<
@@ -67,11 +70,10 @@ export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: SupportedLanguage };
+export async function generateMetadata(props: {
+  params: Promise<{ lang: SupportedLanguage }>;
 }): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   return {

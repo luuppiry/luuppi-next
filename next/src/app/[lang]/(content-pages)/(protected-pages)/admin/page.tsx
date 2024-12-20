@@ -10,11 +10,13 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 interface AdminProps {
-  params: { lang: SupportedLanguage };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ lang: SupportedLanguage }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function Admin({ params, searchParams }: AdminProps) {
+export default async function Admin(props: AdminProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const session = await auth();
   const dictionary = await getDictionary(params.lang);
   const mode = searchParams.mode;
@@ -89,9 +91,8 @@ export default async function Admin({ params, searchParams }: AdminProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: AdminProps): Promise<Metadata> {
+export async function generateMetadata(props: AdminProps): Promise<Metadata> {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {
     title: dictionary.navigation.admin,

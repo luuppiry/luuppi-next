@@ -14,10 +14,11 @@ import {
 import { Metadata } from 'next';
 
 interface EventsProps {
-  params: { lang: SupportedLanguage };
+  params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function Events({ params }: EventsProps) {
+export default async function Events(props: EventsProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   const sixMonthsAgo = new Date();
@@ -71,9 +72,8 @@ export default async function Events({ params }: EventsProps) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: EventsProps): Promise<Metadata> {
+export async function generateMetadata(props: EventsProps): Promise<Metadata> {
+  const params = await props.params;
   const url =
     '/api/events-calendar?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['events-calendar'];

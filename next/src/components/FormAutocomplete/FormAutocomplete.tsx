@@ -28,7 +28,7 @@ export default function FormAutocomplete({
 }: FormAutocompleteProps) {
   const [showOptions, setShowOptions] = useState(false);
   const [value, setValue] = useState('');
-  const ref = useRef<any>();
+  const ref = useRef<any>(undefined);
 
   const select = (option: string) => {
     setValue('');
