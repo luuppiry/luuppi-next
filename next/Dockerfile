@@ -15,7 +15,8 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json ./
-RUN npm i
+# TODO: Used due strapi v4 react 19 peer dependency issue
+RUN npm i --legacy-peer-deps
 
 # 2. Rebuild the source code only when needed
 FROM base AS builder
