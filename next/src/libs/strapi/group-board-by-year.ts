@@ -11,7 +11,7 @@ export const groupBoardByYear = (
 ) => {
   const groupedData = data.reduce(
     (acc, item) => {
-      const year = item.attributes.year;
+      const year = item?.year;
       acc[year] = item;
       return acc;
     },

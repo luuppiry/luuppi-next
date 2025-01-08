@@ -13,12 +13,10 @@ export const addEventRegisterationOpensAtInfo = <T>(
   formatEvent: (event: APIResponseData<'api::event.event'>) => T,
   dictionary: Dictionary,
 ) => {
-  const memberSaleStartsAt = event.attributes.Registration?.TicketTypes.find(
+  const memberSaleStartsAt = event?.Registration?.TicketTypes.find(
     (type) =>
-      type.Role?.data.attributes.RoleId &&
-      [luuppiMember, luuppiNonMember].includes(
-        type.Role?.data.attributes.RoleId,
-      ),
+      type.Role?.data?.RoleId &&
+      [luuppiMember, luuppiNonMember].includes(type.Role?.data?.RoleId),
   );
   if (!memberSaleStartsAt) {
     return [...acc, formatEvent(event)];
@@ -29,13 +27,10 @@ export const addEventRegisterationOpensAtInfo = <T>(
     formatEvent(event),
     formatEvent({
       ...event,
-      attributes: {
-        ...event.attributes,
-        StartDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
-        EndDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
-        NameEn: `${event.attributes['NameEn']} ${dictionary.general.opens}`,
-        NameFi: `${event.attributes['NameFi']} ${dictionary.general.opens}`,
-      },
+      StartDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
+      EndDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
+      NameEn: `${event?.['NameEn']} ${dictionary.general.opens}`,
+      NameFi: `${event?.['NameFi']} ${dictionary.general.opens}`,
     }),
   ];
 };

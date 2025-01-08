@@ -31,7 +31,9 @@ export default async function Tutoring(props: TutoringProps) {
   );
 }
 
-export async function generateMetadata(props: TutoringProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: TutoringProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::tutoring-general.tutoring-general'>

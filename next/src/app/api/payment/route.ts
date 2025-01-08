@@ -78,8 +78,7 @@ export async function GET(request: Request) {
     );
 
     const roleToGive =
-      strapiEvent?.data?.attributes?.Registration?.RoleToGive?.data?.attributes
-        ?.RoleId;
+      strapiEvent?.data?.Registration?.RoleToGive?.data?.RoleId;
 
     const illegalRoles = [
       process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,

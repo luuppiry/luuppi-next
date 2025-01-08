@@ -52,12 +52,11 @@ export default async function Event(props: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const imageUrl = event.data.attributes.Image?.data?.attributes?.url
-    ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
+  const imageUrl = event.data?.Image?.url
+    ? getStrapiUrl(event.data?.Image?.url)
     : null;
 
-  const hasRegistration =
-    event.data.attributes?.Registration?.TicketTypes?.length;
+  const hasRegistration = event.data?.Registration?.TicketTypes?.length;
 
   return (
     <>
@@ -85,16 +84,12 @@ export default async function Event(props: EventProps) {
           </div>
           <div className="relative flex flex-col gap-4">
             <h1 className="break-words">
-              {
-                event.data.attributes[
-                  params.lang === 'en' ? 'NameEn' : 'NameFi'
-                ]
-              }
+              {event.data?.[params.lang === 'en' ? 'NameEn' : 'NameFi']}
             </h1>
             <div className="flex flex-col opacity-40">
               <p className="text-sm">
                 {dictionary.general.content_updated}:{' '}
-                {new Date(event.data.attributes.updatedAt!).toLocaleString(
+                {new Date(event.data?.updatedAt!).toLocaleString(
                   params.lang,
                   dateFormat,
                 )}
@@ -111,8 +106,8 @@ export default async function Event(props: EventProps) {
                 </div>
                 <p className="line-clamp-2">
                   {formatDateRangeLong(
-                    new Date(event.data.attributes.StartDate),
-                    new Date(event.data.attributes.EndDate),
+                    new Date(event.data?.StartDate),
+                    new Date(event.data?.EndDate),
                     params.lang,
                   )}
                 </p>
@@ -123,7 +118,7 @@ export default async function Event(props: EventProps) {
                 </div>
                 <p className="line-clamp-2">
                   {
-                    event.data.attributes[
+                    event.data?.[
                       params.lang === 'en' ? 'LocationEn' : 'LocationFi'
                     ]
                   }
@@ -160,7 +155,7 @@ export default async function Event(props: EventProps) {
           <div className="organization-page prose prose-custom max-w-full break-words decoration-secondary-400 transition-all duration-300 ease-in-out">
             <BlockRendererClient
               content={
-                event.data.attributes[
+                event.data?.[
                   params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
                 ]
               }
@@ -194,16 +189,13 @@ export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const pathname = `/${params.lang}/events/${params.slug}`;
 
   const description = getPlainText(
-    event.data.attributes[
-      params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
-    ],
+    event.data?.[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
   );
 
-  const title =
-    event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
+  const title = event.data?.[params.lang === 'en' ? 'NameEn' : 'NameFi'];
 
-  const imageUrl = event.data.attributes.Image?.data?.attributes?.url
-    ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
+  const imageUrl = event.data?.Image?.url
+    ? getStrapiUrl(event.data?.Image?.url)
     : undefined;
 
   const descriptionCutted = description.length > 300;

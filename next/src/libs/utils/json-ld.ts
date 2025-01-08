@@ -54,33 +54,33 @@ export const getEventJsonLd = (
   lang: SupportedLanguage,
 ) => {
   const description = getPlainText(
-    event.data.attributes[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
+    event.data?.[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
   ).slice(0, 300);
 
   const jsonLd: WithContext<EventSchema> = {
     '@context': 'https://schema.org',
     '@type': 'Event',
-    name: event.data.attributes[lang === 'en' ? 'NameEn' : 'NameFi'],
+    name: event.data?.[lang === 'en' ? 'NameEn' : 'NameFi'],
     url: `https://luuppi.fi/${lang}/events/${event.data.id}`,
-    startDate: new Date(event.data.attributes.StartDate).toISOString(),
-    endDate: new Date(event.data.attributes.EndDate).toISOString(),
+    startDate: new Date(event.data?.StartDate).toISOString(),
+    endDate: new Date(event.data?.EndDate).toISOString(),
     description: description.slice(0, 300),
-    image: event.data.attributes.Image?.data?.attributes?.url
-      ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
+    image: event.data?.Image?.url
+      ? getStrapiUrl(event.data?.Image?.url)
       : undefined,
     location: {
       '@type': 'Place',
-      name: event.data.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
+      name: event.data?.[lang === 'en' ? 'LocationEn' : 'LocationFi'],
     },
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    offers: event.data.attributes.Registration?.TicketTypes.map((ticket) => ({
+    offers: event.data?.Registration?.TicketTypes.map((ticket) => ({
       '@type': 'Offer',
       name: lang === 'en' ? ticket.NameEn : ticket.NameFi,
       price: ticket.Price,
       priceCurrency: 'EUR',
       url: `https://luuppi.fi/${lang}/events/${event.data.id}`,
-      validFrom: new Date(event.data.attributes.StartDate).toISOString(),
+      validFrom: new Date(event.data?.StartDate).toISOString(),
       seller: {
         '@type': 'Organization',
         name: 'Luuppi ry',
@@ -114,13 +114,11 @@ export const getNewsJsonLd = (
   const jsonLd: WithContext<NewsArticle> = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
-    headline: news.attributes.title,
-    description: news.attributes.description,
-    image: news.attributes.banner?.data?.attributes?.url
-      ? getStrapiUrl(news.attributes.banner.data.attributes.url)
-      : undefined,
-    datePublished: new Date(news.attributes.createdAt!).toISOString(),
-    dateModified: new Date(news.attributes.updatedAt!).toISOString(),
+    headline: news?.title,
+    description: news?.description,
+    image: news?.banner?.url ? getStrapiUrl(news?.banner?.url) : undefined,
+    datePublished: new Date(news?.createdAt!).toISOString(),
+    dateModified: new Date(news?.updatedAt!).toISOString(),
     publisher: {
       '@type': 'Organization',
       name: 'Luuppi ry',
@@ -131,9 +129,9 @@ export const getNewsJsonLd = (
     },
     author: {
       '@type': 'Person',
-      name: news.attributes.authorName,
-      image: news.attributes.authorImage?.data?.attributes?.url
-        ? getStrapiUrl(news.attributes.authorImage.data.attributes.url)
+      name: news?.authorName,
+      image: news?.authorImage?.url
+        ? getStrapiUrl(news?.authorImage?.url)
         : undefined,
     },
     inLanguage: {

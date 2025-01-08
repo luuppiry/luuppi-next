@@ -31,7 +31,9 @@ export default async function Organization(props: OrganizationProps) {
   );
 }
 
-export async function generateMetadata(props: OrganizationProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: OrganizationProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::organization-general.organization-general'>

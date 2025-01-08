@@ -18,20 +18,20 @@ export default function NotificationBar({
   const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
-    if (!notification?.data?.attributes?.notification) return;
+    if (!notification?.data?.notification) return;
 
     const isEmpty =
-      notification?.data?.attributes.notification
+      notification?.data?.notification
         ?.map((n) =>
           n.children.map((c) => c.type === 'text' && c.text.trim()).join(''),
         )
         ?.join('')
         ?.trim() === '';
 
-    const showUntil = notification?.data?.attributes.showUntil ?? null;
+    const showUntil = notification?.data?.showUntil ?? null;
     const id = `notification-${lang}`;
     const prevUpdatedAt = new Date(localStorage.getItem(id) ?? 0);
-    const updatedAt = new Date(notification?.data?.attributes.updatedAt!);
+    const updatedAt = new Date(notification?.data?.updatedAt!);
     const isShowed = prevUpdatedAt.toISOString() === updatedAt.toISOString();
     const isExpired = showUntil ? new Date(showUntil) < new Date() : false;
 
@@ -42,7 +42,7 @@ export default function NotificationBar({
 
   const closeNotification = () => {
     setShowNotification(false);
-    const updatedAt = notification?.data?.attributes.updatedAt!;
+    const updatedAt = notification?.data?.updatedAt!;
     const id = `notification-${lang}`;
     localStorage.setItem(id, new Date(updatedAt).toISOString());
   };
@@ -51,9 +51,7 @@ export default function NotificationBar({
 
   return (
     <div className="notification-area fixed bottom-0 left-0 z-40 flex min-h-12 w-full flex-col items-center justify-center bg-accent-400 px-12 py-4 text-center text-white max-md:min-h-10 max-md:text-xs">
-      <BlockRendererClient
-        content={notification.data.attributes.notification}
-      />
+      <BlockRendererClient content={notification.data?.notification} />
       <div className="absolute right-0 top-0 flex h-full items-center justify-center pr-4">
         <button
           className="btn btn-circle btn-ghost btn-xs text-white"

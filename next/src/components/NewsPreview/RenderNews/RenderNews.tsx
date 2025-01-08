@@ -31,12 +31,12 @@ export default async function RenderNews({
 
   const sortedNews = newsLocaleFlipped
     .sort((a, b) => {
-      const dateA = a.attributes?.publishedAt
-        ? new Date(a.attributes.publishedAt).getTime()
-        : new Date(a.attributes.createdAt || new Date()).getTime();
-      const dateB = b.attributes.publishedAt
-        ? new Date(b.attributes.publishedAt).getTime()
-        : new Date(b.attributes.createdAt || new Date()).getTime();
+      const dateA = a?.publishedAt
+        ? new Date(a?.publishedAt).getTime()
+        : new Date(a?.createdAt || new Date()).getTime();
+      const dateB = b?.publishedAt
+        ? new Date(b?.publishedAt).getTime()
+        : new Date(b?.createdAt || new Date()).getTime();
 
       return dateB - dateA;
     })
@@ -52,12 +52,12 @@ export default async function RenderNews({
           <div
             className={`${i !== 0 ? 'shrink-0 rounded-t-lg' : 'rounded-l-lg max-lg:shrink-0 max-lg:rounded-l-none max-lg:rounded-t-lg'} relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300`}
           >
-            {news.attributes.banner?.data?.attributes?.url ? (
+            {news?.banner?.url ? (
               <Image
                 alt="News banner"
                 className={`${i !== 0 ? 'rounded-t-lg' : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'} object-cover`}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={getStrapiUrl(news.attributes.banner?.data.attributes.url)}
+                src={getStrapiUrl(news?.banner?.url)}
                 fill
               />
             ) : (
@@ -70,7 +70,7 @@ export default async function RenderNews({
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm font-bold uppercase text-accent-400">
-                  {news.attributes.category}
+                  {news?.category}
                 </span>
                 <p
                   className={`flex items-center gap-1 text-sm font-semibold uppercase opacity-75 ${
@@ -85,23 +85,19 @@ export default async function RenderNews({
               </div>
               <Link
                 className={`inline-block font-bold ${i === 0 ? 'text-2xl max-lg:text-xl' : 'text-xl'} hover:underline`}
-                href={`/${lang}/news/${news.attributes.slug}`}
+                href={`/${lang}/news/${news?.slug}`}
               >
-                {news.attributes.title}
+                {news?.title}
               </Link>
-              <p className="line-clamp-3 text-sm">
-                {news.attributes.description}
-              </p>
+              <p className="line-clamp-3 text-sm">{news?.description}</p>
             </div>
             <div className="flex items-center gap-2">
-              {news.attributes.authorImage?.data?.attributes?.url ? (
+              {news?.authorImage?.url ? (
                 <Image
                   alt="News author avatar"
                   className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
                   height={50}
-                  src={getStrapiUrl(
-                    news.attributes.authorImage.data?.attributes.url,
-                  )}
+                  src={getStrapiUrl(news?.authorImage?.url)}
                   width={50}
                 />
               ) : (
@@ -111,11 +107,11 @@ export default async function RenderNews({
               )}
               <div className="flex flex-col">
                 <span className="text-sm font-semibold">
-                  {news.attributes.authorName}
+                  {news?.authorName}
                 </span>
                 <span className="text-sm opacity-60">
                   {new Date(
-                    news.attributes?.publishedAt || news.attributes.createdAt!,
+                    news?.publishedAt || news?.createdAt!,
                   ).toLocaleDateString(lang, dateFormat)}
                 </span>
               </div>

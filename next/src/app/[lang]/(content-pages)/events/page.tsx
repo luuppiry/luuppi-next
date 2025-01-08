@@ -35,17 +35,14 @@ export default async function Events(props: EventsProps) {
   // Format event from raw event data
   const formatEvent = (event: APIResponseData<'api::event.event'>): Event => ({
     description: getPlainText(
-      event.attributes[
-        params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
-      ],
+      event?.[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
     ),
-    end: new Date(event.attributes.EndDate),
-    start: new Date(event.attributes.StartDate),
+    end: new Date(event?.EndDate),
+    start: new Date(event?.StartDate),
     id: event.id.toString(),
-    location:
-      event.attributes[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
-    title: event.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'],
-    hasTickets: Boolean(event.attributes.Registration?.TicketTypes.length),
+    location: event?.[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
+    title: event?.[params.lang === 'en' ? 'NameEn' : 'NameFi'],
+    hasTickets: Boolean(event?.Registration?.TicketTypes.length),
   });
 
   const events = data.data.reduce(

@@ -7,7 +7,7 @@ import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
-  '/api/tutoring-larpake?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=ContactBanner';
+  '/api/tutoring-larpake?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
 const tags = ['tutoring-larpake'];
 
 interface TutoringLarpakeProps {
@@ -31,7 +31,9 @@ export default async function TutoringLarpake(props: TutoringLarpakeProps) {
   );
 }
 
-export async function generateMetadata(props: TutoringLarpakeProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: TutoringLarpakeProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::tutoring-larpake.tutoring-larpake'>

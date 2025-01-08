@@ -7,7 +7,7 @@ import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
-  '/api/tutoring-faq?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=ContactBanner';
+  '/api/tutoring-faq?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
 const tags = ['tutoring-faq'];
 
 interface TutoringFaqProps {
@@ -31,7 +31,9 @@ export default async function TutoringFaq(props: TutoringFaqProps) {
   );
 }
 
-export async function generateMetadata(props: TutoringFaqProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: TutoringFaqProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::tutoring-faq.tutoring-faq'>

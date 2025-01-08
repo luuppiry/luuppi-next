@@ -27,23 +27,22 @@ export default async function RenderEvents({
   const upcomingEvents = eventsData.data.map((e) => ({
     ...e,
     isToday:
-      new Date(e.attributes.StartDate).toDateString() ===
-      new Date().toDateString(),
+      new Date(e?.StartDate).toDateString() === new Date().toDateString(),
   }));
 
   const formattedEvents = upcomingEvents.map((event) => ({
     description: getPlainText(
-      event.attributes[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
+      event?.[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
     ),
-    end: new Date(event.attributes.EndDate),
+    end: new Date(event?.EndDate),
     id: event.id.toString(),
-    location: event.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
-    start: new Date(event.attributes.StartDate),
-    title: event.attributes[lang === 'en' ? 'NameEn' : 'NameFi'],
-    image: event.attributes.Image?.data?.attributes?.url
-      ? getStrapiUrl(event.attributes.Image.data.attributes.url)
+    location: event?.[lang === 'en' ? 'LocationEn' : 'LocationFi'],
+    start: new Date(event?.StartDate),
+    title: event?.[lang === 'en' ? 'NameEn' : 'NameFi'],
+    image: event?.Image?.url
+      ? getStrapiUrl(event?.Image?.url)
       : eventPlaceholder,
-    hasTickets: Boolean(event.attributes.Registration?.TicketTypes.length),
+    hasTickets: Boolean(event?.Registration?.TicketTypes.length),
   }));
 
   return (

@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@microsoft/microsoft-graph-types": "^2.40.0",
-    "@strapi/strapi": "^4.25.10",
+    "@strapi/strapi": "^5.6.0",
     "@tailwindcss/typography": "^0.5.15",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/negotiator": "^0.6.3",

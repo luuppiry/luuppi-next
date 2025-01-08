@@ -18,7 +18,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const session = await auth();
   const dictionary = await getDictionary(lang);
 
-  const ticketTypes = event.data.attributes.Registration?.TicketTypes;
+  const ticketTypes = event.data?.Registration?.TicketTypes;
 
   const localUserPromise = session?.user?.entraUserUuid
     ? getCachedUser(session.user.entraUserUuid)
@@ -35,7 +35,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
   const eventRolesWithWeights =
     ticketTypes?.map((ticketType) => ({
-      strapiRoleUuid: ticketType.Role?.data.attributes.RoleId,
+      strapiRoleUuid: ticketType.Role?.data?.RoleId,
       weight: ticketType.Weight,
     })) ?? [];
 
@@ -100,20 +100,20 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   };
 
   const ownQuota = ticketTypes?.find(
-    (type) => type.Role?.data.attributes.RoleId === targetedRole.strapiRoleUuid,
+    (type) => type.Role?.data?.RoleId === targetedRole.strapiRoleUuid,
   );
 
   const isSoldOutOwnQuota = ownQuota
-    ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.data.attributes.RoleId!)
+    ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.data?.RoleId!)
     : false;
 
   const hasUnpaidReservationsOwnQuota = ownQuota
-    ? hasUnpaidReservations(ownQuota.Role?.data.attributes.RoleId!)
+    ? hasUnpaidReservations(ownQuota.Role?.data?.RoleId!)
     : false;
 
   const hasBoughtMaxTicketsOwnQuota = ownQuota
     ? hasBoughtMaxTickets(
-        ownQuota.Role?.data.attributes.RoleId!,
+        ownQuota.Role?.data?.RoleId!,
         ownQuota.TicketsAllowedToBuy,
       )
     : false;
@@ -123,16 +123,15 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     : false;
 
   const ticketTypesFormatted = ticketTypes
-    ?.filter((type) => Boolean(type.Role?.data.attributes.RoleId))
+    ?.filter((type) => Boolean(type.Role?.data?.RoleId))
     ?.map((ticketType) => ({
       name: ticketType[lang === 'en' ? 'NameEn' : 'NameFi'],
-      location:
-        event.data.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
+      location: event.data?.[lang === 'en' ? 'LocationEn' : 'LocationFi'],
       price: ticketType.Price,
-      role: ticketType.Role?.data.attributes.RoleId,
+      role: ticketType.Role?.data?.RoleId,
       registrationStartsAt: new Date(ticketType.RegistrationStartsAt),
       registrationEndsAt: new Date(ticketType.RegistrationEndsAt),
-      isOwnQuota: isOwnQuota(ticketType.Role?.data.attributes.RoleId!),
+      isOwnQuota: isOwnQuota(ticketType.Role?.data?.RoleId!),
       maxTicketsPerUser: ticketType.TicketsAllowedToBuy,
     }))
     .sort((a, b) =>
@@ -212,7 +211,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
               !isRegistrationOpenOwnQuota
             }
             eventId={event.data.id}
-            eventStartsAt={new Date(event.data.attributes.StartDate)}
+            eventStartsAt={new Date(event.data?.StartDate)}
             isOwnQuota={isOwnQuota(ticket.role!)}
             lang={lang}
             targetedRole={targetedRole.strapiRoleUuid}
