@@ -80,29 +80,25 @@ export async function reservationCreate(
     };
   }
 
-  const localUser = await prisma.user.findFirst({
+  // Preload user data outside transaction
+  const localUser = await prisma.user.findUnique({
     where: {
       entraUserUuid: session.user.entraUserUuid,
     },
     include: {
       roles: {
-        include: {
-          role: true,
+        select: {
+          role: {
+            select: {
+              strapiRoleUuid: true,
+            },
+          },
+          expiresAt: true,
         },
         where: {
-          OR: [
-            {
-              expiresAt: {
-                gte: new Date(),
-              },
-            },
-            {
-              expiresAt: null,
-            },
-          ],
+          OR: [{ expiresAt: { gte: new Date() } }, { expiresAt: null }],
         },
       },
-      registrations: true,
     },
   });
 
@@ -185,41 +181,49 @@ export async function reservationCreate(
 
   const result = await prisma
     .$transaction(async (prisma) => {
-      // Lock whole table to prevent overbooking
       await prisma.$executeRaw`LOCK TABLE "EventRegistration" IN ACCESS EXCLUSIVE MODE`;
 
-      const eventRegistrations = await prisma.eventRegistration.findMany({
-        where: {
-          eventId,
-          deletedAt: null,
-
-          // Ticket is consired reserved if one of the following is true:
-          // - Reserved until is in the future
-          // - Payment is completed
-          // - There is a pending payment and payment is not completed
-          OR: [
-            {
-              reservedUntil: {
-                gte: new Date(),
+      const [eventRegistrations, currentUserReservations] = await Promise.all([
+        prisma.eventRegistration.findMany({
+          where: {
+            eventId,
+            deletedAt: null,
+            OR: [
+              { reservedUntil: { gte: new Date() } },
+              { paymentCompleted: true },
+              {
+                paymentCompleted: false,
+                payments: { some: { status: 'PENDING' } },
+              },
+            ],
+          },
+          select: {
+            purchaseRole: {
+              select: {
+                strapiRoleUuid: true,
               },
             },
-            {
-              paymentCompleted: true,
+          },
+        }),
+        prisma.eventRegistration.count({
+          where: {
+            eventId,
+            entraUserUuid: localUser.entraUserUuid,
+            purchaseRole: {
+              strapiRoleUuid: targetedRole.strapiRoleUuid,
             },
-            {
-              paymentCompleted: false,
-              payments: {
-                some: {
-                  status: 'PENDING',
-                },
+            deletedAt: null,
+            OR: [
+              { reservedUntil: { gte: new Date() } },
+              { paymentCompleted: true },
+              {
+                paymentCompleted: false,
+                payments: { some: { status: 'PENDING' } },
               },
-            },
-          ],
-        },
-        include: {
-          purchaseRole: true,
-        },
-      });
+            ],
+          },
+        }),
+      ]);
 
       const totalRegistrationWithRole = eventRegistrations.filter(
         (registration) =>
@@ -239,15 +243,8 @@ export async function reservationCreate(
         ownQuota.TicketsTotal - totalRegistrationWithRole;
       const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
 
-      const currentUserReservations = eventRegistrations.filter(
-        (registration) =>
-          registration.entraUserUuid === localUser.entraUserUuid &&
-          registration.purchaseRole.strapiRoleUuid ===
-            targetedRole.strapiRoleUuid,
-      );
-
       // Validate that the user has not already reserved the maximum amount of tickets
-      if (currentUserReservations.length >= ticketsAllowedToBuy) {
+      if (currentUserReservations >= ticketsAllowedToBuy) {
         return {
           message: dictionary.api.maximum_tickets_reached,
           isError: true,
@@ -256,7 +253,7 @@ export async function reservationCreate(
 
       // Validate per user limit still allows the user to reserve the amount
       const canReserveAmount =
-        amount + currentUserReservations.length <= ticketsAllowedToBuy;
+        amount + currentUserReservations <= ticketsAllowedToBuy;
       if (!canReserveAmount) {
         return {
           message: dictionary.api.no_room_own_limit,
@@ -292,7 +289,7 @@ export async function reservationCreate(
       }
 
       const hasDefaultRole = localUser.roles.find(
-        (role) => role.strapiRoleUuid === options.noRoleId!,
+        (role) => role.role.strapiRoleUuid === options.noRoleId!,
       );
       if (!hasDefaultRole) {
         // User should always have a default role
@@ -319,7 +316,7 @@ export async function reservationCreate(
 
       logger.info(
         `User ${localUser.entraUserUuid} reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
-          currentUserReservations.length + amount
+          currentUserReservations + amount
         }`,
       );
 

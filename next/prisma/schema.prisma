@@ -84,6 +84,8 @@ model EventRegistration {
   answers          Answer[]
 
   @@index([eventId])
+  @@index([eventId, deletedAt, paymentCompleted])
+  @@index([entraUserUuid, eventId])
 }
 
 model Answer {
@@ -108,6 +110,8 @@ model Payment {
   updatedAt          DateTime            @updatedAt
   confirmationSentAt DateTime?
   registration       EventRegistration[]
+
+  @@index([status])
 }
 
 // User to store some event metadata "locally" so
