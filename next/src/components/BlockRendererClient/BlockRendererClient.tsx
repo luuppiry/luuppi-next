@@ -17,10 +17,30 @@ interface BlockRendererClientProps {
   content: BlocksContent;
 }
 
+const isEmptyBlock = (block: any) =>
+  block.type === 'paragraph' &&
+  block.children?.length === 1 &&
+  block.children?.[0]?.type === 'text' &&
+  block.children?.[0]?.text === '';
+
+/**
+ * Sometimes editors make mistakes and leave empty rows at the end of the content.
+ * This function trims those empty rows for a better UX.
+ */
+const trimEmptyBlocks = (content: BlocksContent) => {
+  if (!Array.isArray(content)) return content;
+  let lastIndex = content.length - 1;
+  while (lastIndex >= 0 && isEmptyBlock(content[lastIndex])) {
+    lastIndex--;
+  }
+  return content.slice(0, lastIndex + 1);
+};
+
 export default function BlockRendererClient({
   content,
 }: BlockRendererClientProps) {
   if (!content) return null;
+  const trimmedContent = trimEmptyBlocks(content);
   return (
     <BlocksRenderer
       blocks={{
@@ -57,7 +77,7 @@ export default function BlockRendererClient({
           />
         ),
       }}
-      content={content}
+      content={trimmedContent}
     />
   );
 }
