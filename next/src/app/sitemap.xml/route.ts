@@ -18,6 +18,7 @@ const getStaticPages = (lang: SupportedLanguage) => {
     // Organization
     `/${lang}/organization`,
     `/${lang}/organization/rules`,
+    `/${lang}/organization/songbook`,
     `/${lang}/organization/board`,
     `/${lang}/organization/office`,
     `/${lang}/organization/tradition-guidelines`,
