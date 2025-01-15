@@ -27,7 +27,7 @@ export async function GET(
   const pageSize = parseInt(searchParams.get('pageSize') || '20');
 
   const file = await fs.readFile(
-    process.cwd() + '/src/data/songbook.json',
+    process.cwd() + '/public/data/songbook.json',
     'utf-8',
   );
 
