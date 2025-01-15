@@ -48,6 +48,7 @@ export default function Songbook({ dictionary }: SongbookProps) {
     new Set(),
   );
   const isFetchingRef = useRef(false);
+  const loadingRef = useRef(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -56,78 +57,111 @@ export default function Songbook({ dictionary }: SongbookProps) {
         setPage(0);
         setSongs([]);
         setHasMore(true);
+        isFetchingRef.current = false;
       }
-      isFetchingRef.current = false;
     }, 300);
 
     return () => clearTimeout(timer);
   }, [search, debouncedSearch]);
 
-  const fetchSongs = useCallback(async () => {
-    if (loading || !hasMore || isFetchingRef.current) return;
-
-    try {
-      isFetchingRef.current = true;
-      setLoading(true);
-      setError('');
-
-      const params = new URLSearchParams({
-        page: page.toString(),
-        pageSize: '20',
-        ...(debouncedSearch && { q: debouncedSearch.trim() }),
-        ...(category && { category: category.trim() }),
-      });
-
-      const response = await fetch(`/api/songbook?${params}`);
-      if (!response.ok) throw new Error('Failed to fetch songs');
-
-      const data: FetchResponse = await response.json();
-
-      if (page === 0) {
-        setSongs(data.songs);
-      } else {
-        setSongs((prev) => [...prev, ...data.songs]);
-      }
-
-      if (data.hasMore) {
-        setPage((prev) => prev + 1);
-      }
-      setHasMore(data.hasMore);
-    } catch (err) {
-      setError(dictionary.general.error);
-    } finally {
-      setLoading(false);
-      isFetchingRef.current = false;
-    }
-  }, [page, debouncedSearch, category, loading, hasMore]);
-
   useEffect(() => {
-    if (!loading && !isFetchingRef.current) {
-      fetchSongs();
+    if (debouncedSearch !== search) return;
+    if (loadingRef.current || isFetchingRef.current) return;
+
+    const fetchSongs = async () => {
+      try {
+        loadingRef.current = true;
+        isFetchingRef.current = true;
+        setLoading(true);
+        setError('');
+
+        const params = new URLSearchParams({
+          page: page.toString(),
+          pageSize: '20',
+          ...(debouncedSearch && { q: debouncedSearch.trim() }),
+          ...(category && { category: category.trim() }),
+        });
+
+        const response = await fetch(`/api/songbook?${params}`);
+        if (!response.ok) throw new Error('Failed to fetch songs');
+
+        const data: FetchResponse = await response.json();
+
+        setSongs((prev) =>
+          page === 0 ? data.songs : [...prev, ...data.songs],
+        );
+        setHasMore(data.hasMore);
+        if (data.hasMore && page === 0) {
+          setPage(1);
+        }
+      } catch (err) {
+        setError(dictionary.general.error);
+      } finally {
+        setLoading(false);
+        isFetchingRef.current = false;
+        loadingRef.current = false;
+      }
+    };
+
+    if (page === 0) {
+      setSongs([]);
+      setHasMore(true);
     }
-  }, [debouncedSearch, category]);
+
+    fetchSongs();
+
+    return () => {
+      loadingRef.current = false;
+      isFetchingRef.current = false;
+    };
+  }, [page, debouncedSearch, category, search, dictionary.general.error]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (
           entries[0].isIntersecting &&
-          hasMore &&
-          !loading &&
+          !loadingRef.current &&
           !isFetchingRef.current &&
+          hasMore &&
           page > 0
         ) {
-          fetchSongs();
+          setPage((prev) => prev + 1);
         }
       },
       { threshold: 0.1 },
     );
 
     const sentinel = document.getElementById('scroll-sentinel');
-    if (sentinel) observer.observe(sentinel);
+    if (sentinel) {
+      observer.observe(sentinel);
+    }
 
     return () => observer.disconnect();
-  }, [hasMore, loading, page]);
+  }, [hasMore, page]);
+
+  const shouldExpandSong = useCallback(
+    (song: SongbookSong, searchTerm: string): boolean => {
+      if (!searchTerm) return false;
+      return song.verses.some((verse) =>
+        verse.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      const matchingSongs = songs
+        .filter((song) => shouldExpandSong(song, debouncedSearch))
+        .map((song) => song.title);
+      setExpandedSong(matchingSongs.length === 1 ? matchingSongs[0] : null);
+      setManuallyCollapsed(new Set());
+    } else {
+      setExpandedSong(null);
+      setManuallyCollapsed(new Set());
+    }
+  }, [songs, debouncedSearch, shouldExpandSong]);
 
   const highlightText = (text: string, searchTerm: string) => {
     if (!searchTerm) return text;
@@ -147,36 +181,15 @@ export default function Songbook({ dictionary }: SongbookProps) {
     );
   };
 
-  const shouldExpandSong = (
-    song: SongbookSong,
-    searchTerm: string,
-  ): boolean => {
-    if (!searchTerm) return false;
-    return song.verses.some((verse) =>
-      verse.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-  };
-
-  useEffect(() => {
-    if (debouncedSearch) {
-      const matchingSongs = songs
-        .filter((song) => shouldExpandSong(song, debouncedSearch))
-        .map((song) => song.title);
-      setExpandedSong(matchingSongs.length === 1 ? matchingSongs[0] : null);
-      setManuallyCollapsed(new Set());
-    } else {
-      setExpandedSong(null);
-      setManuallyCollapsed(new Set());
-    }
-  }, [songs, debouncedSearch]);
-
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setSearch('');
     setCategory('');
     setPage(0);
     setSongs([]);
     setHasMore(true);
-  };
+    loadingRef.current = false;
+    isFetchingRef.current = false;
+  }, []);
 
   const groupSongsByCategory = (songs: SongbookSong[]) => {
     const groupedSongs = songs.reduce(
@@ -215,7 +228,7 @@ export default function Songbook({ dictionary }: SongbookProps) {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="w-full">
       <div className="flex w-full items-center justify-between rounded-lg bg-background-50 p-4 max-md:flex-col max-md:justify-center max-md:gap-4 max-md:px-2">
         <div className="flex w-full items-center gap-4 max-md:flex-col max-md:gap-2">
           <div className="relative w-full">
@@ -279,7 +292,7 @@ export default function Songbook({ dictionary }: SongbookProps) {
                 {categorySongs.map((song, index) => (
                   <div
                     key={index}
-                    className="flex bg-background-50 transition-all"
+                    className="flex rounded-lg bg-background-50 transition-all"
                   >
                     <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
                     <div className="card-body flex-1 p-3 sm:p-4">
