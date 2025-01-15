@@ -1,6 +1,6 @@
 'use client';
 import { Dictionary } from '@/models/locale';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { MdClear } from 'react-icons/md';
 
@@ -47,22 +47,27 @@ export default function Songbook({ dictionary }: SongbookProps) {
   const [manuallyCollapsed, setManuallyCollapsed] = useState<Set<string>>(
     new Set(),
   );
+  const isFetchingRef = useRef(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
-      setPage(0);
-      setSongs([]);
-      setHasMore(true);
+      if (search !== debouncedSearch) {
+        setPage(0);
+        setSongs([]);
+        setHasMore(true);
+      }
+      isFetchingRef.current = false;
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, debouncedSearch]);
 
   const fetchSongs = useCallback(async () => {
-    if (loading) return;
+    if (loading || !hasMore || isFetchingRef.current) return;
 
     try {
+      isFetchingRef.current = true;
       setLoading(true);
       setError('');
 
@@ -78,29 +83,40 @@ export default function Songbook({ dictionary }: SongbookProps) {
 
       const data: FetchResponse = await response.json();
 
-      setSongs((prev) => (page === 0 ? data.songs : [...prev, ...data.songs]));
-      setHasMore(data.hasMore);
+      if (page === 0) {
+        setSongs(data.songs);
+      } else {
+        setSongs((prev) => [...prev, ...data.songs]);
+      }
+
       if (data.hasMore) {
         setPage((prev) => prev + 1);
       }
+      setHasMore(data.hasMore);
     } catch (err) {
       setError(dictionary.general.error);
     } finally {
       setLoading(false);
+      isFetchingRef.current = false;
     }
-  }, [page, debouncedSearch, category, loading]);
+  }, [page, debouncedSearch, category, loading, hasMore]);
 
   useEffect(() => {
-    setPage(0);
-    setSongs([]);
-    setHasMore(true);
-    fetchSongs();
+    if (!loading && !isFetchingRef.current) {
+      fetchSongs();
+    }
   }, [debouncedSearch, category]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
+        if (
+          entries[0].isIntersecting &&
+          hasMore &&
+          !loading &&
+          !isFetchingRef.current &&
+          page > 0
+        ) {
           fetchSongs();
         }
       },
@@ -111,7 +127,7 @@ export default function Songbook({ dictionary }: SongbookProps) {
     if (sentinel) observer.observe(sentinel);
 
     return () => observer.disconnect();
-  }, [fetchSongs, hasMore, loading]);
+  }, [hasMore, loading, page]);
 
   const highlightText = (text: string, searchTerm: string) => {
     if (!searchTerm) return text;
