@@ -84,6 +84,7 @@
     "copied": "Kopioitu",
     "submit": "Lähetä",
     "firstNames": "Etunimet",
+    "all_categories": "Kaikki kategoriat",
     "lastName": "Sukunimi",
     "close": "Sulje",
     "preferredFullName": "Ensisijainen koko nimi",
@@ -167,6 +168,7 @@
   },
   "navigation": {
     "home": "Koti",
+    "songbook": "Laulukirja",
     "organization": "Yhdistys",
     "introduction": "Esittely",
     "studies": "Opinnot",
@@ -253,6 +255,12 @@
     "board_members": "Hallituksen jäsenet",
     "officials": "Toimihenkilöt",
     "seo_description": "Luuppi ry:n hallitus ja toimihenkilöt vuonna"
+  },
+  "pages_songbook": {
+    "title": "Laulukirja",
+    "description": "Onneksi olkoon! Olet saanut käsiisi Luuppi ry:n laulukirja Vergilia Dramatican kolmannen painoksen. Kanna kirjaa kuin omaa lastasi illanvietoissa mukana, vaikka sitten haalarien taskussa. Laulukirjan juuret ulottuvat vuoteen 2012, jolloin Luupin ’Poliisi ja rosvot’-sitseille tehtiin ensimmäinen versio Vergilia Dramaticasta lauluvihkon muodossa.",
+    "seo_title": "Luuppi ry | Laulukirja",
+    "seo_description": "Luuppi ry:n laulukirja Vergilia Dramatican kolmannen painoksen laulut."
   },
   "pages_events": {
     "calendar": "Kalenteri",

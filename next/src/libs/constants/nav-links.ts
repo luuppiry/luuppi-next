@@ -47,6 +47,10 @@ export const navLinksDesktop: NavLink[] = [
         href: '/organization/benefits',
       },
       {
+        translation: 'songbook',
+        href: '/organization/songbook',
+      },
+      {
         translation: 'documents',
         href: '/organization/documents',
       },
@@ -218,6 +222,10 @@ export const navLinksMobile: NavLink[] = [
       {
         translation: 'member_benefits',
         href: '/organization/benefits',
+      },
+      {
+        translation: 'songbook',
+        href: '/organization/songbook',
       },
       {
         translation: 'documents',
