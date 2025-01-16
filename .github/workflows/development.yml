@@ -10,17 +10,88 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Check for changes
+    runs-on: ubuntu-latest
+    outputs:
+      strapi: ${{ steps.filter.outputs.strapi }}
+      next: ${{ steps.filter.outputs.next }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            strapi:
+              - 'strapi/**'
+            next:
+              - 'next/**'
+
+  strapi:
+    needs: changes
+    if: ${{ needs.changes.outputs.strapi == 'true' }}
+    name: Build and Deploy Strapi
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Backup Strapi
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd luuppi-next-dev/strapi
+            docker compose exec -T strapi sh -c 'npm run strapi export -- --no-encrypt --file backup'
+            docker cp strapi:/opt/app/backup.tar.gz backup-$(date +%Y-%m-%d-%H-%M-%S).tar.gz
+            docker compose exec -T strapi sh -c 'rm backup.tar.gz'
+
+      - name: Build Strapi Docker image
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          docker build -t ${{ secrets.REGISTRY }}/strapi-dev:latest ./strapi
+          docker push ${{ secrets.REGISTRY }}/strapi-dev:latest
+
+      - name: Deploy Strapi
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd luuppi-next-dev/strapi
+            git pull
+            docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
+            docker pull ${{ secrets.REGISTRY }}/strapi-dev:latest
+            docker compose down
+            docker compose up -d
+
   next:
+    needs: [changes, strapi]
+    if: |
+      always() &&
+      needs.changes.outputs.next == 'true' &&
+      (needs.strapi.result == 'success' || needs.strapi.result == 'skipped')
     name: Build and Deploy Next.js
     timeout-minutes: 15
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Add Next.js environment variables
         run: |
           touch .env
-          echo NEXT_PUBLIC_STRAPI_BASE_URL=https://${{ secrets.CMS_HOST }} >> .env
+          echo NEXT_PUBLIC_STRAPI_BASE_URL=https://${{ secrets.CMS_HOST_DEV }} >> .env
           echo NEXT_PUBLIC_BASE_URL=https://${{ secrets.BASE_HOST_DEV }} >> .env
           echo NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} >> .env
           echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env
@@ -37,22 +108,22 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build -t ${{ secrets.REGISTRY }}/next-beta:latest ./next
-          docker push ${{ secrets.REGISTRY }}/next-beta:latest
+          docker build -t ${{ secrets.REGISTRY }}/next-dev:latest ./next
+          docker push ${{ secrets.REGISTRY }}/next-dev:latest
 
       - name: Deploy Next.js
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DEV }}
-          username: ${{ secrets.USERNAME_DEV }}
-          key: ${{ secrets.KEY_DEV }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd luuppi-next/next
+            cd luuppi-next-dev/next
             git reset --hard origin/dev
             git pull
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
-            docker pull ${{ secrets.REGISTRY }}/next-beta:latest
+            docker pull ${{ secrets.REGISTRY }}/next-dev:latest
             docker compose down
             docker compose up -d
             echo "Sleeping for 10 seconds"
