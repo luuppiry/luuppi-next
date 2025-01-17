@@ -21,7 +21,7 @@ This repository is the foundation of [luuppi.fi](https://luuppi.fi) website. It 
 
 Before you begin, ensure you have the following prerequisites installed on your system:
 
--   [Node.js](https://nodejs.org/en) (Version >= v20.xx)
+- [Node.js](https://nodejs.org/en) (Version >= v20.xx)
 
 #### 1. Configure `.env.local`
 
@@ -62,7 +62,7 @@ In summary, you use the content-type builder locally to structure the correct 'd
 
 Before you begin, ensure you have the following prerequisites installed on your system:
 
--   [Node.js](https://nodejs.org/en) (Version >= v20.xx)
+- [Node.js](https://nodejs.org/en) (Version >= v20.xx)
 
 #### 1. Configure `.env`
 
@@ -86,7 +86,28 @@ npm run dev
 
 The development server should now be up and running at [http://localhost:1337](http://localhost:1337).
 
+## Port Overview
+
+The following ports are used in different environments:
+
+### Production Environment
+
+- Frontend (Next.js): 3000
+- Strapi CMS: 1337
+- Frontend PostgreSQL: 5433
+- Strapi PostgreSQL: 5432
+- Redis: 6379
+
+### Development Environment
+
+- Frontend (Next.js): 3003
+- Strapi CMS: 1338
+- Frontend PostgreSQL: 5434
+- Strapi PostgreSQL: 5452
+- Redis: 6382
+
 ## Contribution
+
 We encourage you to contribute to making the weba™️ better! Please refer to the [Contributing Guidelines](.github/CONTRIBUTING.md) for instructions on how to proceed.
 
 Trying to report a possible security vulnerability in this repository? Please
@@ -102,6 +123,7 @@ We extend our gratitude to all those who take the time to improve Luuppi's websi
 </a>
 
 ### Open Discussion
+
 We have public [Telegram-channel](https://t.me/luupinweba) for people interested about Luuppi's web development :)
 
 <a href="https://t.me/luupinweba">
@@ -109,6 +131,7 @@ We have public [Telegram-channel](https://t.me/luupinweba) for people interested
 </a>
 
 ## License
+
 This repository is released under the [MIT License](https://opensource.org/licenses/MIT).
 
 <details>
@@ -116,11 +139,13 @@ This repository is released under the [MIT License](https://opensource.org/licen
 <summary>Bonus</summary>
 
 # Time lost graveyard 🪦
+
 _Beginning of time starts from January 1, 1970, 00:00:00 UTC_
 
 Feel free to bring your meter here:
 
 #### Kasperi Pohtinen
+
 [![wakatime](https://wakatime.com/badge/user/a04247ba-6c76-456e-b04a-3dfa0bc6df41/project/018d2279-a88c-4764-afbe-c443f3ae9726.svg)](https://wakatime.com/badge/user/a04247ba-6c76-456e-b04a-3dfa0bc6df41/project/018d2279-a88c-4764-afbe-c443f3ae9726)
 
 </details>

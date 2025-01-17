@@ -72,8 +72,8 @@ jobs:
             git pull
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
             docker pull ${{ secrets.REGISTRY }}/strapi-dev:latest
-            docker compose down
-            docker compose up -d
+            docker compose -f docker-compose-development.yaml down
+            docker compose -f docker-compose-development.yaml up -d
 
   next:
     needs: [changes, strapi]
@@ -124,8 +124,8 @@ jobs:
             git pull
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
             docker pull ${{ secrets.REGISTRY }}/next-dev:latest
-            docker compose down
-            docker compose up -d
+            docker compose -f docker-compose-development.yml down
+            docker compose -f docker-compose-development.yml up -d
             echo "Sleeping for 10 seconds"
             sleep 10
             docker compose -f docker-compose-migrate.yaml up -d

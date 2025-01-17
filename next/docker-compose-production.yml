@@ -1,7 +1,7 @@
 services:
-  next:
-    container_name: ${IMAGE}
-    image: luuppi.azurecr.io/${IMAGE}:latest
+  next_production:
+    container_name: next_production
+    image: luuppi.azurecr.io/next-prod:latest
     restart: unless-stopped
     env_file: .env
     environment:
@@ -13,8 +13,8 @@ services:
     networks:
       - weba-network
 
-  redisDB:
-    container_name: redisDB
+  redis_next_production:
+    container_name: redis_next_production
     image: redis/redis-stack-server:latest
     restart: unless-stopped
     ports:
@@ -22,8 +22,8 @@ services:
     networks:
       - weba-network
 
-  postgresDB:
-    container_name: postgresDB
+  pg_next_production:
+    container_name: pg_next_production
     platform: linux/amd64 #for platform error on Apple M1 chips
     restart: unless-stopped
     image: postgres:16.0-alpine

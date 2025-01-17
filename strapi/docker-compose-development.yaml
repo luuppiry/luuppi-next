@@ -1,7 +1,7 @@
 services:
-  strapi:
-    container_name: strapi
-    image: luuppi.azurecr.io/strapi:latest
+  strapi_production:
+    container_name: strapi_production
+    image: luuppi.azurecr.io/strapi-dev:latest
     restart: unless-stopped
     env_file: .env
     environment:
@@ -23,14 +23,14 @@ services:
       - ./.env:/opt/app/.env
       - ./public/uploads:/opt/app/public/uploads
     ports:
-      - "127.0.0.1:1337:1337"
+      - "127.0.0.1:1338:1337"
     networks:
       - weba-network
     depends_on:
       - strapiDB
 
-  strapiDB:
-    container_name: strapiDB
+  pg_strapi_production:
+    container_name: pg_strapi_production
     platform: linux/amd64 #for platform error on Apple M1 chips
     restart: unless-stopped
     env_file: .env
@@ -44,7 +44,7 @@ services:
       #- ./data:/var/lib/postgresql/data/ # if you want to use a bind folder
 
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:5452:5432"
     networks:
       - weba-network
 

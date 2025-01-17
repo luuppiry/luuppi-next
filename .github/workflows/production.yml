@@ -57,8 +57,8 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build -t ${{ secrets.REGISTRY }}/strapi:latest ./strapi
-          docker push ${{ secrets.REGISTRY }}/strapi:latest
+          docker build -t ${{ secrets.REGISTRY }}/strapi-prod:latest ./strapi
+          docker push ${{ secrets.REGISTRY }}/strapi-prod:latest
 
       - name: Deploy Strapi
         uses: appleboy/ssh-action@master
@@ -71,9 +71,9 @@ jobs:
             cd luuppi-next/strapi
             git pull
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
-            docker pull ${{ secrets.REGISTRY }}/strapi:latest
-            docker compose down
-            docker compose up -d
+            docker pull ${{ secrets.REGISTRY }}/strapi-prod:latest
+            docker compose -f docker-compose-production.yaml down
+            docker compose -f docker-compose-production.yaml up -d
 
   next:
     needs: [changes, strapi]
@@ -108,8 +108,8 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build -t ${{ secrets.REGISTRY }}/next:latest ./next
-          docker push ${{ secrets.REGISTRY }}/next:latest
+          docker build -t ${{ secrets.REGISTRY }}/next-prod:latest ./next
+          docker push ${{ secrets.REGISTRY }}/next-prod:latest
 
       - name: Deploy Next.js
         uses: appleboy/ssh-action@master
@@ -123,9 +123,9 @@ jobs:
             git reset --hard origin/main
             git pull
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
-            docker pull ${{ secrets.REGISTRY }}/next:latest
-            docker compose down
-            docker compose up -d
+            docker pull ${{ secrets.REGISTRY }}/next-prod:latest
+            docker compose -f docker-compose-production.yml down
+            docker compose -f docker-compose-production.yml up -d
             echo "Sleeping for 10 seconds"
             sleep 10
             docker compose -f docker-compose-migrate.yaml up -d
