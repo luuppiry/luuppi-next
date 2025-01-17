@@ -40,7 +40,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
     volumes:
-      - strapi-data:/var/lib/postgresql/data/ #using a volume
+      - strapi-data-dev:/var/lib/postgresql/data/ #using a volume
       #- ./data:/var/lib/postgresql/data/ # if you want to use a bind folder
 
     ports:
@@ -49,7 +49,7 @@ services:
       - weba-network
 
 volumes:
-  strapi-data:
+  strapi-data-dev:
 
 #
 # External network handled by luuppi-proxy
