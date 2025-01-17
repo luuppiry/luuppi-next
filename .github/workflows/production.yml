@@ -69,6 +69,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd luuppi-next/strapi
+            git reset --hard origin/main
             git pull
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
             docker pull ${{ secrets.REGISTRY }}/strapi-prod:latest
