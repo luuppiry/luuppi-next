@@ -46,9 +46,9 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd luuppi-next/strapi
-            docker compose exec -T strapi sh -c 'npm run strapi export -- --no-encrypt --file backup'
-            docker cp strapi:/opt/app/backup.tar.gz backup-$(date +%Y-%m-%d-%H-%M-%S).tar.gz
-            docker compose exec -T strapi sh -c 'rm backup.tar.gz'
+            docker compose exec -T strapi_production sh -c 'npm run strapi export -- --no-encrypt --file backup'
+            docker cp strapi_production:/opt/app/backup.tar.gz backup-$(date +%Y-%m-%d-%H-%M-%S).tar.gz
+            docker compose exec -T strapi_production sh -c 'rm backup.tar.gz'
 
       - name: Build Strapi Docker image
         uses: azure/docker-login@v1
