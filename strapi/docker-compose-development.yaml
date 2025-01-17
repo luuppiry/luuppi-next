@@ -1,12 +1,12 @@
 services:
-  strapi_production:
-    container_name: strapi_production
+  strapi_development:
+    container_name: strapi_development
     image: luuppi.azurecr.io/strapi-dev:latest
     restart: unless-stopped
     env_file: .env
     environment:
       DATABASE_CLIENT: ${DATABASE_CLIENT}
-      DATABASE_HOST: strapiDB
+      DATABASE_HOST: pg_strapi_development
       DATABASE_PORT: ${DATABASE_PORT}
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
@@ -27,10 +27,10 @@ services:
     networks:
       - weba-network
     depends_on:
-      - strapiDB
+      - pg_strapi_development
 
-  pg_strapi_production:
-    container_name: pg_strapi_production
+  pg_strapi_development:
+    container_name: pg_strapi_development
     platform: linux/amd64 #for platform error on Apple M1 chips
     restart: unless-stopped
     env_file: .env

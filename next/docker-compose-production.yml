@@ -5,11 +5,11 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      - REDIS_HOST=redisDB
+      - REDIS_HOST=redis_next_production
     ports:
       - '127.0.0.1:3000:3000'
     depends_on:
-      - redisDB
+      - redis_next_production
     networks:
       - weba-network
 

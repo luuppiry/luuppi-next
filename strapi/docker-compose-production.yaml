@@ -6,7 +6,7 @@ services:
     env_file: .env
     environment:
       DATABASE_CLIENT: ${DATABASE_CLIENT}
-      DATABASE_HOST: strapiDB
+      DATABASE_HOST: pg_strapi_production
       DATABASE_PORT: ${DATABASE_PORT}
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
@@ -27,7 +27,7 @@ services:
     networks:
       - weba-network
     depends_on:
-      - strapiDB
+      - pg_strapi_production
 
   pg_strapi_production:
     container_name: pg_strapi_production
