@@ -41,7 +41,10 @@ export default function DayBadge({ dictionary, event }: DayBadgeProps) {
 
   return (
     <span
-      className={`badge badge-accent absolute left-1/2 z-20 -translate-x-1/2 -translate-y-2 transform border-none font-bold text-white ${isEventNow && 'animate-gradient ongoing-event bg-gradient-to-r from-accent-400 to-accent-600'}`}
+      className={`badge badge-accent absolute left-1/2 z-20 -translate-x-1/2 -translate-y-2 transform border-none font-bold text-white ${
+        isEventNow &&
+        'animate-gradient ongoing-event bg-gradient-to-r from-accent-400 to-accent-600'
+      }`}
     >
       {badgeText}!
     </span>

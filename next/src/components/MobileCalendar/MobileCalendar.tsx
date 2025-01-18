@@ -173,14 +173,20 @@ export default function MobileCalendar({
           return (
             <button
               key={idx}
-              className={`flex w-full flex-col items-center rounded-lg py-2 text-center transition-all duration-300 ease-in-out ${isToday ? 'bg-[#fffadf] font-bold' : 'bg-gray-50'} ${hasEvents && 'hover:bg-gray-200 focus:bg-gray-200'}`}
+              className={`flex w-full flex-col items-center rounded-lg py-2 text-center transition-all duration-300 ease-in-out ${
+                isToday ? 'bg-[#fffadf] font-bold' : 'bg-gray-50'
+              } ${hasEvents && 'hover:bg-gray-200 focus:bg-gray-200'}`}
               disabled={!hasEvents}
               onClick={() => openDayEventsDialog(dateKey)}
             >
               {day || ''}
               {hasEvents && (
                 <span
-                  className={`flex h-6 w-6 items-center justify-center rounded-full px-2 py-1 text-xs ${isPast ? 'bg-gray-400 text-white' : 'bg-secondary-400 text-white'}`}
+                  className={`flex h-6 w-6 items-center justify-center rounded-full px-2 py-1 text-xs ${
+                    isPast
+                      ? 'bg-gray-400 text-white'
+                      : 'bg-secondary-400 text-white'
+                  }`}
                 >
                   {dayEvents.length}
                 </span>

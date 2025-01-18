@@ -14,7 +14,9 @@ interface CollaborationGeneralProps {
   params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function CollaborationGeneral(props: CollaborationGeneralProps) {
+export default async function CollaborationGeneral(
+  props: CollaborationGeneralProps,
+) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
@@ -31,7 +33,9 @@ export default async function CollaborationGeneral(props: CollaborationGeneralPr
   );
 }
 
-export async function generateMetadata(props: CollaborationGeneralProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: CollaborationGeneralProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::collaboration-general.collaboration-general'>

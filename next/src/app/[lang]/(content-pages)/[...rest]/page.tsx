@@ -37,7 +37,9 @@ export default async function NotFound(props: NotFoundProps) {
   );
 }
 
-export async function generateMetadata(props: NotFoundProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: NotFoundProps,
+): Promise<Metadata> {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {

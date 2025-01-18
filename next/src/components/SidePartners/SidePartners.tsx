@@ -30,7 +30,13 @@ export default function SidePartners({
         {randomPartners.map((partner) => (
           <Link
             key={partner.attributes.createdAt!.toString()}
-            className={`relative w-full ${partner.attributes.homepageUrl.includes('tietokonepalveluhietaniemi') ? 'h-16' : 'h-8'}`}
+            className={`relative w-full ${
+              partner.attributes.homepageUrl.includes(
+                'tietokonepalveluhietaniemi',
+              )
+                ? 'h-16'
+                : 'h-8'
+            }`}
             href={partner.attributes.homepageUrl}
           >
             <Image

@@ -31,7 +31,9 @@ export default async function StudiesWorkshop(props: StudiesWorkshopProps) {
   );
 }
 
-export async function generateMetadata(props: StudiesWorkshopProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: StudiesWorkshopProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::studies-workshop.studies-workshop'>

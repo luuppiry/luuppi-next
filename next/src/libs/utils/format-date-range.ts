@@ -29,10 +29,14 @@ export const formatDateRangeLong = (
       )}`;
     }
 
-    return `${firstLetterToUpperCase(start.toLocaleString(lang, longDateFormat))} - ${start.toLocaleString(lang, shortTimeFormat)}-${end.toLocaleString(lang, shortTimeFormat)}`;
+    return `${firstLetterToUpperCase(
+      start.toLocaleString(lang, longDateFormat),
+    )} - ${start.toLocaleString(lang, shortTimeFormat)}-${end.toLocaleString(lang, shortTimeFormat)}`;
   }
 
-  return `${firstLetterToUpperCase(start.toLocaleString(lang, shortDateFormat))} - ${firstLetterToUpperCase(end.toLocaleString(lang, shortDateFormat))}`;
+  return `${firstLetterToUpperCase(
+    start.toLocaleString(lang, shortDateFormat),
+  )} - ${firstLetterToUpperCase(end.toLocaleString(lang, shortDateFormat))}`;
 };
 
 export const formatDateRangeShort = (

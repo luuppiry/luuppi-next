@@ -14,7 +14,9 @@ interface OrganizationDocumentsProps {
   params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function OrganizationDocuments(props: OrganizationDocumentsProps) {
+export default async function OrganizationDocuments(
+  props: OrganizationDocumentsProps,
+) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
@@ -31,7 +33,9 @@ export default async function OrganizationDocuments(props: OrganizationDocuments
   );
 }
 
-export async function generateMetadata(props: OrganizationDocumentsProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: OrganizationDocumentsProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::organization-document.organization-document'>

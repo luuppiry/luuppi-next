@@ -18,7 +18,9 @@ const EventsList = dynamic(() => import('../EventsList/EventsList'), {
 });
 const MobileCalendar = dynamic(
   () => import('../MobileCalendar/MobileCalendar'),
-  { loading: () => <MobileCalendarSkeleton /> },
+  {
+    loading: () => <MobileCalendarSkeleton />,
+  },
 );
 
 const baseUrlWithoutHttp = process.env.NEXT_PUBLIC_BASE_URL?.replace(

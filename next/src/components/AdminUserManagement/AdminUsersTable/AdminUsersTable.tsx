@@ -221,10 +221,7 @@ export default function AdminUsersTable({
               <div className="h-4 w-8 animate-pulse rounded bg-gray-200" />
             ) : (
               <span className="font-medium">
-                {`${(page - 1) * PAGE_SIZE + 1}-${Math.min(
-                  page * PAGE_SIZE,
-                  total,
-                )} / ${total}`}
+                {`${(page - 1) * PAGE_SIZE + 1}-${Math.min(page * PAGE_SIZE, total)} / ${total}`}
               </span>
             )}
           </div>

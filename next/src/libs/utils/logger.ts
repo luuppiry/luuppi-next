@@ -5,7 +5,9 @@ const LOGS_ENABLED = process.env.LOGS_ENABLED ?? true;
 
 const getFormattedDate = () => {
   const date = new Date();
-  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  return `${
+    date.getMonth() + 1
+  }/${date.getDate()}/${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 };
 
 const formatMessage = (message: any[]) =>
@@ -42,13 +44,17 @@ export const logger = {
   info: (...message: any[]) => {
     if (!LOGS_ENABLED) return;
     console.log(
-      ` ${colors.bold}${colors.green}✓${colors.reset} ${getFormattedDate()} ${colors.green}INFO ${colors.yellow}[${getPath()}]${colors.green} ${formatMessage(message)}`,
+      ` ${colors.bold}${colors.green}✓${colors.reset} ${getFormattedDate()} ${
+        colors.green
+      }INFO ${colors.yellow}[${getPath()}]${colors.green} ${formatMessage(message)}`,
     );
   },
   error: (...message: any[]) => {
     if (!LOGS_ENABLED) return;
     console.log(
-      ` ${colors.bold}${colors.red}✖${colors.reset} ${getFormattedDate()} ${colors.red}ERROR ${colors.yellow}[${getPath()}]${colors.red} ${formatMessage(message)}`,
+      ` ${colors.bold}${colors.red}✖${colors.reset} ${getFormattedDate()} ${
+        colors.red
+      }ERROR ${colors.yellow}[${getPath()}]${colors.red} ${formatMessage(message)}`,
     );
   },
 };

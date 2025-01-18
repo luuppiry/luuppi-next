@@ -16,7 +16,9 @@ interface LuuppiSanomatProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
 
-export default async function LuuppiSanomatPublication(props: LuuppiSanomatProps) {
+export default async function LuuppiSanomatPublication(
+  props: LuuppiSanomatProps,
+) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
@@ -59,7 +61,9 @@ export default async function LuuppiSanomatPublication(props: LuuppiSanomatProps
   );
 }
 
-export async function generateMetadata(props: LuuppiSanomatProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: LuuppiSanomatProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>

@@ -33,7 +33,10 @@ export default function TicketAmountDialog({
           id="amount"
           marginTop={false}
           options={Array.from({ length: maxAmount }, (_, i) => i + 1).map(
-            (i) => ({ value: i.toString(), label: i.toString() }),
+            (i) => ({
+              value: i.toString(),
+              label: i.toString(),
+            }),
           )}
           required={true}
           title={dictionary.pages_events.ticket_amount}

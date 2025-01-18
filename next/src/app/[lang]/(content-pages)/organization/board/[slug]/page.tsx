@@ -85,7 +85,11 @@ export default async function OldBoard(props: OldBoardProps) {
                 {otherBoards.map((year) => (
                   <li key={year}>
                     <Link
-                      href={`/${params.lang}/organization/board/${year === latestBoard.attributes.year.toString() ? '' : year}`}
+                      href={`/${params.lang}/organization/board/${
+                        year === latestBoard.attributes.year.toString()
+                          ? ''
+                          : year
+                      }`}
                     >
                       {year}
                     </Link>

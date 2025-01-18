@@ -36,7 +36,9 @@ export default async function MigrateAccount(props: MigrateAccountProps) {
   );
 }
 
-export async function generateMetadata(props: MigrateAccountProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: MigrateAccountProps,
+): Promise<Metadata> {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {

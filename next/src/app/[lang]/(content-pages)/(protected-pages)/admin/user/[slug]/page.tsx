@@ -47,17 +47,12 @@ export interface UserWithRegistrations {
   }[];
 }
 
-export default async function Page(
-  props: {
-    params: Promise<{ slug: string; lang: SupportedLanguage }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ slug: string; lang: SupportedLanguage }>;
+}) {
   const params = await props.params;
 
-  const {
-    slug,
-    lang
-  } = params;
+  const { slug, lang } = params;
 
   const session = await auth();
   const dictionary = await getDictionary(lang);

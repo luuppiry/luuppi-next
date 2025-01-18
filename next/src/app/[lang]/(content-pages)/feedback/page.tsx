@@ -22,7 +22,9 @@ export default async function Feedback(props: FeedbackProps) {
   );
 }
 
-export async function generateMetadata(props: FeedbackProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: FeedbackProps,
+): Promise<Metadata> {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {

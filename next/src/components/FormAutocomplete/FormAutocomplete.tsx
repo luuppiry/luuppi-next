@@ -92,7 +92,11 @@ export default function FormAutocomplete({
           }
           style={{
             maxHeight: '200px',
-            bottom: `-${filteredOptions.length * itemHeight > 200 ? 200 : (filteredOptions.length || 1) * itemHeight}px`,
+            bottom: `-${
+              filteredOptions.length * itemHeight > 200
+                ? 200
+                : (filteredOptions.length || 1) * itemHeight
+            }px`,
             overflowY: 'auto',
           }}
         >

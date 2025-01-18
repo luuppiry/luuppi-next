@@ -14,7 +14,9 @@ interface OrganizationTraditionGuidelinesProps {
   params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function OrganizationTraditionGuidelines(props: OrganizationTraditionGuidelinesProps) {
+export default async function OrganizationTraditionGuidelines(
+  props: OrganizationTraditionGuidelinesProps,
+) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
@@ -31,7 +33,9 @@ export default async function OrganizationTraditionGuidelines(props: Organizatio
   );
 }
 
-export async function generateMetadata(props: OrganizationTraditionGuidelinesProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: OrganizationTraditionGuidelinesProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::organization-tradition-guideline.organization-tradition-guideline'>

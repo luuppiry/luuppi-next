@@ -14,7 +14,9 @@ interface OrganizationHonoraryMembersProps {
   params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function OrganizationHonoraryMembers(props: OrganizationHonoraryMembersProps) {
+export default async function OrganizationHonoraryMembers(
+  props: OrganizationHonoraryMembersProps,
+) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
@@ -31,7 +33,9 @@ export default async function OrganizationHonoraryMembers(props: OrganizationHon
   );
 }
 
-export async function generateMetadata(props: OrganizationHonoraryMembersProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: OrganizationHonoraryMembersProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::organization-honorary-member.organization-honorary-member'>

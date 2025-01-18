@@ -7,7 +7,7 @@ import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
-  '/api/studies-general?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=ContactBanner';
+  '/api/studies-general?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
 const tags = ['studies-general'];
 
 interface StudiesProps {

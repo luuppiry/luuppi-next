@@ -41,7 +41,9 @@ export default async function AuthError(props: AuthErrorProps) {
   );
 }
 
-export async function generateMetadata(props: AuthErrorProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: AuthErrorProps,
+): Promise<Metadata> {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {

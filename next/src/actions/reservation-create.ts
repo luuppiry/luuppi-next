@@ -315,7 +315,9 @@ export async function reservationCreate(
       });
 
       logger.info(
-        `User ${localUser.entraUserUuid} reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
+        `User ${
+          localUser.entraUserUuid
+        } reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
           currentUserReservations + amount
         }`,
       );

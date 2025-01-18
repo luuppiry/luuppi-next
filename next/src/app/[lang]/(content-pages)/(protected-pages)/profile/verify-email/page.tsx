@@ -42,7 +42,10 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
     const decoded = jwt.verify(
       emailChangeToken,
       process.env.JWT_SECRET as string,
-    ) as JwtPayload & { newMail: string; userId: string };
+    ) as JwtPayload & {
+      newMail: string;
+      userId: string;
+    };
 
     const { newMail, userId } = decoded;
 
@@ -118,7 +121,9 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
   );
 }
 
-export async function generateMetadata(props: VerifyEmailProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: VerifyEmailProps,
+): Promise<Metadata> {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   return {

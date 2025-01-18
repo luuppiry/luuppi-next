@@ -7,7 +7,7 @@ import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 
 const url =
-  '/api/privacy-policy?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=ContactBanner';
+  '/api/privacy-policy?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
 const tags = ['privacy-policy'];
 
 interface PrivacyPolicyProps {
@@ -31,7 +31,9 @@ export default async function PrivacyPolicy(props: PrivacyPolicyProps) {
   );
 }
 
-export async function generateMetadata(props: PrivacyPolicyProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: PrivacyPolicyProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponse<'api::privacy-policy.privacy-policy'>
