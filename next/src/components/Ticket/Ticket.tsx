@@ -166,7 +166,7 @@ export default function Ticket({
           </div>
           <span className="w-0.5 shrink-0 rounded-l-lg bg-gray-400/10" />
           <div className="flex w-full flex-col justify-center gap-1 p-4">
-            <p className="line-clamp-2 text-lg font-semibold max-md:text-base">
+            <p className="line-clamp-2 break-all text-lg font-semibold max-md:text-base">
               {ticket.name}
             </p>
             <div className="flex justify-between">
