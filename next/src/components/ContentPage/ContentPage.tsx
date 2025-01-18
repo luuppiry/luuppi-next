@@ -73,17 +73,17 @@ export default async function ContentPage({
           </div>
         )}
       </div>
-      <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
-        <div className="flex flex-col gap-4">
+      <div className="sticky top-36 flex h-[calc(100vh-180px)] w-full max-w-80 flex-col gap-8 max-lg:hidden">
+        <div className="flex flex-col">
           <SideNavigator
             dictionary={dictionary}
             targetClass="organization-page"
           />
-          <SidePartners
-            dictionary={dictionary}
-            partnersData={partnersData.data}
-          />
         </div>
+        <SidePartners
+          dictionary={dictionary}
+          partnersData={partnersData.data}
+        />
       </div>
     </div>
   );
