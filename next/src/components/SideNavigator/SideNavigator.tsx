@@ -39,7 +39,6 @@ export default function SideNavigator({
       setActiveHeader(currentHeader);
     };
 
-    // Initial check for active header
     handleScroll();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -83,31 +82,35 @@ export default function SideNavigator({
   return (
     <aside className="flex flex-col gap-2 px-4">
       <p className="text-lg font-bold">{dictionary.general.on_this_page}</p>
-      <ul
-        ref={listRef}
-        className="scrollbar-custom max-h-[calc(100vh-400px)] overflow-y-auto pr-2"
-      >
-        {headers.map((header, index) => (
-          <li
-            key={index}
-            className={`flex items-center gap-4 py-2 ${activeHeader === header.id ? 'font-bold text-secondary-400' : ''}`}
-            data-header-id={header.id}
-          >
-            <span
-              className={`h-0.5 flex-shrink-0 bg-secondary-400 ${activeHeader === header.id ? 'w-5' : 'w-2'} transition-all duration-300 ease-in-out`}
-            />
-            <button
-              className="truncate text-left"
-              title={header.textContent?.replace(/\d+§/, '') ?? ''}
-              onClick={() => scrollToElement(header.id)}
+      <div className="relative">
+        <div className="pointer-events-none absolute top-0 z-10 h-4 w-full bg-gradient-to-b from-white to-transparent" />
+        <ul
+          ref={listRef}
+          className="scrollbar-custom max-h-[calc(100vh-400px)] overflow-y-auto pr-2"
+        >
+          {headers.map((header, index) => (
+            <li
+              key={index}
+              className={`flex items-center gap-4 py-2 ${activeHeader === header.id ? 'font-bold text-secondary-400' : ''}`}
+              data-header-id={header.id}
             >
-              <p className="truncate text-sm">
-                {header.textContent?.replace(/\d+§/, '')}
-              </p>
-            </button>
-          </li>
-        ))}
-      </ul>
+              <span
+                className={`h-0.5 flex-shrink-0 bg-secondary-400 ${activeHeader === header.id ? 'w-5' : 'w-2'} transition-all duration-300 ease-in-out`}
+              />
+              <button
+                className="truncate text-left"
+                title={header.textContent?.replace(/\d+§/, '') ?? ''}
+                onClick={() => scrollToElement(header.id)}
+              >
+                <p className="truncate text-sm">
+                  {header.textContent?.replace(/\d+§/, '')}
+                </p>
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div className="pointer-events-none absolute bottom-0 z-10 h-4 w-full bg-gradient-to-t from-white to-transparent" />
+      </div>
     </aside>
   );
 }
