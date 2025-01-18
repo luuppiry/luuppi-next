@@ -16,7 +16,7 @@ interface HeaderProps {
 
 export default function Header({ dictionary, lang }: HeaderProps) {
   const isLocalEnv = process.env.NODE_ENV === 'development';
-  const isDevEnv = process.env.IS_DEVELOPMENT_ENV === 'true';
+  const isDevEnv = process.env.NEXT_PUBLIC_IS_DEV_ENV === 'true';
 
   return (
     <div>
