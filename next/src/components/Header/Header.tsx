@@ -15,6 +15,9 @@ interface HeaderProps {
 }
 
 export default function Header({ dictionary, lang }: HeaderProps) {
+  const isLocalEnv = process.env.NODE_ENV === 'development';
+  const isDevEnv = process.env.IS_DEVELOPMENT_ENV === 'true';
+
   return (
     <div>
       <ScrollListener />
@@ -43,6 +46,14 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               />
             </Link>
             <div className="flex items-center gap-4">
+              {(isLocalEnv || isDevEnv) && (
+                <div className="flex items-center gap-1.5 rounded-sm bg-violet-400/30 px-2 py-0.5">
+                  <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-300" />
+                  <span className="font-mono text-[11px] font-medium text-violet-200">
+                    {isLocalEnv ? 'Localhost' : 'Development'}
+                  </span>
+                </div>
+              )}
               <div className="flex items-center justify-center max-lg:hidden">
                 <LanguageSwitcher />
               </div>
