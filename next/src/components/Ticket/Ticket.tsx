@@ -85,13 +85,23 @@ export default function Ticket({
 
       if (res.reloadCache) {
         router.refresh();
-      } else if (!res.isError) {
-        router.push(`/${lang}/own-events`);
-        router.refresh(); // TODO: Redirect from server would be better but it does not scroll to the top of the page :(
-      } else {
-        setResponse(res);
+        setLoading(false);
+        return;
       }
-    } finally {
+
+      if (!res.isError) {
+        router.push(`/${lang}/own-events`);
+        router.refresh();
+        return;
+      }
+
+      setResponse(res);
+      setLoading(false);
+    } catch (error) {
+      setResponse({
+        message: dictionary.api.server_error,
+        isError: true,
+      });
       setLoading(false);
     }
   };
@@ -171,6 +181,7 @@ export default function Ticket({
               <BuyTicketsButton
                 dictionary={dictionary}
                 disabled={disabled}
+                loading={loading}
                 onClick={handlePurchaseClick}
               />
             </div>

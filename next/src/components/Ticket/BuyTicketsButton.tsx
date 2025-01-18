@@ -1,10 +1,10 @@
-'use client';
 import { Dictionary } from '@/models/locale';
 import { useRef } from 'react';
 
 interface BuyTicketsButtonProps {
   onClick: () => void;
   disabled?: boolean;
+  loading?: boolean;
   dictionary: Dictionary;
 }
 
@@ -12,6 +12,7 @@ export function BuyTicketsButton({
   onClick,
   disabled = false,
   dictionary,
+  loading = false,
 }: BuyTicketsButtonProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -133,10 +134,16 @@ export function BuyTicketsButton({
       <canvas ref={canvasRef} className="pointer-events-none fixed inset-0" />
       <button
         className="btn btn-primary btn-sm whitespace-nowrap max-md:btn-xs"
-        disabled={disabled}
+        disabled={disabled || loading}
         onClick={handleClick}
       >
-        {dictionary.pages_events.buy_tickets}
+        {loading ? (
+          <div className="min-w-16">
+            <span className="loading loading-spinner loading-md" />
+          </div>
+        ) : (
+          dictionary.pages_events.buy_tickets
+        )}
       </button>
     </div>
   );
