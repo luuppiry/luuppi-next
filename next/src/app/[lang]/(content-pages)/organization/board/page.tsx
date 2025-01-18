@@ -3,10 +3,12 @@ import { getDictionary } from '@/dictionaries';
 import { flipBoardLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { groupBoardByYear } from '@/libs/strapi/group-board-by-year';
+import { getBoardMemberJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Script from 'next/script';
 
 interface BoardProps {
   params: Promise<{ lang: SupportedLanguage }>;
@@ -48,72 +50,83 @@ export default async function Board(props: BoardProps) {
     (member: any) => member.attributes.isBoardMember === false,
   );
 
+  const boardMembersJsonLd = boardMembers.map((member: any) =>
+    getBoardMemberJsonLd(member),
+  );
+
   return (
-    <div className="relative flex flex-col gap-12">
-      <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
-        <h1>
-          {dictionary.navigation.board} {latestBoard.attributes.year}
-        </h1>
-        {Boolean(otherBoards.length) && (
-          <div className="dropdown sm:dropdown-end">
-            <div className="btn m-1" role="button" tabIndex={0}>
-              {dictionary.pages_board.other_boards}
+    <>
+      <Script
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(boardMembersJsonLd) }}
+        id="board-members-jsonld"
+        type="application/ld+json"
+      />
+      <div className="relative flex flex-col gap-12">
+        <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
+          <h1>
+            {dictionary.navigation.board} {latestBoard.attributes.year}
+          </h1>
+          {Boolean(otherBoards.length) && (
+            <div className="dropdown sm:dropdown-end">
+              <div className="btn m-1" role="button" tabIndex={0}>
+                {dictionary.pages_board.other_boards}
+              </div>
+              <ul
+                className="menu dropdown-content z-[9999] w-52 rounded-box bg-base-100 p-2 shadow"
+                tabIndex={0}
+              >
+                {otherBoards.map((year) => (
+                  <li key={year}>
+                    <Link href={`/${params.lang}/organization/board/${year}`}>
+                      {year}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul
-              className="menu dropdown-content z-[9999] w-52 rounded-box bg-base-100 p-2 shadow"
-              tabIndex={0}
-            >
-              {otherBoards.map((year) => (
-                <li key={year}>
-                  <Link href={`/${params.lang}/organization/board/${year}`}>
-                    {year}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+          )}
+        </div>
+        <div>
+          {Boolean(boardMembers.length) && (
+            <>
+              <h2 className="mb-6 text-3xl font-bold max-md:text-2xl">
+                {dictionary.pages_board.board_members}
+              </h2>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-y-12 lg:grid-cols-4">
+                {boardMembers.map((member: any) => (
+                  <BoardMember
+                    key={member.attributes.createdAt}
+                    dictionary={dictionary}
+                    member={member}
+                    showEmail={true}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+        <div>
+          {Boolean(officials.length) && (
+            <>
+              <h2 className="mb-6 text-3xl font-bold max-md:text-2xl">
+                {dictionary.pages_board.officials}
+              </h2>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-y-12 lg:grid-cols-4">
+                {officials.map((member: any) => (
+                  <BoardMember
+                    key={member.attributes.createdAt}
+                    dictionary={dictionary}
+                    member={member}
+                    showEmail={true}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+        <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
       </div>
-      <div>
-        {Boolean(boardMembers.length) && (
-          <>
-            <h2 className="mb-6 text-3xl font-bold max-md:text-2xl">
-              {dictionary.pages_board.board_members}
-            </h2>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-y-12 lg:grid-cols-4">
-              {boardMembers.map((member: any) => (
-                <BoardMember
-                  key={member.attributes.createdAt}
-                  dictionary={dictionary}
-                  member={member}
-                  showEmail={true}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-      <div>
-        {Boolean(officials.length) && (
-          <>
-            <h2 className="mb-6 text-3xl font-bold max-md:text-2xl">
-              {dictionary.pages_board.officials}
-            </h2>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-y-12 lg:grid-cols-4">
-              {officials.map((member: any) => (
-                <BoardMember
-                  key={member.attributes.createdAt}
-                  dictionary={dictionary}
-                  member={member}
-                  showEmail={true}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
-    </div>
+    </>
   );
 }
 

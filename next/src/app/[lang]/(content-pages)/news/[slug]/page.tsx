@@ -13,6 +13,7 @@ import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import Script from 'next/script';
 import { FaUserAlt } from 'react-icons/fa';
 import { PiImageBroken } from 'react-icons/pi';
 
@@ -50,10 +51,11 @@ export default async function NewsPost(props: NewsPostProps) {
 
   return (
     <>
-      <script
+      <Script
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(getNewsJsonLd(selectedNews, params.lang)),
         }}
+        id="news-jsonld"
         type="application/ld+json"
       />
       <div className="flex w-full gap-12">
@@ -145,7 +147,9 @@ export default async function NewsPost(props: NewsPostProps) {
   );
 }
 
-export async function generateMetadata(props: NewsPostProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: NewsPostProps,
+): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>

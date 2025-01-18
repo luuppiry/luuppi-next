@@ -4,6 +4,7 @@ import {
   EducationalOrganization,
   Event as EventSchema,
   NewsArticle,
+  Person,
   WithContext,
 } from 'schema-dts';
 import { getPlainText } from '../strapi/blocks-converter';
@@ -140,6 +141,32 @@ export const getNewsJsonLd = (
       '@type': 'Language',
       name: lang === 'en' ? 'English' : 'Finnish',
       alternateName: lang === 'en' ? 'en' : 'fi',
+    },
+  };
+
+  return jsonLd;
+};
+
+export const getBoardMemberJsonLd = (
+  member: APIResponseData<'api::board-member.board-member'>,
+) => {
+  const jsonLd: WithContext<Person> = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: member.attributes?.fullName,
+    email: member.attributes.boardRoles?.data.map(
+      (role: any) => role.attributes.email,
+    ),
+    image: member?.attributes?.image?.data?.attributes?.url
+      ? getStrapiUrl(member.attributes?.image.data.attributes.url)
+      : undefined,
+    jobTitle: member.attributes.boardRoles?.data?.map(
+      (role: any) => role.attributes.title,
+    ),
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Luuppi ry',
+      url: 'https://luuppi.fi',
     },
   };
 

@@ -14,6 +14,7 @@ import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import Script from 'next/script';
 import { Suspense } from 'react';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 import { PiImageBroken } from 'react-icons/pi';
@@ -61,10 +62,11 @@ export default async function Event(props: EventProps) {
 
   return (
     <>
-      <script
+      <Script
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(getEventJsonLd(event, params.lang)),
         }}
+        id="event-jsonld"
         type="application/ld+json"
       />
       <div className="relative flex w-full gap-12">
