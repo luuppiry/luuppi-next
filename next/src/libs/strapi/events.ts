@@ -13,14 +13,18 @@ export const addEventRegisterationOpensAtInfo = <T>(
   formatEvent: (event: APIResponseData<'api::event.event'>) => T,
   dictionary: Dictionary,
 ) => {
+  if (!event?.attributes?.Registration?.TicketTypes) {
+    return [...acc, formatEvent(event)];
+  }
+
   const memberSaleStartsAt = event.attributes.Registration?.TicketTypes.find(
-    (type) =>
-      type.Role?.data?.attributes?.RoleId &&
-      [luuppiMember, luuppiNonMember].includes(
-        type.Role?.data?.attributes?.RoleId,
-      ),
+    (type) => {
+      const roleId = type?.Role?.data?.attributes?.RoleId;
+      return roleId && [luuppiMember, luuppiNonMember].includes(roleId);
+    },
   );
-  if (!memberSaleStartsAt) {
+
+  if (!memberSaleStartsAt?.RegistrationStartsAt) {
     return [...acc, formatEvent(event)];
   }
 
