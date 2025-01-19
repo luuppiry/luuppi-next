@@ -115,7 +115,7 @@ export async function reservationCreate(
 
   const eventRolesWithWeights =
     ticketTypes?.map((ticketType) => ({
-      strapiRoleUuid: ticketType.Role?.data.attributes.RoleId,
+      strapiRoleUuid: ticketType.Role?.data?.attributes?.RoleId,
       weight: ticketType.Weight,
     })) ?? [];
 
@@ -149,7 +149,8 @@ export async function reservationCreate(
   }
 
   const ownQuota = ticketTypes?.find(
-    (type) => type.Role?.data.attributes.RoleId === targetedRole.strapiRoleUuid,
+    (type) =>
+      type.Role?.data?.attributes?.RoleId === targetedRole.strapiRoleUuid,
   );
 
   // Validate that the user has a role that can reserve tickets

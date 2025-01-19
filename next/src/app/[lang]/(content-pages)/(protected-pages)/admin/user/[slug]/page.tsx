@@ -114,7 +114,8 @@ export default async function Page(props: {
 
     const ticketType = event?.attributes.Registration?.TicketTypes.find(
       (ticketType) =>
-        ticketType.Role?.data.attributes.RoleId === registration.strapiRoleUuid,
+        ticketType.Role?.data?.attributes?.RoleId ===
+        registration.strapiRoleUuid,
     );
 
     return {

@@ -15,9 +15,9 @@ export const addEventRegisterationOpensAtInfo = <T>(
 ) => {
   const memberSaleStartsAt = event.attributes.Registration?.TicketTypes.find(
     (type) =>
-      type.Role?.data.attributes.RoleId &&
+      type.Role?.data?.attributes?.RoleId &&
       [luuppiMember, luuppiNonMember].includes(
-        type.Role?.data.attributes.RoleId,
+        type.Role?.data?.attributes?.RoleId,
       ),
   );
   if (!memberSaleStartsAt) {

@@ -35,7 +35,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
   const eventRolesWithWeights =
     ticketTypes?.map((ticketType) => ({
-      strapiRoleUuid: ticketType.Role?.data.attributes.RoleId,
+      strapiRoleUuid: ticketType.Role?.data?.attributes?.RoleId,
       weight: ticketType.Weight,
     })) ?? [];
 
@@ -100,20 +100,21 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   };
 
   const ownQuota = ticketTypes?.find(
-    (type) => type.Role?.data.attributes.RoleId === targetedRole.strapiRoleUuid,
+    (type) =>
+      type.Role?.data?.attributes?.RoleId === targetedRole.strapiRoleUuid,
   );
 
   const isSoldOutOwnQuota = ownQuota
-    ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.data.attributes.RoleId!)
+    ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.data?.attributes?.RoleId!)
     : false;
 
   const hasUnpaidReservationsOwnQuota = ownQuota
-    ? hasUnpaidReservations(ownQuota.Role?.data.attributes.RoleId!)
+    ? hasUnpaidReservations(ownQuota.Role?.data?.attributes?.RoleId!)
     : false;
 
   const hasBoughtMaxTicketsOwnQuota = ownQuota
     ? hasBoughtMaxTickets(
-        ownQuota.Role?.data.attributes.RoleId!,
+        ownQuota.Role?.data?.attributes?.RoleId!,
         ownQuota.TicketsAllowedToBuy,
       )
     : false;
@@ -123,23 +124,99 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     : false;
 
   const ticketTypesFormatted = ticketTypes
-    ?.filter((type) => Boolean(type.Role?.data.attributes.RoleId))
+    ?.filter((type) => Boolean(type.Role?.data?.attributes?.RoleId))
     ?.map((ticketType) => ({
       name: ticketType[lang === 'en' ? 'NameEn' : 'NameFi'],
       location:
         event.data.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
       price: ticketType.Price,
-      role: ticketType.Role?.data.attributes.RoleId,
+      role: ticketType.Role?.data?.attributes?.RoleId,
       registrationStartsAt: new Date(ticketType.RegistrationStartsAt),
       registrationEndsAt: new Date(ticketType.RegistrationEndsAt),
-      isOwnQuota: isOwnQuota(ticketType.Role?.data.attributes.RoleId!),
+      isOwnQuota: isOwnQuota(ticketType.Role?.data?.attributes?.RoleId!),
       maxTicketsPerUser: ticketType.TicketsAllowedToBuy,
     }))
     .sort((a, b) =>
       a.isOwnQuota === b.isOwnQuota ? 0 : a.isOwnQuota ? -1 : 1,
     );
 
-  if (!ticketTypesFormatted?.length) return null;
+  // Add configuration validation
+  const getConfigurationErrors = () => {
+    const errors: string[] = [];
+
+    // Check for missing roles
+    const quotasWithoutRoles = ticketTypes?.filter(
+      (type) => !type.Role?.data?.attributes?.RoleId,
+    );
+    if (quotasWithoutRoles?.length) {
+      errors.push(
+        `${quotasWithoutRoles.length} quota(s) missing role configuration`,
+      );
+    }
+
+    // Check for duplicate roles
+    const roleIds = ticketTypes
+      ?.map((type) => type.Role?.data?.attributes?.RoleId)
+      .filter(Boolean);
+    const duplicateRoles = roleIds?.filter(
+      (id, index) => roleIds.indexOf(id) !== index,
+    );
+    if (duplicateRoles?.length) {
+      errors.push(
+        `Multiple quotas configured for same role(s): ${duplicateRoles.join(', ')}`,
+      );
+    }
+
+    // Check for duplicate weights
+    const weights = ticketTypes?.map((type) => type.Weight);
+    const duplicateWeights = weights?.filter(
+      (weight, index) => weights.indexOf(weight) !== index,
+    );
+    if (duplicateWeights?.length) {
+      errors.push(
+        `Multiple quotas have same weight(s): ${duplicateWeights.join(', ')}`,
+      );
+    }
+
+    // Check question edit deadline
+    const questionEditUntil =
+      event.data.attributes.Registration?.AllowQuestionEditUntil;
+    const registrationEndDates = ticketTypes?.map(
+      (type) => new Date(type.RegistrationEndsAt),
+    );
+    if (
+      questionEditUntil &&
+      registrationEndDates?.some((date) => new Date(questionEditUntil) < date)
+    ) {
+      errors.push('Question edit deadline is set before registration ends');
+    }
+
+    return errors;
+  };
+
+  const configErrors = getConfigurationErrors();
+
+  if (configErrors.length || !ticketTypesFormatted?.length) {
+    return (
+      <div className="alert rounded-lg bg-red-200 text-sm text-red-800">
+        <BiErrorCircle size={24} />
+        <div className="flex flex-col">
+          <span className="font-semibold">
+            {configErrors.length > 0
+              ? 'Configuration Error(s)'
+              : dictionary.pages_events.no_tickets}
+          </span>
+          {configErrors.length > 0 && (
+            <ul className="ml-4 mt-1 list-disc">
+              {configErrors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   const getErrors = () => {
     const errors = [];
