@@ -154,6 +154,17 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       );
     }
 
+    // Check for invalid registration dates
+    ticketTypes?.forEach((type) => {
+      const startsAt = new Date(type.RegistrationStartsAt);
+      const endsAt = new Date(type.RegistrationEndsAt);
+      if (startsAt >= endsAt) {
+        errors.push(
+          `Invalid registration dates for ${type[lang === 'en' ? 'NameEn' : 'NameFi']}: registration ends before it starts`,
+        );
+      }
+    });
+
     // Check for duplicate roles
     const roleIds = ticketTypes
       ?.map((type) => type.Role?.data?.attributes?.RoleId)
