@@ -1,4 +1,4 @@
-<img src="weba_banner.png" alt="Luuppi ry web repository banner">
+<img src="./.github/weba_banner.png" alt="Luuppi ry web repository banner">
 
 # [Luuppi ry - Weba](https://luuppi.fi)
 
@@ -127,7 +127,7 @@ We extend our gratitude to all those who take the time to improve Luuppi's websi
 We have public [Telegram-channel](https://t.me/luupinweba) for people interested about Luuppi's web development :)
 
 <a href="https://t.me/luupinweba">
-  <img src="tunkkailu_banner.png" alt="Luuppi ry web repository banner">
+  <img src="./.github/tunkkailu_banner.png" alt="Luuppi ry web repository banner">
 </a>
 
 ## License
