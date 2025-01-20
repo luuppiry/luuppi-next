@@ -37,7 +37,7 @@
       "type": "datetime",
       "required": true
     },
-    "Image": {
+    "ImageFi": {
       "type": "media",
       "multiple": false,
       "required": false,
@@ -64,6 +64,14 @@
     "DescriptionEn": {
       "type": "blocks",
       "required": true
+    },
+    "ImageEn": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": false
     }
   }
 }

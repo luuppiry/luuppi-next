@@ -1174,11 +1174,12 @@ export interface ApiEventEvent extends Schema.CollectionType {
     DescriptionFi: Attribute.Blocks & Attribute.Required;
     StartDate: Attribute.DateTime & Attribute.Required;
     EndDate: Attribute.DateTime & Attribute.Required;
-    Image: Attribute.Media<'images'>;
+    ImageFi: Attribute.Media<'images'>;
     Registration: Attribute.Component<'events.registration'>;
     LocationEn: Attribute.String & Attribute.Required;
     NameEn: Attribute.String & Attribute.Required;
     DescriptionEn: Attribute.Blocks & Attribute.Required;
+    ImageEn: Attribute.Media<'images'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
