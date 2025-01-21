@@ -1,23 +1,18 @@
 'use server';
-import { LuuppiEmailVerify as LuuppiEmailVerifyEn } from '@/../emails/email-verify-en';
-import { LuuppiEmailVerify as LuuppiEmailVerifyFi } from '@/../emails/email-verify-fi';
 import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
+import { sendVerificationEmail } from '@/libs/emails/send-verification-email';
 import { getAccessToken } from '@/libs/get-access-token';
 import { verifyGraphAPIEmail } from '@/libs/graph/graph-verify-email';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { EmailClient, EmailMessage } from '@azure/communication-email';
-import { render } from '@react-email/components';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const options = {
-  senderAddress: process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!,
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL!,
   jwtSecret: process.env.JWT_SECRET!,
   cacheKey: 'email-verification',
-  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
 };
 
 export async function emailSendVerify(
@@ -124,47 +119,23 @@ export async function emailSendVerify(
 
   const link = `${options.baseUrl}/${lang}/profile/verify-email?token=${token}`;
 
-  const emailHtml = await render(
-    lang === 'fi'
-      ? LuuppiEmailVerifyFi({
-          name: user.name || user.email!,
-          link,
-        })
-      : LuuppiEmailVerifyEn({
-          name: user.name || user.email!,
-          link,
-        }),
-  );
+  const success = await sendVerificationEmail({
+    to: email,
+    name: user.name || user.email!,
+    verificationLink: link,
+    subject: dictionary.api.email_change_mail_subject,
+    language: lang,
+  });
 
-  const message: EmailMessage = {
-    senderAddress: options.senderAddress,
-    content: {
-      subject: dictionary.api.email_change_mail_subject,
-      html: emailHtml,
-    },
-    recipients: {
-      to: [
-        {
-          address: email,
-        },
-      ],
-    },
-  };
-
-  try {
-    const emailClient = new EmailClient(options.connectionString);
-    const poller = await emailClient.beginSend(message);
-    await poller.pollUntilDone();
-    logger.info('Email change verification email sent to', email);
+  if (success) {
     return {
       message: dictionary.api.verify_email_sent,
       isError: false,
     };
-  } catch (error) {
-    logger.error('Error sending verification email', error);
-    return {
-      message: dictionary.api.email_sending_failed,
-      isError: true,
-    };
   }
+
+  return {
+    message: dictionary.api.email_sending_failed,
+    isError: true,
+  };
 }

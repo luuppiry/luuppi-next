@@ -1,20 +1,16 @@
 'use server';
-import { LuuppiFeedback } from '@/../emails/feedback';
 import { getDictionary } from '@/dictionaries';
 import { luuppiEmails } from '@/libs/constants/emails';
+import { sendFeedbackEmail } from '@/libs/emails/send-feedback-email';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { EmailClient, EmailMessage } from '@azure/communication-email';
-import { render } from '@react-email/components';
 
 const options = {
-  senderAddress: process.env.AZURE_COMMUNICATION_SERVICE_SENDER_EMAIL!,
   turnstileVerifyEndpoint:
     'https://challenges.cloudflare.com/turnstile/v0/siteverify',
   turnstileSecret: process.env.TURNSTILE_SECRET!,
   cacheKey: 'feedback',
-  connectionString: process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING!,
 };
 
 export async function emailSendFeedback(
@@ -100,47 +96,25 @@ export async function emailSendFeedback(
     };
   }
 
-  const emailHtml = await render(
-    LuuppiFeedback({
-      message,
-      receiver,
-      senderEmail: !email || email === '' ? '<ei sähköpostia>' : email,
-      senderName: !name || name === '' ? '<anonyymi lähettäjä>' : name,
-      subject,
-    }),
-  );
+  const success = await sendFeedbackEmail({
+    receiver,
+    subject,
+    message,
+    senderName: name,
+    senderEmail: email,
+  });
 
-  const emailMessage: EmailMessage = {
-    senderAddress: options.senderAddress,
-    content: {
-      subject: 'Palautetta vastaanotettu',
-      html: emailHtml,
-    },
-    recipients: {
-      to: [
-        {
-          address: receiver,
-        },
-      ],
-    },
-  };
-
-  try {
-    const emailClient = new EmailClient(options.connectionString);
-    const poller = await emailClient.beginSend(emailMessage);
-    await poller.pollUntilDone();
-    logger.info('Feedback email sent', email);
+  if (success) {
     return {
       message: dictionary.api.feedback_sent,
       isError: false,
     };
-  } catch (error) {
-    logger.error('Error sending feedback email', error);
-    return {
-      message: dictionary.api.email_sending_failed,
-      isError: true,
-    };
   }
+
+  return {
+    message: dictionary.api.email_sending_failed,
+    isError: true,
+  };
 }
 
 async function verifyTurnstileToken(token: string): Promise<boolean> {

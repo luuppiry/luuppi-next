@@ -19,7 +19,6 @@
     "email-dev": "email dev"
   },
   "dependencies": {
-    "@azure/communication-email": "^1.0.0",
     "@azure/msal-node": "^2.15.0",
     "@formatjs/intl-localematcher": "^0.5.4",
     "@fullcalendar/core": "^6.1.15",
@@ -38,6 +37,7 @@
     "next-auth": "^5.0.0-beta.25",
     "next-plausible": "^3.12.2",
     "node-ical": "^0.19.0",
+    "nodemailer": "^6.9.16",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-email": "3.0.1",
@@ -58,6 +58,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/negotiator": "^0.6.3",
     "@types/node": "^22.7.4",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.2",
     "autoprefixer": "^10.4.20",
