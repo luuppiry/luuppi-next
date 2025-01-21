@@ -11,5 +11,18 @@ export default ({ env }) => {
         maxAge: 86_400_000,
       },
     },
+    email: {
+      config: {
+        provider: "nodemailer",
+        providerOptions: {
+          host: env("SMTP_HOST", "postfix"),
+          port: env("SMTP_PORT", 25),
+        },
+        settings: {
+          defaultFrom: "cms@luuppi.fi",
+          defaultReplyTo: "cms@luuppi.fi",
+        },
+      },
+    },
   };
 };
