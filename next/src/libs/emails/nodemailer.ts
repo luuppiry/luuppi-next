@@ -16,7 +16,10 @@ const transporter = nodemailer.createTransport({
 } as SMTPTransport.Options);
 
 const defaults = {
-  from: 'notifications@luuppi.fi',
+  from: {
+    name: process.env.SMTP_FROM_NAME || 'Luuppi',
+    address: process.env.SMTP_FROM_ADDRESS || 'notifications@luuppi.fi',
+  },
 } as const;
 
 /**
