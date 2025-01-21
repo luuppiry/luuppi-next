@@ -15,8 +15,9 @@ export default ({ env }) => {
       config: {
         provider: "nodemailer",
         providerOptions: {
-          host: env("SMTP_HOST", "postfix"),
-          port: env("SMTP_PORT", 25),
+          host: "mailman.luuppi.fi",
+          port: 25,
+          secure: false,
         },
         settings: {
           defaultFrom: "cms@luuppi.fi",
