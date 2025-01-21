@@ -53,9 +53,12 @@ export default async function Event(props: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const imageUrl = event.data.attributes.Image?.data?.attributes?.url
-    ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
-    : null;
+  const imageUrlLocalized =
+    params.lang === 'en' && event.data.attributes.ImageEn?.data?.attributes?.url
+      ? event.data.attributes.ImageEn?.data?.attributes?.url
+      : event.data.attributes.Image?.data?.attributes?.url;
+
+  const imageUrl = imageUrlLocalized ? getStrapiUrl(imageUrlLocalized) : null;
 
   const hasRegistration =
     event.data.attributes?.Registration?.TicketTypes?.length;
@@ -204,8 +207,13 @@ export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const title =
     event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
 
-  const imageUrl = event.data.attributes.Image?.data?.attributes?.url
-    ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
+  const imageUrlLocalized =
+    params.lang === 'en' && event.data.attributes.ImageEn?.data?.attributes?.url
+      ? event.data.attributes.ImageEn?.data?.attributes?.url
+      : event.data.attributes.Image?.data?.attributes?.url;
+
+  const imageUrl = imageUrlLocalized
+    ? getStrapiUrl(imageUrlLocalized)
     : undefined;
 
   const descriptionCutted = description.length > 300;

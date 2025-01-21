@@ -58,6 +58,11 @@ export const getEventJsonLd = (
     event.data.attributes[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
   ).slice(0, 300);
 
+  const imageUrlLocalized =
+    lang === 'en' && event.data.attributes.ImageEn?.data?.attributes?.url
+      ? event.data.attributes.ImageEn?.data?.attributes?.url
+      : event.data.attributes.Image?.data?.attributes?.url;
+
   const jsonLd: WithContext<EventSchema> = {
     '@context': 'https://schema.org',
     '@type': 'Event',
@@ -66,9 +71,7 @@ export const getEventJsonLd = (
     startDate: new Date(event.data.attributes.StartDate).toISOString(),
     endDate: new Date(event.data.attributes.EndDate).toISOString(),
     description: description.slice(0, 300),
-    image: event.data.attributes.Image?.data?.attributes?.url
-      ? getStrapiUrl(event.data.attributes.Image?.data.attributes.url)
-      : undefined,
+    image: imageUrlLocalized ? getStrapiUrl(imageUrlLocalized) : undefined,
     location: {
       '@type': 'Place',
       name: event.data.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
