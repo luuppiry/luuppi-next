@@ -98,9 +98,11 @@ export default async function NewsPost(props: NewsPostProps) {
               <div className="flex flex-col">
                 <span className="font-bold">
                   {selectedNews.attributes.authorName}{' '}
-                  <span className="font-normal">
-                    | {selectedNews.attributes?.authorTitle}
-                  </span>
+                  {Boolean(selectedNews.attributes?.authorTitle) && (
+                    <span className="font-normal">
+                      | {selectedNews.attributes?.authorTitle}
+                    </span>
+                  )}
                 </span>
                 <span className="text-sm opacity-75">
                   {new Date(
