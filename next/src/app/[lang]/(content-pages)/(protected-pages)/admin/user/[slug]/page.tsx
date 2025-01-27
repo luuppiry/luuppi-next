@@ -178,7 +178,7 @@ export default async function Page(props: {
   const availableRolesFiltered = availableRoles
     .filter(
       (role) =>
-        SUPER_ADMINS.includes(user.entraUserUuid) ||
+        SUPER_ADMINS.includes(session.user?.entraUserUuid ?? '') ||
         (role.strapiRoleUuid !== process.env.NEXT_PUBLIC_LUUPPI_HATO_ID &&
           role.strapiRoleUuid !== process.env.NEXT_PUBLIC_NO_ROLE_ID),
     )
