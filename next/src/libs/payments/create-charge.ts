@@ -1,76 +1,54 @@
 import { SupportedLanguage } from '@/models/locale';
-import {
-  VismapayChargePayment,
-  VismapayError,
-  VismapayErrorType,
-} from '@/types/vismapay';
 import 'server-only';
-import { vismapayClient } from '.';
+import { stripe } from '.';
 import { logger } from '../utils/logger';
 
-/**
- * Initializes a VismaPay charge and returns URL to redirect
- * the user to if successful.
- */
+interface Reservation {
+  id: string;
+  name: string;
+  priceInCents: number;
+  confirmationTime: string;
+}
+
+interface ChargePayment {
+  id: string;
+  amountInCents: number;
+  reservations: Reservation[];
+}
+
 export const createCharge = async (
-  chargeObj: VismapayChargePayment,
+  chargeObj: ChargePayment,
   lang: SupportedLanguage,
   email: string,
 ): Promise<string> => {
-  const charge = {
-    amount: chargeObj.amountInCents,
-    order_number: chargeObj.id,
-    currency: 'EUR',
-    payment_method: {
-      type: 'e-payment',
-      return_url: process.env.NEXT_PUBLIC_BASE_URL + `/${lang}/payment`, // User redirect url
-      notify_url: process.env.NEXT_PUBLIC_BASE_URL + '/api/payment', // VismaPay callback url
-      language: lang,
-      selected: ['banks', 'creditcards', 'wallets'],
-    },
-    customer: {
-      email,
-    },
-    products: chargeObj.reservations.map((reservation) => ({
-      id: reservation.id,
-      title: reservation.name,
-      count: 1,
-      pretax_price: reservation.priceInCents,
-      tax: 0,
-      price: reservation.priceInCents,
-      type: 1,
-    })),
-  };
-
-  let redirectUrl: string | null = null;
   try {
-    const result = await vismapayClient.createCharge(charge);
-    const token = result.token;
-    redirectUrl = `https://www.vismapay.com/pbwapi/token/${token}`;
+    const session = await stripe.checkout.sessions.create({
+      line_items: chargeObj.reservations.map((reservation) => ({
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: reservation.name,
+          },
+          unit_amount: reservation.priceInCents,
+        },
+        quantity: 1,
+      })),
+      mode: 'payment',
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/payment?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/payment?canceled=true`,
+      customer_email: email,
+      metadata: {
+        orderId: chargeObj.id,
+      },
+    });
+
+    if (!session.url) {
+      throw new Error('No redirect URL');
+    }
+
+    return session.url;
   } catch (error) {
     logger.error('Error creating charge', error);
-    const vismapayError = error as VismapayError;
-    if (vismapayError.type) {
-      switch (vismapayError.type) {
-        case VismapayErrorType.MalformedResponse:
-          throw new Error('Malformed response');
-        case VismapayErrorType.KeysNotSet:
-          throw new Error('Keys not set');
-        case VismapayErrorType.InvalidParameters:
-          throw new Error('Invalid parameters');
-        case VismapayErrorType.ProtocolError:
-          throw new Error('Protocol error');
-        case VismapayErrorType.MacCheckFailed:
-          throw new Error('MAC check failed');
-        case VismapayErrorType.ApiReturnedError:
-          throw new Error('API returned error');
-      }
-    }
+    throw new Error('Failed to create payment session');
   }
-
-  if (!redirectUrl) {
-    throw new Error('No redirect URL');
-  }
-
-  return redirectUrl;
 };

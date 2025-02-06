@@ -1,7 +1,10 @@
-// @ts-expect-error - No types available :(
-import vismapay from 'visma-pay';
+import 'server-only';
+import Stripe from 'stripe';
 
-vismapay.setPrivateKey(process.env.VISMAPAY_PRIVATE_KEY);
-vismapay.setApiKey(process.env.VISMAPAY_API_KEY);
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('STRIPE_SECRET_KEY is not defined');
+}
 
-export const vismapayClient = vismapay;
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2025-01-27.acacia',
+});
