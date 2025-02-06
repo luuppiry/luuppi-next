@@ -1,22 +1,24 @@
 import 'server-only';
-import { vismapayClient } from '.';
+import { stripe } from '.';
 import { logger } from '../utils/logger';
 
-export const checkStatus = async (orderNumber: string) => {
+export const checkStatus = async (orderId: string) => {
   try {
-    const status = await vismapayClient.checkStatusWithOrderNumber(orderNumber);
-    const settled = status.settled;
-    const result = status.result;
+    const sessions = await stripe.checkout.sessions.list({
+      payment_intent: orderId,
+    });
 
-    const successful = settled === 1 && result === 0;
-    const failed = result === 2;
+    const session = sessions.data[0];
+    if (!session) {
+      return null;
+    }
 
     return {
-      successful,
-      failed,
+      successful: session.payment_status === 'paid',
+      failed: session.payment_status === 'unpaid',
     };
   } catch (error) {
-    logger.error('Error checking status', error);
+    logger.error('Error checking payment status', error);
     return null;
   }
 };

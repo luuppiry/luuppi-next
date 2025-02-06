@@ -49,6 +49,7 @@
     "server-only": "^0.0.1",
     "sharp": "^0.33.5",
     "sitemap": "^8.0.0",
+    "stripe": "^17.6.0",
     "visma-pay": "^2.0.4"
   },
   "devDependencies": {
