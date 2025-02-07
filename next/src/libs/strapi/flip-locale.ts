@@ -50,21 +50,24 @@ export const flipNewsLocale = (
   data: APIResponseData<'api::news-single.news-single'>[],
 ) =>
   lang === 'en'
-    ? (data.map((news) => {
-        const localeEn = news.attributes.localizations?.data[0];
-        return {
-          ...news,
-          attributes: {
-            ...localeEn?.attributes,
-            banner: news.attributes.banner,
-            authorImage: news.attributes.authorImage,
-            slug: news.attributes.slug,
-            Seo: {
-              ...localeEn?.attributes.Seo,
+    ? (
+        data.map((news) => {
+          const localeEn = news.attributes.localizations?.data[0];
+          if (!localeEn) return null;
+          return {
+            ...news,
+            attributes: {
+              ...localeEn?.attributes,
+              banner: news.attributes.banner,
+              authorImage: news.attributes.authorImage,
+              slug: news.attributes.slug,
+              Seo: {
+                ...localeEn?.attributes.Seo,
+              },
             },
-          },
-        };
-      }) as APIResponseData<'api::news-single.news-single'>[])
+          };
+        }) as APIResponseData<'api::news-single.news-single'>[]
+      )?.filter((news) => news)
     : data;
 
 /**
@@ -80,19 +83,22 @@ export const flipSanomatLocale = (
   data: APIResponseData<'api::luuppi-sanomat.luuppi-sanomat'>[],
 ) =>
   lang === 'en'
-    ? (data.map((publication) => {
-        const localeEn = publication.attributes.localizations?.data[0];
-        return {
-          ...publication,
-          attributes: {
-            ...localeEn?.attributes,
-            id: publication.id,
-            image: publication.attributes.image,
-            pdf: publication.attributes.pdf,
-            Seo: {
-              ...localeEn?.attributes.Seo,
+    ? (
+        data.map((publication) => {
+          const localeEn = publication.attributes.localizations?.data[0];
+          if (!localeEn) return null;
+          return {
+            ...publication,
+            attributes: {
+              ...localeEn?.attributes,
+              id: publication.id,
+              image: publication.attributes.image,
+              pdf: publication.attributes.pdf,
+              Seo: {
+                ...localeEn?.attributes.Seo,
+              },
             },
-          },
-        };
-      }) as APIResponseData<'api::luuppi-sanomat.luuppi-sanomat'>[])
+          };
+        }) as APIResponseData<'api::luuppi-sanomat.luuppi-sanomat'>[]
+      )?.filter((publication) => publication)
     : data;
