@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 interface EventsFeedResponse {
   events: {
-    id: string;
+    id: number;
     nameFi: string;
     nameEn: string;
     descriptionFi: string;
@@ -50,7 +50,7 @@ export async function GET(
     );
 
     const events = data.data.map((event) => ({
-      id: event.id.toString(),
+      id: event.id,
       nameFi: event.attributes.NameFi,
       nameEn: event.attributes.NameEn,
       descriptionFi: getPlainText(event.attributes.DescriptionFi),
