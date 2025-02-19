@@ -8,6 +8,7 @@ interface UserInfoResponse {
     entraUserUuid: string;
     firstName: string | null;
     lastName: string | null;
+    username: string | null;
   };
 }
 
@@ -54,7 +55,7 @@ export async function GET(
         entraUserUuid: user.entraUserUuid,
         firstName: user.firstName,
         lastName: user.lastName,
-        userName: user.username,
+        username: user.username,
       },
     });
   } catch (error) {
