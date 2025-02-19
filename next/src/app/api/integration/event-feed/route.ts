@@ -34,7 +34,7 @@ export async function GET(
   try {
     const auth = request.headers.get('authorization');
     if (!auth || auth !== process.env.INTEGRATION_API_SECRET) {
-      logger.error('Unauthorized revalidate request');
+      logger.error('Unauthorized events feed request');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

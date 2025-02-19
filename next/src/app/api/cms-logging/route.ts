@@ -18,7 +18,7 @@ const strapiEvents = {
 export async function POST(request: NextRequest) {
   const auth = request.headers.get('authorization');
   if (!auth || auth !== process.env.REVALIDATE_AUTH_SECRET) {
-    logger.error('Unauthorized revalidate request');
+    logger.error('Unauthorized cms logging request');
     return new Response('Unauthorized', { status: 401 });
   }
 
