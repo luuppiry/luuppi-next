@@ -4,9 +4,10 @@ import { checkReturn } from '@/libs/payments/check-return';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { APIResponse } from '@/types/types';
+import { NextRequest } from 'next/server';
 import url from 'url';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const queryParams = url.parse(request.url, true).query;
 
   try {

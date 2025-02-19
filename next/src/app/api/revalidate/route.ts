@@ -1,6 +1,7 @@
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { revalidateTag } from 'next/cache';
+import { NextRequest } from 'next/server';
 
 /**
  * Strapi sends webhooks to this endpoint to revalidate
@@ -8,7 +9,7 @@ import { revalidateTag } from 'next/cache';
  * @param request Request object
  * @returns 200 / 401
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const auth = request.headers.get('authorization');
   if (!auth || auth !== process.env.REVALIDATE_AUTH_SECRET) {
     logger.error('Unauthorized revalidate request');

@@ -1,4 +1,5 @@
 import { logger } from '@/libs/utils/logger';
+import { NextRequest } from 'next/server';
 
 type StrapiEntry = {
   event: string;
@@ -14,7 +15,7 @@ const strapiEvents = {
   'entry.create': '🆕 Sisältöä luotu',
 };
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const auth = request.headers.get('authorization');
   if (!auth || auth !== process.env.REVALIDATE_AUTH_SECRET) {
     logger.error('Unauthorized revalidate request');

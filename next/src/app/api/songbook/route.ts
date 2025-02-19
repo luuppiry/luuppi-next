@@ -1,5 +1,5 @@
 import { promises as fs } from 'fs';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 interface SongbookSong {
   title: string;
@@ -18,7 +18,7 @@ interface PaginatedResponse {
 }
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
 ): Promise<NextResponse<PaginatedResponse>> {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q')?.toLowerCase().trim() || '';
