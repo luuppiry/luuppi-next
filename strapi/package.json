@@ -20,7 +20,7 @@
     "@strapi/strapi": "4.25.10",
     "better-sqlite3": "^11.3.0",
     "pg": "8.13.0",
-    "react": "^18.3.1",
+    "react": "^19.0.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "5.3.4",
     "strapi-middleware-upload-plugin-cache": "^2.1.0",
