@@ -125,6 +125,7 @@ jobs:
           echo AUTH_SECRET=${{ secrets.AUTH_SECRET }} >> .env
           echo NEXT_PUBLIC_IS_DEV_ENV=true >> .env
           echo STRAPI_API_KEY=${{ secrets.STRAPI_API_KEY_DEV }} >> .env
+          echo STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }} >> .env
           echo NEXT_PUBLIC_NO_ROLE_ID=${{ secrets.NEXT_PUBLIC_NO_ROLE_ID }} >> .env
           echo NEXT_PUBLIC_LUUPPI_MEMBER_ID=${{ secrets.NEXT_PUBLIC_LUUPPI_MEMBER_ID }} >> .env
           echo NEXT_PUBLIC_LUUPPI_HATO_ID=${{ secrets.NEXT_PUBLIC_LUUPPI_HATO_ID }} >> .env
