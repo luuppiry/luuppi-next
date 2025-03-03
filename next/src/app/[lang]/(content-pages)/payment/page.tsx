@@ -1,75 +1,38 @@
 import { getDictionary } from '@/dictionaries';
-import prisma from '@/libs/db/prisma';
-import { sendEventReceiptEmail } from '@/libs/emails/send-event-verify';
-import { checkReturn } from '@/libs/payments/check-return';
-import { logger } from '@/libs/utils/logger';
+import { stripe } from '@/libs/payments';
 import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 interface PaymentProps {
   params: Promise<{ lang: SupportedLanguage }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function Payment(props: PaymentProps) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+export default async function Payment({
+  params: initialParams,
+  searchParams: initialSearchParams,
+}: PaymentProps) {
+  const params = await initialParams;
+  const searchParams = await initialSearchParams;
+  const lang = params.lang;
   const dictionary = await getDictionary(params.lang);
+  const sessionId = searchParams.session_id as string;
+  const canceled = searchParams.canceled === 'true';
 
-  const { orderId, successful } = await checkReturn(searchParams);
+  if (!sessionId && !canceled) {
+    redirect(`/${lang}`);
+  }
 
-  // TODO: Cache this query. Result should not change for the same orderId.
-  const payment = await prisma.payment.update({
-    where: {
-      orderId,
-    },
-    data: {
-      status: successful ? 'COMPLETED' : 'CANCELLED',
-      registration: {
-        updateMany: successful
-          ? {
-              where: {},
-              data: {
-                paymentCompleted: successful,
-              },
-            }
-          : undefined,
-      },
-    },
-    include: {
-      registration: {
-        include: {
-          event: true,
-          user: true,
-        },
-      },
-    },
-  });
+  let successful = false;
 
-  if (payment && successful && !payment.confirmationSentAt) {
-    const email = payment.registration[0].user.email;
-    const user = payment.registration[0].user;
-    const name = user.username ?? user.firstName ?? '';
-
-    const success = await sendEventReceiptEmail({
-      name,
-      email,
-      payment,
-    });
-
-    if (!success) {
-      logger.error('Error sending email');
-      throw new Error('Error sending email');
+  if (sessionId) {
+    try {
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      successful = session.payment_status === 'paid';
+    } catch (error) {
+      redirect(`/${lang}`);
     }
-
-    await prisma.payment.update({
-      where: {
-        orderId,
-      },
-      data: {
-        confirmationSentAt: new Date(),
-      },
-    });
   }
 
   return (
@@ -79,15 +42,17 @@ export default async function Payment(props: PaymentProps) {
           ? dictionary.pages_events.payment_completed
           : dictionary.pages_events.payment_failed}
       </h1>
-      <p className="text-sm">
-        <strong>ID:</strong> {orderId}
-      </p>
+      {sessionId && (
+        <p className="break-all text-sm">
+          <strong>ID:</strong> {sessionId}
+        </p>
+      )}
       <p className="max-w-xl text-lg max-md:text-base">
         {successful
           ? dictionary.pages_events.payment_completed_description
           : dictionary.pages_events.payment_failed_description}
       </p>
-      <Link className="btn btn-primary btn-sm text-lg" href={`/${params.lang}`}>
+      <Link className="btn btn-primary btn-sm text-lg" href={`/${lang}`}>
         {dictionary.pages_404.return_home}
       </Link>
       <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />

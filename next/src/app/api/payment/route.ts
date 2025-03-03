@@ -4,21 +4,24 @@ import { checkReturn } from '@/libs/payments/check-return';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { APIResponse } from '@/types/types';
-import { NextRequest } from 'next/server';
-import url from 'url';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
-  const queryParams = url.parse(request.url, true).query;
-
+export async function POST(request: NextRequest) {
   try {
-    logger.info('Checking return', { queryParams });
-    const { orderId, successful } = await checkReturn(queryParams);
+    const result = await checkReturn(request);
 
-    // TODO: Cache this query. Result should not change for the same orderId.
+    if (!result) {
+      return NextResponse.json(
+        { message: 'Error processing payment webhook' },
+        { status: 200 },
+      );
+    }
+
+    const { orderId, successful, status } = result;
+    logger.info('Processing payment webhook', { orderId, successful, status });
+
     const payment = await prisma.payment.update({
-      where: {
-        orderId,
-      },
+      where: { orderId },
       data: {
         status: successful ? 'COMPLETED' : 'CANCELLED',
         registration: {
@@ -42,20 +45,25 @@ export async function GET(request: NextRequest) {
     });
 
     if (!successful) {
-      return new Response('OK', { status: 200 });
+      return NextResponse.json({ message: 'OK' }, { status: 200 });
     }
 
     if (!payment.registration?.[0]?.entraUserUuid) {
       logger.error('Error getting entraUserUuid');
-      return new Response('Error getting entraUserUuid', { status: 400 });
+      return NextResponse.json(
+        { message: 'Error getting entraUserUuid' },
+        { status: 400 },
+      );
     }
 
-    // Always same entraUserUuid for all registrations
     const entraUserUuid = payment.registration[0].entraUserUuid;
 
     if (!entraUserUuid) {
       logger.error('Error getting entraUserUuid');
-      return new Response('Error getting entraUserUuid', { status: 400 });
+      return NextResponse.json(
+        { message: 'Error getting entraUserUuid' },
+        { status: 400 },
+      );
     }
 
     const localUser = await prisma.user.findFirst({
@@ -66,7 +74,10 @@ export async function GET(request: NextRequest) {
 
     if (!localUser) {
       logger.error('Error getting user');
-      return new Response('Error getting user', { status: 400 });
+      return NextResponse.json(
+        { message: 'Error getting user' },
+        { status: 400 },
+      );
     }
 
     const eventId = payment.registration?.[0]?.event?.eventId;
@@ -112,7 +123,10 @@ export async function GET(request: NextRequest) {
 
     if (!email) {
       logger.error('Error getting email');
-      return new Response('Error getting email', { status: 400 });
+      return NextResponse.json(
+        { message: 'Error getting email' },
+        { status: 400 },
+      );
     }
 
     if (!payment.confirmationSentAt && successful) {
@@ -124,7 +138,10 @@ export async function GET(request: NextRequest) {
 
       if (!success) {
         logger.error('Error sending email');
-        return new Response('Error sending email', { status: 400 });
+        return NextResponse.json(
+          { message: 'Error sending email' },
+          { status: 400 },
+        );
       }
 
       await prisma.payment.update({
@@ -138,9 +155,12 @@ export async function GET(request: NextRequest) {
     }
     logger.info('Event confirmation email sent', { email });
   } catch (error) {
-    logger.error('Error checking return', error);
-    return new Response('Error checking return', { status: 400 });
+    logger.error('Error processing payment webhook', error);
+    return NextResponse.json(
+      { message: 'Error processing payment webhook' },
+      { status: 400 },
+    );
   }
 
-  return new Response('OK', { status: 200 });
+  return NextResponse.json({ message: 'OK' }, { status: 200 });
 }

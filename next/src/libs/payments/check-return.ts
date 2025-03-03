@@ -1,41 +1,61 @@
+import { NextRequest } from 'next/server';
 import 'server-only';
-import { vismapayClient } from '.';
+import { stripe } from '.';
 import { logger } from '../utils/logger';
+import { getRawBody } from '../utils/raw-body';
 
-export const checkReturn = async (query: {
-  [key: string]: string | string[] | undefined;
-}) => {
-  const returnCode = query.RETURN_CODE;
-  const settled = query.SETTLED;
-  const orderId = query.ORDER_NUMBER;
-
-  if (
-    typeof returnCode !== 'string' ||
-    typeof orderId !== 'string' ||
-    (settled && typeof settled !== 'string') // Only given if successful
-  ) {
-    throw new Error('Invalid query parameters');
+export const checkReturn = async (req: NextRequest) => {
+  const sig = req.headers.get('stripe-signature');
+  if (!sig || !process.env.STRIPE_WEBHOOK_SECRET) {
+    throw new Error('Missing Stripe signature or webhook secret');
   }
-
-  const settledValue = Number(settled);
-  const returnCodeValue = Number(returnCode);
-
-  if ((settledValue && isNaN(settledValue)) || isNaN(returnCodeValue)) {
-    throw new Error('Invalid return code or settled value');
-  }
-
-  // Settled 1 means card was charged (not only authorized)
-  // Return code 0 means successful
-  const successful = settledValue === 1 && returnCodeValue === 0;
 
   try {
-    await vismapayClient.checkReturn(query);
-    return {
-      orderId,
-      successful,
-    };
+    const rawBody = await getRawBody(req);
+    const event = stripe.webhooks.constructEvent(
+      rawBody,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET,
+    );
+
+    switch (event.type) {
+      case 'checkout.session.completed':
+        // Payment successful
+        const session = event.data.object;
+        return {
+          orderId: session.metadata?.orderId,
+          successful: true,
+          status: 'completed',
+        };
+
+      case 'checkout.session.expired':
+        // Payment attempt expired
+        return {
+          orderId: event.data.object.metadata?.orderId,
+          successful: false,
+          status: 'expired',
+        };
+
+      case 'payment_intent.payment_failed':
+        // Payment failed
+        return {
+          orderId: event.data.object.metadata?.orderId,
+          successful: false,
+          status: 'failed',
+        };
+
+      case 'payment_intent.canceled':
+        // Payment canceled
+        return {
+          orderId: event.data.object.metadata?.orderId,
+          successful: false,
+          status: 'canceled',
+        };
+    }
+
+    return null;
   } catch (error) {
-    logger.error('Error checking return', error);
-    throw new Error('Error checking return');
+    logger.error('Error processing webhook', error);
+    throw new Error('Error processing webhook');
   }
 };
