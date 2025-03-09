@@ -79,7 +79,7 @@ export default async function OldBoard(props: OldBoardProps) {
                 {dictionary.pages_board.other_boards}
               </div>
               <ul
-                className="menu dropdown-content z-[9999] w-80 rounded-box bg-base-100 p-2 shadow grid grid-cols-4 gap-2"
+                className="menu dropdown-content z-[9999] grid w-80 grid-cols-4 gap-2 rounded-box bg-base-100 p-2 shadow"
                 tabIndex={0}
               >
                 {otherBoards.map((year) => (
