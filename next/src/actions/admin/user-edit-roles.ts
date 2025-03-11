@@ -54,8 +54,8 @@ export async function userEditRoles(
 
   const strapiRoleUuids = roles.map((role) => role.strapiRoleUuid);
 
-  // Only lowercase chars (with äö), numbers and - allowed
-  const regex = /^[a-z0-9äö-]+$/;
+  // Only lowercase chars (with äö), numbers, - and _ allowed
+  const regex = /^[a-z0-9äö_-]+$/;
   const invalidRoles = strapiRoleUuids.some((role) => !regex.test(role));
 
   const invalidExpirationDates = roles.some(
