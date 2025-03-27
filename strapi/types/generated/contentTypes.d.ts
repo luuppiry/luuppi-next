@@ -1180,6 +1180,9 @@ export interface ApiEventEvent extends Schema.CollectionType {
     NameEn: Attribute.String & Attribute.Required;
     DescriptionEn: Attribute.Blocks & Attribute.Required;
     ImageEn: Attribute.Media<'images'>;
+    Alcohol: Attribute.Enumeration<
+      ['no_alcohol', 'some_alcohol', 'full_alcohol']
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

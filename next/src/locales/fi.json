@@ -298,7 +298,10 @@
     "unanswered_questions": "Vastaamattomia kysymyksiä!",
     "unanswered_questions_description": "Yksi tai useampi maksamaton varauksesi vaatii lisätietoja. Vastaa varauksen kysymyksiin painamalla \"Lisätiedot\"-nappia ja täyttämällä kysymykset. Kun olet vastannut kaikkien maksamattomien varauksiesi kysymyksiin, voit maksaa varaukset.",
     "no_quota": "Roolillesi ei ole kiintiötä tässä tapahtumassa.",
-    "show_participants": "Näytä osallistujat"
+    "show_participants": "Näytä osallistujat",
+    "no_alcohol": "Tapahtuma on alkoholiton.",
+    "some_alcohol": "Tapahtumassa voi halutessaan käyttää alkoholia, mutta juominen ei ole pääpointti. Tapahtumaan voi myös osallistua alkoholittomana.",
+    "full_alcohol": "Tapahtumassa alkoholin käyttö on keskeisessä asemassa esimerkiksi osana ohjelmaa. Tapahtumaan voi myös osallistua alkoholittomana."
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",
