@@ -16,7 +16,9 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import Script from 'next/script';
 import { Suspense } from 'react';
+import { BiSolidDrink } from 'react-icons/bi';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
+import { MdNoDrinks } from 'react-icons/md';
 import { PiImageBroken } from 'react-icons/pi';
 
 interface EventProps {
@@ -134,6 +136,20 @@ export default async function Event(props: EventProps) {
                   }
                 </p>
               </div>
+              {event.data.attributes['Alcohol'] && (
+                <div className="flex items-center">
+                  <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
+                    {event.data.attributes['Alcohol'] === 'no_alcohol' ? (
+                      <MdNoDrinks className="shrink-0 text-2xl" />
+                    ) : (
+                      <BiSolidDrink className="shrink-0 text-2xl" />
+                    )}
+                  </div>
+                  <p className="line-clamp-2 font-normal">
+                    {dictionary.pages_events[event.data.attributes['Alcohol']]}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
           {hasRegistration && (

@@ -72,6 +72,15 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "Alcohol": {
+      "type": "enumeration",
+      "enum": [
+        "no_alcohol",
+        "some_alcohol",
+        "full_alcohol"
+      ],
+      "required": false
     }
   }
 }

@@ -298,7 +298,10 @@
     "unanswered_questions": "Unanswered questions!",
     "unanswered_questions_description": "One or more of your unpaid reservations require additional information. Please respond to the reservation questions by pressing the \"Details\" button and completing the questions. Once you have answered the questions for all your unpaid reservations, you can proceed to make the payment.",
     "no_quota": "There is no quota for your role in this event.",
-    "show_participants": "Show participants"
+    "show_participants": "Show participants",
+    "no_alcohol": "The event is alcohol-free.",
+    "some_alcohol": "You can drink alcohol if you wish, but drinking is not the main point of the event. You can also participate in the event without alcohol.",
+    "full_alcohol": "Alcohol is a central part of the event, for example as part of the programme. You can also participate in the event without alcohol."
   },
   "pages_404": {
     "title": "Page not found",
