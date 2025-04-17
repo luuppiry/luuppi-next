@@ -136,6 +136,20 @@ export default async function Event(props: EventProps) {
                   }
                 </p>
               </div>
+              {event.data.attributes['FuksiPoints'] && (
+                <div className="flex items-center">
+                  <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
+                    {event.data.attributes['FuksiPoints'] === 'fuksi_points_true' ? (
+                      <p className="shrink-0 text-2xl">🐥</p>
+                    ) : (
+                      <p className="shrink-0 text-2xl">🚫</p>
+                    )}
+                  </div>
+                  <p className="line-clamp-2 font-normal">
+                    {dictionary.pages_events[event.data.attributes['FuksiPoints']]}
+                  </p>
+                </div>
+              )}
               {event.data.attributes['Alcohol'] && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">

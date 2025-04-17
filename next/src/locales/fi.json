@@ -301,7 +301,9 @@
     "show_participants": "Näytä osallistujat",
     "no_alcohol": "Tapahtuma on alkoholiton.",
     "some_alcohol": "Tapahtumassa voi halutessaan käyttää alkoholia, mutta juominen ei ole pääpointti. Tapahtumaan voi myös osallistua alkoholittomana.",
-    "full_alcohol": "Tapahtumassa alkoholin käyttö on keskeisessä asemassa esimerkiksi osana ohjelmaa. Tapahtumaan voi myös osallistua alkoholittomana."
+    "full_alcohol": "Tapahtumassa alkoholin käyttö on keskeisessä asemassa esimerkiksi osana ohjelmaa. Tapahtumaan voi myös osallistua alkoholittomana.",
+    "fuksi_points_true": "Tapahtumasta saa lärpäkepisteitä!",
+    "fuksi_points_false": "Tapahtumasta ei ole saatavilla lärpäkepisteitä!"
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",

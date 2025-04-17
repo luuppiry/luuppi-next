@@ -81,6 +81,14 @@
         "full_alcohol"
       ],
       "required": false
+    },
+    "FuksiPoints": {
+      "type": "enumeration",
+      "enum": [
+        "fuksi_points_true", 
+        "fuksi_points_false"
+      ],
+      "required": false
     }
   }
 }

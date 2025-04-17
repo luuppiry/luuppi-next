@@ -1,4 +1,4 @@
-import type { Schema, Attribute } from '@strapi/strapi';
+import type { Attribute, Schema } from '@strapi/strapi';
 
 export interface AdminPermission extends Schema.CollectionType {
   collectionName: 'admin_permissions';
@@ -1182,6 +1182,9 @@ export interface ApiEventEvent extends Schema.CollectionType {
     ImageEn: Attribute.Media<'images'>;
     Alcohol: Attribute.Enumeration<
       ['no_alcohol', 'some_alcohol', 'full_alcohol']
+    >;
+    FuksiPoints: Attribute.Enumeration<
+      ['fuksi_points_true', 'fuksi_points_false']
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

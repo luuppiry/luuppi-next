@@ -301,7 +301,9 @@
     "show_participants": "Show participants",
     "no_alcohol": "The event is alcohol-free.",
     "some_alcohol": "You can drink alcohol if you wish, but drinking is not the main point of the event. You can also participate in the event without alcohol.",
-    "full_alcohol": "Alcohol is a central part of the event, for example as part of the programme. You can also participate in the event without alcohol."
+    "full_alcohol": "Alcohol is a central part of the event, for example as part of the programme. You can also participate in the event without alcohol.",
+    "fuksi_points_true": "Lärpäke points available for fresher!",
+    "fuksi_points_false": "There are no Lärpäke points available for freshmer!"
   },
   "pages_404": {
     "title": "Page not found",
