@@ -18,10 +18,10 @@ import Script from 'next/script';
 import { Suspense } from 'react';
 import { BiSolidDrink } from 'react-icons/bi';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
-import { LuBaby } from "react-icons/lu";
+import { LuBaby } from 'react-icons/lu';
 import { MdNoDrinks } from 'react-icons/md';
 import { PiImageBroken } from 'react-icons/pi';
-import { RiProhibitedLine } from "react-icons/ri";
+import { RiProhibitedLine } from 'react-icons/ri';
 
 interface EventProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
