@@ -18,8 +18,10 @@ import Script from 'next/script';
 import { Suspense } from 'react';
 import { BiSolidDrink } from 'react-icons/bi';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
+import { LuBaby } from "react-icons/lu";
 import { MdNoDrinks } from 'react-icons/md';
 import { PiImageBroken } from 'react-icons/pi';
+import { RiProhibitedLine } from "react-icons/ri";
 
 interface EventProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
@@ -140,9 +142,9 @@ export default async function Event(props: EventProps) {
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
                     {event.data.attributes['FuksiPoints'] === 'fuksi_points_true' ? (
-                      <p className="shrink-0 text-2xl">🐥</p>
+                      <LuBaby className="shrink-0 text-2xl" />
                     ) : (
-                      <p className="shrink-0 text-2xl">🚫</p>
+                      <RiProhibitedLine className="shrink-0 text-2xl" />
                     )}
                   </div>
                   <p className="line-clamp-2 font-normal">
