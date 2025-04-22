@@ -9,7 +9,6 @@ import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Metadata } from 'next';
-import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 const tenantName = process.env.AZURE_TENANT_NAME!;
@@ -100,8 +99,6 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
       email: newEmailVerified,
     },
   });
-
-  revalidatePath('/[lang]/profile', 'page');
 
   return (
     <div className="relative flex flex-col items-center justify-center gap-6 text-center max-md:items-start max-md:text-start">
