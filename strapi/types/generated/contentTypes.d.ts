@@ -1553,13 +1553,13 @@ export interface ApiNotificationNotification extends Schema.SingleType {
   };
 }
 
-export interface ApiOrganizationalumniOrganizationalumni
+export interface ApiOrganizationAlumniOrganizationAlumni
   extends Schema.SingleType {
   collectionName: 'organization_alumni';
   info: {
     singularName: 'organization-alumni';
     pluralName: 'organization-alumnis';
-    displayName: 'Organizationalumni';
+    displayName: 'OrganizationAlumni';
   };
   options: {
     draftAndPublish: false;
@@ -2422,7 +2422,8 @@ declare module '@strapi/types' {
       'api::news-list.news-list': ApiNewsListNewsList;
       'api::news-single.news-single': ApiNewsSingleNewsSingle;
       'api::notification.notification': ApiNotificationNotification;
-      'api::organization-alumni.organization-alumni': ApiOrganizationalumniOrganizationalumni;
+      'api::organization-alumni.organization-alumni': ApiOrganizationAlumniOrganizationAlumni;
+      'api::organization-benefit.organization-benefit': ApiOrganizationBenefitOrganizationBenefit;
       'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
       'api::organization-honorary-member.organization-honorary-member': ApiOrganizationHonoraryMemberOrganizationHonoraryMember;
