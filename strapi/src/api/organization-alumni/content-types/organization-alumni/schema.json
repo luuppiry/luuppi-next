@@ -4,7 +4,7 @@
   "info": {
     "singularName": "organization-alumni",
     "pluralName": "organization-alumnis",
-    "displayName": "Organizationalumni"
+    "displayName": "OrganizationAlumni"
   },
   "options": {
     "draftAndPublish": false

@@ -2422,6 +2422,7 @@ declare module '@strapi/types' {
       'api::news-list.news-list': ApiNewsListNewsList;
       'api::news-single.news-single': ApiNewsSingleNewsSingle;
       'api::notification.notification': ApiNotificationNotification;
+      'api::organization-alumni.organization-alumni': ApiOrganizationAlumniOrganizationAlumni;
       'api::organization-benefit.organization-benefit': ApiOrganizationBenefitOrganizationBenefit;
       'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
