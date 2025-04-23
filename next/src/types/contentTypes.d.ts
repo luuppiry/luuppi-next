@@ -1553,6 +1553,60 @@ export interface ApiNotificationNotification extends Schema.SingleType {
   };
 }
 
+export interface ApiOrganizationAlumniOrganizationAlumni
+  extends Schema.SingleType {
+  collectionName: 'organization_alumni';
+  info: {
+    singularName: 'organization-alumni';
+    pluralName: 'organization-alumnis';
+    displayName: 'OrganizationAlumni';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::organization-alumni.organization-alumni',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::organization-alumni.organization-alumni',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::organization-alumni.organization-alumni',
+      'oneToMany',
+      'api::organization-alumni.organization-alumni'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 export interface ApiOrganizationBenefitOrganizationBenefit
   extends Schema.SingleType {
   collectionName: 'organization_benefits';

@@ -43,6 +43,10 @@ export const navLinksDesktop: NavLink[] = [
         href: '/organization/honorary-members',
       },
       {
+        translation: 'alumni',
+        href: '/organization/alumni',
+      },
+      {
         translation: 'member_benefits',
         href: '/organization/benefits',
       },
@@ -218,6 +222,10 @@ export const navLinksMobile: NavLink[] = [
       {
         translation: 'honorary_members',
         href: '/organization/honorary-members',
+      },
+      {
+        translation: 'alumni',
+        href: '/organization/alumni',
       },
       {
         translation: 'member_benefits',
