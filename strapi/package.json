@@ -22,7 +22,7 @@
     "pg": "8.13.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "5.3.4",
+    "react-router-dom": "7.5.3",
     "strapi-middleware-upload-plugin-cache": "^2.1.0",
     "styled-components": "5.3.11"
   },
