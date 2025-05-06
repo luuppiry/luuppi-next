@@ -1,0 +1,42 @@
+{
+  "kind": "singleType",
+  "collectionName": "organization_offices_hervanta",
+  "info": {
+    "singularName": "organization-office-hervanta",
+    "pluralName": "organization-offices-hervanta",
+    "displayName": "OrganizationOfficeHervanta",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "Content": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.page-content",
+      "required": true
+    },
+    "Seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo",
+      "required": true
+    }
+  }
+}
