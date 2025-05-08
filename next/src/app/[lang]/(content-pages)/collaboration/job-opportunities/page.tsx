@@ -79,9 +79,9 @@ export default async function CollaborationJobOpportunities(
                     </span>
                   </p>
                   <p className="flex items-center gap-1">
-                    {dictionary.pages_companies[job_opportunity.attributes['jobOpportunityTargetGroup']]}:{' '}
+                    {job_opportunity.attributes.job_opportunity_target_group}:{' '}
                     <span className="badge badge-primary">
-                      {job_opportunity.attributes['jobOpportunityTargetGroup']}
+                      {dictionary.pages_companies[job_opportunity.attributes['jobOpportunityTargetGroup']]}
                     </span>
                   </p>
                 </div>
