@@ -1151,10 +1151,10 @@ export interface ApiCollaborationJobOpportunityCollaborationJobOpportunity
 }
 
 export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
-  collectionName: 'jobOpportunities';
+  collectionName: 'job_opportunities';
   info: {
-    singularName: 'jobOpportunity';
-    pluralName: 'jobOpportunities';
+    singularName: 'job-opportunity';
+    pluralName: 'job-opportunities';
     displayName: 'JobOpportunities';
   };
   options: {
@@ -1180,12 +1180,12 @@ export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
         };
       }>;
     jobTitle: Attribute.Text &
-    Attribute.Required &
-    Attribute.SetPluginOptions<{
-      i18n: {
-        localized: true;
-      };
-    }>;
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     description: Attribute.Text &
       Attribute.Required &
       Attribute.SetPluginOptions<{

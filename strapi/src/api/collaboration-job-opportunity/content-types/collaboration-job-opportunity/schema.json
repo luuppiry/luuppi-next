@@ -2,7 +2,7 @@
   "kind": "singleType",
   "collectionName": "collaboration_job_opportunities",
   "info": {
-    "singularName": "collaboration-job_opportunity",
+    "singularName": "collaboration-job-opportunity",
     "pluralName": "collaboration-job-opportunities",
     "displayName": "CollaborationJobOpportunities"
   },
