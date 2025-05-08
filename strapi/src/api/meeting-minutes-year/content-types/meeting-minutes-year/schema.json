@@ -22,7 +22,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::meeting-minute-document.meeting-minute-document",
-      "mappedBy": "meetingMinuteYears"
+      "mappedBy": "meetingMinutesYears"
     }
   }
 }
