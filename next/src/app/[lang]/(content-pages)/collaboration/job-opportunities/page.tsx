@@ -104,11 +104,11 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const url =
-    '/api/collaboration-job-opportunities?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
+    '/api/collaboration-job-opportunity?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
   const tags = ['collaboration-job-opportunity'];
 
   const data = await getStrapiData<
-    APIResponse<'api::job-opportunities.job-opportunities'>
+    APIResponse<'api::job-opportunity.job-opportunity'>
   >(params.lang, url, tags);
 
   const pathname = `/${params.lang}/collaboration/job-opportunities`;
