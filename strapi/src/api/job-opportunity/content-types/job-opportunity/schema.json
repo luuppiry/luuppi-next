@@ -22,7 +22,7 @@
         }
       },
       "type": "string",
-      "required": false
+      "required": true
     },
     "homepageUrl": {
       "pluginOptions": {

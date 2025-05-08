@@ -1167,6 +1167,7 @@ export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
   };
   attributes: {
     jobOpportunityUrl: Attribute.String &
+      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;

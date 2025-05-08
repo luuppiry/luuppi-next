@@ -62,7 +62,7 @@ export default async function CollaborationJobOpportunities(
                       className="link flex items-center gap-1"
                       href={job_opportunity.attributes.jobOpportunityUrl}
                     >
-                      {dictionary.pages_companies.job_opportunity}{' '}
+                      {dictionary.pages_companies.job_opportunity}
                       <FaExternalLinkAlt size={14} />
                     </Link>
                   </div>
