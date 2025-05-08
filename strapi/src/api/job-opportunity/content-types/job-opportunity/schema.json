@@ -65,13 +65,21 @@
       "required": true
     },
     "jobOpportunityPublished": {
-      "pluginOptions": {},
-      "type": "datetime",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "text",
       "required": true
     },
     "jobOpportunityEnding": {
-      "pluginOptions": {},
-      "type": "datetime",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "text",
       "required": true
     },
     "jobOpportunityTargetGroup": {
