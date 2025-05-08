@@ -30,7 +30,7 @@ export default async function CollaborationJobOpportunities(
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.job_opportunities}</h1>
       <div className="flex flex-col gap-8">
-        {pageData.data.map((job_opportunity) => (
+        {pageData.data.reverse().map((job_opportunity) => (
           <div
             key={job_opportunity.attributes.createdAt!.toString()}
             className="flex gap-4 rounded-lg bg-background-50"
