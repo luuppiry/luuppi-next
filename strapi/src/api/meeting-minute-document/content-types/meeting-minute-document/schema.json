@@ -64,11 +64,11 @@
       "required": true,
       "private": true
     },
-    "meetingsMinutesYears": {
+    "meetingMinutesYears": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::meetings-minutes-year.meetings-minutes-year",
-      "inversedBy": "MeetingsMinutesYears"
+      "target": "api::meeting-minutes-year.meeting-minutes-year",
+      "inversedBy": "MeetingMinutesYears"
     }
   }
 }
