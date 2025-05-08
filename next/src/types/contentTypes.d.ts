@@ -1103,6 +1103,131 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
   };
 }
 
+export interface ApiCollaborationJobOpportunityCollaborationJobOpportunity
+  extends Schema.SingleType {
+  collectionName: 'collaboration_job_opportunities';
+  info: {
+    singularName: 'collaboration-job-opportunity';
+    pluralName: 'collaboration-job-opportunities';
+    displayName: 'CollaborationJobOpportunities';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::collaboration-job-opportunity.collaboration-job-opportunity',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::collaboration-job-opportunity.collaboration-job-opportunity',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::collaboration-job-opportunity.collaboration-job-opportunity',
+      'oneToMany',
+      'api::collaboration-job-opportunity.collaboration-job-opportunity'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
+  collectionName: 'jobOpportunities';
+  info: {
+    singularName: 'jobOpportunity';
+    pluralName: 'jobOpportunities';
+    displayName: 'JobOpportunities';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    jobOpportunityUrl: Attribute.String &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    homepageUrl: Attribute.String &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    jobTitle: Attribute.Text &
+    Attribute.Required &
+    Attribute.SetPluginOptions<{
+      i18n: {
+        localized: true;
+      };
+    }>;
+    description: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    logo: Attribute.Media<'images'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    jobOpportunityPublished: Attribute.DateTime & Attribute.Required;
+    jobOpportunityEnding: Attribute.DateTime & Attribute.Required;
+    jobOpportunityTargetGroup: Attribute.Enumeration<
+      ['everybody', 'computer_science', 'mathematics', 'data_analysis']
+    > & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::jobOpportunity.jobOpportunity',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::jobOpportunity.jobOpportunity',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::jobOpportunity.jobOpportunity',
+      'oneToMany',
+      'api::jobOpportunity.jobOpportunity'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 export interface ApiContactContact extends Schema.SingleType {
   collectionName: 'contacts';
   info: {
@@ -2468,7 +2593,9 @@ declare module '@strapi/types' {
       'api::board-role.board-role': ApiBoardRoleBoardRole;
       'api::collaboration-company.collaboration-company': ApiCollaborationCompanyCollaborationCompany;
       'api::collaboration-general.collaboration-general': ApiCollaborationGeneralCollaborationGeneral;
+      'api::collaboration-job-opportunity.collaboration-job-opportunity': ApiCollaborationJobOpportunityCollaborationJobOpportunity;
       'api::company.company': ApiCompanyCompany;
+      'api::job-opportunity.job-opportunity': ApiJobOpportunityJobOpportunity;
       'api::contact.contact': ApiContactContact;
       'api::event.event': ApiEventEvent;
       'api::event-role.event-role': ApiEventRoleEventRole;

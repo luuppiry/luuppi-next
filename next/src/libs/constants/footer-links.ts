@@ -77,6 +77,10 @@ export const footerLinks: FooterLink[] = [
         translation: 'companies',
         href: '/collaboration/companies',
       },
+      {
+        translation: 'job_opportunities',
+        href: '/collaboration/job-opportunities',
+      },
     ],
   },
   {

@@ -1,0 +1,85 @@
+{
+  "kind": "collectionType",
+  "collectionName": "job_opportunities",
+  "info": {
+    "singularName": "job-opportunity",
+    "pluralName": "job-opportunities",
+    "displayName": "JobOpportunities"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "jobOpportunityUrl": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string",
+      "required": false
+    },
+    "homepageUrl": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string",
+      "required": true
+    },
+    "jobTitle": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "text",
+      "required": true
+    },
+    "description": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "text",
+      "required": true
+    },
+    "logo": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "required": true
+    },
+    "jobOpportunityPublished": {
+      "pluginOptions": {},
+      "type": "datetime",
+      "required": true
+    },
+    "jobOpportunityEnding": {
+      "pluginOptions": {},
+      "type": "datetime",
+      "required": true
+    },
+    "jobOpportunityTargetGroup": {
+      "type": "enumeration",
+      "enum": [
+        "everybody", "computer_science", "mathematics", "data_analysis"
+      ],
+      "required": true
+    }
+  }
+}

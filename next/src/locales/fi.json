@@ -198,6 +198,7 @@
     "privacy_policy": "Tietosuojaseloste",
     "miscellaneous": "Muuta",
     "companies": "Yritykset",
+    "job_opportunities": "Työpaikkailmoitukset",
     "profile": "Profiili",
     "own_events": "Omat tapahtumat",
     "admin": "Ylläpito",
@@ -324,7 +325,15 @@
   "pages_companies": {
     "founded": "Perustettu",
     "homepage": "Kotisivut",
-    "open_jobs": "Avoimet työpaikat"
+    "open_jobs": "Avoimet työpaikat",
+    "job_opportunity": "Työpaikkailmoitus",
+    "job_opportunity_published": "Julkaistu",
+    "job_opportunity_ending": "Päättyy",
+    "job_opportunity_target_group": "Kohderyhmä",
+    "everybody": "Kaikki",
+    "computer_science": "Tietojenkäsittelytiede",
+    "mathematics": "Matematiikka",
+    "data_analysis": "Tilastotiede"
   },
   "pages_verify_email": {
     "new_email": "Uusi sähköposti",

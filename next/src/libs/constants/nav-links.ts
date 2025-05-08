@@ -105,6 +105,10 @@ export const navLinksDesktop: NavLink[] = [
         translation: 'companies',
         href: '/collaboration/companies',
       },
+      {
+        translation: 'job_opportunies',
+        href: '/collaboration/job-opportunies',
+      },
     ],
   },
   {
@@ -272,6 +276,10 @@ export const navLinksMobile: NavLink[] = [
       {
         translation: 'companies',
         href: '/collaboration/companies',
+      },
+      {
+        translation: 'job_opportunies',
+        href: '/collaboration/job-opportunies',
       },
     ],
   },

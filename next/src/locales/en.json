@@ -198,6 +198,7 @@
     "privacy_policy": "Privacy policy",
     "miscellaneous": "Miscellaneous",
     "companies": "Companies",
+    "job_opportunities": "Job opportunities",
     "profile": "Profile",
     "own_events": "My events",
     "admin": "Admin",
@@ -324,7 +325,15 @@
   "pages_companies": {
     "founded": "Founded",
     "homepage": "Homepage",
-    "open_jobs": "Open jobs"
+    "open_jobs": "Open jobs",
+    "job_opportunity": "Job opportunity",
+    "job_opportunity_published": "Published",
+    "job_opportunity_ending": "Ending",
+    "job_opportunity_target_group": "Target group",
+    "everybody": "Everybody",
+    "computer_science": "Computer science",
+    "mathematics": "Mathematics",
+    "data_analysis": "Data Analysis"
   },
   "pages_verify_email": {
     "new_email": "New email",
