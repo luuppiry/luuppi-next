@@ -1,7 +1,7 @@
 /**
- * meetings-minutes-year service
+ * meeting-minutes-year service
  */
 
 import { factories } from '@strapi/strapi';
 
-export default factories.createCoreService('api::meetings-minutes-year.meetings-minutes-year');
+export default factories.createCoreService('api::meeting-minutes-year.meeting-minutes-year');
