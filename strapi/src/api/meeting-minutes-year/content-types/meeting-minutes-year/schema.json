@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "meetings_minutes_years",
+  "info": {
+    "singularName": "meetings-minutes-year",
+    "pluralName": "meetings-minutes-years",
+    "displayName": "MeetingsMinutesYears",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "year": {
+      "pluginOptions": {},
+      "type": "integer",
+      "unique": true,
+      "required": true
+    },
+    "meetingsMinuteDocuments": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::meetings-minute-document.meetings-minute-document",
+      "mappedBy": "meetings-minutes-years"
+    }
+  }
+}

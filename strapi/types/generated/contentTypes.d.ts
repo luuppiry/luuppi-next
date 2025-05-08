@@ -1030,6 +1030,53 @@ export interface ApiCollaborationGeneralCollaborationGeneral
   };
 }
 
+export interface ApiCollaborationJobOpportunityCollaborationJobOpportunity
+  extends Schema.SingleType {
+  collectionName: 'collaboration_job_opportunities';
+  info: {
+    singularName: 'collaboration-job-opportunity';
+    pluralName: 'collaboration-job-opportunities';
+    displayName: 'CollaborationJobOpportunities';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::collaboration-job-opportunity.collaboration-job-opportunity',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::collaboration-job-opportunity.collaboration-job-opportunity',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::collaboration-job-opportunity.collaboration-job-opportunity',
+      'oneToMany',
+      'api::collaboration-job-opportunity.collaboration-job-opportunity'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 export interface ApiCompanyCompany extends Schema.CollectionType {
   collectionName: 'companies';
   info: {
@@ -1098,144 +1145,6 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
       'api::company.company',
       'oneToMany',
       'api::company.company'
-    >;
-    locale: Attribute.String;
-  };
-}
-
-export interface ApiCollaborationJobOpportunityCollaborationJobOpportunity
-  extends Schema.SingleType {
-  collectionName: 'collaboration_job_opportunities';
-  info: {
-    singularName: 'collaboration-job-opportunity';
-    pluralName: 'collaboration-job-opportunities';
-    displayName: 'CollaborationJobOpportunities';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    Seo: Attribute.Component<'shared.seo'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::collaboration-job-opportunity.collaboration-job-opportunity',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::collaboration-job-opportunity.collaboration-job-opportunity',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::collaboration-job-opportunity.collaboration-job-opportunity',
-      'oneToMany',
-      'api::collaboration-job-opportunity.collaboration-job-opportunity'
-    >;
-    locale: Attribute.String;
-  };
-}
-
-export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
-  collectionName: 'job_opportunities';
-  info: {
-    singularName: 'job-opportunity';
-    pluralName: 'job-opportunities';
-    displayName: 'JobOpportunities';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    jobOpportunityUrl: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    homepageUrl: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    jobTitle: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    description: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    logo: Attribute.Media<'images'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    jobOpportunityPublished: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    jobOpportunityEnding: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    jobOpportunityTargetGroup: Attribute.Enumeration<
-      ['everybody', 'computer_science', 'mathematics', 'data_analysis']
-    > & Attribute.Required;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::jobOpportunity.jobOpportunity',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::jobOpportunity.jobOpportunity',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::jobOpportunity.jobOpportunity',
-      'oneToMany',
-      'api::jobOpportunity.jobOpportunity'
     >;
     locale: Attribute.String;
   };
@@ -1420,6 +1329,97 @@ export interface ApiEventsCalendarEventsCalendar extends Schema.SingleType {
   };
 }
 
+export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
+  collectionName: 'job_opportunities';
+  info: {
+    singularName: 'job-opportunity';
+    pluralName: 'job-opportunities';
+    displayName: 'JobOpportunities';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    jobOpportunityUrl: Attribute.String &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    homepageUrl: Attribute.String &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    jobTitle: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    description: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    logo: Attribute.Media<'images'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    jobOpportunityPublished: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    jobOpportunityEnding: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    jobOpportunityTargetGroup: Attribute.Enumeration<
+      ['everybody', 'computer_science', 'mathematics', 'data_analysis']
+    > & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::jobOpportunity.jobOpportunity',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::jobOpportunity.jobOpportunity',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::jobOpportunity.jobOpportunity',
+      'oneToMany',
+      'api::jobOpportunity.jobOpportunity'
+    >;
+    locale: Attribute.String;
+  };
+}
+
 export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
   collectionName: 'luuppi_sanomats';
   info: {
@@ -1477,6 +1477,110 @@ export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
       'api::luuppi-sanomat.luuppi-sanomat',
       'oneToMany',
       'api::luuppi-sanomat.luuppi-sanomat'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiMeetingMinutesYearMeetingMinutesYear extends Schema.CollectionType {
+  collectionName: 'meetings_minutes_years',
+  info: {
+    singularName: 'meetings-minutes-year',
+    pluralName: 'meetings-minutes-years',
+    displayName: 'MeetingsMinutesYears',
+    description: ''
+  },
+  options: {
+    draftAndPublish: false
+  },
+  attributes: {
+    year: Attribute.Integer & Attribute.Required & Attribute.Unique;
+    meetingsMinuteDocuments: Attribute.Relation<
+      'api::meetings-minutes-year.meetings-minutes-year',
+      'manyToMany',
+      'api::meetings-minute-document.meetings-minute-document'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::meetings-minutes-year.meetings-minutes-year',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::meetings-minutes-year.meetings-minutes-year',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMeetingMinuteDocumentMeetingMinuteDocument extends Schema.CollectionType {
+  collectionName: 'meeting_minute_documents';
+  info: {
+    singularName: 'meeting-minute-document';
+    pluralName: 'meeting-minute-documents';
+    displayName: 'MeetingMinuteDocument';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    meetingDate: Attribute.DateTime & Attribute.Required;
+    image: Attribute.Media<'images'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    pdf: Attribute.Media<'files'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    year: Attribute.Integer & Attribute.Required & Attribute.Private;
+    meetingsMinutesYears: Attribute.Relation<
+      'api::meeting-minute-document.meeting-minute-document',
+      'manyToMany',
+      'api::meetings-minutes-year.meetings-minutes-year'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::meeting-minute-document.meeting-minute-document',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::meeting-minute-document.meeting-minute-document',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::meeting-minute-document.meeting-minute-document',
+      'oneToMany',
+      'api::meeting-minute-document.meeting-minute-document'
     >;
     locale: Attribute.String;
   };
@@ -2608,12 +2712,14 @@ declare module '@strapi/types' {
       'api::collaboration-general.collaboration-general': ApiCollaborationGeneralCollaborationGeneral;
       'api::collaboration-job-opportunity.collaboration-job-opportunity': ApiCollaborationJobOpportunityCollaborationJobOpportunity;
       'api::company.company': ApiCompanyCompany;
-      'api::job-opportunity.job-opportunity': ApiJobOpportunityJobOpportunity;
       'api::contact.contact': ApiContactContact;
       'api::event.event': ApiEventEvent;
       'api::event-role.event-role': ApiEventRoleEventRole;
       'api::events-calendar.events-calendar': ApiEventsCalendarEventsCalendar;
+      'api::job-opportunity.job-opportunity': ApiJobOpportunityJobOpportunity;
       'api::luuppi-sanomat.luuppi-sanomat': ApiLuuppiSanomatLuuppiSanomat;
+      'api::meeting-minute-document.meeting-minute-document': ApiMeetingMinuteDocumentMeetingMinuteDocument;
+      'api::meeting-minutes-year.meeting-minutes-year': ApiMeetingMinutesYearMeetingMinutesYear;
       'api::news-list.news-list': ApiNewsListNewsList;
       'api::news-single.news-single': ApiNewsSingleNewsSingle;
       'api::notification.notification': ApiNotificationNotification;
@@ -2622,8 +2728,8 @@ declare module '@strapi/types' {
       'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
       'api::organization-honorary-member.organization-honorary-member': ApiOrganizationHonoraryMemberOrganizationHonoraryMember;
-      'api::organization-office.organization-office': ApiOrganizationOfficeOrganizationOffice;
       'api::organization-office-hervanta.organization-office-hervanta': ApiOrganizationOfficeHervantaOrganizationOfficeHervanta;
+      'api::organization-office.organization-office': ApiOrganizationOfficeOrganizationOffice;
       'api::organization-rule.organization-rule': ApiOrganizationRuleOrganizationRule;
       'api::organization-tradition-guideline.organization-tradition-guideline': ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline;
       'api::privacy-policy.privacy-policy': ApiPrivacyPolicyPrivacyPolicy;

@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "meeting_minute_documents",
+  "info": {
+    "singularName": "meeting-minute-document",
+    "pluralName": "meeting-minute-documents",
+    "displayName": "MeetingMinuteDocument",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "meetingDate": {
+      "pluginOptions": {},
+      "type": "datetime",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "pdf": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "files"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "Seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo",
+      "required": true
+    },
+    "year": {
+      "pluginOptions": {},
+      "type": "integer",
+      "required": true,
+      "private": true
+    },
+    "meetingsMinutesYears": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::meetings-minutes-year.meetings-minutes-year",
+      "inversedBy": "MeetingsMinutesYears"
+    }
+  }
+}
