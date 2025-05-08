@@ -108,7 +108,7 @@ export async function generateMetadata(
   const tags = ['collaboration-job-opportunity'];
 
   const data = await getStrapiData<
-    APIResponse<'api::job-opportunity.job-opportunity'>
+    APIResponse<'api::collaboration-job-opportunity.collaboration-job-opportunity'>
   >(params.lang, url, tags);
 
   const pathname = `/${params.lang}/collaboration/job-opportunities`;
