@@ -68,7 +68,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::meeting-minutes-year.meeting-minutes-year",
-      "inversedBy": "meetingMinutesDocuments"
+      "inversedBy": "meetingMinuteDocuments"
     }
   }
 }
