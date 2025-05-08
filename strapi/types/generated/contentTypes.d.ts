@@ -1483,11 +1483,11 @@ export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
 }
 
 export interface ApiMeetingMinutesYearMeetingMinutesYear extends Schema.CollectionType {
-  collectionName: 'meetings_minutes_years',
+  collectionName: 'meeting_minutes_years',
   info: {
-    singularName: 'meetings-minutes-year',
-    pluralName: 'meetings-minutes-years',
-    displayName: 'MeetingsMinutesYears',
+    singularName: 'meeting-minutes-year',
+    pluralName: 'meeting-minutes-years',
+    displayName: 'MeetingMinutesYears',
     description: ''
   },
   options: {
@@ -1495,21 +1495,21 @@ export interface ApiMeetingMinutesYearMeetingMinutesYear extends Schema.Collecti
   },
   attributes: {
     year: Attribute.Integer & Attribute.Required & Attribute.Unique;
-    meetingsMinuteDocuments: Attribute.Relation<
-      'api::meetings-minutes-year.meetings-minutes-year',
+    meetingMinuteDocuments: Attribute.Relation<
+      'api::meeting-minutes-year.meeting-minutes-year',
       'manyToMany',
-      'api::meetings-minute-document.meetings-minute-document'
+      'api::meeting-minute-document.meeting-minute-document'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::meetings-minutes-year.meetings-minutes-year',
+      'api::meeting-minutes-year.meeting-minutes-year',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::meetings-minutes-year.meetings-minutes-year',
+      'api::meeting-minutes-year.meeting-minutes-year',
       'oneToOne',
       'admin::user'
     > &
@@ -1557,10 +1557,10 @@ export interface ApiMeetingMinuteDocumentMeetingMinuteDocument extends Schema.Co
         };
       }>;
     year: Attribute.Integer & Attribute.Required & Attribute.Private;
-    meetingsMinutesYears: Attribute.Relation<
+    meetingMinutesYears: Attribute.Relation<
       'api::meeting-minute-document.meeting-minute-document',
       'manyToMany',
-      'api::meetings-minutes-year.meetings-minutes-year'
+      'api::meeting-minutes-year.meeting-minutes-year'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
