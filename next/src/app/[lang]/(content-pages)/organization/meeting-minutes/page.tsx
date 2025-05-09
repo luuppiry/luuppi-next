@@ -12,13 +12,14 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 interface MeetingMinutesYearProps {
-  params: { 
+  params: {
     lang: SupportedLanguage;
     year?: string; // Add year parameter
   };
 }
 
-export default async function MeetingMinutesYear({ params }: MeetingMinutesYearProps) {
+export default async function MeetingMinutesYear(props: MeetingMinutesYearProps) {
+  const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
   /**
@@ -39,10 +40,9 @@ export default async function MeetingMinutesYear({ params }: MeetingMinutesYearP
     (a, b) => Number(b) - Number(a),
   );
 
-  // Get the selected year from params or use the latest year
   const selectedYear = params.year ? parseInt(params.year, 10) : parseInt(meetingMinutesSortedByYear[0], 10);
   const selectedMeetingMinutesYear = meetingMinutesGroupedByYear[selectedYear.toString()];
-  
+
   const otherMeetingMinuteYears = meetingMinutesSortedByYear.filter(
     (year) => parseInt(year, 10) !== selectedYear,
   );
@@ -151,7 +151,6 @@ export async function generateMetadata({ params }: MeetingMinutesYearProps): Pro
     (a, b) => Number(b) - Number(a),
   );
   const selectedYear = params.year ? parseInt(params.year, 10) : parseInt(meetingMinutesSortedByYear[0], 10);
-  const selectedMeetingMinutesYear = meetingMinutesGroupedByYear[selectedYear.toString()];
 
   const pathname = `/${params.lang}/organization/meeting-minutes${params.year ? `/${params.year}` : ''}`;
 

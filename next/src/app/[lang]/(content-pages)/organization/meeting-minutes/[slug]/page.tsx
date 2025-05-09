@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 interface MeetingMinutesYearProps {
-  params: { 
+  params: {
     lang: SupportedLanguage;
     slug?: string;
   };
