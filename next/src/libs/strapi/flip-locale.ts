@@ -114,26 +114,22 @@ export const flipSanomatLocale = (
 export const flipMeetingMinutesLocale = (
   lang: SupportedLanguage,
   documents: APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[],
-) => {
-  return documents.map((doc) => {
-    if (lang === 'en') return doc;
-    
-    const localizedDoc = doc.attributes.localizations?.data?.find(
-      (localization: any) => localization.attributes.locale === lang,
-    );
-    
-    return localizedDoc
-      ? {
-          ...localizedDoc,
-          attributes: {
-            ...localizedDoc.attributes,
-            // Keep non-localizable fields from original
-            image: doc.attributes.image,
-            pdf: doc.attributes.pdf,
-            meetingDate: doc.attributes.meetingDate,
-            year: doc.attributes.year,
-          },
-        }
-      : doc;
-  });
-};
+) => documents.map((doc) => {
+  if (lang === 'en') return doc;
+  const localizedDoc = doc.attributes.localizations?.data?.find(
+    (localization: any) => localization.attributes.locale === lang,
+  );
+  return localizedDoc
+    ? {
+      ...localizedDoc,
+      attributes: {
+        ...localizedDoc.attributes,
+        // Keep non-localizable fields from original
+        image: doc.attributes.image,
+        pdf: doc.attributes.pdf,
+        meetingDate: doc.attributes.meetingDate,
+        year: doc.attributes.year,
+      },
+    }
+    : doc;
+});

@@ -28,13 +28,12 @@ export default async function MeetingMinutes(props: MeetingMinutesProps) {
   return (
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.meeting_minutes}</h1>
-      
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
         {years.map((year) => (
           <Link
             key={year.id}
             href={`/${params.lang}/organization/meeting-minutes/${year.attributes.year}`}
-            className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
+            className="group relative flex cursor-pointer flex-col gap-4 hover:scale-105 transition-transform duration-300"
           >
             <div className="relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
               {year.attributes.meetingMinuteDocuments?.[0]?.attributes.image?.data?.attributes.url && (
