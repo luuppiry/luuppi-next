@@ -23,7 +23,7 @@ export default async function MeetingMinutesYear(props: MeetingMinutesYearProps)
    * Strapi doesn't support localized queries from non i18n collections.
    */
   const meetingMinutesYearData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minute-year.meeting-minute-year'>
+    APIResponseCollection<'api::meeting-minutes-year.meeting-minutes-year'>
   >(
     'fi',
     '/api/meeting-minutes-years?populate[meetingMinuteDocuments][populate]=localizations&populate[meetingMinuteDocuments][populate]=image',
@@ -128,7 +128,7 @@ export async function generateMetadata(props: MeetingMinutesYearProps): Promise<
   const dictionary = await getDictionary(params.lang);
 
   const meetingMinutesYearData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minute-year.meeting-minute-year'>
+    APIResponseCollection<'api::meeting-minutes-year.meeting-minutes-year'>
   >(
     'fi',
     '/api/meeting-minutes-years?populate[meetingMinuteDocuments][populate]=localizations&populate[meetingMinuteDocuments][populate]=image',

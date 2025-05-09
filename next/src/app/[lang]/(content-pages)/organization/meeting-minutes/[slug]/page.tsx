@@ -24,7 +24,7 @@ export default async function OldMeetingMinutesYear(props: OldMeetingMinutesYear
   }
 
   const meetingMinutesYearData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minute-year.meeting-minute-year'>
+    APIResponseCollection<'api::meeting-minutes-year.meeting-minutes-year'>
   >(
     'fi',
     '/api/meeting-minutes-years?populate[meetingMinuteDocuments][populate]=localizations&populate[meetingMinuteDocuments][populate]=image',
@@ -143,7 +143,7 @@ export async function generateMetadata(
   const dictionary = await getDictionary(params.lang);
 
   const meetingMinutesYearData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minute-year.meeting-minute-year'>
+    APIResponseCollection<'api::meeting-minutes-year.meeting-minutes-year'>
   >(
     'fi',
     '/api/meeting-minutes-years?populate[meetingMinuteDocuments][populate]=localizations&populate[meetingMinuteDocuments][populate]=image',
@@ -184,7 +184,7 @@ export async function generateMetadata(
 
 export async function generateStaticParams() {
   const meetingMinutesYearData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minute-year.meeting-minute-year'>
+    APIResponseCollection<'api::meeting-minutes-year.meeting-minutes-year'>
   >(
     'fi',
     '/api/meeting-minutes-years?populate[meetingMinuteDocuments][populate]=localizations&populate[meetingMinuteDocuments][populate]=image',
