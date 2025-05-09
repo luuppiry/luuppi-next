@@ -3,6 +3,7 @@ import { flipMeetingMinutesYearLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { groupMeetingMinutesByYear } from '@/libs/strapi/group-meeting-minutes-by-year';
+import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
