@@ -35,11 +35,11 @@ export default async function MeetingMinutesYear({ params }: MeetingMinutesYearP
       <h1>{dictionary.navigation.meeting_minutes} {params.year}</h1>
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
         {documents.map((doc) => (
-          <a
-            className="group relative flex cursor-pointer flex-col gap-4 hover:scale-105 transition-transform duration-300"
-            href={`/${params.lang}/organization/meeting-minutes/${params.year}/${doc.id}`}
-            key={doc.id}
-          >
+            <a
+              key={doc.id}
+              className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
+              href={`/${params.lang}/organization/meeting-minutes/${params.year}/${doc.id}`}
+            >
             <div className="relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
               {doc.attributes.image?.data?.attributes.url && (
                 <Image
