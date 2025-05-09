@@ -183,6 +183,7 @@
     "collaboration": "Collaboration",
     "rules": "Rules",
     "board": "Board",
+    "meeting_minutes": "Meeting minutes",
     "office": "Office - City centre",
     "office_hervanta": "Office - Hervanta",
     "feedback": "Feedback",
@@ -258,6 +259,11 @@
     "board_members": "Board members",
     "officials": "Officials",
     "seo_description": "Luuppi ry's Board and Officials in"
+  },
+  "pages_meeting_minutes_year": {
+    "other_meeting_minutes_years": "Other years",
+    "meeting_minutes_documents": "Meeting minutes documents",
+    "seo_description": "Luuppi ry's Meeting Minutes in"
   },
   "pages_songbook": {
     "title": "Songbook",

@@ -31,6 +31,10 @@ export const navLinksDesktop: NavLink[] = [
         href: '/organization/board',
       },
       {
+        translation: 'meeting_minutes',
+        href: '/organization/meeting-minutes',
+      },
+      {
         translation: 'office_hervanta',
         href: '/organization/office-hervanta',
       },
@@ -218,6 +222,10 @@ export const navLinksMobile: NavLink[] = [
       {
         translation: 'board',
         href: '/organization/board',
+      },
+      {
+        translation: 'meeting_minutes',
+        href: '/organization/meeting-minutes',
       },
       {
         translation: 'office_hervanta',

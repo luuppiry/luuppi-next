@@ -24,6 +24,10 @@ export const footerLinks: FooterLink[] = [
         href: '/organization/board',
       },
       {
+        translation: 'meeting_minutes',
+        href: '/organization/meeting-minutes',
+      },
+      {
         translation: 'office_hervanta',
         href: '/organization/office-hervanta',
       },

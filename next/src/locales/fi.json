@@ -183,6 +183,7 @@
     "collaboration": "Yritysyhteistyö",
     "rules": "Säännöt",
     "board": "Hallitus",
+    "meeting_minutes": "Pöytäkirjat",
     "office": "Toimitila - Keskusta",
     "office_hervanta": "Toimitila - Hervanta",
     "feedback": "Palaute",
@@ -258,6 +259,11 @@
     "board_members": "Hallituksen jäsenet",
     "officials": "Toimihenkilöt",
     "seo_description": "Luuppi ry:n hallitus ja toimihenkilöt vuonna"
+  },
+  "pages_meeting_minutes_year": {
+    "other_meeting_minutes_years": "Muut vuodet",
+    "meeting_minutes_documents": "Pöytäkirjat",
+    "seo_description": "Luuppi ry:n pöytäkirjat vuonna"
   },
   "pages_songbook": {
     "title": "Laulukirja",

@@ -20,6 +20,7 @@ const getStaticPages = (lang: SupportedLanguage) => {
     `/${lang}/organization/rules`,
     `/${lang}/organization/songbook`,
     `/${lang}/organization/board`,
+    `/${lang}/organization/meeting-minutes`,
     `/${lang}/organization/office`,
     `/${lang}/organization/office-hervanta`,
     `/${lang}/organization/tradition-guidelines`,
