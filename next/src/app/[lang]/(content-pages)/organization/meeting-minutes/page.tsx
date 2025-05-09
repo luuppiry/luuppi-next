@@ -9,13 +9,16 @@ import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 interface MeetingMinutesYearProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: { 
+    lang: SupportedLanguage;
+    year?: string; // Add year parameter
+  };
 }
 
-export default async function MeetingMinutesYear(props: MeetingMinutesYearProps) {
-  const params = await props.params;
+export default async function MeetingMinutesYear({ params }: MeetingMinutesYearProps) {
   const dictionary = await getDictionary(params.lang);
 
   /**
@@ -35,19 +38,27 @@ export default async function MeetingMinutesYear(props: MeetingMinutesYearProps)
   const meetingMinutesSortedByYear = Object.keys(meetingMinutesGroupedByYear).sort(
     (a, b) => Number(b) - Number(a),
   );
-  const latestMeetingMinutesYear = meetingMinutesGroupedByYear[meetingMinutesSortedByYear[0]];
+
+  // Get the selected year from params or use the latest year
+  const selectedYear = params.year ? parseInt(params.year, 10) : parseInt(meetingMinutesSortedByYear[0], 10);
+  const selectedMeetingMinutesYear = meetingMinutesGroupedByYear[selectedYear.toString()];
+  
   const otherMeetingMinuteYears = meetingMinutesSortedByYear.filter(
-    (year) => parseInt(year, 10) !== latestMeetingMinutesYear.attributes.year,
+    (year) => parseInt(year, 10) !== selectedYear,
   );
 
-  const meetingMinuteDocuments = flipMeetingMinutesYearLocale(params.lang, latestMeetingMinutesYear);
+  const meetingMinuteDocuments = flipMeetingMinutesYearLocale(params.lang, selectedMeetingMinutesYear);
+
+  if (!selectedMeetingMinutesYear) {
+    redirect(`/${params.lang}/404`);
+  }
 
   return (
     <>
       <div className="relative flex flex-col gap-12">
         <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
           <h1>
-            {dictionary.navigation.meeting_minutes} {latestMeetingMinutesYear.attributes.year}
+            {dictionary.navigation.meeting_minutes} {selectedYear}
           </h1>
           {Boolean(otherMeetingMinuteYears.length) && (
             <div className="dropdown sm:dropdown-end">
@@ -80,7 +91,7 @@ export default async function MeetingMinutesYear(props: MeetingMinutesYearProps)
                     <a
                       key={publication.id}
                       className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
-                      href={`/${params.lang}/meeting-minutes/${publication.id}`}
+                      href={`/${params.lang}/organization/meeting-minute-document/${publication.id}`}
                     >
                       {publication.attributes.image?.data.attributes.url && (
                         <div
@@ -124,8 +135,7 @@ export default async function MeetingMinutesYear(props: MeetingMinutesYearProps)
   );
 }
 
-export async function generateMetadata(props: MeetingMinutesYearProps): Promise<Metadata> {
-  const params = await props.params;
+export async function generateMetadata({ params }: MeetingMinutesYearProps): Promise<Metadata> {
   const dictionary = await getDictionary(params.lang);
 
   const meetingMinutesYearData = await getStrapiData<
@@ -140,13 +150,14 @@ export async function generateMetadata(props: MeetingMinutesYearProps): Promise<
   const meetingMinutesSortedByYear = Object.keys(meetingMinutesGroupedByYear).sort(
     (a, b) => Number(b) - Number(a),
   );
-  const latestMeetingMinutesYear = meetingMinutesGroupedByYear[meetingMinutesSortedByYear[0]];
+  const selectedYear = params.year ? parseInt(params.year, 10) : parseInt(meetingMinutesSortedByYear[0], 10);
+  const selectedMeetingMinutesYear = meetingMinutesGroupedByYear[selectedYear.toString()];
 
-  const pathname = `/${params.lang}/organization/meeting-minutes`;
+  const pathname = `/${params.lang}/organization/meeting-minutes${params.year ? `/${params.year}` : ''}`;
 
   return {
-    title: `${dictionary.navigation.meeting_minutes} ${latestMeetingMinutesYear.attributes.year} | Luuppi ry`,
-    description: `${dictionary.pages_meeting_minutes_year.seo_description} ${latestMeetingMinutesYear.attributes.year}`,
+    title: `${dictionary.navigation.meeting_minutes} ${selectedYear} | Luuppi ry`,
+    description: `${dictionary.pages_meeting_minutes_year.seo_description} ${selectedYear}`,
     alternates: {
       canonical: pathname,
       languages: {
@@ -155,14 +166,14 @@ export async function generateMetadata(props: MeetingMinutesYearProps): Promise<
       },
     },
     openGraph: {
-      title: `${dictionary.navigation.meeting_minutes} ${latestMeetingMinutesYear.attributes.year}`,
-      description: `${dictionary.pages_meeting_minutes_year.seo_description} ${latestMeetingMinutesYear.attributes.year}`,
+      title: `${dictionary.navigation.meeting_minutes} ${selectedYear}`,
+      description: `${dictionary.pages_meeting_minutes_year.seo_description} ${selectedYear}`,
       url: pathname,
       siteName: 'Luuppi ry',
     },
     twitter: {
-      title: `${dictionary.navigation.meeting_minutes} ${latestMeetingMinutesYear.attributes.year}`,
-      description: `${dictionary.pages_meeting_minutes_year.seo_description} ${latestMeetingMinutesYear.attributes.year}`,
+      title: `${dictionary.navigation.meeting_minutes} ${selectedYear}`,
+      description: `${dictionary.pages_meeting_minutes_year.seo_description} ${selectedYear}`,
     },
   };
 }
