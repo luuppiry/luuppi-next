@@ -124,7 +124,6 @@ export const flipMeetingMinutesLocale = (
       ...localizedDoc,
       attributes: {
         ...localizedDoc.attributes,
-        // Keep non-localizable fields from original
         image: doc.attributes.image,
         pdf: doc.attributes.pdf,
         meetingDate: doc.attributes.meetingDate,

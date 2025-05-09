@@ -36,9 +36,9 @@ export default async function MeetingMinutesYear({ params }: MeetingMinutesYearP
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
         {documents.map((doc) => (
           <a
-            key={doc.id}
-            href={`/${params.lang}/organization/meeting-minutes/${params.year}/${doc.id}`}
             className="group relative flex cursor-pointer flex-col gap-4 hover:scale-105 transition-transform duration-300"
+            href={`/${params.lang}/organization/meeting-minutes/${params.year}/${doc.id}`}
+            key={doc.id}
           >
             <div className="relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
               {doc.attributes.image?.data?.attributes.url && (
