@@ -108,27 +108,31 @@ export const flipSanomatLocale = (
  * have relations and everything is not localized. Workaround is to
  * populate localizations and then "flip" the locale.
  * @param lang 'en' or 'fi'
- * @param data MeetingMinutesYear data
- * @returns MeetingMinutesYear data with correct locale
+ * @param data MeetingMinuteDocument data
+ * @returns MeetingMinuteDocument data with correct locale
  */
-export const flipMeetingMinutesLocale = (
+export const flipMeetingMinuteDocumentLocale = (
   lang: SupportedLanguage,
   documents: APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[],
-) => documents.map((doc) => {
-  if (lang === 'en') return doc;
-  const localizedDoc = doc.attributes.localizations?.data?.find(
-    (localization: any) => localization.attributes.locale === lang,
-  );
-  return localizedDoc
-    ? {
-      ...localizedDoc,
-      attributes: {
-        ...localizedDoc.attributes,
-        image: doc.attributes.image,
-        pdf: doc.attributes.pdf,
-        meetingDate: doc.attributes.meetingDate,
-        year: doc.attributes.year,
-      },
-    }
-    : doc;
-});
+) =>
+  lang === 'en'
+    ? (
+        documents.map((publication) => {
+          const localeEn = publication.attributes.localizations?.data[0];
+          if (!localeEn) return null;
+          return {
+            ...publication,
+            attributes: {
+              ...localeEn?.attributes,
+              year: publication.year,
+              id: publication.id,
+              image: publication.attributes.image,
+              pdf: publication.attributes.pdf,
+              Seo: {
+                ...localeEn?.attributes.Seo,
+              },
+            },
+          };
+        }) as APIResponseData<'api::luuppi-sanomat.luuppi-sanomat'>[]
+      )?.filter((publication) => publication)
+    : documents;

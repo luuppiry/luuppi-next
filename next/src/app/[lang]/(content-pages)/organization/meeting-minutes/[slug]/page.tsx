@@ -1,6 +1,6 @@
 import PdfViewer from '@/components/PdfViewer/PdfViewer';
 import { getDictionary } from '@/dictionaries';
-import { flipSanomatLocale } from '@/libs/strapi/flip-locale';
+import { flipMeetingMinuteDocumentLocale } from '@/libs/strapi/flip-locale';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
@@ -16,7 +16,7 @@ interface MeetingMinutesDocumentProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
 
-export default async function MeetingMinutesPublication(
+export default async function MeetingMinutesDocument(
   props: MeetingMinutesDocumentProps,
 ) {
   const params = await props.params;
@@ -26,20 +26,20 @@ export default async function MeetingMinutesPublication(
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
   >('fi', `${baseUrl}${params.slug}`, ['meeting-minute-document']);
 
-  const sanomatLocaleFlipped = flipSanomatLocale(params.lang, pageData.data);
+  const meetingMinuteDocumentLocaleFlipped = flipMeetingMinuteDocumentLocale(params.lang, pageData.data);
 
   if (!pageData.data.length) {
     redirect(`/${params.lang}/404`);
   }
 
-  const selectedPublication = sanomatLocaleFlipped[0];
+  const selectedDocument = meetingMinuteDocumentLocaleFlipped[0];
 
   return (
     <article className="relative flex flex-col gap-12">
       <h1>
-        {dictionary.general.publication}{' '}
+        {dictionary.general.meeting_minute}{' '}
         {new Date(
-          selectedPublication.attributes.meetingDate
+          selectedDocument.attributes.meetingDate
         )
           .toLocaleDateString(params.lang, {
             day: 'numeric',
@@ -52,7 +52,7 @@ export default async function MeetingMinutesPublication(
         <PdfViewer
           dictionary={dictionary}
           pdfUrl={getStrapiUrl(
-            selectedPublication.attributes.pdf?.data.attributes.url,
+            selectedDocument.attributes.pdf?.data.attributes.url,
           )}
         />
       </div>
@@ -68,16 +68,16 @@ export async function generateMetadata(
   const data = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
   >('fi', `${baseUrl}${params.slug}`, ['meeting-minute-document']);
-  const sanomatLocaleFlipped = flipSanomatLocale(params.lang, data.data);
-  const selectedPublication = sanomatLocaleFlipped[0];
+  const meetingMinuteDocumentLocaleFlipped = flipMeetingMinuteDocumentLocale(params.lang, data.data);
+  const selectedDocument = meetingMinuteDocumentLocaleFlipped[0];
   const pathname = `/${params.lang}/organization/meeting-minute-document/${params.slug}`;
 
   // No version of the content exists in the requested language
-  if (!selectedPublication?.attributes?.Seo?.id) {
+  if (!selectedDocument?.attributes?.Seo?.id) {
     return {};
   }
 
-  return formatMetadata({ data: selectedPublication }, pathname);
+  return formatMetadata({ data: selectedDocument }, pathname);
 }
 
 export async function generateStaticParams() {
