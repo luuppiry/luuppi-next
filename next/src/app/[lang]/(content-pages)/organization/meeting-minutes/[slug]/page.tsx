@@ -39,7 +39,8 @@ export default async function MeetingMinutesDocument(
       <h1>
         {dictionary.general.meeting_minute}{' '}
         {new Date(
-          selectedDocument.attributes.meetingDate,
+          selectedDocument.attributes?.meetingDate ||
+            selectedDocument.attributes.createdAt!,
         )
           .toLocaleDateString(params.lang, {
             day: 'numeric',
