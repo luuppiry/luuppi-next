@@ -108,32 +108,28 @@ export const flipSanomatLocale = (
  * have relations and everything is not localized. Workaround is to
  * populate localizations and then "flip" the locale.
  * @param lang 'en' or 'fi'
- * @param data MeetingMinuteDocument data
- * @returns MeetingMinuteDocument data with correct locale
+ * @param data MeetingMinutesYear data
+ * @returns MeetingMinutesYear data with correct locale
  */
-export const flipMeetingMinuteDocumentLocale = (
+export const flipMeetingMinutesYearLocale = (
   lang: SupportedLanguage,
-  documents: APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[],
+  data: APIResponseData<'api::meeting-minutes-year.meeting-minutes-year'>,
 ) =>
   lang === 'en'
-    ? (
-        documents.map((publication) => {
-          const localeEn = publication.attributes.localizations?.data[0];
-          if (!localeEn) return null;
-          return {
-            ...publication,
-            attributes: {
-              ...localeEn?.attributes,
-              year: publication.attributes.year,
-              meetingDate: publication.attributes.meetingDate,
-              id: publication.id,
-              image: publication.attributes.image,
-              pdf: publication.attributes.pdf,
-              Seo: {
-                ...localeEn?.attributes.Seo,
-              },
-            },
-          };
-        }) as APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[]
-      )?.filter((publication) => publication)
-    : documents;
+    ? (data.attributes.meetingMinuteDocuments?.data.map((document: any) => {
+      const localeEn = document.attributes.localizations?.data[0];
+      if (!localeEn) return null;
+      return {
+        ...document,
+        attributes: {
+          ...localeEn?.attributes,
+          id: document.id,
+          image: document.attributes.image,
+          pdf: document.attributes.pdf,
+          Seo: {
+            ...localeEn?.attributes.Seo,
+          },
+        },
+      };
+    }) as APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[])?.filter(Boolean)
+  : data.attributes.meetingMinuteDocuments?.data ?? [];
