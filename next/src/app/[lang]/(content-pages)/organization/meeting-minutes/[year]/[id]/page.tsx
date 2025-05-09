@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation';
 
 interface MeetingMinutesDocumentProps {
   params: { year: string; id: string; lang: SupportedLanguage };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
 export default async function MeetingMinutesDocument({ params }: MeetingMinutesDocumentProps) {
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: MeetingMinutesDocumentProps):
     ['meeting-minute-document']
   );
 
-  const document = flipMeetingMinutesLocale(params.lang, [documentData.data])[0];
+  const document = flipMeetingMinutesLocale(params.lang, documentData.data)[0];
   const pathname = `/${params.lang}/organization/meeting-minutes/${params.year}/${params.id}`;
 
   if (!document?.attributes?.Seo?.id) {
