@@ -10,7 +10,7 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 const baseUrl =
-  '/api/meeting-minutes-documents?populate[0]=image&populate[1]=pdf&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[id][$eq]=';
+  '/api/meeting-minute-documents?populate[0]=image&populate[1]=pdf&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[id][$eq]=';
 
 interface MeetingMinutesDocumentProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
@@ -23,8 +23,8 @@ export default async function MeetingMinutesPublication(
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minutes-document.meeting-minutes-document'>
-  >('fi', `${baseUrl}${params.slug}`, ['meeting-minutes-document']);
+    APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
+  >('fi', `${baseUrl}${params.slug}`, ['meeting-minute-document']);
 
   const sanomatLocaleFlipped = flipSanomatLocale(params.lang, pageData.data);
 
@@ -66,11 +66,11 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const data = await getStrapiData<
-    APIResponseCollection<'api::meeting-minutes-document.meeting-minutes-document'>
-  >('fi', `${baseUrl}${params.slug}`, ['meeting-minutes-document']);
+    APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
+  >('fi', `${baseUrl}${params.slug}`, ['meeting-minute-document']);
   const sanomatLocaleFlipped = flipSanomatLocale(params.lang, data.data);
   const selectedPublication = sanomatLocaleFlipped[0];
-  const pathname = `/${params.lang}/organization/meeting-minutes-document/${params.slug}`;
+  const pathname = `/${params.lang}/organization/meeting-minute-document/${params.slug}`;
 
   // No version of the content exists in the requested language
   if (!selectedPublication?.attributes?.Seo?.id) {
@@ -82,8 +82,8 @@ export async function generateMetadata(
 
 export async function generateStaticParams() {
   const pageData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minutes-document.meeting-minutes-document'>
-  >('fi', '/api/meeting-minutes-documents?pagination[pageSize]=100', ['meeting-minutes-document']);
+    APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
+  >('fi', '/api/meeting-minute-documents?pagination[pageSize]=100', ['meeting-minute-document']);
 
   return pageData.data.map((sanomat) => ({
     slug: sanomat.id.toString(),
