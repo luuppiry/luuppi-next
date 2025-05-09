@@ -111,58 +111,29 @@ export const flipSanomatLocale = (
  * @param data MeetingMinutesYear data
  * @returns MeetingMinutesYear data with correct locale
  */
-export const flipMeetingMinutesYearLocale = (
+export const flipMeetingMinutesLocale = (
   lang: SupportedLanguage,
-  data: APIResponseData<'api::meeting-minutes-year.meeting-minutes-year'>,
-) =>
-  lang === 'en'
-    ? (data.attributes.meetingMinuteDocuments?.data.map((document: any) => {
-      const localeEn = document.attributes.localizations?.data[0];
-      if (!localeEn) return null;
-      return {
-        ...document,
-        attributes: {
-          ...localeEn?.attributes,
-          id: document.id,
-          image: document.attributes.image,
-          pdf: document.attributes.pdf,
-          Seo: {
-            ...localeEn?.attributes.Seo,
+  documents: APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[],
+) => {
+  return documents.map((doc) => {
+    if (lang === 'en') return doc;
+    
+    const localizedDoc = doc.attributes.localizations?.data?.find(
+      (localization: any) => localization.attributes.locale === lang,
+    );
+    
+    return localizedDoc
+      ? {
+          ...localizedDoc,
+          attributes: {
+            ...localizedDoc.attributes,
+            // Keep non-localizable fields from original
+            image: doc.attributes.image,
+            pdf: doc.attributes.pdf,
+            meetingDate: doc.attributes.meetingDate,
+            year: doc.attributes.year,
           },
-        },
-      };
-    }) as APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[])?.filter(Boolean)
-  : data.attributes.meetingMinuteDocuments?.data ?? [];
-
-/**
- * Strapi does not support direct localization in a case where we
- * have relations and everything is not localized. Workaround is to
- * populate localizations and then "flip" the locale.
- * @param lang 'en' or 'fi'
- * @param data MeetingMinuteDocument data
- * @returns MeetingMinuteDocument data with correct locale
- */
-export const flipMeetingMinuteDocumentLocale = (
-  lang: SupportedLanguage,
-  data: APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[],
-) =>
-  lang === 'en'
-    ? (
-        data.map((publication) => {
-          const localeEn = publication.attributes.localizations?.data[0];
-          if (!localeEn) return null;
-          return {
-            ...publication,
-            attributes: {
-              ...localeEn?.attributes,
-              id: publication.id,
-              image: publication.attributes.image,
-              pdf: publication.attributes.pdf,
-              Seo: {
-                ...localeEn?.attributes.Seo,
-              },
-            },
-          };
-        }) as APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[]
-      )?.filter((publication) => publication)
-    : data;
+        }
+      : doc;
+  });
+};
