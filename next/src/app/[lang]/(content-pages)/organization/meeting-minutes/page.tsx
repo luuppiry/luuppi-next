@@ -20,7 +20,7 @@ export default async function MeetingMinutesYear(props: MeetingMinutesYearProps)
   /**
    * Localization doesn't matter because we have non i18n
    * collections (meeting-minutes-years, meetingMinuteDocuments) are localized.
-   * Strapi doesn't support localized queries from non i18n collections. 
+   * Strapi doesn't support localized queries from non i18n collections.
    */
   const meetingMinutesYearData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-year.meeting-minute-year'>
