@@ -134,6 +134,6 @@ export const flipMeetingMinuteDocumentLocale = (
               },
             },
           };
-        }) as APIResponseData<'api::luuppi-sanomat.luuppi-sanomat'>[]
+        }) as APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[]
       )?.filter((publication) => publication)
     : documents;
