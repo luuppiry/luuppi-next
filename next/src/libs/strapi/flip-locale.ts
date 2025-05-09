@@ -113,10 +113,10 @@ export const flipSanomatLocale = (
  */
 export const flipMeetingMinutesYearLocale = (
   lang: SupportedLanguage,
-  data: APIResponseData<'api::meeting-minutes-year.meeting-minutes-year'>[],
+  data: APIResponseData<'api::meeting-minutes-year.meeting-minutes-year'>,
 ) =>
   lang === 'en'
-    ? (data.attributes.meetingMinuteDocuments!?.data.map((document) => {
+    ? (data.attributes.meetingMinuteDocuments?.data.map((document: any) => {
       const localeEn = document.attributes.localizations?.data[0];
       if (!localeEn) return null;
       return {
@@ -131,6 +131,5 @@ export const flipMeetingMinutesYearLocale = (
           },
         },
       };
-    }) as APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[]
-  )?.filter((publication) => publication)
-  : data.attributes.meetingMinuteDocuments!?.data;
+    }) as APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[])?.filter(Boolean)
+  : data.attributes.meetingMinuteDocuments?.data ?? [];
