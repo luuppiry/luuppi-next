@@ -6,6 +6,7 @@ import { groupMeetingMinutesByYear } from '@/libs/strapi/group-meeting-minutes-b
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface MeetingMinutesYearProps {
