@@ -37,7 +37,7 @@ export default async function LuuppiSanomatPublication(
   return (
     <article className="relative flex flex-col gap-12">
       <h1>
-        {dictionary.general.publication}{' '}
+        {dictionary.general.meeting_minute}{' '}
         {new Date(
           selectedPublication.attributes?.meetingDate
         )

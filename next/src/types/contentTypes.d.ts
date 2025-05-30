@@ -1482,41 +1482,6 @@ export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
   };
 }
 
-export interface ApiMeetingMinutesYearMeetingMinutesYear extends Schema.CollectionType {
-  collectionName: 'meeting_minutes_years',
-  info: {
-    singularName: 'meeting-minutes-year',
-    pluralName: 'meeting-minutes-years',
-    displayName: 'MeetingMinutesYears',
-    description: ''
-  },
-  options: {
-    draftAndPublish: false
-  },
-  attributes: {
-    year: Attribute.Integer & Attribute.Required & Attribute.Unique;
-    meetingMinuteDocuments: Attribute.Relation<
-      'api::meeting-minutes-year.meeting-minutes-year',
-      'manyToMany',
-      'api::meeting-minute-document.meeting-minute-document'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::meeting-minutes-year.meeting-minutes-year',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::meeting-minutes-year.meeting-minutes-year',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiMeetingMinuteDocumentMeetingMinuteDocument extends Schema.CollectionType {
   collectionName: 'meeting_minute_documents';
   info: {
@@ -1556,12 +1521,7 @@ export interface ApiMeetingMinuteDocumentMeetingMinuteDocument extends Schema.Co
           localized: true;
         };
       }>;
-    year: Attribute.Integer & Attribute.Required & Attribute.Private;
-    meetingMinutesYears: Attribute.Relation<
-      'api::meeting-minute-document.meeting-minute-document',
-      'manyToMany',
-      'api::meeting-minutes-year.meeting-minutes-year'
-    >;
+    year: Attribute.Integer & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
