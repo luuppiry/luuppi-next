@@ -1,201 +1,91 @@
+import PdfViewer from '@/components/PdfViewer/PdfViewer';
 import { getDictionary } from '@/dictionaries';
-import { flipMeetingMinutesYearLocale } from '@/libs/strapi/flip-locale';
+import { flipMeetingMinuteLocale } from '@/libs/strapi/flip-locale';
+import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { groupMeetingMinutesByYear } from '@/libs/strapi/group-meeting-minutes-by-year';
-import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-interface OldMeetingMinutesYearProps {
+const baseUrl =
+  '/api/meeting-minute-documents?populate[0]=image&populate[1]=pdf&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[id][$eq]=';
+
+interface LuuppiSanomatProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
 
-export default async function OldMeetingMinutesYear(props: OldMeetingMinutesYearProps) {
+export default async function LuuppiSanomatPublication(
+  props: LuuppiSanomatProps,
+) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
-  const year = parseInt(params.slug, 10);
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
+  >('fi', `${baseUrl}${params.slug}`, ['meeting-minute-document']);
 
-  if (isNaN(year)) {
+  const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(params.lang, pageData.data);
+
+  if (!pageData.data.length) {
     redirect(`/${params.lang}/404`);
   }
 
-  const meetingMinutesYearData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minutes-year.meeting-minutes-year'>
-  >(
-    'fi',
-    '/api/meeting-minutes-years?populate[meetingMinuteDocuments][populate]=localizations&populate[meetingMinuteDocuments][populate]=image',
-    ['meeting-minutes-year', 'meeting-minute-document'],
-  );
+  const selectedPublication = meetingMinuteLocaleFlipped[0];
 
-  const meetingMinutesGroupedByYear = groupMeetingMinutesByYear(meetingMinutesYearData.data);
-  const wantedMeetingMinutesYear = meetingMinutesGroupedByYear[params.slug];
-
-  if (!wantedMeetingMinutesYear) {
-    redirect(`/${params.lang}/404`);
-  }
-
-  const meetingMinutesSortedByYear = Object.keys(meetingMinutesGroupedByYear).sort(
-    (a, b) => Number(b) - Number(a),
-  );
-  const latestMeetingMinutesYear = meetingMinutesGroupedByYear[meetingMinutesSortedByYear[0]];
-  const otherMeetingMinuteYears = meetingMinutesSortedByYear.filter(
-    (year) => parseInt(year, 10) !== latestMeetingMinutesYear.attributes.year,
-  );
-
-  const meetingMinuteDocuments = flipMeetingMinutesYearLocale(params.lang, latestMeetingMinutesYear);
-
- return (
-    <>
-      <div className="relative flex flex-col gap-12">
-        <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
-          <h1>
-            {dictionary.navigation.meeting_minutes} {latestMeetingMinutesYear.attributes.year}
-          </h1>
-          {Boolean(otherMeetingMinuteYears.length) && (
-            <div className="dropdown sm:dropdown-end">
-              <div className="btn m-1" role="button" tabIndex={0}>
-                {dictionary.pages_meeting_minutes_year.other_meeting_minutes_years}
-              </div>
-              <ul
-                className="menu dropdown-content z-[9999] grid w-80 grid-cols-4 gap-2 rounded-box bg-base-100 p-2 shadow"
-                tabIndex={0}
-              >
-                {otherMeetingMinuteYears.map((year) => (
-                  <li key={year}>
-                    <Link
-                      href={`/${params.lang}/organization/meeting-minutes/${
-                        year === latestMeetingMinutesYear.attributes.year.toString()
-                          ? ''
-                          : year
-                      }`}
-                    >
-                      {year}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+  return (
+    <article className="relative flex flex-col gap-12">
+      <h1>
+        {dictionary.general.publication}{' '}
+        {new Date(
+          selectedPublication.attributes?.meetingDate
+        )
+          .toLocaleDateString(params.lang, {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+          })
+          .toLowerCase()}
+      </h1>
+      <div className="h-full overflow-x-hidden">
+        <PdfViewer
+          dictionary={dictionary}
+          pdfUrl={getStrapiUrl(
+            selectedPublication.attributes.pdf?.data.attributes.url,
           )}
-        </div>
-        <div>
-            {Boolean(meetingMinuteDocuments.length) && (
-              <>
-                <h2 className="mb-6 text-3xl font-bold max-md:text-2xl">
-                  {dictionary.pages_meeting_minutes_year.meeting_minutes_documents}
-                </h2>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-y-12 lg:grid-cols-4">
-                  {meetingMinuteDocuments.map((publication: any) => (
-                    <a
-                      key={publication.id}
-                      className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
-                      href={`/${params.lang}/meeting-minutes/pdf/${publication.id}`}
-                    >
-                      {publication.attributes.image?.data.attributes.url && (
-                        <div
-                          className={
-                            'relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300'
-                          }
-                        >
-                          <Image
-                            alt={`${dictionary.navigation.meeting_minutes} cover`}
-                            className="h-full w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
-                            src={getStrapiUrl(
-                              publication.attributes.image?.data.attributes.url,
-                            )}
-                            fill
-                          />
-                        </div>
-                      )}
-                      <div className="absolute bottom-0 right-0 z-20 rounded-br-lg rounded-tl-lg bg-accent-400 px-2 py-1 font-bold text-white">
-                        {firstLetterToUpperCase(
-                          new Date(
-                            publication.attributes.meetingDate,
-                          ).toLocaleDateString(params.lang, {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                          }),
-                        )}
-                      </div>
-                      <div className="absolute bottom-0 z-10 h-full w-full rounded-lg bg-gradient-to-t from-black to-transparent opacity-25" />
-                      <div className="absolute -bottom-1.5 left-1.5 -z-10 h-full w-full transform rounded-lg bg-gray-300 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5 group-hover:rotate-1" />
-                      <div className="absolute -bottom-3 left-3 -z-20 h-full w-full transform rounded-lg bg-gray-200 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:rotate-2" />
-                    </a>
-                  ))}
-                </div>
-              </>
-            )}
-        </div>
-        <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
+        />
       </div>
-    </>
+      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
+    </article>
   );
 }
 
 export async function generateMetadata(
-  props: OldMeetingMinutesYearProps,
+  props: LuuppiSanomatProps,
 ): Promise<Metadata> {
   const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const data = await getStrapiData<
+    APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
+  >('fi', `${baseUrl}${params.slug}`, ['meeting-minute-document']);
+  const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(params.lang, data.data);
+  const selectedPublication = meetingMinuteLocaleFlipped[0];
+  const pathname = `/${params.lang}/organization/meeting-minutes/${params.slug}`;
 
-  const meetingMinutesYearData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minutes-year.meeting-minutes-year'>
-  >(
-    'fi',
-    '/api/meeting-minutes-years?populate[meetingMinuteDocuments][populate]=localizations&populate[meetingMinuteDocuments][populate]=image',
-    ['meeting-minutes-year', 'meeting-minute-document'],
-  );
-
-  const meetingMinutesGroupedByYear = groupMeetingMinutesByYear(meetingMinutesYearData.data);
-  const wantedMeetingMinutesYear = meetingMinutesGroupedByYear[params.slug];
-
-  if (!wantedMeetingMinutesYear) {
+  // No version of the content exists in the requested language
+  if (!selectedPublication?.attributes?.Seo?.id) {
     return {};
   }
 
-  const pathname = `/${params.lang}/organization/meeting-minutes/${params.slug}`;
-
-  return {
-    title: `${dictionary.navigation.meeting_minutes} ${wantedMeetingMinutesYear.attributes.year} | Luuppi ry`,
-    description: `${dictionary.pages_meeting_minutes_year.seo_description} ${wantedMeetingMinutesYear.attributes.year}`,
-    alternates: {
-      canonical: pathname,
-      languages: {
-        fi: `/fi${pathname.slice(3)}`,
-        en: `/en${pathname.slice(3)}`,
-      },
-    },
-    openGraph: {
-      title: `${dictionary.navigation.meeting_minutes} ${wantedMeetingMinutesYear.attributes.year}`,
-      description: `${dictionary.pages_meeting_minutes_year.seo_description} ${wantedMeetingMinutesYear.attributes.year}`,
-      url: pathname,
-      siteName: 'Luuppi ry',
-    },
-    twitter: {
-      title: `${dictionary.navigation.meeting_minutes} ${wantedMeetingMinutesYear.attributes.year}`,
-      description: `${dictionary.pages_meeting_minutes_year.seo_description} ${wantedMeetingMinutesYear.attributes.year}`,
-    },
-  };
+  return formatMetadata({ data: selectedPublication }, pathname);
 }
 
 export async function generateStaticParams() {
-  const meetingMinutesYearData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minutes-year.meeting-minutes-year'>
-  >(
-    'fi',
-    '/api/meeting-minutes-years?populate[meetingMinuteDocuments][populate]=localizations&populate[meetingMinuteDocuments][populate]=image',
-    ['meeting-minutes-year', 'meeting-minute-document'],
-  );
+  const pageData = await getStrapiData<
+    APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
+  >('fi', '/api/meeting-minute-documents?pagination[pageSize]=100', ['meeting-minute-document']);
 
-  const meetingMinutesGroupedByYear = groupMeetingMinutesByYear(meetingMinutesYearData.data);
-
-  return Object.keys(meetingMinutesGroupedByYear).map((year) => ({
-    slug: year,
+  return pageData.data.map((meetingMinuteDocument) => ({
+    slug: meetingMinuteDocument.id.toString(),
   }));
 }
