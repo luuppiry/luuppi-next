@@ -1522,6 +1522,7 @@ export interface ApiMeetingMinuteDocumentMeetingMinuteDocument extends Schema.Co
         };
       }>;
     year: Attribute.Integer & Attribute.Required;
+    shortMeetingName: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

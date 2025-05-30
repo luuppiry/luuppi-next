@@ -63,6 +63,12 @@
       "type": "integer",
       "required": true,
       "private": true
+    },
+    "shortMeetingName": {
+      "pluginOptions": {},
+      "type": "string",
+      "required": true,
+      "private": false
     }
   }
 }

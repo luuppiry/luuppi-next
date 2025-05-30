@@ -1,7 +1,6 @@
 import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
@@ -55,15 +54,14 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
               </div>
             )}
             <div className="absolute bottom-0 right-0 z-20 rounded-br-lg rounded-tl-lg bg-accent-400 px-2 py-1 font-bold text-white">
-              {firstLetterToUpperCase(
-                new Date(
-                  publication.attributes?.meetingDate
-                ).toLocaleDateString(params.lang, {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                }),
-              )}
+              {(() => {
+                const date = new Date(publication.attributes?.meetingDate);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                const year = date.getFullYear();
+                const formattedDate = `${day}.${month}.${year}`;
+                return `${formattedDate} | ${publication.attributes?.shortMeetingName ?? ''}`;
+              })()}
             </div>
             <div className="absolute bottom-0 z-10 h-full w-full rounded-lg bg-gradient-to-t from-black to-transparent opacity-25" />
             <div className="absolute -bottom-1.5 left-1.5 -z-10 h-full w-full transform rounded-lg bg-gray-300 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5 group-hover:rotate-1" />
