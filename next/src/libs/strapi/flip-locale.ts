@@ -134,7 +134,6 @@ export const flipMeetingMinutesYearLocale = (
     }) as APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[])?.filter(Boolean)
   : data.attributes.meetingMinuteDocuments?.data ?? [];
 
-  
 /**
  * Strapi does not support direct localization in a case where we
  * have relations and everything is not localized. Workaround is to
