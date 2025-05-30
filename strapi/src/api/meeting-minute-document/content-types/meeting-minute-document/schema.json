@@ -63,12 +63,6 @@
       "type": "integer",
       "required": true,
       "private": true
-    },
-    "meetingMinutesYears": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::meeting-minutes-year.meeting-minutes-year",
-      "inversedBy": "meetingMinuteDocuments"
     }
   }
 }
