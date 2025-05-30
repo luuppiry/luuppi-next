@@ -21,15 +21,10 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   ]);
 
   const sortedData = pageData.data
-    .filter((publication) => publication.attributes.createdAt)
+    .filter((publication) => publication.attributes.meetingDate)
     .sort((a, b) => {
-      const dateA = a.attributes?.publishedAt
-        ? new Date(a.attributes.publishedAt).getTime()
-        : new Date(a.attributes.createdAt || new Date()).getTime();
-      const dateB = b.attributes.publishedAt
-        ? new Date(b.attributes.publishedAt).getTime()
-        : new Date(b.attributes.createdAt || new Date()).getTime();
-
+      const dateA = new Date(a.attributes.meetingDate).getTime();
+      const dateB = new Date(b.attributes.meetingDate).getTime();
       return dateB - dateA;
     });
 
