@@ -108,37 +108,6 @@ export const flipSanomatLocale = (
  * have relations and everything is not localized. Workaround is to
  * populate localizations and then "flip" the locale.
  * @param lang 'en' or 'fi'
- * @param data MeetingMinutesYear data
- * @returns MeetingMinutesYear data with correct locale
- */
-export const flipMeetingMinutesYearLocale = (
-  lang: SupportedLanguage,
-  data: APIResponseData<'api::meeting-minutes-year.meeting-minutes-year'>,
-) =>
-  lang === 'en'
-    ? (data.attributes.meetingMinuteDocuments?.data.map((document: any) => {
-      const localeEn = document.attributes.localizations?.data[0];
-      if (!localeEn) return null;
-      return {
-        ...document,
-        attributes: {
-          ...localeEn?.attributes,
-          id: document.id,
-          image: document.attributes.image,
-          pdf: document.attributes.pdf,
-          Seo: {
-            ...localeEn?.attributes.Seo,
-          },
-        },
-      };
-    }) as APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[])?.filter(Boolean)
-  : data.attributes.meetingMinuteDocuments?.data ?? [];
-
-/**
- * Strapi does not support direct localization in a case where we
- * have relations and everything is not localized. Workaround is to
- * populate localizations and then "flip" the locale.
- * @param lang 'en' or 'fi'
  * @param data Sanomat data
  * @returns Sanomat data with correct locale
  */
