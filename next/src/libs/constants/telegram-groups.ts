@@ -24,7 +24,11 @@ export const telegramGroups = [
     link: 'https://t.me/+19lL95IO2lU3ZDlk',
   },
   {
+    translation: 'alumni_group',
+    link: 'https://t.me/alumni_luuppi',
+  },
+  {
     translation: 'new_students',
-    link: 'https://t.me/+VHhrO-9miBg3OGQ8',
+    link: 'https://t.me/+6J7xmmXoJmk3YzE0',
   },
 ];
