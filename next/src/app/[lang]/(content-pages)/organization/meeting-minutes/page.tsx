@@ -4,20 +4,25 @@ import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
 
 interface MeetingMinuteProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: SupportedLanguage; year?: string }>;
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 
 export default async function MeetingMinute(props: MeetingMinuteProps) {
   const params = await props.params;
+  const searchParams = await props.searchParams;
   const dictionary = await getDictionary(params.lang);
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100', [
-    'meeting-minute-document',
-  ]);
+  >(
+    params.lang,
+    '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100',
+    ['meeting-minute-document'],
+  );
 
   const sortedData = pageData.data
     .filter((publication) => publication.attributes.meetingDate)
@@ -27,11 +32,55 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
       return dateB - dateA;
     });
 
+  // Extract all unique years
+  const years = Array.from(
+    new Set(
+      sortedData.map((publication) =>
+        new Date(publication.attributes.meetingDate).getFullYear(),
+      ),
+    ),
+  ).sort((a, b) => b - a);
+
+  // If no year param, redirect to latest year
+  const currentYearParam = searchParams.year;
+  const currentYear = currentYearParam ? parseInt(currentYearParam) : years[0];
+
+  if (!currentYearParam && typeof window === 'undefined') {
+    redirect(`/${params.lang}/organization/meeting-minute?year=${years[0]}`);
+  }
+
+  // Filter by current year
+  const filteredData = sortedData.filter(
+    (item) =>
+      new Date(item.attributes.meetingDate).getFullYear() === currentYear,
+  );
+
   return (
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.meeting_minutes}</h1>
+
+      <div className="dropdown sm:dropdown-end">
+        <div className="btn m-1" role="button" tabIndex={0}>
+          {dictionary.pages_meeting_minutes_year.other_meeting_minutes_years}
+        </div>
+        <ul
+          className="menu dropdown-content z-[9999] grid w-80 grid-cols-4 gap-2 rounded-box bg-base-100 p-2 shadow"
+          tabIndex={0}
+        >
+          {years.map((year) => (
+            <li key={year}>
+              <a
+                href={`/${params.lang}/organization/meeting-minute?year=${year}`}
+              >
+                {year}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
-        {sortedData.map((publication) => (
+        {filteredData.map((publication) => (
           <a
             key={publication.id}
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
@@ -47,7 +96,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
                   alt={`${dictionary.navigation.meeting_minutes} cover`}
                   className="h-full w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
                   src={getStrapiUrl(
-                    publication.attributes.image?.data.attributes.url,
+                    publication.attributes.image.data.attributes.url,
                   )}
                   fill
                 />
@@ -55,9 +104,9 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
             )}
             <div className="absolute bottom-0 right-0 z-20 rounded-br-lg rounded-tl-lg bg-accent-400 px-2 py-1 font-bold text-white">
               {(() => {
-                const date = new Date(publication.attributes?.meetingDate);
+                const date = new Date(publication.attributes.meetingDate);
                 const day = String(date.getDate()).padStart(2, '0');
-                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                const month = String(date.getMonth() + 1).padStart(2, '0');
                 const year = date.getFullYear();
                 const formattedDate = `${day}.${month}.${year}`;
                 return `${formattedDate} | ${publication.attributes?.shortMeetingName ?? ''}`;
@@ -69,6 +118,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
           </a>
         ))}
       </div>
+
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
   );
