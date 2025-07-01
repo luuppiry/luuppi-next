@@ -16,20 +16,20 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const searchParams = await props.searchParams;
   const dictionary = await getDictionary(params.lang);
 
+  // Extract all unique years
+  const years = [2025, 2024, 2023, 2022, 2021, 2020, 2019];
+
+  // If no year param, redirect to latest year
+  const currentYearParam = searchParams.year;
+  const currentYear = currentYearParam ? parseInt(currentYearParam) : years[0];
+
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
   >(
     params.lang,
-    '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&sort=meetingDate:DESC&filters[$and][0][year][$eq]=2025',
+    `/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&sort=meetingDate:DESC&filters[$and][0][year][$eq]=${currentYear}`,
     ['meeting-minute-document'],
   );
-
-  // Extract all unique years
-  const years = [2025, 2024, 2023, 2022, 2021, 2020, 2019];
-
-    // If no year param, redirect to latest year
-  const currentYearParam = searchParams.year;
-  const currentYear = currentYearParam ? parseInt(currentYearParam) : years[0];
 
   if (!currentYearParam && typeof window === 'undefined') {
     redirect(`/${params.lang}/organization/meeting-minutes?year=${years[0]}`);
