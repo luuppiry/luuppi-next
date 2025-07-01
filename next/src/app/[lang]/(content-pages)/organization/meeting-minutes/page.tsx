@@ -20,40 +20,20 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
   >(
     params.lang,
-    '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100',
+    '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&sort=meetingDate:DESC&filters[$and][0][year][$eq]=2025',
     ['meeting-minute-document'],
   );
 
-  const sortedData = pageData.data
-    .filter((publication) => publication.attributes.meetingDate)
-    .sort((a, b) => {
-      const dateA = new Date(a.attributes.meetingDate).getTime();
-      const dateB = new Date(b.attributes.meetingDate).getTime();
-      return dateB - dateA;
-    });
-
   // Extract all unique years
-  const years = Array.from(
-    new Set(
-      sortedData.map((publication) =>
-        new Date(publication.attributes.meetingDate).getFullYear(),
-      ),
-    ),
-  ).sort((a, b) => b - a);
+  const years = [2025, 2024, 2023, 2022, 2021, 2020, 2019];
 
-  // If no year param, redirect to latest year
+    // If no year param, redirect to latest year
   const currentYearParam = searchParams.year;
   const currentYear = currentYearParam ? parseInt(currentYearParam) : years[0];
 
   if (!currentYearParam && typeof window === 'undefined') {
-    redirect(`/${params.lang}/organization/meeting-minute?year=${years[0]}`);
+    redirect(`/${params.lang}/organization/meeting-minutes?year=${years[0]}`);
   }
-
-  // Filter by current year
-  const filteredData = sortedData.filter(
-    (item) =>
-      new Date(item.attributes.meetingDate).getFullYear() === currentYear,
-  );
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -70,7 +50,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
           {years.map((year) => (
             <li key={year}>
               <a
-                href={`/${params.lang}/organization/meeting-minute?year=${year}`}
+                href={`/${params.lang}/organization/meeting-minutes?year=${year}`}
               >
                 {year}
               </a>
@@ -80,7 +60,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
       </div>
 
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
-        {filteredData.map((publication) => (
+        {pageData.data.map((publication) => (
           <a
             key={publication.id}
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
