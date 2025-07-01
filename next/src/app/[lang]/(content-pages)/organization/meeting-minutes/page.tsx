@@ -15,26 +15,21 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const dictionary = await getDictionary(params.lang);
-
-  // Extract all unique years
-  const years = [2025, 2024, 2023, 2022, 2021, 2020, 2019];
-
-  // If no year param, redirect to latest year
-  const currentYearParam = searchParams.year;
-  const currentYear = currentYearParam ? parseInt(currentYearParam) : years[0];
-
+  
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >(
-    params.lang,
-    `/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&filters[year][$eq]=${currentYear}`,
-    ['meeting-minute-document'],
-  );
+  >('fi', '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&filters[year][$eq]=2025', [
+    'meeting-minute-document',
+  ]);
 
-  if (!currentYearParam && typeof window === 'undefined') {
-    redirect(`/${params.lang}/organization/meeting-minutes?year=${years[0]}`);
-  }
-
+  const sortedData = pageData.data
+    .filter((publication) => publication.attributes.meetingDate)
+    .sort((a, b) => {
+      const dateA = new Date(a.attributes.meetingDate).getTime();
+      const dateB = new Date(b.attributes.meetingDate).getTime();
+      return dateB - dateA;
+  });
+  
   return (
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.meeting_minutes}</h1>
@@ -60,7 +55,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
       </div>
 
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
-        {pageData.data.map((publication) => (
+        {sortedData.data.map((publication) => (
           <a
             key={publication.id}
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
