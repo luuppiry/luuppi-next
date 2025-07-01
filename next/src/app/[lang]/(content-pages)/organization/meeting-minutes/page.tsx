@@ -27,7 +27,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
   >(
     params.lang,
-    `/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&sort=meetingDate:DESC&filters[$and][0][year][$eq]=${currentYear}`,
+    `/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&filters[year][$eq]=${currentYear}`,
     ['meeting-minute-document'],
   );
 
