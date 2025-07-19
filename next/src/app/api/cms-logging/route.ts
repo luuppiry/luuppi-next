@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
 
   try {
     await sendSlackMessage(slackMessage);
-  } catch (error) {
+  } catch (_error) {
     return new Response('Error sending Slack message', { status: 500 });
   }
 

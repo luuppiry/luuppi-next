@@ -97,7 +97,7 @@ export default function Ticket({
 
       setResponse(res);
       setLoading(false);
-    } catch (error) {
+    } catch (_error) {
       setResponse({
         message: dictionary.api.server_error,
         isError: true,
@@ -237,7 +237,7 @@ export default function Ticket({
                 <div className="flex gap-5">
                   <div className="text-sm">
                     <span className="countdown font-mono text-2xl max-md:text-lg">
-                      {/* @ts-expect-error */}
+                      {/* @ts-expect-error not supported */}
                       <span style={{ '--value': days }} />
                     </span>
                     <span className="sm:hidden">
@@ -249,7 +249,7 @@ export default function Ticket({
                   </div>
                   <div className="text-sm">
                     <span className="countdown font-mono text-2xl max-md:text-lg">
-                      {/* @ts-expect-error */}
+                      {/* @ts-expect-error not supported */}
                       <span style={{ '--value': hours }} />
                     </span>
                     <span className="sm:hidden">
@@ -261,7 +261,7 @@ export default function Ticket({
                   </div>
                   <div className="text-sm">
                     <span className="countdown font-mono text-2xl max-md:text-lg">
-                      {/* @ts-expect-error */}
+                      {/* @ts-expect-error not supported */}
                       <span style={{ '--value': minutes }} />
                     </span>
                     <span className="sm:hidden">
@@ -273,7 +273,7 @@ export default function Ticket({
                   </div>
                   <div className="text-sm">
                     <span className="countdown font-mono text-2xl max-md:text-lg">
-                      {/* @ts-expect-error */}
+                      {/* @ts-expect-error not supported */}
                       <span style={{ '--value': seconds }} />
                     </span>
                     <span className="sm:hidden">

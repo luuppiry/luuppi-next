@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 import type { Attribute, Schema } from '@strapi/strapi';
 
 export interface AdminPermission extends Schema.CollectionType {
@@ -1396,7 +1397,8 @@ export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
       }>;
     jobOpportunityTargetGroup: Attribute.Enumeration<
       ['everybody', 'computer_science', 'mathematics', 'data_analysis']
-    > & Attribute.Required;
+    > &
+      Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1482,7 +1484,8 @@ export interface ApiLuuppiSanomatLuuppiSanomat extends Schema.CollectionType {
   };
 }
 
-export interface ApiMeetingMinuteDocumentMeetingMinuteDocument extends Schema.CollectionType {
+export interface ApiMeetingMinuteDocumentMeetingMinuteDocument
+  extends Schema.CollectionType {
   collectionName: 'meeting_minute_documents';
   info: {
     singularName: 'meeting-minute-document';
@@ -2030,7 +2033,7 @@ export interface ApiOrganizationHonoraryMemberOrganizationHonoraryMember
 }
 
 export interface ApiOrganizationOfficeHervantaOrganizationOfficeHervanta
-extends Schema.SingleType {
+  extends Schema.SingleType {
   collectionName: 'organization_offices_hervanta';
   info: {
     singularName: 'organization-office-hervanta';
@@ -2649,7 +2652,7 @@ export interface ApiTutoringLarpakeTutoringLarpake extends Schema.SingleType {
 }
 
 declare module '@strapi/types' {
-  export module Shared {
+  export namespace Shared {
     export interface ContentTypes {
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;

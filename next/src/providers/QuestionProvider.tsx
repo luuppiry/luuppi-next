@@ -43,13 +43,12 @@ interface QuestionData {
 
 const initialState = {
   data: null,
-  // eslint-disable-next-line no-unused-vars
   setData: (_: QuestionData | null) => {},
 };
 
 export const QuestionContext = createContext<{
   data: QuestionData | null;
-  // eslint-disable-next-line no-unused-vars
+
   setData: (data: QuestionData | null) => void;
 }>(initialState);
 

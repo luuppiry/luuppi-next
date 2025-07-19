@@ -28,8 +28,9 @@ export default function RegistrationCounter({
   return (
     <div>
       <span className="countdown flex items-center text-sm max-md:flex-1">
-        {/* @ts-expect-error */}
-        <span style={{ '--value': minutes }} />m{/* @ts-expect-error */}
+        {/* @ts-expect-error not supported */}
+        <span style={{ '--value': minutes }} />m
+        {/* @ts-expect-error not supported */}
         <span style={{ '--value': seconds }} />s
       </span>
     </div>

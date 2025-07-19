@@ -30,7 +30,7 @@ export default async function Payment({
     try {
       const session = await stripe.checkout.sessions.retrieve(sessionId);
       successful = session.payment_status === 'paid';
-    } catch (error) {
+    } catch (_error) {
       redirect(`/${lang}`);
     }
   }

@@ -25,12 +25,11 @@ function getLocale(request: NextRequest): string | undefined {
   }
 
   // Use negotiator and intl-localematcher to get best locale
-  let languages = new Negotiator({ headers: negotiatorHeaders })
+  const languages = new Negotiator({ headers: negotiatorHeaders })
     .languages()
     .filter((lang) => i18n.locales.includes(lang as SupportedLanguage));
 
-  // @ts-ignore locales are readonly
-  const locales: string[] = i18n.locales;
+  const locales: readonly string[] = i18n.locales;
   return matchLocale(languages, locales, i18n.defaultLocale);
 }
 

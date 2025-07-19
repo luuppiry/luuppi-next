@@ -141,14 +141,19 @@ export default async function Event(props: EventProps) {
               {event.data.attributes['FuksiPoints'] && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                    {event.data.attributes['FuksiPoints'] === 'fuksi_points_true' ? (
+                    {event.data.attributes['FuksiPoints'] ===
+                    'fuksi_points_true' ? (
                       <LuBaby className="shrink-0 text-2xl" />
                     ) : (
                       <RiProhibitedLine className="shrink-0 text-2xl" />
                     )}
                   </div>
                   <p className="line-clamp-2 font-normal">
-                    {dictionary.pages_events[event.data.attributes['FuksiPoints']]}
+                    {
+                      dictionary.pages_events[
+                        event.data.attributes['FuksiPoints']
+                      ]
+                    }
                   </p>
                 </div>
               )}

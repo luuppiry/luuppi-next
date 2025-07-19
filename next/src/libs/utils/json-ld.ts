@@ -114,7 +114,6 @@ export const getNewsJsonLd = (
   news: APIResponseData<'api::news-single.news-single'>,
   lang: SupportedLanguage,
 ) => {
-  // eslint-disable-next-line no-console
   const jsonLd: WithContext<NewsArticle> = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
@@ -158,13 +157,13 @@ export const getBoardMemberJsonLd = (
     '@type': 'Person',
     name: member.attributes?.fullName,
     email: member.attributes.boardRoles?.data.map(
-      (role: any) => role.attributes.email,
+      (role) => role.attributes.email,
     ),
     image: member?.attributes?.image?.data?.attributes?.url
       ? getStrapiUrl(member.attributes?.image.data.attributes.url)
       : undefined,
     jobTitle: member.attributes.boardRoles?.data?.map(
-      (role: any) => role.attributes.title,
+      (role) => role.attributes.title,
     ),
     worksFor: {
       '@type': 'Organization',

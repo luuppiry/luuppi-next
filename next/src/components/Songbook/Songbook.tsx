@@ -94,7 +94,7 @@ export default function Songbook({ dictionary }: SongbookProps) {
         if (data.hasMore && page === 0) {
           setPage(1);
         }
-      } catch (err) {
+      } catch (_err) {
         setError(dictionary.general.error);
       } finally {
         setLoading(false);

@@ -58,13 +58,13 @@ const generateMonthGrid = (
   let adjustedFirstDay = (firstDayOfMonth + offset) % 7;
   if (adjustedFirstDay < 0) adjustedFirstDay += 7;
 
-  let grid = [];
+  const grid = [];
   let dayCounter = 1;
 
   const rows = Math.ceil((adjustedFirstDay + daysInMonth) / 7);
 
   for (let i = 0; i < rows; i++) {
-    let week = [];
+    const week = [];
     for (let j = 0; j < 7; j++) {
       if ((i === 0 && j < adjustedFirstDay) || dayCounter > daysInMonth) {
         week.push(null);

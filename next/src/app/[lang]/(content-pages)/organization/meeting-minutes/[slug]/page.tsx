@@ -26,7 +26,10 @@ export default async function LuuppiSanomatPublication(
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
   >('fi', `${baseUrl}${params.slug}`, ['meeting-minute-document']);
 
-  const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(params.lang, pageData.data);
+  const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(
+    params.lang,
+    pageData.data,
+  );
 
   if (!pageData.data.length) {
     redirect(`/${params.lang}/404`);
@@ -38,9 +41,7 @@ export default async function LuuppiSanomatPublication(
     <article className="relative flex flex-col gap-12">
       <h1>
         {dictionary.general.meeting_minute}{' '}
-        {new Date(
-          selectedPublication.attributes?.meetingDate
-        )
+        {new Date(selectedPublication.attributes?.meetingDate)
           .toLocaleDateString(params.lang, {
             day: 'numeric',
             month: 'short',
@@ -68,7 +69,10 @@ export async function generateMetadata(
   const data = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
   >('fi', `${baseUrl}${params.slug}`, ['meeting-minute-document']);
-  const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(params.lang, data.data);
+  const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(
+    params.lang,
+    data.data,
+  );
   const selectedPublication = meetingMinuteLocaleFlipped[0];
   const pathname = `/${params.lang}/organization/meeting-minutes/${params.slug}`;
 
@@ -83,7 +87,9 @@ export async function generateMetadata(
 export async function generateStaticParams() {
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', '/api/meeting-minute-documents?pagination[pageSize]=100', ['meeting-minute-document']);
+  >('fi', '/api/meeting-minute-documents?pagination[pageSize]=100', [
+    'meeting-minute-document',
+  ]);
 
   return pageData.data.map((meetingMinuteDocument) => ({
     slug: meetingMinuteDocument.id.toString(),

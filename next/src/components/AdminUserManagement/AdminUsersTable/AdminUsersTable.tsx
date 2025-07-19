@@ -60,7 +60,7 @@ export default function AdminUsersTable({
         setTotal(result.total || 0);
         setError('');
       }
-    } catch (error) {
+    } catch (_error) {
       setError(dictionary.api.server_error);
     } finally {
       setIsLoading(false);

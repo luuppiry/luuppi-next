@@ -17,11 +17,11 @@ export const flipBoardLocale = (
   lang === 'en'
     ? (data.attributes.boardMembers!?.data.map((member) => {
         const flippedLocales = member.attributes.boardRoles?.data.map(
-          (role: any) => {
-            const localeEn = role.attributes.localizations.data[0];
+          (role) => {
+            const localeEn = role.attributes.localizations?.data[0];
             return {
               ...role,
-              attributes: localeEn.attributes,
+              attributes: localeEn?.attributes,
             };
           },
         );

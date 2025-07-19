@@ -9,11 +9,8 @@ const initialState = {
   selectedView: 'calendar',
   activeCalendarMonth: new Date(),
   desktopCalendarFullSize: false,
-  // eslint-disable-next-line no-unused-vars
   setView: (_: 'calendar' | 'list') => {},
-  // eslint-disable-next-line no-unused-vars
   setActiveCalendarMonth: (_: Date) => {},
-  // eslint-disable-next-line no-unused-vars
   setDesktopCalendarFullSize: (_: boolean) => {},
   showPastEvents: false,
   toggleShowPastEvents: () => {},

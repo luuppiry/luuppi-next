@@ -9,9 +9,7 @@ interface FormAutocompleteProps {
   marginBottom?: boolean;
   placeholder?: string;
   noResultsText: string;
-  // eslint-disable-next-line no-unused-vars
   onSelect: (value: string) => void;
-  // eslint-disable-next-line no-unused-vars
   onChange?: (value: string) => void;
 }
 
@@ -39,7 +37,9 @@ export default function FormAutocomplete({
   const handleChange = (text: string) => {
     setValue(text);
     setShowOptions(true);
-    onChange && onChange(text);
+    if (onChange) {
+      onChange(text);
+    }
   };
 
   const filteredOptions = options.filter((option) => option.includes(value));

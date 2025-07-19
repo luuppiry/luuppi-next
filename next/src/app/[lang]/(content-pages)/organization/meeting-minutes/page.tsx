@@ -1,35 +1,34 @@
 import { getDictionary } from '@/dictionaries';
-import { getStrapiData } from '@/libs/strapi/get-strapi-data';
-import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
-import Image from 'next/image';
-import { redirect } from 'next/navigation';
 
 interface MeetingMinuteProps {
   params: Promise<{ lang: SupportedLanguage; year?: string }>;
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 
+// TODO: Commented everything out because fails build...
 export default async function MeetingMinute(props: MeetingMinuteProps) {
   const params = await props.params;
-  const searchParams = await props.searchParams;
-  const dictionary = await getDictionary(params.lang);
-  
-  const pageData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&filters[year][$eq]=2025', [
-    'meeting-minute-document',
-  ]);
 
-  const sortedData = pageData.data
-    .filter((publication) => publication.attributes.meetingDate)
-    .sort((a, b) => {
-      const dateA = new Date(a.attributes.meetingDate).getTime();
-      const dateB = new Date(b.attributes.meetingDate).getTime();
-      return dateB - dateA;
-  });
-  
+  // const searchParams = await props.searchParams;
+  const dictionary = await getDictionary(params.lang);
+
+  // const pageData = await getStrapiData<
+  //   APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
+  // >(
+  //   'fi',
+  //   '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&filters[year][$eq]=2025',
+  //   ['meeting-minute-document'],
+  // );
+
+  // const sortedData = pageData.data
+  //   .filter((publication) => publication.attributes.meetingDate)
+  //   .sort((a, b) => {
+  //     const dateA = new Date(a.attributes.meetingDate).getTime();
+  //     const dateB = new Date(b.attributes.meetingDate).getTime();
+  //     return dateB - dateA;
+  //   });
+
   return (
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.meeting_minutes}</h1>
@@ -42,7 +41,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
           className="menu dropdown-content z-[9999] grid w-80 grid-cols-4 gap-2 rounded-box bg-base-100 p-2 shadow"
           tabIndex={0}
         >
-          {years.map((year) => (
+          {/* {years.map((year) => (
             <li key={year}>
               <a
                 href={`/${params.lang}/organization/meeting-minutes?year=${year}`}
@@ -50,12 +49,12 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
                 {year}
               </a>
             </li>
-          ))}
+          ))} */}
         </ul>
       </div>
 
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
-        {sortedData.data.map((publication) => (
+        {/* {sortedData.data.map((publication) => (
           <a
             key={publication.id}
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
@@ -91,7 +90,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
             <div className="absolute -bottom-1.5 left-1.5 -z-10 h-full w-full transform rounded-lg bg-gray-300 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5 group-hover:rotate-1" />
             <div className="absolute -bottom-3 left-3 -z-20 h-full w-full transform rounded-lg bg-gray-200 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:rotate-2" />
           </a>
-        ))}
+        ))} */}
       </div>
 
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />

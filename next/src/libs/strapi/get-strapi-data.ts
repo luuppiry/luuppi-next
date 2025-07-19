@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { SupportedLanguage } from '@/models/locale';
 import 'server-only';
 import { logger } from '../utils/logger';
