@@ -56,10 +56,10 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd luuppi-next/strapi
-            docker compose ps -q strapi_production &>/dev/null && \
-            docker compose exec -T strapi_production sh -c 'npm run strapi export -- --no-encrypt --file backup' && \
+            docker compose -f docker-compose-production.yaml ps -q strapi_production &>/dev/null && \
+            docker compose -f docker-compose-production.yaml exec -T strapi_production sh -c 'npm run strapi export -- --no-encrypt --file backup' && \
             docker cp strapi_production:/opt/app/backup.tar.gz backup-$(date +%Y-%m-%d-%H-%M-%S).tar.gz && \
-            docker compose exec -T strapi_production sh -c 'rm backup.tar.gz' || \
+            docker compose -f docker-compose-production.yaml exec -T strapi_production sh -c 'rm backup.tar.gz' || \
             echo "Strapi container not running, skipping backup"
 
       - name: Build Strapi Docker image
