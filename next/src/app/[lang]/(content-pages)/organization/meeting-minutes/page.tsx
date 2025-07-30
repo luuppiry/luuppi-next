@@ -22,13 +22,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   >('fi', '/api/meeting-minute-documents?pagination[pageSize]=100&sort[0]=meetingDate:desc', [
     'meeting-minute-document',
   ]);
-
-  const currentYear = new Date().getFullYear();
-  const startYear = 2018; // <3 Love hardcoding
-  const years = [];
-  for (let year = currentYear; year >= startYear; year--) {
-    if (year !== selectedYear) {
-      years.push(year)}}
+  const years = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018];
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -53,7 +47,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
         </div>
       </div>
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
-        {sortedData.map((publication) => (
+        {pageData.data.map((publication) => (
           <a
             key={publication.id}
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
