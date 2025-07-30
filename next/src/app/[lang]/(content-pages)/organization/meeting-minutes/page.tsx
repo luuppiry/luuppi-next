@@ -42,7 +42,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
 
   return (
     <div className="relative flex flex-col gap-12">
-      <div class="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
+      <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
         <h1>{dictionary.navigation.meeting_minutes} {selectedYear}</h1>
         <div className="dropdown sm:dropdown-end">
           <div className="btn m-1" role="button" tabIndex={0}>
