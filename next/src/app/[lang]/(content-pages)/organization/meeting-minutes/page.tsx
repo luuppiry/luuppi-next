@@ -19,7 +19,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&sort[0]=meetingDate:desc&filters[id][$eq]=2025', [
+  >('fi', '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&sort[0]=meetingDate:desc&filters[year][$eq]=2025', [
     'meeting-minute-document',
   ]);
   const years = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018];
