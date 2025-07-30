@@ -21,8 +21,14 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     'meeting-minute-document',
   ]);
 
+  const yearParam = Array.isArray(searchParams.year) ? searchParams.year[0] : searchParams.year;
+  const selectedYear = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear();
+
   const sortedData = pageData.data
-    .filter((publication) => publication.attributes.meetingDate)
+    .filter((publication) => {
+      const date = publication.attributes.meetingDate;
+      return date && new Date(date).getFullYear() === selectedYear;
+    })
     .sort((a, b) => {
       const dateA = new Date(a.attributes.meetingDate).getTime();
       const dateB = new Date(b.attributes.meetingDate).getTime();
@@ -35,10 +41,9 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
         .filter((publication) => publication.attributes.meetingDate)
         .map((publication) => new Date(publication.attributes.meetingDate).getFullYear())
     )
-  ).sort((a, b) => b - a);
-
-  const yearParam = Array.isArray(searchParams.year) ? searchParams.year[0] : searchParams.year;
-  const selectedYear = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear();
+  )
+  .filter((year) => selectedYear === undefined || year !== selectedYear)
+  .sort((a, b) => b - a);
 
   return (
     <div className="relative flex flex-col gap-12">
