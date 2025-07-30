@@ -14,7 +14,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const dictionary = await getDictionary(params.lang);
-  
+
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
   >('fi', '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100', [
