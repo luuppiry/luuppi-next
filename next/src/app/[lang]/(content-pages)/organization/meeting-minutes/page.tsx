@@ -19,7 +19,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', `/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100`, [
+  >('fi', '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100', [
     'meeting-minute-document',
   ]);
 
@@ -36,10 +36,10 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
 
   const currentYear = new Date().getFullYear();
   const startYear = 2018; // <3 Love hardcoding
-  const years = [];
-  for (let year = currentYear; year >= startYear; year--) {
+  const years = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018];
+  /*for (let year = currentYear; year >= startYear; year--) {
     if (year !== selectedYear) {
-      years.push(year)}}
+      years.push(year)}}*/
 
   return (
     <div className="relative flex flex-col gap-12">
