@@ -19,20 +19,9 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', '/api/meeting-minute-documents?pagination[pageSize]=100', [
+  >('fi', '/api/meeting-minute-documents?pagination[pageSize]=100&sort[0]=meetingDate:desc', [
     'meeting-minute-document',
   ]);
-
-  const sortedData = pageData.data
-    .filter((publication) => {
-      const date = publication.attributes.meetingDate;
-      return date && new Date(date).getFullYear() === selectedYear;
-    })
-    .sort((a, b) => {
-      const dateA = new Date(a.attributes.meetingDate).getTime();
-      const dateB = new Date(b.attributes.meetingDate).getTime();
-      return dateB - dateA;
-    });
 
   const currentYear = new Date().getFullYear();
   const startYear = 2018; // <3 Love hardcoding
