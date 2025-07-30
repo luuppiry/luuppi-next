@@ -13,8 +13,6 @@ interface MeetingMinuteProps {
 export default async function MeetingMinute(props: MeetingMinuteProps) {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  const year = searchParams.year;
-  console.log(year);
   const dictionary = await getDictionary(params.lang);
   
   const pageData = await getStrapiData<
@@ -39,10 +37,13 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     )
   ).sort((a, b) => b - a);
 
+  const yearParam = Array.isArray(searchParams.year) ? searchParams.year[0] : searchParams.year;
+  const selectedYear = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear();
+
   return (
     <div className="relative flex flex-col gap-12">
       <div class="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
-        <h1>{dictionary.navigation.meeting_minutes}</h1>
+        <h1>{dictionary.navigation.meeting_minutes} {selectedYear}</h1>
         <div className="dropdown sm:dropdown-end">
           <div className="btn m-1" role="button" tabIndex={0}>
             {dictionary.pages_meeting_minutes_year.other_meeting_minutes_years}
