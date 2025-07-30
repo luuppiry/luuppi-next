@@ -27,9 +27,34 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
       return dateB - dateA;
     });
 
+  const years = Array.from(
+    new Set(
+      pageData.data
+        .filter((publication) => publication.attributes.meetingDate)
+        .map((publication) => new Date(publication.attributes.meetingDate).getFullYear())
+    )
+  ).sort((a, b) => b - a);
+
   return (
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.meeting_minutes}</h1>
+      <div className="dropdown sm:dropdown-end">
+        <div className="btn m-1" role="button" tabIndex={0}>
+          {dictionary.pages_meeting_minutes_year.other_meeting_minutes_years}
+        </div>
+        <ul
+          className="menu dropdown-content z-[9999] grid w-80 grid-cols-4 gap-2 rounded-box bg-base-100 p-2 shadow"
+          tabIndex={0}
+        >
+        {years.map((year) => (
+          <li key={year}>
+            <a href={`/${params.lang}/organization/meeting-minutes?year=${year}`}>
+              {year}
+            </a>
+          </li>
+        ))}
+        </ul>
+      </div>
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
         {sortedData.map((publication) => (
           <a
