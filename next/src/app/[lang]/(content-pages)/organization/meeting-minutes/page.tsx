@@ -14,15 +14,14 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const dictionary = await getDictionary(params.lang);
+  const yearParam = Array.isArray(searchParams.year) ? searchParams.year[0] : searchParams.year;
+  const selectedYear = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear();
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100', [
+  >('fi', `/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&filters[year][$eq]=${selectedYear}`, [
     'meeting-minute-document',
   ]);
-
-  const yearParam = Array.isArray(searchParams.year) ? searchParams.year[0] : searchParams.year;
-  const selectedYear = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear();
 
   const sortedData = pageData.data
     .filter((publication) => {
@@ -35,15 +34,12 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
       return dateB - dateA;
     });
 
-  const years = Array.from(
-    new Set(
-      pageData.data
-        .filter((publication) => publication.attributes.meetingDate)
-        .map((publication) => new Date(publication.attributes.meetingDate).getFullYear())
-    )
-  )
-  .filter((year) => selectedYear === undefined || year !== selectedYear)
-  .sort((a, b) => b - a);
+  const currentYear = new Date().getFullYear();
+  const startYear = 2018; // <3 Love hardcoding
+  const years = [];
+  for (let year = currentYear; year >= startYear; year--) {
+    if (year !== selectedYear) {
+      years.push(year)    }  }
 
   return (
     <div className="relative flex flex-col gap-12">
