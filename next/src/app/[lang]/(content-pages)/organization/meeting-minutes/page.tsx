@@ -7,12 +7,16 @@ import Image from 'next/image';
 
 interface MeetingMinuteProps {
   params: Promise<{ lang: SupportedLanguage }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function MeetingMinute(props: MeetingMinuteProps) {
   const params = await props.params;
+  const searchParams = await props.searchParams;
+  const year = searchParams.year;
+  console.log(year);
   const dictionary = await getDictionary(params.lang);
-
+  
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
   >('fi', '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100', [
@@ -37,23 +41,25 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
 
   return (
     <div className="relative flex flex-col gap-12">
-      <h1>{dictionary.navigation.meeting_minutes}</h1>
-      <div className="dropdown sm:dropdown-end">
-        <div className="btn m-1" role="button" tabIndex={0}>
-          {dictionary.pages_meeting_minutes_year.other_meeting_minutes_years}
+      <div class="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
+        <h1>{dictionary.navigation.meeting_minutes}</h1>
+        <div className="dropdown sm:dropdown-end">
+          <div className="btn m-1" role="button" tabIndex={0}>
+            {dictionary.pages_meeting_minutes_year.other_meeting_minutes_years}
+          </div>
+          <ul
+            className="menu dropdown-content z-[9999] grid w-80 grid-cols-4 gap-2 rounded-box bg-base-100 p-2 shadow"
+            tabIndex={0}
+          >
+          {years.map((year) => (
+            <li key={year}>
+              <a href={`/${params.lang}/organization/meeting-minutes?year=${year}`}>
+                {year}
+              </a>
+            </li>
+          ))}
+          </ul>
         </div>
-        <ul
-          className="menu dropdown-content z-[9999] grid w-80 grid-cols-4 gap-2 rounded-box bg-base-100 p-2 shadow"
-          tabIndex={0}
-        >
-        {years.map((year) => (
-          <li key={year}>
-            <a href={`/${params.lang}/organization/meeting-minutes?year=${year}`}>
-              {year}
-            </a>
-          </li>
-        ))}
-        </ul>
       </div>
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
         {sortedData.map((publication) => (
