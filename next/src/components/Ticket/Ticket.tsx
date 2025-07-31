@@ -234,7 +234,8 @@ export default function Ticket({
             </div>
             <div className="mt-2">
               {days === 0 ? (
-                <div className="flex gap-5">
+                <div><p>{dictionary.pages_events.registration_starts}</p>
+                <div className="flex gap-5 mb-1">
                   <div className="text-sm">
                     <span className="countdown font-mono text-2xl max-md:text-lg">
                       {/* @ts-expect-error not supported */}
@@ -284,6 +285,16 @@ export default function Ticket({
                     </span>
                   </div>
                 </div>
+                <p className="font-semibold">
+                  {ticket.registrationStartsAt.toLocaleDateString(lang, {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    timeZone: 'Europe/Helsinki',
+                  })}
+                </p></div>
               ) : (
                 <div>
                   <p>{dictionary.pages_events.registration_starts}</p>
