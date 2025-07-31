@@ -17,20 +17,18 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const yearParam = Array.isArray(searchParams.year) ? searchParams.year[0] : searchParams.year;
   const selectedYear = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear();
 
-  const pageSize = 100;
   let page = 1;
-  let allData: any[] = [];
+  let pageData: any[] = [];
   let totalPages = 5;
   do {
     const response = await getStrapiData<
       APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
     >(
       'fi',
-      `/api/meeting-minute-documents?populate[1]=image&pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort[0]=meetingDate:desc`,
+      `/api/meeting-minute-documents?populate[1]=image&pagination[page]=${page}&pagination[pageSize]=100&sort[0]=meetingDate:desc`,
       ['meeting-minute-document']
     );
-
-    allData = allData.concat(response.data);
+    pageData = pageData.concat(response.data);
     totalPages = response.meta?.pagination?.pageCount || 1;
     page++;
   } while (page <= totalPages);
