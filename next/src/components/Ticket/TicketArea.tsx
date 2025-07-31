@@ -165,19 +165,6 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       }
     });
 
-    // Check for duplicate roles
-    const roleIds = ticketTypes
-      ?.map((type) => type.Role?.data?.attributes?.RoleId)
-      .filter(Boolean);
-    const duplicateRoles = roleIds?.filter(
-      (id, index) => roleIds.indexOf(id) !== index,
-    );
-    if (duplicateRoles?.length) {
-      errors.push(
-        `Multiple quotas configured for same role(s): ${duplicateRoles.join(', ')}`,
-      );
-    }
-
     // Check for duplicate weights
     const weights = ticketTypes?.map((type) => type.Weight);
     const duplicateWeights = weights?.filter(
