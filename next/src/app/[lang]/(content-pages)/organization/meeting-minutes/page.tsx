@@ -16,12 +16,35 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const yearParam = Array.isArray(searchParams.year) ? searchParams.year[0] : searchParams.year;
   const selectedYear = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear();
 
-  const pageData = await getStrapiData<
-    APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', '/api/meeting-minute-documents?populate[1]=image&pagination[pageSize]=100&sort[0]=meetingDate:desc&filters[$and][0][year][$eq]=2025', [
-    'meeting-minute-document',
-  ]);
-  const years = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018];
+  let page = 1;
+  let allDocuments: any[] = [];
+  let totalPages = 5;
+
+  do {
+    const response = await getStrapiData<
+      APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
+    >(
+      'fi',
+      `/api/meeting-minute-documents?populate[1]=image&pagination[page]=${page}&pagination[pageSize]=100&sort[0]=meetingDate:desc`,
+      ['meeting-minute-document']
+    );
+    allDocuments = allDocuments.concat(response.data);
+    totalPages = response.meta?.pagination?.pageCount || 1;
+    page++;
+  } while (page <= totalPages);
+
+  const years = Array.from(
+    new Set(
+      allDocuments
+        .map(doc => new Date(doc.attributes.meetingDate).getFullYear())
+        .filter(year => !isNaN(year))
+    )
+  ).sort((a, b) => b - a);
+
+  const filteredDocuments = allDocuments.filter((doc) => {
+    const year = new Date(doc.attributes.meetingDate).getFullYear();
+    return year === selectedYear;
+  });
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -46,7 +69,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
         </div>
       </div>
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
-        {pageData.data.map((publication) => (
+        {filteredDocuments.map((publication) => (
           <a
             key={publication.id}
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
