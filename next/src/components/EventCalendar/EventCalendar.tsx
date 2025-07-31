@@ -8,6 +8,7 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useRef, useState } from 'react';
+import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 import './EventCalendar.css';
 
 interface EventCalendarProps {
@@ -121,7 +122,12 @@ export default function EventCalendar({
               <span className="tooltip block w-full" data-tip={arg.event.title}>
                 <p className="overflow-hidden pl-[2px] text-left text-xs">
                   {arg.timeText}{' '}
-                  <span className="font-bold">{arg.event.title}</span>
+                  <span className="font-bold">
+                    {arg.event.title.toLowerCase().includes(dictionary.general.opens) && (
+                      <HiOutlineClipboardDocumentList className="inline-block mr-1 text-blue-600" />
+                    )}
+                    {arg.event.title}
+                  </span>
                 </p>
               </span>
             );
