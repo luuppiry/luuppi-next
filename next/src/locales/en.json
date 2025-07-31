@@ -265,7 +265,8 @@
   "pages_meeting_minutes_year": {
     "other_meeting_minutes_years": "Other years",
     "meeting_minutes_documents": "Meeting minutes documents",
-    "seo_description": "Luuppi ry's Meeting Minutes in"
+    "seo_description": "Luuppi ry's Meeting Minutes in",
+    "unauthorized": "This page can be viewed only by Luuppi members. Log in as a member of Luuppi ry."
   },
   "pages_songbook": {
     "title": "Songbook",

@@ -265,7 +265,8 @@
   "pages_meeting_minutes_year": {
     "other_meeting_minutes_years": "Muut vuodet",
     "meeting_minutes_documents": "Pöytäkirjat",
-    "seo_description": "Luuppi ry:n pöytäkirjat vuonna"
+    "seo_description": "Luuppi ry:n pöytäkirjat vuonna",
+    "unauthorized": "Tätä sivua voivat tarkastella vain Luuppi ry:n jäsenet. Kirjaudu sisään mikäli olet Luuppi ry:n jäsen."
   },
   "pages_songbook": {
     "title": "Laulukirja",

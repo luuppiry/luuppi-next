@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
@@ -12,14 +13,26 @@ interface MeetingMinuteProps {
 export default async function MeetingMinute(props: MeetingMinuteProps) {
   const params = await props.params;
   const searchParams = await props.searchParams;
+  const session = await auth();
   const dictionary = await getDictionary(params.lang);
   const yearParam = Array.isArray(searchParams.year) ? searchParams.year[0] : searchParams.year;
   const selectedYear = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear();
 
+  const user = session?.user;
+  if (!user?.entraUserUuid || !user?.isLuuppiMember) {
+    return (
+      <div className="relative flex flex-col gap-12">
+        <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
+          <h1>{dictionary.navigation.meeting_minutes}</h1>
+        </div>
+        <p>{dictionary.pages_meeting_minutes_year.unauthorized}</p>
+      </div>
+    );
+  }
+
   let page = 1;
   let allDocuments: any[] = [];
   let totalPages = 5;
-
   do {
     const response = await getStrapiData<
       APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
