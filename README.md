@@ -148,4 +148,8 @@ Feel free to bring your meter here:
 
 [![wakatime](https://wakatime.com/badge/user/a04247ba-6c76-456e-b04a-3dfa0bc6df41/project/018d2279-a88c-4764-afbe-c443f3ae9726.svg)](https://wakatime.com/badge/user/a04247ba-6c76-456e-b04a-3dfa0bc6df41/project/018d2279-a88c-4764-afbe-c443f3ae9726)
 
+#### Juliusz Kotelba
+
+[![wakatime](https://wakatime.com/badge/user/c8b15fbf-a210-457e-9da7-a0093d788004/project/7228ff6c-cafc-4c5f-b019-e1ef70fabea4.svg)](https://wakatime.com/badge/user/c8b15fbf-a210-457e-9da7-a0093d788004/project/7228ff6c-cafc-4c5f-b019-e1ef70fabea4)
+
 </details>
