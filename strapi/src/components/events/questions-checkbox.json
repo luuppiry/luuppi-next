@@ -13,6 +13,11 @@
     "QuestionEn": {
       "type": "string",
       "required": true
+    },
+    "Required": {
+      "type": "boolean",
+      "default": true,
+      "required": true
     }
   }
 }
