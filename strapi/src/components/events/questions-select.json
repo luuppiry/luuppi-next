@@ -23,11 +23,6 @@
       "type": "string",
       "regex": "^\\s*[a-zA-Z0-9öäÖÄ ]+(\\s*,\\s*[a-zA-Z0-9öäÖÄ ]+)*\\s*$",
       "required": true
-    },
-    "Required": {
-      "type": "boolean",
-      "default": true,
-      "required": true
     }
   }
 }
