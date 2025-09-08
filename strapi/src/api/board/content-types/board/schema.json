@@ -13,10 +13,9 @@
   "pluginOptions": {},
   "attributes": {
     "year": {
-      "pluginOptions": {},
       "type": "integer",
-      "unique": true,
-      "required": true
+      "required": true,
+      "unique": true
     },
     "boardMembers": {
       "type": "relation",

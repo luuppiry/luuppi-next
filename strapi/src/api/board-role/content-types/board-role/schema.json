@@ -17,21 +17,21 @@
   },
   "attributes": {
     "title": {
+      "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "string",
       "required": true
     },
     "email": {
+      "type": "email",
       "pluginOptions": {
         "i18n": {
           "localized": false
         }
       },
-      "type": "email",
       "required": true
     }
   }

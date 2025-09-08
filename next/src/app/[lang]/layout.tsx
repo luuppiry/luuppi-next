@@ -13,8 +13,6 @@ import { Poppins } from 'next/font/google';
 import { i18n } from '../../i18n-config';
 import './globals.css';
 
-export const experimental_ppr = true;
-
 const titilliumFont = Poppins({
   subsets: ['latin'],
   weight: ['200', '300', '400', '600', '700', '900'],

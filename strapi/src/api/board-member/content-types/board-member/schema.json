@@ -13,7 +13,6 @@
   "pluginOptions": {},
   "attributes": {
     "fullName": {
-      "pluginOptions": {},
       "type": "string",
       "required": true
     },
@@ -23,14 +22,12 @@
       "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "pluginOptions": {}
+      ]
     },
     "isBoardMember": {
-      "pluginOptions": {},
       "type": "boolean",
-      "default": false,
-      "required": true
+      "required": true,
+      "default": false
     },
     "boardRoles": {
       "type": "relation",
@@ -38,10 +35,9 @@
       "target": "api::board-role.board-role"
     },
     "year": {
-      "pluginOptions": {},
       "type": "integer",
-      "required": true,
-      "private": true
+      "private": true,
+      "required": true
     },
     "boards": {
       "type": "relation",

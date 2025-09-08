@@ -18,39 +18,39 @@
   "attributes": {
     "image": {
       "type": "media",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
       "multiple": false,
       "required": true,
       "allowedTypes": [
         "images"
-      ],
+      ]
+    },
+    "pdf": {
+      "type": "media",
       "pluginOptions": {
         "i18n": {
           "localized": false
         }
-      }
-    },
-    "pdf": {
-      "type": "media",
+      },
       "multiple": false,
       "required": true,
       "allowedTypes": [
         "files"
-      ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      }
+      ]
     },
     "Seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
       "component": "shared.seo",
+      "repeatable": false,
       "required": true
     }
   }

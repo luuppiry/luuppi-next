@@ -102,8 +102,8 @@ export async function GET() {
     APIResponseCollection<'api::news-single.news-single'>
   >('fi', '/api/news', ['news-single']);
   const news = newsData.data.map((news) => ({
-    url: `/fi/news/${news.attributes.slug}`,
-    lastmod: new Date(news.attributes.updatedAt!).toISOString(),
+    url: `/fi/news/${news.slug}`,
+    lastmod: new Date(news.updatedAt!).toISOString(),
   }));
 
   const boardData = await getStrapiData<
@@ -160,19 +160,19 @@ export async function GET() {
   );
 
   const boardPages: SitemapItemLoose[] = boardData.data
-    .sort((a, b) => b.attributes.year - a.attributes.year)
+    .sort((a, b) => b.year - a.year)
     .map((board) => ({
-      url: `/fi/organization/board/${board.attributes.year}`,
-      lastmod: new Date(board.attributes.updatedAt!).toISOString(),
+      url: `/fi/organization/board/${board.year}`,
+      lastmod: new Date(board.updatedAt!).toISOString(),
       links: [
         {
           hreflang: 'fi',
-          url: `/fi/organization/board/${board.attributes.year}`,
+          url: `/fi/organization/board/${board.year}`,
           lang: 'fi',
         },
         {
           hreflang: 'en',
-          url: `/en/organization/board/${board.attributes.year}`,
+          url: `/en/organization/board/${board.year}`,
           lang: 'en',
         },
       ],
@@ -182,7 +182,7 @@ export async function GET() {
   const sanomatPages: SitemapItemLoose[] = luuppiSanomatData.data.map(
     (sanomat) => ({
       url: `/fi/luuppi-sanomat/${sanomat.id}`,
-      lastmod: new Date(sanomat.attributes.updatedAt!).toISOString(),
+      lastmod: new Date(sanomat.updatedAt!).toISOString(),
       links: [
         {
           hreflang: 'fi',

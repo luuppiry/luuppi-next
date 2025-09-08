@@ -18,24 +18,24 @@
   "attributes": {
     "Content": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
       "component": "shared.page-content",
+      "repeatable": false,
       "required": true
     },
     "Seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
       "component": "shared.seo",
+      "repeatable": false,
       "required": true
     }
   }

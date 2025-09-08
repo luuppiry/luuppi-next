@@ -10,13 +10,13 @@ export const getSelectChoice = (
   const questionIndex = parseInt(question.split('-')[1], 10);
 
   const choicesFiArray =
-    event?.attributes.Registration?.QuestionsSelect?.[
-      questionIndex
-    ]?.ChoicesFi.split(',') ?? [];
+    event?.Registration?.QuestionsSelect?.[questionIndex]?.ChoicesFi?.split(
+      ',',
+    ) ?? [];
   const choicesEnArray =
-    event?.attributes.Registration?.QuestionsSelect?.[
-      questionIndex
-    ]?.ChoicesEn.split(',') ?? [];
+    event?.Registration?.QuestionsSelect?.[questionIndex]?.ChoicesEn?.split(
+      ',',
+    ) ?? [];
 
   return lang === 'fi'
     ? choicesFiArray[parseInt(answer, 10)]

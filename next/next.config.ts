@@ -1,10 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
   output: 'standalone',
   poweredByHeader: false,
-  experimental: {
-    ppr: 'incremental',
-  },
   images: {
     remotePatterns: [
       {
@@ -15,7 +13,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_STRAPI_BASE_URL.replace(
+        hostname: process.env.NEXT_PUBLIC_STRAPI_BASE_URL!.replace(
           'https://',
           '',
         ),

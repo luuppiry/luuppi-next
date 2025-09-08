@@ -58,14 +58,13 @@ export default async function Event(props: EventProps) {
   }
 
   const imageUrlLocalized =
-    params.lang === 'en' && event.data.attributes.ImageEn?.data?.attributes?.url
-      ? event.data.attributes.ImageEn?.data?.attributes?.url
-      : event.data.attributes.Image?.data?.attributes?.url;
+    params.lang === 'en' && event.data.ImageEn?.url
+      ? event.data.ImageEn?.url
+      : event.data.Image?.url;
 
   const imageUrl = imageUrlLocalized ? getStrapiUrl(imageUrlLocalized) : null;
 
-  const hasRegistration =
-    event.data.attributes?.Registration?.TicketTypes?.length;
+  const hasRegistration = event.data?.Registration?.TicketTypes?.length;
 
   return (
     <>
@@ -94,16 +93,12 @@ export default async function Event(props: EventProps) {
           </div>
           <div className="relative flex flex-col gap-4">
             <h1 className="break-words">
-              {
-                event.data.attributes[
-                  params.lang === 'en' ? 'NameEn' : 'NameFi'
-                ]
-              }
+              {event.data[params.lang === 'en' ? 'NameEn' : 'NameFi']}
             </h1>
             <div className="flex flex-col opacity-40">
               <p className="text-sm">
                 {dictionary.general.content_updated}:{' '}
-                {new Date(event.data.attributes.updatedAt!).toLocaleString(
+                {new Date(event.data.updatedAt!).toLocaleString(
                   params.lang,
                   dateFormat,
                 )}
@@ -120,8 +115,8 @@ export default async function Event(props: EventProps) {
                 </div>
                 <p className="line-clamp-2">
                   {formatDateRangeLong(
-                    new Date(event.data.attributes.StartDate),
-                    new Date(event.data.attributes.EndDate),
+                    new Date(event.data.StartDate),
+                    new Date(event.data.EndDate),
                     params.lang,
                   )}
                 </p>
@@ -132,42 +127,37 @@ export default async function Event(props: EventProps) {
                 </div>
                 <p className="line-clamp-2">
                   {
-                    event.data.attributes[
+                    event.data[
                       params.lang === 'en' ? 'LocationEn' : 'LocationFi'
                     ]
                   }
                 </p>
               </div>
-              {event.data.attributes['FuksiPoints'] && (
+              {event.data['FuksiPoints'] && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                    {event.data.attributes['FuksiPoints'] ===
-                    'fuksi_points_true' ? (
+                    {event.data['FuksiPoints'] === 'fuksi_points_true' ? (
                       <LuBaby className="shrink-0 text-2xl" />
                     ) : (
                       <RiProhibitedLine className="shrink-0 text-2xl" />
                     )}
                   </div>
                   <p className="line-clamp-2 font-normal">
-                    {
-                      dictionary.pages_events[
-                        event.data.attributes['FuksiPoints']
-                      ]
-                    }
+                    {dictionary.pages_events[event.data['FuksiPoints']]}
                   </p>
                 </div>
               )}
-              {event.data.attributes['Alcohol'] && (
+              {event.data['Alcohol'] && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                    {event.data.attributes['Alcohol'] === 'no_alcohol' ? (
+                    {event.data['Alcohol'] === 'no_alcohol' ? (
                       <MdNoDrinks className="shrink-0 text-2xl" />
                     ) : (
                       <BiSolidDrink className="shrink-0 text-2xl" />
                     )}
                   </div>
                   <p className="line-clamp-2 font-normal">
-                    {dictionary.pages_events[event.data.attributes['Alcohol']]}
+                    {dictionary.pages_events[event.data['Alcohol']]}
                   </p>
                 </div>
               )}
@@ -202,7 +192,7 @@ export default async function Event(props: EventProps) {
           <div className="organization-page prose prose-custom max-w-full break-words decoration-secondary-400 transition-all duration-300 ease-in-out">
             <BlockRendererClient
               content={
-                event.data.attributes[
+                event.data[
                   params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
                 ]
               }
@@ -236,18 +226,15 @@ export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const pathname = `/${params.lang}/events/${params.slug}`;
 
   const description = getPlainText(
-    event.data.attributes[
-      params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
-    ],
+    event.data[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
   );
 
-  const title =
-    event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
+  const title = event.data[params.lang === 'en' ? 'NameEn' : 'NameFi'];
 
   const imageUrlLocalized =
-    params.lang === 'en' && event.data.attributes.ImageEn?.data?.attributes?.url
-      ? event.data.attributes.ImageEn?.data?.attributes?.url
-      : event.data.attributes.Image?.data?.attributes?.url;
+    params.lang === 'en' && event.data.ImageEn?.url
+      ? event.data.ImageEn?.url
+      : event.data.Image?.url;
 
   const imageUrl = imageUrlLocalized
     ? getStrapiUrl(imageUrlLocalized)

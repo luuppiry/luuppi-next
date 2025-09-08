@@ -17,36 +17,36 @@
   "attributes": {
     "Content": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "required": true,
-      "component": "shared.page-content"
+      "component": "shared.page-content",
+      "repeatable": false,
+      "required": true
     },
     "ContactBanner": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "required": true,
-      "component": "shared.contact-banner"
+      "component": "shared.contact-banner",
+      "repeatable": false,
+      "required": true
     },
     "Seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "required": true,
-      "component": "shared.seo"
+      "component": "shared.seo",
+      "repeatable": false,
+      "required": true
     }
   }
 }

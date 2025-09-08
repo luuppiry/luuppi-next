@@ -123,8 +123,10 @@ export default function EventCalendar({
                 <p className="overflow-hidden pl-[2px] text-left text-xs">
                   {arg.timeText}{' '}
                   <span className="font-bold">
-                    {arg.event.title.toLowerCase().includes(dictionary.general.opens) && (
-                      <HiOutlineClipboardDocumentList className="inline-block mr-1 text-blue-600" />
+                    {arg.event.title
+                      .toLowerCase()
+                      .includes(dictionary.general.opens) && (
+                      <HiOutlineClipboardDocumentList className="mr-1 inline-block text-blue-600" />
                     )}
                     {arg.event.title}
                   </span>

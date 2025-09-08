@@ -17,58 +17,54 @@
   },
   "attributes": {
     "meetingDate": {
-      "pluginOptions": {},
       "type": "datetime",
       "required": true
     },
     "image": {
       "type": "media",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
       "multiple": false,
       "required": true,
       "allowedTypes": [
         "images"
-      ],
+      ]
+    },
+    "pdf": {
+      "type": "media",
       "pluginOptions": {
         "i18n": {
           "localized": false
         }
-      }
-    },
-    "pdf": {
-      "type": "media",
+      },
       "multiple": false,
       "required": true,
       "allowedTypes": [
         "files"
-      ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      }
+      ]
     },
     "Seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
       "component": "shared.seo",
+      "repeatable": false,
       "required": true
     },
     "year": {
-      "pluginOptions": {},
       "type": "integer",
-      "required": true,
-      "private": true
+      "private": true,
+      "required": true
     },
     "shortMeetingName": {
-      "pluginOptions": {},
       "type": "string",
-      "required": true,
-      "private": false
+      "required": true
     }
   }
 }

@@ -136,14 +136,11 @@ export default async function OwnEvents(props: OwnEventsProps) {
 
       return {
         eventId,
-        text: event?.data?.attributes.Registration?.QuestionsText ?? [],
-        select: event?.data?.attributes.Registration?.QuestionsSelect ?? [],
-        checkbox: event?.data?.attributes.Registration?.QuestionsCheckbox ?? [],
-        answerableUntil: event?.data?.attributes.Registration
-          ?.AllowQuestionEditUntil
-          ? new Date(
-              event?.data?.attributes.Registration?.AllowQuestionEditUntil,
-            )
+        text: event?.data?.Registration?.QuestionsText ?? [],
+        select: event?.data?.Registration?.QuestionsSelect ?? [],
+        checkbox: event?.data?.Registration?.QuestionsCheckbox ?? [],
+        answerableUntil: event?.data?.Registration?.AllowQuestionEditUntil
+          ? new Date(event?.data?.Registration?.AllowQuestionEditUntil)
           : null,
       };
     }),

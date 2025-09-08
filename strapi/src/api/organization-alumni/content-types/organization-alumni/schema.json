@@ -17,25 +17,25 @@
   "attributes": {
     "Content": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "required": true,
-      "component": "shared.page-content"
+      "component": "shared.page-content",
+      "repeatable": false,
+      "required": true
     },
     "Seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "required": true,
-      "component": "shared.seo"
+      "component": "shared.seo",
+      "repeatable": false,
+      "required": true
     }
   }
 }

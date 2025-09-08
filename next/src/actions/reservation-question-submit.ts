@@ -58,11 +58,11 @@ export async function reservationQuestionSubmit(
   }
 
   // Fallback to the day before the event if the registration does not have an answerableUntil date
-  const eventStart = new Date(event.data.attributes.StartDate);
+  const eventStart = new Date(event.data.StartDate);
 
-  const allowAnswerChangesUntil = event.data.attributes.Registration
+  const allowAnswerChangesUntil = event.data.Registration
     ?.AllowQuestionEditUntil
-    ? new Date(event.data.attributes.Registration?.AllowQuestionEditUntil)
+    ? new Date(event.data.Registration?.AllowQuestionEditUntil)
     : eventStart;
 
   if (allowAnswerChangesUntil < new Date()) {
@@ -73,11 +73,11 @@ export async function reservationQuestionSubmit(
   }
 
   const allowedTextQuestions =
-    event.data.attributes.Registration?.QuestionsText?.length ?? 0;
+    event.data.Registration?.QuestionsText?.length ?? 0;
   const allowedSelectQuestions =
-    event.data.attributes.Registration?.QuestionsSelect?.length ?? 0;
+    event.data.Registration?.QuestionsSelect?.length ?? 0;
   const allowedCheckboxQuestions =
-    event.data.attributes.Registration?.QuestionsCheckbox?.length ?? 0;
+    event.data.Registration?.QuestionsCheckbox?.length ?? 0;
 
   // Check if the number of answers is correct
   const textQuestions = answers.filter((answer) => answer.type === 'text');
@@ -99,9 +99,9 @@ export async function reservationQuestionSubmit(
 
   // Check if select questions have valid values
   const allowedSelectChoices =
-    event.data.attributes.Registration?.QuestionsSelect?.map((q) => ({
-      en: q.ChoicesEn.split(',').map((c) => c.trim()),
-      fi: q.ChoicesFi.split(',').map((c) => c.trim()),
+    event.data.Registration?.QuestionsSelect?.map((q) => ({
+      en: q.ChoicesEn?.split(',').map((c) => c.trim()),
+      fi: q.ChoicesFi?.split(',').map((c) => c.trim()),
     })) ?? [];
 
   for (let i = 0; i < allowedSelectChoices.length; i++) {
@@ -109,7 +109,7 @@ export async function reservationQuestionSubmit(
     const allowedAnswers = allowedSelectChoices[i];
 
     if (lang === 'en') {
-      if (!allowedAnswers.en.includes(answer.value as string)) {
+      if (!allowedAnswers.en?.includes(answer.value as string)) {
         logger.error('Invalid answer:', answer.value);
         return {
           message: dictionary.api.invalid_answer,
@@ -119,7 +119,7 @@ export async function reservationQuestionSubmit(
     }
 
     if (lang === 'fi') {
-      if (!allowedAnswers.fi.includes(answer.value as string)) {
+      if (!allowedAnswers.fi?.includes(answer.value as string)) {
         logger.error('Invalid answer:', answer.value);
         return {
           message: dictionary.api.invalid_answer,
@@ -145,7 +145,7 @@ export async function reservationQuestionSubmit(
   // Check if text questions have valid values meaning every value is a string and within the length limits
   for (let i = 0; i < textQuestions.length; i++) {
     const answer = textQuestions[i];
-    const question = event.data.attributes.Registration?.QuestionsText?.[i]!;
+    const question = event.data.Registration?.QuestionsText?.[i]!;
 
     if (typeof answer.value !== 'string') {
       logger.error('Invalid answer:', answer.value);
@@ -156,8 +156,8 @@ export async function reservationQuestionSubmit(
     }
 
     if (
-      answer.value.length < question.MinLength ||
-      answer.value.length > question.MaxLength
+      (question.MinLength && answer.value.length < question.MinLength) ||
+      (question.MaxLength && answer.value.length > question.MaxLength)
     ) {
       logger.error('Invalid answer:', answer.value);
       return {
@@ -183,14 +183,14 @@ export async function reservationQuestionSubmit(
         if (answer.type === 'select') {
           const allowedAnswers = allowedSelectChoices.find((a) =>
             lang === 'en'
-              ? a.en.includes(answer.value as string)
-              : a.fi.includes(answer.value as string),
+              ? a.en?.includes(answer.value as string)
+              : a.fi?.includes(answer.value as string),
           );
 
           selectIndex = allowedAnswers
             ? lang === 'en'
-              ? allowedAnswers.en.indexOf(answer.value as string)
-              : allowedAnswers.fi.indexOf(answer.value as string)
+              ? (allowedAnswers.en?.indexOf(answer.value as string) ?? null)
+              : (allowedAnswers.fi?.indexOf(answer.value as string) ?? null)
             : null;
         }
 

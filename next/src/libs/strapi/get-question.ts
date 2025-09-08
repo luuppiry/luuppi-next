@@ -13,22 +13,16 @@ export const getQuestion = (
   switch (type) {
     case 'TEXT':
       return lang === 'en'
-        ? event?.attributes.Registration?.QuestionsText?.[questionIndex]
-            ?.QuestionEn
-        : event?.attributes.Registration?.QuestionsText?.[questionIndex]
-            ?.QuestionFi;
+        ? event?.Registration?.QuestionsText?.[questionIndex]?.QuestionEn
+        : event?.Registration?.QuestionsText?.[questionIndex]?.QuestionFi;
     case 'SELECT':
       return lang === 'en'
-        ? event?.attributes.Registration?.QuestionsSelect?.[questionIndex]
-            ?.QuestionEn
-        : event?.attributes.Registration?.QuestionsSelect?.[questionIndex]
-            ?.QuestionFi;
+        ? event?.Registration?.QuestionsSelect?.[questionIndex]?.QuestionEn
+        : event?.Registration?.QuestionsSelect?.[questionIndex]?.QuestionFi;
     case 'CHECKBOX':
       return lang === 'en'
-        ? event?.attributes.Registration?.QuestionsCheckbox?.[questionIndex]
-            ?.QuestionEn
-        : event?.attributes.Registration?.QuestionsCheckbox?.[questionIndex]
-            ?.QuestionFi;
+        ? event?.Registration?.QuestionsCheckbox?.[questionIndex]?.QuestionEn
+        : event?.Registration?.QuestionsCheckbox?.[questionIndex]?.QuestionFi;
     default:
       return '';
   }

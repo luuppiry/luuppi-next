@@ -13,9 +13,9 @@
   "attributes": {
     "Title": {
       "type": "string",
+      "private": true,
       "required": true,
-      "unique": false,
-      "private": true
+      "unique": false
     },
     "RoleId": {
       "type": "uid",
@@ -23,8 +23,8 @@
     },
     "Description": {
       "type": "text",
-      "required": true,
-      "private": true
+      "private": true,
+      "required": true
     }
   }
 }

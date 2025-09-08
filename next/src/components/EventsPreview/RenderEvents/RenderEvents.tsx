@@ -26,35 +26,33 @@ export default async function RenderEvents({
 
   const upcomingEvents = eventsData.data.map((e) => ({
     ...e,
-    isToday:
-      new Date(e.attributes.StartDate).toDateString() ===
-      new Date().toDateString(),
+    isToday: new Date(e.StartDate).toDateString() === new Date().toDateString(),
   }));
 
-  const formattedEvents = upcomingEvents.map(({ id, attributes }) => {
+  const formattedEvents = upcomingEvents.map((event) => {
     const isEnglish = lang === 'en';
     const description = getPlainText(
-      isEnglish ? attributes.DescriptionEn : attributes.DescriptionFi,
+      isEnglish ? event.DescriptionEn : event.DescriptionFi,
     );
-    const location = isEnglish ? attributes.LocationEn : attributes.LocationFi;
-    const title = isEnglish ? attributes.NameEn : attributes.NameFi;
+    const location = isEnglish ? event.LocationEn : event.LocationFi;
+    const title = isEnglish ? event.NameEn : event.NameFi;
 
     const image =
-      isEnglish && attributes.ImageEn?.data?.attributes?.url
-        ? getStrapiUrl(attributes.ImageEn.data.attributes.url)
-        : attributes.Image?.data?.attributes?.url
-          ? getStrapiUrl(attributes.Image.data.attributes.url)
+      isEnglish && event.ImageEn?.url
+        ? getStrapiUrl(event.ImageEn.url)
+        : event.Image?.url
+          ? getStrapiUrl(event.Image.url)
           : eventPlaceholder;
 
     return {
-      id: id.toString(),
+      id: event.id.toString(),
       description,
       location,
       title,
       image,
-      start: new Date(attributes.StartDate),
-      end: new Date(attributes.EndDate),
-      hasTickets: Boolean(attributes.Registration?.TicketTypes.length),
+      start: new Date(event.StartDate),
+      end: new Date(event.EndDate),
+      hasTickets: Boolean(event.Registration?.TicketTypes?.length),
     };
   });
 

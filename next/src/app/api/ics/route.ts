@@ -42,13 +42,13 @@ export async function GET(request: NextRequest) {
 
   // Format event from raw event data
   const formatEvent = (event: APIResponseData<'api::event.event'>) => ({
-    name: event.attributes[lang === 'fi' ? 'NameFi' : 'NameEn'],
+    name: event[lang === 'fi' ? 'NameFi' : 'NameEn'],
     id: event.id,
-    startDate: new Date(event.attributes.StartDate),
-    endDate: new Date(event.attributes.EndDate),
-    location: event.attributes[lang === 'fi' ? 'LocationFi' : 'LocationEn'],
+    startDate: new Date(event.StartDate),
+    endDate: new Date(event.EndDate),
+    location: event[lang === 'fi' ? 'LocationFi' : 'LocationEn'],
     description: getPlainText(
-      event.attributes[lang === 'fi' ? 'DescriptionFi' : 'DescriptionEn'],
+      event[lang === 'fi' ? 'DescriptionFi' : 'DescriptionEn'],
     ),
   });
 

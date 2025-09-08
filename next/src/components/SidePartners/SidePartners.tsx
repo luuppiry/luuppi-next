@@ -29,21 +29,19 @@ export default function SidePartners({
       <div className="flex flex-col gap-4">
         {randomPartners.map((partner) => (
           <Link
-            key={partner.attributes.createdAt!.toString()}
+            key={partner.createdAt!.toString()}
             className={`relative w-full ${
-              partner.attributes.homepageUrl.includes(
-                'tietokonepalveluhietaniemi',
-              )
+              partner.homepageUrl.includes('tietokonepalveluhietaniemi')
                 ? 'h-16'
                 : 'h-8'
             }`}
-            href={partner.attributes.homepageUrl}
+            href={partner.homepageUrl}
           >
             <Image
               alt="Partner company logo"
               className="w-auto object-contain object-left"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src={getStrapiUrl(partner.attributes.logo?.data.attributes.url)}
+              src={getStrapiUrl(partner.logo?.url)}
               fill
             />
           </Link>

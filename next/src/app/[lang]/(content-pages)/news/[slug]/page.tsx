@@ -45,7 +45,7 @@ export default async function NewsPost(props: NewsPostProps) {
   const selectedNews = newsLocaleFlipped[0];
 
   // No version of the content exists in the requested language
-  if (!selectedNews?.attributes?.content) {
+  if (!selectedNews?.content) {
     redirect(`/${params.lang}/404`);
   }
 
@@ -61,15 +61,13 @@ export default async function NewsPost(props: NewsPostProps) {
       <div className="flex w-full gap-12">
         <div className="flex w-full flex-col gap-12">
           <div className="relative aspect-[2/1] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
-            {selectedNews.attributes.banner?.data?.attributes?.url ? (
+            {selectedNews.banner?.url ? (
               <Image
                 alt="News banner"
                 className={'rounded-lg object-cover'}
                 quality={100}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={getStrapiUrl(
-                  selectedNews.attributes.banner?.data.attributes.url,
-                )}
+                src={getStrapiUrl(selectedNews.banner?.url)}
                 fill
               />
             ) : (
@@ -80,14 +78,12 @@ export default async function NewsPost(props: NewsPostProps) {
           </div>
           <div className="relative flex flex-col gap-4">
             <div className="flex items-center gap-4">
-              {selectedNews.attributes.authorImage?.data?.attributes?.url ? (
+              {selectedNews.authorImage?.url ? (
                 <Image
                   alt="News author avatar"
                   className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
                   height={50}
-                  src={getStrapiUrl(
-                    selectedNews.attributes.authorImage.data?.attributes.url,
-                  )}
+                  src={getStrapiUrl(selectedNews.authorImage?.url)}
                   width={50}
                 />
               ) : (
@@ -97,30 +93,29 @@ export default async function NewsPost(props: NewsPostProps) {
               )}
               <div className="flex flex-col">
                 <span className="font-bold">
-                  {selectedNews.attributes.authorName}{' '}
-                  {Boolean(selectedNews.attributes?.authorTitle) && (
+                  {selectedNews.authorName}{' '}
+                  {Boolean(selectedNews?.authorTitle) && (
                     <span className="font-normal">
-                      | {selectedNews.attributes?.authorTitle}
+                      | {selectedNews?.authorTitle}
                     </span>
                   )}
                 </span>
                 <span className="text-sm opacity-75">
                   {new Date(
-                    selectedNews.attributes?.publishedAt ||
-                      selectedNews.attributes.createdAt!,
+                    selectedNews?.publishedAt || selectedNews.createdAt!,
                   ).toLocaleString(params.lang, dateFormat)}
                 </span>
               </div>
             </div>
             <div>
               <h1 className="text-4xl font-extrabold max-md:text-3xl">
-                {selectedNews.attributes.title}
+                {selectedNews.title}
               </h1>
             </div>
             <div className="flex flex-col opacity-40">
               <p className="text-sm">
                 {dictionary.general.content_updated}:{' '}
-                {new Date(selectedNews.attributes.updatedAt!).toLocaleString(
+                {new Date(selectedNews.updatedAt!).toLocaleString(
                   params.lang,
                   dateFormat,
                 )}
@@ -129,7 +124,7 @@ export default async function NewsPost(props: NewsPostProps) {
             <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
           </div>
           <article className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
-            <BlockRendererClient content={selectedNews.attributes.content!} />
+            <BlockRendererClient content={selectedNews.content!} />
           </article>
         </div>
         <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
@@ -161,7 +156,7 @@ export async function generateMetadata(
   const pathname = `/${params.lang}/news/${params.slug}`;
 
   // No version of the content exists in the requested language
-  if (!selectedNews?.attributes?.content) {
+  if (!selectedNews?.content) {
     return {};
   }
 
@@ -174,6 +169,6 @@ export async function generateStaticParams() {
   >('fi', '/api/news?pagination[pageSize]=100', ['news-single']);
 
   return pageData.data.map((news) => ({
-    slug: news.attributes.slug,
+    slug: news.slug,
   }));
 }

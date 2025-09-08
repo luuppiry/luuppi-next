@@ -32,7 +32,7 @@ export default async function CollaborationJobOpportunities(
       <div className="flex flex-col gap-8">
         {pageData.data.reverse().map((job_opportunity) => (
           <div
-            key={job_opportunity.attributes.createdAt!.toString()}
+            key={job_opportunity.createdAt!.toString()}
             className="flex gap-4 rounded-lg bg-background-50"
           >
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
@@ -42,16 +42,14 @@ export default async function CollaborationJobOpportunities(
                   alt="Company logo"
                   className="rounded-lg object-contain max-md:w-44"
                   height={100}
-                  src={getStrapiUrl(
-                    job_opportunity.attributes.logo?.data.attributes.url,
-                  )}
+                  src={getStrapiUrl(job_opportunity.logo?.url)}
                   width={300}
                 />
                 <div className="flex flex-col gap-1 font-semibold">
                   <div>
                     <Link
                       className="link flex items-center gap-1"
-                      href={job_opportunity.attributes.homepageUrl}
+                      href={job_opportunity.homepageUrl}
                     >
                       {dictionary.pages_companies.homepage}
                       <FaExternalLinkAlt size={14} />
@@ -60,7 +58,7 @@ export default async function CollaborationJobOpportunities(
                   <div>
                     <Link
                       className="link flex items-center gap-1"
-                      href={job_opportunity.attributes.jobOpportunityUrl}
+                      href={job_opportunity.jobOpportunityUrl}
                     >
                       {dictionary.pages_companies.job_opportunity}
                       <FaExternalLinkAlt size={14} />
@@ -69,13 +67,13 @@ export default async function CollaborationJobOpportunities(
                   <p className="flex items-center gap-1">
                     {dictionary.pages_companies.job_opportunity_published}:{' '}
                     <span className="badge badge-primary">
-                      {job_opportunity.attributes.jobOpportunityPublished}
+                      {job_opportunity.jobOpportunityPublished}
                     </span>
                   </p>
                   <p className="flex items-center gap-1">
                     {dictionary.pages_companies.job_opportunity_ending}:{' '}
                     <span className="badge badge-primary">
-                      {job_opportunity.attributes.jobOpportunityEnding}
+                      {job_opportunity.jobOpportunityEnding}
                     </span>
                   </p>
                   <p className="flex items-center gap-1">
@@ -83,9 +81,7 @@ export default async function CollaborationJobOpportunities(
                     <span className="badge badge-primary">
                       {
                         dictionary.pages_companies[
-                          job_opportunity.attributes[
-                            'jobOpportunityTargetGroup'
-                          ]
+                          job_opportunity['jobOpportunityTargetGroup']
                         ]
                       }
                     </span>
@@ -93,8 +89,8 @@ export default async function CollaborationJobOpportunities(
                 </div>
               </div>
               <div className="justify-top flex flex-col gap-4 pr-4">
-                <strong>{job_opportunity.attributes.jobTitle}</strong>
-                <p>{job_opportunity.attributes.description}</p>
+                <strong>{job_opportunity.jobTitle}</strong>
+                <p>{job_opportunity.description}</p>
               </div>
             </div>
           </div>
@@ -110,7 +106,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const url =
-    '/api/collaboration-job-opportunity?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
+    '/api/collaboration-job-opportunity?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['collaboration-job-opportunity'];
 
   const data = await getStrapiData<

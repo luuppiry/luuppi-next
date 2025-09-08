@@ -13,27 +13,22 @@
   "pluginOptions": {},
   "attributes": {
     "NameFi": {
-      "pluginOptions": {},
       "type": "string",
       "required": true
     },
     "LocationFi": {
-      "pluginOptions": {},
       "type": "string",
       "required": true
     },
     "DescriptionFi": {
-      "pluginOptions": {},
       "type": "blocks",
       "required": true
     },
     "StartDate": {
-      "pluginOptions": {},
       "type": "datetime",
       "required": true
     },
     "EndDate": {
-      "pluginOptions": {},
       "type": "datetime",
       "required": true
     },
@@ -43,15 +38,12 @@
       "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "pluginOptions": {}
+      ]
     },
     "Registration": {
-      "displayName": "Registration",
       "type": "component",
-      "repeatable": false,
-      "pluginOptions": {},
-      "component": "events.registration"
+      "component": "events.registration",
+      "repeatable": false
     },
     "LocationEn": {
       "type": "string",
@@ -75,20 +67,20 @@
     },
     "Alcohol": {
       "type": "enumeration",
+      "required": false,
       "enum": [
         "no_alcohol",
         "some_alcohol",
         "full_alcohol"
-      ],
-      "required": false
+      ]
     },
     "FuksiPoints": {
       "type": "enumeration",
+      "required": false,
       "enum": [
-        "fuksi_points_true", 
+        "fuksi_points_true",
         "fuksi_points_false"
-      ],
-      "required": false
+      ]
     }
   }
 }

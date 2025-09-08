@@ -32,7 +32,7 @@ export default async function CollaborationCompanies(
       <div className="flex flex-col gap-8">
         {pageData.data.map((company) => (
           <div
-            key={company.attributes.createdAt!.toString()}
+            key={company.createdAt!.toString()}
             className="flex gap-4 rounded-lg bg-background-50"
           >
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
@@ -42,32 +42,30 @@ export default async function CollaborationCompanies(
                   alt="Company logo"
                   className="rounded-lg object-contain max-md:w-44"
                   height={100}
-                  src={getStrapiUrl(
-                    company.attributes.logo?.data.attributes.url,
-                  )}
+                  src={getStrapiUrl(company.logo?.url)}
                   width={300}
                 />
                 <div className="flex flex-col gap-1 font-semibold">
                   <p className="flex items-center gap-1">
                     {dictionary.pages_companies.founded}:{' '}
                     <span className="badge badge-primary">
-                      {company.attributes.foundedYear}
+                      {company.foundedYear}
                     </span>
                   </p>
                   <div>
                     <Link
                       className="link flex items-center gap-1"
-                      href={company.attributes.homepageUrl}
+                      href={company.homepageUrl}
                     >
                       {dictionary.pages_companies.homepage}
                       <FaExternalLinkAlt size={14} />
                     </Link>
                   </div>
-                  {company.attributes.openJobsUrl && (
+                  {company.openJobsUrl && (
                     <div>
                       <Link
                         className="link flex items-center gap-1"
-                        href={company.attributes.openJobsUrl}
+                        href={company.openJobsUrl}
                       >
                         {dictionary.pages_companies.open_jobs}{' '}
                         <FaExternalLinkAlt size={14} />
@@ -77,7 +75,7 @@ export default async function CollaborationCompanies(
                 </div>
               </div>
               <div className="flex items-center pr-4">
-                <p>{company.attributes.description}</p>
+                <p>{company.description}</p>
               </div>
             </div>
           </div>
@@ -93,7 +91,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const url =
-    '/api/collaboration-company?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
+    '/api/collaboration-company?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['collaboration-company'];
 
   const data = await getStrapiData<

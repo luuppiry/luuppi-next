@@ -18,7 +18,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const session = await auth();
   const dictionary = await getDictionary(lang);
 
-  const ticketTypes = event.data.attributes.Registration?.TicketTypes;
+  const ticketTypes = event.data.Registration?.TicketTypes;
 
   const localUserPromise = session?.user?.entraUserUuid
     ? getCachedUser(session.user.entraUserUuid)
@@ -35,7 +35,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
   const eventRolesWithWeights =
     ticketTypes?.map((ticketType) => ({
-      strapiRoleUuid: ticketType.Role?.data?.attributes?.RoleId,
+      strapiRoleUuid: ticketType.Role?.RoleId,
       weight: ticketType.Weight,
     })) ?? [];
 
@@ -100,41 +100,36 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   };
 
   const ownQuota = ticketTypes?.find(
-    (type) =>
-      type.Role?.data?.attributes?.RoleId === targetedRole.strapiRoleUuid,
+    (type) => type.Role?.RoleId === targetedRole.strapiRoleUuid,
   );
 
   const isSoldOutOwnQuota = ownQuota
-    ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.data?.attributes?.RoleId!)
+    ? isSoldOut(ownQuota.TicketsTotal!, ownQuota.Role?.RoleId!)
     : false;
 
   const hasUnpaidReservationsOwnQuota = ownQuota
-    ? hasUnpaidReservations(ownQuota.Role?.data?.attributes?.RoleId!)
+    ? hasUnpaidReservations(ownQuota.Role?.RoleId!)
     : false;
 
   const hasBoughtMaxTicketsOwnQuota = ownQuota
-    ? hasBoughtMaxTickets(
-        ownQuota.Role?.data?.attributes?.RoleId!,
-        ownQuota.TicketsAllowedToBuy,
-      )
+    ? hasBoughtMaxTickets(ownQuota.Role?.RoleId!, ownQuota.TicketsAllowedToBuy!)
     : false;
 
   const isRegistrationOpenOwnQuota = ownQuota
-    ? isRegistrationOpen(new Date(ownQuota.RegistrationEndsAt))
+    ? isRegistrationOpen(new Date(ownQuota.RegistrationEndsAt!))
     : false;
 
   const ticketTypesFormatted = ticketTypes
-    ?.filter((type) => Boolean(type.Role?.data?.attributes?.RoleId))
+    ?.filter((type) => Boolean(type.Role?.RoleId))
     ?.map((ticketType) => ({
-      name: ticketType[lang === 'en' ? 'NameEn' : 'NameFi'],
-      location:
-        event.data.attributes[lang === 'en' ? 'LocationEn' : 'LocationFi'],
-      price: ticketType.Price,
-      role: ticketType.Role?.data?.attributes?.RoleId,
-      registrationStartsAt: new Date(ticketType.RegistrationStartsAt),
-      registrationEndsAt: new Date(ticketType.RegistrationEndsAt),
-      isOwnQuota: isOwnQuota(ticketType.Role?.data?.attributes?.RoleId!),
-      maxTicketsPerUser: ticketType.TicketsAllowedToBuy,
+      name: ticketType[lang === 'en' ? 'NameEn' : 'NameFi']!,
+      price: ticketType.Price!,
+      role: ticketType.Role?.RoleId!,
+      location: event.data[lang === 'en' ? 'LocationEn' : 'LocationFi']!,
+      registrationStartsAt: new Date(ticketType.RegistrationStartsAt!),
+      registrationEndsAt: new Date(ticketType.RegistrationEndsAt!),
+      isOwnQuota: isOwnQuota(ticketType.Role?.RoleId!),
+      maxTicketsPerUser: ticketType.TicketsAllowedToBuy!,
     }))
     .sort((a, b) =>
       a.isOwnQuota === b.isOwnQuota ? 0 : a.isOwnQuota ? -1 : 1,
@@ -146,7 +141,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
 
     // Check for missing roles
     const quotasWithoutRoles = ticketTypes?.filter(
-      (type) => !type.Role?.data?.attributes?.RoleId,
+      (type) => !type.Role?.RoleId,
     );
     if (quotasWithoutRoles?.length) {
       errors.push(
@@ -156,8 +151,8 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
 
     // Check for invalid registration dates
     ticketTypes?.forEach((type) => {
-      const startsAt = new Date(type.RegistrationStartsAt);
-      const endsAt = new Date(type.RegistrationEndsAt);
+      const startsAt = new Date(type.RegistrationStartsAt!);
+      const endsAt = new Date(type.RegistrationEndsAt!);
       if (startsAt >= endsAt) {
         errors.push(
           `Invalid registration dates for ${type[lang === 'en' ? 'NameEn' : 'NameFi']}: registration ends before it starts`,
@@ -177,10 +172,9 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     }
 
     // Check question edit deadline
-    const questionEditUntil =
-      event.data.attributes.Registration?.AllowQuestionEditUntil;
+    const questionEditUntil = event.data.Registration?.AllowQuestionEditUntil;
     const registrationEndDates = ticketTypes?.map(
-      (type) => new Date(type.RegistrationEndsAt),
+      (type) => new Date(type.RegistrationEndsAt!),
     );
     if (
       questionEditUntil &&
@@ -287,7 +281,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
               !isRegistrationOpenOwnQuota
             }
             eventId={event.data.id}
-            eventStartsAt={new Date(event.data.attributes.StartDate)}
+            eventStartsAt={new Date(event.data.StartDate)}
             isOwnQuota={isOwnQuota(ticket.role!)}
             lang={lang}
             targetedRole={targetedRole.strapiRoleUuid}

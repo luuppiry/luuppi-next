@@ -16,19 +16,19 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
-  >('fi', '/api/luuppi-sanomats?populate[1]=image&pagination[pageSize]=100', [
+  >('fi', '/api/luuppi-sanomats?populate[1]=image&pagination[pageSize]=200', [
     'luuppi-sanomat',
   ]);
 
   const sortedData = pageData.data
-    .filter((publication) => publication.attributes.createdAt)
+    .filter((publication) => publication.createdAt)
     .sort((a, b) => {
-      const dateA = a.attributes?.publishedAt
-        ? new Date(a.attributes.publishedAt).getTime()
-        : new Date(a.attributes.createdAt || new Date()).getTime();
-      const dateB = b.attributes.publishedAt
-        ? new Date(b.attributes.publishedAt).getTime()
-        : new Date(b.attributes.createdAt || new Date()).getTime();
+      const dateA = a?.publishedAt
+        ? new Date(a.publishedAt).getTime()
+        : new Date(a.createdAt || new Date()).getTime();
+      const dateB = b.publishedAt
+        ? new Date(b.publishedAt).getTime()
+        : new Date(b.createdAt || new Date()).getTime();
 
       return dateB - dateA;
     });
@@ -43,7 +43,7 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
             href={`/${params.lang}/luuppi-sanomat/${publication.id}`}
           >
-            {publication.attributes.image?.data.attributes.url && (
+            {publication.image?.url && (
               <div
                 className={
                   'relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300'
@@ -52,9 +52,7 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
                 <Image
                   alt={`${dictionary.navigation.sanomat} cover`}
                   className="h-full w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
-                  src={getStrapiUrl(
-                    publication.attributes.image?.data.attributes.url,
-                  )}
+                  src={getStrapiUrl(publication.image?.url)}
                   fill
                 />
               </div>
@@ -62,8 +60,7 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
             <div className="absolute bottom-0 right-0 z-20 rounded-br-lg rounded-tl-lg bg-accent-400 px-2 py-1 font-bold text-white">
               {firstLetterToUpperCase(
                 new Date(
-                  publication.attributes?.publishedAt ||
-                    publication.attributes.createdAt!,
+                  publication?.publishedAt || publication.createdAt!,
                 ).toLocaleDateString(params.lang, {
                   month: 'short',
                   year: 'numeric',

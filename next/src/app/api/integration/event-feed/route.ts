@@ -51,17 +51,17 @@ export async function GET(
 
     const events = data.data.map((event) => ({
       id: event.id,
-      nameFi: event.attributes.NameFi,
-      nameEn: event.attributes.NameEn,
-      descriptionFi: getPlainText(event.attributes.DescriptionFi),
-      descriptionEn: getPlainText(event.attributes.DescriptionEn),
-      locationFi: event.attributes.LocationFi,
-      locationEn: event.attributes.LocationEn,
-      start: new Date(event.attributes.StartDate),
-      end: new Date(event.attributes.EndDate),
-      hasTickets: Boolean(event.attributes.Registration?.TicketTypes.length),
-      imageEnUrl: event.attributes.ImageEn?.data?.attributes?.url || null,
-      imageFiUrl: event.attributes.Image?.data?.attributes?.url || null,
+      nameFi: event.NameFi,
+      nameEn: event.NameEn,
+      descriptionFi: getPlainText(event.DescriptionFi),
+      descriptionEn: getPlainText(event.DescriptionEn),
+      locationFi: event.LocationFi,
+      locationEn: event.LocationEn,
+      start: new Date(event.StartDate),
+      end: new Date(event.EndDate),
+      hasTickets: Boolean(event.Registration?.TicketTypes?.length),
+      imageEnUrl: event.ImageEn?.url || null,
+      imageFiUrl: event.Image?.url || null,
     }));
 
     return NextResponse.json({ events: events });

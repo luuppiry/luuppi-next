@@ -15,27 +15,20 @@ export const flipBoardLocale = (
   data: APIResponseData<'api::board.board'>,
 ) =>
   lang === 'en'
-    ? (data.attributes.boardMembers!?.data.map((member) => {
-        const flippedLocales = member.attributes.boardRoles?.data.map(
-          (role) => {
-            const localeEn = role.attributes.localizations?.data[0];
-            return {
-              ...role,
-              attributes: localeEn?.attributes,
-            };
-          },
-        );
+    ? (data.boardMembers!?.map((member) => {
+        const flippedLocales = member.boardRoles?.map((role) => {
+          const localeEn = role.localizations;
+          return {
+            ...role,
+            localeEn,
+          };
+        });
         return {
           ...member,
-          attributes: {
-            ...member.attributes,
-            boardRoles: {
-              data: flippedLocales,
-            },
-          },
+          boardRoles: flippedLocales,
         };
       }) as APIResponseData<'api::board-member.board-member'>[])
-    : data.attributes.boardMembers!?.data;
+    : data.boardMembers;
 
 /**
  * Strapi does not support direct localization in a case where we
@@ -52,18 +45,16 @@ export const flipNewsLocale = (
   lang === 'en'
     ? (
         data.map((news) => {
-          const localeEn = news.attributes.localizations?.data[0];
+          const localeEn = news.localizations?.[0];
           if (!localeEn) return null;
           return {
             ...news,
-            attributes: {
-              ...localeEn?.attributes,
-              banner: news.attributes.banner,
-              authorImage: news.attributes.authorImage,
-              slug: news.attributes.slug,
-              Seo: {
-                ...localeEn?.attributes.Seo,
-              },
+            ...localeEn,
+            banner: news.banner,
+            authorImage: news.authorImage,
+            slug: news.slug,
+            Seo: {
+              ...localeEn?.Seo,
             },
           };
         }) as APIResponseData<'api::news-single.news-single'>[]
@@ -85,18 +76,13 @@ export const flipSanomatLocale = (
   lang === 'en'
     ? (
         data.map((publication) => {
-          const localeEn = publication.attributes.localizations?.data[0];
+          const localeEn = publication.localizations?.[0];
           if (!localeEn) return null;
           return {
             ...publication,
-            attributes: {
-              ...localeEn?.attributes,
-              id: publication.id,
-              image: publication.attributes.image,
-              pdf: publication.attributes.pdf,
-              Seo: {
-                ...localeEn?.attributes.Seo,
-              },
+            ...localeEn,
+            Seo: {
+              ...localeEn?.Seo,
             },
           };
         }) as APIResponseData<'api::luuppi-sanomat.luuppi-sanomat'>[]
@@ -118,17 +104,17 @@ export const flipMeetingMinuteLocale = (
   lang === 'en'
     ? (
         data.map((publication) => {
-          const localeEn = publication.attributes.localizations?.data[0];
+          const localeEn = publication.localizations?.[0];
           if (!localeEn) return null;
           return {
             ...publication,
             attributes: {
-              ...localeEn?.attributes,
+              ...localeEn,
               id: publication.id,
-              image: publication.attributes.image,
-              pdf: publication.attributes.pdf,
+              image: publication.image,
+              pdf: publication.pdf,
               Seo: {
-                ...localeEn?.attributes.Seo,
+                ...localeEn?.Seo,
               },
             },
           };

@@ -111,11 +111,11 @@ export async function reservationCreate(
 
   const strapiRoleUuids =
     localUser.roles.map((role) => role.role.strapiRoleUuid) ?? [];
-  const ticketTypes = strapiEvent.data.attributes.Registration?.TicketTypes;
+  const ticketTypes = strapiEvent.data.Registration?.TicketTypes;
 
   const eventRolesWithWeights =
     ticketTypes?.map((ticketType) => ({
-      strapiRoleUuid: ticketType.Role?.data?.attributes?.RoleId,
+      strapiRoleUuid: ticketType.Role?.RoleId,
       weight: ticketType.Weight,
     })) ?? [];
 
@@ -149,12 +149,14 @@ export async function reservationCreate(
   }
 
   const ownQuota = ticketTypes?.find(
-    (type) =>
-      type.Role?.data?.attributes?.RoleId === targetedRole.strapiRoleUuid,
+    (type) => type.Role?.RoleId === targetedRole.strapiRoleUuid,
   );
 
+  const ticketsTotal = ownQuota?.TicketsTotal;
+  const ticketsAllowedToBuy = ownQuota?.TicketsAllowedToBuy;
+
   // Validate that the user has a role that can reserve tickets
-  if (!ownQuota) {
+  if (!ownQuota || !ticketsTotal || !ticketsAllowedToBuy) {
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -162,7 +164,10 @@ export async function reservationCreate(
   }
 
   // Validate that the registration is still open
-  if (new Date(ownQuota.RegistrationEndsAt) < new Date()) {
+  if (
+    ownQuota.RegistrationEndsAt &&
+    new Date(ownQuota.RegistrationEndsAt) < new Date()
+  ) {
     return {
       message: dictionary.api.registration_closed,
       isError: true,
@@ -170,7 +175,10 @@ export async function reservationCreate(
   }
 
   // Validate that registration is open
-  if (new Date(ownQuota.RegistrationStartsAt) > new Date()) {
+  if (
+    ownQuota.RegistrationStartsAt &&
+    new Date(ownQuota.RegistrationStartsAt) > new Date()
+  ) {
     return {
       message: dictionary.api.registration_not_open,
       isError: true,
@@ -233,16 +241,14 @@ export async function reservationCreate(
       ).length;
 
       // Validate that the event is not sold out for the user's role
-      if (totalRegistrationWithRole >= ownQuota.TicketsTotal) {
+      if (totalRegistrationWithRole >= ticketsTotal) {
         return {
           message: dictionary.api.sold_out,
           isError: true,
         };
       }
 
-      const ticketsAvailable =
-        ownQuota.TicketsTotal - totalRegistrationWithRole;
-      const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
+      const ticketsAvailable = ticketsTotal - totalRegistrationWithRole;
 
       // Validate that the user has not already reserved the maximum amount of tickets
       if (currentUserReservations >= ticketsAllowedToBuy) {
@@ -272,7 +278,7 @@ export async function reservationCreate(
       }
 
       // Buys the last tickets
-      if (amount + totalRegistrationWithRole >= ownQuota.TicketsTotal) {
+      if (amount + totalRegistrationWithRole >= ticketsTotal) {
         // Set event as sold out for this role in redis for 3 minutes
         // to prevent unnecessary database locks & backend calculations
         logger.info(
@@ -307,7 +313,7 @@ export async function reservationCreate(
           eventId,
           entraUserUuid,
           strapiRoleUuid,
-          price: ownQuota.Price,
+          price: ownQuota.Price || 0,
         }),
       );
 

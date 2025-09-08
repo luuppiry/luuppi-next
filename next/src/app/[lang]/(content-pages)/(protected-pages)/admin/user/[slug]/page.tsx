@@ -112,29 +112,26 @@ export default async function Page(props: {
       (event) => event.id === registration.eventId,
     );
 
-    const ticketType = event?.attributes.Registration?.TicketTypes.find(
-      (ticketType) =>
-        ticketType.Role?.data?.attributes?.RoleId ===
-        registration.strapiRoleUuid,
+    const ticketType = event?.Registration?.TicketTypes?.find(
+      (ticketType) => ticketType.Role?.RoleId === registration.strapiRoleUuid,
     );
 
     return {
       id: registration.id,
       eventId: registration.eventId,
-      eventName:
-        lang === 'en' ? event?.attributes.NameEn : event?.attributes.NameFi,
+      eventName: lang === 'en' ? event?.NameEn : event?.NameFi,
       paymentCompleted: registration.paymentCompleted,
       reservedUntil: registration.reservedUntil,
       ticketType: {
-        name: lang === 'en' ? ticketType?.NameEn : ticketType?.NameFi,
-        price: ticketType?.Price,
+        name: lang === 'en' ? ticketType?.NameEn! : ticketType?.NameFi!,
+        price: ticketType?.Price!,
       },
       payments: registration.payments.map((payment) => ({
         status: payment.status,
         orderId: payment.orderId,
       })),
       answers: registration.answers.map((answer) => ({
-        question: getQuestion(event, lang, answer.question, answer.type),
+        question: getQuestion(event, lang, answer.question, answer.type)!,
         answer:
           answer.type === 'SELECT'
             ? getSelectChoice(event, lang, answer.question, answer.answer)

@@ -18,14 +18,14 @@
   "attributes": {
     "Seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "required": true,
-      "component": "shared.seo"
+      "component": "shared.seo",
+      "repeatable": false,
+      "required": true
     }
   }
 }

@@ -9,20 +9,18 @@ const luuppiNonMember = process.env.NEXT_PUBLIC_NO_ROLE_ID!;
 export const addEventRegisterationOpensAtInfo = <T>(
   acc: T[],
   event: APIResponseData<'api::event.event'>,
-  // eslint-disable-next-line no-unused-vars
+
   formatEvent: (event: APIResponseData<'api::event.event'>) => T,
   dictionary: Dictionary,
 ) => {
-  if (!event?.attributes?.Registration?.TicketTypes) {
+  if (!event?.Registration?.TicketTypes) {
     return [...acc, formatEvent(event)];
   }
 
-  const memberSaleStartsAt = event.attributes.Registration?.TicketTypes.find(
-    (type) => {
-      const roleId = type?.Role?.data?.attributes?.RoleId;
-      return roleId && [luuppiMember, luuppiNonMember].includes(roleId);
-    },
-  );
+  const memberSaleStartsAt = event.Registration?.TicketTypes.find((type) => {
+    const roleId = type?.Role?.RoleId;
+    return roleId && [luuppiMember, luuppiNonMember].includes(roleId);
+  });
 
   if (!memberSaleStartsAt?.RegistrationStartsAt) {
     return [...acc, formatEvent(event)];
@@ -33,13 +31,10 @@ export const addEventRegisterationOpensAtInfo = <T>(
     formatEvent(event),
     formatEvent({
       ...event,
-      attributes: {
-        ...event.attributes,
-        StartDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
-        EndDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
-        NameEn: `${event.attributes['NameEn']} ${dictionary.general.opens}`,
-        NameFi: `${event.attributes['NameFi']} ${dictionary.general.opens}`,
-      },
+      StartDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
+      EndDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
+      NameEn: `${event['NameEn']} ${dictionary.general.opens}`,
+      NameFi: `${event['NameFi']} ${dictionary.general.opens}`,
     }),
   ];
 };

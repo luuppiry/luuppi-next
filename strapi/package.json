@@ -14,17 +14,16 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@strapi/plugin-i18n": "4.25.12",
-    "@strapi/plugin-users-permissions": "4.25.10",
+    "@strapi/plugin-users-permissions": "5.18.1",
     "@strapi/provider-email-nodemailer": "^5.8.0",
-    "@strapi/strapi": "4.25.10",
+    "@strapi/strapi": "5.18.1",
     "better-sqlite3": "^11.3.0",
     "pg": "8.13.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "5.3.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
     "strapi-middleware-upload-plugin-cache": "^2.1.0",
-    "styled-components": "5.3.11"
+    "styled-components": "^6.0.0"
   },
   "engines": {
     "node": ">=18.0.0 <=20.x.x",
