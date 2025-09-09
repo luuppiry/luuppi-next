@@ -4,7 +4,8 @@
   "info": {
     "singularName": "collaboration-job-opportunity",
     "pluralName": "collaboration-job-opportunities",
-    "displayName": "CollaborationJobOpportunities"
+    "displayName": "CollaborationJobOpportunities",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false

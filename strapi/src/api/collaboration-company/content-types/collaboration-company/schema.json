@@ -4,7 +4,8 @@
   "info": {
     "singularName": "collaboration-company",
     "pluralName": "collaboration-companies",
-    "displayName": "CollaborationCompanies"
+    "displayName": "CollaborationCompanies",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "event-role",
     "pluralName": "event-roles",
-    "displayName": "EventRoles"
+    "displayName": "EventRoles",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false

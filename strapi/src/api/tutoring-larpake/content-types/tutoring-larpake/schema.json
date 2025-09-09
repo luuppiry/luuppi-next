@@ -4,7 +4,8 @@
   "info": {
     "singularName": "tutoring-larpake",
     "pluralName": "tutoring-larpakes",
-    "displayName": "TutoringLarpake"
+    "displayName": "TutoringLarpake",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
