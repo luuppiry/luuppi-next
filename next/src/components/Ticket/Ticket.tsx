@@ -234,67 +234,69 @@ export default function Ticket({
             </div>
             <div className="mt-2">
               {days === 0 ? (
-                <div><p>{dictionary.pages_events.registration_starts}</p>
-                <div className="flex gap-5 mb-1">
-                  <div className="text-sm">
-                    <span className="countdown font-mono text-2xl max-md:text-lg">
-                      {/* @ts-expect-error not supported */}
-                      <span style={{ '--value': days }} />
-                    </span>
-                    <span className="sm:hidden">
-                      {dictionary.general.days_short}
-                    </span>
-                    <span className="max-sm:hidden">
-                      {dictionary.general.days}
-                    </span>
+                <div>
+                  <p>{dictionary.pages_events.registration_starts}</p>
+                  <div className="mb-1 flex gap-5">
+                    <div className="text-sm">
+                      <span className="countdown font-mono text-2xl max-md:text-lg">
+                        {/* @ts-expect-error not supported */}
+                        <span style={{ '--value': days }} />
+                      </span>
+                      <span className="sm:hidden">
+                        {dictionary.general.days_short}
+                      </span>
+                      <span className="max-sm:hidden">
+                        {dictionary.general.days}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="countdown font-mono text-2xl max-md:text-lg">
+                        {/* @ts-expect-error not supported */}
+                        <span style={{ '--value': hours }} />
+                      </span>
+                      <span className="sm:hidden">
+                        {dictionary.general.hours_short}
+                      </span>
+                      <span className="max-sm:hidden">
+                        {dictionary.general.hours}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="countdown font-mono text-2xl max-md:text-lg">
+                        {/* @ts-expect-error not supported */}
+                        <span style={{ '--value': minutes }} />
+                      </span>
+                      <span className="sm:hidden">
+                        {dictionary.general.minutes_short}
+                      </span>
+                      <span className="max-sm:hidden">
+                        {dictionary.general.minutes}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="countdown font-mono text-2xl max-md:text-lg">
+                        {/* @ts-expect-error not supported */}
+                        <span style={{ '--value': seconds }} />
+                      </span>
+                      <span className="sm:hidden">
+                        {dictionary.general.seconds_short}
+                      </span>
+                      <span className="max-sm:hidden">
+                        {dictionary.general.seconds}
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-sm">
-                    <span className="countdown font-mono text-2xl max-md:text-lg">
-                      {/* @ts-expect-error not supported */}
-                      <span style={{ '--value': hours }} />
-                    </span>
-                    <span className="sm:hidden">
-                      {dictionary.general.hours_short}
-                    </span>
-                    <span className="max-sm:hidden">
-                      {dictionary.general.hours}
-                    </span>
-                  </div>
-                  <div className="text-sm">
-                    <span className="countdown font-mono text-2xl max-md:text-lg">
-                      {/* @ts-expect-error not supported */}
-                      <span style={{ '--value': minutes }} />
-                    </span>
-                    <span className="sm:hidden">
-                      {dictionary.general.minutes_short}
-                    </span>
-                    <span className="max-sm:hidden">
-                      {dictionary.general.minutes}
-                    </span>
-                  </div>
-                  <div className="text-sm">
-                    <span className="countdown font-mono text-2xl max-md:text-lg">
-                      {/* @ts-expect-error not supported */}
-                      <span style={{ '--value': seconds }} />
-                    </span>
-                    <span className="sm:hidden">
-                      {dictionary.general.seconds_short}
-                    </span>
-                    <span className="max-sm:hidden">
-                      {dictionary.general.seconds}
-                    </span>
-                  </div>
+                  <p className="font-semibold">
+                    {ticket.registrationStartsAt.toLocaleDateString(lang, {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      timeZone: 'Europe/Helsinki',
+                    })}
+                  </p>
                 </div>
-                <p className="font-semibold">
-                  {ticket.registrationStartsAt.toLocaleDateString(lang, {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    timeZone: 'Europe/Helsinki',
-                  })}
-                </p></div>
               ) : (
                 <div>
                   <p>{dictionary.pages_events.registration_starts}</p>

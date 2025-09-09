@@ -3,15 +3,11 @@ import Negotiator from 'negotiator';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { i18n } from './i18n-config';
-import { SupportedLanguage } from './models/locale';
 
 function getLocale(request: NextRequest): string | undefined {
   // Use cookie if it exists and is valid
   const langCookie = request.cookies.get('lang');
-  if (
-    langCookie &&
-    i18n.locales.includes(langCookie.value as SupportedLanguage)
-  ) {
+  if (langCookie && i18n.locales.includes(langCookie.value as 'fi' | 'en')) {
     return langCookie.value;
   }
 
@@ -27,7 +23,7 @@ function getLocale(request: NextRequest): string | undefined {
   // Use negotiator and intl-localematcher to get best locale
   const languages = new Negotiator({ headers: negotiatorHeaders })
     .languages()
-    .filter((lang) => i18n.locales.includes(lang as SupportedLanguage));
+    .filter((lang) => i18n.locales.includes(lang as 'fi' | 'en'));
 
   const locales: readonly string[] = i18n.locales;
   return matchLocale(languages, locales, i18n.defaultLocale);

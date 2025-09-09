@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
 import type { Attribute, Schema } from '@strapi/strapi';
 
 export interface AdminPermission extends Schema.CollectionType {
@@ -24,12 +23,12 @@ export interface AdminPermission extends Schema.CollectionType {
       Attribute.SetMinMaxLength<{
         minLength: 1;
       }>;
-    actionParameters: Attribute.JSON & Attribute.DefaultTo<{}>;
+    actionParameters: Attribute.JSON & Attribute.DefaultTo<object>;
     subject: Attribute.String &
       Attribute.SetMinMaxLength<{
         minLength: 1;
       }>;
-    properties: Attribute.JSON & Attribute.DefaultTo<{}>;
+    properties: Attribute.JSON & Attribute.DefaultTo<object>;
     conditions: Attribute.JSON & Attribute.DefaultTo<[]>;
     role: Attribute.Relation<'admin::permission', 'manyToOne', 'admin::role'>;
     createdAt: Attribute.DateTime;
@@ -930,6 +929,7 @@ export interface ApiCollaborationCompanyCollaborationCompany
     singularName: 'collaboration-company';
     pluralName: 'collaboration-companies';
     displayName: 'CollaborationCompanies';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -977,6 +977,7 @@ export interface ApiCollaborationGeneralCollaborationGeneral
     singularName: 'collaboration-general';
     pluralName: 'collaboration-generals';
     displayName: 'CollaborationGeneral';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1038,6 +1039,7 @@ export interface ApiCollaborationJobOpportunityCollaborationJobOpportunity
     singularName: 'collaboration-job-opportunity';
     pluralName: 'collaboration-job-opportunities';
     displayName: 'CollaborationJobOpportunities';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1084,6 +1086,7 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
     singularName: 'company';
     pluralName: 'companies';
     displayName: 'Companies';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1258,6 +1261,7 @@ export interface ApiEventRoleEventRole extends Schema.CollectionType {
     singularName: 'event-role';
     pluralName: 'event-roles';
     displayName: 'EventRoles';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1336,6 +1340,7 @@ export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
     singularName: 'job-opportunity';
     pluralName: 'job-opportunities';
     displayName: 'JobOpportunities';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1402,21 +1407,21 @@ export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::jobOpportunity.jobOpportunity',
+      'api::job-opportunity.job-opportunity',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::jobOpportunity.jobOpportunity',
+      'api::job-opportunity.job-opportunity',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     localizations: Attribute.Relation<
-      'api::jobOpportunity.jobOpportunity',
+      'api::job-opportunity.job-opportunity',
       'oneToMany',
-      'api::jobOpportunity.jobOpportunity'
+      'api::job-opportunity.job-opportunity'
     >;
     locale: Attribute.String;
   };
@@ -1524,8 +1529,8 @@ export interface ApiMeetingMinuteDocumentMeetingMinuteDocument
           localized: true;
         };
       }>;
-    year: Attribute.Integer & Attribute.Required;
-    shortMeetingName: Attribute.String;
+    year: Attribute.Integer & Attribute.Required & Attribute.Private;
+    shortMeetingName: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1766,6 +1771,7 @@ export interface ApiOrganizationAlumniOrganizationAlumni
     singularName: 'organization-alumni';
     pluralName: 'organization-alumnis';
     displayName: 'OrganizationAlumni';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1820,6 +1826,7 @@ export interface ApiOrganizationBenefitOrganizationBenefit
     singularName: 'organization-benefit';
     pluralName: 'organization-benefits';
     displayName: 'OrganizationBenefits';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -2032,61 +2039,6 @@ export interface ApiOrganizationHonoraryMemberOrganizationHonoraryMember
   };
 }
 
-export interface ApiOrganizationOfficeHervantaOrganizationOfficeHervanta
-  extends Schema.SingleType {
-  collectionName: 'organization_offices_hervanta';
-  info: {
-    singularName: 'organization-office-hervanta';
-    pluralName: 'organization-offices-hervanta';
-    displayName: 'OrganizationOfficeHervanta';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    Content: Attribute.Component<'shared.page-content'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    Seo: Attribute.Component<'shared.seo'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::organization-office-hervanta.organization-office-hervanta',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::organization-office-hervanta.organization-office-hervanta',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::organization-office-hervanta.organization-office-hervanta',
-      'oneToMany',
-      'api::organization-office-hervanta.organization-office-hervanta'
-    >;
-    locale: Attribute.String;
-  };
-}
-
 export interface ApiOrganizationOfficeOrganizationOffice
   extends Schema.SingleType {
   collectionName: 'organization_offices';
@@ -2137,6 +2089,61 @@ export interface ApiOrganizationOfficeOrganizationOffice
       'api::organization-office.organization-office',
       'oneToMany',
       'api::organization-office.organization-office'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiOrganizationOfficeHervantaOrganizationOfficeHervanta
+  extends Schema.SingleType {
+  collectionName: 'organization_offices_hervanta';
+  info: {
+    singularName: 'organization-office-hervanta';
+    pluralName: 'organization-offices-hervanta';
+    displayName: 'OrganizationOfficeHervanta';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    Content: Attribute.Component<'shared.page-content'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Seo: Attribute.Component<'shared.seo'> &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::organization-office-hervanta.organization-office-hervanta',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::organization-office-hervanta.organization-office-hervanta',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::organization-office-hervanta.organization-office-hervanta',
+      'oneToMany',
+      'api::organization-office-hervanta.organization-office-hervanta'
     >;
     locale: Attribute.String;
   };
@@ -2257,6 +2264,7 @@ export interface ApiPrivacyPolicyPrivacyPolicy extends Schema.SingleType {
     singularName: 'privacy-policy';
     pluralName: 'privacy-policies';
     displayName: 'PrivacyPolicy';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -2370,6 +2378,7 @@ export interface ApiStudiesGeneralStudiesGeneral extends Schema.SingleType {
     singularName: 'studies-general';
     pluralName: 'studies-generals';
     displayName: 'StudiesGeneral';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -2491,6 +2500,7 @@ export interface ApiTutoringFaqTutoringFaq extends Schema.SingleType {
     singularName: 'tutoring-faq';
     pluralName: 'tutoring-faqs';
     displayName: 'TutoringFaq';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -2544,6 +2554,7 @@ export interface ApiTutoringGeneralTutoringGeneral extends Schema.SingleType {
     singularName: 'tutoring-general';
     pluralName: 'tutoring-generals';
     displayName: 'TutoringGeneral';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -2604,6 +2615,7 @@ export interface ApiTutoringLarpakeTutoringLarpake extends Schema.SingleType {
     singularName: 'tutoring-larpake';
     pluralName: 'tutoring-larpakes';
     displayName: 'TutoringLarpake';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -2683,7 +2695,6 @@ declare module '@strapi/types' {
       'api::job-opportunity.job-opportunity': ApiJobOpportunityJobOpportunity;
       'api::luuppi-sanomat.luuppi-sanomat': ApiLuuppiSanomatLuuppiSanomat;
       'api::meeting-minute-document.meeting-minute-document': ApiMeetingMinuteDocumentMeetingMinuteDocument;
-      'api::meeting-minutes-year.meeting-minutes-year': ApiMeetingMinutesYearMeetingMinutesYear;
       'api::news-list.news-list': ApiNewsListNewsList;
       'api::news-single.news-single': ApiNewsSingleNewsSingle;
       'api::notification.notification': ApiNotificationNotification;
@@ -2692,8 +2703,8 @@ declare module '@strapi/types' {
       'api::organization-document.organization-document': ApiOrganizationDocumentOrganizationDocument;
       'api::organization-general.organization-general': ApiOrganizationGeneralOrganizationGeneral;
       'api::organization-honorary-member.organization-honorary-member': ApiOrganizationHonoraryMemberOrganizationHonoraryMember;
-      'api::organization-office-hervanta.organization-office-hervanta': ApiOrganizationOfficeHervantaOrganizationOfficeHervanta;
       'api::organization-office.organization-office': ApiOrganizationOfficeOrganizationOffice;
+      'api::organization-office-hervanta.organization-office-hervanta': ApiOrganizationOfficeHervantaOrganizationOfficeHervanta;
       'api::organization-rule.organization-rule': ApiOrganizationRuleOrganizationRule;
       'api::organization-tradition-guideline.organization-tradition-guideline': ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline;
       'api::privacy-policy.privacy-policy': ApiPrivacyPolicyPrivacyPolicy;

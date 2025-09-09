@@ -15,8 +15,12 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const searchParams = await props.searchParams;
   const session = await auth();
   const dictionary = await getDictionary(params.lang);
-  const yearParam = Array.isArray(searchParams.year) ? searchParams.year[0] : searchParams.year;
-  const selectedYear = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear();
+  const yearParam = Array.isArray(searchParams.year)
+    ? searchParams.year[0]
+    : searchParams.year;
+  const selectedYear = yearParam
+    ? parseInt(yearParam, 10)
+    : new Date().getFullYear();
 
   const user = session?.user;
   if (!user?.entraUserUuid || !user?.isLuuppiMember) {
@@ -39,7 +43,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     >(
       'fi',
       `/api/meeting-minute-documents?populate[1]=image&pagination[page]=${page}&pagination[pageSize]=100&sort[0]=meetingDate:desc`,
-      ['meeting-minute-document']
+      ['meeting-minute-document'],
     );
     allDocuments = allDocuments.concat(response.data);
     totalPages = response.meta?.pagination?.pageCount || 1;
@@ -49,9 +53,9 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const years = Array.from(
     new Set(
       allDocuments
-        .map(doc => new Date(doc.attributes.meetingDate).getFullYear())
-        .filter(year => !isNaN(year))
-    )
+        .map((doc) => new Date(doc.attributes.meetingDate).getFullYear())
+        .filter((year) => !isNaN(year)),
+    ),
   ).sort((a, b) => b - a);
 
   const filteredDocuments = allDocuments.filter((doc) => {
@@ -62,7 +66,9 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   return (
     <div className="relative flex flex-col gap-12">
       <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
-        <h1>{dictionary.navigation.meeting_minutes} {selectedYear}</h1>
+        <h1>
+          {dictionary.navigation.meeting_minutes} {selectedYear}
+        </h1>
         <div className="dropdown sm:dropdown-end">
           <div className="btn m-1" role="button" tabIndex={0}>
             {dictionary.pages_meeting_minutes_year.other_meeting_minutes_years}
@@ -71,13 +77,15 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
             className="menu dropdown-content z-[9999] grid w-80 grid-cols-4 gap-2 rounded-box bg-base-100 p-2 shadow"
             tabIndex={0}
           >
-          {years.map((year) => (
-            <li key={year}>
-              <a href={`/${params.lang}/organization/meeting-minutes?year=${year}`}>
-                {year}
-              </a>
-            </li>
-          ))}
+            {years.map((year) => (
+              <li key={year}>
+                <a
+                  href={`/${params.lang}/organization/meeting-minutes?year=${year}`}
+                >
+                  {year}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -89,13 +97,13 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
             href={`/${params.lang}/organization/meeting-minutes/${publication.id}`}
           >
             {publication.attributes.image?.data?.attributes?.url && (
-              <div
-                className="relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300"
-              >
+              <div className="relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
                 <Image
                   alt={`${dictionary.navigation.meeting_minutes} cover`}
                   className="h-full w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
-                  src={getStrapiUrl(publication.attributes.image.data.attributes.url)}
+                  src={getStrapiUrl(
+                    publication.attributes.image.data.attributes.url,
+                  )}
                   fill
                 />
               </div>

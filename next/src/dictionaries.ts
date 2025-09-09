@@ -5,10 +5,10 @@ const dictionaries = {
   fi: () => import('./locales/fi.json').then((module) => module.default),
 };
 
-export const getDictionary = async (locale: 'fi' | 'en') => {
+export const getDictionary = async (locale: string) => {
   const supportedLocales = ['fi', 'en'];
   if (!supportedLocales.includes(locale)) {
     locale = 'fi';
   }
-  return dictionaries[locale]();
+  return dictionaries[locale as keyof typeof dictionaries]();
 };

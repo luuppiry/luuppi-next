@@ -2,9 +2,6 @@
 const nextConfig = {
   output: 'standalone',
   poweredByHeader: false,
-  experimental: {
-    ppr: 'incremental',
-  },
   images: {
     remotePatterns: [
       {
