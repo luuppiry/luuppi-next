@@ -4,13 +4,12 @@ import AdminUsersTable from '@/components/AdminUserManagement/AdminUsersTable/Ad
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 interface AdminProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 

@@ -1,6 +1,6 @@
 'use client';
 import { profileUpdate } from '@/actions/profile-update';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { User } from '@prisma/client';
 import { useState } from 'react';
 import { BiErrorCircle } from 'react-icons/bi';
@@ -23,7 +23,7 @@ const initialState: ProfileFormResponse = {
 
 interface ProfileUserInfoFormProps {
   user: User;
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
   isLuuppiMember: boolean;
 }

@@ -1,10 +1,10 @@
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import Link from 'next/link';
 import RenderNews from './RenderNews/RenderNews';
 
 interface NewsPreviewProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function NewsPreview({ dictionary, lang }: NewsPreviewProps) {

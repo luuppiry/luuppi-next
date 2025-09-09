@@ -3,13 +3,13 @@ import { shortDateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { redirect } from 'next/navigation';
 import AdminExportEventButton from './AdminExportEventButton/AdminExportEventButton';
 
 interface AdminEventManagementProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default async function AdminEventManagement({

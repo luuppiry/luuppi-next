@@ -2,7 +2,7 @@ import { dateFormat } from '@/libs/constants';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import eventPlaceholder from '../../../../public/images/event_placeholder.png';
 import DayBadge from '../DayBadge/DayBadge';
 
 interface RenderEventsProps {
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
 }
 

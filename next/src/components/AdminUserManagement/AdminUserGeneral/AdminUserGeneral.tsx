@@ -4,7 +4,7 @@ import { UserWithRegistrations } from '@/app/[lang]/(content-pages)/(protected-p
 import FormInput from '@/components/FormInput/FormInput';
 import FormSelect from '@/components/FormSelect/FormSelect';
 import SubmitButton from '@/components/SubmitButton/SubmitButton';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { useState } from 'react';
 import { BiErrorCircle } from 'react-icons/bi';
 
@@ -23,7 +23,7 @@ const initialState: UserEditGeneralResponse = {
 interface AdminUserGeneralProps {
   dictionary: Dictionary;
   user: UserWithRegistrations;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function AdminUserGeneral({

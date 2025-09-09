@@ -2,7 +2,6 @@ import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import { getCachedEventRegistrations } from '@/libs/db/queries/get-cached-event-registrations';
 import { getCachedUser } from '@/libs/db/queries/get-cached-user';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { BiErrorCircle } from 'react-icons/bi';
 import { IoIosInformationCircleOutline } from 'react-icons/io';
@@ -10,7 +9,7 @@ import { IoWarningOutline } from 'react-icons/io5';
 import Ticket from './Ticket';
 
 interface TicketAreaProps {
-  lang: SupportedLanguage;
+  lang: string;
   event: APIResponse<'api::event.event'>;
 }
 

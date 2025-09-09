@@ -1,5 +1,5 @@
 import { signOut } from '@/actions/auth';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { Session } from 'next-auth';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { RiUser3Fill } from 'react-icons/ri';
@@ -7,7 +7,7 @@ import CloseableLinks from './CloseableLinks/CloseableLinks';
 
 interface UserDropdownProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
   session: Session | null;
 }
 

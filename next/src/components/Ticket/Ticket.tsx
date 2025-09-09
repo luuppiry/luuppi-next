@@ -1,7 +1,7 @@
 'use client';
 import { reservationCreate } from '@/actions/reservation-create';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BuyTicketsButton } from './BuyTicketsButton';
@@ -20,7 +20,7 @@ interface TicketProps {
   };
   eventId: number;
   eventStartsAt: Date;
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
   disabled?: boolean;
   isOwnQuota?: boolean;

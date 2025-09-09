@@ -1,12 +1,11 @@
 import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import roboSvg from '../../../../../public/robo_404.svg';
 
 interface NotFoundProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function NotFound(props: NotFoundProps) {

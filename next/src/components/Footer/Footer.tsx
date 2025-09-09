@@ -1,5 +1,5 @@
 import { footerLinks } from '@/libs/constants';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -15,7 +15,7 @@ import luuppiSvg from '../../../public/luuppi.svg';
 
 interface FooterProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function Footer({ dictionary, lang }: FooterProps) {

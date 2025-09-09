@@ -1,4 +1,3 @@
-import { SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import bannerDesktop from '../../../public/banner.png';
 import bannerMobile from '../../../public/banner_mobile.png';
@@ -7,7 +6,7 @@ import luuppiBannerTextEn from '../../../public/luuppi_banner_text_en.svg';
 import luuppiBannerTextFi from '../../../public/luuppi_banner_text_fi.svg';
 
 interface BannerProps {
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function Banner({ lang }: BannerProps) {

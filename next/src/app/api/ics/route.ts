@@ -2,7 +2,6 @@ import { getDictionary } from '@/dictionaries';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
 import { addEventRegisterationOpensAtInfo } from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection, APIResponseData } from '@/types/types';
 import ical from 'ical-generator';
 import { NextRequest } from 'next/server';
@@ -19,7 +18,7 @@ interface IcsEvent {
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
-  const lang = searchParams.get('lang') as SupportedLanguage | undefined;
+  const lang = searchParams.get('lang') as string | undefined;
   const allowedLangs = ['en', 'fi'];
 
   if (!lang || !allowedLangs.includes(lang)) {

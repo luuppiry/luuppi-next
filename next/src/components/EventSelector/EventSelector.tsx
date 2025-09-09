@@ -1,6 +1,6 @@
 'use client';
 import { Event } from '@/models/event';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { SelectedViewContext } from '@/providers/EventSelectorProvider';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -31,7 +31,7 @@ const baseUrlWithoutHttp = process.env.NEXT_PUBLIC_BASE_URL?.replace(
 interface EventSelectorProps {
   events: Event[];
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function EventSelector({

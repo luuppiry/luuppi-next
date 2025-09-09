@@ -1,12 +1,12 @@
 import { formatDateRangeShort } from '@/libs/utils/format-date-range';
 import { Event } from '@/models/event';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import Link from 'next/link';
 
 interface ViewEventsDialogProps {
   events: Event[];
   onClose: () => void;
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
 }
 

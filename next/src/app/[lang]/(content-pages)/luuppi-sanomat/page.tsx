@@ -2,12 +2,11 @@ import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
 
 interface LuuppiSanomatProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function LuuppiSanomat(props: LuuppiSanomatProps) {

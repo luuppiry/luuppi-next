@@ -2,12 +2,11 @@ import { auth } from '@/auth';
 import LegacyAccountMigrate from '@/components/LegacyAccountMigrate/LegacyAccountMigrate';
 import { getDictionary } from '@/dictionaries';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 interface MigrateAccountProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function MigrateAccount(props: MigrateAccountProps) {

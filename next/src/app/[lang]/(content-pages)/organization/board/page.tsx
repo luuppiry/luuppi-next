@@ -4,14 +4,13 @@ import { flipBoardLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { groupBoardByYear } from '@/libs/strapi/group-board-by-year';
 import { getBoardMemberJsonLd } from '@/libs/utils/json-ld';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Script from 'next/script';
 
 interface BoardProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function Board(props: BoardProps) {

@@ -1,6 +1,6 @@
 'use client';
 import { emailSendVerify } from '@/actions/email-send-verify';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { User } from '@prisma/client';
 import { useState } from 'react';
 import { BiErrorCircle } from 'react-icons/bi';
@@ -21,7 +21,7 @@ const initialState: ProfileEmailResponse = {
 
 interface ProfileEmailFormProps {
   user: User;
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
 }
 

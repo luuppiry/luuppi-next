@@ -1,11 +1,11 @@
 import { Event } from '@/models/event';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { SelectedViewContext } from '@/providers/EventSelectorProvider';
 import { useContext, useMemo, useState } from 'react';
 import { BiArrowToLeft, BiArrowToRight } from 'react-icons/bi';
 import ViewEventsDialog from './ViewEventsDialog/ViewEventsDialog';
 
-const getDaysOfWeek = (locale: SupportedLanguage) => {
+const getDaysOfWeek = (locale: string) => {
   const baseDate = new Date(Date.UTC(2021, 0, 10));
   const daysOfWeek = [];
 
@@ -46,11 +46,7 @@ const groupEventsByStartDate = (events: Event[]): Record<string, Event[]> =>
       {} as Record<string, Event[]>,
     );
 
-const generateMonthGrid = (
-  year: number,
-  month: number,
-  locale: SupportedLanguage,
-) => {
+const generateMonthGrid = (year: number, month: number, locale: string) => {
   const firstDayOfMonth = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -79,7 +75,7 @@ const generateMonthGrid = (
 };
 
 interface MobileCalendarProps {
-  lang: SupportedLanguage;
+  lang: string;
   events: Event[];
   dictionary: Dictionary;
 }

@@ -7,11 +7,10 @@ import Partners from '@/components/Partners/Partners';
 import TelegramPreview from '@/components/TelegramPreview/TelegramPreview';
 import { getDictionary } from '@/dictionaries';
 import { getOrganizationJsonLd } from '@/libs/utils/json-ld';
-import { SupportedLanguage } from '@/models/locale';
 import Script from 'next/script';
 
 interface HomeProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function Home(props: HomeProps) {

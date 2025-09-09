@@ -1,5 +1,4 @@
 import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,7 +6,7 @@ import roboSvg from '../../../../../../public/robo_500.svg';
 
 interface AuthErrorProps {
   params: Promise<{
-    lang: SupportedLanguage;
+    lang: string;
   }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }

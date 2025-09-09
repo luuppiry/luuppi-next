@@ -1,9 +1,8 @@
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 
 export const getSelectChoice = (
   event: APIResponse<'api::event.event'>['data'] | undefined,
-  lang: SupportedLanguage,
+  lang: string,
   question: string,
   answer: string,
 ) => {

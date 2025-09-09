@@ -3,7 +3,7 @@ import {
   GetUsersResponse,
   GetUsersSuccessResponse,
 } from '@/app/api/users/route';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { BiErrorCircle, BiSearch } from 'react-icons/bi';
@@ -11,7 +11,7 @@ import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 
 interface AdminUsersTableProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 const PAGE_SIZE = 25;

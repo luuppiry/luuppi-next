@@ -1,5 +1,5 @@
 import { discoverLinks } from '@/libs/constants';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
@@ -7,7 +7,7 @@ import ccchaosSvg from '../../../public/ccchaos.svg';
 
 interface DiscoverProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function Discover({ dictionary, lang }: DiscoverProps) {

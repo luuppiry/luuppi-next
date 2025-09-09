@@ -1,6 +1,5 @@
 import { LuuppiEmailVerify as LuuppiEmailVerifyEn } from '@/../emails/email-verify-en';
 import { LuuppiEmailVerify as LuuppiEmailVerifyFi } from '@/../emails/email-verify-fi';
-import { SupportedLanguage } from '@/models/locale';
 import { render } from '@react-email/components';
 import { logger } from '../utils/logger';
 import { sendEmail } from './nodemailer';
@@ -10,7 +9,7 @@ interface SendVerificationEmailParams {
   name: string;
   verificationLink: string;
   subject: string;
-  language: SupportedLanguage;
+  language: string;
 }
 
 export async function sendVerificationEmail({

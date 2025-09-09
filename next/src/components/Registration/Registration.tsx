@@ -1,7 +1,7 @@
 import { reservationCancel } from '@/actions/reservation-cancel';
 import { longDateFormat, shortTimeFormat } from '@/libs/constants';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { $Enums } from '@prisma/client';
 import QuestionButton from '../QuestionButton/QuestionButton';
 import SubmitButton from '../SubmitButton/SubmitButton';
@@ -36,7 +36,7 @@ interface RegistrationProps {
     registrationId: number;
   }[];
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function Registration({

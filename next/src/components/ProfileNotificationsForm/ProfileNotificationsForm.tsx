@@ -1,11 +1,11 @@
 'use client';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { User } from '@prisma/client';
 import FormCheckbox from '../FormCheckbox/FormCheckbox';
 
 interface ProfileNotificationsFormProps {
   user: User;
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
 }
 

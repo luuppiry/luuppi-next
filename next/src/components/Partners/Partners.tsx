@@ -1,10 +1,10 @@
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import Link from 'next/link';
 import RenderPartners from './RenderPartners/RenderPartners';
 
 interface PartnersProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function Partners({ dictionary, lang }: PartnersProps) {

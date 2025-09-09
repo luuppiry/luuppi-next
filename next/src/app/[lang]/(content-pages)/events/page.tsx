@@ -5,7 +5,6 @@ import { addEventRegisterationOpensAtInfo } from '@/libs/strapi/events';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { Event } from '@/models/event';
-import { SupportedLanguage } from '@/models/locale';
 import {
   APIResponse,
   APIResponseCollection,
@@ -14,7 +13,7 @@ import {
 import { Metadata } from 'next';
 
 interface EventsProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function Events(props: EventsProps) {

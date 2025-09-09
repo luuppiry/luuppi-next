@@ -1,7 +1,7 @@
 'use client';
 import { signIn, signOut } from '@/actions/auth';
 import { NavLink, navLinksMobile } from '@/libs/constants';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { Session } from 'next-auth';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -20,7 +20,7 @@ const InstallPwaButton = dynamic(() => import('./InstallPwaButton'), {
 
 interface MobileNavbarProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
   session: Session | null;
 }
 

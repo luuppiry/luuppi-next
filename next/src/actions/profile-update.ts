@@ -4,17 +4,13 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath } from 'next/cache';
 
 const options = {
   cacheKey: 'update-profile',
 };
 
-export async function profileUpdate(
-  lang: SupportedLanguage,
-  formData: FormData,
-) {
+export async function profileUpdate(lang: string, formData: FormData) {
   const dictionary = await getDictionary(lang);
   const session = await auth();
 

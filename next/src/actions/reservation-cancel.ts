@@ -1,14 +1,10 @@
 'use server';
 import { auth } from '@/auth';
 import prisma from '@/libs/db/prisma';
-import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function reservationCancel(
-  lang: SupportedLanguage,
-  formData: FormData,
-) {
+export async function reservationCancel(lang: string, formData: FormData) {
   const session = await auth();
 
   if (!session?.user) return;

@@ -2,11 +2,10 @@
 import { eventExport } from '@/actions/admin/event-export';
 import SubmitButton from '@/components/SubmitButton/SubmitButton';
 import { csvToHtml } from '@/libs/utils/csv-to-html';
-import { SupportedLanguage } from '@/models/locale';
 import { PiFileCsv, PiFileHtml } from 'react-icons/pi';
 
 interface AdminExportEventButtonProps {
-  lang: SupportedLanguage;
+  lang: string;
   eventId: number;
   disabled?: boolean;
 }

@@ -3,7 +3,6 @@ import Header from '@/components/Header/Header';
 import NotificationBar from '@/components/NotificationBar/NotificationBar';
 import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
-import { SupportedLanguage } from '@/models/locale';
 import EventSelectorProvider from '@/providers/EventSelectorProvider';
 import { APIResponse } from '@/types/types';
 import type { Metadata, Viewport } from 'next';
@@ -20,7 +19,7 @@ const titilliumFont = Poppins({
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function RootLayout(props: RootLayoutProps) {
@@ -70,7 +69,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);

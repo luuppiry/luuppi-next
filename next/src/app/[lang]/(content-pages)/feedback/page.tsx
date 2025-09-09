@@ -1,10 +1,9 @@
 import FeedbackForm from '@/components/FeedbackForm/FeedbackForm';
 import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 
 interface FeedbackProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function Feedback(props: FeedbackProps) {

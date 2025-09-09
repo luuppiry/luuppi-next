@@ -1,10 +1,9 @@
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { QuestionType } from '@prisma/client';
 
 export const getQuestion = (
   event: APIResponse<'api::event.event'>['data'] | undefined,
-  lang: SupportedLanguage,
+  lang: string,
   question: string,
   type: QuestionType,
 ) => {

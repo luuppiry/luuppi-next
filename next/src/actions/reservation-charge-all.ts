@@ -5,12 +5,11 @@ import prisma from '@/libs/db/prisma';
 import { sendEventReceiptEmail } from '@/libs/emails/send-event-verify';
 import { createCharge } from '@/libs/payments/create-charge';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { randomUUID } from 'crypto';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function reservationChargeAll(lang: SupportedLanguage) {
+export async function reservationChargeAll(lang: string) {
   const dictionary = await getDictionary(lang);
   const session = await auth();
 

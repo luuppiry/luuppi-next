@@ -5,7 +5,6 @@ import prisma from '@/libs/db/prisma';
 import { redisClient } from '@/libs/db/redis';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { revalidateTag } from 'next/cache';
 
@@ -16,7 +15,7 @@ const options = {
 export async function reservationCreate(
   eventId: number,
   amount: number,
-  lang: SupportedLanguage,
+  lang: string,
   selectedQuota: string,
   userProvidedTargetedRole: string | undefined,
 ) {

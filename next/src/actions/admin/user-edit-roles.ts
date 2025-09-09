@@ -3,7 +3,6 @@ import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath, revalidateTag } from 'next/cache';
 
 export async function userEditRoles(
@@ -11,7 +10,7 @@ export async function userEditRoles(
     strapiRoleUuid: string;
     expiresAt: Date | null;
   }[],
-  lang: SupportedLanguage,
+  lang: string,
   userToEditEntraUuid: string,
 ) {
   const dictionary = await getDictionary(lang);

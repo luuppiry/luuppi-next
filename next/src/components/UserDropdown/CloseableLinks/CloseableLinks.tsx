@@ -1,11 +1,11 @@
 'use client';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import Link from 'next/link';
 import { MdOutlineBackup } from 'react-icons/md';
 import { RiAdminLine, RiCalendarEventLine, RiUser3Fill } from 'react-icons/ri';
 
 interface CloseableLinkProps {
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
   isLuuppiHato?: boolean;
   isLuuppiMember?: boolean;

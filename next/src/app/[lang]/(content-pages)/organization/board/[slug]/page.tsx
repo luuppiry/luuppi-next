@@ -4,7 +4,6 @@ import { flipBoardLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { groupBoardByYear } from '@/libs/strapi/group-board-by-year';
 import { getBoardMemberJsonLd } from '@/libs/utils/json-ld';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -12,7 +11,7 @@ import { redirect } from 'next/navigation';
 import Script from 'next/script';
 
 interface OldBoardProps {
-  params: Promise<{ slug: string; lang: SupportedLanguage }>;
+  params: Promise<{ slug: string; lang: string }>;
 }
 
 export default async function OldBoard(props: OldBoardProps) {

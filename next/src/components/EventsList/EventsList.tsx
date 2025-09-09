@@ -2,14 +2,13 @@ import { longDateFormat } from '@/libs/constants';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { formatDateRangeLong } from '@/libs/utils/format-date-range';
 import { Event } from '@/models/event';
-import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { IoTicketSharp } from 'react-icons/io5';
 
 interface EventListProps {
   events: Event[];
   showPastEvents: boolean;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function EventsList({

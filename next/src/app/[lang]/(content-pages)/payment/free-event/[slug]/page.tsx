@@ -1,11 +1,10 @@
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
-import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 interface FreeEventProps {
-  params: Promise<{ slug: string; lang: SupportedLanguage }>;
+  params: Promise<{ slug: string; lang: string }>;
 }
 
 export default async function Event(props: FreeEventProps) {

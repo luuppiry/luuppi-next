@@ -9,7 +9,6 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { formatDateRangeLong } from '@/libs/utils/format-date-range';
 import { getEventJsonLd } from '@/libs/utils/json-ld';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
@@ -24,7 +23,7 @@ import { PiImageBroken } from 'react-icons/pi';
 import { RiProhibitedLine } from 'react-icons/ri';
 
 interface EventProps {
-  params: Promise<{ slug: string; lang: SupportedLanguage }>;
+  params: Promise<{ slug: string; lang: string }>;
 }
 
 export default async function Event(props: EventProps) {

@@ -4,7 +4,6 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath, revalidateTag } from 'next/cache';
 
 const options = {
@@ -12,10 +11,7 @@ const options = {
   memberRole: process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
 };
 
-export async function migrateLegacyAccount(
-  lang: SupportedLanguage,
-  formData: FormData,
-) {
+export async function migrateLegacyAccount(lang: string, formData: FormData) {
   const dictionary = await getDictionary(lang);
 
   const session = await auth();

@@ -6,7 +6,6 @@ import { getAccessToken } from '@/libs/get-access-token';
 import { verifyGraphAPIEmail } from '@/libs/graph/graph-verify-email';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const options = {
@@ -15,10 +14,7 @@ const options = {
   cacheKey: 'email-verification',
 };
 
-export async function emailSendVerify(
-  lang: SupportedLanguage,
-  formData: FormData,
-) {
+export async function emailSendVerify(lang: string, formData: FormData) {
   const dictionary = await getDictionary(lang);
 
   const session = await auth();

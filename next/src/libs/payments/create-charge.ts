@@ -1,4 +1,3 @@
-import { SupportedLanguage } from '@/models/locale';
 import 'server-only';
 import { stripe } from '.';
 import { logger } from '../utils/logger';
@@ -18,7 +17,7 @@ interface ChargePayment {
 
 export const createCharge = async (
   chargeObj: ChargePayment,
-  lang: SupportedLanguage,
+  lang: string,
   email: string,
 ): Promise<string> => {
   try {

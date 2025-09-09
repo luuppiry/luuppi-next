@@ -1,25 +1,24 @@
-import { SupportedLanguage } from '@/models/locale';
 import 'server-only';
 import { logger } from '../utils/logger';
 import { getStrapiUrl } from './get-strapi-url';
 
 // Define the function overloads
 export function getStrapiData<T>(
-  lang: SupportedLanguage,
+  lang: string,
   url: string,
   revalidateTags: string[],
   ignoreError: true,
 ): Promise<T | null>;
 
 export function getStrapiData<T>(
-  lang: SupportedLanguage,
+  lang: string,
   url: string,
   revalidateTags: string[],
   ignoreError?: false,
 ): Promise<T>;
 
 export async function getStrapiData<T>(
-  lang: SupportedLanguage,
+  lang: string,
   url: string,
   revalidateTags: string[],
   ignoreError?: boolean,

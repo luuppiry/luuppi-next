@@ -1,11 +1,10 @@
-import { SupportedLanguage } from '@/models/locale';
 import { longDateFormat, shortDateFormat, shortTimeFormat } from '../constants';
 import { firstLetterToUpperCase } from './first-letter-uppercase';
 
 export const formatDateRangeLong = (
   start: Date,
   end: Date,
-  lang: SupportedLanguage,
+  lang: string,
 ): string => {
   const startUTC = new Date(
     start.getTime() + start.getTimezoneOffset() * 60000,
@@ -42,7 +41,7 @@ export const formatDateRangeLong = (
 export const formatDateRangeShort = (
   start: Date,
   end: Date,
-  lang: SupportedLanguage,
+  lang: string,
 ): string => {
   const startUTC = new Date(
     start.getTime() + start.getTimezoneOffset() * 60000,

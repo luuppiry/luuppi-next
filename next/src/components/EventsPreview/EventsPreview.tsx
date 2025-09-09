@@ -1,10 +1,10 @@
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import Link from 'next/link';
 import RenderEvents from './RenderEvents/RenderEvents';
 
 interface EventsPreviewProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function EventsPreview({

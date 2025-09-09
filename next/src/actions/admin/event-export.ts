@@ -6,7 +6,6 @@ import { getQuestion } from '@/libs/strapi/get-question';
 import { getSelectChoice } from '@/libs/strapi/get-select-choice';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 
 function escapeCsvField(field: any): string {
@@ -22,7 +21,7 @@ function escapeCsvField(field: any): string {
   return stringField;
 }
 
-export async function eventExport(lang: SupportedLanguage, eventId: number) {
+export async function eventExport(lang: string, eventId: number) {
   const dictionary = await getDictionary(lang);
 
   const session = await auth();

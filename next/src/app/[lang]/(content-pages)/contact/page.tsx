@@ -2,7 +2,6 @@ import ContentPage from '@/components/ContentPage/ContentPage';
 import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 
@@ -11,7 +10,7 @@ const url =
 const tags = ['contact'];
 
 interface ContactProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function Contact(props: ContactProps) {

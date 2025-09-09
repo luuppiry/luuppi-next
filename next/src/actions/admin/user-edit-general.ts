@@ -3,11 +3,10 @@ import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 
 export async function userEditGeneral(
   formData: FormData,
-  lang: SupportedLanguage,
+  lang: string,
   userToEditEntraUuid: string,
 ) {
   const dictionary = await getDictionary(lang);

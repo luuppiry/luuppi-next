@@ -1,7 +1,7 @@
 import { dateFormat } from '@/libs/constants';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,7 +12,7 @@ import SidePartners from '../SidePartners/SidePartners';
 interface ContentPageProps {
   contentData: any;
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default async function ContentPage({

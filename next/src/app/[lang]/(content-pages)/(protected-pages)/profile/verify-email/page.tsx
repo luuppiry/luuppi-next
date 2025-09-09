@@ -6,7 +6,6 @@ import prisma from '@/libs/db/prisma';
 import { getAccessToken } from '@/libs/get-access-token';
 import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
@@ -14,7 +13,7 @@ import { redirect } from 'next/navigation';
 const tenantName = process.env.AZURE_TENANT_NAME!;
 
 interface VerifyEmailProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 

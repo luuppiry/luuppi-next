@@ -1,11 +1,10 @@
 import { getDictionary } from '@/dictionaries';
 import { stripe } from '@/libs/payments';
-import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 interface PaymentProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 

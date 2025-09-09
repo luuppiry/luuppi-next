@@ -1,6 +1,6 @@
 'use client';
 import { reservationQuestionSubmit } from '@/actions/reservation-question-submit';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { QuestionContext } from '@/providers/QuestionProvider';
 import { useContext, useRef, useState } from 'react';
 import { BiErrorCircle } from 'react-icons/bi';
@@ -11,7 +11,7 @@ import SubmitButton from '../SubmitButton/SubmitButton';
 
 interface QuestionDialogProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function QuestionDialog({

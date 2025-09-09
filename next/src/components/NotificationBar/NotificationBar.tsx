@@ -1,5 +1,4 @@
 'use client';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { useEffect, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
@@ -8,7 +7,7 @@ import './NotificationBar.css';
 
 interface NotificationBarProps {
   notification: APIResponse<'api::notification.notification'> | null;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function NotificationBar({

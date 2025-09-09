@@ -2,7 +2,6 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
@@ -13,7 +12,7 @@ const url = '/api/job-opportunities?populate=logo';
 const tags = ['job-opportunity'];
 
 interface CollaborationJobOpportunitiesProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function CollaborationJobOpportunities(

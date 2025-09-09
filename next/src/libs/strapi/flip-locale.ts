@@ -1,4 +1,3 @@
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseData } from '@/types/types';
 import 'server-only';
 
@@ -11,7 +10,7 @@ import 'server-only';
  * @returns Board members data with correct locale
  */
 export const flipBoardLocale = (
-  lang: SupportedLanguage,
+  lang: string,
   data: APIResponseData<'api::board.board'>,
 ) =>
   lang === 'en'
@@ -39,7 +38,7 @@ export const flipBoardLocale = (
  * @returns News data with correct locale
  */
 export const flipNewsLocale = (
-  lang: SupportedLanguage,
+  lang: string,
   data: APIResponseData<'api::news-single.news-single'>[],
 ) =>
   lang === 'en'
@@ -70,7 +69,7 @@ export const flipNewsLocale = (
  * @returns Sanomat data with correct locale
  */
 export const flipSanomatLocale = (
-  lang: SupportedLanguage,
+  lang: string,
   data: APIResponseData<'api::luuppi-sanomat.luuppi-sanomat'>[],
 ) =>
   lang === 'en'
@@ -98,7 +97,7 @@ export const flipSanomatLocale = (
  * @returns Sanomat data with correct locale
  */
 export const flipMeetingMinuteLocale = (
-  lang: SupportedLanguage,
+  lang: string,
   data: APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[],
 ) =>
   lang === 'en'

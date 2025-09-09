@@ -1,5 +1,5 @@
 'use client';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import Link from 'next/link';
 
 interface HideableLinkProps {
@@ -8,7 +8,7 @@ interface HideableLinkProps {
     href: string;
   };
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function HideableLink({

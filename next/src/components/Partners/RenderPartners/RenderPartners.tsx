@@ -1,13 +1,12 @@
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import Marquee from 'react-fast-marquee';
 
 interface RenderPartnersProps {
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default async function RenderPartners({ lang }: RenderPartnersProps) {

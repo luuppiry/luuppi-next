@@ -7,7 +7,6 @@ import prisma from '@/libs/db/prisma';
 import { checkStatus } from '@/libs/payments/check-status';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import QuestionProvider from '@/providers/QuestionProvider';
 import { APIResponse } from '@/types/types';
 import { Payment, PaymentStatus } from '@prisma/client';
@@ -16,7 +15,7 @@ import { redirect } from 'next/navigation';
 import { BiErrorCircle } from 'react-icons/bi';
 
 interface OwnEventsProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function OwnEvents(props: OwnEventsProps) {

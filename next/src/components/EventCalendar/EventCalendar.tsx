@@ -1,6 +1,6 @@
 'use client';
 import { Event } from '@/models/event';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { SelectedViewContext } from '@/providers/EventSelectorProvider';
 import fiLocale from '@fullcalendar/core/locales/fi';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -13,7 +13,7 @@ import './EventCalendar.css';
 
 interface EventCalendarProps {
   events: Event[];
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
 }
 

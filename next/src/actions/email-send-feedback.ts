@@ -4,7 +4,6 @@ import { luuppiEmails } from '@/libs/constants/emails';
 import { sendFeedbackEmail } from '@/libs/emails/send-feedback-email';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 
 const options = {
   turnstileVerifyEndpoint:
@@ -13,10 +12,7 @@ const options = {
   cacheKey: 'feedback',
 };
 
-export async function emailSendFeedback(
-  lang: SupportedLanguage,
-  formData: FormData,
-) {
+export async function emailSendFeedback(lang: string, formData: FormData) {
   const dictionary = await getDictionary(lang);
 
   const isLimited = await isRateLimited(options.cacheKey, options.cacheKey, 10);

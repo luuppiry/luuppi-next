@@ -1,5 +1,5 @@
 import { navLinksDesktop } from '@/libs/constants';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiArrowDropDownLine } from 'react-icons/ri';
@@ -11,7 +11,7 @@ import ScrollListener from './ScrollListener/ScrollListener';
 
 interface HeaderProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function Header({ dictionary, lang }: HeaderProps) {

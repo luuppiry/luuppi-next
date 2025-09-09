@@ -1,11 +1,11 @@
 'use client';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef } from 'react';
 
 interface HeroProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function Hero({ dictionary, lang }: HeroProps) {

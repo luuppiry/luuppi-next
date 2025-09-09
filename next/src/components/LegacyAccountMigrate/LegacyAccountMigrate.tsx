@@ -1,6 +1,6 @@
 'use client';
 import { migrateLegacyAccount } from '@/actions/migrate-legacy-account';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { useState } from 'react';
 import { BiErrorCircle } from 'react-icons/bi';
 import FormInput from '../FormInput/FormInput';
@@ -8,7 +8,7 @@ import SubmitButton from '../SubmitButton/SubmitButton';
 
 interface LegacyAccountMigrateProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 const initialState = {

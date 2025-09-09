@@ -3,7 +3,7 @@ import { userEditRoles } from '@/actions/admin/user-edit-roles';
 import { UserWithRegistrations } from '@/app/[lang]/(content-pages)/(protected-pages)/admin/user/[slug]/page';
 import FormAutocomplete from '@/components/FormAutocomplete/FormAutocomplete';
 import SubmitButton from '@/components/SubmitButton/SubmitButton';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { useEffect, useState } from 'react';
 import { BiErrorCircle, BiInfinite } from 'react-icons/bi';
 
@@ -16,7 +16,7 @@ interface AdminRoleEditorProps {
   availableRoles: string[];
   user: UserWithRegistrations;
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function AdminRoleEditor({

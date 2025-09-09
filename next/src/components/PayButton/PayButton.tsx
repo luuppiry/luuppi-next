@@ -1,13 +1,13 @@
 'use client';
 import { reservationChargeAll } from '@/actions/reservation-charge-all';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { useState } from 'react';
 import QuestionConfirmDialog from '../QuestionConfirmDialog/QuestionConfirmDialog';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import ErrorDialog from '../Ticket/ErrorDialog';
 
 interface PayButtonProps {
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
   hasUnansweredQuestions: boolean;
 }

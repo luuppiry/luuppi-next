@@ -7,7 +7,6 @@ import prisma from '@/libs/db/prisma';
 import { getQuestion } from '@/libs/strapi/get-question';
 import { getSelectChoice } from '@/libs/strapi/get-select-choice';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -48,7 +47,7 @@ export interface UserWithRegistrations {
 }
 
 export default async function Page(props: {
-  params: Promise<{ slug: string; lang: SupportedLanguage }>;
+  params: Promise<{ slug: string; lang: string }>;
 }) {
   const params = await props.params;
 

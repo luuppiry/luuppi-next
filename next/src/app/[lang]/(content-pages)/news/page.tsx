@@ -5,7 +5,6 @@ import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { analyzeReadTime } from '@/libs/utils/analyze-read-time';
-import { SupportedLanguage } from '@/models/locale';
 import {
   APIResponse,
   APIResponseCollection,
@@ -18,7 +17,7 @@ import { FaUserAlt } from 'react-icons/fa';
 import { PiImageBroken } from 'react-icons/pi';
 
 interface NewsProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function News(props: NewsProps) {

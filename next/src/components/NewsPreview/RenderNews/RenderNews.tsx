@@ -3,7 +3,7 @@ import { flipNewsLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { analyzeReadTime } from '@/libs/utils/analyze-read-time';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { APIResponseCollection, APIResponseData } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,7 +11,7 @@ import { FaUserAlt } from 'react-icons/fa';
 import { PiImageBroken } from 'react-icons/pi';
 
 interface RenderNewsProps {
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
 }
 

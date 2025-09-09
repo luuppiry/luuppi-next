@@ -1,7 +1,7 @@
 'use client';
 import { emailSendFeedback } from '@/actions/email-send-feedback';
 import { luuppiEmails } from '@/libs/constants/emails';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 import { useRef, useState } from 'react';
 import { BiErrorCircle } from 'react-icons/bi';
@@ -23,7 +23,7 @@ const initialState: FeedbackResponse = {
 };
 
 interface FeedbackFormProps {
-  lang: SupportedLanguage;
+  lang: string;
   dictionary: Dictionary;
 }
 

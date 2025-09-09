@@ -5,12 +5,11 @@ import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInf
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 interface ProfileProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function Profile(props: ProfileProps) {

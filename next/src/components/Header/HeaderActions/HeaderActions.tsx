@@ -1,14 +1,14 @@
 'use client';
 import { signIn } from '@/actions/auth';
 import MobileHamburger from '@/components/MobileHamburger/MobileHamburger';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { useSession } from 'next-auth/react';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import UserDropdown from '../../UserDropdown/UserDropdown';
 
 interface HeaderActionsProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage;
+  lang: string;
 }
 
 export default function HeaderActions({

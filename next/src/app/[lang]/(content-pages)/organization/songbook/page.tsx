@@ -1,10 +1,9 @@
 import Songbook from '@/components/Songbook/Songbook';
 import { getDictionary } from '@/dictionaries';
-import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 
 interface SongbookProps {
-  params: Promise<{ lang: SupportedLanguage }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function SongbookPage(props: SongbookProps) {

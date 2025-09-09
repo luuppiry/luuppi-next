@@ -1,5 +1,4 @@
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { SitemapItemLoose, SitemapStream, streamToPromise } from 'sitemap';
 
@@ -10,7 +9,7 @@ import { SitemapItemLoose, SitemapStream, streamToPromise } from 'sitemap';
  * @param lang "fi" or "en
  * @returns array of static pages
  */
-const getStaticPages = (lang: SupportedLanguage) => {
+const getStaticPages = (lang: string) => {
   const staticPages = [
     // General
     `/${lang}`,

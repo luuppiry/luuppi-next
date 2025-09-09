@@ -1,4 +1,4 @@
-import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Dictionary } from '@/models/locale';
 import { APIResponse, APIResponseData } from '@/types/types';
 import {
   EducationalOrganization,
@@ -52,7 +52,7 @@ export const getOrganizationJsonLd = (dictionary: Dictionary) => {
 
 export const getEventJsonLd = (
   event: APIResponse<'api::event.event'>,
-  lang: SupportedLanguage,
+  lang: string,
 ) => {
   const description = getPlainText(
     event.data[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
@@ -116,7 +116,7 @@ export const getEventJsonLd = (
 
 export const getNewsJsonLd = (
   news: APIResponseData<'api::news-single.news-single'>,
-  lang: SupportedLanguage,
+  lang: string,
 ) => {
   const jsonLd: WithContext<NewsArticle> = {
     '@context': 'https://schema.org',
