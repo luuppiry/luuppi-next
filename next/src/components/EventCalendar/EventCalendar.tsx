@@ -111,7 +111,6 @@ export default function EventCalendar({
                 }
               : {
                   weekday: 'long',
-                  day: 'numeric',
                 }
           }
           dayMaxEventRows={4}
