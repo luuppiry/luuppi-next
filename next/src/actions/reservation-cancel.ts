@@ -4,10 +4,15 @@ import prisma from '@/libs/db/prisma';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function reservationCancel(lang: string, formData: FormData) {
+export async function reservationCancel(
+  lang: string,
+  formData: FormData,
+): Promise<void> {
   const session = await auth();
 
-  if (!session?.user) return;
+  if (!session?.user) {
+    return;
+  }
 
   const registrationId = Number(formData.get('registrationId'));
   if (!registrationId || isNaN(registrationId) || registrationId < 1) {

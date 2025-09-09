@@ -3,16 +3,31 @@ import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
+import { Dictionary } from '@/models/locale';
 import { revalidatePath, revalidateTag } from 'next/cache';
 
+const CONFIG = {
+  HATO_ROLE_ID: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
+  NO_ROLE_ID: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+  SUPER_ADMINS: process.env.XXX_SUPER_ADMIN_XXX!.split(','),
+  ROLE_UUID_REGEX: /^[a-z0-9äö_-]+$/,
+} as const;
+
+type RoleEditResult = {
+  message: string;
+  isError: boolean;
+};
+
+type RoleInput = {
+  strapiRoleUuid: string;
+  expiresAt: Date | null;
+};
+
 export async function userEditRoles(
-  roles: {
-    strapiRoleUuid: string;
-    expiresAt: Date | null;
-  }[],
+  roles: RoleInput[],
   lang: string,
   userToEditEntraUuid: string,
-) {
+): Promise<RoleEditResult> {
   const dictionary = await getDictionary(lang);
 
   const session = await auth();
@@ -26,22 +41,7 @@ export async function userEditRoles(
     };
   }
 
-  const hasHatoRole = await prisma.rolesOnUsers.findFirst({
-    where: {
-      entraUserUuid: user.entraUserUuid,
-      strapiRoleUuid: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
-      OR: [
-        {
-          expiresAt: {
-            gte: new Date(),
-          },
-        },
-        {
-          expiresAt: null,
-        },
-      ],
-    },
-  });
+  const hasHatoRole = await checkHatoRole(user.entraUserUuid);
 
   if (!hasHatoRole) {
     logger.error('User does not have the required role');
@@ -51,31 +51,12 @@ export async function userEditRoles(
     };
   }
 
+  const validationError = validateRoles(roles, dictionary);
+  if (validationError) {
+    return validationError;
+  }
+
   const strapiRoleUuids = roles.map((role) => role.strapiRoleUuid);
-
-  // Only lowercase chars (with äö), numbers, - and _ allowed
-  const regex = /^[a-z0-9äö_-]+$/;
-  const invalidRoles = strapiRoleUuids.some((role) => !regex.test(role));
-
-  const invalidExpirationDates = roles.some(
-    (role) => role.expiresAt && role.expiresAt < new Date(),
-  );
-
-  if (invalidExpirationDates) {
-    logger.error('Invalid expiration dates');
-    return {
-      message: dictionary.api.invalid_roles,
-      isError: true,
-    };
-  }
-
-  if (invalidRoles) {
-    logger.error('Invalid roles');
-    return {
-      message: dictionary.api.invalid_roles,
-      isError: true,
-    };
-  }
 
   const rolesMatch = await prisma.role.findMany({
     where: {
@@ -93,22 +74,11 @@ export async function userEditRoles(
     };
   }
 
-  const SUPER_ADMINS = process.env.XXX_SUPER_ADMIN_XXX!.split(',');
-
-  const illegalRoles = SUPER_ADMINS.includes(user.entraUserUuid)
+  const illegalRoles = CONFIG.SUPER_ADMINS.includes(user.entraUserUuid)
     ? []
-    : [
-        process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
-        process.env.NEXT_PUBLIC_NO_ROLE_ID!,
-      ];
+    : [CONFIG.HATO_ROLE_ID, CONFIG.NO_ROLE_ID];
 
-  const includesIllegalRoles = strapiRoleUuids.some((role) =>
-    illegalRoles.includes(role),
-  );
-
-  // Check if roles contain illegal roles, meaning roles that should not
-  // be assigned by the user
-  if (includesIllegalRoles) {
+  if (strapiRoleUuids.some((role) => illegalRoles.includes(role))) {
     logger.error('Roles contains illegal role');
     return {
       message: dictionary.api.invalid_roles,
@@ -162,4 +132,54 @@ export async function userEditRoles(
     isError: false,
     message: dictionary.api.user_roles_updated,
   };
+}
+
+async function checkHatoRole(entraUserUuid: string) {
+  return await prisma.rolesOnUsers.findFirst({
+    where: {
+      entraUserUuid,
+      strapiRoleUuid: CONFIG.HATO_ROLE_ID,
+      OR: [
+        {
+          expiresAt: {
+            gte: new Date(),
+          },
+        },
+        {
+          expiresAt: null,
+        },
+      ],
+    },
+  });
+}
+
+function validateRoles(
+  roles: RoleInput[],
+  dictionary: Dictionary,
+): RoleEditResult | null {
+  const strapiRoleUuids = roles.map((role) => role.strapiRoleUuid);
+  const invalidRoles = strapiRoleUuids.some(
+    (role) => !CONFIG.ROLE_UUID_REGEX.test(role),
+  );
+  const invalidExpirationDates = roles.some(
+    (role) => role.expiresAt && role.expiresAt < new Date(),
+  );
+
+  if (invalidExpirationDates) {
+    logger.error('Invalid expiration dates');
+    return {
+      message: dictionary.api.invalid_roles,
+      isError: true,
+    };
+  }
+
+  if (invalidRoles) {
+    logger.error('Invalid roles');
+    return {
+      message: dictionary.api.invalid_roles,
+      isError: true,
+    };
+  }
+
+  return null;
 }

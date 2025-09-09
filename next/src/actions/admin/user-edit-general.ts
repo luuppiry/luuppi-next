@@ -3,12 +3,36 @@ import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
+import { Dictionary } from '@/models/locale';
+
+const CONFIG = {
+  HATO_ROLE_ID: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
+  USERNAME_REGEX: /^(?!.*[-_]{2})[a-zA-Z0-9äÄöÖåÅ_-]{3,30}$/,
+  NAME_REGEX: /^.{2,70}$/,
+  LASTNAME_REGEX: /^.{2,35}$/,
+  DOMICLE_REGEX: /^.{2,35}$/,
+  PREFERRED_NAME_REGEX: /^[a-zA-ZäÄöÖåÅ\-\s]{2,100}$/,
+  MAJOR_REGEX:
+    /^(COMPUTER_SCIENCE|MATHEMATICS|STATISTICAL_DATA_ANALYSIS|OTHER)$/,
+} as const;
+
+type UserEditResult = {
+  message: string;
+  isError: boolean;
+  field?: string;
+};
+
+type FieldValidation = {
+  value: FormDataEntryValue | null;
+  regex: RegExp;
+  required?: boolean;
+};
 
 export async function userEditGeneral(
   formData: FormData,
   lang: string,
   userToEditEntraUuid: string,
-) {
+): Promise<UserEditResult> {
   const dictionary = await getDictionary(lang);
 
   const session = await auth();
@@ -22,22 +46,7 @@ export async function userEditGeneral(
     };
   }
 
-  const hasHatoRole = await prisma.rolesOnUsers.findFirst({
-    where: {
-      entraUserUuid: user.entraUserUuid,
-      strapiRoleUuid: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
-      OR: [
-        {
-          expiresAt: {
-            gte: new Date(),
-          },
-        },
-        {
-          expiresAt: null,
-        },
-      ],
-    },
-  });
+  const hasHatoRole = await checkHatoRole(user.entraUserUuid);
 
   if (!hasHatoRole) {
     logger.error('User does not have the required role');
@@ -47,38 +56,30 @@ export async function userEditGeneral(
     };
   }
 
-  const fields: Record<
-    string,
-    { value: FormDataEntryValue | null; regex: RegExp; required?: boolean }
-  > = {
+  const fields: Record<string, FieldValidation> = {
     username: {
       value: formData.get('username'),
-
-      // Regex checks for:
-      // - 3-30 characters
-      // - No consecutive underscores or hyphens
-      // - Only letters, numbers, underscores, hyphens, and Finnish/Swedish characters
-      regex: /^(?!.*[-_]{2})[a-zA-Z0-9äÄöÖåÅ_-]{3,30}$/,
+      regex: CONFIG.USERNAME_REGEX,
     },
     firstName: {
       value: formData.get('firstName'),
-      regex: /^.{2,70}$/,
+      regex: CONFIG.NAME_REGEX,
     },
     lastName: {
       value: formData.get('lastName'),
-      regex: /^.{2,35}$/,
+      regex: CONFIG.LASTNAME_REGEX,
     },
     domicle: {
       value: formData.get('domicle'),
-      regex: /^.{2,35}$/,
+      regex: CONFIG.DOMICLE_REGEX,
     },
     preferredFullName: {
       value: formData.get('preferredFullName'),
-      regex: /^[a-zA-ZäÄöÖåÅ\-\s]{2,100}$/,
+      regex: CONFIG.PREFERRED_NAME_REGEX,
     },
     major: {
       value: formData.get('major'),
-      regex: /^(COMPUTER_SCIENCE|MATHEMATICS|STATISTICAL_DATA_ANALYSIS|OTHER)$/,
+      regex: CONFIG.MAJOR_REGEX,
       required: true,
     },
   };
@@ -116,13 +117,11 @@ export async function userEditGeneral(
       username: fieldsToUpdate.username,
       preferredFullName: fieldsToUpdate.preferredFullName,
       major:
-        fieldsToUpdate.major === 'COMPUTER_SCIENCE'
-          ? 'COMPUTER_SCIENCE'
-          : fieldsToUpdate.major === 'MATHEMATICS'
-            ? 'MATHEMATICS'
-            : fieldsToUpdate.major === 'STATISTICAL_DATA_ANALYSIS'
-              ? 'STATISTICAL_DATA_ANALYSIS'
-              : 'OTHER',
+        (fieldsToUpdate.major as
+          | 'COMPUTER_SCIENCE'
+          | 'MATHEMATICS'
+          | 'STATISTICAL_DATA_ANALYSIS'
+          | 'OTHER') || 'OTHER',
       domicle: fieldsToUpdate.domicle,
     },
   });
@@ -133,18 +132,39 @@ export async function userEditGeneral(
   };
 }
 
+async function checkHatoRole(entraUserUuid: string) {
+  return await prisma.rolesOnUsers.findFirst({
+    where: {
+      entraUserUuid,
+      strapiRoleUuid: CONFIG.HATO_ROLE_ID,
+      OR: [
+        {
+          expiresAt: {
+            gte: new Date(),
+          },
+        },
+        {
+          expiresAt: null,
+        },
+      ],
+    },
+  });
+}
+
 function validateField(
   fieldValue: string | null,
   regex: RegExp,
-  dictionary: any,
+  dictionary: Dictionary,
   fieldName: string,
   required?: boolean,
-) {
+): UserEditResult | null {
   const fieldNameSnakeCase = fieldName.replace(/([A-Z])/g, '_$1').toLowerCase();
+  const invalidKey =
+    `invalid_${fieldNameSnakeCase}` as keyof typeof dictionary.api;
 
   if (required && !fieldValue) {
     return {
-      message: dictionary.api[`invalid_${fieldNameSnakeCase}`],
+      message: dictionary.api[invalidKey] || dictionary.api.server_error,
       isError: true,
       field: fieldName,
     };
@@ -152,7 +172,7 @@ function validateField(
 
   if (fieldValue && !regex.test(fieldValue)) {
     return {
-      message: dictionary.api[`invalid_${fieldNameSnakeCase}`],
+      message: dictionary.api[invalidKey] || dictionary.api.server_error,
       isError: true,
       field: fieldName,
     };

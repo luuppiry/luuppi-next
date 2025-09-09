@@ -6,12 +6,22 @@ import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { revalidatePath, revalidateTag } from 'next/cache';
 
-const options = {
-  cacheKey: 'migrate-legacy-account',
-  memberRole: process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+const CONFIG = {
+  CACHE_KEY: 'migrate-legacy-account',
+  MEMBER_ROLE: process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+  RATE_LIMIT: 5,
+  LEGACY_API_URL: 'http://legacy-mig:4444/login',
+} as const;
+
+type MigrationResult = {
+  message: string;
+  isError: boolean;
 };
 
-export async function migrateLegacyAccount(lang: string, formData: FormData) {
+export async function migrateLegacyAccount(
+  lang: string,
+  formData: FormData,
+): Promise<MigrationResult> {
   const dictionary = await getDictionary(lang);
 
   const session = await auth();
@@ -27,8 +37,8 @@ export async function migrateLegacyAccount(lang: string, formData: FormData) {
 
   const isLimited = await isRateLimited(
     user.entraUserUuid,
-    options.cacheKey,
-    5,
+    CONFIG.CACHE_KEY,
+    CONFIG.RATE_LIMIT,
   );
   if (isLimited) {
     logger.error(`User is being rate limited: ${user.email}`);
@@ -36,9 +46,9 @@ export async function migrateLegacyAccount(lang: string, formData: FormData) {
       message: dictionary.api.ratelimit,
       isError: true,
     };
-  } else {
-    await updateRateLimitCounter(user.entraUserUuid, options.cacheKey);
   }
+
+  await updateRateLimitCounter(user.entraUserUuid, CONFIG.CACHE_KEY);
 
   const localUser = await prisma.user.findFirst({
     where: {
@@ -74,7 +84,7 @@ export async function migrateLegacyAccount(lang: string, formData: FormData) {
   }
 
   const hasMemberRole = localUser.roles.some(
-    (r) => r.role.strapiRoleUuid === options.memberRole,
+    (role) => role.role.strapiRoleUuid === CONFIG.MEMBER_ROLE,
   );
   if (hasMemberRole) {
     logger.error('User already has member role');
@@ -95,7 +105,7 @@ export async function migrateLegacyAccount(lang: string, formData: FormData) {
     };
   }
 
-  const legacyMigrateResponse = await fetch('http://legacy-mig:4444/login', {
+  const legacyMigrateResponse = await fetch(CONFIG.LEGACY_API_URL, {
     body: JSON.stringify({ user: email, pass: password }),
     headers: {
       'Content-Type': 'application/json',
@@ -120,14 +130,14 @@ export async function migrateLegacyAccount(lang: string, formData: FormData) {
     where: {
       strapiRoleUuid_entraUserUuid: {
         entraUserUuid: user.entraUserUuid,
-        strapiRoleUuid: options.memberRole,
+        strapiRoleUuid: CONFIG.MEMBER_ROLE,
       },
     },
     update: {
       expiresAt: endsAt,
     },
     create: {
-      strapiRoleUuid: options.memberRole,
+      strapiRoleUuid: CONFIG.MEMBER_ROLE,
       entraUserUuid: user.entraUserUuid,
     },
   });

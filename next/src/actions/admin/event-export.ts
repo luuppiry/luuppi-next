@@ -8,7 +8,17 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { APIResponse } from '@/types/types';
 
-function escapeCsvField(field: any): string {
+const CONFIG = {
+  HATO_ROLE_ID: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
+} as const;
+
+type ExportResult = {
+  message: string;
+  isError: boolean;
+  data?: string;
+};
+
+function escapeCsvField(field: unknown): string {
   if (field === null || field === undefined) return '""';
   const stringField = String(field);
   if (
@@ -21,7 +31,10 @@ function escapeCsvField(field: any): string {
   return stringField;
 }
 
-export async function eventExport(lang: string, eventId: number) {
+export async function eventExport(
+  lang: string,
+  eventId: number,
+): Promise<ExportResult> {
   const dictionary = await getDictionary(lang);
 
   const session = await auth();
@@ -38,7 +51,7 @@ export async function eventExport(lang: string, eventId: number) {
   const hasHatoRole = await prisma.rolesOnUsers.findFirst({
     where: {
       entraUserUuid: user.entraUserUuid,
-      strapiRoleUuid: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
+      strapiRoleUuid: CONFIG.HATO_ROLE_ID,
       OR: [
         {
           expiresAt: {
@@ -163,7 +176,7 @@ export async function eventExport(lang: string, eventId: number) {
       return registration;
     }
     return acc;
-  }, {} as any);
+  }, {});
 
   // Create the CSV
   const csv = eventRegistrations.reduce(

@@ -5,11 +5,19 @@ import prisma from '@/libs/db/prisma';
 import { redisClient } from '@/libs/db/redis';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
+import { Dictionary } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { revalidateTag } from 'next/cache';
 
-const options = {
-  noRoleId: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+const CONFIG = {
+  NO_ROLE_ID: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+  SOLD_OUT_CACHE_EXPIRY: 180,
+} as const;
+
+type ReservationResult = {
+  message: string;
+  isError: boolean;
+  reloadCache?: boolean;
 };
 
 export async function reservationCreate(
@@ -18,7 +26,7 @@ export async function reservationCreate(
   lang: string,
   selectedQuota: string,
   userProvidedTargetedRole: string | undefined,
-) {
+): Promise<ReservationResult> {
   const dictionary = await getDictionary(lang);
   const session = await auth();
 
@@ -31,37 +39,20 @@ export async function reservationCreate(
 
   // User provided targeted role cannot be trusted (can be manipulated by user), but this
   // prevents unnecessary database queries most of the time
-  if (
-    userProvidedTargetedRole &&
-    typeof userProvidedTargetedRole === 'string'
-  ) {
-    // Check if the event is sold out for the user's role
-    const isSoldOut = await redisClient.get(
-      `event-sold-out:${eventId}:${userProvidedTargetedRole}`,
-    );
-    if (isSoldOut) {
-      logger.info(
-        `Cache hit: Event ${eventId} is sold out for role ${userProvidedTargetedRole}`,
-      );
-      return {
-        message: dictionary.api.sold_out,
-        isError: true,
-      };
-    }
-  }
-
-  if (!amount || isNaN(amount) || amount < 1) {
+  const soldOutCacheResult = await checkSoldOutCache(
+    eventId,
+    userProvidedTargetedRole,
+  );
+  if (soldOutCacheResult) {
     return {
-      message: dictionary.api.invalid_amount,
+      message: dictionary.api.sold_out,
       isError: true,
     };
   }
 
-  if (!eventId || isNaN(eventId) || eventId < 1) {
-    return {
-      message: dictionary.api.invalid_event,
-      isError: true,
-    };
+  const inputValidationError = validateInputs(eventId, amount, dictionary);
+  if (inputValidationError) {
+    return inputValidationError;
   }
 
   const strapiUrl = `/api/events/${eventId}?populate=Registration.TicketTypes.Role&populate=Registration.RoleToGive`;
@@ -119,7 +110,7 @@ export async function reservationCreate(
     })) ?? [];
 
   const hasDefaultRoleWeight = eventRolesWithWeights.find(
-    (role) => role.strapiRoleUuid === options.noRoleId!,
+    (role) => role.strapiRoleUuid === CONFIG.NO_ROLE_ID,
   );
 
   const targetedRole = strapiRoleUuids.reduce(
@@ -133,7 +124,7 @@ export async function reservationCreate(
         : acc;
     },
     {
-      strapiRoleUuid: options.noRoleId!,
+      strapiRoleUuid: CONFIG.NO_ROLE_ID,
       weight: hasDefaultRoleWeight?.weight ?? 0,
     },
   );
@@ -287,7 +278,7 @@ export async function reservationCreate(
           `event-sold-out:${eventId}:${strapiRoleUuid}`,
           'true',
           'EX',
-          180, // 3 minutes
+          CONFIG.SOLD_OUT_CACHE_EXPIRY,
         );
 
         // Revalidates cache for event registrations so that the sold out status is updated
@@ -295,7 +286,7 @@ export async function reservationCreate(
       }
 
       const hasDefaultRole = localUser.roles.find(
-        (role) => role.role.strapiRoleUuid === options.noRoleId!,
+        (role) => role.role.strapiRoleUuid === CONFIG.NO_ROLE_ID,
       );
       if (!hasDefaultRole) {
         // User should always have a default role
@@ -351,4 +342,47 @@ export async function reservationCreate(
     message: dictionary.general.success,
     isError: false,
   };
+}
+
+async function checkSoldOutCache(
+  eventId: number,
+  userProvidedTargetedRole: string | undefined,
+): Promise<boolean> {
+  if (
+    userProvidedTargetedRole &&
+    typeof userProvidedTargetedRole === 'string'
+  ) {
+    const isSoldOut = await redisClient.get(
+      `event-sold-out:${eventId}:${userProvidedTargetedRole}`,
+    );
+    if (isSoldOut) {
+      logger.info(
+        `Cache hit: Event ${eventId} is sold out for role ${userProvidedTargetedRole}`,
+      );
+      return true;
+    }
+  }
+  return false;
+}
+
+function validateInputs(
+  eventId: number,
+  amount: number,
+  dictionary: Dictionary,
+): ReservationResult | null {
+  if (!amount || isNaN(amount) || amount < 1) {
+    return {
+      message: dictionary.api.invalid_amount,
+      isError: true,
+    };
+  }
+
+  if (!eventId || isNaN(eventId) || eventId < 1) {
+    return {
+      message: dictionary.api.invalid_event,
+      isError: true,
+    };
+  }
+
+  return null;
 }

@@ -9,7 +9,14 @@ import { randomUUID } from 'crypto';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function reservationChargeAll(lang: string) {
+type ChargeResult = {
+  message: string;
+  isError: boolean;
+};
+
+export async function reservationChargeAll(
+  lang: string,
+): Promise<ChargeResult | never> {
   const dictionary = await getDictionary(lang);
   const session = await auth();
 
@@ -42,9 +49,11 @@ export async function reservationChargeAll(lang: string) {
     };
   }
 
-  const priceInCents =
-    registrations.reduce((acc, registration) => acc + registration.price, 0) *
-    100;
+  const totalPrice = registrations.reduce(
+    (acc, registration) => acc + registration.price,
+    0,
+  );
+  const priceInCents = totalPrice * 100;
 
   let redirectUrl: string | null = null;
   try {
@@ -105,8 +114,9 @@ export async function reservationChargeAll(lang: string) {
           },
         });
 
-        const email = payment.registration[0].user.email;
-        const user = payment.registration[0].user;
+        const firstRegistration = payment.registration[0];
+        const user = firstRegistration.user;
+        const email = user.email;
         const name = user.username ?? user.firstName ?? '';
 
         const success = await sendEventReceiptEmail({
@@ -116,7 +126,7 @@ export async function reservationChargeAll(lang: string) {
         });
 
         if (!success) {
-          logger.error('Error sending email, failing silently');
+          logger.error('Failed to send event receipt email');
         }
       }
     });

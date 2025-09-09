@@ -4,13 +4,37 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
+import { Dictionary } from '@/models/locale';
 import { revalidatePath } from 'next/cache';
 
-const options = {
-  cacheKey: 'update-profile',
+const CONFIG = {
+  CACHE_KEY: 'update-profile',
+  RATE_LIMIT: 10,
+  USERNAME_REGEX: /^(?!.*[-_]{2})[a-zA-Z0-9äÄöÖåÅ_-]{3,30}$/,
+  NAME_REGEX: /^.{2,70}$/,
+  LASTNAME_REGEX: /^.{2,35}$/,
+  DOMICLE_REGEX: /^.{2,35}$/,
+  PREFERRED_NAME_REGEX: /^[a-zA-ZäÄöÖåÅ\-\s]{2,100}$/,
+  MAJOR_REGEX:
+    /^(COMPUTER_SCIENCE|MATHEMATICS|STATISTICAL_DATA_ANALYSIS|OTHER)$/,
+} as const;
+
+type ProfileUpdateResult = {
+  message: string;
+  isError: boolean;
+  field?: string;
 };
 
-export async function profileUpdate(lang: string, formData: FormData) {
+type FieldValidation = {
+  value: FormDataEntryValue | null;
+  regex: RegExp;
+  required?: boolean;
+};
+
+export async function profileUpdate(
+  lang: string,
+  formData: FormData,
+): Promise<ProfileUpdateResult> {
   const dictionary = await getDictionary(lang);
   const session = await auth();
 
@@ -24,8 +48,8 @@ export async function profileUpdate(lang: string, formData: FormData) {
 
   const isLimited = await isRateLimited(
     session.user.entraUserUuid,
-    options.cacheKey,
-    10,
+    CONFIG.CACHE_KEY,
+    CONFIG.RATE_LIMIT,
   );
   if (isLimited) {
     logger.error('User is being rate limited');
@@ -33,9 +57,9 @@ export async function profileUpdate(lang: string, formData: FormData) {
       message: dictionary.api.ratelimit,
       isError: true,
     };
-  } else {
-    await updateRateLimitCounter(session.user.entraUserUuid, options.cacheKey);
   }
+
+  await updateRateLimitCounter(session.user.entraUserUuid, CONFIG.CACHE_KEY);
 
   const localUser = await prisma.user.findFirst({
     where: {
@@ -68,41 +92,33 @@ export async function profileUpdate(lang: string, formData: FormData) {
     process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
   );
 
-  const fields: Record<
-    string,
-    { value: FormDataEntryValue | null; regex: RegExp; required?: boolean }
-  > = {
+  const fields: Record<string, FieldValidation> = {
     username: {
       value: formData.get('username'),
-
-      // Regex checks for:
-      // - 3-30 characters
-      // - No consecutive underscores or hyphens
-      // - Only letters, numbers, underscores, hyphens, and Finnish/Swedish characters
-      regex: /^(?!.*[-_]{2})[a-zA-Z0-9äÄöÖåÅ_-]{3,30}$/,
+      regex: CONFIG.USERNAME_REGEX,
     },
     firstName: {
       value: formData.get('firstName'),
-      regex: /^.{2,70}$/,
+      regex: CONFIG.NAME_REGEX,
       required: isLuuppiMember,
     },
     lastName: {
       value: formData.get('lastName'),
-      regex: /^.{2,35}$/,
+      regex: CONFIG.LASTNAME_REGEX,
       required: isLuuppiMember,
     },
     domicle: {
       value: formData.get('domicle'),
-      regex: /^.{2,35}$/,
+      regex: CONFIG.DOMICLE_REGEX,
       required: isLuuppiMember,
     },
     preferredFullName: {
       value: formData.get('preferredFullName'),
-      regex: /^[a-zA-ZäÄöÖåÅ\-\s]{2,100}$/,
+      regex: CONFIG.PREFERRED_NAME_REGEX,
     },
     major: {
       value: formData.get('major'),
-      regex: /^(COMPUTER_SCIENCE|MATHEMATICS|STATISTICAL_DATA_ANALYSIS|OTHER)$/,
+      regex: CONFIG.MAJOR_REGEX,
       required: isLuuppiMember,
     },
   };
@@ -150,13 +166,11 @@ export async function profileUpdate(lang: string, formData: FormData) {
       username: fieldsToUpdate.username,
       preferredFullName: fieldsToUpdate.preferredFullName,
       major:
-        fieldsToUpdate.major === 'COMPUTER_SCIENCE'
-          ? 'COMPUTER_SCIENCE'
-          : fieldsToUpdate.major === 'MATHEMATICS'
-            ? 'MATHEMATICS'
-            : fieldsToUpdate.major === 'STATISTICAL_DATA_ANALYSIS'
-              ? 'STATISTICAL_DATA_ANALYSIS'
-              : 'OTHER',
+        (fieldsToUpdate.major as
+          | 'COMPUTER_SCIENCE'
+          | 'MATHEMATICS'
+          | 'STATISTICAL_DATA_ANALYSIS'
+          | 'OTHER') || 'OTHER',
       domicle: fieldsToUpdate.domicle,
     },
   });
@@ -172,15 +186,16 @@ export async function profileUpdate(lang: string, formData: FormData) {
 function validateField(
   fieldValue: string | null,
   regex: RegExp,
-  dictionary: any,
+  dictionary: Dictionary,
   fieldName: string,
   required?: boolean,
-) {
+): ProfileUpdateResult | null {
   const fieldNameSnakeCase = fieldName.replace(/([A-Z])/g, '_$1').toLowerCase();
+  const invalidKey = `invalid_${fieldNameSnakeCase}` as keyof Dictionary['api'];
 
   if (required && !fieldValue) {
     return {
-      message: dictionary.api[`invalid_${fieldNameSnakeCase}`],
+      message: dictionary.api[invalidKey] || dictionary.api.server_error,
       isError: true,
       field: fieldName,
     };
@@ -188,7 +203,7 @@ function validateField(
 
   if (fieldValue && !regex.test(fieldValue)) {
     return {
-      message: dictionary.api[`invalid_${fieldNameSnakeCase}`],
+      message: dictionary.api[invalidKey] || dictionary.api.server_error,
       isError: true,
       field: fieldName,
     };
