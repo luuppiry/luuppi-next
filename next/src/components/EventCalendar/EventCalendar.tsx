@@ -141,6 +141,7 @@ export default function EventCalendar({
             hour12: false,
           }}
           events={events}
+          firstDay={1}
           headerToolbar={
             !isSmallDesktop
               ? {
