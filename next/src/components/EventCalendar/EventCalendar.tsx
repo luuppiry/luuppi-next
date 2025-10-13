@@ -140,7 +140,15 @@ export default function EventCalendar({
             meridiem: false,
             hour12: false,
           }}
-          events={events}
+          events={events.map((event) => {
+            // Force multi-day events to display as block elements since `nextDayThreshold`
+            // prevents FullCalendar from automatically detecting them as multi-day.
+            if (event.start.getDate() != event.end.getDate()) {
+              (event as Event & { display: string }).display = 'block';
+            }
+
+            return event;
+          })}
           headerToolbar={
             !isSmallDesktop
               ? {
@@ -158,6 +166,7 @@ export default function EventCalendar({
           initialDate={new Date(currentYear, currentMonth, 1)}
           initialView={'dayGridMonth'}
           locale={lang === 'fi' ? fiLocale : ''}
+          nextDayThreshold="06:00"
           plugins={[dayGridPlugin, timeGridPlugin]}
           slotLabelFormat={{
             hour: 'numeric',
