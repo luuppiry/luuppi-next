@@ -9,6 +9,11 @@ const config: Config = {
           primary: '#787eba',
           accent: '#b166cc',
         },
+        dark: {
+          ...require('daisyui/src/theming/themes')['night'],
+          primary: '#787eba',
+          accent: '#b166cc',
+        },
       },
     ],
   },
