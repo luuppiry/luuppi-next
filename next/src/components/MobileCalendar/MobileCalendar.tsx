@@ -17,9 +17,8 @@ const getDaysOfWeek = (locale: SupportedLanguage) => {
     );
   }
 
-  if (locale === 'fi') {
-    daysOfWeek.push(daysOfWeek.shift());
-  }
+  // Always start with Monday regardless of locale
+  daysOfWeek.push(daysOfWeek.shift());
 
   return daysOfWeek;
 };
@@ -46,17 +45,12 @@ const groupEventsByStartDate = (events: Event[]): Record<string, Event[]> =>
       {} as Record<string, Event[]>,
     );
 
-const generateMonthGrid = (
-  year: number,
-  month: number,
-  locale: SupportedLanguage,
-) => {
+const generateMonthGrid = (year: number, month: number) => {
   const firstDayOfMonth = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const offset = locale === 'fi' ? -1 : 0;
-  let adjustedFirstDay = (firstDayOfMonth + offset) % 7;
-  if (adjustedFirstDay < 0) adjustedFirstDay += 7;
+  // Always use Monday as first day of week (adjust Sunday from 0 to 6)
+  const adjustedFirstDay = (firstDayOfMonth + 6) % 7;
 
   const grid = [];
   let dayCounter = 1;
@@ -110,8 +104,8 @@ export default function MobileCalendar({
 
   const daysOfWeek = useMemo(() => getDaysOfWeek(lang), [lang]);
   const monthGrid = useMemo(
-    () => generateMonthGrid(currentYear, currentMonth, lang),
-    [currentYear, currentMonth, lang],
+    () => generateMonthGrid(currentYear, currentMonth),
+    [currentYear, currentMonth],
   );
   const groupedEvents = useMemo(() => groupEventsByStartDate(events), [events]);
 
