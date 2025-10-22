@@ -26,6 +26,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        white: 'var(--high-contrast)',
         text: {
           50: 'var(--text-50)',
           100: 'var(--text-100)',

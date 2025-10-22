@@ -21,8 +21,8 @@ export default function Header({ dictionary, lang }: HeaderProps) {
   return (
     <div>
       <ScrollListener />
-      <div className="h-36 bg-primary-800 max-xl:h-28 max-lg:h-16" />
-      <header className={'fixed top-0 z-50 w-full bg-primary-800 text-white'}>
+      <div className="h-36 bg-primary-800 dark:bg-primary-200 max-xl:h-28 max-lg:h-16" />
+      <header className={'fixed top-0 z-50 w-full bg-primary-800 dark:bg-primary-200 text-white'}>
         <nav
           className={
             'custom-scroll-nav h-24 bg-primary-500 px-4 transition-all duration-300 max-xl:h-16 max-xl:shadow-md'
