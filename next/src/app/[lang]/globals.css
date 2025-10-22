@@ -77,7 +77,7 @@
   --text-900: #d6daf5;
   --text-950: #ebecfa;
 
-  --background-50: #070713;
+  --background-50: #0e0e25;
   --background-100: #0e0e25;
   --background-200: #1b1b4b;
   --background-300: #292970;
@@ -124,6 +124,9 @@
   --accent-800: #d8b3e6;
   --accent-900: #ebd9f2;
   --accent-950: #f5ecf9;
+}
+[data-theme='dark'] object[type*='svg'] {
+  filter: brightness(0.7);
 }
 
 * {
@@ -233,10 +236,20 @@
   }
 
   .luuppi-pattern {
-    @apply bg-[linear-gradient(#d6d6d650_1px,transparent_1px),linear-gradient(to_right,#d6d6d650_1px,#fff_1px)] opacity-80;
+    --luuppi-pattern-alpha: #d6d6d650;
+    --luuppi-pattern-final: #fff;
+    --luuppi-pattern-bs: #ff;
+
+    @apply bg-[linear-gradient(var(--luuppi-pattern-alpha)_1px,transparent_1px),linear-gradient(to_right,var(--luuppi-pattern-alpha)_1px,var(--luuppi-pattern-final)_1px)] opacity-80;
     background-size: 20px 20px;
     border-radius: 50%;
-    box-shadow: 0 0 50px 50px #fff inset;
+    box-shadow: 0 0 50px 50px var(--luuppi-pattern-bs) inset;
+  }
+
+  [data-theme='dark'] .luuppi-pattern {
+    --luuppi-pattern-alpha: #d6d6d625;
+    --luuppi-pattern-final: var(--fallback-b1, oklch(var(--b1) / 1));
+    --luuppi-pattern-bs: var(--fallback-b1, oklch(var(--b1) / 1)) ;
   }
 
   .luuppi-kolmio-pattern {
