@@ -45,7 +45,7 @@ export default function Hero({ dictionary, lang }: HeroProps) {
           {dictionary.pages_home.hero.title_1}{' '}
           <span
             ref={changingTextRef}
-            className="inline-block bg-gradient-to-r from-secondary-400 to-text-300 bg-clip-text text-transparent transition-all duration-300"
+            className="inline-block bg-gradient-to-r from-secondary-400 to-text-300 bg-clip-text text-transparent transition-all duration-300 dark:from-secondary-700 dark:to-text-800"
             id="study-area"
           >
             {studyAreas[0]}
