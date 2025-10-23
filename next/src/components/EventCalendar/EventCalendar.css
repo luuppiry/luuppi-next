@@ -2,6 +2,12 @@
   @apply bg-white;
 }
 
+[data-theme='dark'] .fc-view {
+  @apply bg-slate-900;
+
+  --fc-border-color: var(--primary-200);
+}
+
 .fc-media-screen {
   @apply w-full;
 }
