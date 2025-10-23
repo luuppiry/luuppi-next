@@ -5,6 +5,7 @@ import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import EventSelectorProvider from '@/providers/EventSelectorProvider';
+import { ThemeProvider } from '@/providers/ThemeProvider';
 import { APIResponse } from '@/types/types';
 import type { Metadata, Viewport } from 'next';
 import { SessionProvider } from 'next-auth/react';
@@ -35,8 +36,30 @@ export default async function RootLayout(props: RootLayoutProps) {
   >(params.lang, '/api/notification', ['notification'], true);
 
   return (
-    <html data-theme="light" lang={params.lang}>
+    <html lang={params.lang} suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const savedTheme = localStorage.getItem('theme') || 'auto';
+                  let theme = 'light';
+                  
+                  if (savedTheme === 'auto') {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  } else {
+                    theme = savedTheme;
+                  }
+                  
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (_) {
+                  document.documentElement.setAttribute('data-theme', 'light');
+                }
+              })();
+            `,
+          }}
+        />
         <PlausibleProvider
           customDomain={process.env.NEXT_PUBLIC_BASE_URL}
           domain={process.env.NEXT_PUBLIC_BASE_URL!?.replace('https://', '')}
@@ -52,14 +75,16 @@ export default async function RootLayout(props: RootLayoutProps) {
         />
       </head>
       <body className={titilliumFont.className}>
-        <SessionProvider>
-          <Header dictionary={dictionary} lang={params.lang} />
-          <EventSelectorProvider>
-            <div className="flex-1">{children}</div>
-          </EventSelectorProvider>
-          <Footer dictionary={dictionary} lang={params.lang} />
-          <NotificationBar lang={params.lang} notification={notification} />
-        </SessionProvider>
+        <ThemeProvider>
+          <SessionProvider>
+            <Header dictionary={dictionary} lang={params.lang} />
+            <EventSelectorProvider>
+              <div className="flex-1">{children}</div>
+            </EventSelectorProvider>
+            <Footer dictionary={dictionary} lang={params.lang} />
+            <NotificationBar lang={params.lang} notification={notification} />
+          </SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

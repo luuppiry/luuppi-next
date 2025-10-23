@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import luuppiSvg from '../../../public/luuppi.svg';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import HeaderActions from './HeaderActions/HeaderActions';
 import HideableLink from './HideableLinks/HideableLink';
 import ScrollListener from './ScrollListener/ScrollListener';
@@ -21,8 +22,8 @@ export default function Header({ dictionary, lang }: HeaderProps) {
   return (
     <div>
       <ScrollListener />
-      <div className="h-36 bg-primary-800 dark:bg-primary-200 max-xl:h-28 max-lg:h-16" />
-      <header className={'fixed top-0 z-50 w-full bg-primary-800 dark:bg-primary-200 text-white'}>
+      <div className="h-36 bg-primary-800 max-xl:h-28 max-lg:h-16 dark:bg-primary-200" />
+      <header className="fixed top-0 z-50 w-full bg-primary-800 text-white dark:bg-primary-200">
         <nav
           className={
             'custom-scroll-nav h-24 bg-primary-500 px-4 transition-all duration-300 max-xl:h-16 max-xl:shadow-md'
@@ -56,6 +57,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               )}
               <div className="flex items-center justify-center max-lg:hidden">
                 <LanguageSwitcher />
+                <ThemeSwitcher dictionary={dictionary} />
               </div>
               <HeaderActions dictionary={dictionary} lang={lang} />
             </div>
