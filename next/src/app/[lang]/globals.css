@@ -130,7 +130,7 @@
   --accent-950: #f5ecf9;
 }
 [data-theme='dark'] object[type*='svg'] {
-  filter: brightness(0.7);
+  filter: brightness(0.8);
 }
 
 * {
@@ -239,6 +239,10 @@
     background: #efeff6;
   }
 
+  [data-theme='dark'] .luuppi-hero-container {
+    background: transparent;
+  }
+
   .luuppi-pattern {
     --luuppi-pattern-alpha: #d6d6d650;
     --luuppi-pattern-final: #fff;
@@ -253,7 +257,7 @@
   [data-theme='dark'] .luuppi-pattern {
     --luuppi-pattern-alpha: #d6d6d625;
     --luuppi-pattern-final: var(--fallback-b1, oklch(var(--b1) / 1));
-    --luuppi-pattern-bs: var(--fallback-b1, oklch(var(--b1) / 1)) ;
+    --luuppi-pattern-bs: var(--fallback-b1, oklch(var(--b1) / 1));
   }
 
   .luuppi-kolmio-pattern {
