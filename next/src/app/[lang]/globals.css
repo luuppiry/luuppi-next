@@ -131,6 +131,8 @@
 }
 [data-theme='dark'] object[type*='svg'] {
   filter: brightness(0.8);
+  /** Prevent browser a11y features from rendering a white background in dark mode **/
+  color-scheme: light;
 }
 
 * {
