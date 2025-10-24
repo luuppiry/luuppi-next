@@ -27,7 +27,7 @@ export default function Discover({ dictionary, lang }: DiscoverProps) {
         {discoverLinks.map((link) => (
           <Link
             key={dictionary.pages_home.discover[link.translation]}
-            className="group relative flex aspect-[3/2] h-full w-full border-4 border-primary-950 shadow-[7px_7px_#090a10] transition-all duration-300 hover:shadow-[0px_0px_#090a10] max-md:aspect-square"
+            className="group relative flex aspect-[3/2] h-full w-full border-4 border-primary-950 dark:border-base-300 shadow-[7px_7px_#090a10] transition-all duration-300 hover:shadow-[0px_0px_#090a10] max-md:aspect-square"
             href={`/${lang}/${link.href}`}
           >
             <div className="absolute z-20 h-full w-0 bg-secondary-400/50 transition-all duration-300 group-hover:w-full" />
