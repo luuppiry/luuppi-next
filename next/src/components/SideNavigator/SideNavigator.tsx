@@ -83,7 +83,7 @@ export default function SideNavigator({
     <aside className="flex flex-col gap-2 px-4">
       <p className="text-lg font-bold">{dictionary.general.on_this_page}</p>
       <div className="relative">
-        <div className="pointer-events-none absolute top-0 z-10 h-4 w-full bg-gradient-to-b from-white to-transparent" />
+        <div className="pointer-events-none absolute top-0 z-10 h-4 w-full bg-gradient-to-b from-white to-transparent dark:from-base-100" />
         <ul
           ref={listRef}
           className="scrollbar-custom max-h-[calc(100vh-400px)] overflow-y-auto pr-2"
@@ -92,7 +92,7 @@ export default function SideNavigator({
             <li
               key={index}
               className={`flex items-center gap-4 py-2 ${
-                activeHeader === header.id ? 'font-bold text-secondary-400' : ''
+                activeHeader === header.id ? 'font-bold text-secondary-400 dark:text-secondary-600' : ''
               }`}
               data-header-id={header.id}
             >
@@ -113,7 +113,7 @@ export default function SideNavigator({
             </li>
           ))}
         </ul>
-        <div className="pointer-events-none absolute bottom-0 z-10 h-4 w-full bg-gradient-to-t from-white to-transparent" />
+        <div className="pointer-events-none absolute bottom-0 z-10 h-4 w-full bg-gradient-to-t from-white to-transparent dark:from-base-100" />
       </div>
     </aside>
   );
