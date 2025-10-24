@@ -118,7 +118,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                 </Link>
               )}
               {link.sublinks && link.sublinks.length > 0 && (
-                <div className="invisible absolute z-50 flex min-w-full flex-col bg-gray-100 px-2 py-4 text-gray-800 shadow-xl group-hover:visible">
+                <div className="invisible absolute z-50 flex min-w-full flex-col bg-gray-100 px-2 py-4 text-gray-800 shadow-xl group-hover:visible dark:bg-base-200 dark:text-background-950">
                   {link.sublinks.map((sublink) => (
                     <HideableLink
                       key={sublink.translation}
