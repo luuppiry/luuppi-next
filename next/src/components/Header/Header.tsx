@@ -72,7 +72,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               {link.sublinks && link.sublinks.length > 0 ? (
                 <div
                   className={
-                    'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 max-xl:text-base'
+                    'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 max-xl:text-base dark:group-hover:bg-background-700'
                   }
                 >
                   <span>
@@ -92,7 +92,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
               ) : (
                 <Link
                   className={
-                    'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 max-xl:text-base'
+                    'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 max-xl:text-base dark:group-hover:bg-background-700'
                   }
                   href={
                     link.href?.startsWith('/')
