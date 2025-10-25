@@ -189,7 +189,7 @@ export default function Ticket({
         </div>
       ) : (
         <div
-          className={`indicator flex w-full gap-4 rounded-lg bg-background-50 ${disabled ? 'grayscale' : ''}`}
+          className={`indicator flex w-full gap-4 rounded-lg bg-background-50 ${disabled ? 'grayscale opacity-40' : ''}`}
         >
           {isOwnQuota && (
             <span className="badge indicator-item badge-primary badge-sm indicator-center">

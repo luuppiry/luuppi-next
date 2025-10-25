@@ -61,7 +61,7 @@ export default async function Admin(props: AdminProps) {
       <h1 className="mb-12">{dictionary.navigation.admin}</h1>
       <div className="mb-8 flex w-full items-center justify-between rounded-lg bg-background-50 p-4 max-md:flex-col max-md:justify-center max-md:gap-4 max-md:px-2">
         <div
-          className="tabs-boxed tabs border bg-white max-md:w-full dark:bg-inherit"
+          className="tabs-boxed tabs border bg-white max-md:w-full dark:bg-inherit dark:border-primary-300"
           role="tablist"
         >
           <Link

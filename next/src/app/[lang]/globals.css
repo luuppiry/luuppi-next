@@ -160,7 +160,7 @@
 }
 
 .card {
-  @apply rounded-lg bg-background-50;
+  @apply rounded-lg bg-background-50 dark:bg-base-100;
 }
 
 @media screen and (max-width: 768px) {
