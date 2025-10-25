@@ -15,7 +15,7 @@ export default function Discover({ dictionary, lang }: DiscoverProps) {
     <section className="relative mx-auto max-w-[1200px] px-4 py-20 max-2xl:overflow-hidden">
       <Image
         alt="Luuppi background pattern"
-        className="absolute -left-32 top-0 -z-10 max-md:hidden"
+        className="absolute -left-32 top-0 -z-10 max-md:hidden dark:brightness-[.15]"
         height={400}
         src={ccchaosSvg}
         width={400}
