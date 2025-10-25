@@ -45,7 +45,7 @@ export default function Hero({ dictionary, lang }: HeroProps) {
           {dictionary.pages_home.hero.title_1}{' '}
           <span
             ref={changingTextRef}
-            className="inline-block bg-gradient-to-r from-secondary-400 to-text-300 bg-clip-text text-transparent transition-all duration-300"
+            className="inline-block bg-gradient-to-r from-secondary-400 to-text-300 bg-clip-text text-transparent transition-all duration-300 dark:from-secondary-700 dark:to-text-800"
             id="study-area"
           >
             {studyAreas[0]}
@@ -73,7 +73,7 @@ export default function Hero({ dictionary, lang }: HeroProps) {
           />
         </div>
       </div>
-      <div className="absolute left-0 top-1/3 -z-10 h-96 w-96 rounded-full bg-[#d4e1fc] bg-gradient-to-r blur-[200px]" />
+      <div className="absolute left-0 top-1/3 -z-10 h-96 w-96 rounded-full bg-[#d4e1fc] dark:bg-background-300  bg-gradient-to-r blur-[200px]" />
       <div className="luuppi-pattern absolute -left-48 top-0 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:top-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </section>
   );

@@ -5,6 +5,7 @@ import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import EventSelectorProvider from '@/providers/EventSelectorProvider';
+import { ThemeProvider } from '@/providers/ThemeProvider';
 import { APIResponse } from '@/types/types';
 import type { Metadata, Viewport } from 'next';
 import { SessionProvider } from 'next-auth/react';
@@ -53,12 +54,14 @@ export default async function RootLayout(props: RootLayoutProps) {
       </head>
       <body className={titilliumFont.className}>
         <SessionProvider>
-          <Header dictionary={dictionary} lang={params.lang} />
-          <EventSelectorProvider>
-            <div className="flex-1">{children}</div>
-          </EventSelectorProvider>
-          <Footer dictionary={dictionary} lang={params.lang} />
-          <NotificationBar lang={params.lang} notification={notification} />
+          <ThemeProvider>
+            <Header dictionary={dictionary} lang={params.lang} />
+            <EventSelectorProvider>
+              <div className="flex-1">{children}</div>
+            </EventSelectorProvider>
+            <Footer dictionary={dictionary} lang={params.lang} />
+            <NotificationBar lang={params.lang} notification={notification} />
+          </ThemeProvider>
         </SessionProvider>
       </body>
     </html>

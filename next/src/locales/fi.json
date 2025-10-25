@@ -156,6 +156,11 @@
     "no_users": "Käyttäjiä ei löytynyt",
     "no_search_results": "Haulla ei löytynyt käyttäjiä"
   },
+  "theme": {
+    "auto": "Automaattinen",
+    "light": "Vaalea",
+    "dark": "Tumma"
+  },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
   },

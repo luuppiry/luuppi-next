@@ -5,6 +5,7 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useSession } from 'next-auth/react';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import UserDropdown from '../../UserDropdown/UserDropdown';
+import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher';
 
 interface HeaderActionsProps {
   dictionary: Dictionary;
@@ -20,6 +21,7 @@ export default function HeaderActions({
 
   return (
     <>
+      <ThemeSwitcher dictionary={dictionary.theme} session={session} />
       {session && (
         <div className="flex items-center justify-center max-lg:hidden">
           <UserDropdown dictionary={dictionary} lang={lang} session={session} />

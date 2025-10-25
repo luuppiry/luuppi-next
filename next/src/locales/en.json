@@ -156,6 +156,11 @@
     "no_users": "No users found",
     "no_search_results": "No users found matching your search"
   },
+  "theme": {
+    "auto": "Auto",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "mail_list": {
     "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
   },

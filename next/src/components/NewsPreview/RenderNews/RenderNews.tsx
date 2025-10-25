@@ -51,7 +51,7 @@ export default async function RenderNews({
             i === 0
               ? 'col-span-3 max-lg:col-span-1 max-lg:flex-col'
               : 'col-span-1 flex-col'
-          } flex gap-4 rounded-lg border border-gray-200/50 bg-background-50 shadow-sm`}
+          } flex gap-4 rounded-lg border border-gray-200/50 bg-background-50 shadow-sm dark:border-background-50 dark:bg-background-100`}
         >
           <div
             className={`${
@@ -67,7 +67,7 @@ export default async function RenderNews({
                   i !== 0
                     ? 'rounded-t-lg'
                     : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'
-                } object-cover`}
+                } object-cover dark:brightness-90`}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={getStrapiUrl(news.attributes.banner?.data.attributes.url)}
                 fill
@@ -81,7 +81,7 @@ export default async function RenderNews({
           <div className="flex h-full w-full flex-col justify-between gap-12 p-4">
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-bold uppercase text-accent-400">
+                <span className="text-sm font-bold uppercase text-accent-400 dark:text-accent-600">
                   {news.attributes.category}
                 </span>
                 <p

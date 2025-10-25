@@ -12,6 +12,7 @@ import { HiMenu } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import './MobileHamburger.css';
 
 const InstallPwaButton = dynamic(() => import('./InstallPwaButton'), {
@@ -154,6 +155,7 @@ export default function MobileHamburger({
                 <IoMdClose size={32} />
               </button>
               <LanguageSwitcher />
+              <ThemeSwitcher dictionary={dictionary.theme} session={session} />
               {session?.user ? (
                 <button
                   aria-label={dictionary.general.logout}

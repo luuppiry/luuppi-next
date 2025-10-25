@@ -1,3 +1,4 @@
+import { ForceLightMode } from '@/libs/utils/ForceLightMode';
 import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
@@ -28,12 +29,14 @@ export default async function CollaborationCompanies(
 
   return (
     <div className="relative flex flex-col gap-12">
+      <ForceLightMode />
+
       <h1>{dictionary.navigation.companies}</h1>
       <div className="flex flex-col gap-8">
         {pageData.data.map((company) => (
           <div
             key={company.attributes.createdAt!.toString()}
-            className="flex gap-4 rounded-lg bg-background-50"
+            className="flex gap-4 rounded-lg bg-background-50 dark:bg-background-900/80 dark:text-base-300"
           >
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
             <div className="flex gap-12 py-4 max-md:flex-col max-md:gap-6">

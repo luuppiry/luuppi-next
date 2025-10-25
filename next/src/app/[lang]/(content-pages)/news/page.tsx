@@ -55,7 +55,7 @@ export default async function News(props: NewsProps) {
           <article
             key={news.attributes.title}
             className={
-              'flex gap-4 rounded-lg border border-gray-200/50 bg-background-50 shadow-sm max-sm:flex-col'
+              'flex gap-4 rounded-lg border border-gray-200/50 dark:border-background-200 bg-background-50 shadow-sm max-sm:flex-col'
             }
           >
             <div
@@ -82,7 +82,7 @@ export default async function News(props: NewsProps) {
             <div className="flex w-full flex-col justify-between gap-6 p-4">
               <div className="flex flex-col gap-1">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-sm font-bold uppercase text-accent-400">
+                  <span className="text-sm font-bold uppercase text-accent-400 dark:text-accent-700">
                     {news.attributes.category}
                   </span>
                   <p

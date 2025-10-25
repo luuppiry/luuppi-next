@@ -20,7 +20,7 @@ export default async function RenderPartners({ lang }: RenderPartnersProps) {
       {partnersData.data.map((partner) => (
         <Link
           key={partner.attributes.createdAt!.toString()}
-          className="btn btn-link relative mx-6 flex h-32 w-48 opacity-65 brightness-0 filter transition-all duration-300 hover:opacity-100 hover:brightness-100 max-md:h-20"
+          className="btn btn-link relative mx-6 flex h-32 w-48 opacity-65 brightness-0 filter transition-all duration-300 hover:opacity-100 hover:brightness-100 max-md:h-20 dark:mix-blend-screen dark:brightness-200 dark:contrast-0"
           href={partner.attributes.homepageUrl}
         >
           <Image
