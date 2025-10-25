@@ -2,7 +2,7 @@ import { Session } from 'next-auth';
 
 export const FF_DARK_MODE = 'dark_mode' as const;
 
-const SUPER_ADMINS = process.env.XXX_SUPER_ADMIN_XXX!.split(',');
+const SUPER_ADMINS = process.env.XXX_SUPER_ADMIN_XXX?.split(',') || [];
 
 type FeatureFlag = typeof FF_DARK_MODE;
 
