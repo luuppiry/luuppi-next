@@ -36,7 +36,7 @@ export default async function RootLayout(props: RootLayoutProps) {
   >(params.lang, '/api/notification', ['notification'], true);
 
   return (
-    <html lang={params.lang}>
+    <html data-theme="light" lang={params.lang}>
       <head>
         <PlausibleProvider
           customDomain={process.env.NEXT_PUBLIC_BASE_URL}
@@ -53,16 +53,16 @@ export default async function RootLayout(props: RootLayoutProps) {
         />
       </head>
       <body className={titilliumFont.className}>
-        <ThemeProvider>
-          <SessionProvider>
+        <SessionProvider>
+          <ThemeProvider>
             <Header dictionary={dictionary} lang={params.lang} />
             <EventSelectorProvider>
               <div className="flex-1">{children}</div>
             </EventSelectorProvider>
             <Footer dictionary={dictionary} lang={params.lang} />
             <NotificationBar lang={params.lang} notification={notification} />
-          </SessionProvider>
-        </ThemeProvider>
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );
