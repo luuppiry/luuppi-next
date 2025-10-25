@@ -1,7 +1,10 @@
 'use client';
 
+import { hasFeatureAccess, FF_DARK_MODE } from '@/libs/utils/feature-flags';
 import { Dictionary } from '@/models/locale';
 import { useTheme } from '@/providers/ThemeProvider';
+
+import { Session } from 'next-auth';
 import { useState } from 'react';
 import { BsDisplay, BsMoon, BsSun } from 'react-icons/bs';
 
@@ -9,9 +12,12 @@ type ThemeMode = 'auto' | 'light' | 'dark';
 
 interface ThemeSwitcherProps {
   dictionary: Dictionary['theme'];
+  session: Session | null;
 }
 
-export default function ThemeSwitcher({ dictionary }: ThemeSwitcherProps) {
+const ThemeSwitcherImpl = ({
+  dictionary,
+}: Omit<ThemeSwitcherProps, 'session'>) => {
   const { theme: currentTheme, setTheme: setMode } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -77,4 +83,15 @@ export default function ThemeSwitcher({ dictionary }: ThemeSwitcherProps) {
       )}
     </div>
   );
+};
+
+export default function ThemeSwitcher({
+  dictionary,
+  session,
+}: ThemeSwitcherProps) {
+  if (!hasFeatureAccess(FF_DARK_MODE, session)) {
+    return null;
+  }
+
+  return <ThemeSwitcherImpl dictionary={dictionary} />;
 }
