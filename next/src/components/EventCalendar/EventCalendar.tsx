@@ -54,7 +54,7 @@ export default function EventCalendar({
       className={`${ctx.desktopCalendarFullSize ? 'fixed left-0 top-0 z-50 h-screen w-screen' : ''}`}
     >
       <div
-        className={`${ctx.desktopCalendarFullSize ? 'flex h-full w-full bg-white p-6' : ''}`}
+        className={`${ctx.desktopCalendarFullSize ? 'flex h-full w-full bg-white p-6 dark:bg-background-50' : ''}`}
       >
         <FullCalendar
           ref={calendarRef}
