@@ -1,3 +1,4 @@
+import { ForceLightMode } from '@/libs/utils/ForceLightMode';
 import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
@@ -28,6 +29,8 @@ export default async function CollaborationCompanies(
 
   return (
     <div className="relative flex flex-col gap-12">
+      <ForceLightMode />
+
       <h1>{dictionary.navigation.companies}</h1>
       <div className="flex flex-col gap-8">
         {pageData.data.map((company) => (
