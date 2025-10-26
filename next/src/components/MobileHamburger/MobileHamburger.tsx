@@ -155,7 +155,7 @@ export default function MobileHamburger({
                 <IoMdClose size={32} />
               </button>
               <LanguageSwitcher />
-              <ThemeSwitcher dictionary={dictionary.theme} session={session} />
+              <ThemeSwitcher dictionary={dictionary.theme} />
               {session?.user ? (
                 <button
                   aria-label={dictionary.general.logout}

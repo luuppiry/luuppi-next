@@ -1,6 +1,5 @@
 'use client';
 
-import { hasFeatureAccess, FF_DARK_MODE } from '@/libs/utils/feature-flags';
 import { Dictionary } from '@/models/locale';
 import { useTheme } from '@/providers/ThemeProvider';
 
@@ -15,9 +14,7 @@ interface ThemeSwitcherProps {
   session: Session | null;
 }
 
-const ThemeSwitcherImpl = ({
-  dictionary,
-}: Omit<ThemeSwitcherProps, 'session'>) => {
+const ThemeSwitcher = ({ dictionary }: Omit<ThemeSwitcherProps, 'session'>) => {
   const { theme: currentTheme, setTheme: setMode } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -85,13 +82,4 @@ const ThemeSwitcherImpl = ({
   );
 };
 
-export default function ThemeSwitcher({
-  dictionary,
-  session,
-}: ThemeSwitcherProps) {
-  if (!hasFeatureAccess(FF_DARK_MODE, session)) {
-    return null;
-  }
-
-  return <ThemeSwitcherImpl dictionary={dictionary} />;
-}
+export default ThemeSwitcher;
