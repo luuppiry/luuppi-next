@@ -23,14 +23,16 @@ const ThemeSwitcher = ({ dictionary }: Omit<ThemeSwitcherProps, 'session'>) => {
     setIsOpen(false);
   };
 
-  const getThemeIcon = (mode: ThemeMode) => {
+  const getThemeIcon = (mode: ThemeMode, variant?: 'small') => {
+    const size = variant == 'small' ? 16 : 24;
+
     switch (mode) {
       case 'light':
-        return <BsSun size={16} />;
+        return <BsSun size={size} />;
       case 'dark':
-        return <BsMoon size={16} />;
+        return <BsMoon size={size} />;
       default:
-        return <BsDisplay size={16} />;
+        return <BsDisplay size={size} />;
     }
   };
 
@@ -71,7 +73,7 @@ const ThemeSwitcher = ({ dictionary }: Omit<ThemeSwitcherProps, 'session'>) => {
                 className="flex items-center gap-2"
                 onClick={() => handleThemeChange(mode)}
               >
-                {getThemeIcon(mode)}
+                {getThemeIcon(mode, 'small')}
                 {getThemeLabel(mode)}
               </button>
             </li>
