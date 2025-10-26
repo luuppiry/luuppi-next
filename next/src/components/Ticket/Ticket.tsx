@@ -143,7 +143,7 @@ export default function Ticket({
           )}
           <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
           <div className="flex flex-col items-center justify-center p-4 max-md:px-0">
-            <p className="text-4xl font-semibold text-accent-400 max-md:text-2xl">
+            <p className="text-4xl font-semibold text-accent-400 max-md:text-2xl dark:text-accent-700">
               {new Date(eventStartsAt).toLocaleDateString(lang, {
                 day: '2-digit',
               })}

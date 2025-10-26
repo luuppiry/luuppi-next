@@ -167,9 +167,11 @@ export default function MobileCalendar({
           return (
             <button
               key={idx}
-              className={`flex w-full flex-col items-center rounded-lg py-2 text-center transition-all duration-300 dark:bg-background-100 ease-in-out ${
-                isToday ? 'bg-[#fffadf] dark:bg-yellow-800/30 font-bold' : 'bg-gray-50'
-              } ${hasEvents && 'hover:bg-gray-200 focus:bg-gray-200'}`}
+              className={`flex w-full flex-col items-center rounded-lg py-2 text-center transition-all duration-300 ease-in-out dark:bg-background-100 ${
+                isToday
+                  ? 'bg-[#fffadf] font-bold dark:bg-yellow-800/30'
+                  : 'bg-gray-50'
+              } ${hasEvents && 'hover:bg-gray-200 focus:bg-gray-200 dark:hover:bg-primary-200 dark:focus:bg-primary-200'}`}
               disabled={!hasEvents}
               onClick={() => openDayEventsDialog(dateKey)}
             >
@@ -178,7 +180,7 @@ export default function MobileCalendar({
                 <span
                   className={`flex h-6 w-6 items-center justify-center rounded-full px-2 py-1 text-xs ${
                     isPast
-                      ? 'bg-gray-400 text-white'
+                      ? 'bg-gray-400 text-white dark:bg-gray-700'
                       : 'bg-secondary-400 text-white'
                   }`}
                 >

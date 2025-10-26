@@ -101,7 +101,7 @@ export default async function Event(props: EventProps) {
               }
             </h1>
             <div className="flex flex-col opacity-40">
-              <p className="text-sm">
+              <p className="text-sm dark:text-white">
                 {dictionary.general.content_updated}:{' '}
                 {new Date(event.data.attributes.updatedAt!).toLocaleString(
                   params.lang,

@@ -68,7 +68,7 @@ export default async function Board(props: BoardProps) {
           </h1>
           {Boolean(otherBoards.length) && (
             <div className="dropdown sm:dropdown-end">
-              <div className="btn m-1" role="button" tabIndex={0}>
+              <div className="btn m-1 dark:border-primary-500 dark:hover:border-primary-400" role="button" tabIndex={0}>
                 {dictionary.pages_board.other_boards}
               </div>
               <ul

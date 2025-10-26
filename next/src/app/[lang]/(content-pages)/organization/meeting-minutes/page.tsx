@@ -70,7 +70,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
           {dictionary.navigation.meeting_minutes} {selectedYear}
         </h1>
         <div className="dropdown sm:dropdown-end">
-          <div className="btn m-1" role="button" tabIndex={0}>
+          <div className="btn m-1 dark:border-primary-500 dark:hover:border-primary-400" role="button" tabIndex={0}>
             {dictionary.pages_meeting_minutes_year.other_meeting_minutes_years}
           </div>
           <ul
