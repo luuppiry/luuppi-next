@@ -8,7 +8,7 @@ import { APIResponseData } from '@/types/types';
 export const analyzeReadTime = (
   news: APIResponseData<'api::news-single.news-single'>,
 ) => {
-  const content = news.attributes.content
+  const content = (news.attributes.content ?? [])
     .map((c) => c.children.map((c) => (c.type === 'text' ? c.text : '')))
     .join(' ');
   const words = content.split(' ').length;
