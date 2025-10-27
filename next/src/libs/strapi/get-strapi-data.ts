@@ -9,7 +9,7 @@ export function getStrapiData<T>(
   url: string,
   revalidateTags: string[],
   ignoreError: true,
-  includePreviews?: boolean,
+  includeDrafts?: boolean,
 ): Promise<T | null>;
 
 export function getStrapiData<T>(
@@ -17,7 +17,7 @@ export function getStrapiData<T>(
   url: string,
   revalidateTags: string[],
   ignoreError?: false,
-  includePreviews?: boolean,
+  includeDrafts?: boolean,
 ): Promise<T>;
 
 export async function getStrapiData<T>(

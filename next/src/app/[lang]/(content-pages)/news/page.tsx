@@ -33,7 +33,7 @@ export default async function News(props: NewsProps) {
     'fi',
     '/api/news?populate[0]=banner&populate[1]=authorImage&populate[3]=localizations&pagination[pageSize]=100',
     ['news-single'],
-    includeDrafts ? undefined : false,
+    undefined,
     includeDrafts,
   );
 
@@ -129,6 +129,11 @@ export default async function News(props: NewsProps) {
                   </div>
                 )}
                 <div className="flex flex-col">
+                  {!news.attributes.publishedAt && (
+                    <span className="badge badge-neutral mb-1">
+                      {dictionary.general.draft} 👷🏼
+                    </span>
+                  )}
                   <span className="text-sm font-semibold">
                     {news.attributes.authorName}
                   </span>
