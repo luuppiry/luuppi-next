@@ -22,7 +22,7 @@ export default function HeaderActions({
   return (
     <>
       <div className="flex items-center justify-center max-lg:hidden">
-        <ThemeSwitcher dictionary={dictionary.theme} session={session} />
+        <ThemeSwitcher dictionary={dictionary.theme} />
       </div>
       {session && (
         <div className="flex items-center justify-center max-lg:hidden">

@@ -36,8 +36,30 @@ export default async function RootLayout(props: RootLayoutProps) {
   >(params.lang, '/api/notification', ['notification'], true);
 
   return (
-    <html data-theme="light" lang={params.lang}>
+    <html lang={params.lang} suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const savedTheme = localStorage.getItem('theme') || 'auto';
+                  let theme = 'light';
+                  
+                  if (savedTheme === 'auto') {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  } else {
+                    theme = savedTheme;
+                  }
+                  
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (_) {
+                  document.documentElement.setAttribute('data-theme', 'light');
+                }
+              })();
+            `,
+          }}
+        />
         <PlausibleProvider
           customDomain={process.env.NEXT_PUBLIC_BASE_URL}
           domain={process.env.NEXT_PUBLIC_BASE_URL!?.replace('https://', '')}

@@ -121,7 +121,7 @@ export default function EventCalendar({
               <span className="tooltip block w-full" data-tip={arg.event.title}>
                 <p className="overflow-hidden pl-[2px] text-left text-xs">
                   {arg.timeText}{' '}
-                  <span className="font-bold">
+                  <span className="font-bold dark:font-normal">
                     {arg.event.title
                       .toLowerCase()
                       .includes(dictionary.general.opens) && (
