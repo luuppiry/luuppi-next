@@ -1,5 +1,5 @@
 .menu li > *:not(ul, .menu-title, details, .btn):active,
 .menu li > *:not(ul, .menu-title, details, .btn).active,
 .menu li > details > summary:active {
-  @apply bg-[#e8e9eb] text-inherit dark:bg-base-content;
+  @apply bg-[#e8e9eb] text-inherit dark:bg-primary-200;
 }
