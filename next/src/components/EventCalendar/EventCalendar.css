@@ -51,7 +51,7 @@
 }
 
 .fc .fc-popover {
-  @apply rounded-lg dark:bg-background-100;
+  @apply rounded-lg dark:bg-background-100 dark:[--fc-border-color:rgb(var(--primary-200))];
 }
 
 .fc-event-selected,
