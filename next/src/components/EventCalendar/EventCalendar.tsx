@@ -125,7 +125,7 @@ export default function EventCalendar({
                     {arg.event.title
                       .toLowerCase()
                       .includes(dictionary.general.opens) && (
-                      <HiOutlineClipboardDocumentList className="mr-1 inline-block text-blue-600 dark:bg-opacity-5" />
+                      <HiOutlineClipboardDocumentList className="mr-1 inline-block text-blue-600" />
                     )}
                     {arg.event.title}
                   </span>
