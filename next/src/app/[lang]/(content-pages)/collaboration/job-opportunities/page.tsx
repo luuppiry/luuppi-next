@@ -2,7 +2,6 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { ForceLightMode } from '@/libs/utils/ForceLightMode';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
@@ -29,8 +28,6 @@ export default async function CollaborationJobOpportunities(
 
   return (
     <div className="relative flex flex-col gap-12">
-      <ForceLightMode />
-
       <h1>{dictionary.navigation.job_opportunities}</h1>
       <div className="flex flex-col gap-8">
         {pageData.data.reverse().map((job_opportunity) => (
@@ -43,7 +40,7 @@ export default async function CollaborationJobOpportunities(
               <div className="flex shrink-0 flex-col justify-center gap-4">
                 <Image
                   alt="Company logo"
-                  className="rounded-lg object-contain max-md:w-44"
+                  className="rounded-lg object-contain max-md:w-44 dark:drop-shadow-[0_0_.5px_white]"
                   height={100}
                   src={getStrapiUrl(
                     job_opportunity.attributes.logo?.data.attributes.url,
