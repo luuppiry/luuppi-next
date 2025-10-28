@@ -121,6 +121,7 @@
     "no_results": "No results",
     "expires": "Expires",
     "created_at": "Created at",
+    "draft": "Draft",
     "delete": "Delete",
     "general_info": "General info",
     "address_declaration": "Address declaration",
