@@ -89,6 +89,6 @@ export async function generateStaticParams() {
   ]);
 
   return pageData.data.map((meetingMinuteDocument) => ({
-    slug: meetingMinuteDocument.id.toString(),
+    slug: meetingMinuteDocument.documentId.toString(),
   }));
 }

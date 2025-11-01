@@ -34,7 +34,7 @@ export default function EventCalendar({
   const calendarRef = useRef<FullCalendar>(null);
 
   const handleEventClick = (e: any) => {
-    const eventId = e.event.id;
+    const eventId = e.event.extendedProps.documentId || e.event.id;
     router.push(`/${lang}/events/${eventId}`);
   };
 

@@ -21,7 +21,7 @@ type ReservationResult = {
 };
 
 export async function reservationCreate(
-  eventId: number,
+  eventId: string,
   amount: number,
   lang: string,
   selectedQuota: string,
@@ -346,7 +346,7 @@ export async function reservationCreate(
 }
 
 async function checkSoldOutCache(
-  eventId: number,
+  eventId: string,
   userProvidedTargetedRole: string | undefined,
 ): Promise<boolean> {
   if (
@@ -367,7 +367,7 @@ async function checkSoldOutCache(
 }
 
 function validateInputs(
-  eventId: number,
+  eventId: string,
   amount: number,
   dictionary: Dictionary,
 ): ReservationResult | null {
@@ -378,7 +378,7 @@ function validateInputs(
     };
   }
 
-  if (!eventId || isNaN(eventId) || eventId < 1) {
+  if (!eventId ) {
     return {
       message: dictionary.api.invalid_event,
       isError: true,

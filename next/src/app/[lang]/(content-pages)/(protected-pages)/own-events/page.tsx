@@ -173,7 +173,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
     )
     .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
-  const getQuestionsForEvent = (eventId: number) =>
+  const getQuestionsForEvent = (eventId: string) =>
     upcomingEventQuestions.find(
       (eventQuestions) => eventQuestions.eventId === eventId,
     ) ?? {

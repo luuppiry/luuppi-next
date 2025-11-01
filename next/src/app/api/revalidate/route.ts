@@ -25,14 +25,14 @@ export async function POST(request: NextRequest) {
     if (model === 'event') {
       logger.info(`Revalidating event-${body.entry.id}`);
 
-      if (!body.entry?.id) {
+      if (!body.entry?.documentId) {
         logger.error(`No entry found for event-${body.entry.id}`);
         return new Response('No entry found', { status: 400 });
       }
 
       revalidateTag(`event-${body.entry.id}`);
 
-      const { NameFi, NameEn, LocationFi, LocationEn, StartDate, EndDate, id } =
+      const { NameFi, NameEn, LocationFi, LocationEn, StartDate, EndDate, documentId } =
         body.entry;
 
       await createEvent({
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
         LocationEn,
         StartDate,
         EndDate,
-        id,
+        documentId,
       });
     }
 
@@ -81,7 +81,7 @@ function createEvent({
   LocationEn,
   StartDate,
   EndDate,
-  id,
+  documentId,
 }: {
   NameFi: string;
   NameEn: string;
@@ -89,15 +89,15 @@ function createEvent({
   LocationEn: string;
   StartDate: string;
   EndDate: string;
-  id: number;
+  documentId: string;
 }) {
   return prisma.event.upsert({
     where: {
-      eventId: id,
+      eventId: documentId,
     },
     create: {
       endDate: EndDate,
-      eventId: id,
+      eventId: documentId,
       locationEn: LocationEn,
       locationFi: LocationFi,
       nameEn: NameEn,

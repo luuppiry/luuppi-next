@@ -109,7 +109,7 @@ export const flipMeetingMinuteLocale = (
             ...publication,
             attributes: {
               ...localeEn,
-              id: publication.id,
+              id: publication.documentId,
               image: publication.image,
               pdf: publication.pdf,
               Seo: {

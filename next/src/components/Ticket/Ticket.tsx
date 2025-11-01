@@ -18,7 +18,7 @@ interface TicketProps {
     role: string | undefined;
     maxTicketsPerUser: number;
   };
-  eventId: number;
+  eventId: string;
   eventStartsAt: Date;
   lang: string;
   dictionary: Dictionary;

@@ -27,7 +27,7 @@ export interface UserWithRegistrations {
   }[];
   registrations: {
     id: number;
-    eventId: number;
+    eventId: string;
     eventName: string | undefined;
     paymentCompleted: boolean;
     reservedUntil: Date | null;
@@ -108,7 +108,7 @@ export default async function Page(props: {
 
   const registrationsFormatted = user.registrations.map((registration) => {
     const event = strapiEventData.data.find(
-      (event) => event.id === registration.eventId,
+      (event) => event.documentId === registration.eventId,
     );
 
     const ticketType = event?.Registration?.TicketTypes?.find(

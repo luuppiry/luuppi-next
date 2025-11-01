@@ -7,7 +7,7 @@ import { useContext } from 'react';
 interface QuestionButtonProps {
   reservationId: number;
   questions: {
-    eventId: number;
+    eventId: string;
     text: {
       id?: number;
       QuestionEn: string;

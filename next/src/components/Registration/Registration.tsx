@@ -22,7 +22,7 @@ interface RegistrationProps {
   };
   questions: {
     answerableUntil: Date | null;
-    eventId: number;
+    eventId: string;
     text: any[];
     select: any[];
     checkbox: any[];

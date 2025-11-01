@@ -38,9 +38,9 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
         {sortedData.map((publication) => (
           <a
-            key={publication.id}
+            key={publication.documentId}
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
-            href={`/${params.lang}/luuppi-sanomat/${publication.id}`}
+            href={`/${params.lang}/luuppi-sanomat/${publication.documentId}`}
           >
             {publication.image?.url && (
               <div

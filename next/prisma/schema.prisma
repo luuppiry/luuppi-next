@@ -93,7 +93,7 @@ model EventRegistration {
   entraUserUuid    String
   user             User      @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
   /// Strapi Event ID
-  eventId          Int
+  eventId          String
   event            Event     @relation(fields: [eventId], references: [eventId])
   payments         Payment[]
   answers          Answer[]
@@ -134,7 +134,7 @@ model Payment {
 model Event {
   id            Int                 @id @default(autoincrement())
   /// Strapi Event ID
-  eventId       Int                 @unique
+  eventId       String              @unique
   nameEn        String
   nameFi        String
   startDate     DateTime

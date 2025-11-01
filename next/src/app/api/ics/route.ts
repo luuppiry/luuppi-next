@@ -8,7 +8,7 @@ import { NextRequest } from 'next/server';
 
 interface IcsEvent {
   name: string;
-  id: number;
+  id: string;
   startDate: Date;
   endDate: Date;
   location: string;
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
   // Format event from raw event data
   const formatEvent = (event: APIResponseData<'api::event.event'>) => ({
     name: event[lang === 'fi' ? 'NameFi' : 'NameEn'],
-    id: event.id,
+    id: event.documentId,
     startDate: new Date(event.StartDate),
     endDate: new Date(event.EndDate),
     location: event[lang === 'fi' ? 'LocationFi' : 'LocationEn'],

@@ -82,6 +82,6 @@ export async function generateStaticParams() {
   >('fi', '/api/luuppi-sanomats?pagination[pageSize]=100', ['luuppi-sanomat']);
 
   return pageData.data.map((sanomat) => ({
-    slug: sanomat.id.toString(),
+    slug: sanomat.documentId.toString(),
   }));
 }

@@ -6,7 +6,7 @@ import ShowParticipantsModal from './ShowParticipantsDialog/ShowParticipantsDial
 export const revalidate = 60; // revalidate the data at most every 60 seconds
 
 interface ShowParticipantsProps {
-  eventId: number;
+  eventId: string;
   lang: string;
 }
 

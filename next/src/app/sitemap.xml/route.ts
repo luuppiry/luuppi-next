@@ -124,16 +124,16 @@ export async function GET() {
 
   const eventPagesSiteMap: SitemapItemLoose[] = eventsData.data.map(
     (event) => ({
-      url: `/fi/events/${event.id}`,
+      url: `/fi/events/${event.documentId}`,
       links: [
         {
           hreflang: 'fi',
-          url: `/fi/events/${event.id}`,
+          url: `/fi/events/${event.documentId}`,
           lang: 'fi',
         },
         {
           hreflang: 'en',
-          url: `/en/events/${event.id}`,
+          url: `/en/events/${event.documentId}`,
           lang: 'en',
         },
       ],
@@ -142,16 +142,16 @@ export async function GET() {
 
   const eventPagesSiteMapEn: SitemapItemLoose[] = eventsData.data.map(
     (event) => ({
-      url: `/en/events/${event.id}`,
+      url: `/en/events/${event.documentId}`,
       links: [
         {
           hreflang: 'en',
-          url: `/en/events/${event.id}`,
+          url: `/en/events/${event.documentId}`,
           lang: 'en',
         },
         {
           hreflang: 'fi',
-          url: `/fi/events/${event.id}`,
+          url: `/fi/events/${event.documentId}`,
           lang: 'fi',
         },
       ],
@@ -180,17 +180,17 @@ export async function GET() {
 
   const sanomatPages: SitemapItemLoose[] = luuppiSanomatData.data.map(
     (sanomat) => ({
-      url: `/fi/luuppi-sanomat/${sanomat.id}`,
+      url: `/fi/luuppi-sanomat/${sanomat.documentId}`,
       lastmod: new Date(sanomat.updatedAt!).toISOString(),
       links: [
         {
           hreflang: 'fi',
-          url: `/fi/luuppi-sanomat/${sanomat.id}`,
+          url: `/fi/luuppi-sanomat/${sanomat.documentId}`,
           lang: 'fi',
         },
         {
           hreflang: 'en',
-          url: `/en/luuppi-sanomat/${sanomat.id}`,
+          url: `/en/luuppi-sanomat/${sanomat.documentId}`,
           lang: 'en',
         },
       ],

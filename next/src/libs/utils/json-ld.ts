@@ -67,7 +67,7 @@ export const getEventJsonLd = (
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: event.data[lang === 'en' ? 'NameEn' : 'NameFi'],
-    url: `https://luuppi.fi/${lang}/events/${event.data.id}`,
+    url: `https://luuppi.fi/${lang}/events/${event.data.documentId}`,
     startDate: new Date(event.data.StartDate).toISOString(),
     endDate: new Date(event.data.EndDate).toISOString(),
     description: description.slice(0, 300),
@@ -87,7 +87,7 @@ export const getEventJsonLd = (
       name: lang === 'en' ? ticket.NameEn! : ticket.NameFi!,
       price: ticket.Price!,
       priceCurrency: 'EUR',
-      url: `https://luuppi.fi/${lang}/events/${event.data.id}`,
+      url: `https://luuppi.fi/${lang}/events/${event.data.documentId}`,
       validFrom: new Date(event.data.StartDate).toISOString(),
       seller: {
         '@type': 'Organization',

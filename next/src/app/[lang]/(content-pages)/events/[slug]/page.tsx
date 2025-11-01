@@ -30,12 +30,8 @@ export default async function Event(props: EventProps) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
-  const id = parseInt(params.slug, 10);
-  if (isNaN(id)) {
-    redirect(`/${params.lang}/404`);
-  }
-
-  const url = `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=Image&populate=Registration.TicketTypes.Role`;
+  const id = params.slug;
+  const url = `/api/events/${params.slug}?populate=Image&populate=Registration.TicketTypes.Role`;
 
   const event = await getStrapiData<APIResponse<'api::event.event'>>(
     params.lang,

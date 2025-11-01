@@ -45,7 +45,8 @@ export default async function RenderEvents({
           : eventPlaceholder;
 
     return {
-      id: event.id.toString(),
+      documentId: event.documentId,
+      id: event.documentId.toString(),
       description,
       location,
       title,
