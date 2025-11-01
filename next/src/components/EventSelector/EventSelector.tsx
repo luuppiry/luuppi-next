@@ -63,7 +63,7 @@ export default function EventSelector({
       <div className="flex w-full items-center justify-between rounded-lg bg-background-50 p-4 max-md:flex-col max-md:justify-center max-md:gap-4 max-md:px-2">
         <div className="flex w-full items-center gap-4 max-md:flex-col max-md:gap-2">
           <div
-            className="tabs-boxed tabs border bg-white max-md:w-full"
+            className="tabs-boxed dark:border-primary-300 tabs border bg-white dark:bg-inherit max-md:w-full"
             role="tablist"
           >
             <button

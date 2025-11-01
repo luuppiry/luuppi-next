@@ -98,7 +98,7 @@ export default function AdminUsersTable({
             </p>
           </div>
           <div className="join w-full sm:w-auto">
-            <div className="join-item inline-flex h-12 items-center border border-r-0 bg-secondary-400 px-3">
+            <div className="join-item inline-flex h-12 items-center border border-r-0 bg-secondary-400 px-3 dark:border-[var(--fallback-bc,oklch(var(--bc)/.2))] dark:bg-primary-500">
               <BiSearch className="text-white" size={20} />
             </div>
             <input

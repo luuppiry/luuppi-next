@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import { dateFormat } from '@/libs/constants';
 import { flipNewsLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
@@ -19,12 +20,17 @@ export default async function RenderNews({
   lang,
   dictionary,
 }: RenderNewsProps) {
+  const session = await auth();
+  const includeDrafts = session?.user?.isLuuppiHato ?? false;
+
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
   >(
     'fi',
     '/api/news?populate[0]=banner&populate[1]=authorImage&populate[3]=localizations&pagination[pageSize]=100',
     ['news-single'],
+    undefined,
+    includeDrafts,
   );
 
   const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);
@@ -51,7 +57,7 @@ export default async function RenderNews({
             i === 0
               ? 'col-span-3 max-lg:col-span-1 max-lg:flex-col'
               : 'col-span-1 flex-col'
-          } flex gap-4 rounded-lg border border-gray-200/50 bg-background-50 shadow-sm`}
+          } flex gap-4 rounded-lg border border-gray-200/50 bg-background-50 shadow-sm dark:border-background-50 dark:bg-background-100`}
         >
           <div
             className={`${
@@ -67,7 +73,7 @@ export default async function RenderNews({
                   i !== 0
                     ? 'rounded-t-lg'
                     : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'
-                } object-cover`}
+                } object-cover dark:brightness-90`}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={getStrapiUrl(news.banner?.url)}
                 fill
@@ -81,7 +87,7 @@ export default async function RenderNews({
           <div className="flex h-full w-full flex-col justify-between gap-12 p-4">
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-bold uppercase text-accent-400">
+                <span className="text-sm font-bold uppercase text-accent-400 dark:text-accent-600">
                   {news.category}
                 </span>
                 <p

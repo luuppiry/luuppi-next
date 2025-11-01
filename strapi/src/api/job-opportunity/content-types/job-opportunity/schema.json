@@ -4,7 +4,8 @@
   "info": {
     "singularName": "job-opportunity",
     "pluralName": "job-opportunities",
-    "displayName": "JobOpportunities"
+    "displayName": "JobOpportunities",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -53,16 +54,14 @@
     },
     "logo": {
       "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"],
       "pluginOptions": {
         "i18n": {
           "localized": false
         }
       },
-      "multiple": false,
-      "required": true,
-      "allowedTypes": [
-        "images"
-      ]
+      "required": true
     },
     "jobOpportunityPublished": {
       "type": "text",
@@ -84,13 +83,8 @@
     },
     "jobOpportunityTargetGroup": {
       "type": "enumeration",
-      "required": true,
-      "enum": [
-        "everybody",
-        "computer_science",
-        "mathematics",
-        "data_analysis"
-      ]
+      "enum": ["everybody", "computer_science", "mathematics", "data_analysis"],
+      "required": true
     }
   }
 }

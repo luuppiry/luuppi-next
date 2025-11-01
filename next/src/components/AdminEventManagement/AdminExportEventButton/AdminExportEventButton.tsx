@@ -49,7 +49,7 @@ export default function AdminExportEventButton({
       >
         <SubmitButton className="btn btn-circle btn-ghost" disabled={disabled}>
           <PiFileHtml
-            className={disabled ? 'text-gray-400' : 'text-gray-800'}
+            className={disabled ? 'text-gray-400' : 'text-gray-800 dark:text-background-950'}
             size={26}
           />
         </SubmitButton>
@@ -60,7 +60,7 @@ export default function AdminExportEventButton({
       >
         <SubmitButton className="btn btn-circle btn-ghost" disabled={disabled}>
           <PiFileCsv
-            className={disabled ? 'text-gray-400' : 'text-gray-800'}
+            className={disabled ? 'text-gray-400' : 'text-gray-800 dark:text-background-950'}
             size={26}
           />
         </SubmitButton>

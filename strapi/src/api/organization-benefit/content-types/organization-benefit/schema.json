@@ -4,7 +4,8 @@
   "info": {
     "singularName": "organization-benefit",
     "pluralName": "organization-benefits",
-    "displayName": "OrganizationBenefits"
+    "displayName": "OrganizationBenefits",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false

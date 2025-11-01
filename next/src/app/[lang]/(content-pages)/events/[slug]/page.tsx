@@ -95,7 +95,7 @@ export default async function Event(props: EventProps) {
               {event.data[params.lang === 'en' ? 'NameEn' : 'NameFi']}
             </h1>
             <div className="flex flex-col opacity-40">
-              <p className="text-sm">
+              <p className="text-sm dark:text-white">
                 {dictionary.general.content_updated}:{' '}
                 {new Date(event.data.updatedAt!).toLocaleString(
                   params.lang,

@@ -39,7 +39,7 @@ export default async function CollaborationCompanies(
               <div className="flex shrink-0 flex-col justify-center gap-4">
                 <Image
                   alt="Company logo"
-                  className="rounded-lg object-contain max-md:w-44"
+                  className="rounded-lg object-contain max-md:w-44 dark:drop-shadow-[0_0_.5px_white]"
                   height={100}
                   src={getStrapiUrl(company.logo?.url)}
                   width={300}

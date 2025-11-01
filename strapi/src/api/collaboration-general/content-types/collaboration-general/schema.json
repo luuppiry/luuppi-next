@@ -4,7 +4,8 @@
   "info": {
     "singularName": "collaboration-general",
     "pluralName": "collaboration-generals",
-    "displayName": "CollaborationGeneral"
+    "displayName": "CollaborationGeneral",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false

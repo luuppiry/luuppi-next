@@ -36,9 +36,8 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"],
+      "pluginOptions": {}
     },
     "Registration": {
       "type": "component",
@@ -61,9 +60,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "Alcohol": {
       "type": "enumeration",

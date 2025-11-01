@@ -255,16 +255,18 @@ export default async function OwnEvents(props: OwnEventsProps) {
                 {dictionary.pages_events.paid_registrations}
               </h2>
               <div className="flex flex-col gap-4">
-                {paidRegistrations.map((registration) => (
-                  <Registration
-                    key={registration.id}
-                    answers={getAnswersForReservation(registration.id)}
-                    dictionary={dictionary}
-                    lang={params.lang}
-                    questions={getQuestionsForEvent(registration.eventId)}
-                    registration={registration}
-                  />
-                ))}
+                {paidRegistrations
+                  .sort((a, b) => +b.startDate - +a.endDate)
+                  .map((registration) => (
+                    <Registration
+                      key={registration.id}
+                      answers={getAnswersForReservation(registration.id)}
+                      dictionary={dictionary}
+                      lang={params.lang}
+                      questions={getQuestionsForEvent(registration.eventId)}
+                      registration={registration}
+                    />
+                  ))}
               </div>
             </div>
           )}

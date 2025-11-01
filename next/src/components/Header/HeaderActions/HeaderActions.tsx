@@ -1,7 +1,8 @@
 'use client';
 import { signIn } from '@/actions/auth';
 import MobileHamburger from '@/components/MobileHamburger/MobileHamburger';
-import { Dictionary } from '@/models/locale';
+import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useSession } from 'next-auth/react';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import UserDropdown from '../../UserDropdown/UserDropdown';
@@ -20,6 +21,9 @@ export default function HeaderActions({
 
   return (
     <>
+      <div className="flex items-center justify-center max-lg:hidden">
+        <ThemeSwitcher dictionary={dictionary.theme} />
+      </div>
       {session && (
         <div className="flex items-center justify-center max-lg:hidden">
           <UserDropdown dictionary={dictionary} lang={lang} session={session} />

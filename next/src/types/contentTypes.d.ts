@@ -133,8 +133,7 @@ export interface AdminPermission extends Struct.CollectionTypeSchema {
       Schema.Attribute.SetMinMaxLength<{
         minLength: 1;
       }>;
-    actionParameters: Schema.Attribute.JSON &
-      Schema.Attribute.DefaultTo<object>;
+    actionParameters: Schema.Attribute.JSON & Schema.Attribute.DefaultTo<{}>;
     conditions: Schema.Attribute.JSON & Schema.Attribute.DefaultTo<[]>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -142,7 +141,7 @@ export interface AdminPermission extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'admin::permission'> &
       Schema.Attribute.Private;
-    properties: Schema.Attribute.JSON & Schema.Attribute.DefaultTo<object>;
+    properties: Schema.Attribute.JSON & Schema.Attribute.DefaultTo<{}>;
     publishedAt: Schema.Attribute.DateTime;
     role: Schema.Attribute.Relation<'manyToOne', 'admin::role'>;
     subject: Schema.Attribute.String &
@@ -497,6 +496,7 @@ export interface ApiCollaborationCompanyCollaborationCompany
   extends Struct.SingleTypeSchema {
   collectionName: 'collaboration_companies';
   info: {
+    description: '';
     displayName: 'CollaborationCompanies';
     pluralName: 'collaboration-companies';
     singularName: 'collaboration-company';
@@ -536,6 +536,7 @@ export interface ApiCollaborationGeneralCollaborationGeneral
   extends Struct.SingleTypeSchema {
   collectionName: 'collaboration_generals';
   info: {
+    description: '';
     displayName: 'CollaborationGeneral';
     pluralName: 'collaboration-generals';
     singularName: 'collaboration-general';
@@ -589,6 +590,7 @@ export interface ApiCollaborationJobOpportunityCollaborationJobOpportunity
   extends Struct.SingleTypeSchema {
   collectionName: 'collaboration_job_opportunities';
   info: {
+    description: '';
     displayName: 'CollaborationJobOpportunities';
     pluralName: 'collaboration-job-opportunities';
     singularName: 'collaboration-job-opportunity';
@@ -627,6 +629,7 @@ export interface ApiCollaborationJobOpportunityCollaborationJobOpportunity
 export interface ApiCompanyCompany extends Struct.CollectionTypeSchema {
   collectionName: 'companies';
   info: {
+    description: '';
     displayName: 'Companies';
     pluralName: 'companies';
     singularName: 'company';
@@ -669,7 +672,7 @@ export interface ApiCompanyCompany extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::company.company'
     >;
-    logo: Schema.Attribute.Media<'images'> &
+    logo: Schema.Attribute.Media &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -738,6 +741,7 @@ export interface ApiContactContact extends Struct.SingleTypeSchema {
 export interface ApiEventRoleEventRole extends Struct.CollectionTypeSchema {
   collectionName: 'event_roles';
   info: {
+    description: '';
     displayName: 'EventRoles';
     pluralName: 'event-roles';
     singularName: 'event-role';
@@ -855,6 +859,7 @@ export interface ApiJobOpportunityJobOpportunity
   extends Struct.CollectionTypeSchema {
   collectionName: 'job_opportunities';
   info: {
+    description: '';
     displayName: 'JobOpportunities';
     pluralName: 'job-opportunities';
     singularName: 'job-opportunity';
@@ -1237,6 +1242,7 @@ export interface ApiOrganizationAlumniOrganizationAlumni
   extends Struct.SingleTypeSchema {
   collectionName: 'organization_alumni';
   info: {
+    description: '';
     displayName: 'OrganizationAlumni';
     pluralName: 'organization-alumnis';
     singularName: 'organization-alumni';
@@ -1283,6 +1289,7 @@ export interface ApiOrganizationBenefitOrganizationBenefit
   extends Struct.SingleTypeSchema {
   collectionName: 'organization_benefits';
   info: {
+    description: '';
     displayName: 'OrganizationBenefits';
     pluralName: 'organization-benefits';
     singularName: 'organization-benefit';
@@ -1657,6 +1664,7 @@ export interface ApiOrganizationTraditionGuidelineOrganizationTraditionGuideline
 export interface ApiPrivacyPolicyPrivacyPolicy extends Struct.SingleTypeSchema {
   collectionName: 'privacy_policies';
   info: {
+    description: '';
     displayName: 'PrivacyPolicy';
     pluralName: 'privacy-policies';
     singularName: 'privacy-policy';
@@ -1752,6 +1760,7 @@ export interface ApiStudiesGeneralStudiesGeneral
   extends Struct.SingleTypeSchema {
   collectionName: 'studies_generals';
   info: {
+    description: '';
     displayName: 'StudiesGeneral';
     pluralName: 'studies-generals';
     singularName: 'studies-general';
@@ -1858,6 +1867,7 @@ export interface ApiStudiesWorkshopStudiesWorkshop
 export interface ApiTutoringFaqTutoringFaq extends Struct.SingleTypeSchema {
   collectionName: 'tutoring_faqs';
   info: {
+    description: '';
     displayName: 'TutoringFaq';
     pluralName: 'tutoring-faqs';
     singularName: 'tutoring-faq';
@@ -1904,6 +1914,7 @@ export interface ApiTutoringGeneralTutoringGeneral
   extends Struct.SingleTypeSchema {
   collectionName: 'tutoring_generals';
   info: {
+    description: '';
     displayName: 'TutoringGeneral';
     pluralName: 'tutoring-generals';
     singularName: 'tutoring-general';
@@ -1957,6 +1968,7 @@ export interface ApiTutoringLarpakeTutoringLarpake
   extends Struct.SingleTypeSchema {
   collectionName: 'tutoring_larpakes';
   info: {
+    description: '';
     displayName: 'TutoringLarpake';
     pluralName: 'tutoring-larpakes';
     singularName: 'tutoring-larpake';
@@ -2499,7 +2511,7 @@ export interface PluginUsersPermissionsUser
 }
 
 declare module '@strapi/strapi' {
-  export namespace Public {
+  export module Public {
     export interface ContentTypeSchemas {
       'admin::api-token': AdminApiToken;
       'admin::api-token-permission': AdminApiTokenPermission;

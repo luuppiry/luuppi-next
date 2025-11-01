@@ -303,6 +303,7 @@ export async function reservationCreate(
           eventId,
           entraUserUuid,
           strapiRoleUuid,
+          reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
           price: ownQuota.Price || 0,
         }),
       );

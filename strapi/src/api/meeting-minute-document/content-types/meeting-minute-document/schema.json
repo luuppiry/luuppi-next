@@ -35,16 +35,14 @@
     },
     "pdf": {
       "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["files"],
       "pluginOptions": {
         "i18n": {
           "localized": false
         }
-      },
-      "multiple": false,
-      "required": true,
-      "allowedTypes": [
-        "files"
-      ]
+      }
     },
     "Seo": {
       "type": "component",

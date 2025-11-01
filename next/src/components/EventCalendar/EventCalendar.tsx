@@ -54,7 +54,7 @@ export default function EventCalendar({
       className={`${ctx.desktopCalendarFullSize ? 'fixed left-0 top-0 z-50 h-screen w-screen' : ''}`}
     >
       <div
-        className={`${ctx.desktopCalendarFullSize ? 'flex h-full w-full bg-white p-6' : ''}`}
+        className={`${ctx.desktopCalendarFullSize ? 'flex h-full w-full bg-white p-6 dark:bg-background-50' : ''}`}
       >
         <FullCalendar
           ref={calendarRef}
@@ -111,7 +111,6 @@ export default function EventCalendar({
                 }
               : {
                   weekday: 'long',
-                  day: 'numeric',
                 }
           }
           dayMaxEventRows={4}
@@ -122,7 +121,7 @@ export default function EventCalendar({
               <span className="tooltip block w-full" data-tip={arg.event.title}>
                 <p className="overflow-hidden pl-[2px] text-left text-xs">
                   {arg.timeText}{' '}
-                  <span className="font-bold">
+                  <span className="font-bold dark:font-normal">
                     {arg.event.title
                       .toLowerCase()
                       .includes(dictionary.general.opens) && (
@@ -141,7 +140,16 @@ export default function EventCalendar({
             meridiem: false,
             hour12: false,
           }}
-          events={events}
+          events={events.map((event) => {
+            // Force multi-day events to display as block elements since `nextDayThreshold`
+            // prevents FullCalendar from automatically detecting them as multi-day.
+            if (event.start.getDate() != event.end.getDate()) {
+              (event as Event & { display: string }).display = 'block';
+            }
+
+            return event;
+          })}
+          firstDay={1}
           headerToolbar={
             !isSmallDesktop
               ? {
@@ -159,6 +167,7 @@ export default function EventCalendar({
           initialDate={new Date(currentYear, currentMonth, 1)}
           initialView={'dayGridMonth'}
           locale={lang === 'fi' ? fiLocale : ''}
+          nextDayThreshold="06:00"
           plugins={[dayGridPlugin, timeGridPlugin]}
           slotLabelFormat={{
             hour: 'numeric',

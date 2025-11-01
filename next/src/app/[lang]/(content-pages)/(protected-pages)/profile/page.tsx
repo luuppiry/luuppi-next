@@ -2,6 +2,7 @@ import { auth } from '@/auth';
 import ProfileEmailform from '@/components/ProfileEmailForm/ProfileEmailForm';
 import ProfileNotificationsForm from '@/components/ProfileNotificationsForm/ProfileNotificationsForm';
 import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInfoForm';
+import ProfileUserAddressDeclaration from '@/components/ProfileUserAddressDeclaration/ProfileUserAddressDeclaration';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
@@ -47,6 +48,17 @@ export default async function Profile(props: ProfileProps) {
     },
   });
 
+  const targetYear = getDeclarationYear();
+  const declaration = await prisma.addressDeclaration.findUnique({
+    where: {
+      entraUserUuid_year: {
+        entraUserUuid: session.user.entraUserUuid,
+        year: targetYear,
+      },
+    },
+  });
+  const declared = !!declaration;
+
   if (!localUser) {
     logger.error('User not found in database. This should not happen.');
     redirect(`/${params.lang}/404`);
@@ -73,6 +85,17 @@ export default async function Profile(props: ProfileProps) {
           lang={params.lang}
           user={localUser}
         />
+        {Boolean(isLuuppiMember) && (
+          <>
+            <ProfileUserAddressDeclaration
+              declared={declared}
+              dictionary={dictionary}
+              isLuuppiMember={isLuuppiMember}
+              lang={params.lang}
+              user={localUser}
+            />
+          </>
+        )}
         <ProfileNotificationsForm
           dictionary={dictionary}
           lang={params.lang}
@@ -82,6 +105,12 @@ export default async function Profile(props: ProfileProps) {
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
   );
+}
+
+function getDeclarationYear(d = new Date()): number {
+  const month = d.getMonth() + 1;
+  const year = d.getFullYear();
+  return month >= 9 ? year : year - 1; // Sep–Dec → current, Jan–Aug → previous
 }
 
 export async function generateMetadata(props: ProfileProps): Promise<Metadata> {

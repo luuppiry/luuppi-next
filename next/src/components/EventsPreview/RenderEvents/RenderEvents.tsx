@@ -61,7 +61,7 @@ export default async function RenderEvents({
       {formattedEvents.slice(0, 4).map((event, i) => (
         <Link
           key={i}
-          className="group relative flex flex-col rounded-lg bg-primary-800 text-white"
+          className="group relative flex flex-col rounded-lg bg-primary-800 dark:bg-primary-200 text-white"
           href={`/${lang}/events/${event.id}`}
         >
           <DayBadge dictionary={dictionary} event={event} />
@@ -79,7 +79,7 @@ export default async function RenderEvents({
             <p className="z-20 text-sm font-bold">
               {new Date(event.start).toLocaleString(lang, dateFormat)}
             </p>
-            <p className="z-20 line-clamp-3 text-lg font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-base">
+            <p className="z-20 line-clamp-3 text-lg font-bold text-accent-400 dark:text-accent-600 transition-all duration-300 group-hover:underline max-md:text-base">
               {event.title}
             </p>
             <div className="z-20 flex items-center">

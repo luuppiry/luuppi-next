@@ -8,6 +8,7 @@ export function getStrapiData<T>(
   url: string,
   revalidateTags: string[],
   ignoreError: true,
+  includeDrafts?: boolean,
 ): Promise<T | null>;
 
 export function getStrapiData<T>(
@@ -15,6 +16,7 @@ export function getStrapiData<T>(
   url: string,
   revalidateTags: string[],
   ignoreError?: false,
+  includeDrafts?: boolean,
 ): Promise<T>;
 
 export async function getStrapiData<T>(
@@ -22,13 +24,15 @@ export async function getStrapiData<T>(
   url: string,
   revalidateTags: string[],
   ignoreError?: boolean,
+  includeDrafts?: boolean,
 ): Promise<T | null> {
   try {
     let res = await fetch(
       getStrapiUrl(
         `${url}${url.includes('?') ? '&' : '?'}locale=${lang}&publicationState=${
           process.env.NEXT_PUBLIC_BASE_URL?.includes('beta.luuppi.fi') ||
-          process.env.NEXT_PUBLIC_BASE_URL?.includes('localhost')
+          process.env.NEXT_PUBLIC_BASE_URL?.includes('localhost') ||
+          includeDrafts
             ? 'preview'
             : 'live'
         }`,

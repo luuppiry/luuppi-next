@@ -4,7 +4,8 @@
   "info": {
     "singularName": "company",
     "pluralName": "companies",
-    "displayName": "Companies"
+    "displayName": "Companies",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -59,10 +60,7 @@
         }
       },
       "multiple": false,
-      "required": true,
-      "allowedTypes": [
-        "images"
-      ]
+      "required": true
     }
   }
 }

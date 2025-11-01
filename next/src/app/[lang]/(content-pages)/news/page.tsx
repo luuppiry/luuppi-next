@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
 import { flipNewsLocale } from '@/libs/strapi/flip-locale';
@@ -22,12 +23,17 @@ interface NewsProps {
 
 export default async function News(props: NewsProps) {
   const params = await props.params;
+  const session = await auth();
+  const includeDrafts = session?.user?.isLuuppiHato ?? false;
+
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
   >(
     'fi',
     '/api/news?populate[0]=banner&populate[1]=authorImage&populate[3]=localizations&pagination[pageSize]=100',
     ['news-single'],
+    undefined,
+    includeDrafts,
   );
 
   const newsLocaleFlipped = flipNewsLocale(params.lang, pageData.data);
@@ -54,7 +60,7 @@ export default async function News(props: NewsProps) {
           <article
             key={news.title}
             className={
-              'flex gap-4 rounded-lg border border-gray-200/50 bg-background-50 shadow-sm max-sm:flex-col'
+              'flex gap-4 rounded-lg border border-gray-200/50 bg-background-50 shadow-sm max-sm:flex-col dark:border-background-200'
             }
           >
             <div
@@ -118,6 +124,11 @@ export default async function News(props: NewsProps) {
                   </div>
                 )}
                 <div className="flex flex-col">
+                  {!news.publishedAt && (
+                    <span className="badge badge-neutral mb-1">
+                      {dictionary.general.draft} 👷🏼
+                    </span>
+                  )}
                   <span className="text-sm font-semibold">
                     {news.authorName}
                   </span>

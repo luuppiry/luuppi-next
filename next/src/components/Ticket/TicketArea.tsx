@@ -254,10 +254,10 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
           key={error.message}
           className={`alert rounded-lg text-sm ${
             error.level === 'warn'
-              ? 'bg-yellow-200/50 text-yellow-800'
+              ? 'bg-yellow-200/50 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-200'
               : error.level === 'info'
-                ? 'bg-blue-200 text-blue-800'
-                : 'bg-red-200 text-sm text-red-800'
+                ? 'bg-blue-200 text-blue-800 dark:bg-blue-800/30 dark:text-blue-200'
+                : 'bg-red-200 text-sm text-red-800 dark:bg-red-800/30 dark:text-red-200'
           } ${i === errors.length - 1 ? 'mb-8' : 'mb-4'}`}
         >
           {error.level === 'error' && <BiErrorCircle size={24} />}

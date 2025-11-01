@@ -15,7 +15,7 @@ export default function BoardMember({
   showEmail,
 }: BoardMemberProps) {
   return (
-    <div className="flex w-full flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
+    <div className="flex w-full flex-col rounded-lg border border-gray-200 bg-white shadow-lg dark:bg-base-200 dark:border-background-200">
       <div className="relative aspect-[9/10] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
         {member.image?.url ? (
           <Image

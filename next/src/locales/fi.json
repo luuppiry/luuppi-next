@@ -15,6 +15,7 @@
     "invalid_preferred_full_name": "Kelvoton haluttu koko nimi. Halutun koko nimen tulee olla 2-100 merkkiä pitkä.",
     "invalid_major": "Kelvoton pääaine",
     "no_changes_detected": "Muutoksia ei havaittu",
+    "address_declarated": "Osoitteenilmoitus on tehty onnistuneesti.",
     "profile_updated": "Profiili päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen.",
     "ratelimit": "Liian monta pyyntöä. Yritä uudelleen myöhemmin.",
     "invalid_name": "Kelvoton nimi",
@@ -80,6 +81,7 @@
     "partners": "Yhteistyössä",
     "business_id": "Y-tunnus",
     "copy": "Kopioi",
+    "country": "Maa",
     "logout": "Kirjaudu ulos",
     "copied": "Kopioitu",
     "submit": "Lähetä",
@@ -119,8 +121,10 @@
     "no_results": "Ei tuloksia",
     "expires": "Vanhenee",
     "created_at": "Luotu",
+    "draft": "Luonnos",
     "delete": "Poista",
     "general_info": "Perustiedot",
+    "address_declaration": "Osoitteenilmoitus",
     "expiration_date": "Vanhentumispäivä",
     "event": "Tapahtuma",
     "status": "Tila",
@@ -136,7 +140,9 @@
     "no_payments": "Ei maksuja",
     "no_events": "Ei tapahtuma ilmoittautumisia",
     "participants": "Osallistujat",
+    "postal_code": "Postinumero",
     "starts_at": "Alkaa",
+    "street_address": "Katuosoite",
     "registrations": "Ilmoittautumiset",
     "total_paid": "Maksettu yhteensä",
     "location": "Paikka",
@@ -150,6 +156,11 @@
     "never": "Ei koskaan",
     "no_users": "Käyttäjiä ei löytynyt",
     "no_search_results": "Haulla ei löytynyt käyttäjiä"
+  },
+  "theme": {
+    "auto": "Automaattinen",
+    "light": "Vaalea",
+    "dark": "Tumma"
   },
   "mail_list": {
     "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
@@ -369,7 +380,10 @@
     "first_name_explanation": "Kaikki viralliset etunimesi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "lastname_explanation": "Virallinen sukunimi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "preferred_full_name_explanation": "Haluttu koko nimi. Tämä on nimi, jolla sinua kutsutaan yhdistyksen sisällä. Tämä voi olla esimerkiksi lempinimi tai muu nimi, jolla haluat tulla kutsutuksi. Tätä tietoa käytetään esimerkiksi tapahtumien pöytäplaseerauksissa.",
+    "street_address_explanation": "Katuosoite. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
+    "postal_code_explanation": "Postinumero. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "domicle_explanation": "Kotikunta. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
+    "country_explanation": "Maa. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "major_explanation": "Pääaine. Valitse muu jos et halua kertoa pääainettasi tai jos pääaineesi ei ole listalla.",
     "majors": {
       "other": "Muu / En halua kertoa",
@@ -377,9 +391,12 @@
       "mathematics": "Matematiikka",
       "statistical_data_analysis": "Tilastollinen data-analyysi"
     },
+    "declare_address": "Ilmoitan tekeväni osoitteenilmoituksen Luupin sääntöjen 4 § mukaan ajalle",
+    "address_declarated_info": "Osoitteenilmoituksesi on voimassa",
+    "address_not_declared": "Et ole tehnyt osoitteenilmoitusta kaudelle",
     "legacy_migrate_info": "Voit linkittää vanhan verkkosivuston Luuppi-tilisi tämän lomakkeen avulla. Syötä vanhan verkkosivuston käyttäjätunnuksesi ja salasanasi alla oleviin kenttiin ja paina 'Lähetä'.",
     "migrate_account": "Linkitä vanha Luuppi-tili",
-    "missing_required_fields": "Olet Luupin jäsen, mutta sinulta puuttuu pakollisia tietoja. Olet hyvä ja täytät puuttuvat tiedot. Pakolliset kentät on merkitty tähdellä.",
+    "missing_required_fields": "Olet Luupin jäsen, mutta sinulta puuttuu pakollisia tietoja. Ole hyvä ja täytä puuttuvat tiedot. Pakolliset kentät on merkitty tähdellä.",
     "email_subscription": "Sähköpostilistat"
   },
   "pages_feedback": {

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "tutoring-general",
     "pluralName": "tutoring-generals",
-    "displayName": "TutoringGeneral"
+    "displayName": "TutoringGeneral",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false

@@ -17,9 +17,8 @@ const getDaysOfWeek = (locale: string) => {
     );
   }
 
-  if (locale === 'fi') {
-    daysOfWeek.push(daysOfWeek.shift());
-  }
+  // Always start with Monday regardless of locale
+  daysOfWeek.push(daysOfWeek.shift());
 
   return daysOfWeek;
 };
@@ -46,13 +45,12 @@ const groupEventsByStartDate = (events: Event[]): Record<string, Event[]> =>
       {} as Record<string, Event[]>,
     );
 
-const generateMonthGrid = (year: number, month: number, locale: string) => {
+const generateMonthGrid = (year: number, month: number) => {
   const firstDayOfMonth = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const offset = locale === 'fi' ? -1 : 0;
-  let adjustedFirstDay = (firstDayOfMonth + offset) % 7;
-  if (adjustedFirstDay < 0) adjustedFirstDay += 7;
+  // Always use Monday as first day of week (adjust Sunday from 0 to 6)
+  const adjustedFirstDay = (firstDayOfMonth + 6) % 7;
 
   const grid = [];
   let dayCounter = 1;
@@ -106,8 +104,8 @@ export default function MobileCalendar({
 
   const daysOfWeek = useMemo(() => getDaysOfWeek(lang), [lang]);
   const monthGrid = useMemo(
-    () => generateMonthGrid(currentYear, currentMonth, lang),
-    [currentYear, currentMonth, lang],
+    () => generateMonthGrid(currentYear, currentMonth),
+    [currentYear, currentMonth],
   );
   const groupedEvents = useMemo(() => groupEventsByStartDate(events), [events]);
 
@@ -121,7 +119,7 @@ export default function MobileCalendar({
   };
 
   return (
-    <div className="w-full bg-white py-4">
+    <div className="w-full bg-white py-4 dark:bg-base-100">
       <ViewEventsDialog
         dictionary={dictionary}
         events={selectedEvents}
@@ -169,9 +167,11 @@ export default function MobileCalendar({
           return (
             <button
               key={idx}
-              className={`flex w-full flex-col items-center rounded-lg py-2 text-center transition-all duration-300 ease-in-out ${
-                isToday ? 'bg-[#fffadf] font-bold' : 'bg-gray-50'
-              } ${hasEvents && 'hover:bg-gray-200 focus:bg-gray-200'}`}
+              className={`flex w-full flex-col items-center rounded-lg py-2 text-center transition-all duration-300 ease-in-out dark:bg-background-100 ${
+                isToday
+                  ? 'bg-[#fffadf] font-bold dark:bg-yellow-800/30'
+                  : 'bg-gray-50'
+              } ${hasEvents && 'hover:bg-gray-200 focus:bg-gray-200 dark:hover:bg-primary-200 dark:focus:bg-primary-200'}`}
               disabled={!hasEvents}
               onClick={() => openDayEventsDialog(dateKey)}
             >
@@ -180,7 +180,7 @@ export default function MobileCalendar({
                 <span
                   className={`flex h-6 w-6 items-center justify-center rounded-full px-2 py-1 text-xs ${
                     isPast
-                      ? 'bg-gray-400 text-white'
+                      ? 'bg-gray-400 text-white dark:bg-gray-700'
                       : 'bg-secondary-400 text-white'
                   }`}
                 >

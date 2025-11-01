@@ -41,7 +41,7 @@ export default async function ContentPage({
         <div className="relative flex flex-col gap-4">
           <h1>{contentData.Content.title}</h1>
           <div className="flex flex-col opacity-40">
-            <p className="text-sm">
+            <p className="text-sm dark:text-white">
               {dictionary.general.content_updated}:{' '}
               {new Date(contentData.updatedAt).toLocaleString(lang, dateFormat)}
             </p>
