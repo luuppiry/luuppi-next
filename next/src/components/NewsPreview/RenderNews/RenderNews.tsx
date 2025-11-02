@@ -1,4 +1,3 @@
-import { auth } from '@/auth';
 import { dateFormat } from '@/libs/constants';
 import { flipNewsLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
@@ -20,17 +19,12 @@ export default async function RenderNews({
   lang,
   dictionary,
 }: RenderNewsProps) {
-  const session = await auth();
-  const includeDrafts = session?.user?.isLuuppiHato ?? false;
-
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
   >(
     'fi',
     '/api/news?populate[0]=banner&populate[1]=authorImage&populate[3]=localizations&pagination[pageSize]=100',
     ['news-single'],
-    undefined,
-    includeDrafts,
   );
 
   const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);

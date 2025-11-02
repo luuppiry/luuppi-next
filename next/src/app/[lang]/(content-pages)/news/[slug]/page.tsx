@@ -1,4 +1,3 @@
-import { auth } from '@/auth';
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import SideNavigator from '@/components/SideNavigator/SideNavigator';
 import SidePartners from '@/components/SidePartners/SidePartners';
@@ -27,19 +26,10 @@ interface NewsPostProps {
 export default async function NewsPost(props: NewsPostProps) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
-  const session = await auth();
-
-  const includeDrafts = session?.user?.isLuuppiHato ?? false;
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
-  >(
-    'fi',
-    `${baseUrl}${params.slug}`,
-    ['news-single'],
-    undefined,
-    includeDrafts,
-  );
+  >('fi', `${baseUrl}${params.slug}`, ['news-single']);
 
   const newsLocaleFlipped = flipNewsLocale(params.lang, pageData.data);
 
