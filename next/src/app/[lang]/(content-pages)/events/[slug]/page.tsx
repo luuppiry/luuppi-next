@@ -199,7 +199,7 @@ export default async function Event(props: EventProps) {
           </div>
           <div className="mb-12 mt-4 flex gap-4 rounded-lg bg-background-50">
             <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
-            <div className="flex max-w-full flex-col gap-2 rounded-lg py-4 pr-4 font-semibold max-sm:text-sm">
+            <div className="flex w-full flex-col gap-2 rounded-lg py-4 pr-4 font-semibold max-sm:text-sm">
               <div className="flex items-center">
                 <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
                   <IoCalendarOutline className="shrink-0 text-2xl" />
