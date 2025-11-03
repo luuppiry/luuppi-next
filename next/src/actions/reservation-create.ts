@@ -9,19 +9,6 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { revalidateTag } from 'next/cache';
 
-export type ReservationCreateResponse =
-  | {
-      message: string;
-      isError: true;
-      reloadCache?: boolean;
-    }
-  | {
-      message: string;
-      isError: false;
-      isFreeTicket?: boolean;
-      reloadCache?: boolean;
-    };
-
 const options = {
   noRoleId: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
 };
@@ -32,7 +19,7 @@ export async function reservationCreate(
   lang: SupportedLanguage,
   selectedQuota: string,
   userProvidedTargetedRole: string | undefined,
-): Promise<ReservationCreateResponse> {
+) {
   const dictionary = await getDictionary(lang);
   const session = await auth();
 
@@ -329,53 +316,6 @@ export async function reservationCreate(
         data: eventRegistrationsFormatted,
       });
 
-      // If tickets are free, complete the payment immediately
-      if (ownQuota.Price === 0) {
-        // Get created registrations to update them
-        const actualRegistrations = await prisma.eventRegistration.findMany({
-          where: {
-            eventId,
-            entraUserUuid,
-            strapiRoleUuid,
-            price: 0,
-            paymentCompleted: false,
-            createdAt: {
-              gte: new Date(Date.now() - 5000), // Created within last 5 seconds
-            },
-          },
-          orderBy: {
-            createdAt: 'desc',
-          },
-          take: amount,
-        });
-
-        // Mark free tickets as paid immediately
-        await prisma.eventRegistration.updateMany({
-          where: {
-            id: {
-              in: actualRegistrations.map((reg) => reg.id),
-            },
-          },
-          data: {
-            paymentCompleted: true,
-          },
-        });
-
-        logger.info(
-          `User ${
-            localUser.entraUserUuid
-          } reserved and completed ${amount} free tickets for event ${eventId}. User's total count of tickets for this event is now ${
-            currentUserReservations + amount
-          }`,
-        );
-
-        return {
-          message: dictionary.general.success,
-          isError: false,
-          isFreeTicket: true,
-        };
-      }
-
       logger.info(
         `User ${
           localUser.entraUserUuid
@@ -403,5 +343,8 @@ export async function reservationCreate(
 
   revalidateTag(`get-cached-user:${localUser.entraUserUuid}`);
 
-  return result;
+  return {
+    message: dictionary.general.success,
+    isError: false,
+  };
 }

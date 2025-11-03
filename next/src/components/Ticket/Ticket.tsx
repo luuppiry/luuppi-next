@@ -1,6 +1,4 @@
 'use client';
-import type { ReservationCreateResponse } from '@/actions/reservation-create';
-
 import { reservationCreate } from '@/actions/reservation-create';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
@@ -46,9 +44,10 @@ export default function Ticket({
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState<ReservationCreateResponse | null>(
-    null,
-  );
+  const [response, setResponse] = useState<{
+    message: string;
+    isError: boolean;
+  } | null>(null);
 
   const router = useRouter();
 
@@ -91,14 +90,6 @@ export default function Ticket({
       }
 
       if (!res.isError) {
-        // For free tickets, just refresh the current page to update the UI
-        if ('isFreeTicket' in res && res.isFreeTicket) {
-          router.refresh();
-          setLoading(false);
-          return;
-        }
-
-        // For paid tickets, redirect to own-events page
         router.push(`/${lang}/own-events`);
         router.refresh();
         return;
@@ -143,7 +134,7 @@ export default function Ticket({
       />
       {registrationStarted ? (
         <div
-          className={`indicator flex w-full gap-4 rounded-lg bg-background-50 ${disabled ? 'grayscale dark:opacity-40' : ''}`}
+          className={`indicator flex w-full gap-4 rounded-lg bg-background-50  ${disabled ? 'grayscale dark:opacity-40' : ''}`}
         >
           {isOwnQuota && (
             <span className="badge indicator-item badge-primary badge-sm indicator-center">
@@ -198,7 +189,7 @@ export default function Ticket({
         </div>
       ) : (
         <div
-          className={`indicator flex w-full gap-4 rounded-lg bg-background-50 ${disabled ? 'opacity-40 grayscale' : ''}`}
+          className={`indicator flex w-full gap-4 rounded-lg bg-background-50 ${disabled ? 'grayscale opacity-40' : ''}`}
         >
           {isOwnQuota && (
             <span className="badge indicator-item badge-primary badge-sm indicator-center">

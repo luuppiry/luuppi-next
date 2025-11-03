@@ -1,11 +1,13 @@
-import { ReservationCreateResponse } from '@/actions/reservation-create';
 import { Dictionary } from '@/models/locale';
 
 interface ErrorDialogProps {
   dictionary: Dictionary;
   open: boolean;
   onClose: () => void;
-  response: ReservationCreateResponse | null;
+  response: {
+    message: string;
+    isError: boolean;
+  } | null;
 }
 
 export default function ErrorDialog({
