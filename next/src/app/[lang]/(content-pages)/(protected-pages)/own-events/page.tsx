@@ -177,8 +177,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
     )
     .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
-  const isFreeTicket =
-    !unpaidRegistrations.some((reg) => reg.price !== 0);
+  const isFreeTicket = !unpaidRegistrations.some((reg) => reg.price !== 0);
 
   const getQuestionsForEvent = (eventId: number) =>
     upcomingEventQuestions.find(
@@ -262,8 +261,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
               <PayButton
                 dictionary={dictionary}
                 eventId={
-                  unpaidRegistrations.length === 1 &&
-                  unpaidRegistrations[0].eventId
+                  isFreeTicket ? unpaidRegistrations.at(0)?.eventId : undefined
                 }
                 hasUnansweredQuestions={
                   unpaidRegistrationsHaveUnansweredQuestions
