@@ -79,6 +79,8 @@ export default function Registration({
     return !reservationExpired && !registrationCancelled && !paymentCompleted;
   };
 
+  const redeemedOrPaid = registration.price === 0 ? 'redeemed' : 'paid';
+
   return (
     <div
       key={registration.id}
@@ -100,7 +102,7 @@ export default function Registration({
               }`}
             >
               {registration.paymentCompleted
-                ? dictionary.general.paid
+                ? dictionary.general[redeemedOrPaid]
                 : dictionary.pages_events.reserved}
             </span>
             {registration.reservedUntil >= new Date() &&
