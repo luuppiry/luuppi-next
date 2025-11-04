@@ -10,7 +10,6 @@ interface PayButtonProps {
   lang: SupportedLanguage;
   dictionary: Dictionary;
   isFreeTicket?: boolean;
-  eventId?: number;
   hasUnansweredQuestions: boolean;
 }
 
@@ -19,18 +18,13 @@ export default function PayButton({
   dictionary,
   hasUnansweredQuestions,
   isFreeTicket,
-  eventId,
 }: PayButtonProps) {
   const [response, setResponse] = useState<{
     isError: boolean;
     message: string;
   } | null>(null);
   const [questionConfirmation, setQuestionConfirmation] = useState(false);
-  const reservationChargeAllAction = reservationChargeAll.bind(
-    null,
-    lang,
-    `/events/${eventId}`,
-  );
+  const reservationChargeAllAction = reservationChargeAll.bind(null, lang);
 
   return (
     <>

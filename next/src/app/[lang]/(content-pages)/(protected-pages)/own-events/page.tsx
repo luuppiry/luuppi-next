@@ -260,9 +260,6 @@ export default async function OwnEvents(props: OwnEventsProps) {
               </div>
               <PayButton
                 dictionary={dictionary}
-                eventId={
-                  isFreeTicket ? unpaidRegistrations.at(0)?.eventId : undefined
-                }
                 hasUnansweredQuestions={
                   unpaidRegistrationsHaveUnansweredQuestions
                 }
