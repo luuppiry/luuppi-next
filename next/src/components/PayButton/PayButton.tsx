@@ -9,6 +9,8 @@ import ErrorDialog from '../Ticket/ErrorDialog';
 interface PayButtonProps {
   lang: SupportedLanguage;
   dictionary: Dictionary;
+  isFreeTicket?: boolean;
+  eventId?: number;
   hasUnansweredQuestions: boolean;
 }
 
@@ -16,13 +18,19 @@ export default function PayButton({
   lang,
   dictionary,
   hasUnansweredQuestions,
+  isFreeTicket,
+  eventId,
 }: PayButtonProps) {
   const [response, setResponse] = useState<{
     isError: boolean;
     message: string;
   } | null>(null);
   const [questionConfirmation, setQuestionConfirmation] = useState(false);
-  const reservationChargeAllAction = reservationChargeAll.bind(null, lang);
+  const reservationChargeAllAction = reservationChargeAll.bind(
+    null,
+    lang,
+    `/events/${eventId}`,
+  );
 
   return (
     <>
@@ -48,7 +56,13 @@ export default function PayButton({
         }}
         className="mt-4"
       >
-        <SubmitButton text={dictionary.pages_events.move_to_checkout} />
+        <SubmitButton
+          text={
+            dictionary.pages_events[
+              isFreeTicket ? 'redeem_ticket' : 'move_to_checkout'
+            ]
+          }
+        />
       </form>
     </>
   );

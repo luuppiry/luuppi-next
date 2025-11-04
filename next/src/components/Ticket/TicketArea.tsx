@@ -75,7 +75,10 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const isRegistrationOpen = (registrationEndsAt: Date) =>
     new Date() < new Date(registrationEndsAt);
 
-  const hasBoughtMaxTickets = (roleUuid: string, maxAmount: number) => {
+  const hasBoughtMaxTickets = (
+    roleUuid: string,
+    maxAmount: number,
+  ): { isFree: boolean } | false => {
     if (!eventRegistrations || !localUser) return false;
     const userPurchases = localUser.registrations.filter(
       (registration) => registration.eventId === event.data.id,
@@ -83,10 +86,17 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     const userPurchasesWithRole = userPurchases.filter(
       (registration) => registration.strapiRoleUuid === roleUuid,
     );
-    return userPurchasesWithRole.length >= maxAmount;
+
+    return (
+      userPurchasesWithRole.length >= maxAmount && {
+        isFree: !userPurchasesWithRole.some((reg) => reg.price !== 0),
+      }
+    );
   };
 
-  const hasUnpaidReservations = (roleUuid: string) => {
+  const hasUnpaidReservations = (
+    roleUuid: string,
+  ): { isFree: boolean } | false => {
     if (!eventRegistrations || !localUser) return false;
     const userPurchases = localUser.registrations.filter(
       (registration) => registration.eventId === event.data.id,
@@ -94,9 +104,16 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     const userPurchasesWithRole = userPurchases.filter(
       (registration) => registration.strapiRoleUuid === roleUuid,
     );
-    return userPurchasesWithRole.some(
+
+    const notPaid = userPurchasesWithRole.find(
       (registration) => !registration.paymentCompleted,
     );
+
+    if (!notPaid) {
+      return false;
+    }
+
+    return { isFree: notPaid.price === 0 };
   };
 
   const ownQuota = ticketTypes?.find(
@@ -236,7 +253,12 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       });
     if (hasBoughtMaxTicketsOwnQuota && ownQuota)
       errors.push({
-        message: dictionary.pages_events.max_tickets_bought,
+        message:
+          dictionary.pages_events[
+            hasBoughtMaxTicketsOwnQuota.isFree
+              ? 'max_tickets_redeemed'
+              : 'max_tickets_bought'
+          ],
         level: 'info',
       });
     if (!isRegistrationOpenOwnQuota && ownQuota)
@@ -246,7 +268,12 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       });
     if (hasUnpaidReservationsOwnQuota && ownQuota)
       errors.push({
-        message: dictionary.pages_events.unpaid_reservations,
+        message:
+          dictionary.pages_events[
+            hasUnpaidReservationsOwnQuota.isFree
+              ? 'unredeemed_reservations'
+              : 'unpaid_reservations'
+          ],
         level: 'warn',
       });
     return errors;

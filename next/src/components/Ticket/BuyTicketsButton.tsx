@@ -6,12 +6,14 @@ interface BuyTicketsButtonProps {
   disabled?: boolean;
   loading?: boolean;
   dictionary: Dictionary;
+  isFreeTicket?: boolean;
 }
 
 export function BuyTicketsButton({
   onClick,
   disabled = false,
   dictionary,
+  isFreeTicket,
   loading = false,
 }: BuyTicketsButtonProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -142,7 +144,9 @@ export function BuyTicketsButton({
             <span className="loading loading-spinner loading-md" />
           </div>
         ) : (
-          dictionary.pages_events.buy_tickets
+          dictionary.pages_events[
+            isFreeTicket ? 'redeem_tickets' : 'buy_tickets'
+          ]
         )}
       </button>
     </div>

@@ -177,6 +177,9 @@ export default async function OwnEvents(props: OwnEventsProps) {
     )
     .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
+  const isFreeTicket =
+    !unpaidRegistrations.some((reg) => reg.price !== 0);
+
   const getQuestionsForEvent = (eventId: number) =>
     upcomingEventQuestions.find(
       (eventQuestions) => eventQuestions.eventId === eventId,
@@ -217,7 +220,13 @@ export default async function OwnEvents(props: OwnEventsProps) {
         {Boolean(unpaidRegistrations.length) && (
           <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
             <BiErrorCircle size={24} />
-            {dictionary.pages_events.unpaid_reservations_info}
+            {
+              dictionary.pages_events[
+                isFreeTicket
+                  ? 'unredeemed_reservations_info'
+                  : 'unpaid_reservations_info'
+              ]
+            }
           </div>
         )}
         {userEventRegistrations.length === 0 && (
@@ -230,7 +239,13 @@ export default async function OwnEvents(props: OwnEventsProps) {
           {Boolean(unpaidRegistrations.length) && (
             <div>
               <h2 className="mb-4 text-2xl font-bold">
-                {dictionary.pages_events.unpaid_registrations}
+                {
+                  dictionary.pages_events[
+                    isFreeTicket
+                      ? 'unredeemed_registrations'
+                      : 'unpaid_registrations'
+                  ]
+                }
               </h2>
               <div className="flex flex-col gap-4">
                 {unpaidRegistrations.map((registration) => (
@@ -246,9 +261,14 @@ export default async function OwnEvents(props: OwnEventsProps) {
               </div>
               <PayButton
                 dictionary={dictionary}
+                eventId={
+                  unpaidRegistrations.length === 1 &&
+                  unpaidRegistrations[0].eventId
+                }
                 hasUnansweredQuestions={
                   unpaidRegistrationsHaveUnansweredQuestions
                 }
+                isFreeTicket={isFreeTicket}
                 lang={params.lang}
               />
             </div>

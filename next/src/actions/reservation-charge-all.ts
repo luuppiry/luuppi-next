@@ -10,7 +10,10 @@ import { randomUUID } from 'crypto';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function reservationChargeAll(lang: SupportedLanguage) {
+export async function reservationChargeAll(
+  lang: SupportedLanguage,
+  userRedirectUrl?: string,
+) {
   const dictionary = await getDictionary(lang);
   const session = await auth();
 
@@ -67,7 +70,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
         session.user.email!,
       );
     } else {
-      redirectUrl = `/${lang}/payment/free-event/${orderId}`;
+      redirectUrl = userRedirectUrl ?? '/';
     }
 
     await prisma.$transaction(async (prisma) => {
