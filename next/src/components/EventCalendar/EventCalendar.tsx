@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 import './EventCalendar.css';
+import type { CalendarListeners } from '@fullcalendar/core';
 
 interface EventCalendarProps {
   events: Event[];
@@ -33,8 +34,14 @@ export default function EventCalendar({
   // Hacky solution to fix overlapping events styling
   const calendarRef = useRef<FullCalendar>(null);
 
-  const handleEventClick = (e: any) => {
+  const handleEventClick: CalendarListeners['eventClick'] = (e) => {
     const eventId = e.event.id;
+
+    if (e.jsEvent.metaKey || e.jsEvent.ctrlKey) {
+      window.open(`/${lang}/events/${eventId}`, '_blank');
+      return;
+    }
+
     router.push(`/${lang}/events/${eventId}`);
   };
 
