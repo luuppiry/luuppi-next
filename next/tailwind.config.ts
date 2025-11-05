@@ -25,6 +25,30 @@ const config: Config = {
   darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
+      keyframes: {
+        tooltip: {
+          '0%': {
+            opacity: '0',
+            transform: 'scale(0.95) translate(0px, 2px)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'scale(1) translate(0px, 0px)',
+          },
+        },
+        'tooltip-exit': {
+          '0%': {
+            opacity: '1',
+          },
+          '100%': {
+            opacity: '0',
+          },
+        },
+      },
+      animation: {
+        tooltip: 'tooltip .2s ease-in forwards',
+        'tooltip-exit': 'tooltip-exit .3s ease-out forwards',
+      },
       colors: {
         text: {
           50: 'rgb(var(--text-50))',
