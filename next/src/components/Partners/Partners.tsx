@@ -1,6 +1,7 @@
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import RenderPartners from './RenderPartners/RenderPartners';
+import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 
 interface PartnersProps {
   dictionary: Dictionary;
@@ -18,12 +19,19 @@ export default function Partners({ dictionary, lang }: PartnersProps) {
           <p className="max-w-2xl text-lg transition-all duration-300 max-md:text-base">
             {dictionary.pages_home.partners.description}
           </p>
-          <div className="flex">
+          <div className="flex gap-4">
             <Link
               className="btn btn-primary text-lg font-bold max-md:text-base"
               href={`/${lang}/collaboration`}
             >
               {dictionary.pages_home.partners.read_more}
+            </Link>
+
+            <Link
+              className="btn btn-primary text-lg font-bold max-md:text-base"
+              href={`/${lang}/collaboration/job-opportunities`}
+            >
+              {dictionary.pages_companies.open_jobs}
             </Link>
           </div>
         </div>
