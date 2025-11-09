@@ -91,6 +91,8 @@ model EventRegistration {
   deletedAt        DateTime?
   /// Marks if physical products (tickets, cards, etc.) have been picked up by the user
   pickedUp         Boolean   @default(false)
+  /// Six-character pickup code for QR scanning and manual entry
+  pickupCode       String?   @unique
   /// User's EntraID UUID
   entraUserUuid    String
   user             User      @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
@@ -103,6 +105,7 @@ model EventRegistration {
   @@index([eventId])
   @@index([eventId, deletedAt, paymentCompleted])
   @@index([entraUserUuid, eventId])
+  @@index([pickupCode])
 }
 
 model Answer {

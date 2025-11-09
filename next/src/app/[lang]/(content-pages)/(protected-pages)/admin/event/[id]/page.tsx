@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { PiArrowLeft } from 'react-icons/pi';
 import AdminEventRegistrationsList from '@/components/AdminEventRegistrationsList/AdminEventRegistrationsList';
+import PickupScanner from '@/components/PickupScanner/PickupScanner';
 
 interface AdminEventDetailProps {
   params: Promise<{ lang: SupportedLanguage; id: string }>;
@@ -80,7 +81,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
 
   return (
     <div className="relative">
-      <div className="mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <Link
           className="btn btn-ghost gap-2"
           href={`/${params.lang}/admin?mode=event`}
@@ -88,6 +89,11 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
           <PiArrowLeft size={20} />
           {dictionary.general.back}
         </Link>
+        <PickupScanner
+          dictionary={dictionary}
+          eventId={event.eventId}
+          lang={params.lang}
+        />
       </div>
       <h1 className="mb-8">{eventName}</h1>
       <AdminEventRegistrationsList

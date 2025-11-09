@@ -47,7 +47,9 @@
     "user_roles_updated": "User roles updated successfully",
     "already_member_role": "You already have member role",
     "no_users": "No users found",
-    "no_search_results": "No users found matching your search"
+    "no_search_results": "No users found matching your search",
+    "invalid_pickup_code": "Invalid pickup code",
+    "registration_not_found": "Registration not found"
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -338,7 +340,12 @@
     "some_alcohol": "You can drink alcohol if you wish, but drinking is not the main point of the event. You can also participate in the event without alcohol.",
     "full_alcohol": "Alcohol is a central part of the event, for example as part of the programme. You can also participate in the event without alcohol.",
     "fuksi_points_true": "Lärpäke points available for freshmen!",
-    "fuksi_points_false": "There are no Lärpäke points available for freshmen!"
+    "fuksi_points_false": "There are no Lärpäke points available for freshmen!",
+    "pickup_code": "Pickup Code",
+    "show_qr_code": "Show QR Code",
+    "hide_qr_code": "Hide QR Code",
+    "not_picked_up": "Not picked up yet",
+    "show_to_admin": "Show this code to the administrator"
   },
   "pages_404": {
     "title": "Page not found",
@@ -388,7 +395,13 @@
     "user_management_description": "View and manage all users in the system. Use search to filter by email, username, or name.",
     "picked_up": "Picked up",
     "mark_picked_up": "Mark as picked up",
-    "mark_not_picked_up": "Mark as not picked up"
+    "mark_not_picked_up": "Mark as not picked up",
+    "scan_pickup_code": "Scan Pickup Code",
+    "manual_entry": "Manual Entry",
+    "camera": "Camera",
+    "camera_not_available": "Camera not available",
+    "camera_scanning_note": "Camera scanning coming soon. Use manual entry for now.",
+    "enter_6_char_code": "Enter 6-character code (e.g., ABC123)"
   },
   "pages_profile": {
     "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",

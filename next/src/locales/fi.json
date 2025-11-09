@@ -47,7 +47,9 @@
     "user_roles_updated": "Käyttäjän roolit päivitetty onnistuneesti",
     "already_member_role": "Sinulla on jo jäsen-rooli",
     "no_users": "Käyttäjiä ei löytynyt",
-    "no_search_results": "Haulla ei löytynyt käyttäjiä"
+    "no_search_results": "Haulla ei löytynyt käyttäjiä",
+    "invalid_pickup_code": "Virheellinen noutkoodi",
+    "registration_not_found": "Ilmoittautumista ei löytynyt"
   },
   "roles": {
     "entire_board": "Koko hallitus",
@@ -338,7 +340,12 @@
     "some_alcohol": "Tapahtumassa voi halutessaan käyttää alkoholia, mutta juominen ei ole pääpointti. Tapahtumaan voi myös osallistua alkoholittomana.",
     "full_alcohol": "Tapahtumassa alkoholin käyttö on keskeisessä asemassa esimerkiksi osana ohjelmaa. Tapahtumaan voi myös osallistua alkoholittomana.",
     "fuksi_points_true": "Tapahtumasta saa lärpäkepisteitä!",
-    "fuksi_points_false": "Tapahtumasta ei ole saatavilla lärpäkepisteitä!"
+    "fuksi_points_false": "Tapahtumasta ei ole saatavilla lärpäkepisteitä!",
+    "pickup_code": "Noutkoodi",
+    "show_qr_code": "Näytä QR-koodi",
+    "hide_qr_code": "Piilota QR-koodi",
+    "not_picked_up": "Ei vielä noudettu",
+    "show_to_admin": "Näytä tämä koodi järjestäjälle"
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",
@@ -388,7 +395,13 @@
     "user_management_description": "Selaa ja hallinnoi järjestelmän käyttäjiä. Käytä hakua suodattaaksesi sähköpostin, käyttäjänimen tai nimen perusteella.",
     "picked_up": "Noudettu",
     "mark_picked_up": "Merkitse noudetuksi",
-    "mark_not_picked_up": "Merkitse ei noudetuksi"
+    "mark_not_picked_up": "Merkitse ei noudetuksi",
+    "scan_pickup_code": "Skannaa noutkoodi",
+    "manual_entry": "Syötä käsin",
+    "camera": "Kamera",
+    "camera_not_available": "Kamera ei käytettävissä",
+    "camera_scanning_note": "Kameran skannaus tulossa pian. Käytä toistaiseksi manuaalista syöttöä.",
+    "enter_6_char_code": "Syötä 6-merkkinen koodi (esim. ABC123)"
   },
   "pages_profile": {
     "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",

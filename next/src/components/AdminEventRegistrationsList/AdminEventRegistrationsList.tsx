@@ -7,6 +7,7 @@ import { PiCheckCircle, PiCircle } from 'react-icons/pi';
 interface Registration {
   id: number;
   pickedUp: boolean;
+  pickupCode: string | null;
   user: {
     username: string | null;
     email: string;
@@ -90,6 +91,11 @@ export default function AdminEventRegistrationsList({
                 <th>{dictionary.general.lastName}</th>
                 <th>
                   <span className="flex justify-center">
+                    {dictionary.pages_events.pickup_code ?? 'Pickup Code'}
+                  </span>
+                </th>
+                <th>
+                  <span className="flex justify-center">
                     {dictionary.pages_admin.picked_up ?? 'Picked up'}
                   </span>
                 </th>
@@ -103,6 +109,13 @@ export default function AdminEventRegistrationsList({
                   <td>{registration.user.email}</td>
                   <td>{registration.user.firstName ?? '-'}</td>
                   <td>{registration.user.lastName ?? '-'}</td>
+                  <td>
+                    <div className="flex justify-center">
+                      <span className="font-mono font-semibold">
+                        {registration.pickupCode ?? '-'}
+                      </span>
+                    </div>
+                  </td>
                   <td>
                     <div className="flex justify-center">
                       <button
