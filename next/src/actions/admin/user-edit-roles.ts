@@ -133,6 +133,29 @@ export async function userEditRoles(
     };
   }
 
+  // Check if luuppi-member role is being added
+  const luuppiMemberId = process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!;
+  const isAddingMemberRole = strapiRoleUuids.includes(luuppiMemberId);
+
+  // Validate required fields for member role
+  if (isAddingMemberRole) {
+    const hasRequiredFields =
+      userToEdit.firstName && userToEdit.lastName && userToEdit.domicle;
+
+    if (!hasRequiredFields) {
+      logger.error('Missing required fields for member role', {
+        entraUserUuid: userToEditEntraUuid,
+        hasFirstName: !!userToEdit.firstName,
+        hasLastName: !!userToEdit.lastName,
+        hasDomicle: !!userToEdit.domicle,
+      });
+      return {
+        isError: true,
+        message: dictionary.api.missing_required_fields_for_member,
+      };
+    }
+  }
+
   await prisma.$transaction(async (prisma) => {
     // Everything else is deletable except the illegal roles
     await prisma.rolesOnUsers.deleteMany({

@@ -44,6 +44,7 @@
     "user_not_found": "User not found",
     "user_updated": "User updated. Some changes require the user to re-login to take effect.",
     "invalid_roles": "Invalid roles",
+    "missing_required_fields_for_member": "Adding member role requires that the user has first name, last name and domicile filled in",
     "user_roles_updated": "User roles updated successfully",
     "already_member_role": "You already have member role",
     "no_users": "No users found",
