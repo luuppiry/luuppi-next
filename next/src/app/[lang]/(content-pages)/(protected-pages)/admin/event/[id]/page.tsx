@@ -65,6 +65,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
         },
         include: {
           user: true,
+          answers: true,
         },
         orderBy: {
           createdAt: 'asc',

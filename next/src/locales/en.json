@@ -401,7 +401,8 @@
     "camera": "Camera",
     "camera_not_available": "Camera not available",
     "camera_scanning_note": "Camera scanning coming soon. Use manual entry for now.",
-    "enter_6_char_code": "Enter 6-character code (e.g., ABC123)"
+    "enter_6_char_code": "Enter 6-character code (e.g., ABC123)",
+    "registration_answers": "Registration Answers"
   },
   "pages_profile": {
     "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",

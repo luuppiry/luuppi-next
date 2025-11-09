@@ -401,7 +401,8 @@
     "camera": "Kamera",
     "camera_not_available": "Kamera ei käytettävissä",
     "camera_scanning_note": "Kameran skannaus tulossa pian. Käytä toistaiseksi manuaalista syöttöä.",
-    "enter_6_char_code": "Syötä 6-merkkinen koodi (esim. ABC123)"
+    "enter_6_char_code": "Syötä 6-merkkinen koodi (esim. ABC123)",
+    "registration_answers": "Ilmoittautumisen vastaukset"
   },
   "pages_profile": {
     "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",
