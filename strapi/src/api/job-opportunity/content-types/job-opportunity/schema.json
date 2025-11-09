@@ -56,7 +56,9 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false
@@ -66,24 +68,29 @@
     "jobOpportunityPublished": {
       "pluginOptions": {
         "i18n": {
-          "localized": true
+          "localized": false
         }
       },
-      "type": "datetime",
+      "type": "date",
       "required": true
     },
     "jobOpportunityEnding": {
       "pluginOptions": {
         "i18n": {
-          "localized": true
+          "localized": false
         }
       },
-      "type": "datetime",
+      "type": "date",
       "required": true
     },
     "jobOpportunityTargetGroup": {
       "type": "enumeration",
-      "enum": ["everybody", "computer_science", "mathematics", "data_analysis"],
+      "enum": [
+        "everybody",
+        "computer_science",
+        "mathematics",
+        "data_analysis"
+      ],
       "required": true
     }
   }
