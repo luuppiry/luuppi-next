@@ -26,11 +26,30 @@ export default async function CollaborationJobOpportunities(
     APIResponseCollection<'api::job-opportunity.job-opportunity'>
   >(params.lang, url, tags);
 
+  // Filter to show only open job opportunities (ending date >= today)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set to start of day for comparison
+
+  const openJobOpportunities = pageData.data.filter((job) => {
+    const endingDate = new Date(job.attributes.jobOpportunityEnding);
+    return endingDate >= today;
+  });
+
+  // Helper function to format date
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(params.lang, {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+  };
+
   return (
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.job_opportunities}</h1>
       <div className="flex flex-col gap-8">
-        {pageData.data.reverse().map((job_opportunity) => (
+        {openJobOpportunities.reverse().map((job_opportunity) => (
           <div
             key={job_opportunity.attributes.createdAt!.toString()}
             className="flex gap-4 rounded-lg bg-background-50"
@@ -69,13 +88,13 @@ export default async function CollaborationJobOpportunities(
                   <p className="flex items-center gap-1">
                     {dictionary.pages_companies.job_opportunity_published}:{' '}
                     <span className="badge badge-primary">
-                      {job_opportunity.attributes.jobOpportunityPublished}
+                      {formatDate(job_opportunity.attributes.jobOpportunityPublished)}
                     </span>
                   </p>
                   <p className="flex items-center gap-1">
                     {dictionary.pages_companies.job_opportunity_ending}:{' '}
                     <span className="badge badge-primary">
-                      {job_opportunity.attributes.jobOpportunityEnding}
+                      {formatDate(job_opportunity.attributes.jobOpportunityEnding)}
                     </span>
                   </p>
                   <p className="flex items-center gap-1">
