@@ -44,6 +44,7 @@
     "user_not_found": "Käyttäjää ei löytynyt",
     "user_updated": "Käyttäjän tiedot päivitetty. Osa muutoksista tulee voimaan vasta uudelleenkirjautumisen jälkeen.",
     "invalid_roles": "Kelvottomat roolit",
+    "missing_required_fields_for_member": "Jäsenroolin lisääminen vaatii, että käyttäjällä on täytettynä etunimi, sukunimi ja kotikunta",
     "user_roles_updated": "Käyttäjän roolit päivitetty onnistuneesti",
     "already_member_role": "Sinulla on jo jäsen-rooli",
     "no_users": "Käyttäjiä ei löytynyt",
