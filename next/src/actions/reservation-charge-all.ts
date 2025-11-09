@@ -67,7 +67,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
         session.user.email!,
       );
     } else {
-      redirectUrl = `/${lang}/payment/free-event/${orderId}`;
+      redirectUrl = `/${lang}/own-events`;
     }
 
     await prisma.$transaction(async (prisma) => {

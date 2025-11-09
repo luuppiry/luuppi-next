@@ -9,6 +9,7 @@ import ErrorDialog from '../Ticket/ErrorDialog';
 interface PayButtonProps {
   lang: SupportedLanguage;
   dictionary: Dictionary;
+  isFreeTicket?: boolean;
   hasUnansweredQuestions: boolean;
 }
 
@@ -16,6 +17,7 @@ export default function PayButton({
   lang,
   dictionary,
   hasUnansweredQuestions,
+  isFreeTicket,
 }: PayButtonProps) {
   const [response, setResponse] = useState<{
     isError: boolean;
@@ -48,7 +50,13 @@ export default function PayButton({
         }}
         className="mt-4"
       >
-        <SubmitButton text={dictionary.pages_events.move_to_checkout} />
+        <SubmitButton
+          text={
+            dictionary.pages_events[
+              isFreeTicket ? 'redeem_ticket' : 'move_to_checkout'
+            ]
+          }
+        />
       </form>
     </>
   );
