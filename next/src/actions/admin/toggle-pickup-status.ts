@@ -75,7 +75,7 @@ export async function togglePickupStatus(
   } else {
     if (!registrationIdOrCode || isNaN(registrationIdOrCode) || registrationIdOrCode < 1) {
       return {
-        message: dictionary.api.invalid_request,
+        message: dictionary.api.invalid_message,
         isError: true,
       };
     }
@@ -113,6 +113,14 @@ export async function togglePickupStatus(
       };
     }
 
+    // If attempting to mark as picked up but it's already picked up, return an error
+    if (pickedUp === true && registration.pickedUp === true) {
+      return {
+        message: dictionary.pages_events.already_picked_up,
+        isError: true,
+      };
+    }
+
     await prisma.eventRegistration.update({
       where: {
         id: registration.id,
@@ -138,7 +146,7 @@ export async function togglePickupStatus(
   } catch (error) {
     logger.error('Failed to update pickup status', error);
     return {
-      message: dictionary.api.internal_server_error,
+      message: dictionary.api.invalid_message,
       isError: true,
     };
   }

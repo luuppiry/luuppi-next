@@ -1,7 +1,7 @@
 'use client';
 import { togglePickupStatus } from '@/actions/admin/toggle-pickup-status';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { PiCamera, PiKeyboard, PiX } from 'react-icons/pi';
 
 interface PickupScannerProps {
@@ -139,8 +139,7 @@ export default function PickupScanner({
                   playsInline
                 />
                 <p className="mt-2 text-center text-sm text-gray-600">
-                  {dictionary.pages_admin.camera_scanning_note ??
-                    'Camera scanning coming soon. Use manual entry for now.'}
+                  {dictionary.pages_admin.camera_scanning_note}
                 </p>
               </div>
             )}
@@ -154,21 +153,20 @@ export default function PickupScanner({
                     </span>
                   </label>
                   <input
-                    autoFocus
                     className="input input-bordered font-mono uppercase"
                     id="pickup-code"
                     maxLength={6}
                     placeholder="ABC123"
                     type="text"
                     value={manualCode}
+                    autoFocus
                     onChange={(e) =>
                       setManualCode(e.target.value.toUpperCase())
                     }
                   />
                   <label className="label">
                     <span className="label-text-alt text-gray-500">
-                      {dictionary.pages_admin.enter_6_char_code ??
-                        'Enter 6-character code (e.g., ABC123)'}
+                      {dictionary.pages_admin.enter_6_char_code}
                     </span>
                   </label>
                 </div>
@@ -189,7 +187,7 @@ export default function PickupScanner({
                   {loading ? (
                     <span className="loading loading-spinner" />
                   ) : (
-                    dictionary.pages_admin.mark_picked_up ?? 'Mark as Picked Up'
+                    dictionary.pages_admin.mark_picked_up
                   )}
                 </button>
               </form>

@@ -1,8 +1,7 @@
-'use client';
-import { togglePickupStatus } from '@/actions/admin/toggle-pickup-status';
+ 'use client';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import React, { useState } from 'react';
-import { PiCheckCircle, PiCircle, PiCaretDown, PiCaretRight } from 'react-icons/pi';
+import React from 'react';
+import { PiCheckCircle, PiCircle } from 'react-icons/pi';
 
 interface Registration {
   id: number;
@@ -38,52 +37,15 @@ interface AdminEventRegistrationsListProps {
 export default function AdminEventRegistrationsList({
   event,
   dictionary,
-  lang,
+  lang: _lang,
 }: AdminEventRegistrationsListProps) {
-  const [registrations, setRegistrations] = useState(event.registrations);
-  const [loading, setLoading] = useState<number | null>(null);
-  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+  const sortedRegistrations = React.useMemo(
+    () => [...event.registrations].sort((a, b) => a.user.email.localeCompare(b.user.email)),
+    [event.registrations],
+  );
 
-  const handleTogglePickup = async (
-    registrationId: number,
-    currentStatus: boolean,
-  ) => {
-    setLoading(registrationId);
-    const result = await togglePickupStatus(
-      lang,
-      registrationId,
-      !currentStatus,
-    );
-
-    if (!result.isError) {
-      setRegistrations((prev) =>
-        prev.map((reg) =>
-          reg.id === registrationId
-            ? { ...reg, pickedUp: !currentStatus }
-            : reg,
-        ),
-      );
-    } else {
-      // Show error message
-      alert(result.message);
-    }
-
-    setLoading(null);
-  };
-
-  const toggleRowExpansion = (registrationId: number) => {
-    setExpandedRows((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(registrationId)) {
-        newSet.delete(registrationId);
-      } else {
-        newSet.add(registrationId);
-      }
-      return newSet;
-    });
-  };
-
-  const pickedUpCount = registrations.filter((r) => r.pickedUp).length;
+  const pickedUpCount = sortedRegistrations.filter((r) => r.pickedUp).length;
+  const pickedUpLabel = dictionary.pages_admin.picked_up;
 
   return (
     <div className="card card-body">
@@ -94,114 +56,59 @@ export default function AdminEventRegistrationsList({
         <div className="flex gap-2">
           <span className="badge badge-success">
             {dictionary.pages_admin.picked_up ?? 'Picked up'}: {pickedUpCount} /{' '}
-            {registrations.length}
+            {sortedRegistrations.length}
           </span>
         </div>
       </div>
-      {registrations.length > 0 ? (
+  {sortedRegistrations.length > 0 ? (
         <div className="overflow-x-auto">
           <table className="table">
             <thead>
               <tr>
-                <th />
-                <th>{dictionary.general.username}</th>
+                <th>#</th>
                 <th>{dictionary.general.email}</th>
                 <th>{dictionary.general.firstNames}</th>
                 <th>{dictionary.general.lastName}</th>
+                <th>{dictionary.pages_admin.registration_answers}</th>
                 <th>
                   <span className="flex justify-center">
-                    {dictionary.pages_events.pickup_code ?? 'Pickup Code'}
-                  </span>
-                </th>
-                <th>
-                  <span className="flex justify-center">
-                    {dictionary.pages_admin.picked_up ?? 'Picked up'}
+                            {pickedUpLabel}
                   </span>
                 </th>
               </tr>
             </thead>
             <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
-              {registrations.map((registration, index) => (
+              {sortedRegistrations.map((registration, index) => (
                 <React.Fragment key={registration.id}>
                   <tr>
-                    <th>
-                      <button
-                        className="btn btn-circle btn-ghost btn-xs"
-                        onClick={() => toggleRowExpansion(registration.id)}
-                        type="button"
-                      >
-                        {expandedRows.has(registration.id) ? (
-                          <PiCaretDown size={16} />
-                        ) : (
-                          <PiCaretRight size={16} />
-                        )}
-                      </button>
-                      {index + 1}
-                    </th>
-                    <td>{registration.user.username ?? '???'}</td>
+                    <th>{index + 1}</th>
                     <td>{registration.user.email}</td>
                     <td>{registration.user.firstName ?? '-'}</td>
                     <td>{registration.user.lastName ?? '-'}</td>
                     <td>
-                      <div className="flex justify-center">
-                        <span className="font-mono font-semibold">
-                          {registration.pickupCode ?? '-'}
-                        </span>
+                      <div className="space-y-1 max-w-lg">
+                        {registration.answers.map((answer) => (
+                          <div key={answer.id} className="rounded bg-white p-2">
+                            <p className="text-sm font-semibold text-gray-700">{answer.question}</p>
+                            <p className="text-sm text-gray-900">{answer.answer}</p>
+                          </div>
+                        ))}
                       </div>
                     </td>
                     <td>
-                      <div className="flex justify-center">
-                        <button
-                          aria-label={
-                            registration.pickedUp
-                              ? dictionary.pages_admin.mark_not_picked_up ??
-                                'Mark as not picked up'
-                              : dictionary.pages_admin.mark_picked_up ??
-                                'Mark as picked up'
-                          }
-                          className="btn btn-circle btn-ghost"
-                          disabled={loading === registration.id}
-                          onClick={() =>
-                            handleTogglePickup(
-                              registration.id,
-                              registration.pickedUp,
-                            )
-                          }
-                        >
-                          {loading === registration.id ? (
-                            <span className="loading loading-spinner loading-md" />
-                          ) : registration.pickedUp ? (
-                            <PiCheckCircle className="text-success" size={26} />
-                          ) : (
-                            <PiCircle className="text-gray-400" size={26} />
-                          )}
-                        </button>
+                      <div className="flex items-center justify-center gap-2">
+                        {registration.pickedUp ? (
+                          <>
+                            <PiCheckCircle className="text-success" size={20} />
+                          </>
+                        ) : (
+                          <>
+                            <PiCircle className="text-gray-400" size={20} />
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>
-                  {expandedRows.has(registration.id) && registration.answers.length > 0 && (
-                    <tr key={`${registration.id}-answers`}>
-                      <td colSpan={7} className="bg-base-200 p-4">
-                        <div className="ml-8">
-                          <h4 className="mb-2 font-semibold">
-                            {dictionary.pages_admin.registration_answers ?? 'Registration Answers'}:
-                          </h4>
-                          <div className="space-y-2">
-                            {registration.answers.map((answer) => (
-                              <div key={answer.id} className="rounded bg-white p-2">
-                                <p className="text-sm font-semibold text-gray-700">
-                                  {answer.question}
-                                </p>
-                                <p className="text-sm text-gray-900">
-                                  {answer.answer}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
                 </React.Fragment>
               ))}
             </tbody>

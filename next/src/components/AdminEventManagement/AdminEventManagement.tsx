@@ -4,10 +4,10 @@ import prisma from '@/libs/db/prisma';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import AdminExportEventButton from './AdminExportEventButton/AdminExportEventButton';
+import { redirect } from 'next/navigation';
 import { PiEye } from 'react-icons/pi';
+import AdminExportEventButton from './AdminExportEventButton/AdminExportEventButton';
 
 interface AdminEventManagementProps {
   dictionary: Dictionary;
@@ -107,7 +107,7 @@ export default async function AdminEventManagement({
                     <div className="flex items-end justify-end gap-1">
                       <Link
                         aria-label={dictionary.general.view}
-                        className="btn btn-circle btn-ghost"
+                        className="btn btn-primary btn-circle btn-ghost btn-sm"
                         href={`/${lang}/admin/event/${event.id}`}
                       >
                         <PiEye

@@ -345,6 +345,7 @@
     "show_qr_code": "Show QR Code",
     "hide_qr_code": "Hide QR Code",
     "not_picked_up": "Not picked up yet",
+    "already_picked_up": "Already picked up",
     "show_to_admin": "Show this code to the administrator"
   },
   "pages_404": {
@@ -401,6 +402,7 @@
     "camera": "Camera",
     "camera_not_available": "Camera not available",
     "camera_scanning_note": "Camera scanning coming soon. Use manual entry for now.",
+    "qr_not_supported_note": "QR scanning not supported by this browser. Use Manual Entry or update your browser.",
     "enter_6_char_code": "Enter 6-character code (e.g., ABC123)",
     "registration_answers": "Registration Answers"
   },
