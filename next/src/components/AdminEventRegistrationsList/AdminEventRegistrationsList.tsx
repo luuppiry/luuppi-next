@@ -41,8 +41,12 @@ export default function AdminEventRegistrationsList({
     currentStatus: boolean,
   ) => {
     setLoading(registrationId);
-    const result = await togglePickupStatus(lang, registrationId, !currentStatus);
-    
+    const result = await togglePickupStatus(
+      lang,
+      registrationId,
+      !currentStatus,
+    );
+
     if (!result.isError) {
       setRegistrations((prev) =>
         prev.map((reg) =>
@@ -55,7 +59,7 @@ export default function AdminEventRegistrationsList({
       // Show error message
       alert(result.message);
     }
-    
+
     setLoading(null);
   };
 
@@ -102,32 +106,28 @@ export default function AdminEventRegistrationsList({
                   <td>
                     <div className="flex justify-center">
                       <button
+                        aria-label={
+                          registration.pickedUp
+                            ? dictionary.pages_admin.mark_not_picked_up ??
+                              'Mark as not picked up'
+                            : dictionary.pages_admin.mark_picked_up ??
+                              'Mark as picked up'
+                        }
+                        className="btn btn-circle btn-ghost"
+                        disabled={loading === registration.id}
                         onClick={() =>
                           handleTogglePickup(
                             registration.id,
                             registration.pickedUp,
                           )
                         }
-                        disabled={loading === registration.id}
-                        className="btn btn-circle btn-ghost"
-                        aria-label={
-                          registration.pickedUp
-                            ? dictionary.pages_admin.mark_not_picked_up ?? 'Mark as not picked up'
-                            : dictionary.pages_admin.mark_picked_up ?? 'Mark as picked up'
-                        }
                       >
                         {loading === registration.id ? (
                           <span className="loading loading-spinner loading-md" />
                         ) : registration.pickedUp ? (
-                          <PiCheckCircle
-                            className="text-success"
-                            size={26}
-                          />
+                          <PiCheckCircle className="text-success" size={26} />
                         ) : (
-                          <PiCircle
-                            className="text-gray-400"
-                            size={26}
-                          />
+                          <PiCircle className="text-gray-400" size={26} />
                         )}
                       </button>
                     </div>
@@ -138,7 +138,9 @@ export default function AdminEventRegistrationsList({
           </table>
         </div>
       ) : (
-        <p className="text-sm">{dictionary.general.no_registrations ?? 'No registrations'}</p>
+        <p className="text-sm">
+          {dictionary.general.no_registrations ?? 'No registrations'}
+        </p>
       )}
     </div>
   );

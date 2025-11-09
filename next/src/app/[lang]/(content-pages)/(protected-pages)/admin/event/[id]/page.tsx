@@ -82,8 +82,8 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
     <div className="relative">
       <div className="mb-6">
         <Link
-          href={`/${params.lang}/admin?mode=event`}
           className="btn btn-ghost gap-2"
+          href={`/${params.lang}/admin?mode=event`}
         >
           <PiArrowLeft size={20} />
           {dictionary.general.back}
@@ -91,8 +91,8 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
       </div>
       <h1 className="mb-8">{eventName}</h1>
       <AdminEventRegistrationsList
-        event={event}
         dictionary={dictionary}
+        event={event}
         lang={params.lang}
       />
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />

@@ -106,9 +106,9 @@ export default async function AdminEventManagement({
                   <td>
                     <div className="flex items-end justify-end gap-1">
                       <Link
-                        href={`/${lang}/admin/event/${event.id}`}
-                        className="btn btn-circle btn-ghost"
                         aria-label={dictionary.general.view}
+                        className="btn btn-circle btn-ghost"
+                        href={`/${lang}/admin/event/${event.id}`}
                       >
                         <PiEye
                           className="text-gray-800 dark:text-background-950"
