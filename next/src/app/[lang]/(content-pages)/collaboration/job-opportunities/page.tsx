@@ -87,13 +87,13 @@ export default async function CollaborationJobOpportunities(
                   <p className="flex items-center gap-1">
                     {dictionary.pages_companies.job_opportunity_published}:{' '}
                     <span className="badge badge-primary">
-                      {formatDate(job_opportunity.attributes.jobOpportunityPublished)}
+                      {formatDate(job_opportunity.attributes.jobOpportunityDatePublished)}
                     </span>
                   </p>
                   <p className="flex items-center gap-1">
                     {dictionary.pages_companies.job_opportunity_ending}:{' '}
                     <span className="badge badge-primary">
-                      {formatDate(job_opportunity.attributes.jobOpportunityEnding)}
+                      {formatDate(job_opportunity.attributes.jobOpportunityDateEnding)}
                     </span>
                   </p>
                   <p className="flex items-center gap-1">

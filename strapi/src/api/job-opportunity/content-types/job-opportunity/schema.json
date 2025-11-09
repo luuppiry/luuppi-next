@@ -75,7 +75,7 @@
       ],
       "required": true
     },
-    "jobOpportunityEnding": {
+    "jobOpportunityDateEnding": {
       "pluginOptions": {
         "i18n": {
           "localized": false
@@ -84,7 +84,7 @@
       "type": "date",
       "required": true
     },
-    "jobOpportunityPublished": {
+    "jobOpportunityDatePublished": {
       "pluginOptions": {
         "i18n": {
           "localized": false
