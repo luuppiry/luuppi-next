@@ -30,7 +30,7 @@ export default async function CollaborationJobOpportunities(
   today.setHours(0, 0, 0, 0);
 
   const openJobOpportunities = pageData.data.filter((job) => {
-    const endingDate = new Date(job.attributes.jobOpportunityEnding);
+    const endingDate = new Date(job.attributes.jobOpportunityDateEnding);
     return endingDate >= today;
   });
 
