@@ -156,7 +156,10 @@
     "no": "No",
     "never": "Never",
     "no_users": "No users found",
-    "no_search_results": "No users found matching your search"
+    "no_search_results": "No users found matching your search",
+    "view": "View",
+    "back": "Back",
+    "no_registrations": "No registrations"
   },
   "theme": {
     "auto": "Auto",
@@ -382,7 +385,10 @@
     "user_management": "User management",
     "event_management": "Event management",
     "user_required_info_missing": "User is Luuppi's member but is missing required information!",
-    "user_management_description": "View and manage all users in the system. Use search to filter by email, username, or name."
+    "user_management_description": "View and manage all users in the system. Use search to filter by email, username, or name.",
+    "picked_up": "Picked up",
+    "mark_picked_up": "Mark as picked up",
+    "mark_not_picked_up": "Mark as not picked up"
   },
   "pages_profile": {
     "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",

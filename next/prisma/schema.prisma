@@ -89,6 +89,8 @@ model EventRegistration {
   updatedAt        DateTime  @updatedAt
   /// Soft delete. If this is set, the registration is not valid anymore
   deletedAt        DateTime?
+  /// Marks if physical products (tickets, cards, etc.) have been picked up by the user
+  pickedUp         Boolean   @default(false)
   /// User's EntraID UUID
   entraUserUuid    String
   user             User      @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)

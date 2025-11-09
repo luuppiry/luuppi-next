@@ -151,6 +151,9 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
         registration.user.preferredFullName ?? '',
       [dictionary.general.paid]: registration.price,
       [dictionary.general.quota]: registration.strapiRoleUuid,
+      [dictionary.pages_admin.picked_up ?? 'Picked up']: registration.pickedUp
+        ? dictionary.general.yes ?? 'Yes'
+        : dictionary.general.no ?? 'No',
     } as Record<string, string>;
 
     return {

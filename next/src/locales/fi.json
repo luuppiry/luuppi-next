@@ -156,7 +156,10 @@
     "no": "Ei",
     "never": "Ei koskaan",
     "no_users": "Käyttäjiä ei löytynyt",
-    "no_search_results": "Haulla ei löytynyt käyttäjiä"
+    "no_search_results": "Haulla ei löytynyt käyttäjiä",
+    "view": "Näytä",
+    "back": "Takaisin",
+    "no_registrations": "Ei ilmoittautumisia"
   },
   "theme": {
     "auto": "Automaattinen",
@@ -382,7 +385,10 @@
     "user_management": "Käyttäjähallinta",
     "event_management": "Tapahtumahallinta",
     "user_required_info_missing": "Käyttäjä on Luupin jäsen, mutta häneltä puuttuu pakollisia tietoja!",
-    "user_management_description": "Selaa ja hallinnoi järjestelmän käyttäjiä. Käytä hakua suodattaaksesi sähköpostin, käyttäjänimen tai nimen perusteella."
+    "user_management_description": "Selaa ja hallinnoi järjestelmän käyttäjiä. Käytä hakua suodattaaksesi sähköpostin, käyttäjänimen tai nimen perusteella.",
+    "picked_up": "Noudettu",
+    "mark_picked_up": "Merkitse noudetuksi",
+    "mark_not_picked_up": "Merkitse ei noudetuksi"
   },
   "pages_profile": {
     "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",
