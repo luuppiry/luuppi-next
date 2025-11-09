@@ -296,23 +296,24 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         >
           {error.level === 'error' && <BiErrorCircle size={24} />}
           {error.level === 'warn' && <IoWarningOutline size={24} />}
-          {error.level === 'info' && (
-            <IoIosInformationCircleOutline size={24} />
-          )}
+          {error.level === 'info' && <IoIosInformationCircleOutline size={24} />}
           {error.message}
         </div>
       ))}
       <div className="flex flex-col gap-4">
-        {ticketTypesFormatted?.map((ticket, index) => (
+        {ticketTypesFormatted?.map((ticket, index) => {
+          const disabled = Boolean(
+            !ticket.isOwnQuota ||
+            isSoldOutOwnQuota ||
+            Boolean(hasBoughtMaxTicketsOwnQuota) ||
+            !isRegistrationOpenOwnQuota,
+          );
+
+          return (
           <Ticket
             key={`${ticket.name}-${index}`}
             dictionary={dictionary}
-            disabled={
-              !ticket.isOwnQuota ||
-              isSoldOutOwnQuota ||
-              hasBoughtMaxTicketsOwnQuota ||
-              !isRegistrationOpenOwnQuota
-            }
+            disabled={disabled}
             eventId={event.data.id}
             eventStartsAt={new Date(event.data.attributes.StartDate)}
             isOwnQuota={isOwnQuota(ticket.role!)}
@@ -320,7 +321,8 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
             targetedRole={targetedRole.strapiRoleUuid}
             ticket={ticket}
           />
-        ))}
+          );
+    })}
       </div>
     </>
   ) : (
