@@ -26,9 +26,8 @@ export default async function CollaborationJobOpportunities(
     APIResponseCollection<'api::job-opportunity.job-opportunity'>
   >(params.lang, url, tags);
 
-  // Filter to show only open job opportunities (ending date >= today)
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Set to start of day for comparison
+  today.setHours(0, 0, 0, 0);
 
   const openJobOpportunities = pageData.data.filter((job) => {
     const endingDate = new Date(job.attributes.jobOpportunityEnding);
@@ -36,7 +35,7 @@ export default async function CollaborationJobOpportunities(
   });
 
   // Helper function to format date
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: any) => {
     const date = new Date(dateString);
     return date.toLocaleDateString(params.lang, {
       year: 'numeric',

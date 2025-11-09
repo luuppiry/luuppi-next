@@ -1,4 +1,4 @@
-import type { Schema, Attribute } from '@strapi/strapi';
+import type { Attribute, Schema } from '@strapi/strapi';
 
 export interface SharedSeo extends Schema.Component {
   collectionName: 'components_shared_seos';
@@ -231,7 +231,7 @@ export interface EventsQuestionsCheckbox extends Schema.Component {
 }
 
 declare module '@strapi/types' {
-  export module Shared {
+  export namespace Shared {
     export interface Components {
       'shared.seo': SharedSeo;
       'shared.page-content': SharedPageContent;
