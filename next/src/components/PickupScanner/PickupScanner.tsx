@@ -37,7 +37,7 @@ export default function PickupScanner({
       setMessage({ text: result.message, isError: true });
     } else {
       setMessage({
-        text: `${dictionary.general.success}: ${result.data?.username || result.data?.email}`,
+        text: `${dictionary.general.success}: ${result.data?.email}`,
         isError: false,
       });
       setManualCode('');
