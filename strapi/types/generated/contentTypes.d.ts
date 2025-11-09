@@ -1386,14 +1386,14 @@ export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
           localized: false;
         };
       }>;
-    jobOpportunityPublished: Attribute.DateTime &
+    jobOpportunityPublished: Attribute.Text &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
-    jobOpportunityEnding: Attribute.DateTime &
+    jobOpportunityEnding: Attribute.Text &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {

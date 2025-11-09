@@ -1386,8 +1386,20 @@ export interface ApiJobOpportunityJobOpportunity extends Schema.CollectionType {
           localized: false;
         };
       }>;
-    jobOpportunityPublished: Attribute.DateTime & Attribute.Required;
-    jobOpportunityEnding: Attribute.DateTime & Attribute.Required;
+    jobOpportunityPublished: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    jobOpportunityEnding: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     jobOpportunityTargetGroup: Attribute.Enumeration<
       ['everybody', 'computer_science', 'mathematics', 'data_analysis']
     > &

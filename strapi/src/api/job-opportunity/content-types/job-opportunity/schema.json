@@ -69,7 +69,7 @@
           "localized": true
         }
       },
-      "type": "datetime",
+      "type": "text",
       "required": true
     },
     "jobOpportunityEnding": {
@@ -78,7 +78,7 @@
           "localized": true
         }
       },
-      "type": "datetime",
+      "type": "text",
       "required": true
     },
     "jobOpportunityTargetGroup": {
