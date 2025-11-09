@@ -1,7 +1,9 @@
 'use client';
+import Tooltip from '@/components/Tooltip/Tooltip';
 import { Event } from '@/models/event';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { SelectedViewContext } from '@/providers/EventSelectorProvider';
+import type { CalendarListeners } from '@fullcalendar/core';
 import fiLocale from '@fullcalendar/core/locales/fi';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import FullCalendar from '@fullcalendar/react';
@@ -10,7 +12,6 @@ import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 import './EventCalendar.css';
-import type { CalendarListeners } from '@fullcalendar/core';
 
 interface EventCalendarProps {
   events: Event[];
@@ -125,7 +126,7 @@ export default function EventCalendar({
           eventClick={handleEventClick}
           eventContent={function (arg) {
             return (
-              <span className="tooltip block w-full" data-tip={arg.event.title}>
+              <Tooltip content={arg.event.title}>
                 <p className="overflow-hidden pl-[2px] text-left text-xs">
                   {arg.timeText}{' '}
                   <span className="font-bold dark:font-normal">
@@ -137,7 +138,7 @@ export default function EventCalendar({
                     {arg.event.title}
                   </span>
                 </p>
-              </span>
+              </Tooltip>
             );
           }}
           eventOrderStrict={true}

@@ -1,7 +1,6 @@
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import RenderPartners from './RenderPartners/RenderPartners';
-import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 
 interface PartnersProps {
   dictionary: Dictionary;
