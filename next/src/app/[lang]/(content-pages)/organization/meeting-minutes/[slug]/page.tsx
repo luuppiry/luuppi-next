@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import PdfViewer from '@/components/PdfViewer/PdfViewer';
 import { getDictionary } from '@/dictionaries';
 import { flipMeetingMinuteLocale } from '@/libs/strapi/flip-locale';
@@ -21,6 +22,7 @@ export default async function LuuppiSanomatPublication(
 ) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
+  const session = await auth();
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
@@ -36,6 +38,27 @@ export default async function LuuppiSanomatPublication(
   }
 
   const selectedPublication = meetingMinuteLocaleFlipped[0];
+
+  const user = session?.user;
+  if (!user?.entraUserUuid || !user?.isLuuppiMember) {
+    return (
+      <div className="relative flex flex-col gap-12">
+        <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
+          <h1>
+            {dictionary.general.meeting_minute}{' '}
+            {new Date(selectedPublication.attributes?.meetingDate)
+              .toLocaleDateString(params.lang, {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })
+              .toLowerCase()}
+          </h1>
+        </div>
+        <p>{dictionary.pages_meeting_minutes_year.unauthorized}</p>
+      </div>
+    );
+  }
 
   return (
     <article className="relative flex flex-col gap-12">
