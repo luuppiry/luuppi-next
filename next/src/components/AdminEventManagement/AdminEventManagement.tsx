@@ -99,7 +99,7 @@ export default async function AdminEventManagement({
                     </span>
                   </td>
                   <td>
-                    <span className="badge badge-success">
+                    <span className="badge badge-primary">
                       {event.pickedUpCount} / {event.registrations}
                     </span>
                   </td>
