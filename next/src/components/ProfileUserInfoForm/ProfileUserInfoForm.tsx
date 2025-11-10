@@ -153,6 +153,8 @@ export default function ProfileUserInfoForm({
         value={user.preferredFullName ?? ''}
         onChange={() => setFormResponse(initialState)}
       />
+      {Boolean(isLuuppiMember) && (
+        <>
           <FormInput
             error={formResponse.field === 'domicle' ? formResponse.message : ''}
             id="domicle"
@@ -195,6 +197,8 @@ export default function ProfileUserInfoForm({
             value={user.major}
             onChange={() => setFormResponse(initialState)}
           />
+        </>
+      )}
       <div>
         <SubmitButton text={dictionary.general.submit} />
       </div>

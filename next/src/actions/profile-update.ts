@@ -134,6 +134,16 @@ export async function profileUpdate(
     ]),
   );
 
+  if ((fieldsToUpdate.major || fieldsToUpdate.domicle) && !isLuuppiMember) {
+    logger.error(
+      'Tried to update major or domicle without being a member of Luuppi',
+    );
+    return {
+      message: dictionary.api.unauthorized,
+      isError: true,
+    };
+  }
+
   await prisma.user.update({
     where: {
       entraUserUuid: session.user.entraUserUuid,
