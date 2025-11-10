@@ -1,8 +1,8 @@
 import { auth } from '@/auth';
 import ProfileEmailform from '@/components/ProfileEmailForm/ProfileEmailForm';
 import ProfileNotificationsForm from '@/components/ProfileNotificationsForm/ProfileNotificationsForm';
-import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInfoForm';
 import ProfileUserAddressDeclaration from '@/components/ProfileUserAddressDeclaration/ProfileUserAddressDeclaration';
+import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInfoForm';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';

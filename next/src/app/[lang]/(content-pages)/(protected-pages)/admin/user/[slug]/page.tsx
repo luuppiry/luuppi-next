@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import AdminEventsTable from '@/components/AdminUserManagement/AdminEventsTable/AdminEventsTable';
+import AdminEventsTable from '@/components/AdminEventManagement/AdminEventsTable/AdminEventsTable';
 import AdminRoleEditor from '@/components/AdminUserManagement/AdminRoleEditor/AdminRoleEditor';
 import AdminUserGeneral from '@/components/AdminUserManagement/AdminUserGeneral/AdminUserGeneral';
 import { getDictionary } from '@/dictionaries';
