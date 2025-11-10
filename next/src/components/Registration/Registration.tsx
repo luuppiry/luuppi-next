@@ -6,6 +6,7 @@ import { $Enums } from '@prisma/client';
 import QuestionButton from '../QuestionButton/QuestionButton';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import RegistrationCounter from './RegistrationCounter';
+import PickupQRCode from '../PickupQRCode/PickupQRCode';
 
 interface RegistrationProps {
   registration: {
@@ -19,6 +20,8 @@ interface RegistrationProps {
     paymentCompleted: boolean;
     deletedAt: Date | null;
     id: number;
+    pickupCode?: string | null;
+    pickedUp?: boolean;
   };
   questions: {
     answerableUntil: Date | null;
@@ -87,62 +90,73 @@ export default function Registration({
       className="flex gap-4 rounded-lg bg-background-50"
     >
       <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
-      <div className="flex w-full justify-between gap-4 p-4 max-md:flex-col">
-        <div className="flex flex-1 flex-col gap-2">
-          <h2 className="line-clamp-2 break-all text-lg font-semibold max-md:text-base">
-            {registration.name}
-          </h2>
-          <h2 className="flex items-center gap-4 text-xl font-semibold max-md:text-lg">
-            <span>{registration.price?.toFixed(2)} €</span>
-            <span
-              className={`badge max-md:badge-sm ${
-                registration.paymentCompleted
-                  ? 'badge-success text-white'
-                  : 'badge-warning text-gray-800'
-              }`}
-            >
-              {registration.paymentCompleted
-                ? dictionary.general[redeemedOrPaid]
-                : dictionary.pages_events.reserved}
-            </span>
-            {registration.reservedUntil >= new Date() &&
-              !registration.paymentCompleted && (
-                <RegistrationCounter expiresAt={registration.reservedUntil} />
-              )}
-          </h2>
-          <div className="flex items-center gap-6">
-            <p className="text-sm">
-              {firstLetterToUpperCase(
-                registration.createdAt.toLocaleString(lang, longDateFormat),
-              )}{' '}
-              {registration.createdAt.toLocaleString(lang, shortTimeFormat)}
-            </p>
+      <div className="flex w-full flex-col gap-2 p-4">
+        <div className="flex w-full justify-between gap-4 max-md:flex-col">
+          <div className="flex flex-1 flex-col gap-2">
+            <h2 className="line-clamp-2 break-all text-lg font-semibold max-md:text-base">
+              {registration.name}
+            </h2>
+            <h2 className="flex items-center gap-4 text-xl font-semibold max-md:text-lg">
+              <span>{registration.price?.toFixed(2)} €</span>
+              <span
+                className={`badge max-md:badge-sm ${
+                  registration.paymentCompleted
+                    ? 'badge-success text-white'
+                    : 'badge-warning text-gray-800'
+                }`}
+              >
+                {registration.paymentCompleted
+                  ? dictionary.general[redeemedOrPaid]
+                  : dictionary.pages_events.reserved}
+              </span>
+              {registration.reservedUntil >= new Date() &&
+                !registration.paymentCompleted && (
+                  <RegistrationCounter expiresAt={registration.reservedUntil} />
+                )}
+            </h2>
+            <div className="flex items-center gap-6">
+              <p className="text-sm">
+                {firstLetterToUpperCase(
+                  registration.createdAt.toLocaleString(lang, longDateFormat),
+                )}{' '}
+                {registration.createdAt.toLocaleString(lang, shortTimeFormat)}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-end gap-2">
+            {displayQuestionButton(registration, questions) && (
+              <QuestionButton
+                answers={answers}
+                dictionary={dictionary}
+                questions={questions}
+                reservationId={registration.id}
+              />
+            )}
+            {displayCancelReservationButton(registration) && (
+              <form action={reservationCancelAction}>
+                <input
+                  name="registrationId"
+                  type="hidden"
+                  value={registration.id}
+                />
+                <SubmitButton
+                  className="btn-outline max-md:btn-xs"
+                  text={dictionary.pages_events.cancel_reservation}
+                  variant="error"
+                />
+              </form>
+            )}
           </div>
         </div>
-        <div className="flex items-end gap-2">
-          {displayQuestionButton(registration, questions) && (
-            <QuestionButton
-              answers={answers}
-              dictionary={dictionary}
-              questions={questions}
-              reservationId={registration.id}
-            />
-          )}
-          {displayCancelReservationButton(registration) && (
-            <form action={reservationCancelAction}>
-              <input
-                name="registrationId"
-                type="hidden"
-                value={registration.id}
-              />
-              <SubmitButton
-                className="btn-outline max-md:btn-xs"
-                text={dictionary.pages_events.cancel_reservation}
-                variant="error"
-              />
-            </form>
-          )}
-        </div>
+
+        {registration.paymentCompleted && registration.pickupCode && (
+          <PickupQRCode
+            dictionary={dictionary}
+            pickedUp={registration.pickedUp ?? false}
+            pickupCode={registration.pickupCode}
+            registrationId={registration.id}
+          />
+        )}
       </div>
     </div>
   );

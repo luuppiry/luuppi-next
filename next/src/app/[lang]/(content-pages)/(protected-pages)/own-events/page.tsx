@@ -162,6 +162,8 @@ export default async function OwnEvents(props: OwnEventsProps) {
     deletedAt: registration.deletedAt,
     id: registration.id,
     eventId: registration.eventId,
+    pickupCode: registration.pickupCode,
+    pickedUp: registration.pickedUp,
   }));
 
   const paidRegistrations = registrationsFormatted
