@@ -54,8 +54,8 @@ export default function AdminEventRegistrationsList({
           {dictionary.general.registrations}
         </h2>
         <div className="flex gap-2">
-          <span className="badge badge-primary">
-            {dictionary.pages_admin.picked_up}: {pickedUpCount} /{' '}
+          <span className="badge badge-success">
+            {dictionary.pages_admin.picked_up ?? 'Picked up'}: {pickedUpCount} /{' '}
             {sortedRegistrations.length}
           </span>
         </div>
@@ -116,7 +116,7 @@ export default function AdminEventRegistrationsList({
         </div>
       ) : (
         <p className="text-sm">
-          {dictionary.general.no_registrations}
+          {dictionary.general.no_registrations ?? 'No registrations'}
         </p>
       )}
     </div>
