@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
 import NotificationBar from '@/components/NotificationBar/NotificationBar';
+import Snowfall from '@/components/Snowfall/Snowfall';
 import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
@@ -83,6 +84,7 @@ export default async function RootLayout(props: RootLayoutProps) {
             </EventSelectorProvider>
             <Footer dictionary={dictionary} lang={params.lang} />
             <NotificationBar lang={params.lang} notification={notification} />
+            <Snowfall />
           </ThemeProvider>
         </SessionProvider>
       </body>
