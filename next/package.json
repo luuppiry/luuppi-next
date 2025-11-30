@@ -45,7 +45,6 @@
     "react-fast-marquee": "^1.6.5",
     "react-icons": "^5.5.0",
     "react-pdf": "^9.2.1",
-    "react-snowfall": "^2.3.0",
     "react-turnstile": "^1.1.4",
     "schema-dts": "^1.1.5",
     "server-only": "^0.0.1",
