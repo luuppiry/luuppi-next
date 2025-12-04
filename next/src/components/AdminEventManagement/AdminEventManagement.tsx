@@ -4,7 +4,9 @@ import prisma from '@/libs/db/prisma';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { PiEye } from 'react-icons/pi';
 import AdminExportEventButton from './AdminExportEventButton/AdminExportEventButton';
 
 interface AdminEventManagementProps {
@@ -56,6 +58,7 @@ export default async function AdminEventManagement({
       name: lang === 'fi' ? event.nameFi : event.nameEn,
       startDate: new Date(event.startDate),
       registrations: event.registrations.length,
+      pickedUpCount: event.registrations.filter((r) => r.pickedUp).length,
     }));
 
   return (
@@ -72,6 +75,7 @@ export default async function AdminEventManagement({
                 <th>{dictionary.general.event}</th>
                 <th>{dictionary.general.starts_at}</th>
                 <th>{dictionary.general.registrations}</th>
+                <th>{dictionary.pages_admin.picked_up ?? 'Picked up'}</th>
                 <th>
                   <span className="flex justify-end">
                     {dictionary.general.actions}
@@ -95,11 +99,28 @@ export default async function AdminEventManagement({
                     </span>
                   </td>
                   <td>
-                    <AdminExportEventButton
-                      disabled={!event.registrations}
-                      eventId={event.id}
-                      lang={lang}
-                    />
+                    <span className="badge badge-primary">
+                      {event.pickedUpCount} / {event.registrations}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="flex items-end justify-end gap-1">
+                      <Link
+                        aria-label={dictionary.general.view}
+                        className="btn btn-primary btn-circle btn-ghost btn-sm"
+                        href={`/${lang}/admin/event/${event.id}`}
+                      >
+                        <PiEye
+                          className="text-gray-800 dark:text-background-950"
+                          size={26}
+                        />
+                      </Link>
+                      <AdminExportEventButton
+                        disabled={!event.registrations}
+                        eventId={event.id}
+                        lang={lang}
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}
