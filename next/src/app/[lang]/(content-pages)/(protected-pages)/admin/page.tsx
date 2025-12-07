@@ -30,7 +30,7 @@ export default async function Admin(props: AdminProps) {
 
   const allowedModes = ['user', 'event'];
   if (!mode || typeof mode !== 'string' || !allowedModes.includes(mode)) {
-    redirect(`/${params.lang}/admin?mode=user`);
+    redirect(`/${params.lang}/admin?mode=event`);
   }
 
   const hasHatoRole = await prisma.rolesOnUsers.findFirst({
@@ -61,22 +61,22 @@ export default async function Admin(props: AdminProps) {
       <h1 className="mb-12">{dictionary.navigation.admin}</h1>
       <div className="mb-8 flex w-full items-center justify-between rounded-lg bg-background-50 p-4 max-md:flex-col max-md:justify-center max-md:gap-4 max-md:px-2">
         <div
-          className="tabs-boxed tabs border bg-white max-md:w-full dark:bg-inherit dark:border-primary-300"
+          className="tabs-boxed tabs border bg-white max-md:w-full dark:border-primary-300 dark:bg-inherit"
           role="tablist"
         >
-          <Link
-            className={`tab text-nowrap font-semibold ${mode === 'user' && 'tab-active'}`}
-            href={`/${params.lang}/admin?mode=user`}
-            role="tab"
-          >
-            {dictionary.pages_admin.user_management}
-          </Link>
           <Link
             className={`tab text-nowrap font-semibold ${mode === 'event' && 'tab-active'}`}
             href={`/${params.lang}/admin?mode=event`}
             role="tab"
           >
             {dictionary.pages_admin.event_management}
+          </Link>
+          <Link
+            className={`tab text-nowrap font-semibold ${mode === 'user' && 'tab-active'}`}
+            href={`/${params.lang}/admin?mode=user`}
+            role="tab"
+          >
+            {dictionary.pages_admin.user_management}
           </Link>
         </div>
       </div>
