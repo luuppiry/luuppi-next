@@ -56,6 +56,18 @@ export default async function Admin(props: AdminProps) {
     redirect('/api/auth/force-signout');
   }
 
+  const createTabUrl = (mode: string) => {
+    const urlParams = new URLSearchParams();
+
+    Object.entries(searchParams).forEach(([key, value]) => {
+      if (typeof value === 'string') urlParams.set(key, value);
+    });
+
+    urlParams.set('mode', mode);
+
+    return `/${params.lang}/admin?${urlParams.toString()}`;
+  };
+
   return (
     <div className="relative">
       <h1 className="mb-12">{dictionary.navigation.admin}</h1>
@@ -66,14 +78,14 @@ export default async function Admin(props: AdminProps) {
         >
           <Link
             className={`tab text-nowrap font-semibold ${mode === 'event' && 'tab-active'}`}
-            href={`/${params.lang}/admin?mode=event`}
+            href={createTabUrl('event')}
             role="tab"
           >
             {dictionary.pages_admin.event_management}
           </Link>
           <Link
             className={`tab text-nowrap font-semibold ${mode === 'user' && 'tab-active'}`}
-            href={`/${params.lang}/admin?mode=user`}
+            href={createTabUrl('user')}
             role="tab"
           >
             {dictionary.pages_admin.user_management}
@@ -84,7 +96,11 @@ export default async function Admin(props: AdminProps) {
         <AdminUsersTable dictionary={dictionary} lang={params.lang} />
       )}
       {mode === 'event' && (
-        <AdminEventManagement dictionary={dictionary} lang={params.lang} />
+        <AdminEventManagement
+          dictionary={dictionary}
+          lang={params.lang}
+          searchParams={searchParams}
+        />
       )}
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
