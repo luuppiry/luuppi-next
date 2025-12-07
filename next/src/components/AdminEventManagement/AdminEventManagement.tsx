@@ -45,7 +45,7 @@ export default async function AdminEventManagement({
       },
     },
     orderBy: {
-      createdAt: 'desc',
+      startDate: 'desc',
     },
   });
 
