@@ -180,7 +180,7 @@ export const navLinksMobile: NavLink[] = [
   },
   {
     translation: 'admin',
-    href: '/admin?mode=user',
+    href: '/admin?mode=event',
     authenticationLevel: 'luuppi-hato',
   },
   {
