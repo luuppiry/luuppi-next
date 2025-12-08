@@ -48,7 +48,8 @@
     "user_roles_updated": "User roles updated successfully",
     "already_member_role": "You already have member role",
     "no_users": "No users found",
-    "no_search_results": "No users found matching your search"
+    "no_search_results": "No users found matching your search",
+    "no_event_search_results": "No events found matching your search"
   },
   "roles": {
     "entire_board": "Entire Board",

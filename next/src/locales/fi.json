@@ -157,7 +157,8 @@
     "no": "Ei",
     "never": "Ei koskaan",
     "no_users": "Käyttäjiä ei löytynyt",
-    "no_search_results": "Haulla ei löytynyt käyttäjiä"
+    "no_search_results": "Haulla ei löytynyt käyttäjiä",
+    "no_event_search_results": "Haulla ei löytynyt tapahtumia"
   },
   "theme": {
     "auto": "Automaattinen",
