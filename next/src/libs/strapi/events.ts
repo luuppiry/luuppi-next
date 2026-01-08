@@ -6,6 +6,19 @@ import { APIResponseData } from '@/types/types';
 const luuppiMember = process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!;
 const luuppiNonMember = process.env.NEXT_PUBLIC_NO_ROLE_ID!;
 
+/**
+ * Helper function to extract role IDs from user roles
+ * @param roles - User roles from Prisma
+ * @returns Array of role IDs
+ */
+const extractRoleIds = (
+  roles: Array<{ role: { strapiRoleUuid: string } }>,
+): string[] => {
+  return roles
+    .map((r) => r.role?.strapiRoleUuid)
+    .filter((id): id is string => Boolean(id));
+};
+
 // Incase an event has a Registeration for luuppi-members or non-members ("default"), add a duplicate event
 // to show the opening time in the calendar
 export const addEventRegisterationOpensAtInfo = <T>(
@@ -106,12 +119,14 @@ export const isEventVisible = async (
       return false;
     }
 
-    userRoleIds = user.roles.map((r) => r.role.strapiRoleUuid);
+    userRoleIds = extractRoleIds(user.roles);
   }
 
   // Check if user has any of the required roles
-  const requiredRoleIds = visibleForRoles.map((r) => r.attributes.RoleId);
-  return requiredRoleIds.some((requiredRole) => userRoleIds.includes(requiredRole));
+  const requiredRoleIds = visibleForRoles
+    .map((r) => r.attributes?.RoleId)
+    .filter((id): id is string => Boolean(id));
+  return requiredRoleIds.some((requiredRole) => userRoleIds!.includes(requiredRole));
 };
 
 /**
@@ -155,7 +170,7 @@ export const filterVisibleEvents = async (
     });
 
     if (user) {
-      userRoleIds = user.roles.map((r) => r.role.strapiRoleUuid);
+      userRoleIds = extractRoleIds(user.roles);
     }
   }
 
