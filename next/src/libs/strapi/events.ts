@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import prisma from '@/libs/db/prisma';
 import { Dictionary } from '@/models/locale';
 import { APIResponseData } from '@/types/types';
 
@@ -46,14 +47,16 @@ export const addEventRegisterationOpensAtInfo = <T>(
 };
 
 /**
- * Checks if an event should be visible to the current user based on ShowInCalendar flag
+ * Checks if an event should be visible to a specific user based on ShowInCalendar flag
  * and VisibleOnlyForRoles configuration.
  * 
  * @param event - The event data from Strapi
+ * @param userRoleIds - Array of role IDs the user has (optional, for performance)
  * @returns Promise<boolean> - True if the event should be visible, false otherwise
  */
 export const isEventVisible = async (
   event: APIResponseData<'api::event.event'>,
+  userRoleIds?: string[],
 ): Promise<boolean> => {
   // If ShowInCalendar is explicitly set to false, hide the event
   if (event.attributes.ShowInCalendar === false) {
@@ -66,53 +69,54 @@ export const isEventVisible = async (
     return true;
   }
 
-  // Check if user has any of the required roles
-  const session = await auth();
-  if (!session?.user) {
-    // Not logged in, can't see role-restricted events
-    return false;
-  }
+  // If userRoleIds weren't passed, we need to fetch them
+  if (!userRoleIds) {
+    const session = await auth();
+    if (!session?.user) {
+      // Not logged in, can't see role-restricted events
+      return false;
+    }
 
-  // Get user's roles from the database
-  const prisma = (await import('@/libs/db/prisma')).default;
-  const user = await prisma.user.findUnique({
-    where: {
-      entraUserUuid: session.user.entraUserUuid,
-    },
-    include: {
-      roles: {
-        include: {
-          role: true,
-        },
-        where: {
-          OR: [
-            {
-              expiresAt: {
-                gte: new Date(),
+    const user = await prisma.user.findUnique({
+      where: {
+        entraUserUuid: session.user.entraUserUuid,
+      },
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+          where: {
+            OR: [
+              {
+                expiresAt: {
+                  gte: new Date(),
+                },
               },
-            },
-            {
-              expiresAt: null,
-            },
-          ],
+              {
+                expiresAt: null,
+              },
+            ],
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!user) {
-    return false;
+    if (!user) {
+      return false;
+    }
+
+    userRoleIds = user.roles.map((r) => r.role.strapiRoleUuid);
   }
 
   // Check if user has any of the required roles
-  const userRoleIds = user.roles.map((r) => r.role.strapiRoleUuid);
   const requiredRoleIds = visibleForRoles.map((r) => r.attributes.RoleId);
-
   return requiredRoleIds.some((requiredRole) => userRoleIds.includes(requiredRole));
 };
 
 /**
- * Filters an array of events based on visibility rules
+ * Filters an array of events based on visibility rules.
+ * Optimized to fetch user session and roles only once.
  * 
  * @param events - Array of event data from Strapi
  * @returns Promise<Array> - Filtered array of events
@@ -120,10 +124,46 @@ export const isEventVisible = async (
 export const filterVisibleEvents = async (
   events: APIResponseData<'api::event.event'>[],
 ): Promise<APIResponseData<'api::event.event'>[]> => {
+  // Get user session and roles once
+  const session = await auth();
+  let userRoleIds: string[] | undefined = undefined;
+
+  if (session?.user) {
+    const user = await prisma.user.findUnique({
+      where: {
+        entraUserUuid: session.user.entraUserUuid,
+      },
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+          where: {
+            OR: [
+              {
+                expiresAt: {
+                  gte: new Date(),
+                },
+              },
+              {
+                expiresAt: null,
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    if (user) {
+      userRoleIds = user.roles.map((r) => r.role.strapiRoleUuid);
+    }
+  }
+
+  // Check visibility for all events with the same user role data
   const visibilityChecks = await Promise.all(
     events.map(async (event) => ({
       event,
-      visible: await isEventVisible(event),
+      visible: await isEventVisible(event, userRoleIds),
     })),
   );
 
