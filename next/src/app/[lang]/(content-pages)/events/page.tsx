@@ -1,7 +1,7 @@
 import EventSelector from '@/components/EventSelector/EventSelector';
 import { getDictionary } from '@/dictionaries';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
-import { addEventRegisterationOpensAtInfo } from '@/libs/strapi/events';
+import { addEventRegisterationOpensAtInfo, filterVisibleEvents } from '@/libs/strapi/events';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { Event } from '@/models/event';
@@ -24,13 +24,16 @@ export default async function Events(props: EventsProps) {
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-  const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role`;
+  const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,
     url,
     ['event'],
   );
+
+  // Filter events based on visibility rules
+  const visibleEvents = await filterVisibleEvents(data.data);
 
   // Format event from raw event data
   const formatEvent = (event: APIResponseData<'api::event.event'>): Event => ({
@@ -48,7 +51,7 @@ export default async function Events(props: EventsProps) {
     hasTickets: Boolean(event.attributes.Registration?.TicketTypes.length),
   });
 
-  const events = data.data.reduce(
+  const events = visibleEvents.reduce(
     (acc, event) =>
       addEventRegisterationOpensAtInfo<Event>(
         acc,
