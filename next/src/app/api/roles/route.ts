@@ -85,19 +85,20 @@ export async function GET(
     user.entraUserUuid,
   );
   
-  // Combine search and permission filters
-  const strapiRoleUuidFilter: any = {};
+  // Combine search and permission filters using AND
+  const filters = [];
   if (search) {
-    strapiRoleUuidFilter.contains = search;
-    strapiRoleUuidFilter.mode = 'insensitive' as const;
+    filters.push({
+      strapiRoleUuid: { contains: search, mode: 'insensitive' as const },
+    });
   }
   if (!isSuperAdmin) {
-    strapiRoleUuidFilter.not = process.env.NEXT_PUBLIC_LUUPPI_HATO_ID;
+    filters.push({
+      strapiRoleUuid: { not: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID },
+    });
   }
   
-  const where = Object.keys(strapiRoleUuidFilter).length > 0
-    ? { strapiRoleUuid: strapiRoleUuidFilter }
-    : {};
+  const where = filters.length > 0 ? { AND: filters } : {};
 
   try {
     const [allRoles, total] = await Promise.all([
