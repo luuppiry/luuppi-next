@@ -120,11 +120,7 @@ export async function GET(
               AND: {
                 strapiRoleUuid: roleId,
                 NOT: {
-                  strapiRoleUuid: process.env.XXX_SUPER_ADMIN_XXX?.includes(
-                    user.entraUserUuid,
-                  )
-                    ? ''
-                    : process.env.NEXT_PUBLIC_LUUPPI_HATO_ID,
+                  strapiRoleUuid: restrictedRole,
                 },
               },
             },
