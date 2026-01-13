@@ -51,7 +51,10 @@ export async function GET(
     );
 
     // Filter events based on visibility rules
-    const visibleEvents = await filterVisibleEvents(data.data);
+    const visibleEvents = await filterVisibleEvents(data.data, [
+      process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+      process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+    ]);
 
     const events = visibleEvents.map((event) => ({
       id: event.id,

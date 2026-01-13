@@ -125,10 +125,10 @@ export async function GET() {
   >('fi', url, ['event']);
 
   // Filter events based on visibility rules
-  const visibleEvents = await filterVisibleEvents(
-    eventsData.data,
-    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID,
-  );
+  const visibleEvents = await filterVisibleEvents(eventsData.data, [
+    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+    process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+  ]);
 
   const eventPagesSiteMap: SitemapItemLoose[] = visibleEvents.map((event) => ({
     url: `/fi/events/${event.id}`,

@@ -1,6 +1,9 @@
 import { getDictionary } from '@/dictionaries';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
-import { addEventRegisterationOpensAtInfo, filterVisibleEvents } from '@/libs/strapi/events';
+import {
+  addEventRegisterationOpensAtInfo,
+  filterVisibleEvents,
+} from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection, APIResponseData } from '@/types/types';
@@ -41,7 +44,10 @@ export async function GET(request: NextRequest) {
   }
 
   // Filter events based on visibility rules
-  const visibleEvents = await filterVisibleEvents(eventData.data);
+  const visibleEvents = await filterVisibleEvents(eventData.data, [
+    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+    process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+  ]);
 
   // Format event from raw event data
   const formatEvent = (event: APIResponseData<'api::event.event'>) => ({
