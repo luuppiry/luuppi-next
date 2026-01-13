@@ -6,8 +6,13 @@ import {
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { BiErrorCircle, BiSearch } from 'react-icons/bi';
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import Alert from '@/components/AdminShared/components/Alert';
+import DataTable, {
+  TableColumn,
+} from '@/components/AdminShared/components/DataTable';
+import Pagination from '@/components/AdminShared/components/Pagination';
+import SearchBar from '@/components/AdminShared/components/SearchBar';
+import { useDebounce } from '@/components/AdminShared/hooks/useDebounce';
 
 interface AdminUsersTableProps {
   dictionary: Dictionary;
@@ -16,22 +21,13 @@ interface AdminUsersTableProps {
 
 const PAGE_SIZE = 25;
 
-const useDebounce = (value: string, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-
-  return debouncedValue;
-};
+type UserRow = GetUsersSuccessResponse['users'][number];
 
 export default function AdminUsersTable({
   dictionary,
   lang,
 }: AdminUsersTableProps) {
-  const [users, setUsers] = useState<GetUsersSuccessResponse['users']>([]);
+  const [users, setUsers] = useState<UserRow[]>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [inputValue, setInputValue] = useState('');
@@ -73,9 +69,7 @@ export default function AdminUsersTable({
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  const getMembershipInfo = (
-    user: GetUsersSuccessResponse['users'][number],
-  ) => {
+  const getMembershipInfo = (user: UserRow) => {
     const memberRole = user.roles.find(
       (r) => r.role.strapiRoleUuid === process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID,
     );
@@ -84,6 +78,70 @@ export default function AdminUsersTable({
       expiresAt: memberRole?.expiresAt,
     };
   };
+
+  const handleSearchChange = (value: string) => {
+    setInputValue(value);
+    setPage(1);
+  };
+
+  const columns: TableColumn<UserRow>[] = [
+    {
+      header: '',
+      render: (user) => <span className="truncate">{user.id}</span>,
+    },
+    {
+      header: dictionary.general.email,
+      render: (user) => (
+        <div className="max-w-xs font-medium">
+          <div className="truncate">{user.email}</div>
+        </div>
+      ),
+    },
+    {
+      header: dictionary.general.first_name,
+      accessor: 'firstName',
+      render: (user) => user.firstName || '-',
+    },
+    {
+      header: dictionary.general.last_name,
+      accessor: 'lastName',
+      render: (user) => user.lastName || '-',
+    },
+    {
+      header: dictionary.general.username,
+      render: (user) => (
+        <div className="max-w-[150px]">
+          <div className="truncate">{user.username || '-'}</div>
+        </div>
+      ),
+    },
+    {
+      header: dictionary.general.membership,
+      className: 'text-center',
+      render: (user) => {
+        const { isMember } = getMembershipInfo(user);
+        return isMember ? (
+          <span className="badge badge-success badge-sm text-white">
+            {dictionary.general.yes}
+          </span>
+        ) : (
+          <span className="badge badge-error badge-sm text-white">
+            {dictionary.general.no}
+          </span>
+        );
+      },
+    },
+    {
+      header: dictionary.general.expires,
+      render: (user) => {
+        const { isMember, expiresAt } = getMembershipInfo(user);
+        if (!isMember) return '-';
+        return expiresAt
+          ? new Date(expiresAt).toLocaleDateString()
+          : dictionary.general.never;
+      },
+    },
+  ];
 
   return (
     <>
@@ -97,151 +155,39 @@ export default function AdminUsersTable({
               {dictionary.pages_admin.user_management_description}
             </p>
           </div>
-          <div className="join w-full sm:w-auto">
-            <div className="join-item inline-flex h-12 items-center border border-r-0 bg-secondary-400 px-3 dark:border-[var(--fallback-bc,oklch(var(--bc)/.2))] dark:bg-primary-500">
-              <BiSearch className="text-white" size={20} />
-            </div>
-            <input
-              className="input join-item input-bordered h-12 w-full"
-              placeholder={dictionary.general.search}
-              type="text"
-              value={inputValue}
-              onChange={(e) => {
-                setInputValue(e.target.value);
-                setPage(1);
-              }}
-            />
-          </div>
+          <SearchBar
+            placeholder={dictionary.general.search}
+            value={inputValue}
+            onChange={handleSearchChange}
+          />
         </div>
 
-        {error && (
-          <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
-            <BiErrorCircle size={24} />
-            {error}
-          </div>
-        )}
+        {error && <Alert message={error} type="error" />}
 
-        <div className="relative overflow-x-auto">
-          <table className="table">
-            <thead>
-              <tr>
-                <th />
-                <th>{dictionary.general.email}</th>
-                <th>{dictionary.general.first_name}</th>
-                <th>{dictionary.general.last_name}</th>
-                <th>{dictionary.general.username}</th>
-                <th className="text-center">{dictionary.general.membership}</th>
-                <th>{dictionary.general.expires}</th>
-              </tr>
-            </thead>
-            <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
-              {isLoading ? (
-                Array.from({ length: PAGE_SIZE }).map((_, index) => (
-                  <tr key={index} className="animate-pulse">
-                    <th className="w-8">
-                      <div className="h-4 w-4 rounded bg-gray-200" />
-                    </th>
-                    <td>
-                      <div className="h-4 w-48 rounded bg-gray-200" />
-                    </td>
-                    <td>
-                      <div className="h-4 w-24 rounded bg-gray-200" />
-                    </td>
-                    <td>
-                      <div className="h-4 w-24 rounded bg-gray-200" />
-                    </td>
-                    <td>
-                      <div className="h-4 w-32 rounded bg-gray-200" />
-                    </td>
-                    <td className="text-center">
-                      <div className="mx-auto h-4 w-16 rounded bg-gray-200" />
-                    </td>
-                    <td>
-                      <div className="h-4 w-20 rounded bg-gray-200" />
-                    </td>
-                  </tr>
-                ))
-              ) : users.length === 0 ? (
-                <tr>
-                  <td className="h-32 text-center text-gray-500" colSpan={7}>
-                    {search
-                      ? dictionary.general.no_search_results
-                      : dictionary.general.no_users}
-                  </td>
-                </tr>
-              ) : (
-                users.map((user) => {
-                  const { isMember, expiresAt } = getMembershipInfo(user);
-                  return (
-                    <tr
-                      key={user.id}
-                      className="cursor-pointer hover:bg-base-200"
-                      onClick={() =>
-                        router.push(`/admin/user/${user.entraUserUuid}`)
-                      }
-                    >
-                      <th className="truncate">{user.id}</th>
-                      <td className="max-w-xs font-medium">
-                        <div className="truncate">{user.email}</div>
-                      </td>
-                      <td>{user.firstName || '-'}</td>
-                      <td>{user.lastName || '-'}</td>
-                      <td className="max-w-[150px]">
-                        <div className="truncate">{user.username || '-'}</div>
-                      </td>
-                      <td className="text-center">
-                        {isMember ? (
-                          <span className="badge badge-success badge-sm text-white">
-                            {dictionary.general.yes}
-                          </span>
-                        ) : (
-                          <span className="badge badge-error badge-sm text-white">
-                            {dictionary.general.no}
-                          </span>
-                        )}
-                      </td>
-                      <td>
-                        {isMember
-                          ? expiresAt
-                            ? new Date(expiresAt).toLocaleDateString()
-                            : dictionary.general.never
-                          : '-'}
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          columns={columns}
+          data={users}
+          emptyMessage={
+            search
+              ? dictionary.general.no_search_results
+              : dictionary.general.no_users
+          }
+          getRowKey={(user) => user.id}
+          isLoading={isLoading}
+          loadingRowCount={PAGE_SIZE}
+          onRowClick={(user) =>
+            router.push(`/admin/user/${user.entraUserUuid}`)
+          }
+        />
 
-        <div className="mt-4 flex flex-wrap items-center justify-end gap-4">
-          <div className="flex flex-1 items-center gap-2 text-sm text-gray-600">
-            {isLoading ? (
-              <div className="h-4 w-8 animate-pulse rounded bg-gray-200" />
-            ) : (
-              <span className="font-medium">
-                {`${(page - 1) * PAGE_SIZE + 1}-${Math.min(page * PAGE_SIZE, total)} / ${total}`}
-              </span>
-            )}
-          </div>
-          <div className="flex gap-2">
-            <button
-              className="btn btn-primary btn-sm"
-              disabled={isLoading || page === 1}
-              onClick={() => setPage(page - 1)}
-            >
-              <MdChevronLeft size={24} />
-            </button>
-            <button
-              className="btn btn-primary btn-sm"
-              disabled={isLoading || page === totalPages}
-              onClick={() => setPage(page + 1)}
-            >
-              <MdChevronRight size={24} />
-            </button>
-          </div>
-        </div>
+        <Pagination
+          currentPage={page}
+          isLoading={isLoading}
+          pageSize={PAGE_SIZE}
+          total={total}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
     </>
   );
