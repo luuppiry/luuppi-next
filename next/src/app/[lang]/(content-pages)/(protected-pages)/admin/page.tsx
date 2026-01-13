@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 import AdminEventManagement from '@/components/AdminEventManagement/AdminEventManagement';
+import AdminRolesTable from '@/components/AdminRoleManagement/AdminRolesTable/AdminRolesTable';
 import AdminUsersTable from '@/components/AdminUserManagement/AdminUsersTable/AdminUsersTable';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
@@ -28,7 +29,7 @@ export default async function Admin(props: AdminProps) {
     redirect(`/${params.lang}`);
   }
 
-  const allowedModes = ['user', 'event'];
+  const allowedModes = ['user', 'event', 'roles'];
   if (!mode || typeof mode !== 'string' || !allowedModes.includes(mode)) {
     redirect(`/${params.lang}/admin?mode=event`);
   }
@@ -90,10 +91,20 @@ export default async function Admin(props: AdminProps) {
           >
             {dictionary.pages_admin.user_management}
           </Link>
+          <Link
+            className={`tab text-nowrap font-semibold ${mode === 'roles' && 'tab-active'}`}
+            href={createTabUrl('roles')}
+            role="tab"
+          >
+            {dictionary.pages_admin.roles_management}
+          </Link>
         </div>
       </div>
       {mode === 'user' && (
         <AdminUsersTable dictionary={dictionary} lang={params.lang} />
+      )}
+      {mode === 'roles' && (
+        <AdminRolesTable dictionary={dictionary} lang={params.lang} />
       )}
       {mode === 'event' && (
         <AdminEventManagement
