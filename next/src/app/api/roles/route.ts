@@ -84,9 +84,9 @@ export async function GET(
   const isSuperAdmin = process.env.XXX_SUPER_ADMIN_XXX?.includes(
     user.entraUserUuid,
   );
-  
+
   // Combine search and permission filters using AND
-  const filters = [];
+  const filters: Array<Record<string, unknown>> = [];
   if (search) {
     filters.push({
       strapiRoleUuid: { contains: search, mode: 'insensitive' as const },
@@ -97,7 +97,7 @@ export async function GET(
       strapiRoleUuid: { not: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID },
     });
   }
-  
+
   const where = filters.length > 0 ? { AND: filters } : {};
 
   try {
