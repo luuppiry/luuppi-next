@@ -283,7 +283,7 @@ export default function AdminRoleUsers({
                 ))
               ) : users.length === 0 ? (
                 <tr>
-                  <td className="h-32 text-center text-gray-500" colSpan={4}>
+                  <td className="h-32 text-center text-gray-500" colSpan={5}>
                     {search
                       ? dictionary.general.no_search_results
                       : dictionary.pages_admin.no_role_users}

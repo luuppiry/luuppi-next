@@ -151,23 +151,29 @@ export async function GET(
       }),
     ]);
 
-    // Get role info for each user
-    const usersWithRoleInfo = await Promise.all(
-      usersWithRole.map(async (user) => {
-        const roleInfo = await prisma.rolesOnUsers.findFirst({
+    // Get role info for each user in a single batched query
+    const userUuids = usersWithRole.map((u) => u.entraUserUuid);
+
+    const roleInfos = userUuids.length
+      ? await prisma.rolesOnUsers.findMany({
           where: {
-            entraUserUuid: user.entraUserUuid,
+            entraUserUuid: { in: userUuids },
             strapiRoleUuid: roleId,
           },
-        });
+        })
+      : [];
 
-        return {
-          ...user,
-          roleInfo,
-        };
-      }),
-    );
+    const roleInfoByUserId = new Map<string, RolesOnUsers>();
+    for (const roleInfo of roleInfos) {
+      if (!roleInfoByUserId.has(roleInfo.entraUserUuid)) {
+        roleInfoByUserId.set(roleInfo.entraUserUuid, roleInfo);
+      }
+    }
 
+    const usersWithRoleInfo = usersWithRole.map((u) => ({
+      ...u,
+      roleInfo: roleInfoByUserId.get(u.entraUserUuid) ?? null,
+    }));
     return NextResponse.json({
       users: usersWithRoleInfo,
       total: totalWithRole,

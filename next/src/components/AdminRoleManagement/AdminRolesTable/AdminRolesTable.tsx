@@ -135,7 +135,7 @@ export default function AdminRolesTable({
                 ))
               ) : roles.length === 0 ? (
                 <tr>
-                  <td className="h-32 text-center text-gray-500" colSpan={3}>
+                  <td className="h-32 text-center text-gray-500" colSpan={2}>
                     {search
                       ? dictionary.general.no_role_search_results
                       : dictionary.pages_admin.no_roles}
