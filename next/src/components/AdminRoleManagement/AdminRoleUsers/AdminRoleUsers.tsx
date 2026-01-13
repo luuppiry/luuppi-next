@@ -4,9 +4,15 @@ import { GetRoleUsersResponse } from '@/app/api/roles/[roleId]/users/route';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { Role, RolesOnUsers, User } from '@prisma/client';
 import { useCallback, useEffect, useState } from 'react';
-import { BiErrorCircle, BiSearch, BiTrash, BiUserPlus } from 'react-icons/bi';
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { BiTrash, BiUserPlus } from 'react-icons/bi';
 import AddUserModal from './AddUserModal';
+import Alert from '@/components/AdminShared/components/Alert';
+import DataTable, {
+  TableColumn,
+} from '@/components/AdminShared/components/DataTable';
+import Pagination from '@/components/AdminShared/components/Pagination';
+import SearchBar from '@/components/AdminShared/components/SearchBar';
+import { useDebounce } from '@/components/AdminShared/hooks/useDebounce';
 
 interface AdminRoleUsersProps {
   dictionary: Dictionary;
@@ -18,30 +24,16 @@ interface AdminRoleUsersProps {
 
 const PAGE_SIZE = 30;
 
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
+type UserRow = NonNullable<
+  Extract<GetRoleUsersResponse, { isError: false }>['users']
+>[number];
 
 export default function AdminRoleUsers({
   dictionary,
   lang,
   role,
 }: AdminRoleUsersProps) {
-  const [users, setUsers] = useState<
-    NonNullable<Extract<GetRoleUsersResponse, { isError: false }>['users']>
-  >([]);
+  const [users, setUsers] = useState<UserRow[]>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [inputValue, setInputValue] = useState('');
@@ -182,6 +174,57 @@ export default function AdminRoleUsers({
     }
   };
 
+  const handleSearchChange = (value: string) => {
+    setInputValue(value);
+    setPage(1);
+  };
+
+  const columns: TableColumn<UserRow>[] = [
+    {
+      header: dictionary.general.email,
+      render: (user) => (
+        <div className="max-w-xs font-medium">
+          <div className="truncate">{user.email}</div>
+        </div>
+      ),
+    },
+    {
+      header: dictionary.general.first_name,
+      render: (user) => (
+        <div className="max-w-xs font-medium">
+          <div className="truncate">{user.firstName}</div>
+        </div>
+      ),
+    },
+    {
+      header: dictionary.general.lastName,
+      render: (user) => (
+        <div className="max-w-xs font-medium">
+          <div className="truncate">{user.lastName}</div>
+        </div>
+      ),
+    },
+    {
+      header: dictionary.general.expires,
+      render: (user) =>
+        user.roleInfo?.expiresAt
+          ? new Date(user.roleInfo.expiresAt).toLocaleDateString()
+          : dictionary.general.never,
+    },
+    {
+      header: dictionary.general.actions,
+      className: 'text-right',
+      render: (user) => (
+        <button
+          className="btn btn-error btn-sm"
+          onClick={() => handleRemoveUser(user.entraUserUuid)}
+        >
+          <BiTrash size={16} />
+        </button>
+      ),
+    },
+  ];
+
   return (
     <>
       <AddUserModal
@@ -219,137 +262,38 @@ export default function AdminRoleUsers({
         </div>
 
         <div className="mb-4">
-          <div className="join w-full">
-            <div className="join-item inline-flex h-12 items-center border border-r-0 bg-secondary-400 px-3 dark:border-[var(--fallback-bc,oklch(var(--bc)/.2))] dark:bg-primary-500">
-              <BiSearch className="text-white" size={20} />
-            </div>
-            <input
-              className="input join-item input-bordered h-12 w-full"
-              placeholder={dictionary.general.search}
-              type="text"
-              value={inputValue}
-              onChange={(e) => {
-                setInputValue(e.target.value);
-                setPage(1);
-              }}
-            />
-          </div>
+          <SearchBar
+            placeholder={dictionary.general.search}
+            value={inputValue}
+            onChange={handleSearchChange}
+          />
         </div>
 
-        {error && (
-          <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
-            <BiErrorCircle size={24} />
-            {error}
-          </div>
-        )}
+        {error && <Alert message={error} type="error" />}
 
-        {success && (
-          <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
-            {success}
-          </div>
-        )}
+        {success && <Alert message={success} type="success" />}
 
-        <div className="relative overflow-x-auto">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>{dictionary.general.email}</th>
-                <th>{dictionary.general.first_name}</th>
-                <th>{dictionary.general.lastName}</th>
-                <th>{dictionary.general.expires}</th>
-                <th className="text-right">{dictionary.general.actions}</th>
-              </tr>
-            </thead>
-            <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
-              {isLoading ? (
-                Array.from({ length: 5 }).map((_, index) => (
-                  <tr key={index} className="animate-pulse">
-                    <td>
-                      <div className="h-4 w-48 rounded bg-gray-200" />
-                    </td>
-                    <td>
-                      <div className="h-4 w-24 rounded bg-gray-200" />
-                    </td>
-                    <td>
-                      <div className="h-4 w-24 rounded bg-gray-200" />
-                    </td>
-                    <td>
-                      <div className="h-4 w-24 rounded bg-gray-200" />
-                    </td>
-                    <td className="text-right">
-                      <div className="ml-auto h-4 w-16 rounded bg-gray-200" />
-                    </td>
-                  </tr>
-                ))
-              ) : users.length === 0 ? (
-                <tr>
-                  <td className="h-32 text-center text-gray-500" colSpan={5}>
-                    {search
-                      ? dictionary.general.no_search_results
-                      : dictionary.pages_admin.no_role_users}
-                  </td>
-                </tr>
-              ) : (
-                users.map((user) => (
-                  <tr key={user.entraUserUuid}>
-                    <td className="max-w-xs font-medium">
-                      <div className="truncate">{user.email}</div>
-                    </td>
-                    <td className="max-w-xs font-medium">
-                      <div className="truncate">{user.firstName}</div>
-                    </td>
-                    <td className="max-w-xs font-medium">
-                      <div className="truncate">{user.lastName}</div>
-                    </td>
-                    <td>
-                      {user.roleInfo?.expiresAt
-                        ? new Date(user.roleInfo.expiresAt).toLocaleDateString()
-                        : dictionary.general.never}
-                    </td>
-                    <td className="text-right">
-                      <button
-                        className="btn btn-error btn-sm"
-                        onClick={() => handleRemoveUser(user.entraUserUuid)}
-                      >
-                        <BiTrash size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          columns={columns}
+          data={users}
+          emptyMessage={
+            search
+              ? dictionary.general.no_search_results
+              : dictionary.pages_admin.no_role_users
+          }
+          getRowKey={(user) => user.entraUserUuid}
+          isLoading={isLoading}
+          loadingRowCount={5}
+        />
 
-        {totalPages > 1 && (
-          <div className="mt-4 flex flex-wrap items-center justify-end gap-4">
-            <div className="flex flex-1 items-center gap-2 text-sm text-gray-600">
-              {isLoading ? (
-                <div className="h-4 w-8 animate-pulse rounded bg-gray-200" />
-              ) : (
-                <span className="font-medium">
-                  {`${(page - 1) * PAGE_SIZE + 1}-${Math.min(page * PAGE_SIZE, total)} / ${total}`}
-                </span>
-              )}
-            </div>
-            <div className="flex gap-2">
-              <button
-                className="btn btn-primary btn-sm"
-                disabled={isLoading || page === 1}
-                onClick={() => setPage(page - 1)}
-              >
-                <MdChevronLeft size={24} />
-              </button>
-              <button
-                className="btn btn-primary btn-sm"
-                disabled={isLoading || page === totalPages}
-                onClick={() => setPage(page + 1)}
-              >
-                <MdChevronRight size={24} />
-              </button>
-            </div>
-          </div>
-        )}
+        <Pagination
+          currentPage={page}
+          isLoading={isLoading}
+          pageSize={PAGE_SIZE}
+          total={total}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
     </>
   );
