@@ -80,31 +80,41 @@ export async function GET(
     );
   }
 
-  const where = search
-    ? {
-        strapiRoleUuid: { contains: search, mode: 'insensitive' as const },
-      }
+  // Build where clause with permission filtering
+  const isSuperAdmin = process.env.XXX_SUPER_ADMIN_XXX?.includes(
+    user.entraUserUuid,
+  );
+  
+  // Combine search and permission filters
+  const strapiRoleUuidFilter: any = {};
+  if (search) {
+    strapiRoleUuidFilter.contains = search;
+    strapiRoleUuidFilter.mode = 'insensitive' as const;
+  }
+  if (!isSuperAdmin) {
+    strapiRoleUuidFilter.not = process.env.NEXT_PUBLIC_LUUPPI_HATO_ID;
+  }
+  
+  const where = Object.keys(strapiRoleUuidFilter).length > 0
+    ? { strapiRoleUuid: strapiRoleUuidFilter }
     : {};
 
   try {
-    let allRoles = await prisma.role.findMany({
-      where,
-      take: pageSize,
-      skip: (page - 1) * pageSize,
-      include: {
-        users: {
-          include: {
-            user: true,
+    const [allRoles, total] = await Promise.all([
+      prisma.role.findMany({
+        where,
+        take: pageSize,
+        skip: (page - 1) * pageSize,
+        include: {
+          users: {
+            include: {
+              user: true,
+            },
           },
         },
-      },
-    });
-
-    if (!process.env.XXX_SUPER_ADMIN_XXX?.includes(user.entraUserUuid)) {
-      allRoles = allRoles.filter(
-        (r) => r.strapiRoleUuid !== process.env.NEXT_PUBLIC_LUUPPI_HATO_ID,
-      );
-    }
+      }),
+      prisma.role.count({ where }),
+    ]);
 
     // Sort by number of active users (descending), then alphabetically by strapiRoleUuid
     const sortedRoles = allRoles.sort((a, b) => {
@@ -115,7 +125,7 @@ export async function GET(
 
     return NextResponse.json({
       roles: sortedRoles,
-      total: sortedRoles.length,
+      total,
       isError: false,
     });
   } catch (error) {
