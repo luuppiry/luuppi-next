@@ -87,7 +87,7 @@ export const isEventVisible = async (
     const ticketTypes = event.attributes.Registration?.TicketTypes;
     if (!ticketTypes || ticketTypes.length === 0) {
       // No ticket types and no visible roles - hide from everyone
-      logger.warn(`Event ${event.id} is hidden entirely - no ticket types`);
+      logger.error(`Event ${event.id} is hidden entirely - no ticket types`);
       return false;
     }
 
@@ -97,7 +97,7 @@ export const isEventVisible = async (
 
     // If no valid role IDs found in ticket types, hide the event
     if (requiredRoleIds.length === 0) {
-      logger.warn(`Event ${event.id} is hidden entirely - no roles for ticket types`);
+      logger.error(`Event ${event.id} is hidden entirely - no roles for ticket types`);
       return false;
     }
   }
