@@ -17,9 +17,6 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const yearParam = Array.isArray(searchParams.year)
     ? searchParams.year[0]
     : searchParams.year;
-  const selectedYear = yearParam
-    ? parseInt(yearParam, 10)
-    : new Date().getFullYear();
 
   const user = session?.user;
   if (!user?.entraUserUuid || !user?.isLuuppiMember) {
@@ -57,10 +54,18 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     ),
   ).sort((a, b) => b - a);
 
+  const latestPublishedYear = years[0] ?? new Date().getFullYear();
+  const parsedYearParam = yearParam ? parseInt(yearParam, 10) : NaN;
+  const selectedYear =
+    Number.isFinite(parsedYearParam) && years.includes(parsedYearParam)
+      ? parsedYearParam
+      : latestPublishedYear;
+
   const filteredDocuments = allDocuments.filter((doc) => {
     const year = new Date(doc.meetingDate).getFullYear();
     return year === selectedYear;
   });
+  const dropdownYears = years.filter((y) => y !== selectedYear);
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -76,7 +81,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
             className="menu dropdown-content z-[9999] grid w-80 grid-cols-4 gap-2 rounded-box bg-base-100 p-2 shadow"
             tabIndex={0}
           >
-            {years.map((year) => (
+            {dropdownYears.map((year) => (
               <li key={year}>
                 <a
                   href={`/${params.lang}/organization/meeting-minutes?year=${year}`}
