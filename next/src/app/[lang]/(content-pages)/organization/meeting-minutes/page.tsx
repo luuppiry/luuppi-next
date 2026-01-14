@@ -15,12 +15,6 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const searchParams = await props.searchParams;
   const session = await auth();
   const dictionary = await getDictionary(params.lang);
-  const yearParam = Array.isArray(searchParams.year)
-    ? searchParams.year[0]
-    : searchParams.year;
-  const selectedYear = yearParam
-    ? parseInt(yearParam, 10)
-    : new Date().getFullYear();
 
   const user = session?.user;
   if (!user?.entraUserUuid || !user?.isLuuppiMember) {
@@ -50,6 +44,17 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     page++;
   } while (page <= totalPages);
 
+  const latestYear =
+    allDocuments.length > 0
+      ? new Date(allDocuments[0].attributes.meetingDate).getFullYear()
+      : new Date().getFullYear();
+
+  const yearParam = Array.isArray(searchParams.year)
+    ? searchParams.year[0]
+    : searchParams.year;
+
+  const yearFromQuery = yearParam ? Number.parseInt(yearParam, 10) : NaN;
+
   const years = Array.from(
     new Set(
       allDocuments
@@ -58,10 +63,17 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     ),
   ).sort((a, b) => b - a);
 
+  const selectedYear =
+    Number.isFinite(yearFromQuery) && years.includes(yearFromQuery)
+      ? yearFromQuery
+      : latestYear;
+
   const filteredDocuments = allDocuments.filter((doc) => {
     const year = new Date(doc.attributes.meetingDate).getFullYear();
     return year === selectedYear;
   });
+
+  const dropdownYears = years.filter((y) => y !== selectedYear);
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -77,7 +89,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
             className="menu dropdown-content z-[9999] grid w-80 grid-cols-4 gap-2 rounded-box bg-base-100 p-2 shadow"
             tabIndex={0}
           >
-            {years.map((year) => (
+            {dropdownYears.map((year) => (
               <li key={year}>
                 <a
                   href={`/${params.lang}/organization/meeting-minutes?year=${year}`}
