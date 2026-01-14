@@ -2672,7 +2672,7 @@ export interface ApiTutoringLarpakeTutoringLarpake extends Schema.SingleType {
 }
 
 declare module '@strapi/types' {
-  export module Shared {
+  export namespace Shared {
     export interface ContentTypes {
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
