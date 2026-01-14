@@ -1,4 +1,5 @@
 import { getPlainText } from '@/libs/strapi/blocks-converter';
+import { filterVisibleEvents } from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { APIResponseCollection } from '@/types/types';
@@ -41,7 +42,7 @@ export async function GET(
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-    const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role&populate=Image&populate=ImageEn`;
+    const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role&populate=Image&populate=ImageEn&populate=VisibleOnlyForRoles`;
 
     const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
       'fi',
@@ -49,7 +50,13 @@ export async function GET(
       ['event'],
     );
 
-    const events = data.data.map((event) => ({
+    // Filter events based on visibility rules
+    const visibleEvents = await filterVisibleEvents(data.data, [
+      process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+      process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+    ]);
+
+    const events = visibleEvents.map((event) => ({
       id: event.id,
       nameFi: event.attributes.NameFi,
       nameEn: event.attributes.NameEn,

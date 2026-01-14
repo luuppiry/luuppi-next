@@ -1,3 +1,4 @@
+import { filterVisibleEvents } from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
@@ -117,31 +118,35 @@ export async function GET() {
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
 
-  const url = `/api/events?filters[StartDate][$gte]=${weekAgo.toISOString()}&pagination[limit]=9999&sort[0]=createdAt:desc`;
+  const url = `/api/events?filters[StartDate][$gte]=${weekAgo.toISOString()}&pagination[limit]=9999&sort[0]=createdAt:desc&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const eventsData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
   >('fi', url, ['event']);
 
-  const eventPagesSiteMap: SitemapItemLoose[] = eventsData.data.map(
-    (event) => ({
-      url: `/fi/events/${event.id}`,
-      links: [
-        {
-          hreflang: 'fi',
-          url: `/fi/events/${event.id}`,
-          lang: 'fi',
-        },
-        {
-          hreflang: 'en',
-          url: `/en/events/${event.id}`,
-          lang: 'en',
-        },
-      ],
-    }),
-  );
+  // Filter events based on visibility rules
+  const visibleEvents = await filterVisibleEvents(eventsData.data, [
+    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+    process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+  ]);
 
-  const eventPagesSiteMapEn: SitemapItemLoose[] = eventsData.data.map(
+  const eventPagesSiteMap: SitemapItemLoose[] = visibleEvents.map((event) => ({
+    url: `/fi/events/${event.id}`,
+    links: [
+      {
+        hreflang: 'fi',
+        url: `/fi/events/${event.id}`,
+        lang: 'fi',
+      },
+      {
+        hreflang: 'en',
+        url: `/en/events/${event.id}`,
+        lang: 'en',
+      },
+    ],
+  }));
+
+  const eventPagesSiteMapEn: SitemapItemLoose[] = visibleEvents.map(
     (event) => ({
       url: `/en/events/${event.id}`,
       links: [

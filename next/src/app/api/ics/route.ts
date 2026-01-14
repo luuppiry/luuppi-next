@@ -1,6 +1,9 @@
 import { getDictionary } from '@/dictionaries';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
-import { addEventRegisterationOpensAtInfo } from '@/libs/strapi/events';
+import {
+  addEventRegisterationOpensAtInfo,
+  filterVisibleEvents,
+} from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection, APIResponseData } from '@/types/types';
@@ -30,7 +33,7 @@ export async function GET(request: NextRequest) {
   const threeMonthsAgo = new Date();
   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
-  const strapiUrl = `/api/events?filters[StartDate][$gte]=${threeMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role`;
+  const strapiUrl = `/api/events?filters[StartDate][$gte]=${threeMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const eventData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
@@ -39,6 +42,12 @@ export async function GET(request: NextRequest) {
   if (!eventData) {
     return new Response('Error fetching event data', { status: 500 });
   }
+
+  // Filter events based on visibility rules
+  const visibleEvents = await filterVisibleEvents(eventData.data, [
+    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+    process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+  ]);
 
   // Format event from raw event data
   const formatEvent = (event: APIResponseData<'api::event.event'>) => ({
@@ -52,7 +61,7 @@ export async function GET(request: NextRequest) {
     ),
   });
 
-  const eventLanguageFormatted = eventData.data.reduce(
+  const eventLanguageFormatted = visibleEvents.reduce(
     (acc, event) =>
       addEventRegisterationOpensAtInfo<IcsEvent>(
         acc,

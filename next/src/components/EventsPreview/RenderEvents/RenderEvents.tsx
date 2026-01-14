@@ -1,5 +1,6 @@
 import { dateFormat } from '@/libs/constants';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
+import { filterVisibleEvents } from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
@@ -18,13 +19,16 @@ export default async function RenderEvents({
   lang,
   dictionary,
 }: RenderEventsProps) {
-  const url = `/api/events?pagination[limit]=9999&sort[0]=StartDate&filters[EndDate][$gte]=${new Date().toISOString()}&populate=Image&populate=Registration.TicketTypes.Role`;
+  const url = `/api/events?pagination[limit]=9999&sort[0]=StartDate&filters[EndDate][$gte]=${new Date().toISOString()}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const eventsData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
   >('fi', url, ['event']);
 
-  const upcomingEvents = eventsData.data.map((e) => ({
+  // Filter events based on visibility rules
+  const visibleEventsData = await filterVisibleEvents(eventsData.data);
+
+  const upcomingEvents = visibleEventsData.map((e) => ({
     ...e,
     isToday:
       new Date(e.attributes.StartDate).toDateString() ===

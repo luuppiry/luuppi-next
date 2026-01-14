@@ -1,4 +1,4 @@
-import type { Attribute, Schema } from '@strapi/strapi';
+import type { Schema, Attribute } from '@strapi/strapi';
 
 export interface AdminPermission extends Schema.CollectionType {
   collectionName: 'admin_permissions';
@@ -23,12 +23,12 @@ export interface AdminPermission extends Schema.CollectionType {
       Attribute.SetMinMaxLength<{
         minLength: 1;
       }>;
-    actionParameters: Attribute.JSON & Attribute.DefaultTo<object>;
+    actionParameters: Attribute.JSON & Attribute.DefaultTo<{}>;
     subject: Attribute.String &
       Attribute.SetMinMaxLength<{
         minLength: 1;
       }>;
-    properties: Attribute.JSON & Attribute.DefaultTo<object>;
+    properties: Attribute.JSON & Attribute.DefaultTo<{}>;
     conditions: Attribute.JSON & Attribute.DefaultTo<[]>;
     role: Attribute.Relation<'admin::permission', 'manyToOne', 'admin::role'>;
     createdAt: Attribute.DateTime;
@@ -1236,6 +1236,14 @@ export interface ApiEventEvent extends Schema.CollectionType {
     >;
     FuksiPoints: Attribute.Enumeration<
       ['fuksi_points_true', 'fuksi_points_false']
+    >;
+    ShowInCalendar: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<true>;
+    VisibleOnlyForRoles: Attribute.Relation<
+      'api::event.event',
+      'oneToMany',
+      'api::event-role.event-role'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -2664,7 +2672,7 @@ export interface ApiTutoringLarpakeTutoringLarpake extends Schema.SingleType {
 }
 
 declare module '@strapi/types' {
-  export namespace Shared {
+  export module Shared {
     export interface ContentTypes {
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
