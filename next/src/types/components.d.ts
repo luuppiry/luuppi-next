@@ -231,7 +231,7 @@ export interface EventsQuestionsCheckbox extends Schema.Component {
 }
 
 declare module '@strapi/types' {
-  export module Shared {
+  export namespace Shared {
     export interface Components {
       'shared.seo': SharedSeo;
       'shared.page-content': SharedPageContent;
