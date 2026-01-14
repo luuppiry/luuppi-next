@@ -19,7 +19,7 @@ const extractRoleIds = (
     .map((r) => r.role?.strapiRoleUuid)
     .filter((id): id is string => Boolean(id));
 
-// Incase an event has a Registeration for luuppi-members or non-members ("default"), add a duplicate event
+// In case an event has a Registration for luuppi-members or non-members ("default"), add a duplicate event
 // to show the opening time in the calendar
 export const addEventRegisterationOpensAtInfo = <T>(
   acc: T[],
@@ -153,9 +153,7 @@ export const isEventVisible = async (
  * Optimized to fetch user session and roles only once.
  *
  * @param events - Array of event data from Strapi
- * @param forcedRoles
- * Allows bypassing authentication for use in sitemap, ics generation, and event feed
- *
+ * @param forcedRoles - Allows bypassing authentication for use in sitemap, ics generation, and event feed
  * @returns Promise<Array> - Filtered array of events
  */
 export const filterVisibleEvents = async (

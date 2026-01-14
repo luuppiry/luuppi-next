@@ -146,7 +146,7 @@ export async function GET() {
     ],
   }));
 
-  const eventPagesSiteMapEn: SitemapItemLoose[] = eventsData.data.map(
+  const eventPagesSiteMapEn: SitemapItemLoose[] = visibleEvents.map(
     (event) => ({
       url: `/en/events/${event.id}`,
       links: [
