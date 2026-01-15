@@ -101,7 +101,7 @@ export async function GET(
   const where = filters.length > 0 ? { AND: filters } : {};
 
   try {
-    const [allRoles, total] = await Promise.all([
+    const [roles, total] = await Promise.all([
       prisma.role.findMany({
         where,
         take: pageSize,
@@ -113,19 +113,13 @@ export async function GET(
             },
           },
         },
+        orderBy: [{ users: { _count: 'desc' } }, { strapiRoleUuid: 'asc' }],
       }),
       prisma.role.count({ where }),
     ]);
 
-    // Sort by number of active users (descending), then alphabetically by strapiRoleUuid
-    const sortedRoles = allRoles.sort((a, b) => {
-      const userCountDiff = b.users.length - a.users.length;
-      if (userCountDiff !== 0) return userCountDiff;
-      return a.strapiRoleUuid.localeCompare(b.strapiRoleUuid);
-    });
-
     return NextResponse.json({
-      roles: sortedRoles,
+      roles,
       total,
       isError: false,
     });
