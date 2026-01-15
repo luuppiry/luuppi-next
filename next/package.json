@@ -50,8 +50,7 @@
     "server-only": "^0.0.1",
     "sharp": "^0.33.5",
     "sitemap": "^8.0.0",
-    "stripe": "^17.7.0",
-    "visma-pay": "^2.0.4"
+    "stripe": "^17.7.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
