@@ -29,11 +29,13 @@ export default function EventCalendar({
   const ctx = useContext(SelectedViewContext);
   const router = useRouter();
 
-  const currentYear = ctx.activeCalendarMonth.getFullYear();
-  const currentMonth = ctx.activeCalendarMonth.getMonth();
-
   // Hacky solution to fix overlapping events styling
   const calendarRef = useRef<FullCalendar>(null);
+
+  // Don't rely on user timezone and always use Finland
+  const currentDate = new Date(
+    new Date().toLocaleString('en-US', { timeZone: 'Europe/Helsinki' }),
+  );
 
   const handleEventClick: CalendarListeners['eventClick'] = (e) => {
     const eventId = e.event.id;
@@ -159,20 +161,20 @@ export default function EventCalendar({
           })}
           firstDay={1}
           headerToolbar={
-            !isSmallDesktop
+            isSmallDesktop
               ? {
-                  left: 'prev,next today',
-                  center: 'title',
-                  right: 'dayGridMonth,timeGridWeek toggleSize',
-                }
-              : {
                   left: 'title',
                   center: 'prev,next today',
                   right: 'dayGridMonth toggleSize',
                 }
+              : {
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'dayGridMonth,timeGridWeek toggleSize',
+                }
           }
           height={ctx.desktopCalendarFullSize ? '100%' : undefined}
-          initialDate={new Date(currentYear, currentMonth, 1)}
+          initialDate={currentDate}
           initialView={'dayGridMonth'}
           locale={lang === 'fi' ? fiLocale : ''}
           nextDayThreshold="06:00"
@@ -187,7 +189,7 @@ export default function EventCalendar({
             year: 'numeric',
             month: 'long',
           }}
-          weekends={true}
+          weekends
         />
       </div>
     </div>
