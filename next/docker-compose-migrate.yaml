@@ -9,7 +9,7 @@ services:
       - .:/app
     networks:
       - weba-network
-    command: sh -c "npx prisma generate && npx prisma migrate deploy"
+    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm exec prisma generate && pnpm exec prisma migrate deploy"
 
 #
 # External network handled by luuppi-proxy

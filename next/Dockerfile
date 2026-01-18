@@ -7,16 +7,22 @@ RUN apk add --no-cache tzdata \
 
 ENV TZ=Europe/Helsinki
 
+# Install pnpm
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
 # 1. Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json package-lock.json ./
-# TODO: Used due strapi v4 react 19 peer dependency issue
-RUN npm i --legacy-peer-deps
+# Copy package manager lock file for better caching
+COPY package.json pnpm-lock.yaml ./
+
+# Mount pnpm store as cache for faster installs
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # 2. Rebuild the source code only when needed
 FROM base AS builder
@@ -26,7 +32,7 @@ COPY . .
 
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
-RUN npm run build
+RUN pnpm build
 
 # 3. Production image, copy all the files and run next
 FROM base AS runner
