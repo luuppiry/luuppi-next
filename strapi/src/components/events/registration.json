@@ -40,6 +40,11 @@
     "AllowQuestionEditUntil": {
       "type": "datetime",
       "required": false
+    },
+    "RequiresPickup": {
+      "type": "boolean",
+      "default": false,
+      "required": false
     }
   }
 }

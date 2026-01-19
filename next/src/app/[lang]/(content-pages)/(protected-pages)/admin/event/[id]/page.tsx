@@ -3,8 +3,10 @@ import AdminEventRegistrationsList from '@/components/AdminEventRegistrationsLis
 import PickupScanner from '@/components/PickupScanner/PickupScanner';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
+import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -78,6 +80,17 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
     redirect(`/${params.lang}/admin?mode=event`);
   }
 
+  // Fetch Strapi event data to get RequiresPickup field
+  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
+    params.lang,
+    `/api/events/${eventId}?populate=Registration`,
+    [`event-${eventId}`],
+    true,
+  );
+
+  const requiresPickup =
+    strapiEvent?.data?.attributes?.Registration?.RequiresPickup ?? false;
+
   const eventName = params.lang === 'fi' ? event.nameFi : event.nameEn;
 
   return (
@@ -90,17 +103,20 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
           <PiArrowLeft size={20} />
           {dictionary.general.back}
         </Link>
-        <PickupScanner
-          dictionary={dictionary}
-          eventId={event.eventId}
-          lang={params.lang}
-        />
+        {requiresPickup && (
+          <PickupScanner
+            dictionary={dictionary}
+            eventId={event.eventId}
+            lang={params.lang}
+          />
+        )}
       </div>
       <h1 className="mb-8">{eventName}</h1>
       <AdminEventRegistrationsList
         dictionary={dictionary}
         event={event}
         lang={params.lang}
+        requiresPickup={requiresPickup}
       />
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>

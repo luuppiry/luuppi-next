@@ -32,12 +32,14 @@ interface AdminEventRegistrationsListProps {
   event: Event;
   dictionary: Dictionary;
   lang: SupportedLanguage;
+  requiresPickup: boolean;
 }
 
 export default function AdminEventRegistrationsList({
   event,
   dictionary,
   lang: _lang,
+  requiresPickup,
 }: AdminEventRegistrationsListProps) {
   const sortedRegistrations = React.useMemo(
     () => [...event.registrations].sort((a, b) => a.user.email.localeCompare(b.user.email)),
@@ -53,12 +55,14 @@ export default function AdminEventRegistrationsList({
         <h2 className="text-lg font-semibold">
           {dictionary.general.registrations}
         </h2>
-        <div className="flex gap-2">
-          <span className="badge badge-primary">
-            {dictionary.pages_admin.picked_up}: {pickedUpCount} /{' '}
-            {sortedRegistrations.length}
-          </span>
-        </div>
+        {requiresPickup && (
+          <div className="flex gap-2">
+            <span className="badge badge-primary">
+              {dictionary.pages_admin.picked_up}: {pickedUpCount} /{' '}
+              {sortedRegistrations.length}
+            </span>
+          </div>
+        )}
       </div>
   {sortedRegistrations.length > 0 ? (
         <div className="overflow-x-auto">
@@ -70,11 +74,13 @@ export default function AdminEventRegistrationsList({
                 <th>{dictionary.general.firstNames}</th>
                 <th>{dictionary.general.lastName}</th>
                 <th>{dictionary.pages_admin.registration_answers}</th>
-                <th>
-                  <span className="flex justify-center">
-                            {pickedUpLabel}
-                  </span>
-                </th>
+                {requiresPickup && (
+                  <th>
+                    <span className="flex justify-center">
+                              {pickedUpLabel}
+                    </span>
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
@@ -95,19 +101,21 @@ export default function AdminEventRegistrationsList({
                         ))}
                       </div>
                     </td>
-                    <td>
-                      <div className="flex items-center justify-center gap-2">
-                        {registration.pickedUp ? (
-                          <>
-                            <PiCheckCircle className="text-success" size={20} />
-                          </>
-                        ) : (
-                          <>
-                            <PiCircle className="text-gray-400" size={20} />
-                          </>
-                        )}
-                      </div>
-                    </td>
+                    {requiresPickup && (
+                      <td>
+                        <div className="flex items-center justify-center gap-2">
+                          {registration.pickedUp ? (
+                            <>
+                              <PiCheckCircle className="text-success" size={20} />
+                            </>
+                          ) : (
+                            <>
+                              <PiCircle className="text-gray-400" size={20} />
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 </React.Fragment>
               ))}

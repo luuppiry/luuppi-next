@@ -2,9 +2,11 @@ import { auth } from '@/auth';
 import { AdminSearchEventForm } from '@/components/AdminEventManagement/AdminSearchEventForm/AdminSearchEventForm';
 import { shortDateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { APIResponse } from '@/types/types';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { PiEye } from 'react-icons/pi';
@@ -80,17 +82,39 @@ export default async function AdminEventManagement({
     take: searchTerm ? MAX_SEARCH_RESULTS : undefined,
   });
 
+  // Fetch Strapi data for all events to get RequiresPickup field
+  const eventIds = eventData.map((event) => event.eventId);
+  const strapiEventsPromises = eventIds.map((eventId) =>
+    getStrapiData<APIResponse<'api::event.event'>>(
+      lang,
+      `/api/events/${eventId}?populate=Registration`,
+      [`event-${eventId}`],
+      true,
+    ),
+  );
+  const strapiEvents = await Promise.all(strapiEventsPromises);
+  const strapiEventsMap = new Map(
+    strapiEvents
+      .filter((event) => event)
+      .map((event) => [event!.data.id, event!.data.attributes.Registration]),
+  );
+
   // For search results, don't filter by registrations count
   const eventLanguageFormatted = eventData
     .filter((event) => searchTerm || event.registrations.length)
-    .map((event) => ({
-      id: event.id,
-      eventId: event.eventId,
-      name: lang === 'fi' ? event.nameFi : event.nameEn,
-      startDate: new Date(event.startDate),
-      registrations: event.registrations.length,
-      pickedUpCount: event.registrations.filter((r) => r.pickedUp).length,
-    }));
+    .map((event) => {
+      const strapiRegistration = strapiEventsMap.get(event.eventId);
+      const requiresPickup = strapiRegistration?.RequiresPickup ?? false;
+      return {
+        id: event.id,
+        eventId: event.eventId,
+        name: lang === 'fi' ? event.nameFi : event.nameEn,
+        startDate: new Date(event.startDate),
+        registrations: event.registrations.length,
+        pickedUpCount: event.registrations.filter((r) => r.pickedUp).length,
+        requiresPickup,
+      };
+    });
 
   return (
     <div className="card card-body">
@@ -148,9 +172,13 @@ export default async function AdminEventManagement({
                     </span>
                   </td>
                   <td>
-                    <span className="badge badge-primary">
-                      {event.pickedUpCount} / {event.registrations}
-                    </span>
+                    {event.requiresPickup ? (
+                      <span className="badge badge-primary">
+                        {event.pickedUpCount} / {event.registrations}
+                      </span>
+                    ) : (
+                      <span className="badge badge-ghost">0 / 0</span>
+                    )}
                   </td>
                   <td>
                     <div className="flex items-end justify-end gap-1">
