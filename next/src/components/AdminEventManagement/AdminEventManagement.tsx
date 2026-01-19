@@ -1,13 +1,16 @@
 import { auth } from '@/auth';
+import { AdminSearchEventForm } from '@/components/AdminEventManagement/AdminSearchEventForm/AdminSearchEventForm';
 import { shortDateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { APIResponse } from '@/types/types';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { PiEye } from 'react-icons/pi';
 import AdminExportEventButton from './AdminExportEventButton/AdminExportEventButton';
-
-import { AdminSearchEventForm } from '@/components/AdminEventManagement/AdminSearchEventForm/AdminSearchEventForm';
 
 const MAX_SEARCH_RESULTS = 10;
 
@@ -79,15 +82,39 @@ export default async function AdminEventManagement({
     take: searchTerm ? MAX_SEARCH_RESULTS : undefined,
   });
 
+  // Fetch Strapi data for all events to get RequiresPickup field
+  const eventIds = eventData.map((event) => event.eventId);
+  const strapiEventsPromises = eventIds.map((eventId) =>
+    getStrapiData<APIResponse<'api::event.event'>>(
+      lang,
+      `/api/events/${eventId}?populate=Registration`,
+      [`event-${eventId}`],
+      true,
+    ),
+  );
+  const strapiEvents = await Promise.all(strapiEventsPromises);
+  const strapiEventsMap = new Map(
+    strapiEvents
+      .filter((event) => event)
+      .map((event) => [event!.data.id, event!.data.attributes.Registration]),
+  );
+
   // For search results, don't filter by registrations count
   const eventLanguageFormatted = eventData
     .filter((event) => searchTerm || event.registrations.length)
-    .map((event) => ({
-      id: event.id,
-      name: lang === 'fi' ? event.nameFi : event.nameEn,
-      startDate: new Date(event.startDate),
-      registrations: event.registrations.length,
-    }));
+    .map((event) => {
+      const strapiRegistration = strapiEventsMap.get(event.eventId) as { RequiresPickup?: boolean } | undefined;
+      const requiresPickup = strapiRegistration?.RequiresPickup ?? false;
+      return {
+        id: event.id,
+        eventId: event.eventId,
+        name: lang === 'fi' ? event.nameFi : event.nameEn,
+        startDate: new Date(event.startDate),
+        registrations: event.registrations.length,
+        pickedUpCount: event.registrations.filter((r) => r.pickedUp).length,
+        requiresPickup,
+      };
+    });
 
   return (
     <div className="card card-body">
@@ -112,6 +139,7 @@ export default async function AdminEventManagement({
                 <th>{dictionary.general.event}</th>
                 <th>{dictionary.general.starts_at}</th>
                 <th>{dictionary.general.registrations}</th>
+                <th>{dictionary.pages_admin.picked_up ?? 'Picked up'}</th>
                 <th>
                   <span className="flex justify-end">
                     {dictionary.general.actions}
@@ -123,7 +151,14 @@ export default async function AdminEventManagement({
               {eventLanguageFormatted?.map((event, index) => (
                 <tr key={event.id}>
                   <th>{index + 1}</th>
-                  <td className="truncate">{event.name}</td>
+                  <td className="truncate">
+                    <Link
+                      className="link"
+                      href={`/admin/event/${event.eventId}`}
+                    >
+                      {event.name}
+                    </Link>
+                  </td>
                   <td className="truncate">
                     {firstLetterToUpperCase(
                       event.startDate.toLocaleString(lang, shortDateFormat),
@@ -137,11 +172,32 @@ export default async function AdminEventManagement({
                     </span>
                   </td>
                   <td>
-                    <AdminExportEventButton
-                      disabled={!event.registrations}
-                      eventId={event.id}
-                      lang={lang}
-                    />
+                    {event.requiresPickup ? (
+                      <span className="badge badge-primary">
+                        {event.pickedUpCount} / {event.registrations}
+                      </span>
+                    ) : (
+                      <span className="badge badge-ghost">0 / 0</span>
+                    )}
+                  </td>
+                  <td>
+                    <div className="flex items-end justify-end gap-1">
+                      <Link
+                        aria-label={dictionary.general.view}
+                        className="btn btn-primary btn-circle btn-ghost btn-sm"
+                        href={`/${lang}/admin/event/${event.eventId}`}
+                      >
+                        <PiEye
+                          className="text-gray-800 dark:text-background-950"
+                          size={26}
+                        />
+                      </Link>
+                      <AdminExportEventButton
+                        disabled={!event.registrations}
+                        eventId={event.id}
+                        lang={lang}
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}
