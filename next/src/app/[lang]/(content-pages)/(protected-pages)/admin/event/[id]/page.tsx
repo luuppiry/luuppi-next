@@ -1,14 +1,14 @@
 import { auth } from '@/auth';
+import AdminEventRegistrationsList from '@/components/AdminEventRegistrationsList/AdminEventRegistrationsList';
+import PickupScanner from '@/components/PickupScanner/PickupScanner';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { PiArrowLeft } from 'react-icons/pi';
-import AdminEventRegistrationsList from '@/components/AdminEventRegistrationsList/AdminEventRegistrationsList';
-import PickupScanner from '@/components/PickupScanner/PickupScanner';
 
 interface AdminEventDetailProps {
   params: Promise<{ lang: SupportedLanguage; id: string }>;
@@ -55,7 +55,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
 
   const event = await prisma.event.findUnique({
     where: {
-      id: eventId,
+      eventId: eventId,
     },
     include: {
       registrations: {

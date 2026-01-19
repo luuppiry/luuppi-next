@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import { AdminSearchEventForm } from '@/components/AdminEventManagement/AdminSearchEventForm/AdminSearchEventForm';
 import { shortDateFormat } from '@/libs/constants';
 import prisma from '@/libs/db/prisma';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
@@ -8,9 +9,6 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { PiEye } from 'react-icons/pi';
 import AdminExportEventButton from './AdminExportEventButton/AdminExportEventButton';
-import Link from 'next/link';
-
-import { AdminSearchEventForm } from '@/components/AdminEventManagement/AdminSearchEventForm/AdminSearchEventForm';
 
 const MAX_SEARCH_RESULTS = 10;
 
@@ -159,7 +157,7 @@ export default async function AdminEventManagement({
                       <Link
                         aria-label={dictionary.general.view}
                         className="btn btn-primary btn-circle btn-ghost btn-sm"
-                        href={`/${lang}/admin/event/${event.id}`}
+                        href={`/${lang}/admin/event/${event.eventId}`}
                       >
                         <PiEye
                           className="text-gray-800 dark:text-background-950"
