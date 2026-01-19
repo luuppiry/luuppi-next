@@ -3,10 +3,10 @@ import { longDateFormat, shortTimeFormat } from '@/libs/constants';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { $Enums } from '@prisma/client';
+import PickupQRCode from '../PickupQRCode/PickupQRCode';
 import QuestionButton from '../QuestionButton/QuestionButton';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import RegistrationCounter from './RegistrationCounter';
-import PickupQRCode from '../PickupQRCode/PickupQRCode';
 
 interface RegistrationProps {
   registration: {
@@ -154,7 +154,6 @@ export default function Registration({
             dictionary={dictionary}
             pickedUp={registration.pickedUp ?? false}
             pickupCode={registration.pickupCode}
-            registrationId={registration.id}
           />
         )}
       </div>

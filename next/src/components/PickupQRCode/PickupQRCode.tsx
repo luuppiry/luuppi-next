@@ -1,11 +1,10 @@
 'use client';
-import { useEffect, useState } from 'react';
-import QRCode from 'qrcode';
 import { Dictionary } from '@/models/locale';
+import QRCode from 'qrcode';
+import { useEffect, useState } from 'react';
 import { PiCheckCircle, PiCircle } from 'react-icons/pi';
 
 interface PickupQRCodeProps {
-  registrationId: number;
   pickupCode: string;
   pickedUp: boolean;
   dictionary: Dictionary;
