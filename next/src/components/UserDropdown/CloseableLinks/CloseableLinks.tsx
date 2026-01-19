@@ -54,7 +54,7 @@ export default function CloseableLink({
       {isLuuppiHato && (
         <Link
           className="btn btn-ghost btn-sm justify-start"
-          href={`/${lang}/admin?mode=user`}
+          href={`/${lang}/admin?mode=event`}
           onClick={handleClick}
         >
           <RiAdminLine size={22} />

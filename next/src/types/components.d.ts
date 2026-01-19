@@ -1,4 +1,4 @@
-import type { Attribute, Schema } from '@strapi/strapi';
+import type { Schema, Attribute } from '@strapi/strapi';
 
 export interface SharedSeo extends Schema.Component {
   collectionName: 'components_shared_seos';

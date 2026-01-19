@@ -69,11 +69,8 @@ jobs:
           push: true
           tags: ${{ secrets.REGISTRY }}/strapi-prod:latest
           cache-from: |
-            type=gha
             type=registry,ref=${{ secrets.REGISTRY }}/strapi-prod:latest
-          cache-to: type=gha,mode=max
-          build-args: |
-            BUILDKIT_INLINE_CACHE=1
+          cache-to: type=inline
           platforms: linux/amd64
           provenance: false
 
@@ -137,11 +134,8 @@ jobs:
           push: true
           tags: ${{ secrets.REGISTRY }}/next-prod:latest
           cache-from: |
-            type=gha
             type=registry,ref=${{ secrets.REGISTRY }}/next-prod:latest
-          cache-to: type=gha,mode=max
-          build-args: |
-            BUILDKIT_INLINE_CACHE=1
+          cache-to: type=inline
           platforms: linux/amd64
           provenance: false
 

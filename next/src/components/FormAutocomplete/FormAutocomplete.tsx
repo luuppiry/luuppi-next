@@ -26,12 +26,12 @@ export default function FormAutocomplete({
 }: FormAutocompleteProps) {
   const [showOptions, setShowOptions] = useState(false);
   const [value, setValue] = useState('');
-  const ref = useRef<any>(undefined);
+  const ref = useRef<HTMLDivElement>(null);
 
   const select = (option: string) => {
     setValue('');
-    onSelect(option);
     setShowOptions(false);
+    onSelect(option);
   };
 
   const handleChange = (text: string) => {
@@ -46,7 +46,7 @@ export default function FormAutocomplete({
 
   useEffect(() => {
     const listener = (e: Event) => {
-      if (!ref.current?.contains(e.target)) {
+      if (!ref.current?.contains(e.target as Node)) {
         setShowOptions(false);
       }
     };
@@ -104,14 +104,16 @@ export default function FormAutocomplete({
             filteredOptions.map((option) => (
               <li
                 key={option}
-                className="flex h-[48px] items-center px-4 hover:bg-gray-100"
-                onClick={() => select(option)}
+                className="flex h-[48px] items-center px-4 hover:bg-gray-100 dark:bg-base-100 dark:hover:bg-base-200"
+                onMouseDown={(e) => (e.preventDefault(), select(option))}
               >
                 {option}
               </li>
             ))
           ) : (
-            <li className="flex h-[48px] items-center px-4">{noResultsText}</li>
+            <li className="flex h-[48px] items-center px-4 dark:bg-base-100">
+              {noResultsText}
+            </li>
           )}
         </ul>
       )}

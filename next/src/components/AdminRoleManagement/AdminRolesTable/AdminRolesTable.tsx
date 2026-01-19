@@ -1,8 +1,5 @@
 'use client';
-import {
-  GetUsersResponse,
-  GetUsersSuccessResponse,
-} from '@/app/api/users/route';
+import { GetRolesResponse } from '@/app/api/roles/route';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -14,20 +11,22 @@ import Pagination from '@/components/AdminShared/components/Pagination';
 import SearchBar from '@/components/AdminShared/components/SearchBar';
 import { useDebounce } from '@/components/AdminShared/hooks/useDebounce';
 
-interface AdminUsersTableProps {
+interface AdminRolesTableProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 30;
 
-type UserRow = GetUsersSuccessResponse['users'][number];
+type RoleRow = NonNullable<
+  Extract<GetRolesResponse, { isError: false }>['roles']
+>[number];
 
-export default function AdminUsersTable({
+export default function AdminRolesTable({
   dictionary,
   lang,
-}: AdminUsersTableProps) {
-  const [users, setUsers] = useState<UserRow[]>([]);
+}: AdminRolesTableProps) {
+  const [roles, setRoles] = useState<RoleRow[]>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [inputValue, setInputValue] = useState('');
@@ -36,7 +35,7 @@ export default function AdminUsersTable({
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const loadUsers = useCallback(async () => {
+  const loadRoles = useCallback(async () => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams({
@@ -46,13 +45,13 @@ export default function AdminUsersTable({
         lang,
       });
 
-      const response = await fetch(`/api/users?${params}`);
-      const result = (await response.json()) as GetUsersResponse;
+      const response = await fetch(`/api/roles?${params}`);
+      const result = (await response.json()) as GetRolesResponse;
 
       if (result.isError) {
         setError(result.message);
       } else {
-        setUsers(result.users || []);
+        setRoles(result.roles || []);
         setTotal(result.total || 0);
         setError('');
       }
@@ -64,82 +63,35 @@ export default function AdminUsersTable({
   }, [page, search, lang, dictionary.api.server_error]);
 
   useEffect(() => {
-    loadUsers();
-  }, [page, search, loadUsers]);
+    loadRoles();
+  }, [page, search, loadRoles]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
-
-  const getMembershipInfo = (user: UserRow) => {
-    const memberRole = user.roles.find(
-      (r) => r.role.strapiRoleUuid === process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID,
-    );
-    return {
-      isMember: Boolean(memberRole),
-      expiresAt: memberRole?.expiresAt,
-    };
-  };
 
   const handleSearchChange = (value: string) => {
     setInputValue(value);
     setPage(1);
   };
 
-  const columns: TableColumn<UserRow>[] = [
+  const columns: TableColumn<RoleRow>[] = [
     {
-      header: '',
-      render: (user) => <span className="truncate">{user.id}</span>,
-    },
-    {
-      header: dictionary.general.email,
-      render: (user) => (
+      header: dictionary.pages_admin.role_details,
+      render: (role) => (
         <div className="max-w-xs font-medium">
-          <div className="truncate">{user.email}</div>
+          <div className="truncate">{role.strapiRoleUuid}</div>
         </div>
       ),
     },
     {
-      header: dictionary.general.first_name,
-      accessor: 'firstName',
-      render: (user) => user.firstName || '-',
-    },
-    {
-      header: dictionary.general.last_name,
-      accessor: 'lastName',
-      render: (user) => user.lastName || '-',
-    },
-    {
-      header: dictionary.general.username,
-      render: (user) => (
-        <div className="max-w-[150px]">
-          <div className="truncate">{user.username || '-'}</div>
-        </div>
+      header: dictionary.pages_admin.active_users,
+      render: (role) => (
+        <>
+          {role.users.length}{' '}
+          <span className="text-xs text-gray-500">
+            {dictionary.pages_admin.role_user_count}
+          </span>
+        </>
       ),
-    },
-    {
-      header: dictionary.general.membership,
-      className: 'text-center',
-      render: (user) => {
-        const { isMember } = getMembershipInfo(user);
-        return isMember ? (
-          <span className="badge badge-success badge-sm text-white">
-            {dictionary.general.yes}
-          </span>
-        ) : (
-          <span className="badge badge-error badge-sm text-white">
-            {dictionary.general.no}
-          </span>
-        );
-      },
-    },
-    {
-      header: dictionary.general.expires,
-      render: (user) => {
-        const { isMember, expiresAt } = getMembershipInfo(user);
-        if (!isMember) return '-';
-        return expiresAt
-          ? new Date(expiresAt).toLocaleDateString()
-          : dictionary.general.never;
-      },
     },
   ];
 
@@ -149,10 +101,10 @@ export default function AdminUsersTable({
         <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold">
-              {dictionary.pages_admin.user_management}
+              {dictionary.pages_admin.roles_management}
             </h2>
             <p className="max-w-md text-sm text-gray-500">
-              {dictionary.pages_admin.user_management_description}
+              {dictionary.pages_admin.roles_management_description}
             </p>
           </div>
           <SearchBar
@@ -166,17 +118,17 @@ export default function AdminUsersTable({
 
         <DataTable
           columns={columns}
-          data={users}
+          data={roles}
           emptyMessage={
             search
-              ? dictionary.general.no_search_results
-              : dictionary.general.no_users
+              ? dictionary.general.no_role_search_results
+              : dictionary.pages_admin.no_roles
           }
-          getRowKey={(user) => user.id}
+          getRowKey={(role) => role.id}
           isLoading={isLoading}
           loadingRowCount={PAGE_SIZE}
-          onRowClick={(user) =>
-            router.push(`/admin/user/${user.entraUserUuid}`)
+          onRowClick={(role) =>
+            router.push(`/${lang}/admin/roles/${role.strapiRoleUuid}`)
           }
         />
 

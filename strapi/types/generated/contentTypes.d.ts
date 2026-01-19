@@ -1237,6 +1237,14 @@ export interface ApiEventEvent extends Schema.CollectionType {
     FuksiPoints: Attribute.Enumeration<
       ['fuksi_points_true', 'fuksi_points_false']
     >;
+    ShowInCalendar: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<true>;
+    VisibleOnlyForRoles: Attribute.Relation<
+      'api::event.event',
+      'oneToMany',
+      'api::event-role.event-role'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

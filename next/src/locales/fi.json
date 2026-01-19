@@ -51,6 +51,12 @@
     "no_search_results": "Haulla ei löytynyt käyttäjiä",
     "invalid_pickup_code": "Virheellinen noutokoodi",
     "registration_not_found": "Ilmoittautumista ei löytynyt"
+    "role_not_found": "Roolia ei löytynyt",
+    "role_deleted": "Rooli poistettu onnistuneesti",
+    "role_updated": "Rooli päivitetty onnistuneesti",
+    "user_added_to_role": "Käyttäjä lisätty rooliin onnistuneesti",
+    "user_removed_from_role": "Käyttäjä poistettu roolista onnistuneesti",
+    "role_already_exists": "Käyttäjällä on jo rooli"
   },
   "roles": {
     "entire_board": "Koko hallitus",
@@ -163,6 +169,8 @@
     "view": "Näytä",
     "back": "Takaisin",
     "no_registrations": "Ei ilmoittautumisia"
+    "no_event_search_results": "Haulla ei löytynyt tapahtumia",
+    "no_role_search_results": "Haulla ei löytynyt rooleja"
   },
   "theme": {
     "auto": "Automaattinen",
@@ -406,6 +414,16 @@
     "qr_not_supported_note": "Selaimesi ei tue QR-koodin skannausta. Käytä toistaiseksi manuaalista syöttöä.",
     "enter_6_char_code": "Syötä 6-merkkinen koodi (esim. ABC123)",
     "registration_answers": "Ilmoittautumisen vastaukset"
+    "roles_management": "Roolihallinta",
+    "roles_management_description": "Tarkastele ja hallinnoi järjestelmän rooleja.",
+    "role_details": "Rooli",
+    "role_users": "Käyttäjät, joilla on tämä rooli",
+    "no_role_users": "Kenelläkään ei ole tätä roolia",
+    "add_user_to_role": "Lisää käyttäjä rooliin",
+    "remove_user_from_role": "Poista käyttäjä roolista",
+    "search_users_to_add": "Etsi lisättäviä käyttäjiä",
+    "role_user_count": "käyttäjää",
+    "active_users": "Aktiiviset käyttäjät"
   },
   "pages_profile": {
     "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",

@@ -51,6 +51,12 @@
     "no_search_results": "No users found matching your search",
     "invalid_pickup_code": "Invalid pickup code",
     "registration_not_found": "Registration not found"
+    "role_not_found": "Role not found",
+    "role_deleted": "Role deleted successfully",
+    "role_updated": "Role updated successfully",
+    "user_added_to_role": "User added to role successfully",
+    "user_removed_from_role": "User removed from role successfully",
+    "role_already_exists": "User already has the role"
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -163,6 +169,8 @@
     "view": "View",
     "back": "Back",
     "no_registrations": "No registrations"
+    "no_event_search_results": "No events found matching your search",
+    "no_role_search_results": "No roles found matching your search"
   },
   "theme": {
     "auto": "Auto",
@@ -406,6 +414,16 @@
     "qr_not_supported_note": "QR scanning not supported by this browser. Use Manual Entry or update your browser.",
     "enter_6_char_code": "Enter 6-character code (e.g., ABC123)",
     "registration_answers": "Registration Answers"
+    "roles_management": "Roles management",
+    "roles_management_description": "View and manage roles in the system.",
+    "role_details": "Role details",
+    "role_users": "Users with this role",
+    "no_role_users": "No users have this role",
+    "add_user_to_role": "Add user to role",
+    "remove_user_from_role": "Remove user from role",
+    "search_users_to_add": "Search for users to add",
+    "role_user_count": "users",
+    "active_users": "Active users"
   },
   "pages_profile": {
     "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",

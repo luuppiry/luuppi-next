@@ -8,6 +8,7 @@ import { dateFormat } from '@/libs/constants';
 import { getCachedEventRegistrations } from '@/libs/db/queries/get-cached-event-registrations';
 import { getCachedUser } from '@/libs/db/queries/get-cached-user';
 import { getPlainText } from '@/libs/strapi/blocks-converter';
+import { isEventVisible } from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { formatDateRangeLong } from '@/libs/utils/format-date-range';
@@ -45,7 +46,7 @@ export default async function Event(props: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const url = `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=Image&populate=Registration.TicketTypes.Role`;
+  const url = `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const event = await getStrapiData<APIResponse<'api::event.event'>>(
     params.lang,
@@ -55,6 +56,12 @@ export default async function Event(props: EventProps) {
   );
 
   if (!event) {
+    redirect(`/${params.lang}/404`);
+  }
+
+  // Check if the event is visible to the current user
+  const eventVisible = await isEventVisible(event.data);
+  if (!eventVisible) {
     redirect(`/${params.lang}/404`);
   }
 

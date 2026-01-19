@@ -9,14 +9,22 @@ import { redirect } from 'next/navigation';
 import { PiEye } from 'react-icons/pi';
 import AdminExportEventButton from './AdminExportEventButton/AdminExportEventButton';
 
+import { AdminSearchEventForm } from '@/components/AdminEventManagement/AdminSearchEventForm/AdminSearchEventForm';
+
+const MAX_SEARCH_RESULTS = 10;
+
 interface AdminEventManagementProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
+  searchParams?: {
+    search?: string;
+  };
 }
 
 export default async function AdminEventManagement({
   dictionary,
   lang,
+  searchParams,
 }: AdminEventManagementProps) {
   const session = await auth();
 
@@ -28,12 +36,33 @@ export default async function AdminEventManagement({
   const threeMonthsAgo = new Date();
   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
+  const searchTerm = searchParams?.search?.trim();
+
+  const whereClause = searchTerm
+    ? {
+        OR: [
+          {
+            nameFi: {
+              contains: searchTerm,
+              mode: 'insensitive' as const,
+            },
+          },
+          {
+            nameEn: {
+              contains: searchTerm,
+              mode: 'insensitive' as const,
+            },
+          },
+        ],
+      }
+    : {
+        endDate: {
+          gte: threeMonthsAgo,
+        },
+      };
+
   const eventData = await prisma.event.findMany({
-    where: {
-      endDate: {
-        gte: threeMonthsAgo,
-      },
-    },
+    where: whereClause,
     include: {
       registrations: {
         where: {
@@ -47,12 +76,14 @@ export default async function AdminEventManagement({
       },
     },
     orderBy: {
-      createdAt: 'desc',
+      startDate: 'desc',
     },
+    take: searchTerm ? MAX_SEARCH_RESULTS : undefined,
   });
 
+  // For search results, don't filter by registrations count
   const eventLanguageFormatted = eventData
-    .filter((event) => event.registrations.length)
+    .filter((event) => searchTerm || event.registrations.length)
     .map((event) => ({
       id: event.id,
       name: lang === 'fi' ? event.nameFi : event.nameEn,
@@ -63,9 +94,18 @@ export default async function AdminEventManagement({
 
   return (
     <div className="card card-body">
-      <h2 className="mb-4 text-lg font-semibold">
-        {dictionary.pages_admin.event_management}
-      </h2>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+        <h2 className="mb-4 text-lg font-semibold">
+          {dictionary.pages_admin.event_management}
+        </h2>
+
+        <AdminSearchEventForm
+          dictionary={dictionary}
+          lang={lang}
+          searchTerm={searchTerm}
+        />
+      </div>
+
       {Boolean(eventLanguageFormatted?.length) ? (
         <div className="overflow-x-auto">
           <table className="table">
@@ -94,7 +134,9 @@ export default async function AdminEventManagement({
                     )}
                   </td>
                   <td>
-                    <span className="badge badge-primary">
+                    <span
+                      className={`badge ${event.registrations > 0 ? 'badge-primary' : 'badge-ghost'}`}
+                    >
                       {event.registrations}
                     </span>
                   </td>
@@ -128,7 +170,11 @@ export default async function AdminEventManagement({
           </table>
         </div>
       ) : (
-        <p className="text-sm">{dictionary.general.no_events}</p>
+        <p className="text-sm">
+          {searchTerm
+            ? dictionary.general.no_event_search_results
+            : dictionary.general.no_events}
+        </p>
       )}
     </div>
   );
