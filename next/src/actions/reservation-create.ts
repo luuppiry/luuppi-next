@@ -304,7 +304,7 @@ export async function reservationCreate(
 
       // Generate a unique pickup code
       const requiresPickup = strapiEvent?.data?.attributes?.Registration?.RequiresPickup ?? false;
-      let pickupCode = "";
+      let pickupCode = '';
       if (requiresPickup) {
         pickupCode = generatePickupCode();
         let attempts = 0;
