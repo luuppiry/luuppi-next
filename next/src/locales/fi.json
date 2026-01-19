@@ -50,7 +50,7 @@
     "no_users": "Käyttäjiä ei löytynyt",
     "no_search_results": "Haulla ei löytynyt käyttäjiä",
     "invalid_pickup_code": "Virheellinen noutokoodi",
-    "registration_not_found": "Ilmoittautumista ei löytynyt"
+    "registration_not_found": "Ilmoittautumista ei löytynyt",
     "role_not_found": "Roolia ei löytynyt",
     "role_deleted": "Rooli poistettu onnistuneesti",
     "role_updated": "Rooli päivitetty onnistuneesti",
@@ -168,7 +168,7 @@
     "no_search_results": "Haulla ei löytynyt käyttäjiä",
     "view": "Näytä",
     "back": "Takaisin",
-    "no_registrations": "Ei ilmoittautumisia"
+    "no_registrations": "Ei ilmoittautumisia",
     "no_event_search_results": "Haulla ei löytynyt tapahtumia",
     "no_role_search_results": "Haulla ei löytynyt rooleja"
   },
@@ -413,7 +413,7 @@
     "camera_scanning_note": "Kameran skannaus tulossa pian. Käytä toistaiseksi manuaalista syöttöä.",
     "qr_not_supported_note": "Selaimesi ei tue QR-koodin skannausta. Käytä toistaiseksi manuaalista syöttöä.",
     "enter_6_char_code": "Syötä 6-merkkinen koodi (esim. ABC123)",
-    "registration_answers": "Ilmoittautumisen vastaukset"
+    "registration_answers": "Ilmoittautumisen vastaukset",
     "roles_management": "Roolihallinta",
     "roles_management_description": "Tarkastele ja hallinnoi järjestelmän rooleja.",
     "role_details": "Rooli",

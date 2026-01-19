@@ -50,7 +50,7 @@
     "no_users": "No users found",
     "no_search_results": "No users found matching your search",
     "invalid_pickup_code": "Invalid pickup code",
-    "registration_not_found": "Registration not found"
+    "registration_not_found": "Registration not found",
     "role_not_found": "Role not found",
     "role_deleted": "Role deleted successfully",
     "role_updated": "Role updated successfully",
@@ -168,7 +168,7 @@
     "no_search_results": "No users found matching your search",
     "view": "View",
     "back": "Back",
-    "no_registrations": "No registrations"
+    "no_registrations": "No registrations",
     "no_event_search_results": "No events found matching your search",
     "no_role_search_results": "No roles found matching your search"
   },
@@ -413,7 +413,7 @@
     "camera_scanning_note": "Camera scanning coming soon. Use manual entry for now.",
     "qr_not_supported_note": "QR scanning not supported by this browser. Use Manual Entry or update your browser.",
     "enter_6_char_code": "Enter 6-character code (e.g., ABC123)",
-    "registration_answers": "Registration Answers"
+    "registration_answers": "Registration Answers",
     "roles_management": "Roles management",
     "roles_management_description": "View and manage roles in the system.",
     "role_details": "Role details",
