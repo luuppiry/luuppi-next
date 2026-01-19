@@ -46,6 +46,11 @@ export default function AdminEventRegistrationsList({
     [event.registrations],
   );
 
+  const hasAnswers = React.useMemo(
+    () => sortedRegistrations.some((r) => r.answers.length > 0),
+    [sortedRegistrations],
+  );
+
   const pickedUpCount = sortedRegistrations.filter((r) => r.pickedUp).length;
   const pickedUpLabel = dictionary.pages_admin.picked_up;
 
@@ -73,7 +78,9 @@ export default function AdminEventRegistrationsList({
                 <th>{dictionary.general.email}</th>
                 <th>{dictionary.general.firstNames}</th>
                 <th>{dictionary.general.lastName}</th>
-                <th>{dictionary.pages_admin.registration_answers}</th>
+                {hasAnswers && (
+                  <th>{dictionary.pages_admin.registration_answers}</th>
+                )}
                 {requiresPickup && (
                   <th>
                     <span className="flex justify-center">
@@ -91,16 +98,31 @@ export default function AdminEventRegistrationsList({
                     <td>{registration.user.email}</td>
                     <td>{registration.user.firstName ?? '-'}</td>
                     <td>{registration.user.lastName ?? '-'}</td>
-                    <td>
-                      <div className="space-y-1 max-w-lg">
-                        {registration.answers.map((answer) => (
-                          <div key={answer.id} className="rounded bg-white p-2">
-                            <p className="text-sm font-semibold text-gray-700">{answer.question}</p>
-                            <p className="text-sm text-gray-900">{answer.answer}</p>
+                    {hasAnswers && (
+                      <td>
+                        {registration.answers.length > 0 ? (
+                          <div
+                            className="grid gap-4 rounded-md border border-gray-200 bg-white p-3"
+                            style={{
+                              gridTemplateColumns: `repeat(${registration.answers.length}, minmax(0, 1fr))`,
+                            }}
+                          >
+                            {registration.answers.map((a) => (
+                              <div key={a.id} className="flex flex-col">
+                                <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                  {a.question}
+                                </span>
+                                <span className="mt-1 text-sm text-gray-900 whitespace-pre-wrap">
+                                  {a.answer || '-'}
+                                </span>
+                              </div>
+                            ))}
                           </div>
-                        ))}
-                      </div>
-                    </td>
+                        ) : (
+                          <span className="text-sm text-gray-400">–</span>
+                        )}
+                      </td>
+                    )}
                     {requiresPickup && (
                       <td>
                         <div className="flex items-center justify-center gap-2">

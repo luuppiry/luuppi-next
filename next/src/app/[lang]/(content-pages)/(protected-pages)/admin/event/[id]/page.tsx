@@ -88,9 +88,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
     true,
   );
 
-  const requiresPickup =
-    strapiEvent?.data?.attributes?.Registration?.RequiresPickup ?? false;
-
+  const requiresPickup = strapiEvent?.data?.attributes?.Registration?.RequiresPickup ?? false;
   const eventName = params.lang === 'fi' ? event.nameFi : event.nameEn;
 
   return (
