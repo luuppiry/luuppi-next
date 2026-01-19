@@ -14,6 +14,7 @@ interface PickupScannerProps {
 export default function PickupScanner({
   dictionary,
   lang,
+  eventId,
   onSuccess,
 }: PickupScannerProps) {
   const [showScanner, setShowScanner] = useState(false);
@@ -31,7 +32,7 @@ export default function PickupScanner({
     setLoading(true);
     setMessage(null);
 
-    const result = await togglePickupStatus(lang, manualCode.toUpperCase().trim(), true);
+    const result = await togglePickupStatus(lang, manualCode.toUpperCase().trim(), true, eventId);
 
     if (result.isError) {
       setMessage({ text: result.message, isError: true });

@@ -8,8 +8,9 @@ import { SupportedLanguage } from '@/models/locale';
 
 export async function togglePickupStatus(
   lang: SupportedLanguage,
-  registrationIdOrCode: number | string,
+  registrationIdOrCode: string,
   pickedUp: boolean,
+  eventId: number
 ) {
   const dictionary = await getDictionary(lang);
 
@@ -55,6 +56,7 @@ export async function togglePickupStatus(
     pickupCode?: string;
     deletedAt: null;
     paymentCompleted: true;
+    eventId: number;
   };
 
   if (typeof registrationIdOrCode === 'string') {
@@ -71,19 +73,12 @@ export async function togglePickupStatus(
       pickupCode: code,
       deletedAt: null,
       paymentCompleted: true,
+      eventId: eventId,
     };
   } else {
-    if (!registrationIdOrCode || isNaN(registrationIdOrCode) || registrationIdOrCode < 1) {
-      return {
+    return {
         message: dictionary.api.invalid_message,
         isError: true,
-      };
-    }
-
-    whereClause = {
-      id: registrationIdOrCode,
-      deletedAt: null,
-      paymentCompleted: true,
     };
   }
 
