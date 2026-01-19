@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { PiEye } from 'react-icons/pi';
 import AdminExportEventButton from './AdminExportEventButton/AdminExportEventButton';
+import Link from 'next/link';
 
 import { AdminSearchEventForm } from '@/components/AdminEventManagement/AdminSearchEventForm/AdminSearchEventForm';
 
@@ -86,6 +87,7 @@ export default async function AdminEventManagement({
     .filter((event) => searchTerm || event.registrations.length)
     .map((event) => ({
       id: event.id,
+      eventId: event.eventId,
       name: lang === 'fi' ? event.nameFi : event.nameEn,
       startDate: new Date(event.startDate),
       registrations: event.registrations.length,
@@ -127,7 +129,14 @@ export default async function AdminEventManagement({
               {eventLanguageFormatted?.map((event, index) => (
                 <tr key={event.id}>
                   <th>{index + 1}</th>
-                  <td className="truncate">{event.name}</td>
+                  <td className="truncate">
+                    <Link
+                      className="link"
+                      href={`/admin/event/${event.eventId}`}
+                    >
+                      {event.name}
+                    </Link>
+                  </td>
                   <td className="truncate">
                     {firstLetterToUpperCase(
                       event.startDate.toLocaleString(lang, shortDateFormat),
