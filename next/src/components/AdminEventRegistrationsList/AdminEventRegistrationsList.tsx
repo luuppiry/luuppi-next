@@ -86,7 +86,6 @@ function parseCsv(csv: string): string[][] {
           i += 2;
           continue;
         }
-        // End quote
         inQuotes = false;
         i += 1;
         continue;
@@ -185,8 +184,9 @@ export default function AdminEventRegistrationsList({
     return [...r].sort((a, b) => (a[emailKey] ?? '').localeCompare(b[emailKey] ?? ''));
   }, [data?.rows, dictionary.general.email]);
 
-  const baseKeys = React.useMemo(() => {
-    return new Set([
+  const baseKeys = React.useMemo(
+    () =>
+    new Set([
       dictionary.general.created_at.toUpperCase(),
       dictionary.general.username.toUpperCase(),
       dictionary.general.email.toUpperCase(),
@@ -196,8 +196,9 @@ export default function AdminEventRegistrationsList({
       dictionary.general.paid.toUpperCase(),
       dictionary.general.quota.toUpperCase(),
       (dictionary.pages_admin.picked_up ?? 'Picked up').toUpperCase(),
-    ]);
-  }, [dictionary]);
+    ]),
+    [dictionary],
+  );
 
   const hasAnswers = React.useMemo(() => {
     if (!data?.headers?.length) return false;
@@ -216,19 +217,19 @@ export default function AdminEventRegistrationsList({
     return rows.filter((r) => (r[pickedUpKey] ?? '').toLowerCase() === yes).length;
   }, [dictionary, requiresPickup, rows]);
 
-  const pickedUpLabel = dictionary.pages_admin.picked_up;
-
   if (loading) {
     return (
-      <div className="card card-body">
-        <p className="text-sm text-gray-500">{dictionary.general.loading ?? 'Loading…'}</p>
+      <div className="card card-body bg-base-100 text-base-content">
+        <p className="text-sm text-base-content/60">
+          {dictionary.general.loading ?? 'Loading…'}
+        </p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="card card-body">
+      <div className="card card-body bg-base-100 text-base-content">
         <p className="text-sm text-error">{error}</p>
       </div>
     );
@@ -236,7 +237,7 @@ export default function AdminEventRegistrationsList({
 
   if (!rows.length) {
     return (
-      <div className="card card-body">
+      <div className="card card-body bg-base-100 text-base-content">
         <p className="text-sm">{dictionary.general.no_registrations}</p>
       </div>
     );
@@ -251,7 +252,7 @@ export default function AdminEventRegistrationsList({
   const answerKeys = (data?.headers ?? []).filter((h) => !baseKeys.has(h));
 
   return (
-    <div className="card card-body">
+    <div className="card card-body bg-base-100 text-base-content">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold">{dictionary.general.registrations}</h2>
 
@@ -277,23 +278,19 @@ export default function AdminEventRegistrationsList({
 
               {requiresPickup && (
                 <th>
-                  <span className="flex justify-center">{pickedUpLabel}</span>
+                  <span className="flex justify-center">{dictionary.pages_admin.picked_up}</span>
                 </th>
               )}
             </tr>
           </thead>
 
-          <tbody className="[&>*:nth-child(odd)]:bg-primary-50">
+          <tbody className="[&>*:nth-child(odd)]:bg-base-200/40">
             {rows.map((r, index) => {
               const pickedUp = (r[pickedUpKey] ?? '').toLowerCase() === yes;
 
-              // Build answers list the same “question -> answer” shape your old component expects
               const answers = answerKeys
-                .map((k) => ({
-                  question: k, // already uppercased header; if you want original case, stop uppercasing headers in export
-                  answer: r[k] ?? '',
-                }))
-                .filter((a) => (a.answer ?? '').trim() !== '');
+                .map((k) => ({ question: k, answer: r[k] ?? '' }))
+                .filter((a) => a.answer.trim() !== '');
 
               return (
                 <React.Fragment key={`${r[emailKey] ?? 'row'}-${index}`}>
@@ -307,24 +304,24 @@ export default function AdminEventRegistrationsList({
                       <td>
                         {answers.length > 0 ? (
                           <div
-                            className="grid gap-4 rounded-md border border-gray-200 bg-white p-3"
+                            className="grid gap-4 rounded-md border border-primary-300 bg-base-100 p-3"
                             style={{
                               gridTemplateColumns: `repeat(${answers.length}, minmax(0, 1fr))`,
                             }}
                           >
                             {answers.map((a) => (
                               <div key={a.question} className="flex flex-col">
-                                <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                <span className="text-xs font-semibold uppercase tracking-wide text-base-content/60">
                                   {a.question}
                                 </span>
-                                <span className="mt-1 whitespace-pre-wrap text-sm text-gray-900">
+                                <span className="mt-1 whitespace-pre-wrap text-sm text-base-content">
                                   {a.answer || '-'}
                                 </span>
                               </div>
                             ))}
                           </div>
                         ) : (
-                          <span className="text-sm text-gray-400">–</span>
+                          <span className="text-sm text-base-content/50">–</span>
                         )}
                       </td>
                     )}
@@ -334,7 +331,7 @@ export default function AdminEventRegistrationsList({
                           {pickedUp ? (
                             <PiCheckCircle className="text-success" size={20} />
                           ) : (
-                            <PiCircle className="text-gray-400" size={20} />
+                            <PiCircle className="text-base-content/40" size={20} />
                           )}
                         </div>
                       </td>
