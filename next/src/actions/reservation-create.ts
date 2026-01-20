@@ -319,23 +319,38 @@ export async function reservationCreate(
           pickupCode = generatePickupCode();
           attempts++;
         }
+
+        const eventRegistrationsFormattedWithPickupCode = Array.from({ length: amount }).map(
+          () => ({
+            eventId,
+            entraUserUuid,
+            strapiRoleUuid,
+            reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
+            price: ownQuota.Price,
+            pickupCode: pickupCode,
+          }),
+        );
+
+        // Create event registrations. This is the actual reservation.
+        await prisma.eventRegistration.createMany({
+          data: eventRegistrationsFormattedWithPickupCode,
+        });
+
+      } else {
+        let eventRegistrationsFormatted = Array.from({ length: amount }).map(
+          () => ({
+            eventId,
+            entraUserUuid,
+            strapiRoleUuid,
+            reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
+            price: ownQuota.Price,
+          }),
+        );
+
+        await prisma.eventRegistration.createMany({
+          data: eventRegistrationsFormatted,
+        });
       }
-
-      // Create event registrations. This is the actual reservation.
-      const eventRegistrationsFormatted = Array.from({ length: amount }).map(
-        () => ({
-          eventId,
-          entraUserUuid,
-          strapiRoleUuid,
-          reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
-          price: ownQuota.Price,
-          pickupCode: pickupCode,
-        }),
-      );
-
-      await prisma.eventRegistration.createMany({
-        data: eventRegistrationsFormatted,
-      });
 
       logger.info(
         `User ${
