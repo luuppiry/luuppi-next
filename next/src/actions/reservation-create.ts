@@ -337,7 +337,7 @@ export async function reservationCreate(
         });
 
       } else {
-        let eventRegistrationsFormatted = Array.from({ length: amount }).map(
+        const eventRegistrationsFormatted = Array.from({ length: amount }).map(
           () => ({
             eventId,
             entraUserUuid,
