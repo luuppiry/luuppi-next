@@ -112,7 +112,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
       <h1 className="mb-8">{eventName}</h1>
       <AdminEventRegistrationsList
         dictionary={dictionary}
-        event={event}
+        eventId={event.eventId}
         lang={params.lang}
         requiresPickup={requiresPickup}
       />

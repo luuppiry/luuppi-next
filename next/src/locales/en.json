@@ -170,7 +170,8 @@
     "back": "Back",
     "no_registrations": "No registrations",
     "no_event_search_results": "No events found matching your search",
-    "no_role_search_results": "No roles found matching your search"
+    "no_role_search_results": "No roles found matching your search",
+    "loading": "Loading…"
   },
   "theme": {
     "auto": "Auto",

@@ -170,7 +170,8 @@
     "back": "Takaisin",
     "no_registrations": "Ei ilmoittautumisia",
     "no_event_search_results": "Haulla ei löytynyt tapahtumia",
-    "no_role_search_results": "Haulla ei löytynyt rooleja"
+    "no_role_search_results": "Haulla ei löytynyt rooleja",
+    "loading": "Ladataan…"
   },
   "theme": {
     "auto": "Automaattinen",
