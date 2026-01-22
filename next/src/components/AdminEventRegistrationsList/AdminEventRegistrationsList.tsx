@@ -288,9 +288,17 @@ export default function AdminEventRegistrationsList({
             {rows.map((r, index) => {
               const pickedUp = (r[pickedUpKey] ?? '').toLowerCase() === yes;
 
-              const answers = answerKeys
-                .map((k) => ({ question: k, answer: r[k] ?? '' }))
-                .filter((a) => a.answer.trim() !== '');
+              // Build answers list for ALL questions (even if empty)
+              const answers = answerKeys.map((k) => {
+                const raw = r[k] ?? '';
+                const trimmed = raw.trim();
+                return {
+                  question: k,
+                  answer: trimmed !== '' ? raw : '-',
+                  isEmpty: trimmed === '',
+                };
+              });
+
 
               return (
                 <React.Fragment key={`${r[emailKey] ?? 'row'}-${index}`}>
