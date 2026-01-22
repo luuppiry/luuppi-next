@@ -299,7 +299,6 @@ export default function AdminEventRegistrationsList({
                 };
               });
 
-
               return (
                 <React.Fragment key={`${r[emailKey] ?? 'row'}-${index}`}>
                   <tr>
