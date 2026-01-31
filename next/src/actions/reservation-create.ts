@@ -5,6 +5,7 @@ import prisma from '@/libs/db/prisma';
 import { redisClient } from '@/libs/db/redis';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
+import { generatePickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { revalidateTag } from 'next/cache';
@@ -301,20 +302,55 @@ export async function reservationCreate(
         throw new Error(dictionary.api.server_error);
       }
 
-      // Create event registrations. This is the actual reservation.
-      const eventRegistrationsFormatted = Array.from({ length: amount }).map(
-        () => ({
-          eventId,
-          entraUserUuid,
-          strapiRoleUuid,
-          reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
-          price: ownQuota.Price,
-        }),
-      );
+      // Generate a unique pickup code
+      const requiresPickup = strapiEvent?.data?.attributes?.Registration?.RequiresPickup ?? false;
+      let pickupCode = '';
+      if (requiresPickup) {
+        pickupCode = generatePickupCode();
+        let attempts = 0;
+        const maxAttempts = 1000;
+        while (attempts < maxAttempts) {
+          const existing = await prisma.eventRegistration.findUnique({
+            where: { pickupCode },
+          });
+          if (!existing) {
+            break;
+          }
+          pickupCode = generatePickupCode();
+          attempts++;
+        }
 
-      await prisma.eventRegistration.createMany({
-        data: eventRegistrationsFormatted,
-      });
+        const eventRegistrationsFormattedWithPickupCode = Array.from({ length: amount }).map(
+          () => ({
+            eventId,
+            entraUserUuid,
+            strapiRoleUuid,
+            reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
+            price: ownQuota.Price,
+            pickupCode: pickupCode,
+          }),
+        );
+
+        // Create event registrations. This is the actual reservation.
+        await prisma.eventRegistration.createMany({
+          data: eventRegistrationsFormattedWithPickupCode,
+        });
+
+      } else {
+        const eventRegistrationsFormatted = Array.from({ length: amount }).map(
+          () => ({
+            eventId,
+            entraUserUuid,
+            strapiRoleUuid,
+            reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
+            price: ownQuota.Price,
+          }),
+        );
+
+        await prisma.eventRegistration.createMany({
+          data: eventRegistrationsFormatted,
+        });
+      }
 
       logger.info(
         `User ${
