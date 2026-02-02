@@ -134,7 +134,7 @@ export default async function Event(props: EventProps) {
 
   const registrationEndsOwnQuota = ticketTypes?.reduce((latestDate, ticket) => {
     const ticketIsOwnQuota =
-      ticket.Role && isOwnQuota(ticket.Role.data.attributes.RoleId);
+      ticket.Role && isOwnQuota(ticket.Role.data?.attributes.RoleId);
     const isSoldOutOwnQuota = ownQuota
       ? isSoldOut(
           ownQuota.TicketsTotal,
