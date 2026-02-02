@@ -19,7 +19,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Copy package manager lock file for better caching
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
 # Mount pnpm store as cache for faster installs
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
