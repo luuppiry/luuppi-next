@@ -1,10 +1,10 @@
 version: 2
 updates:
-    - package-ecosystem: 'pnpm'
+    - package-ecosystem: 'npm'
       directory: '/next'
       schedule:
           interval: 'monthly'
-    - package-ecosystem: 'pnpm'
+    - package-ecosystem: 'npm'
       directory: '/strapi'
       schedule:
           interval: 'monthly'
