@@ -29,10 +29,14 @@ WORKDIR /opt/app
 ENV NODE_ENV=production
 ENV PATH=/opt/node_modules/.bin:$PATH
 
-RUN apk add --no-cache vips-dev
+# Install runtime dependencies AND build tools for sharp rebuild
+RUN apk add --no-cache vips-dev build-base gcc autoconf automake zlib-dev libpng-dev python3 make g++
 
 COPY --from=deps /opt/node_modules ../node_modules
 COPY --from=builder /opt/app ./
+
+# Rebuild sharp in the final stage for the correct Alpine Linux runtime
+RUN cd /opt && pnpm rebuild sharp
 
 RUN chown -R node:node /opt/app
 USER node
