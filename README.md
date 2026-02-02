@@ -32,7 +32,8 @@ First, fill in the configuration file `.env.local`. You can use `example.env` as
 Run the following command to install project dependencies:
 
 ```bash
-npm i
+corepack enable
+pnpm i
 ```
 
 #### 3. Start the Development Server
@@ -40,7 +41,7 @@ npm i
 Launch the development server by running the following command:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 The development server should now be up and running at [http://localhost:3000](http://localhost:3000).
@@ -73,7 +74,8 @@ First, fill in the configuration file `.env`. You can use `example.env` as a ref
 Run the following command to install project dependencies:
 
 ```bash
-npm i
+corepack enable
+pnpm i
 ```
 
 #### 3. Start the Development Server
@@ -81,7 +83,7 @@ npm i
 Launch the development server by running the following command:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 The development server should now be up and running at [http://localhost:1337](http://localhost:1337).
