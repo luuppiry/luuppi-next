@@ -20,6 +20,7 @@ services:
       - ./src:/opt/app/src
       - ./package.json:/opt/package.json
       - ./pnpm-lock.yaml:/opt/pnpm-lock.yaml
+      - ./pnpm-workspace.yaml:/opt/pnpm-workspace.yaml
       - ./.env:/opt/app/.env
       - ./public/uploads:/opt/app/public/uploads
     ports:

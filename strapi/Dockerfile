@@ -8,7 +8,7 @@ FROM base AS deps
 RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
 WORKDIR /opt/
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --production
 
 FROM base AS builder
@@ -33,6 +33,7 @@ ENV PATH=/opt/node_modules/.bin:$PATH
 RUN apk add --no-cache vips-dev build-base gcc autoconf automake zlib-dev libpng-dev python3 make g++
 
 COPY --from=deps /opt/node_modules ../node_modules
+COPY --from=deps /opt/package.json /opt/pnpm-lock.yaml /opt/pnpm-workspace.yaml  ../ 
 COPY --from=builder /opt/app ./
 
 # Rebuild sharp in the final stage for the correct Alpine Linux runtime
