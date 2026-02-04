@@ -1,156 +1,73 @@
 /* eslint-disable */
 
-import type { Schema, Attribute } from '@strapi/strapi';
+import type { Attribute, Schema } from '@strapi/strapi';
 
-export interface SharedSeo extends Schema.Component {
-  collectionName: 'components_shared_seos';
+export interface EventsQuestionsCheckbox extends Schema.Component {
+  collectionName: 'components_events_questions_checkboxes';
   info: {
-    displayName: 'Seo';
-    icon: 'search';
     description: '';
+    displayName: 'QuestionsCheckbox';
   };
   attributes: {
-    metaTitle: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 120;
-      }>;
-    metaDescription: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 300;
-      }>;
-    metaAuthor: Attribute.String;
-    metaKeywords: Attribute.String;
-    openGraph: Attribute.Component<'shared.meta-open-graph'> &
-      Attribute.Required;
-    twitter: Attribute.Component<'shared.meta-twitter'> & Attribute.Required;
+    QuestionEn: Attribute.String & Attribute.Required;
+    QuestionFi: Attribute.String & Attribute.Required;
   };
 }
 
-export interface SharedPageContent extends Schema.Component {
-  collectionName: 'components_shared_page_contents';
+export interface EventsQuestionsSelect extends Schema.Component {
+  collectionName: 'components_events_questions_selects';
   info: {
-    displayName: 'PageContent';
-    icon: 'write';
     description: '';
+    displayName: 'QuestionsSelect';
   };
   attributes: {
-    title: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 100;
-      }>;
-    content: Attribute.Blocks & Attribute.Required;
-    banner: Attribute.Media<'images'> & Attribute.Required;
+    ChoicesEn: Attribute.String & Attribute.Required;
+    ChoicesFi: Attribute.String & Attribute.Required;
+    QuestionEn: Attribute.String & Attribute.Required;
+    QuestionFi: Attribute.String & Attribute.Required;
   };
 }
 
-export interface SharedMetaTwitter extends Schema.Component {
-  collectionName: 'components_shared_meta_twitters';
+export interface EventsQuestionsText extends Schema.Component {
+  collectionName: 'components_events_questions_texts';
   info: {
-    displayName: 'MetaTwitter';
-    icon: 'twitter';
     description: '';
+    displayName: 'QuestionsText';
   };
   attributes: {
-    twitterTitle: Attribute.String &
+    MaxLength: Attribute.Integer &
       Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 120;
-      }>;
-    twitterDescription: Attribute.Text &
+      Attribute.DefaultTo<500>;
+    MinLength: Attribute.Integer & Attribute.Required & Attribute.DefaultTo<3>;
+    QuestionEn: Attribute.String & Attribute.Required;
+    QuestionFi: Attribute.String & Attribute.Required;
+    Required: Attribute.Boolean &
       Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 300;
-      }>;
-    twitterImage: Attribute.Media<'images'>;
-  };
-}
-
-export interface SharedMetaOpenGraph extends Schema.Component {
-  collectionName: 'components_shared_meta_open_graphs';
-  info: {
-    displayName: 'metaOpenGraph';
-    icon: 'link';
-    description: '';
-  };
-  attributes: {
-    openGraphTitle: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 120;
-      }>;
-    openGraphDescription: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 300;
-      }>;
-    openGraphImage: Attribute.Media<'images'>;
-  };
-}
-
-export interface SharedContactBanner extends Schema.Component {
-  collectionName: 'components_shared_contact_banners';
-  info: {
-    displayName: 'ContactBanner';
-    icon: 'message';
-  };
-  attributes: {
-    title: Attribute.String & Attribute.Required;
-    description: Attribute.Text & Attribute.Required;
-    email: Attribute.Email & Attribute.Required;
-  };
-}
-
-export interface EventsRegistration extends Schema.Component {
-  collectionName: 'components_events_registrations';
-  info: {
-    displayName: 'Registration';
-    icon: 'key';
-    description: '';
-  };
-  attributes: {
-    TicketTypes: Attribute.Component<'events.quotas', true> &
-      Attribute.Required &
-      Attribute.SetMinMax<
-        {
-          min: 1;
-        },
-        number
-      >;
-    RoleToGive: Attribute.Relation<
-      'events.registration',
-      'oneToOne',
-      'api::event-role.event-role'
-    >;
-    QuestionsText: Attribute.Component<'events.questions-text', true>;
-    QuestionsSelect: Attribute.Component<'events.questions-select', true>;
-    QuestionsCheckbox: Attribute.Component<'events.questions-checkbox', true>;
-    AllowQuestionEditUntil: Attribute.DateTime;
-    RequiresPickup: Attribute.Boolean & Attribute.DefaultTo<false>;
+      Attribute.DefaultTo<true>;
   };
 }
 
 export interface EventsQuotas extends Schema.Component {
   collectionName: 'components_events_quotas';
   info: {
+    description: '';
     displayName: 'TicketTypes';
     icon: 'television';
-    description: '';
   };
   attributes: {
-    RegistrationStartsAt: Attribute.DateTime & Attribute.Required;
-    RegistrationEndsAt: Attribute.DateTime & Attribute.Required;
-    TicketsTotal: Attribute.Integer &
+    NameEn: Attribute.String & Attribute.Required;
+    NameFi: Attribute.String & Attribute.Required;
+    Price: Attribute.Decimal &
       Attribute.Required &
       Attribute.SetMinMax<
         {
-          min: 1;
+          min: 0;
         },
         number
       > &
-      Attribute.DefaultTo<10>;
+      Attribute.DefaultTo<0>;
+    RegistrationEndsAt: Attribute.DateTime & Attribute.Required;
+    RegistrationStartsAt: Attribute.DateTime & Attribute.Required;
     Role: Attribute.Relation<
       'events.quotas',
       'oneToOne',
@@ -165,17 +82,15 @@ export interface EventsQuotas extends Schema.Component {
         number
       > &
       Attribute.DefaultTo<1>;
-    Price: Attribute.Decimal &
+    TicketsTotal: Attribute.Integer &
       Attribute.Required &
       Attribute.SetMinMax<
         {
-          min: 0;
+          min: 1;
         },
         number
       > &
-      Attribute.DefaultTo<0>;
-    NameFi: Attribute.String & Attribute.Required;
-    NameEn: Attribute.String & Attribute.Required;
+      Attribute.DefaultTo<10>;
     Weight: Attribute.Integer &
       Attribute.Required &
       Attribute.SetMinMax<
@@ -188,64 +103,149 @@ export interface EventsQuotas extends Schema.Component {
   };
 }
 
-export interface EventsQuestionsText extends Schema.Component {
-  collectionName: 'components_events_questions_texts';
+export interface EventsRegistration extends Schema.Component {
+  collectionName: 'components_events_registrations';
   info: {
-    displayName: 'QuestionsText';
     description: '';
+    displayName: 'Registration';
+    icon: 'key';
   };
   attributes: {
-    QuestionFi: Attribute.String & Attribute.Required;
-    QuestionEn: Attribute.String & Attribute.Required;
-    MinLength: Attribute.Integer & Attribute.Required & Attribute.DefaultTo<3>;
-    MaxLength: Attribute.Integer &
+    AllowQuestionEditUntil: Attribute.DateTime;
+    QuestionsCheckbox: Attribute.Component<'events.questions-checkbox', true>;
+    QuestionsSelect: Attribute.Component<'events.questions-select', true>;
+    QuestionsText: Attribute.Component<'events.questions-text', true>;
+    RequiresPickup: Attribute.Boolean & Attribute.DefaultTo<false>;
+    RoleToGive: Attribute.Relation<
+      'events.registration',
+      'oneToOne',
+      'api::event-role.event-role'
+    >;
+    TicketTypes: Attribute.Component<'events.quotas', true> &
       Attribute.Required &
-      Attribute.DefaultTo<500>;
-    Required: Attribute.Boolean &
-      Attribute.Required &
-      Attribute.DefaultTo<true>;
+      Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
   };
 }
 
-export interface EventsQuestionsSelect extends Schema.Component {
-  collectionName: 'components_events_questions_selects';
+export interface SharedContactBanner extends Schema.Component {
+  collectionName: 'components_shared_contact_banners';
   info: {
-    displayName: 'QuestionsSelect';
-    description: '';
+    displayName: 'ContactBanner';
+    icon: 'message';
   };
   attributes: {
-    QuestionEn: Attribute.String & Attribute.Required;
-    QuestionFi: Attribute.String & Attribute.Required;
-    ChoicesFi: Attribute.String & Attribute.Required;
-    ChoicesEn: Attribute.String & Attribute.Required;
+    description: Attribute.Text & Attribute.Required;
+    email: Attribute.Email & Attribute.Required;
+    title: Attribute.String & Attribute.Required;
   };
 }
 
-export interface EventsQuestionsCheckbox extends Schema.Component {
-  collectionName: 'components_events_questions_checkboxes';
+export interface SharedMetaOpenGraph extends Schema.Component {
+  collectionName: 'components_shared_meta_open_graphs';
   info: {
-    displayName: 'QuestionsCheckbox';
     description: '';
+    displayName: 'metaOpenGraph';
+    icon: 'link';
   };
   attributes: {
-    QuestionFi: Attribute.String & Attribute.Required;
-    QuestionEn: Attribute.String & Attribute.Required;
+    openGraphDescription: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
+    openGraphImage: Attribute.Media<'images'>;
+    openGraphTitle: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+  };
+}
+
+export interface SharedMetaTwitter extends Schema.Component {
+  collectionName: 'components_shared_meta_twitters';
+  info: {
+    description: '';
+    displayName: 'MetaTwitter';
+    icon: 'twitter';
+  };
+  attributes: {
+    twitterDescription: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
+    twitterImage: Attribute.Media<'images'>;
+    twitterTitle: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+  };
+}
+
+export interface SharedPageContent extends Schema.Component {
+  collectionName: 'components_shared_page_contents';
+  info: {
+    description: '';
+    displayName: 'PageContent';
+    icon: 'write';
+  };
+  attributes: {
+    banner: Attribute.Media<'images'> & Attribute.Required;
+    content: Attribute.Blocks & Attribute.Required;
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+  };
+}
+
+export interface SharedSeo extends Schema.Component {
+  collectionName: 'components_shared_seos';
+  info: {
+    description: '';
+    displayName: 'Seo';
+    icon: 'search';
+  };
+  attributes: {
+    metaAuthor: Attribute.String;
+    metaDescription: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
+    metaKeywords: Attribute.String;
+    metaTitle: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+    openGraph: Attribute.Component<'shared.meta-open-graph'> &
+      Attribute.Required;
+    twitter: Attribute.Component<'shared.meta-twitter'> & Attribute.Required;
   };
 }
 
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
-      'shared.seo': SharedSeo;
-      'shared.page-content': SharedPageContent;
-      'shared.meta-twitter': SharedMetaTwitter;
-      'shared.meta-open-graph': SharedMetaOpenGraph;
-      'shared.contact-banner': SharedContactBanner;
-      'events.registration': EventsRegistration;
-      'events.quotas': EventsQuotas;
-      'events.questions-text': EventsQuestionsText;
-      'events.questions-select': EventsQuestionsSelect;
       'events.questions-checkbox': EventsQuestionsCheckbox;
+      'events.questions-select': EventsQuestionsSelect;
+      'events.questions-text': EventsQuestionsText;
+      'events.quotas': EventsQuotas;
+      'events.registration': EventsRegistration;
+      'shared.contact-banner': SharedContactBanner;
+      'shared.meta-open-graph': SharedMetaOpenGraph;
+      'shared.meta-twitter': SharedMetaTwitter;
+      'shared.page-content': SharedPageContent;
+      'shared.seo': SharedSeo;
     }
   }
 }
