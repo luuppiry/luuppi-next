@@ -85,7 +85,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
     APIResponseCollection<'api::event.event'>
   >(
     params.lang,
-    `/api/events?filters[id][$eq]=${eventId}?populate=Registration`,
+    `/api/events?filters[id][$eq]=${eventId}&populate=Registration`,
     [`event-${eventId}`],
     true,
   );
@@ -93,7 +93,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
   const strapiEvent = strapiEvents?.data.at(0);
 
   if (!strapiEvent) {
-    return redirect(`${params.lang}/404`);
+    return redirect(`/${params.lang}/404`);
   }
 
   const requiresPickup = strapiEvent?.Registration?.RequiresPickup ?? false;
