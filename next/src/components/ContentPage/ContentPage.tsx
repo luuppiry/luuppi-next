@@ -24,7 +24,7 @@ export default async function ContentPage({
     APIResponseCollection<'api::company.company'>
   >(lang, '/api/companies?populate=*', ['company']);
 
-  const imagePath = contentData.Content.banner.data.url;
+  const imagePath = contentData.Content.banner.url;
   const imageUrl = getStrapiUrl(imagePath);
 
   return (

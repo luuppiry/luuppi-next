@@ -17,12 +17,12 @@ export default function BoardMember({
   return (
     <div className="flex w-full flex-col rounded-lg border border-gray-200 bg-white shadow-lg dark:border-background-200 dark:bg-base-200">
       <div className="relative aspect-[9/10] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
-        {member.image.data?.url ? (
+        {member.image?.url ? (
           <Image
             alt={`Picture of ${member.fullName}`}
             className="rounded-t-lg object-cover object-top"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            src={getStrapiUrl(member.image.data.url)}
+            src={getStrapiUrl(member.image.url)}
             fill
           />
         ) : (
@@ -36,7 +36,7 @@ export default function BoardMember({
           {member.fullName}
         </h2>
         <div className="flex flex-col items-start">
-          {member.boardRoles.data.map((role: any) => (
+          {member.boardRoles.map((role: any) => (
             <div
               key={role.title}
               className="tooltip flex max-w-full opacity-90"
@@ -52,7 +52,7 @@ export default function BoardMember({
           <div>
             <h3 className="font-semibold">{dictionary.general.email}</h3>
             <div className="flex flex-col items-start gap-1">
-              {member.boardRoles.data.map((role: any) => (
+              {member.boardRoles.map((role: any) => (
                 <div
                   key={role.email}
                   className="tooltip inline-block max-w-full"

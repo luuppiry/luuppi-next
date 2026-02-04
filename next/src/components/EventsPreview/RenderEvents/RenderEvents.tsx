@@ -43,9 +43,9 @@ export default async function RenderEvents({
 
     const image =
       isEnglish && e.ImageEn?.url
-        ? getStrapiUrl(e.ImageEn.data.url)
+        ? getStrapiUrl(e.ImageEn.url)
         : e.Image?.url
-          ? getStrapiUrl(e.Image.data.url)
+          ? getStrapiUrl(e.Image.url)
           : eventPlaceholder;
 
     return {

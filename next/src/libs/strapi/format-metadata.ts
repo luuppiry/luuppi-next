@@ -21,11 +21,11 @@ export const formatMetadata = (
 
   let twitterImage: string | null = null;
   if (seo.twitter?.twitterImage?.url) {
-    twitterImage = `${cmsUrl}${seo.twitter.twitterImage.data.url}`;
+    twitterImage = `${cmsUrl}${seo.twitter.twitterImage.url}`;
   }
   let openGraphImage: string | null = null;
   if (seo.openGraph?.openGraphImage?.url) {
-    openGraphImage = `${cmsUrl}${seo.openGraph.openGraphImage.data.url}`;
+    openGraphImage = `${cmsUrl}${seo.openGraph.openGraphImage.url}`;
   }
 
   if (isNews && !openGraphImage) {

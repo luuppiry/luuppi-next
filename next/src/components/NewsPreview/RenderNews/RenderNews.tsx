@@ -4,6 +4,7 @@ import { flipNewsLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { analyzeReadTime } from '@/libs/utils/analyze-read-time';
+import { logger } from '@/libs/utils/logger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection, APIResponseData } from '@/types/types';
 import Image from 'next/image';
@@ -35,18 +36,19 @@ export default async function RenderNews({
 
   const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);
 
+  
   const sortedNews = newsLocaleFlipped
-    .sort((a, b) => {
-      const dateA = a?.publishedAt
-        ? new Date(a.publishedAt).getTime()
-        : new Date(a.createdAt || new Date()).getTime();
-      const dateB = b.publishedAt
-        ? new Date(b.publishedAt).getTime()
-        : new Date(b.createdAt || new Date()).getTime();
-
-      return dateB - dateA;
-    })
-    .slice(0, 4);
+  .sort((a, b) => {
+    const dateA = a?.publishedAt
+    ? new Date(a.publishedAt).getTime()
+    : new Date(a.createdAt || new Date()).getTime();
+    const dateB = b.publishedAt
+    ? new Date(b.publishedAt).getTime()
+    : new Date(b.createdAt || new Date()).getTime();
+    
+    return dateB - dateA;
+  })
+  .slice(0, 4);
 
   return (
     <>
@@ -75,7 +77,7 @@ export default async function RenderNews({
                     : 'rounded-l-lg max-lg:rounded-l-none max-lg:rounded-t-lg'
                 } object-cover dark:brightness-90`}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={getStrapiUrl(news.banner?.data.url)}
+                src={getStrapiUrl(news.banner?.url)}
                 fill
               />
             ) : (

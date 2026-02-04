@@ -74,7 +74,7 @@ export default async function News(props: NewsProps) {
                   alt="News banner"
                   className={'object-cover max-sm:rounded-t-lg sm:rounded-l-lg'}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  src={getStrapiUrl(news.banner?.data.url)}
+                  src={getStrapiUrl(news.banner?.url)}
                   fill
                 />
               ) : (
@@ -152,7 +152,7 @@ export default async function News(props: NewsProps) {
 export async function generateMetadata(props: NewsProps): Promise<Metadata> {
   const params = await props.params;
   const url =
-    '/api/news-list?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
+    '/api/news-list?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['news-list'];
 
   const data = await getStrapiData<APIResponse<'api::news-list.news-list'>>(

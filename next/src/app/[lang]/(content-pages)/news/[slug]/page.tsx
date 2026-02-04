@@ -77,7 +77,7 @@ export default async function NewsPost(props: NewsPostProps) {
                 className={'rounded-lg object-cover'}
                 quality={100}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={getStrapiUrl(selectedNews.banner?.data.url)}
+                src={getStrapiUrl(selectedNews.banner?.url)}
                 fill
               />
             ) : (

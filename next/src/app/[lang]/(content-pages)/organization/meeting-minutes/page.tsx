@@ -117,7 +117,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
                 <Image
                   alt={`${dictionary.navigation.meeting_minutes} cover`}
                   className="h-full w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
-                  src={getStrapiUrl(publication.image.data.url)}
+                  src={getStrapiUrl(publication.image.url)}
                   fill
                 />
               </div>

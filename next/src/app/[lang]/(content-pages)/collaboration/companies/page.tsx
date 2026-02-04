@@ -13,7 +13,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
-const url = '/api/companies?populate=logo,logoDark';
+const url = '/api/companies?populate=logo&populate=logoDark';
 const tags = ['company'];
 
 interface CollaborationCompaniesProps {
@@ -121,7 +121,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const url =
-    '/api/collaboration-company?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
+    '/api/collaboration-company?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['collaboration-company'];
 
   const data = await getStrapiData<

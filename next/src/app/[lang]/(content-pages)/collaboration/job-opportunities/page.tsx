@@ -60,7 +60,7 @@ export default async function CollaborationJobOpportunities(
                   alt="Company logo"
                   className="rounded-lg object-contain max-md:w-44 dark:drop-shadow-[0_0_.5px_white]"
                   height={100}
-                  src={getStrapiUrl(job_opportunity.logo?.data.url)}
+                  src={getStrapiUrl(job_opportunity.logo?.url)}
                   width={300}
                 />
                 <div className="flex flex-col gap-1 font-semibold">
@@ -124,7 +124,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const url =
-    '/api/collaboration-job-opportunity?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=ContactBanner';
+    '/api/collaboration-job-opportunity?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['collaboration-job-opportunity'];
 
   const data = await getStrapiData<
