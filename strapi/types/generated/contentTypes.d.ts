@@ -1131,6 +1131,12 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
           localized: false;
         };
       }>;
+    logoDark: Attribute.Media<'images'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
