@@ -39,8 +39,7 @@ export default async function LuuppiSanomatPublication(
       <h1>
         {dictionary.general.publication}{' '}
         {new Date(
-          selectedPublication?.publishedAt ||
-            selectedPublication.createdAt!,
+          selectedPublication?.publishedAt || selectedPublication.createdAt!,
         )
           .toLocaleDateString(params.lang, {
             month: 'short',
@@ -51,9 +50,7 @@ export default async function LuuppiSanomatPublication(
       <div className="h-full overflow-x-hidden">
         <PdfViewer
           dictionary={dictionary}
-          pdfUrl={getStrapiUrl(
-            selectedPublication.pdf?.data.url,
-          )}
+          pdfUrl={getStrapiUrl(selectedPublication.pdf?.data.url)}
         />
       </div>
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />

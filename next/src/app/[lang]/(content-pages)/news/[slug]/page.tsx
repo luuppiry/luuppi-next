@@ -77,9 +77,7 @@ export default async function NewsPost(props: NewsPostProps) {
                 className={'rounded-lg object-cover'}
                 quality={100}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={getStrapiUrl(
-                  selectedNews.banner?.data.url,
-                )}
+                src={getStrapiUrl(selectedNews.banner?.data.url)}
                 fill
               />
             ) : (
@@ -95,9 +93,7 @@ export default async function NewsPost(props: NewsPostProps) {
                   alt="News author avatar"
                   className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
                   height={50}
-                  src={getStrapiUrl(
-                    selectedNews.authorImage.data?.url,
-                  )}
+                  src={getStrapiUrl(selectedNews.authorImage.data?.url)}
                   width={50}
                 />
               ) : (
@@ -116,8 +112,7 @@ export default async function NewsPost(props: NewsPostProps) {
                 </span>
                 <span className="text-sm opacity-75">
                   {new Date(
-                    selectedNews?.publishedAt ||
-                      selectedNews.createdAt!,
+                    selectedNews?.publishedAt || selectedNews.createdAt!,
                   ).toLocaleString(params.lang, dateFormat)}
                 </span>
               </div>

@@ -54,8 +54,8 @@ export default function PickupQRCode({
         )}
         <span className="text-sm font-semibold">
           {pickedUp
-            ? dictionary.pages_admin.picked_up ?? 'Picked up'
-            : dictionary.pages_events.not_picked_up ?? 'Not picked up yet'}
+            ? (dictionary.pages_admin.picked_up ?? 'Picked up')
+            : (dictionary.pages_events.not_picked_up ?? 'Not picked up yet')}
         </span>
       </div>
       <button
@@ -64,8 +64,8 @@ export default function PickupQRCode({
         onClick={() => setShowQR(!showQR)}
       >
         {showQR
-          ? dictionary.pages_events.hide_qr_code ?? 'Hide QR Code'
-          : dictionary.pages_events.show_qr_code ?? 'Show Pickup QR Code'}
+          ? (dictionary.pages_events.hide_qr_code ?? 'Hide QR Code')
+          : (dictionary.pages_events.show_qr_code ?? 'Show Pickup QR Code')}
       </button>
 
       {showQR && qrCodeDataUrl && (

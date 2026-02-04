@@ -150,8 +150,7 @@ export async function reservationCreate(
   }
 
   const ownQuota = ticketTypes?.find(
-    (type) =>
-      type.Role?.RoleId === targetedRole.strapiRoleUuid,
+    (type) => type.Role?.RoleId === targetedRole.strapiRoleUuid,
   );
 
   // Validate that the user has a role that can reserve tickets
@@ -303,7 +302,8 @@ export async function reservationCreate(
       }
 
       // Generate a unique pickup code
-      const requiresPickup = strapiEvent?.data?.Registration?.RequiresPickup ?? false;
+      const requiresPickup =
+        strapiEvent?.data?.Registration?.RequiresPickup ?? false;
       let pickupCode = '';
       if (requiresPickup) {
         pickupCode = generatePickupCode();
@@ -320,22 +320,21 @@ export async function reservationCreate(
           attempts++;
         }
 
-        const eventRegistrationsFormattedWithPickupCode = Array.from({ length: amount }).map(
-          () => ({
-            eventId,
-            entraUserUuid,
-            strapiRoleUuid,
-            reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
-            price: ownQuota.Price,
-            pickupCode: pickupCode,
-          }),
-        );
+        const eventRegistrationsFormattedWithPickupCode = Array.from({
+          length: amount,
+        }).map(() => ({
+          eventId,
+          entraUserUuid,
+          strapiRoleUuid,
+          reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
+          price: ownQuota.Price,
+          pickupCode: pickupCode,
+        }));
 
         // Create event registrations. This is the actual reservation.
         await prisma.eventRegistration.createMany({
           data: eventRegistrationsFormattedWithPickupCode,
         });
-
       } else {
         const eventRegistrationsFormatted = Array.from({ length: amount }).map(
           () => ({

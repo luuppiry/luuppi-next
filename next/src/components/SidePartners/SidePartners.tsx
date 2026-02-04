@@ -41,7 +41,7 @@ export default function SidePartners({
               alt="Partner company logo"
               className="w-auto object-contain object-left dark:contrast-0"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src={getStrapiUrl(partner.logo?.data.url)}
+              src={getStrapiUrl(partner.logo?.url)}
               fill
             />
           </Link>

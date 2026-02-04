@@ -28,7 +28,7 @@ export default async function RenderPartners({ lang }: RenderPartnersProps) {
             className="object-contain"
             draggable={false}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            src={getStrapiUrl(partner.logo?.data.url)}
+            src={getStrapiUrl(partner.logo?.url)}
             fill
             priority
           />

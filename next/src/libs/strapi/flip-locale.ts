@@ -16,15 +16,13 @@ export const flipBoardLocale = (
 ) =>
   lang === 'en'
     ? (data.boardMembers!.map((member) => {
-        const flippedLocales = member.boardRoles?.map(
-          (role) => {
-            const localeEn = role.localizations![0];
-            return {
-              ...role,
-              attributes: localeEn,
-            };
-          },
-        );
+        const flippedLocales = member.boardRoles?.map((role) => {
+          const localeEn = role.localizations![0];
+          return {
+            ...role,
+            attributes: localeEn,
+          };
+        });
         return {
           ...member,
           attributes: {

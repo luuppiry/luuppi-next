@@ -119,9 +119,7 @@ export const getNewsJsonLd = (
     '@type': 'NewsArticle',
     headline: news.title,
     description: news.description,
-    image: news.banner?.url
-      ? getStrapiUrl(news.banner.data.url)
-      : undefined,
+    image: news.banner?.url ? getStrapiUrl(news.banner.data.url) : undefined,
     datePublished: new Date(news.createdAt!).toISOString(),
     dateModified: new Date(news.updatedAt!).toISOString(),
     publisher: {
@@ -156,15 +154,11 @@ export const getBoardMemberJsonLd = (
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: member?.fullName,
-    email: member.boardRoles!.map(
-      (role) => role.email!,
-    ),
+    email: member.boardRoles!.map((role) => role.email!),
     image: member!.image?.url
       ? getStrapiUrl(member?.image.data.url)
       : undefined,
-    jobTitle: member.boardRoles!.map(
-      (role) => role.title!,
-    ),
+    jobTitle: member.boardRoles!.map((role) => role.title!),
     worksFor: {
       '@type': 'Organization',
       name: 'Luuppi ry',

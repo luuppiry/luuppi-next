@@ -74,9 +74,7 @@ export default async function News(props: NewsProps) {
                   alt="News banner"
                   className={'object-cover max-sm:rounded-t-lg sm:rounded-l-lg'}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  src={getStrapiUrl(
-                    news.banner?.data.url,
-                  )}
+                  src={getStrapiUrl(news.banner?.data.url)}
                   fill
                 />
               ) : (
@@ -118,9 +116,7 @@ export default async function News(props: NewsProps) {
                     alt="News author avatar"
                     className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
                     height={50}
-                    src={getStrapiUrl(
-                      news.authorImage.data?.url,
-                    )}
+                    src={getStrapiUrl(news.authorImage.data?.url)}
                     width={50}
                   />
                 ) : (
@@ -139,8 +135,7 @@ export default async function News(props: NewsProps) {
                   </span>
                   <span className="text-sm opacity-60">
                     {new Date(
-                      news?.publishedAt ||
-                        news.createdAt!,
+                      news?.publishedAt || news.createdAt!,
                     ).toLocaleDateString(params.lang, dateFormat)}
                   </span>
                 </div>

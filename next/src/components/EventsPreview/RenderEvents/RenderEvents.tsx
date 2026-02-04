@@ -33,7 +33,7 @@ export default async function RenderEvents({
     isToday: new Date(e.StartDate).toDateString() === new Date().toDateString(),
   }));
 
-  const formattedEvents = upcomingEvents.map(e => {
+  const formattedEvents = upcomingEvents.map((e) => {
     const isEnglish = lang === 'en';
     const description = getPlainText(
       isEnglish ? e.DescriptionEn : e.DescriptionFi,

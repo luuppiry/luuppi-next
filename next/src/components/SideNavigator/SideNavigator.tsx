@@ -92,7 +92,9 @@ export default function SideNavigator({
             <li
               key={index}
               className={`flex items-center gap-4 py-2 ${
-                activeHeader === header.id ? 'font-bold text-secondary-400 dark:text-secondary-600' : ''
+                activeHeader === header.id
+                  ? 'font-bold text-secondary-400 dark:text-secondary-600'
+                  : ''
               }`}
               data-header-id={header.id}
             >

@@ -113,16 +113,13 @@ export default async function Page(props: {
     );
 
     const ticketType = event?.Registration?.TicketTypes.find(
-      (ticketType) =>
-        ticketType.Role?.RoleId ===
-        registration.strapiRoleUuid,
+      (ticketType) => ticketType.Role?.RoleId === registration.strapiRoleUuid,
     );
 
     return {
       id: registration.id,
       eventId: registration.eventId,
-      eventName:
-        lang === 'en' ? event?.NameEn : event?.NameFi,
+      eventName: lang === 'en' ? event?.NameEn : event?.NameFi,
       paymentCompleted: registration.paymentCompleted,
       reservedUntil: registration.reservedUntil,
       ticketType: {
