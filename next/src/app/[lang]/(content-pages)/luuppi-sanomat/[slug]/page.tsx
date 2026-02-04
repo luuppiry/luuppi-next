@@ -39,8 +39,8 @@ export default async function LuuppiSanomatPublication(
       <h1>
         {dictionary.general.publication}{' '}
         {new Date(
-          selectedPublication.attributes?.publishedAt ||
-            selectedPublication.attributes.createdAt!,
+          selectedPublication?.publishedAt ||
+            selectedPublication.createdAt!,
         )
           .toLocaleDateString(params.lang, {
             month: 'short',
@@ -52,7 +52,7 @@ export default async function LuuppiSanomatPublication(
         <PdfViewer
           dictionary={dictionary}
           pdfUrl={getStrapiUrl(
-            selectedPublication.attributes.pdf?.data.attributes.url,
+            selectedPublication.pdf?.data.url,
           )}
         />
       </div>
@@ -73,7 +73,7 @@ export async function generateMetadata(
   const pathname = `/${params.lang}/luuppi-sanomat/${params.slug}`;
 
   // No version of the content exists in the requested language
-  if (!selectedPublication?.attributes?.Seo?.id) {
+  if (!selectedPublication?.Seo?.id) {
     return {};
   }
 

@@ -112,9 +112,9 @@ export default async function Page(props: {
       (event) => event.id === registration.eventId,
     );
 
-    const ticketType = event?.attributes.Registration?.TicketTypes.find(
+    const ticketType = event?.Registration?.TicketTypes.find(
       (ticketType) =>
-        ticketType.Role?.data?.attributes?.RoleId ===
+        ticketType.Role?.RoleId ===
         registration.strapiRoleUuid,
     );
 
@@ -122,7 +122,7 @@ export default async function Page(props: {
       id: registration.id,
       eventId: registration.eventId,
       eventName:
-        lang === 'en' ? event?.attributes.NameEn : event?.attributes.NameFi,
+        lang === 'en' ? event?.NameEn : event?.NameFi,
       paymentCompleted: registration.paymentCompleted,
       reservedUntil: registration.reservedUntil,
       ticketType: {

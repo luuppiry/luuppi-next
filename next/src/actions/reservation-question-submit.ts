@@ -58,11 +58,11 @@ export async function reservationQuestionSubmit(
   }
 
   // Fallback to the day before the event if the registration does not have an answerableUntil date
-  const eventStart = new Date(event.data.attributes.StartDate);
+  const eventStart = new Date(event.data.StartDate);
 
-  const allowAnswerChangesUntil = event.data.attributes.Registration
+  const allowAnswerChangesUntil = event.data.Registration
     ?.AllowQuestionEditUntil
-    ? new Date(event.data.attributes.Registration?.AllowQuestionEditUntil)
+    ? new Date(event.data.Registration?.AllowQuestionEditUntil)
     : eventStart;
 
   if (allowAnswerChangesUntil < new Date()) {
@@ -73,11 +73,11 @@ export async function reservationQuestionSubmit(
   }
 
   const allowedTextQuestions =
-    event.data.attributes.Registration?.QuestionsText?.length ?? 0;
+    event.data.Registration?.QuestionsText?.length ?? 0;
   const allowedSelectQuestions =
-    event.data.attributes.Registration?.QuestionsSelect?.length ?? 0;
+    event.data.Registration?.QuestionsSelect?.length ?? 0;
   const allowedCheckboxQuestions =
-    event.data.attributes.Registration?.QuestionsCheckbox?.length ?? 0;
+    event.data.Registration?.QuestionsCheckbox?.length ?? 0;
 
   // Check if the number of answers is correct
   const textQuestions = answers.filter((answer) => answer.type === 'text');
@@ -99,7 +99,7 @@ export async function reservationQuestionSubmit(
 
   // Check if select questions have valid values
   const allowedSelectChoices =
-    event.data.attributes.Registration?.QuestionsSelect?.map((q) => ({
+    event.data.Registration?.QuestionsSelect?.map((q) => ({
       en: q.ChoicesEn.split(',').map((c) => c.trim()),
       fi: q.ChoicesFi.split(',').map((c) => c.trim()),
     })) ?? [];
@@ -145,7 +145,7 @@ export async function reservationQuestionSubmit(
   // Check if text questions have valid values meaning every value is a string and within the length limits
   for (let i = 0; i < textQuestions.length; i++) {
     const answer = textQuestions[i];
-    const question = event.data.attributes.Registration?.QuestionsText?.[i]!;
+    const question = event.data.Registration?.QuestionsText?.[i]!;
 
     if (typeof answer.value !== 'string') {
       logger.error('Invalid answer:', answer.value);

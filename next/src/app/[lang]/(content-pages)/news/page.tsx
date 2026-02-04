@@ -41,14 +41,14 @@ export default async function News(props: NewsProps) {
   const dictionary = await getDictionary(params.lang);
 
   const sortedNews = newsLocaleFlipped
-    .filter((n) => n.attributes.createdAt)
+    .filter((n) => n.createdAt)
     .sort((a, b) => {
-      const dateA = a.attributes?.publishedAt
-        ? new Date(a.attributes.publishedAt).getTime()
-        : new Date(a.attributes.createdAt || new Date()).getTime();
-      const dateB = b.attributes.publishedAt
-        ? new Date(b.attributes.publishedAt).getTime()
-        : new Date(b.attributes.createdAt || new Date()).getTime();
+      const dateA = a?.publishedAt
+        ? new Date(a.publishedAt).getTime()
+        : new Date(a.createdAt || new Date()).getTime();
+      const dateB = b.publishedAt
+        ? new Date(b.publishedAt).getTime()
+        : new Date(b.createdAt || new Date()).getTime();
 
       return dateB - dateA;
     });
@@ -59,7 +59,7 @@ export default async function News(props: NewsProps) {
       <div className="flex flex-col gap-12 max-md:gap-6">
         {sortedNews.map((news) => (
           <article
-            key={news.attributes.title}
+            key={news.title}
             className={
               'flex gap-4 rounded-lg border border-gray-200/50 bg-background-50 shadow-sm max-sm:flex-col dark:border-background-200'
             }
@@ -69,13 +69,13 @@ export default async function News(props: NewsProps) {
                 'relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300 max-sm:rounded-t-lg sm:rounded-l-lg'
               }
             >
-              {news.attributes.banner?.data?.attributes?.url ? (
+              {news.banner?.data?.url ? (
                 <Image
                   alt="News banner"
                   className={'object-cover max-sm:rounded-t-lg sm:rounded-l-lg'}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   src={getStrapiUrl(
-                    news.attributes.banner?.data.attributes.url,
+                    news.banner?.data.url,
                   )}
                   fill
                 />
@@ -89,7 +89,7 @@ export default async function News(props: NewsProps) {
               <div className="flex flex-col gap-1">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-sm font-bold uppercase text-accent-400 dark:text-accent-700">
-                    {news.attributes.category}
+                    {news.category}
                   </span>
                   <p
                     className={
@@ -106,20 +106,20 @@ export default async function News(props: NewsProps) {
                   className={
                     'inline-block text-2xl font-bold hover:underline max-lg:text-xl'
                   }
-                  href={`/${params.lang}/news/${news.attributes.slug}`}
+                  href={`/${params.lang}/news/${news.slug}`}
                 >
-                  {news.attributes.title}
+                  {news.title}
                 </Link>
-                <p className="line-clamp-4">{news.attributes.description}</p>
+                <p className="line-clamp-4">{news.description}</p>
               </div>
               <div className="flex items-center gap-2">
-                {news.attributes.authorImage?.data?.attributes?.url ? (
+                {news.authorImage?.data?.url ? (
                   <Image
                     alt="News author avatar"
                     className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
                     height={50}
                     src={getStrapiUrl(
-                      news.attributes.authorImage.data?.attributes.url,
+                      news.authorImage.data?.url,
                     )}
                     width={50}
                   />
@@ -129,18 +129,18 @@ export default async function News(props: NewsProps) {
                   </div>
                 )}
                 <div className="flex flex-col">
-                  {!news.attributes.publishedAt && (
+                  {!news.publishedAt && (
                     <span className="badge badge-neutral mb-1">
                       {dictionary.general.draft} 👷🏼
                     </span>
                   )}
                   <span className="text-sm font-semibold">
-                    {news.attributes.authorName}
+                    {news.authorName}
                   </span>
                   <span className="text-sm opacity-60">
                     {new Date(
-                      news.attributes?.publishedAt ||
-                        news.attributes.createdAt!,
+                      news?.publishedAt ||
+                        news.createdAt!,
                     ).toLocaleDateString(params.lang, dateFormat)}
                   </span>
                 </div>

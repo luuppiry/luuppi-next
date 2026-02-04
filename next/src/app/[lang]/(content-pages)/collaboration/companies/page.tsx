@@ -31,12 +31,12 @@ export default async function CollaborationCompanies(
   >(params.lang, url, tags);
 
   const getLogos = (company: APIResponseData<'api::company.company'>) => {
-    const lightLogo = company.attributes.logo?.data;
-    const darkLogo = company.attributes.logoDark?.data ?? lightLogo;
+    const lightLogo = company.logo?.data;
+    const darkLogo = company.logoDark?.data ?? lightLogo;
 
     return {
-      light: getStrapiUrl(lightLogo?.attributes.url),
-      dark: getStrapiUrl(darkLogo?.attributes.url),
+      light: getStrapiUrl(lightLogo?.url),
+      dark: getStrapiUrl(darkLogo?.url),
     };
   };
 
@@ -49,7 +49,7 @@ export default async function CollaborationCompanies(
 
           return (
             <div
-              key={company.attributes.createdAt!.toString()}
+              key={company.createdAt!.toString()}
               className="flex gap-4 rounded-lg bg-background-50"
             >
               <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
@@ -65,7 +65,7 @@ export default async function CollaborationCompanies(
                   <Image
                     alt="Company logo"
                     className={`"hidden dark:block" rounded-lg object-contain max-md:w-44 ${
-                      company.attributes.logoDark
+                      company.logoDark
                         ? ''
                         : 'dark:drop-shadow-[0_0_.5px_white]'
                     }`}
@@ -78,23 +78,23 @@ export default async function CollaborationCompanies(
                     <p className="flex items-center gap-1">
                       {dictionary.pages_companies.founded}:{' '}
                       <span className="badge badge-primary">
-                        {company.attributes.foundedYear}
+                        {company.foundedYear}
                       </span>
                     </p>
                     <div>
                       <Link
                         className="link flex items-center gap-1"
-                        href={company.attributes.homepageUrl}
+                        href={company.homepageUrl}
                       >
                         {dictionary.pages_companies.homepage}
                         <FaExternalLinkAlt size={14} />
                       </Link>
                     </div>
-                    {company.attributes.openJobsUrl && (
+                    {company.openJobsUrl && (
                       <div>
                         <Link
                           className="link flex items-center gap-1"
-                          href={company.attributes.openJobsUrl}
+                          href={company.openJobsUrl}
                         >
                           {dictionary.pages_companies.open_jobs}{' '}
                           <FaExternalLinkAlt size={14} />
@@ -104,7 +104,7 @@ export default async function CollaborationCompanies(
                   </div>
                 </div>
                 <div className="flex items-center pr-4">
-                  <p>{company.attributes.description}</p>
+                  <p>{company.description}</p>
                 </div>
               </div>
             </div>

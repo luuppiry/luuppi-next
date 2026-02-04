@@ -112,11 +112,11 @@ export async function reservationCreate(
 
   const strapiRoleUuids =
     localUser.roles.map((role) => role.role.strapiRoleUuid) ?? [];
-  const ticketTypes = strapiEvent.data.attributes.Registration?.TicketTypes;
+  const ticketTypes = strapiEvent.data.Registration?.TicketTypes;
 
   const eventRolesWithWeights =
     ticketTypes?.map((ticketType) => ({
-      strapiRoleUuid: ticketType.Role?.data?.attributes?.RoleId,
+      strapiRoleUuid: ticketType.Role?.RoleId,
       weight: ticketType.Weight,
     })) ?? [];
 
@@ -151,7 +151,7 @@ export async function reservationCreate(
 
   const ownQuota = ticketTypes?.find(
     (type) =>
-      type.Role?.data?.attributes?.RoleId === targetedRole.strapiRoleUuid,
+      type.Role?.RoleId === targetedRole.strapiRoleUuid,
   );
 
   // Validate that the user has a role that can reserve tickets
@@ -303,7 +303,7 @@ export async function reservationCreate(
       }
 
       // Generate a unique pickup code
-      const requiresPickup = strapiEvent?.data?.attributes?.Registration?.RequiresPickup ?? false;
+      const requiresPickup = strapiEvent?.data?.Registration?.RequiresPickup ?? false;
       let pickupCode = '';
       if (requiresPickup) {
         pickupCode = generatePickupCode();

@@ -96,14 +96,16 @@ export default async function AdminEventManagement({
   const strapiEventsMap = new Map(
     strapiEvents
       .filter((event) => event)
-      .map((event) => [event!.data.id, event!.data.attributes.Registration]),
+      .map((event) => [event!.data.id, event!.data.Registration]),
   );
 
   // For search results, don't filter by registrations count
   const eventLanguageFormatted = eventData
     .filter((event) => searchTerm || event.registrations.length)
     .map((event) => {
-      const strapiRegistration = strapiEventsMap.get(event.eventId) as { RequiresPickup?: boolean } | undefined;
+      const strapiRegistration = strapiEventsMap.get(event.eventId) as
+        | { RequiresPickup?: boolean }
+        | undefined;
       const requiresPickup = strapiRegistration?.RequiresPickup ?? false;
       return {
         id: event.id,
@@ -184,7 +186,7 @@ export default async function AdminEventManagement({
                     <div className="flex items-end justify-end gap-1">
                       <Link
                         aria-label={dictionary.general.view}
-                        className="btn btn-primary btn-circle btn-ghost btn-sm"
+                        className="btn btn-circle btn-ghost btn-primary btn-sm"
                         href={`/${lang}/admin/event/${event.eventId}`}
                       >
                         <PiEye

@@ -13,19 +13,19 @@ export const formatMetadata = (
   pathname: string,
   isNews = false,
 ): Metadata => {
-  const seo = content.data.attributes.Seo;
+  const seo = content.data.Seo;
 
   if (!seo) throw new Error('No SEO data found');
 
   const cmsUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 
   let twitterImage: string | null = null;
-  if (seo.twitter?.twitterImage?.data?.attributes?.url) {
-    twitterImage = `${cmsUrl}${seo.twitter.twitterImage.data.attributes.url}`;
+  if (seo.twitter?.twitterImage?.url) {
+    twitterImage = `${cmsUrl}${seo.twitter.twitterImage.data.url}`;
   }
   let openGraphImage: string | null = null;
-  if (seo.openGraph?.openGraphImage?.data?.attributes?.url) {
-    openGraphImage = `${cmsUrl}${seo.openGraph.openGraphImage.data.attributes.url}`;
+  if (seo.openGraph?.openGraphImage?.url) {
+    openGraphImage = `${cmsUrl}${seo.openGraph.openGraphImage.data.url}`;
   }
 
   if (isNews && !openGraphImage) {
