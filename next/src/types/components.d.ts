@@ -1,4 +1,6 @@
-import type { Attribute, Schema } from '@strapi/strapi';
+/* eslint-disable */
+
+import type { Schema, Attribute } from '@strapi/strapi';
 
 export interface SharedSeo extends Schema.Component {
   collectionName: 'components_shared_seos';
@@ -126,7 +128,7 @@ export interface EventsRegistration extends Schema.Component {
     QuestionsSelect: Attribute.Component<'events.questions-select', true>;
     QuestionsCheckbox: Attribute.Component<'events.questions-checkbox', true>;
     AllowQuestionEditUntil: Attribute.DateTime;
-    RequiresPickup: Attribute.Boolean & Attribute.Required;
+    RequiresPickup: Attribute.Boolean & Attribute.DefaultTo<false>;
   };
 }
 
@@ -232,7 +234,7 @@ export interface EventsQuestionsCheckbox extends Schema.Component {
 }
 
 declare module '@strapi/types' {
-  export namespace Shared {
+  export module Shared {
     export interface Components {
       'shared.seo': SharedSeo;
       'shared.page-content': SharedPageContent;

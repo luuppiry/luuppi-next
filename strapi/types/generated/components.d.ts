@@ -1,4 +1,4 @@
-import type { Attribute, Schema } from '@strapi/strapi';
+import type { Schema, Attribute } from '@strapi/strapi';
 
 export interface SharedSeo extends Schema.Component {
   collectionName: 'components_shared_seos';
@@ -126,7 +126,7 @@ export interface EventsRegistration extends Schema.Component {
     QuestionsSelect: Attribute.Component<'events.questions-select', true>;
     QuestionsCheckbox: Attribute.Component<'events.questions-checkbox', true>;
     AllowQuestionEditUntil: Attribute.DateTime;
-    RequiresPickup: Attribute.Boolean & Attribute.Required;
+    RequiresPickup: Attribute.Boolean & Attribute.DefaultTo<false>;
   };
 }
 

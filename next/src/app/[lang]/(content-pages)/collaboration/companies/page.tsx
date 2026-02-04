@@ -3,13 +3,17 @@ import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponse, APIResponseCollection } from '@/types/types';
+import {
+  APIResponse,
+  APIResponseCollection,
+  APIResponseData,
+} from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
-const url = '/api/companies?populate=logo';
+const url = '/api/companies?populate=logo,logoDark';
 const tags = ['company'];
 
 interface CollaborationCompaniesProps {
@@ -26,62 +30,86 @@ export default async function CollaborationCompanies(
     APIResponseCollection<'api::company.company'>
   >(params.lang, url, tags);
 
+  const getLogos = (company: APIResponseData<'api::company.company'>) => {
+    const lightLogo = company.attributes.logo?.data;
+    const darkLogo = company.attributes.logoDark?.data ?? lightLogo;
+
+    return {
+      light: getStrapiUrl(lightLogo?.attributes.url),
+      dark: getStrapiUrl(darkLogo?.attributes.url),
+    };
+  };
+
   return (
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.companies}</h1>
       <div className="flex flex-col gap-8">
-        {pageData.data.map((company) => (
-          <div
-            key={company.attributes.createdAt!.toString()}
-            className="flex gap-4 rounded-lg bg-background-50"
-          >
-            <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
-            <div className="flex gap-12 py-4 max-md:flex-col max-md:gap-6">
-              <div className="flex shrink-0 flex-col justify-center gap-4">
-                <Image
-                  alt="Company logo"
-                  className="rounded-lg object-contain max-md:w-44 dark:drop-shadow-[0_0_.5px_white]"
-                  height={100}
-                  src={getStrapiUrl(
-                    company.attributes.logo?.data.attributes.url,
-                  )}
-                  width={300}
-                />
-                <div className="flex flex-col gap-1 font-semibold">
-                  <p className="flex items-center gap-1">
-                    {dictionary.pages_companies.founded}:{' '}
-                    <span className="badge badge-primary">
-                      {company.attributes.foundedYear}
-                    </span>
-                  </p>
-                  <div>
-                    <Link
-                      className="link flex items-center gap-1"
-                      href={company.attributes.homepageUrl}
-                    >
-                      {dictionary.pages_companies.homepage}
-                      <FaExternalLinkAlt size={14} />
-                    </Link>
-                  </div>
-                  {company.attributes.openJobsUrl && (
+        {pageData.data.map((company) => {
+          const logos = getLogos(company);
+
+          return (
+            <div
+              key={company.attributes.createdAt!.toString()}
+              className="flex gap-4 rounded-lg bg-background-50"
+            >
+              <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
+              <div className="flex gap-12 py-4 max-md:flex-col max-md:gap-6">
+                <div className="flex shrink-0 flex-col justify-center gap-4">
+                  <Image
+                    alt="Company logo"
+                    className="rounded-lg object-contain max-md:w-44 dark:hidden"
+                    height={100}
+                    src={logos.light}
+                    width={300}
+                  />
+                  <Image
+                    alt="Company logo"
+                    className={`"hidden dark:block" rounded-lg object-contain max-md:w-44 ${
+                      company.attributes.logoDark
+                        ? ''
+                        : 'dark:drop-shadow-[0_0_.5px_white]'
+                    }`}
+                    height={100}
+                    src={logos.dark}
+                    width={300}
+                  />
+
+                  <div className="flex flex-col gap-1 font-semibold">
+                    <p className="flex items-center gap-1">
+                      {dictionary.pages_companies.founded}:{' '}
+                      <span className="badge badge-primary">
+                        {company.attributes.foundedYear}
+                      </span>
+                    </p>
                     <div>
                       <Link
                         className="link flex items-center gap-1"
-                        href={company.attributes.openJobsUrl}
+                        href={company.attributes.homepageUrl}
                       >
-                        {dictionary.pages_companies.open_jobs}{' '}
+                        {dictionary.pages_companies.homepage}
                         <FaExternalLinkAlt size={14} />
                       </Link>
                     </div>
-                  )}
+                    {company.attributes.openJobsUrl && (
+                      <div>
+                        <Link
+                          className="link flex items-center gap-1"
+                          href={company.attributes.openJobsUrl}
+                        >
+                          {dictionary.pages_companies.open_jobs}{' '}
+                          <FaExternalLinkAlt size={14} />
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center pr-4">
+                  <p>{company.attributes.description}</p>
                 </div>
               </div>
-              <div className="flex items-center pr-4">
-                <p>{company.attributes.description}</p>
-              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
