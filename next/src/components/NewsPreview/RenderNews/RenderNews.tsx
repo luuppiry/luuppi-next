@@ -115,7 +115,7 @@ export default async function RenderNews({
                   alt="News author avatar"
                   className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
                   height={50}
-                  src={getStrapiUrl(news.authorImage.data?.url)}
+                  src={getStrapiUrl(news.authorImage?.url)}
                   width={50}
                 />
               ) : (
