@@ -5,7 +5,7 @@ import prisma from '@/libs/db/prisma';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponse } from '@/types/types';
+import { APIResponseCollection } from '@/types/types';
 import { redirect } from 'next/navigation';
 
 export async function reservationQuestionSubmit(
@@ -41,14 +41,16 @@ export async function reservationQuestionSubmit(
     };
   }
 
-  const url = `/api/events/${registration.eventId}?populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
+  const url = `/api/events?filters[id][$eq]=${registration.eventId}?populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
 
-  const event = await getStrapiData<APIResponse<'api::event.event'>>(
+  const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     lang,
     url,
     [`event-${registration.eventId}`],
     true,
   );
+
+  const event = events?.data.at(0);
 
   if (!event) {
     return {
@@ -58,11 +60,10 @@ export async function reservationQuestionSubmit(
   }
 
   // Fallback to the day before the event if the registration does not have an answerableUntil date
-  const eventStart = new Date(event.data.StartDate);
+  const eventStart = new Date(event.StartDate);
 
-  const allowAnswerChangesUntil = event.data.Registration
-    ?.AllowQuestionEditUntil
-    ? new Date(event.data.Registration?.AllowQuestionEditUntil)
+  const allowAnswerChangesUntil = event.Registration?.AllowQuestionEditUntil
+    ? new Date(event.Registration?.AllowQuestionEditUntil)
     : eventStart;
 
   if (allowAnswerChangesUntil < new Date()) {
@@ -72,12 +73,11 @@ export async function reservationQuestionSubmit(
     };
   }
 
-  const allowedTextQuestions =
-    event.data.Registration?.QuestionsText?.length ?? 0;
+  const allowedTextQuestions = event.Registration?.QuestionsText?.length ?? 0;
   const allowedSelectQuestions =
-    event.data.Registration?.QuestionsSelect?.length ?? 0;
+    event.Registration?.QuestionsSelect?.length ?? 0;
   const allowedCheckboxQuestions =
-    event.data.Registration?.QuestionsCheckbox?.length ?? 0;
+    event.Registration?.QuestionsCheckbox?.length ?? 0;
 
   // Check if the number of answers is correct
   const textQuestions = answers.filter((answer) => answer.type === 'text');
@@ -99,7 +99,7 @@ export async function reservationQuestionSubmit(
 
   // Check if select questions have valid values
   const allowedSelectChoices =
-    event.data.Registration?.QuestionsSelect?.map((q) => ({
+    event.Registration?.QuestionsSelect?.map((q) => ({
       en: q.ChoicesEn.split(',').map((c) => c.trim()),
       fi: q.ChoicesFi.split(',').map((c) => c.trim()),
     })) ?? [];
@@ -145,7 +145,7 @@ export async function reservationQuestionSubmit(
   // Check if text questions have valid values meaning every value is a string and within the length limits
   for (let i = 0; i < textQuestions.length; i++) {
     const answer = textQuestions[i];
-    const question = event.data.Registration?.QuestionsText?.[i]!;
+    const question = event.Registration?.QuestionsText?.[i]!;
 
     if (typeof answer.value !== 'string') {
       logger.error('Invalid answer:', answer.value);

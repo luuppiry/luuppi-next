@@ -47,7 +47,7 @@ export default async function Event(props: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const url = `/api/events?filters[id][$eq]=${params.slug}&populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+  const url = `/api/events?filters[id][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,

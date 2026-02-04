@@ -6,7 +6,7 @@ import prisma from '@/libs/db/prisma';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponse } from '@/types/types';
+import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -81,15 +81,22 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
   }
 
   // Fetch Strapi event data to get RequiresPickup field
-  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
+  const strapiEvents = await getStrapiData<
+    APIResponseCollection<'api::event.event'>
+  >(
     params.lang,
-    `/api/events/${eventId}?populate=Registration`,
+    `/api/events?filters[id][$eq]=${eventId}?populate=Registration`,
     [`event-${eventId}`],
     true,
   );
 
-  const requiresPickup =
-    strapiEvent?.data?.Registration?.RequiresPickup ?? false;
+  const strapiEvent = strapiEvents?.data.at(0);
+
+  if (!strapiEvent) {
+    return redirect(`${params.lang}/404`);
+  }
+
+  const requiresPickup = strapiEvent?.Registration?.RequiresPickup ?? false;
   const eventName = params.lang === 'fi' ? event.nameFi : event.nameEn;
 
   return (

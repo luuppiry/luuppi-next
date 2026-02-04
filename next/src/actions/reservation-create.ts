@@ -7,7 +7,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { generatePickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponse } from '@/types/types';
+import { APIResponseCollection } from '@/types/types';
 import { revalidateTag } from 'next/cache';
 
 const options = {
@@ -66,13 +66,12 @@ export async function reservationCreate(
     };
   }
 
-  const strapiUrl = `/api/events/${eventId}?populate=Registration.TicketTypes.Role&populate=Registration.RoleToGive`;
-  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
-    lang,
-    strapiUrl,
-    [`event-${eventId}`],
-    true,
-  );
+  const strapiUrl = `/api/events?filters[id][$eq]=${eventId}&populate=Registration.TicketTypes.Role&populate=Registration.RoleToGive`;
+  const strapiEvents = await getStrapiData<
+    APIResponseCollection<'api::event.event'>
+  >(lang, strapiUrl, [`event-${eventId}`], true);
+
+  const strapiEvent = strapiEvents?.data.at(0);
 
   if (!strapiEvent) {
     return {
@@ -112,7 +111,7 @@ export async function reservationCreate(
 
   const strapiRoleUuids =
     localUser.roles.map((role) => role.role.strapiRoleUuid) ?? [];
-  const ticketTypes = strapiEvent.data.Registration?.TicketTypes;
+  const ticketTypes = strapiEvent.Registration?.TicketTypes;
 
   const eventRolesWithWeights =
     ticketTypes?.map((ticketType) => ({
@@ -302,8 +301,7 @@ export async function reservationCreate(
       }
 
       // Generate a unique pickup code
-      const requiresPickup =
-        strapiEvent?.data?.Registration?.RequiresPickup ?? false;
+      const requiresPickup = strapiEvent.Registration?.RequiresPickup ?? false;
       let pickupCode = '';
       if (requiresPickup) {
         pickupCode = generatePickupCode();

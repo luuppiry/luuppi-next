@@ -6,7 +6,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { APIResponse } from '@/types/types';
+import { APIResponseCollection } from '@/types/types';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { PiEye } from 'react-icons/pi';
@@ -84,19 +84,19 @@ export default async function AdminEventManagement({
 
   // Fetch Strapi data for all events to get RequiresPickup field
   const eventIds = eventData.map((event) => event.eventId);
-  const strapiEventsPromises = eventIds.map((eventId) =>
-    getStrapiData<APIResponse<'api::event.event'>>(
-      lang,
-      `/api/events/${eventId}?populate=Registration`,
-      [`event-${eventId}`],
-      true,
-    ),
+  const strapiEventsResponse = await getStrapiData<
+    APIResponseCollection<'api::event.event'>
+  >(
+    lang,
+    `/api/events?filters[id][$in]=${eventIds.join(',')}&populate=Registration`,
+    eventIds.map((id) => `event-${id}`),
+    true,
   );
-  const strapiEvents = await Promise.all(strapiEventsPromises);
   const strapiEventsMap = new Map(
-    strapiEvents
-      .filter((event) => event)
-      .map((event) => [event!.data.id, event!.data.Registration]),
+    strapiEventsResponse?.data?.map((event) => [
+      event.id,
+      event.Registration,
+    ]) ?? [],
   );
 
   // For search results, don't filter by registrations count
