@@ -59,9 +59,9 @@ export const getEventJsonLd = (
   ).slice(0, 300);
 
   const imageUrlLocalized =
-    lang === 'en' && event.data.ImageEn?.data?.url
-      ? event.data.ImageEn?.data?.url
-      : event.data.Image?.data?.url;
+    lang === 'en' && event.data.ImageEn?.url
+      ? event.data.ImageEn?.url
+      : event.data.Image?.url;
 
   const jsonLd: WithContext<EventSchema> = {
     '@context': 'https://schema.org',

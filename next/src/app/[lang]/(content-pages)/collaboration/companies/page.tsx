@@ -31,8 +31,8 @@ export default async function CollaborationCompanies(
   >(params.lang, url, tags);
 
   const getLogos = (company: APIResponseData<'api::company.company'>) => {
-    const lightLogo = company.logo?.data;
-    const darkLogo = company.logoDark?.data ?? lightLogo;
+    const lightLogo = company.logo;
+    const darkLogo = company.logoDark ?? lightLogo;
 
     return {
       light: getStrapiUrl(lightLogo?.url),

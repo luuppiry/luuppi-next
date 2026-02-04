@@ -69,7 +69,7 @@ export default async function News(props: NewsProps) {
                 'relative aspect-video w-full bg-gradient-to-r from-secondary-400 to-primary-300 max-sm:rounded-t-lg sm:rounded-l-lg'
               }
             >
-              {news.banner?.data?.url ? (
+              {news.banner?.url ? (
                 <Image
                   alt="News banner"
                   className={'object-cover max-sm:rounded-t-lg sm:rounded-l-lg'}
@@ -111,12 +111,12 @@ export default async function News(props: NewsProps) {
                 <p className="line-clamp-4">{news.description}</p>
               </div>
               <div className="flex items-center gap-2">
-                {news.authorImage?.data?.url ? (
+                {news.authorImage?.url ? (
                   <Image
                     alt="News author avatar"
                     className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
                     height={50}
-                    src={getStrapiUrl(news.authorImage.data?.url)}
+                    src={getStrapiUrl(news.authorImage?.url)}
                     width={50}
                   />
                 ) : (

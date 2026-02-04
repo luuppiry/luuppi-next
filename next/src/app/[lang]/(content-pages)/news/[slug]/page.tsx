@@ -71,7 +71,7 @@ export default async function NewsPost(props: NewsPostProps) {
       <div className="flex w-full gap-12">
         <div className="flex w-full flex-col gap-12">
           <div className="relative aspect-[2/1] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
-            {selectedNews.banner?.data?.url ? (
+            {selectedNews.banner?.url ? (
               <Image
                 alt="News banner"
                 className={'rounded-lg object-cover'}
@@ -88,12 +88,12 @@ export default async function NewsPost(props: NewsPostProps) {
           </div>
           <div className="relative flex flex-col gap-4">
             <div className="flex items-center gap-4">
-              {selectedNews.authorImage?.data?.url ? (
+              {selectedNews.authorImage?.url ? (
                 <Image
                   alt="News author avatar"
                   className="h-[50px] w-[50px] rounded-full bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
                   height={50}
-                  src={getStrapiUrl(selectedNews.authorImage.data?.url)}
+                  src={getStrapiUrl(selectedNews.authorImage?.url)}
                   width={50}
                 />
               ) : (

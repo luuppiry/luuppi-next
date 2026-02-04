@@ -67,8 +67,8 @@ export async function GET(
       start: new Date(event.StartDate),
       end: new Date(event.EndDate),
       hasTickets: Boolean(event.Registration?.TicketTypes.length),
-      imageEnUrl: event.ImageEn?.data?.url || null,
-      imageFiUrl: event.Image?.data?.url || null,
+      imageEnUrl: event.ImageEn?.url || null,
+      imageFiUrl: event.Image?.url || null,
     }));
 
     return NextResponse.json({ events: events });
