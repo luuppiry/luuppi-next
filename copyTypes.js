@@ -35,7 +35,7 @@ function copyFile({ src, dest }) {
 	// Read the source file, modify its content and write to the destination file
 	const content = fs.readFileSync(src, 'utf8');
 
-	fs.writeFile(dest, content, (err) => {
+	fs.writeFile(dest, `/* eslint-disable */\n\n${content}`, (err) => {
 		if (err) {
 			console.error(`Error writing to destination file: ${err}`);
 			process.exit(1);

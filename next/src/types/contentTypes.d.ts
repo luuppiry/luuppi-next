@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import type { Schema, Attribute } from '@strapi/strapi';
 
 export interface AdminPermission extends Schema.CollectionType {
@@ -23,12 +25,12 @@ export interface AdminPermission extends Schema.CollectionType {
       Attribute.SetMinMaxLength<{
         minLength: 1;
       }>;
-    actionParameters: Attribute.JSON & Attribute.DefaultTo<object>;
+    actionParameters: Attribute.JSON & Attribute.DefaultTo<{}>;
     subject: Attribute.String &
       Attribute.SetMinMaxLength<{
         minLength: 1;
       }>;
-    properties: Attribute.JSON & Attribute.DefaultTo<object>;
+    properties: Attribute.JSON & Attribute.DefaultTo<{}>;
     conditions: Attribute.JSON & Attribute.DefaultTo<[]>;
     role: Attribute.Relation<'admin::permission', 'manyToOne', 'admin::role'>;
     createdAt: Attribute.DateTime;
@@ -1126,6 +1128,12 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
       }>;
     logo: Attribute.Media<'images'> &
       Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    logoDark: Attribute.Media<'images'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
@@ -2672,7 +2680,7 @@ export interface ApiTutoringLarpakeTutoringLarpake extends Schema.SingleType {
 }
 
 declare module '@strapi/types' {
-  export namespace Shared {
+  export module Shared {
     export interface ContentTypes {
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
