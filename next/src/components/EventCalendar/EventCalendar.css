@@ -6,7 +6,11 @@
   @apply bg-slate-900;
 
   --fc-border-color: rgb(var(--primary-200));
-  --fc-today-bg-color: color-mix(in hsl, theme(colors.yellow.400) 5%, transparent);
+  --fc-today-bg-color: color-mix(
+    in hsl,
+    theme(colors.yellow.400) 5%,
+    transparent
+  );
 }
 
 .fc-media-screen {

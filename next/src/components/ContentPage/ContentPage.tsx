@@ -24,7 +24,7 @@ export default async function ContentPage({
     APIResponseCollection<'api::company.company'>
   >(lang, '/api/companies?populate=*', ['company']);
 
-  const imagePath = contentData.attributes.Content.banner.data.attributes.url;
+  const imagePath = contentData.Content.banner.url;
   const imageUrl = getStrapiUrl(imagePath);
 
   return (
@@ -39,36 +39,29 @@ export default async function ContentPage({
           />
         </div>
         <div className="relative flex flex-col gap-4">
-          <h1>{contentData.attributes.Content.title}</h1>
+          <h1>{contentData.Content.title}</h1>
           <div className="flex flex-col opacity-40">
             <p className="text-sm dark:text-white">
               {dictionary.general.content_updated}:{' '}
-              {new Date(contentData.attributes.updatedAt).toLocaleString(
-                lang,
-                dateFormat,
-              )}
+              {new Date(contentData.updatedAt).toLocaleString(lang, dateFormat)}
             </p>
           </div>
           <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
         </div>
         <article className="organization-page prose prose-custom max-w-full decoration-secondary-400 transition-all duration-300 ease-in-out">
-          <BlockRendererClient
-            content={contentData.attributes.Content.content}
-          />
+          <BlockRendererClient content={contentData.Content.content} />
         </article>
-        {contentData.attributes.ContactBanner && (
+        {contentData.ContactBanner && (
           <div className="luuppi-questions-bg flex flex-col items-center justify-center gap-4 rounded-xl bg-secondary-400 p-6 text-center text-white shadow-sm">
             <h2 className="text-2xl font-bold">
-              {contentData.attributes.ContactBanner.title}
+              {contentData.ContactBanner.title}
             </h2>
-            <p className="max-w-md">
-              {contentData.attributes.ContactBanner.description}
-            </p>
+            <p className="max-w-md">{contentData.ContactBanner.description}</p>
             <Link
               className="link text-white"
-              href={`mailto:${contentData.attributes.ContactBanner.email}`}
+              href={`mailto:${contentData.ContactBanner.email}`}
             >
-              {contentData.attributes.ContactBanner.email}
+              {contentData.ContactBanner.email}
             </Link>
           </div>
         )}

@@ -13,6 +13,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { formatDateRangeLong } from '@/libs/utils/format-date-range';
 import { getEventJsonLd } from '@/libs/utils/json-ld';
+import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
@@ -46,21 +47,23 @@ export default async function Event(props: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const url = `/api/events/${params.slug}?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+  const url = `/api/events?filters[id][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
-  const event = await getStrapiData<APIResponse<'api::event.event'>>(
+  const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,
     url,
     [`event-${params.slug}`],
     true,
   );
 
+  const event = events?.data.at(0);
+
   if (!event) {
     redirect(`/${params.lang}/404`);
   }
 
   // Check if the event is visible to the current user
-  const eventVisible = await isEventVisible(event.data);
+  const eventVisible = await isEventVisible(event);
   if (!eventVisible) {
     redirect(`/${params.lang}/404`);
   }
@@ -73,13 +76,13 @@ export default async function Event(props: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const ticketTypes = event.data.attributes.Registration?.TicketTypes;
+  const ticketTypes = event.Registration?.TicketTypes;
 
   const localUserPromise = session?.user?.entraUserUuid
     ? getCachedUser(session.user.entraUserUuid)
     : null;
 
-  const eventRegistrationsPromise = getCachedEventRegistrations(event.data.id);
+  const eventRegistrationsPromise = getCachedEventRegistrations(event.id);
 
   const [localUser, eventRegistrations] = await Promise.all([
     localUserPromise,
@@ -90,7 +93,7 @@ export default async function Event(props: EventProps) {
     localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
   const eventRolesWithWeights =
     ticketTypes?.map((ticketType) => ({
-      strapiRoleUuid: ticketType.Role?.data?.attributes?.RoleId,
+      strapiRoleUuid: ticketType.Role?.RoleId,
       weight: ticketType.Weight,
     })) ?? [];
 
@@ -115,8 +118,7 @@ export default async function Event(props: EventProps) {
   );
 
   const ownQuota = ticketTypes?.find(
-    (type) =>
-      type.Role?.data?.attributes?.RoleId === targetedRole.strapiRoleUuid,
+    (type) => type.Role?.RoleId === targetedRole.strapiRoleUuid,
   );
 
   const isOwnQuota = (role: string) => {
@@ -133,13 +135,9 @@ export default async function Event(props: EventProps) {
   };
 
   const registrationEndsOwnQuota = ticketTypes?.reduce((latestDate, ticket) => {
-    const ticketIsOwnQuota =
-      ticket.Role && isOwnQuota(ticket.Role.data?.attributes.RoleId);
+    const ticketIsOwnQuota = ticket.Role && isOwnQuota(ticket.Role!.RoleId!);
     const isSoldOutOwnQuota = ownQuota
-      ? isSoldOut(
-          ownQuota.TicketsTotal,
-          ownQuota.Role?.data?.attributes?.RoleId!,
-        )
+      ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.RoleId!)
       : false;
 
     if (!ticketIsOwnQuota || isSoldOutOwnQuota) {
@@ -151,20 +149,19 @@ export default async function Event(props: EventProps) {
   }, null! as Date);
 
   const imageUrlLocalized =
-    params.lang === 'en' && event.data.attributes.ImageEn?.data?.attributes?.url
-      ? event.data.attributes.ImageEn?.data?.attributes?.url
-      : event.data.attributes.Image?.data?.attributes?.url;
+    params.lang === 'en' && event.ImageEn?.url
+      ? event.ImageEn?.url
+      : event.Image?.url;
 
   const imageUrl = imageUrlLocalized ? getStrapiUrl(imageUrlLocalized) : null;
 
-  const hasRegistration =
-    event.data.attributes?.Registration?.TicketTypes?.length;
+  const hasRegistration = event?.Registration?.TicketTypes?.length;
 
   return (
     <>
       <Script
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getEventJsonLd(event, params.lang)),
+          __html: JSON.stringify(getEventJsonLd({ data: event }, params.lang)),
         }}
         id="event-jsonld"
         type="application/ld+json"
@@ -187,16 +184,12 @@ export default async function Event(props: EventProps) {
           </div>
           <div className="relative flex flex-col gap-4">
             <h1 className="break-words">
-              {
-                event.data.attributes[
-                  params.lang === 'en' ? 'NameEn' : 'NameFi'
-                ]
-              }
+              {event[params.lang === 'en' ? 'NameEn' : 'NameFi']}
             </h1>
             <div className="flex flex-col opacity-40">
               <p className="text-sm dark:text-white">
                 {dictionary.general.content_updated}:{' '}
-                {new Date(event.data.attributes.updatedAt!).toLocaleString(
+                {new Date(event.updatedAt!).toLocaleString(
                   params.lang,
                   dateFormat,
                 )}
@@ -213,8 +206,8 @@ export default async function Event(props: EventProps) {
                 </div>
                 <p className="line-clamp-2">
                   {formatDateRangeLong(
-                    new Date(event.data.attributes.StartDate),
-                    new Date(event.data.attributes.EndDate),
+                    new Date(event.StartDate),
+                    new Date(event.EndDate),
                     params.lang,
                   )}
                 </p>
@@ -251,43 +244,34 @@ export default async function Event(props: EventProps) {
                   <IoLocationOutline className="shrink-0 text-2xl" />
                 </div>
                 <p className="line-clamp-2">
-                  {
-                    event.data.attributes[
-                      params.lang === 'en' ? 'LocationEn' : 'LocationFi'
-                    ]
-                  }
+                  {event[params.lang === 'en' ? 'LocationEn' : 'LocationFi']}
                 </p>
               </div>
-              {event.data.attributes['FuksiPoints'] && (
+              {event['FuksiPoints'] && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                    {event.data.attributes['FuksiPoints'] ===
-                    'fuksi_points_true' ? (
+                    {event['FuksiPoints'] === 'fuksi_points_true' ? (
                       <LuBaby className="shrink-0 text-2xl" />
                     ) : (
                       <RiProhibitedLine className="shrink-0 text-2xl" />
                     )}
                   </div>
                   <p className="line-clamp-2 font-normal">
-                    {
-                      dictionary.pages_events[
-                        event.data.attributes['FuksiPoints']
-                      ]
-                    }
+                    {dictionary.pages_events[event['FuksiPoints']]}
                   </p>
                 </div>
               )}
-              {event.data.attributes['Alcohol'] && (
+              {event['Alcohol'] && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                    {event.data.attributes['Alcohol'] === 'no_alcohol' ? (
+                    {event['Alcohol'] === 'no_alcohol' ? (
                       <MdNoDrinks className="shrink-0 text-2xl" />
                     ) : (
                       <BiSolidDrink className="shrink-0 text-2xl" />
                     )}
                   </div>
                   <p className="line-clamp-2 font-normal">
-                    {dictionary.pages_events[event.data.attributes['Alcohol']]}
+                    {dictionary.pages_events[event['Alcohol']]}
                   </p>
                 </div>
               )}
@@ -306,7 +290,7 @@ export default async function Event(props: EventProps) {
                   </div>
                 }
               >
-                <TicketArea event={event} lang={params.lang} />
+                <TicketArea event={{ data: event }} lang={params.lang} />
               </Suspense>
               <Suspense
                 fallback={
@@ -322,9 +306,7 @@ export default async function Event(props: EventProps) {
           <div className="organization-page prose prose-custom max-w-full break-words decoration-secondary-400 transition-all duration-300 ease-in-out">
             <BlockRendererClient
               content={
-                event.data.attributes[
-                  params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
-                ]
+                event[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']
               }
             />
           </div>
@@ -344,30 +326,29 @@ export default async function Event(props: EventProps) {
 
 export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const params = await props.params;
-  const event = await getStrapiData<APIResponse<'api::event.event'>>(
+  const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,
-    `/api/events/${params.slug}?populate=Image`,
+    `/api/events?filters[id][$eq]=${params.slug}&populate=Image`,
     [`event-${params.slug}`],
     true,
   );
+
+  const event = events?.data.at(0);
 
   if (!event) return {};
 
   const pathname = `/${params.lang}/events/${params.slug}`;
 
   const description = getPlainText(
-    event.data.attributes[
-      params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'
-    ],
+    event[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
   );
 
-  const title =
-    event.data.attributes[params.lang === 'en' ? 'NameEn' : 'NameFi'];
+  const title = event[params.lang === 'en' ? 'NameEn' : 'NameFi'];
 
   const imageUrlLocalized =
-    params.lang === 'en' && event.data.attributes.ImageEn?.data?.attributes?.url
-      ? event.data.attributes.ImageEn?.data?.attributes?.url
-      : event.data.attributes.Image?.data?.attributes?.url;
+    params.lang === 'en' && event.ImageEn?.url
+      ? event.ImageEn?.url
+      : event.Image?.url;
 
   const imageUrl = imageUrlLocalized
     ? getStrapiUrl(imageUrlLocalized)

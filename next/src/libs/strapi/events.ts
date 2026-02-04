@@ -27,16 +27,14 @@ export const addEventRegisterationOpensAtInfo = <T>(
   formatEvent: (event: APIResponseData<'api::event.event'>) => T,
   dictionary: Dictionary,
 ) => {
-  if (!event?.attributes?.Registration?.TicketTypes) {
+  if (!event?.Registration?.TicketTypes) {
     return [...acc, formatEvent(event)];
   }
 
-  const memberSaleStartsAt = event.attributes.Registration?.TicketTypes.find(
-    (type) => {
-      const roleId = type?.Role?.data?.attributes?.RoleId;
-      return roleId && [luuppiMember, luuppiNonMember].includes(roleId);
-    },
-  );
+  const memberSaleStartsAt = event.Registration?.TicketTypes.find((type) => {
+    const roleId = type?.Role?.RoleId;
+    return roleId && [luuppiMember, luuppiNonMember].includes(roleId);
+  });
 
   if (!memberSaleStartsAt?.RegistrationStartsAt) {
     return [...acc, formatEvent(event)];
@@ -47,13 +45,10 @@ export const addEventRegisterationOpensAtInfo = <T>(
     formatEvent(event),
     formatEvent({
       ...event,
-      attributes: {
-        ...event.attributes,
-        StartDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
-        EndDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
-        NameEn: `${event.attributes['NameEn']} ${dictionary.general.opens}`,
-        NameFi: `${event.attributes['NameFi']} ${dictionary.general.opens}`,
-      },
+      StartDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
+      EndDate: new Date(memberSaleStartsAt.RegistrationStartsAt),
+      NameEn: `${event['NameEn']} ${dictionary.general.opens}`,
+      NameFi: `${event['NameFi']} ${dictionary.general.opens}`,
     }),
   ];
 };
@@ -71,20 +66,20 @@ export const isEventVisible = async (
   userRoleIds?: string[],
 ): Promise<boolean> => {
   // If ShowInCalendar is not explicitly false, show to everyone (true is the default or undefined for old events)
-  if (event.attributes.ShowInCalendar !== false) {
+  if (event.ShowInCalendar !== false) {
     return true;
   }
 
-  const visibleForRoles = event.attributes.VisibleOnlyForRoles?.data;
+  const visibleForRoles = event.VisibleOnlyForRoles;
   let requiredRoleIds: string[];
 
   // Use VisibleOnlyForRoles if specified or TicketTypes as a fallback, otherwise hide the event entirely
   if (visibleForRoles && visibleForRoles.length > 0) {
     requiredRoleIds = visibleForRoles
-      .map((r) => r.attributes?.RoleId)
+      .map((r) => r?.RoleId)
       .filter((id): id is string => Boolean(id));
   } else {
-    const ticketTypes = event.attributes.Registration?.TicketTypes;
+    const ticketTypes = event.Registration?.TicketTypes;
     if (!ticketTypes || ticketTypes.length === 0) {
       // No ticket types and no visible roles - hide from everyone
       logger.error(`Event ${event.id} is hidden entirely - no ticket types`);
@@ -92,12 +87,14 @@ export const isEventVisible = async (
     }
 
     requiredRoleIds = ticketTypes
-      .map((type) => type?.Role?.data?.attributes?.RoleId)
+      .map((type) => type?.Role?.RoleId)
       .filter((id): id is string => Boolean(id));
 
     // If no valid role IDs found in ticket types, hide the event
     if (requiredRoleIds.length === 0) {
-      logger.error(`Event ${event.id} is hidden entirely - no roles for ticket types`);
+      logger.error(
+        `Event ${event.id} is hidden entirely - no roles for ticket types`,
+      );
       return false;
     }
   }

@@ -98,7 +98,7 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
     };
   }
 
-  const url = `/api/events/${event.eventId}?populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
+  const url = `/api/events?filters[id][$eq]=${event.eventId}?populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
 
   const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
     lang,
@@ -152,8 +152,8 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
       [dictionary.general.paid]: registration.price,
       [dictionary.general.quota]: registration.strapiRoleUuid,
       [dictionary.pages_admin.picked_up ?? 'Picked up']: registration.pickedUp
-        ? dictionary.general.yes ?? 'Yes'
-        : dictionary.general.no ?? 'No',
+        ? (dictionary.general.yes ?? 'Yes')
+        : (dictionary.general.no ?? 'No'),
     } as Record<string, string>;
 
     return {

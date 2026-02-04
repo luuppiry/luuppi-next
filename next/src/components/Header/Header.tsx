@@ -25,7 +25,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
       <header className="fixed top-0 z-50 w-full bg-primary-800 text-white dark:bg-primary-200">
         <nav
           className={
-            'custom-scroll-nav h-24 bg-primary-500 dark:bg-[#5c61a3]  px-4 transition-all duration-300 max-xl:h-16 max-xl:shadow-md'
+            'custom-scroll-nav h-24 bg-primary-500 px-4 transition-all duration-300 max-xl:h-16 max-xl:shadow-md dark:bg-[#5c61a3]'
           }
         >
           <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between">

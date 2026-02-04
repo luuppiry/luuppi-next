@@ -60,8 +60,8 @@ export default function AdminUserGeneral({
         )}
         {Boolean(
           formResponse.isError &&
-            formResponse.message &&
-            formResponse.field !== '',
+          formResponse.message &&
+          formResponse.field !== '',
         ) && (
           <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
             <BiErrorCircle size={24} />
@@ -70,8 +70,8 @@ export default function AdminUserGeneral({
         )}
         {Boolean(
           !formResponse.isError &&
-            formResponse.message &&
-            formResponse.field !== '',
+          formResponse.message &&
+          formResponse.field !== '',
         ) && (
           <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
             {formResponse.message}

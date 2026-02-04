@@ -30,35 +30,33 @@ export default async function RenderEvents({
 
   const upcomingEvents = visibleEventsData.map((e) => ({
     ...e,
-    isToday:
-      new Date(e.attributes.StartDate).toDateString() ===
-      new Date().toDateString(),
+    isToday: new Date(e.StartDate).toDateString() === new Date().toDateString(),
   }));
 
-  const formattedEvents = upcomingEvents.map(({ id, attributes }) => {
+  const formattedEvents = upcomingEvents.map((e) => {
     const isEnglish = lang === 'en';
     const description = getPlainText(
-      isEnglish ? attributes.DescriptionEn : attributes.DescriptionFi,
+      isEnglish ? e.DescriptionEn : e.DescriptionFi,
     );
-    const location = isEnglish ? attributes.LocationEn : attributes.LocationFi;
-    const title = isEnglish ? attributes.NameEn : attributes.NameFi;
+    const location = isEnglish ? e.LocationEn : e.LocationFi;
+    const title = isEnglish ? e.NameEn : e.NameFi;
 
     const image =
-      isEnglish && attributes.ImageEn?.data?.attributes?.url
-        ? getStrapiUrl(attributes.ImageEn.data.attributes.url)
-        : attributes.Image?.data?.attributes?.url
-          ? getStrapiUrl(attributes.Image.data.attributes.url)
+      isEnglish && e.ImageEn?.url
+        ? getStrapiUrl(e.ImageEn.url)
+        : e.Image?.url
+          ? getStrapiUrl(e.Image.url)
           : eventPlaceholder;
 
     return {
-      id: id.toString(),
+      id: e.id.toString(),
       description,
       location,
       title,
       image,
-      start: new Date(attributes.StartDate),
-      end: new Date(attributes.EndDate),
-      hasTickets: Boolean(attributes.Registration?.TicketTypes.length),
+      start: new Date(e.StartDate),
+      end: new Date(e.EndDate),
+      hasTickets: Boolean(e.Registration?.TicketTypes.length),
     };
   });
 
@@ -67,7 +65,7 @@ export default async function RenderEvents({
       {formattedEvents.slice(0, 4).map((event, i) => (
         <Link
           key={i}
-          className="group relative flex flex-col rounded-lg bg-primary-800 dark:bg-primary-200 text-white"
+          className="group relative flex flex-col rounded-lg bg-primary-800 text-white dark:bg-primary-200"
           href={`/${lang}/events/${event.id}`}
         >
           <DayBadge dictionary={dictionary} event={event} />
@@ -85,7 +83,7 @@ export default async function RenderEvents({
             <p className="z-20 text-sm font-bold">
               {new Date(event.start).toLocaleString(lang, dateFormat)}
             </p>
-            <p className="z-20 line-clamp-3 text-lg font-bold text-accent-400 dark:text-accent-600 transition-all duration-300 group-hover:underline max-md:text-base">
+            <p className="z-20 line-clamp-3 text-lg font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-base dark:text-accent-600">
               {event.title}
             </p>
             <div className="z-20 flex items-center">

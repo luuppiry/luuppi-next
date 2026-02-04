@@ -58,8 +58,8 @@ export default function ProfileUserInfoForm({
       )}
       {Boolean(
         formResponse.isError &&
-          formResponse.message &&
-          formResponse.field !== '',
+        formResponse.message &&
+        formResponse.field !== '',
       ) && (
         <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
           <BiErrorCircle size={24} />
@@ -68,8 +68,8 @@ export default function ProfileUserInfoForm({
       )}
       {Boolean(
         !formResponse.isError &&
-          formResponse.message &&
-          formResponse.field !== '',
+        formResponse.message &&
+        formResponse.field !== '',
       ) && (
         <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
           {formResponse.message}
@@ -153,48 +153,48 @@ export default function ProfileUserInfoForm({
         value={user.preferredFullName ?? ''}
         onChange={() => setFormResponse(initialState)}
       />
-          <FormInput
-            error={formResponse.field === 'domicle' ? formResponse.message : ''}
-            id="domicle"
-            labelTopRight={
-              <span
-                className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
-                data-tip={dictionary.pages_profile.domicle_explanation}
-              >
-                <FaQuestion size={12} />
-              </span>
-            }
-            marginTop={false}
-            placeholder={dictionary.general.domicle}
-            required={isLuuppiMember}
-            title={dictionary.general.domicle}
-            type="text"
-            value={user.domicle ?? ''}
-            onChange={() => setFormResponse(initialState)}
-          />
-          <FormSelect
-            id="major"
-            labelTopRight={
-              <span
-                className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
-                data-tip={dictionary.pages_profile.major_explanation}
-              >
-                <FaQuestion size={12} />
-              </span>
-            }
-            marginTop={false}
-            options={Object.keys(dictionary.pages_profile.majors).map((m) => ({
-              value: m.toUpperCase(),
-              label:
-                dictionary.pages_profile.majors[
-                  m as keyof typeof dictionary.pages_profile.majors
-                ],
-            }))}
-            required={true}
-            title={dictionary.general.major}
-            value={user.major}
-            onChange={() => setFormResponse(initialState)}
-          />
+      <FormInput
+        error={formResponse.field === 'domicle' ? formResponse.message : ''}
+        id="domicle"
+        labelTopRight={
+          <span
+            className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
+            data-tip={dictionary.pages_profile.domicle_explanation}
+          >
+            <FaQuestion size={12} />
+          </span>
+        }
+        marginTop={false}
+        placeholder={dictionary.general.domicle}
+        required={isLuuppiMember}
+        title={dictionary.general.domicle}
+        type="text"
+        value={user.domicle ?? ''}
+        onChange={() => setFormResponse(initialState)}
+      />
+      <FormSelect
+        id="major"
+        labelTopRight={
+          <span
+            className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
+            data-tip={dictionary.pages_profile.major_explanation}
+          >
+            <FaQuestion size={12} />
+          </span>
+        }
+        marginTop={false}
+        options={Object.keys(dictionary.pages_profile.majors).map((m) => ({
+          value: m.toUpperCase(),
+          label:
+            dictionary.pages_profile.majors[
+              m as keyof typeof dictionary.pages_profile.majors
+            ],
+        }))}
+        required={true}
+        title={dictionary.general.major}
+        value={user.major}
+        onChange={() => setFormResponse(initialState)}
+      />
       <div>
         <SubmitButton text={dictionary.general.submit} />
       </div>

@@ -10,7 +10,7 @@ export async function togglePickupStatus(
   lang: SupportedLanguage,
   registrationIdOrCode: string,
   pickedUp: boolean,
-  eventId: number
+  eventId: number,
 ) {
   const dictionary = await getDictionary(lang);
 
@@ -64,7 +64,8 @@ export async function togglePickupStatus(
 
     if (!isValidPickupCode(code)) {
       return {
-        message: dictionary.api.invalid_pickup_code ?? 'Invalid pickup code format',
+        message:
+          dictionary.api.invalid_pickup_code ?? 'Invalid pickup code format',
         isError: true,
       };
     }
@@ -77,8 +78,8 @@ export async function togglePickupStatus(
     };
   } else {
     return {
-        message: dictionary.api.invalid_message,
-        isError: true,
+      message: dictionary.api.invalid_message,
+      isError: true,
     };
   }
 
@@ -103,7 +104,8 @@ export async function togglePickupStatus(
 
     if (!registration) {
       return {
-        message: dictionary.api.registration_not_found ?? 'Registration not found',
+        message:
+          dictionary.api.registration_not_found ?? 'Registration not found',
         isError: true,
       };
     }
@@ -125,7 +127,8 @@ export async function togglePickupStatus(
       },
     });
 
-    const eventName = lang === 'fi' ? registration.event.nameFi : registration.event.nameEn;
+    const eventName =
+      lang === 'fi' ? registration.event.nameFi : registration.event.nameEn;
 
     return {
       message: dictionary.general.success,

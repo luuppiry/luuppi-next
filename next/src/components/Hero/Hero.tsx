@@ -73,7 +73,7 @@ export default function Hero({ dictionary, lang }: HeroProps) {
           />
         </div>
       </div>
-      <div className="absolute left-0 top-1/3 -z-10 h-96 w-96 rounded-full bg-[#d4e1fc] dark:bg-background-300  bg-gradient-to-r blur-[200px]" />
+      <div className="absolute left-0 top-1/3 -z-10 h-96 w-96 rounded-full bg-[#d4e1fc] bg-gradient-to-r blur-[200px] dark:bg-background-300" />
       <div className="luuppi-pattern absolute -left-48 top-0 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:top-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </section>
   );

@@ -46,7 +46,7 @@ export default async function LuuppiSanomatPublication(
         <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
           <h1>
             {dictionary.general.meeting_minute}{' '}
-            {new Date(selectedPublication.attributes?.meetingDate)
+            {new Date(selectedPublication?.meetingDate)
               .toLocaleDateString(params.lang, {
                 day: 'numeric',
                 month: 'short',
@@ -64,7 +64,7 @@ export default async function LuuppiSanomatPublication(
     <article className="relative flex flex-col gap-12">
       <h1>
         {dictionary.general.meeting_minute}{' '}
-        {new Date(selectedPublication.attributes?.meetingDate)
+        {new Date(selectedPublication?.meetingDate)
           .toLocaleDateString(params.lang, {
             day: 'numeric',
             month: 'short',
@@ -75,9 +75,7 @@ export default async function LuuppiSanomatPublication(
       <div className="h-full overflow-x-hidden">
         <PdfViewer
           dictionary={dictionary}
-          pdfUrl={getStrapiUrl(
-            selectedPublication.attributes.pdf?.data.attributes.url,
-          )}
+          pdfUrl={getStrapiUrl(selectedPublication.pdf?.url)}
         />
       </div>
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
@@ -100,7 +98,7 @@ export async function generateMetadata(
   const pathname = `/${params.lang}/organization/meeting-minutes/${params.slug}`;
 
   // No version of the content exists in the requested language
-  if (!selectedPublication?.attributes?.Seo?.id) {
+  if (!selectedPublication.Seo?.id) {
     return {};
   }
 
