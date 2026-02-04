@@ -9,7 +9,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import QuestionProvider from '@/providers/QuestionProvider';
-import { APIResponse } from '@/types/types';
+import { APIResponseCollection } from '@/types/types';
 import { Payment, PaymentStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
@@ -125,25 +125,21 @@ export default async function OwnEvents(props: OwnEventsProps) {
 
   const upcomingEventQuestions = await Promise.all(
     uniqueUpcomingEventIds.map(async (eventId) => {
-      const url = `/api/events/${eventId}?populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
+      const url = `/api/events?filters[id][$eq]=${eventId}?populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
 
-      const event = await getStrapiData<APIResponse<'api::event.event'>>(
-        params.lang,
-        url,
-        [`event-${eventId}`],
-        true,
-      );
+      const events = await getStrapiData<
+        APIResponseCollection<'api::event.event'>
+      >(params.lang, url, [`event-${eventId}`], true);
+
+      const event = events?.data.at(0);
 
       return {
         eventId,
-        text: event?.data?.attributes.Registration?.QuestionsText ?? [],
-        select: event?.data?.attributes.Registration?.QuestionsSelect ?? [],
-        checkbox: event?.data?.attributes.Registration?.QuestionsCheckbox ?? [],
-        answerableUntil: event?.data?.attributes.Registration
-          ?.AllowQuestionEditUntil
-          ? new Date(
-              event?.data?.attributes.Registration?.AllowQuestionEditUntil,
-            )
+        text: event?.Registration?.QuestionsText ?? [],
+        select: event?.Registration?.QuestionsSelect ?? [],
+        checkbox: event?.Registration?.QuestionsCheckbox ?? [],
+        answerableUntil: event?.Registration?.AllowQuestionEditUntil
+          ? new Date(event?.Registration?.AllowQuestionEditUntil)
           : null,
       };
     }),

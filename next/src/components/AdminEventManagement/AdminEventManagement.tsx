@@ -6,7 +6,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { APIResponse } from '@/types/types';
+import { APIResponseCollection } from '@/types/types';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { PiEye } from 'react-icons/pi';
@@ -84,26 +84,28 @@ export default async function AdminEventManagement({
 
   // Fetch Strapi data for all events to get RequiresPickup field
   const eventIds = eventData.map((event) => event.eventId);
-  const strapiEventsPromises = eventIds.map((eventId) =>
-    getStrapiData<APIResponse<'api::event.event'>>(
-      lang,
-      `/api/events/${eventId}?populate=Registration`,
-      [`event-${eventId}`],
-      true,
-    ),
+  const strapiEventsResponse = await getStrapiData<
+    APIResponseCollection<'api::event.event'>
+  >(
+    lang,
+    `/api/events?filters[id][$in]=${eventIds.join(',')}&populate=Registration`,
+    eventIds.map((id) => `event-${id}`),
+    true,
   );
-  const strapiEvents = await Promise.all(strapiEventsPromises);
   const strapiEventsMap = new Map(
-    strapiEvents
-      .filter((event) => event)
-      .map((event) => [event!.data.id, event!.data.attributes.Registration]),
+    strapiEventsResponse?.data?.map((event) => [
+      event.id,
+      event.Registration,
+    ]) ?? [],
   );
 
   // For search results, don't filter by registrations count
   const eventLanguageFormatted = eventData
     .filter((event) => searchTerm || event.registrations.length)
     .map((event) => {
-      const strapiRegistration = strapiEventsMap.get(event.eventId) as { RequiresPickup?: boolean } | undefined;
+      const strapiRegistration = strapiEventsMap.get(event.eventId) as
+        | { RequiresPickup?: boolean }
+        | undefined;
       const requiresPickup = strapiRegistration?.RequiresPickup ?? false;
       return {
         id: event.id,
@@ -184,7 +186,7 @@ export default async function AdminEventManagement({
                     <div className="flex items-end justify-end gap-1">
                       <Link
                         aria-label={dictionary.general.view}
-                        className="btn btn-primary btn-circle btn-ghost btn-sm"
+                        className="btn btn-circle btn-ghost btn-primary btn-sm"
                         href={`/${lang}/admin/event/${event.eventId}`}
                       >
                         <PiEye

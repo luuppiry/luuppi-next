@@ -46,7 +46,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
 
   const latestYear =
     allDocuments.length > 0
-      ? new Date(allDocuments[0].attributes.meetingDate).getFullYear()
+      ? new Date(allDocuments[0].meetingDate).getFullYear()
       : new Date().getFullYear();
 
   const yearParam = Array.isArray(searchParams.year)
@@ -58,7 +58,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
   const years = Array.from(
     new Set(
       allDocuments
-        .map((doc) => new Date(doc.attributes.meetingDate).getFullYear())
+        .map((doc) => new Date(doc.meetingDate).getFullYear())
         .filter((year) => !isNaN(year)),
     ),
   ).sort((a, b) => b - a);
@@ -69,7 +69,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
       : latestYear;
 
   const filteredDocuments = allDocuments.filter((doc) => {
-    const year = new Date(doc.attributes.meetingDate).getFullYear();
+    const year = new Date(doc.meetingDate).getFullYear();
     return year === selectedYear;
   });
 
@@ -82,7 +82,11 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
           {dictionary.navigation.meeting_minutes} {selectedYear}
         </h1>
         <div className="dropdown sm:dropdown-end">
-          <div className="btn m-1 dark:border-primary-500 dark:hover:border-primary-400" role="button" tabIndex={0}>
+          <div
+            className="btn m-1 dark:border-primary-500 dark:hover:border-primary-400"
+            role="button"
+            tabIndex={0}
+          >
             {dictionary.pages_meeting_minutes_year.other_meeting_minutes_years}
           </div>
           <ul
@@ -108,25 +112,23 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
             href={`/${params.lang}/organization/meeting-minutes/${publication.id}`}
           >
-            {publication.attributes.image?.data?.attributes?.url && (
+            {publication.image?.url && (
               <div className="relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
                 <Image
                   alt={`${dictionary.navigation.meeting_minutes} cover`}
                   className="h-full w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
-                  src={getStrapiUrl(
-                    publication.attributes.image.data.attributes.url,
-                  )}
+                  src={getStrapiUrl(publication.image.url)}
                   fill
                 />
               </div>
             )}
             <div className="absolute bottom-0 right-0 z-20 rounded-br-lg rounded-tl-lg bg-accent-400 px-2 py-1 font-bold text-white">
               {(() => {
-                const date = new Date(publication.attributes?.meetingDate);
+                const date = new Date(publication?.meetingDate);
                 const day = String(date.getDate()).padStart(2, '0');
                 const month = String(date.getMonth() + 1).padStart(2, '0');
                 const year = date.getFullYear();
-                return `${day}.${month}.${year} | ${publication.attributes?.shortMeetingName ?? ''}`;
+                return `${day}.${month}.${year} | ${publication?.shortMeetingName ?? ''}`;
               })()}
             </div>
             <div className="absolute bottom-0 z-10 h-full w-full rounded-lg bg-gradient-to-t from-black to-transparent opacity-25" />

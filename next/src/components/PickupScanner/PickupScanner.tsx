@@ -20,7 +20,10 @@ export default function PickupScanner({
   const [showScanner, setShowScanner] = useState(false);
   const [manualCode, setManualCode] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null);
+  const [message, setMessage] = useState<{
+    text: string;
+    isError: boolean;
+  } | null>(null);
   const [scanMode, setScanMode] = useState<'camera' | 'manual'>('manual');
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -32,7 +35,12 @@ export default function PickupScanner({
     setLoading(true);
     setMessage(null);
 
-    const result = await togglePickupStatus(lang, manualCode.toUpperCase().trim(), true, eventId);
+    const result = await togglePickupStatus(
+      lang,
+      manualCode.toUpperCase().trim(),
+      true,
+      eventId,
+    );
 
     if (result.isError) {
       setMessage({ text: result.message, isError: true });
@@ -62,7 +70,8 @@ export default function PickupScanner({
       setScanMode('camera');
     } catch (_error) {
       setMessage({
-        text: dictionary.pages_admin.camera_not_available ?? 'Camera not available',
+        text:
+          dictionary.pages_admin.camera_not_available ?? 'Camera not available',
         isError: true,
       });
     }

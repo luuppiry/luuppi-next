@@ -15,7 +15,7 @@ interface TicketProps {
     price: number;
     registrationStartsAt: Date;
     registrationEndsAt: Date;
-    role: string | undefined;
+    role: string | undefined | null;
     maxTicketsPerUser: number;
   };
   eventId: number;

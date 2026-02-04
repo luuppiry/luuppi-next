@@ -75,7 +75,19 @@ export async function getStrapiData<T>(
     return data as T;
   } catch (error) {
     if (ignoreError) return null;
-    logger.error('Error fetching data from Strapi', error);
-    throw new Error('Failed to fetch data from Strapi');
+
+    logger.error('Error fetching data from Strapi', {
+      error: error instanceof Error ? error.message : String(error),
+      errorType: error?.constructor?.name,
+      cause: error instanceof Error ? error.cause : undefined,
+      stack: error instanceof Error ? error.stack : undefined,
+      url: getStrapiUrl(`${url}${url.includes('?') ? '&' : '?'}locale=${lang}`),
+      strapiBaseUrl: process.env.NEXT_PUBLIC_STRAPI_BASE_URL,
+      hasApiKey: !!process.env.STRAPI_API_KEY,
+    });
+
+    throw new Error(
+      `Failed to fetch data from Strapi: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }

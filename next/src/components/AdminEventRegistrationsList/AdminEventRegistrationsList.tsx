@@ -23,7 +23,8 @@ function parseEventExportCsv(input: string): ParsedExport {
 
   // Find the first completely empty line -> metadata ends there.
   const firstBlankIdx = lines.findIndex((l) => l.trim() === '');
-  const metadataLines = firstBlankIdx === -1 ? [] : lines.slice(0, firstBlankIdx);
+  const metadataLines =
+    firstBlankIdx === -1 ? [] : lines.slice(0, firstBlankIdx);
 
   // Skip blank lines after metadata to find CSV header line index
   let csvStart = firstBlankIdx === -1 ? 0 : firstBlankIdx;
@@ -165,7 +166,7 @@ export default function AdminEventRegistrationsList({
         setData(parsed);
       } catch (e: any) {
         if (!cancelled) {
-          setError(e?.message ?? (dictionary.general.error ?? 'Error'));
+          setError(e?.message ?? dictionary.general.error ?? 'Error');
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -181,22 +182,24 @@ export default function AdminEventRegistrationsList({
     const r = data?.rows ?? [];
     const emailKey = dictionary.general.email.toUpperCase();
 
-    return [...r].sort((a, b) => (a[emailKey] ?? '').localeCompare(b[emailKey] ?? ''));
+    return [...r].sort((a, b) =>
+      (a[emailKey] ?? '').localeCompare(b[emailKey] ?? ''),
+    );
   }, [data?.rows, dictionary.general.email]);
 
   const baseKeys = React.useMemo(
     () =>
-    new Set([
-      dictionary.general.created_at.toUpperCase(),
-      dictionary.general.username.toUpperCase(),
-      dictionary.general.email.toUpperCase(),
-      dictionary.general.firstNames.toUpperCase(),
-      dictionary.general.lastName.toUpperCase(),
-      dictionary.general.preferredFullName.toUpperCase(),
-      dictionary.general.paid.toUpperCase(),
-      dictionary.general.quota.toUpperCase(),
-      (dictionary.pages_admin.picked_up ?? 'Picked up').toUpperCase(),
-    ]),
+      new Set([
+        dictionary.general.created_at.toUpperCase(),
+        dictionary.general.username.toUpperCase(),
+        dictionary.general.email.toUpperCase(),
+        dictionary.general.firstNames.toUpperCase(),
+        dictionary.general.lastName.toUpperCase(),
+        dictionary.general.preferredFullName.toUpperCase(),
+        dictionary.general.paid.toUpperCase(),
+        dictionary.general.quota.toUpperCase(),
+        (dictionary.pages_admin.picked_up ?? 'Picked up').toUpperCase(),
+      ]),
     [dictionary],
   );
 
@@ -211,10 +214,13 @@ export default function AdminEventRegistrationsList({
 
   const pickedUpCount = React.useMemo(() => {
     if (!requiresPickup) return 0;
-    const pickedUpKey = (dictionary.pages_admin.picked_up ?? 'Picked up').toUpperCase();
+    const pickedUpKey = (
+      dictionary.pages_admin.picked_up ?? 'Picked up'
+    ).toUpperCase();
     const yes = (dictionary.general.yes ?? 'Yes').toLowerCase();
 
-    return rows.filter((r) => (r[pickedUpKey] ?? '').toLowerCase() === yes).length;
+    return rows.filter((r) => (r[pickedUpKey] ?? '').toLowerCase() === yes)
+      .length;
   }, [dictionary, requiresPickup, rows]);
 
   if (loading) {
@@ -246,7 +252,9 @@ export default function AdminEventRegistrationsList({
   const emailKey = dictionary.general.email.toUpperCase();
   const firstNamesKey = dictionary.general.firstNames.toUpperCase();
   const lastNameKey = dictionary.general.lastName.toUpperCase();
-  const pickedUpKey = (dictionary.pages_admin.picked_up ?? 'Picked up').toUpperCase();
+  const pickedUpKey = (
+    dictionary.pages_admin.picked_up ?? 'Picked up'
+  ).toUpperCase();
   const yes = (dictionary.general.yes ?? 'Yes').toLowerCase();
 
   const answerKeys = (data?.headers ?? []).filter((h) => !baseKeys.has(h));
@@ -254,12 +262,15 @@ export default function AdminEventRegistrationsList({
   return (
     <div className="card card-body bg-base-100 text-base-content">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold">{dictionary.general.registrations}</h2>
+        <h2 className="text-lg font-semibold">
+          {dictionary.general.registrations}
+        </h2>
 
         {requiresPickup && (
           <div className="flex gap-2">
             <span className="badge badge-primary">
-              {dictionary.pages_admin.picked_up}: {pickedUpCount} / {rows.length}
+              {dictionary.pages_admin.picked_up}: {pickedUpCount} /{' '}
+              {rows.length}
             </span>
           </div>
         )}
@@ -274,11 +285,15 @@ export default function AdminEventRegistrationsList({
               <th>{dictionary.general.firstNames}</th>
               <th>{dictionary.general.lastName}</th>
 
-              {hasAnswers && <th>{dictionary.pages_admin.registration_answers}</th>}
+              {hasAnswers && (
+                <th>{dictionary.pages_admin.registration_answers}</th>
+              )}
 
               {requiresPickup && (
                 <th>
-                  <span className="flex justify-center">{dictionary.pages_admin.picked_up}</span>
+                  <span className="flex justify-center">
+                    {dictionary.pages_admin.picked_up}
+                  </span>
                 </th>
               )}
             </tr>
@@ -328,7 +343,9 @@ export default function AdminEventRegistrationsList({
                             ))}
                           </div>
                         ) : (
-                          <span className="text-sm text-base-content/50">–</span>
+                          <span className="text-sm text-base-content/50">
+                            –
+                          </span>
                         )}
                       </td>
                     )}
@@ -338,7 +355,10 @@ export default function AdminEventRegistrationsList({
                           {pickedUp ? (
                             <PiCheckCircle className="text-success" size={20} />
                           ) : (
-                            <PiCircle className="text-base-content/40" size={20} />
+                            <PiCircle
+                              className="text-base-content/40"
+                              size={20}
+                            />
                           )}
                         </div>
                       </td>

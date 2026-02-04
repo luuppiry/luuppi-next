@@ -38,16 +38,16 @@ export default async function Board(props: BoardProps) {
   );
   const latestBoard = boardGroupedByYear[boardSortedByYear[0]];
   const otherBoards = boardSortedByYear.filter(
-    (year) => parseInt(year, 10) !== latestBoard.attributes.year,
+    (year) => parseInt(year, 10) !== latestBoard.year,
   );
 
   const boardLanguageFlipped = flipBoardLocale(params.lang, latestBoard);
 
   const boardMembers = boardLanguageFlipped.filter(
-    (member: any) => member.attributes.isBoardMember === true,
+    (member: any) => member.isBoardMember === true,
   );
   const officials = boardLanguageFlipped.filter(
-    (member: any) => member.attributes.isBoardMember === false,
+    (member: any) => member.isBoardMember === false,
   );
 
   const boardMembersJsonLd = boardMembers.map((member: any) =>
@@ -64,11 +64,15 @@ export default async function Board(props: BoardProps) {
       <div className="relative flex flex-col gap-12">
         <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
           <h1>
-            {dictionary.navigation.board} {latestBoard.attributes.year}
+            {dictionary.navigation.board} {latestBoard.year}
           </h1>
           {Boolean(otherBoards.length) && (
             <div className="dropdown sm:dropdown-end">
-              <div className="btn m-1 dark:border-primary-500 dark:hover:border-primary-400" role="button" tabIndex={0}>
+              <div
+                className="btn m-1 dark:border-primary-500 dark:hover:border-primary-400"
+                role="button"
+                tabIndex={0}
+              >
                 {dictionary.pages_board.other_boards}
               </div>
               <ul
@@ -95,7 +99,7 @@ export default async function Board(props: BoardProps) {
               <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-y-12 lg:grid-cols-4">
                 {boardMembers.map((member: any) => (
                   <BoardMember
-                    key={member.attributes.createdAt}
+                    key={member.createdAt}
                     dictionary={dictionary}
                     member={member}
                     showEmail={true}
@@ -114,7 +118,7 @@ export default async function Board(props: BoardProps) {
               <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-y-12 lg:grid-cols-4">
                 {officials.map((member: any) => (
                   <BoardMember
-                    key={member.attributes.createdAt}
+                    key={member.createdAt}
                     dictionary={dictionary}
                     member={member}
                     showEmail={true}
@@ -151,8 +155,8 @@ export async function generateMetadata(props: BoardProps): Promise<Metadata> {
   const pathname = `/${params.lang}/organization/board`;
 
   return {
-    title: `${dictionary.navigation.board} ${latestBoard.attributes.year} | Luuppi ry`,
-    description: `${dictionary.pages_board.seo_description} ${latestBoard.attributes.year}`,
+    title: `${dictionary.navigation.board} ${latestBoard.year} | Luuppi ry`,
+    description: `${dictionary.pages_board.seo_description} ${latestBoard.year}`,
     alternates: {
       canonical: pathname,
       languages: {
@@ -161,14 +165,14 @@ export async function generateMetadata(props: BoardProps): Promise<Metadata> {
       },
     },
     openGraph: {
-      title: `${dictionary.navigation.board} ${latestBoard.attributes.year}`,
-      description: `${dictionary.pages_board.seo_description} ${latestBoard.attributes.year}`,
+      title: `${dictionary.navigation.board} ${latestBoard.year}`,
+      description: `${dictionary.pages_board.seo_description} ${latestBoard.year}`,
       url: pathname,
       siteName: 'Luuppi ry',
     },
     twitter: {
-      title: `${dictionary.navigation.board} ${latestBoard.attributes.year}`,
-      description: `${dictionary.pages_board.seo_description} ${latestBoard.attributes.year}`,
+      title: `${dictionary.navigation.board} ${latestBoard.year}`,
+      description: `${dictionary.pages_board.seo_description} ${latestBoard.year}`,
     },
   };
 }
