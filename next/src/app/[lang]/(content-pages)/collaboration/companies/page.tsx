@@ -64,7 +64,7 @@ export default async function CollaborationCompanies(
                   />
                   <Image
                     alt="Company logo"
-                    className={`"hidden dark:block" rounded-lg object-contain max-md:w-44 ${
+                    className={`hidden dark:block rounded-lg object-contain max-md:w-44 ${
                       company.attributes.logoDark
                         ? ''
                         : 'dark:drop-shadow-[0_0_.5px_white]'
