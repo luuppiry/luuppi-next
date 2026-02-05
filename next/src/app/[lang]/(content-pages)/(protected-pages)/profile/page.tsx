@@ -14,6 +14,15 @@ interface ProfileProps {
   params: Promise<{ lang: SupportedLanguage }>;
 }
 
+const mailman = {
+  auth:
+    'Basic ' +
+    Buffer.from(
+      `${process.env.MAILMAN_USER}:${process.env.MAILMAN_PASSWORD}`,
+    ).toString('base64'),
+  baseUrl: `http://${process.env.MAILMAN_HOSTNAME}:${process.env.MAILMAN_PORT}`,
+};
+
 export default async function Profile(props: ProfileProps) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
@@ -23,6 +32,22 @@ export default async function Profile(props: ProfileProps) {
     logger.error('Error getting user');
     redirect(`/${params.lang}`);
   }
+
+  const subscribed = await fetch(
+    `${mailman.baseUrl}/3.1/members/find?subscriber=${session.user.email}&list_id=loop.luuppi.fi`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: mailman.auth,
+      },
+    },
+  )
+    .then(async (res) => {
+      if (!res.ok) return false;
+      const data = await res.json();
+      return data?.total_size > 0;
+    })
+    .catch(() => false);
 
   const localUser = await prisma.user.findFirst({
     where: {
@@ -99,8 +124,7 @@ export default async function Profile(props: ProfileProps) {
         )}
         <ProfileNotificationsForm
           dictionary={dictionary}
-          lang={params.lang}
-          user={localUser}
+          subscribed={subscribed}
         />
       </div>
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />

@@ -179,7 +179,9 @@
     "dark": "Dark"
   },
   "mail_list": {
-    "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi"
+    "loop": "LOOP: Events, partner announcements, and academic matters related to Luuppi",
+    "subscribed": "You've been added to the LOOP mail list",
+    "unsubscribed": "You've been removed from the LOOP mail list"
   },
   "auth": {
     "login_to_account": "Login to your account",

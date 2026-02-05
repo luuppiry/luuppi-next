@@ -179,7 +179,9 @@
     "dark": "Tumma"
   },
   "mail_list": {
-    "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat"
+    "loop": "LOOP: Luupin tapahtumat, yhteistyötahojen ilmoitukset, opiskeluasiat",
+    "subscribed": "Sinut on lisätty LOOP-sähköpostilistalle",
+    "unsubscribed": "Sinut on poistettu LOOP-sähköpostilistalta"
   },
   "auth": {
     "login_to_account": "Kirjaudu sisään",

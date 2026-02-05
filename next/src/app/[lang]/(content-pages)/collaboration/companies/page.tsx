@@ -3,11 +3,7 @@ import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
-import {
-  APIResponse,
-  APIResponseCollection,
-  APIResponseData,
-} from '@/types/types';
+import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
