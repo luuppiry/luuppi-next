@@ -30,22 +30,13 @@ export default async function CollaborationCompanies(
     APIResponseCollection<'api::company.company'>
   >(params.lang, url, tags);
 
-  const getLogos = (company: APIResponseData<'api::company.company'>) => {
-    const lightLogo = company.logo;
-    const darkLogo = company.logoDark ?? lightLogo;
-
-    return {
-      light: getStrapiUrl(lightLogo?.url),
-      dark: getStrapiUrl(darkLogo?.url),
-    };
-  };
-
   return (
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.companies}</h1>
       <div className="flex flex-col gap-8">
         {pageData.data.map((company) => {
-          const logos = getLogos(company);
+          const light = getStrapiUrl(company.logo.url);
+          const dark = getStrapiUrl((company.logoDark ?? company.logo).url);
 
           return (
             <div
@@ -59,18 +50,18 @@ export default async function CollaborationCompanies(
                     alt="Company logo"
                     className="rounded-lg object-contain max-md:w-44 dark:hidden"
                     height={100}
-                    src={logos.light}
+                    src={light}
                     width={300}
                   />
                   <Image
                     alt="Company logo"
-                    className={`hidden dark:block rounded-lg object-contain max-md:w-44 ${
+                    className={`hidden rounded-lg object-contain max-md:w-44 dark:block ${
                       company.logoDark
                         ? ''
                         : 'dark:drop-shadow-[0_0_.5px_white]'
                     }`}
                     height={100}
-                    src={logos.dark}
+                    src={dark}
                     width={300}
                   />
 

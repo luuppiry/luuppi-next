@@ -43,7 +43,7 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
             href={`/${params.lang}/luuppi-sanomat/${publication.id}`}
           >
-            {publication.image?.url && (
+            {publication.image.url && (
               <div
                 className={
                   'relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300'
@@ -52,7 +52,7 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
                 <Image
                   alt={`${dictionary.navigation.sanomat} cover`}
                   className="h-full w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
-                  src={getStrapiUrl(publication.image?.url)}
+                  src={getStrapiUrl(publication.image.url)}
                   fill
                 />
               </div>

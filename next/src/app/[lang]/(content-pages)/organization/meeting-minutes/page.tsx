@@ -112,7 +112,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
             href={`/${params.lang}/organization/meeting-minutes/${publication.id}`}
           >
-            {publication.image?.url && (
+            {publication.image.url && (
               <div className="relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
                 <Image
                   alt={`${dictionary.navigation.meeting_minutes} cover`}

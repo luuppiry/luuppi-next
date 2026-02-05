@@ -30,6 +30,15 @@ type GetValues<TSchemaUID extends UID.Schema> = {
     Omit<TValues, InvalidKeys<TSchemaUID>>
   : never;
 
+type MediaValue<TAttribute extends Schema.Attribute.Attribute> =
+  TAttribute extends Schema.Attribute.Media<infer _TKind, infer TMultiple>
+    ? Utils.If<
+        TMultiple,
+        APIResponseData<'plugin::upload.file'>[],
+        APIResponseData<'plugin::upload.file'>
+      >
+    : never;
+
 // Helper type to process component values with proper required handling
 type GetComponentValue<TAttribute extends Schema.Attribute.Attribute> =
   TAttribute extends Schema.Attribute.Component<
@@ -65,7 +74,7 @@ type GetValue<TAttribute extends Schema.Attribute.Attribute> = Utils.If<
       // Media
       [
         Utils.Extends<TAttribute, Schema.Attribute.OfType<'media'>>,
-        Schema.Attribute.GetMediaValue<TAttribute>,
+        MediaValue<TAttribute>,
       ],
 
       // Fallback
