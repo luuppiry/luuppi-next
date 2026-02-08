@@ -314,7 +314,7 @@
     "redeem_tickets": "Redeem ticket",
     "registration_starts": "Registration starts",
     "registration_ends": "Sales end",
-    "registration_ends_explanation": "Estimate of when sales will end for your quota. If you are in multiple quotas, the last one to close is shown. The event organizer reserves the right to make changes.",
+    "registration_ends_explanation": "Estimate of when sales will end for your quota. The event organizer reserves the right to make changes.",
     "tickets": "Tickets",
     "login_required": "You must be logged in to register for events.",
     "quota_info": "There are several ticket quotas for the event. Only the quota you belong to is shown as available to you.",

@@ -228,7 +228,7 @@ export default async function Event(props: EventProps) {
                     </p>
 
                     <span
-                      className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
+                      className="tooltip tooltip-left flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
                       data-tip={
                         dictionary.pages_events.registration_ends_explanation
                       }

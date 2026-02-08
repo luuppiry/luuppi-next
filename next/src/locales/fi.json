@@ -314,7 +314,7 @@
     "redeem_tickets": "Lunasta lippu",
     "registration_starts": "Myynti alkaa",
     "registration_ends": "Myynti sulkeutuu",
-    "registration_ends_explanation": "Arvio myynnin loppumisesta kiintiöllesi. Jos olet useassa kiintiössä, näytetään viimeisenä sulkeutuva. Tapahtuman järjestäjä pidättää oikeuden muutoksiin.",
+    "registration_ends_explanation": "Arvio myynnin loppumisesta kiintiöllesi. Tapahtuman järjestäjä pidättää oikeuden muutoksiin.",
     "tickets": "Lipunmyynti",
     "login_required": "Sinun täytyy kirjautua sisään ostaaksesi lippuja.",
     "quota_info": "Tapahtumassa on useita lippukiintiöitä. Sinulle näytetään saatavilla olevana vain kiintiö johon kuulut.",
