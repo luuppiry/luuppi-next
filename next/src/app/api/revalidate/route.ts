@@ -23,6 +23,11 @@ export async function POST(request: NextRequest) {
     revalidateTag(model);
 
     if (model === 'event') {
+      // Discard update to a draft, in Strapi 5 all published entries (visible on the website) have publishedAt
+      if (!body.entry?.publishedAt) {
+        return new Response('OK');
+      }
+
       logger.info(`Revalidating event-${body.entry.id}`);
 
       if (!body.entry?.id) {
@@ -74,7 +79,7 @@ function createRole(roleId: string) {
   });
 }
 
-function createEvent({
+async function createEvent({
   NameFi,
   NameEn,
   LocationFi,
@@ -91,6 +96,38 @@ function createEvent({
   EndDate: string;
   id: number;
 }) {
+  // FIXME: Legacy compabibility layer for Strapi 4 -> 5 migration where IDs may change.
+  // `documentId` should be used in the future since it's the stable identifier now.
+  const existingEvent = await prisma.event.findFirst({
+    where: {
+      nameEn: NameEn,
+      startDate: StartDate,
+      locationFi: LocationFi,
+    },
+  });
+
+  if (existingEvent && existingEvent.eventId !== id) {
+    // Event exists but with a different strapi ID
+    logger.info(
+      `Migrating event "${NameEn}" from old Strapi ID ${existingEvent.eventId} to new ID ${id}`,
+    );
+
+    return prisma.event.update({
+      where: {
+        id: existingEvent.id,
+      },
+      data: {
+        eventId: id,
+        endDate: EndDate,
+        locationEn: LocationEn,
+        locationFi: LocationFi,
+        nameEn: NameEn,
+        nameFi: NameFi,
+        startDate: StartDate,
+      },
+    });
+  }
+
   return prisma.event.upsert({
     where: {
       eventId: id,
