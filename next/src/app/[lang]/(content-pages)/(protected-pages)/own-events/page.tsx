@@ -125,7 +125,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
 
   const upcomingEventQuestions = await Promise.all(
     uniqueUpcomingEventIds.map(async (eventId) => {
-      const url = `/api/events?filters[id][$eq]=${eventId}?populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
+      const url = `/api/events?filters[id][$eq]=${eventId}&populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
 
       const events = await getStrapiData<
         APIResponseCollection<'api::event.event'>

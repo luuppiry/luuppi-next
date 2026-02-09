@@ -98,7 +98,7 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
     };
   }
 
-  const url = `/api/events?filters[id][$eq]=${event.eventId}&populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox`;
+  const url = `/api/events?filters[id][$eq]=${event.eventId}&populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
 
   const strapiEvents = await getStrapiData<
     APIResponseCollection<'api::event.event'>

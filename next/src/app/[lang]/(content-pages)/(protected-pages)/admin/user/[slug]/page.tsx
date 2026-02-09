@@ -98,7 +98,7 @@ export default async function Page(props: {
   }
 
   const url =
-    '/api/events?pagination[limit]=9999&sort[0]=createdAt:desc&populate=Registration.TicketTypes.Role&populate=Registration.QuestionsText&populate=Registration.QuestionsSelect&populate=Registration.QuestionsCheckbox';
+    '/api/events?pagination[limit]=9999&sort[0]=createdAt:desc&populate[Registration][populate][0]=TicketTypes&populate[Registration][populate][1]=QuestionsText&populate[Registration][populate][2]=QuestionsSelect&populate[Registration][populate][3]=QuestionsCheckbox&populate[Registration][TicketTypes][populate][0]=Role';
   const strapiEventData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
   >('fi', url, ['events'], true);
