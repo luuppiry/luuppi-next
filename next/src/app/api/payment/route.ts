@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     }
 
     const eventId = payment.registration?.[0]?.event?.eventId;
-    const strapiUrl = `/api/events?filters[id][$eq]=${eventId}?populate=Registration.RoleToGive`;
+    const strapiUrl = `/api/events?filters[id][$eq]=${eventId}&populate=Registration.RoleToGive`;
     const strapiEvents = await getStrapiData<
       APIResponseCollection<'api::event.event'>
     >(
