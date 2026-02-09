@@ -1,6 +1,6 @@
 services:
   prisma:
-    image: node:latest
+    image: node:22.22-alpine
     env_file: .env
     working_dir: /app
     environment:
