@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     revalidateTag(model);
 
     if (model === 'event') {
-      // Discard update to a draft, in Strapi 5 all published entries (visible on the website) have publishedAt
+      // FIXME: Discard update to a draft, in Strapi 5 all published entries (visible on the website) have publishedAt
       if (!body.entry?.publishedAt) {
         return new Response('OK');
       }
@@ -37,8 +37,16 @@ export async function POST(request: NextRequest) {
 
       revalidateTag(`event-${body.entry.id}`);
 
-      const { NameFi, NameEn, LocationFi, LocationEn, StartDate, EndDate, id } =
-        body.entry;
+      const {
+        NameFi,
+        NameEn,
+        LocationFi,
+        LocationEn,
+        StartDate,
+        EndDate,
+        id,
+        documentId,
+      } = body.entry;
 
       await createEvent({
         NameFi,
@@ -48,6 +56,7 @@ export async function POST(request: NextRequest) {
         StartDate,
         EndDate,
         id,
+        documentId,
       });
     }
 
@@ -87,6 +96,7 @@ async function createEvent({
   StartDate,
   EndDate,
   id,
+  documentId,
 }: {
   NameFi: string;
   NameEn: string;
@@ -95,14 +105,20 @@ async function createEvent({
   StartDate: string;
   EndDate: string;
   id: number;
+  documentId: string;
 }) {
   // FIXME: Legacy compabibility layer for Strapi 4 -> 5 migration where IDs may change.
   // `documentId` should be used in the future since it's the stable identifier now.
   const existingEvent = await prisma.event.findFirst({
     where: {
-      nameEn: NameEn,
-      startDate: StartDate,
-      locationFi: LocationFi,
+      OR: [
+        {
+          nameEn: NameEn,
+          startDate: StartDate,
+          locationFi: LocationFi,
+        },
+        { eventDocumentId: documentId },
+      ],
     },
   });
 
@@ -117,6 +133,7 @@ async function createEvent({
         id: existingEvent.id,
       },
       data: {
+        eventDocumentId: documentId,
         eventId: id,
         endDate: EndDate,
         locationEn: LocationEn,
@@ -130,9 +147,11 @@ async function createEvent({
 
   return prisma.event.upsert({
     where: {
+      // FIXME: use `eventDocumentId: documentId`
       eventId: id,
     },
     create: {
+      eventDocumentId: documentId,
       endDate: EndDate,
       eventId: id,
       locationEn: LocationEn,
@@ -142,6 +161,7 @@ async function createEvent({
       startDate: StartDate,
     },
     update: {
+      eventDocumentId: documentId,
       endDate: EndDate,
       locationEn: LocationEn,
       locationFi: LocationFi,

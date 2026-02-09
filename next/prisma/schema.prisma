@@ -96,13 +96,16 @@ model EventRegistration {
   /// User's EntraID UUID
   entraUserUuid    String
   user             User      @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
-  /// Strapi Event ID
-  eventId          Int
-  event            Event     @relation(fields: [eventId], references: [eventId])
+  /// Strapi Event ID (legacy Strapi 4)
+  eventId          Int?
+  /// Strapi Event Document ID (Strapi 5)
+  eventDocumentId  String?
+  event            Event?    @relation(fields: [eventId], references: [eventId])
   payments         Payment[]
   answers          Answer[]
 
   @@index([eventId])
+  @@index([eventDocumentId])
   @@index([eventId, deletedAt, paymentCompleted])
   @@index([entraUserUuid, eventId])
   @@index([pickupCode])
@@ -137,18 +140,20 @@ model Payment {
 // User to store some event metadata "locally" so
 // we don't have to fetch it from Strapi every time.
 model Event {
-  id            Int                 @id @default(autoincrement())
-  /// Strapi Event ID
-  eventId       Int                 @unique
-  nameEn        String
-  nameFi        String
-  startDate     DateTime
-  endDate       DateTime
-  locationEn    String
-  locationFi    String
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
-  registrations EventRegistration[]
+  id              Int                 @id @default(autoincrement())
+  /// Strapi Event ID (legacy Strapi 4)
+  eventId         Int?                @unique
+  /// Strapi Event Document ID (Strapi 5)
+  eventDocumentId String?             @unique
+  nameEn          String
+  nameFi          String
+  startDate       DateTime
+  endDate         DateTime
+  locationEn      String
+  locationFi      String
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  registrations   EventRegistration[]
 }
 
 enum PaymentStatus {
