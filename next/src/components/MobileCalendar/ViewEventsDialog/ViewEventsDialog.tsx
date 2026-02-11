@@ -36,7 +36,7 @@ export default function ViewEventsDialog({
               <Link
                 key={event.id}
                 className="mb-4 block rounded-lg bg-background-50 p-4"
-                href={`/${lang}/events/${event.id}`}
+                href={`/${lang}/events/${event.slug ?? event.id}`}
               >
                 <h3 className="text-lg font-bold">{event.title}</h3>
                 <h4>{formatDateRangeShort(event.start, event.end, lang)} </h4>

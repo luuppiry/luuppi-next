@@ -70,7 +70,7 @@ export default function EventsList({
                   event.title
                 }
                 className="flex gap-4 rounded-lg bg-background-50 transition-all delay-300 ease-in-out"
-                href={`/${lang}/events/${event.id}`}
+                href={`/${lang}/events/${event.slug ?? event.id}`}
                 id={event.start.toDateString() + event.title}
               >
                 <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />

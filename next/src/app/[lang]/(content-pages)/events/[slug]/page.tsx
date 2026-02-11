@@ -46,7 +46,8 @@ export default async function Event(props: EventProps) {
     redirect(`/${params.lang}/404`);
   }
 
-  const url = `/api/events?filters[id][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+  const prop = process.env.NEXT_PUBLIC_SLUG_MIGRATION_DONE ? 'Slug' : 'id';
+  const url = `/api/events?filters[${prop}][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,

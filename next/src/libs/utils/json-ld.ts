@@ -67,7 +67,7 @@ export const getEventJsonLd = (
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: event.data[lang === 'en' ? 'NameEn' : 'NameFi'],
-    url: `https://luuppi.fi/${lang}/events/${event.data.id}`,
+    url: `https://luuppi.fi/${lang}/events/${event.data.Slug ?? event.data.id}`,
     startDate: new Date(event.data.StartDate).toISOString(),
     endDate: new Date(event.data.EndDate).toISOString(),
     description: description.slice(0, 300),
@@ -83,7 +83,7 @@ export const getEventJsonLd = (
       name: lang === 'en' ? ticket.NameEn : ticket.NameFi,
       price: ticket.Price,
       priceCurrency: 'EUR',
-      url: `https://luuppi.fi/${lang}/events/${event.data.id}`,
+      url: `https://luuppi.fi/${lang}/events/${event.data.Slug ?? event.data.id}`,
       validFrom: new Date(event.data.StartDate).toISOString(),
       seller: {
         '@type': 'Organization',
@@ -155,9 +155,7 @@ export const getBoardMemberJsonLd = (
     '@type': 'Person',
     name: member?.fullName,
     email: member.boardRoles!.map((role) => role.email!),
-    image: member!.image?.url
-      ? getStrapiUrl(member?.image.url)
-      : undefined,
+    image: member!.image?.url ? getStrapiUrl(member?.image.url) : undefined,
     jobTitle: member.boardRoles!.map((role) => role.title!),
     worksFor: {
       '@type': 'Organization',

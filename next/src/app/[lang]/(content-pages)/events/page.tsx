@@ -43,6 +43,7 @@ export default async function Events(props: EventsProps) {
     description: getPlainText(
       event[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
     ),
+    slug: event.Slug,
     end: new Date(event.EndDate),
     start: new Date(event.StartDate),
     id: event.id.toString(),

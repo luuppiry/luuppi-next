@@ -25,7 +25,8 @@
     "react-router-dom": "^6.0.0",
     "strapi-middleware-upload-plugin-cache": "^2.1.0",
     "strapi-plugin-required-relation-field": "^0.3.1",
-    "styled-components": "^6.0.0"
+    "styled-components": "^6.0.0",
+    "@sindresorhus/slugify": "^3.0.0"
   },
   "engines": {
     "node": ">=18.0.0 <=20.x.x"

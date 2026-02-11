@@ -6,4 +6,5 @@ export interface Event {
   end: Date;
   location: string;
   hasTickets: boolean;
+  slug?: string
 }
