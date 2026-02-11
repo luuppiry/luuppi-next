@@ -25,6 +25,7 @@ interface TicketProps {
   disabled?: boolean;
   isOwnQuota?: boolean;
   targetedRole?: string;
+  eventDocumentId: string
 }
 
 export default function Ticket({
@@ -35,6 +36,7 @@ export default function Ticket({
   disabled = false,
   isOwnQuota = false,
   eventId,
+  eventDocumentId,
   targetedRole,
 }: TicketProps) {
   const [amount, setAmount] = useState(1);
@@ -75,6 +77,7 @@ export default function Ticket({
     try {
       setLoading(true);
       const res = await reservationCreate(
+        eventDocumentId,
         eventId,
         amount,
         lang,

@@ -15,6 +15,7 @@ const options = {
 };
 
 export async function reservationCreate(
+  eventDocumentId: string,
   eventId: number,
   amount: number,
   lang: SupportedLanguage,
@@ -321,6 +322,7 @@ export async function reservationCreate(
         const eventRegistrationsFormattedWithPickupCode = Array.from({
           length: amount,
         }).map(() => ({
+          eventDocumentId,
           eventId,
           entraUserUuid,
           strapiRoleUuid,
@@ -336,6 +338,7 @@ export async function reservationCreate(
       } else {
         const eventRegistrationsFormatted = Array.from({ length: amount }).map(
           () => ({
+            eventDocumentId,
             eventId,
             entraUserUuid,
             strapiRoleUuid,

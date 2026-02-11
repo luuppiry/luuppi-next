@@ -2,6 +2,7 @@ import type { Schema, UID, Utils } from '@strapi/strapi';
 
 interface IDProperty {
   id: number;
+  documentId: string
 }
 
 type InvalidKeys<TSchemaUID extends UID.Schema> = Utils.Object.KeysBy<
