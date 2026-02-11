@@ -41,11 +41,6 @@ export default async function Event(props: EventProps) {
   const dictionary = await getDictionary(params.lang);
   const session = await auth();
 
-  const id = parseInt(params.slug, 10);
-  if (isNaN(id)) {
-    redirect(`/${params.lang}/404`);
-  }
-
   const prop = process.env.NEXT_PUBLIC_SLUG_MIGRATION_DONE ? 'Slug' : 'id';
   const url = `/api/events?filters[${prop}][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
@@ -299,7 +294,7 @@ export default async function Event(props: EventProps) {
                   </div>
                 }
               >
-                <ShowParticipants eventId={id} lang={params.lang} />
+                <ShowParticipants eventId={event.id} lang={params.lang} />
               </Suspense>
             </div>
           )}
