@@ -6,7 +6,7 @@ import prisma from '@/libs/db/prisma';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -50,14 +50,11 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
     redirect('/api/auth/force-signout');
   }
 
-  const eventId = parseInt(params.id);
-  if (isNaN(eventId)) {
-    redirect(`/${params.lang}/admin?mode=event`);
-  }
+  const eventId = params.id;
 
   const event = await prisma.event.findUnique({
     where: {
-      eventId: eventId,
+      eventDocumentId: eventId,
     },
     include: {
       registrations: {
@@ -81,22 +78,18 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
   }
 
   // Fetch Strapi event data to get RequiresPickup field
-  const strapiEvents = await getStrapiData<
-    APIResponseCollection<'api::event.event'>
-  >(
+  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
     params.lang,
-    `/api/events?filters[id][$eq]=${eventId}&populate=Registration`,
+    `/api/events/${eventId}?populate=Registration`,
     [`event-${eventId}`],
     true,
   );
 
-  const strapiEvent = strapiEvents?.data.at(0);
-
-  if (!strapiEvent) {
+  if (!strapiEvent?.data) {
     return redirect(`/${params.lang}/404`);
   }
 
-  const requiresPickup = strapiEvent?.Registration?.RequiresPickup ?? false;
+  const requiresPickup = strapiEvent.data.Registration?.RequiresPickup ?? false;
   const eventName = params.lang === 'fi' ? event.nameFi : event.nameEn;
 
   return (

@@ -83,12 +83,12 @@ export default async function AdminEventManagement({
   });
 
   // Fetch Strapi data for all events to get RequiresPickup field
-  const eventIds = eventData.map((event) => event.eventId);
+  const eventIds = eventData.map((event) => event.eventDocumentId);
   const strapiEventsResponse = await getStrapiData<
     APIResponseCollection<'api::event.event'>
   >(
     lang,
-    `/api/events?filters[id][$in]=${eventIds.join(',')}&populate=Registration`,
+    `/api/events?filters[documentId][$in]=${eventIds.join(',')}&populate=Registration`,
     eventIds.map((id) => `event-${id}`),
     true,
   );
@@ -109,6 +109,7 @@ export default async function AdminEventManagement({
       const requiresPickup = strapiRegistration?.RequiresPickup ?? false;
       return {
         id: event.id,
+        eventDocumentId: event.eventDocumentId,
         eventId: event.eventId,
         name: lang === 'fi' ? event.nameFi : event.nameEn,
         startDate: new Date(event.startDate),
@@ -156,7 +157,7 @@ export default async function AdminEventManagement({
                   <td className="truncate">
                     <Link
                       className="link"
-                      href={`/admin/event/${event.eventId}`}
+                      href={`/admin/event/${event.eventDocumentId}`}
                     >
                       {event.name}
                     </Link>
@@ -187,7 +188,7 @@ export default async function AdminEventManagement({
                       <Link
                         aria-label={dictionary.general.view}
                         className="btn btn-circle btn-ghost btn-primary btn-sm"
-                        href={`/${lang}/admin/event/${event.eventId}`}
+                        href={`/${lang}/admin/event/${event.eventDocumentId}`}
                       >
                         <PiEye
                           className="text-gray-800 dark:text-background-950"
