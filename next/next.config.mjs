@@ -1,19 +1,11 @@
-/** @type {{[id: number]: string}} */
-let redirects = {};
-
-try {
-  // FIXME: add directly to source control after redirects have been generated -- this solution is temporary
-  redirects = await fetch(
-    `${NEXT_PUBLIC_STRAPI_BASE_URL}/uploads/strapi4-redirects.json`,
-  ).then((res) => res.json());
-} catch {}
+import redirects from './strapi4-redirects.json' with { type: 'json' };
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
   poweredByHeader: false,
   env: {
-    NEXT_PUBLIC_SLUG_MIGRATION_DONE: Object.keys(redirects).length,
+    NEXT_PUBLIC_SLUG_MIGRATION_DONE: 'true',
   },
   images: {
     remotePatterns: [
