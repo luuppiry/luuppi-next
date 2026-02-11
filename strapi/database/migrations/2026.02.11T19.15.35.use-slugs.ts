@@ -2,18 +2,13 @@ import slugify from "@sindresorhus/slugify";
 import fs from "node:fs/promises";
 
 // Updates all published events' slug from NameEn + optional running number when needed
-// Creates a public/strapi4-redirects.json file that must be used to 308 redirect old urls to their new URLs
+// Creates a strapi4-redirects.json file that must be used to 308 redirect old urls to their new URLs
 //
 // IMPORTANT! Document API does not trigger webhooks, so every event needs to be republished via the admin panel to sync database ids
 
 const redirects = {};
 
 export async function up() {
-  throw new TypeError(
-    `Needs to have slug field -- Strapi runs migrations before contentType changes 
-     (which for reasons is also not configurable?) so this would fail and prevent the contentType change`,
-  );
-
   const events = await strapi.documents("api::event.event").findMany({
     status: "published",
     limit: 9999,

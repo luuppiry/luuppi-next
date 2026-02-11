@@ -100,8 +100,6 @@ export default ({ env }) => {
     },
     settings: {
       useTypescriptMigrations: true,
-      // Skip migrations in the /database/migrations directory
-      runMigrations: false,
     },
   };
 };
