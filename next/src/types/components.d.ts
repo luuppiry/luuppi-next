@@ -111,6 +111,9 @@ export interface EventsRegistration extends Struct.ComponentSchema {
   };
   attributes: {
     AllowQuestionEditUntil: Schema.Attribute.DateTime;
+    JointQuota: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     QuestionsCheckbox: Schema.Attribute.Component<
       'events.questions-checkbox',
       true
@@ -126,6 +129,15 @@ export interface EventsRegistration extends Struct.ComponentSchema {
       'oneToOne',
       'api::event-role.event-role'
     >;
+    TicketsTotal: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<1>;
     TicketTypes: Schema.Attribute.Component<'events.quotas', true> &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
