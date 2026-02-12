@@ -5,7 +5,7 @@ import prisma from '@/libs/db/prisma';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponse, APIResponseCollection } from '@/types/types';
+import { APIResponse } from '@/types/types';
 import { redirect } from 'next/navigation';
 
 export async function reservationQuestionSubmit(

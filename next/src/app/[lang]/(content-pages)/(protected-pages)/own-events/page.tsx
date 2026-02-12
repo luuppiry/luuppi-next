@@ -9,7 +9,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import QuestionProvider from '@/providers/QuestionProvider';
-import { APIResponse, APIResponseCollection } from '@/types/types';
+import { APIResponse } from '@/types/types';
 import { Payment, PaymentStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
@@ -254,7 +254,9 @@ export default async function OwnEvents(props: OwnEventsProps) {
                     answers={getAnswersForReservation(registration.id)}
                     dictionary={dictionary}
                     lang={params.lang}
-                    questions={getQuestionsForEvent(registration.eventDocumentId)}
+                    questions={getQuestionsForEvent(
+                      registration.eventDocumentId,
+                    )}
                     registration={registration}
                   />
                 ))}
@@ -283,7 +285,9 @@ export default async function OwnEvents(props: OwnEventsProps) {
                       answers={getAnswersForReservation(registration.id)}
                       dictionary={dictionary}
                       lang={params.lang}
-                      questions={getQuestionsForEvent(registration.eventDocumentId)}
+                      questions={getQuestionsForEvent(
+                        registration.eventDocumentId,
+                      )}
                       registration={registration}
                     />
                   ))}

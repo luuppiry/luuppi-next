@@ -52,8 +52,6 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
 
   const eventDocumentId = params.id;
 
-  console.log(eventDocumentId);
-
   const event = await prisma.event.findUnique({
     where: {
       eventDocumentId,

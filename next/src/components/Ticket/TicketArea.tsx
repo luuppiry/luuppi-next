@@ -311,7 +311,6 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
               dictionary={dictionary}
               disabled={disabled}
               eventDocumentId={event.data.documentId}
-              eventId={event.data.id}
               eventStartsAt={new Date(event.data.StartDate)}
               isOwnQuota={isOwnQuota(ticket.role!)}
               lang={lang}
