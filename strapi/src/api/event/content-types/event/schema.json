@@ -36,9 +36,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "Registration": {
       "type": "component",
@@ -61,26 +59,17 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "Alcohol": {
       "type": "enumeration",
       "required": false,
-      "enum": [
-        "no_alcohol",
-        "some_alcohol",
-        "full_alcohol"
-      ]
+      "enum": ["no_alcohol", "some_alcohol", "full_alcohol"]
     },
     "FuksiPoints": {
       "type": "enumeration",
       "required": false,
-      "enum": [
-        "fuksi_points_true",
-        "fuksi_points_false"
-      ]
+      "enum": ["fuksi_points_true", "fuksi_points_false"]
     },
     "ShowInCalendar": {
       "type": "boolean",
@@ -95,7 +84,9 @@
     "Slug": {
       "type": "uid",
       "targetField": "NameEn",
-      "required": false
+      "required": true,
+      "minLength": 3,
+      "regex": "^[A-Za-z]+(-[A-Za-z0-9]+)*$"
     }
   }
 }

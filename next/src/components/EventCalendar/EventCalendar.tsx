@@ -38,7 +38,7 @@ export default function EventCalendar({
   );
 
   const handleEventClick: CalendarListeners['eventClick'] = (e) => {
-    const eventUrl = `/${lang}/events/${events.find((event) => event.id === e.event.id)?.slug ?? e.event.id}`;
+    const eventUrl = `/${lang}/events/${events.find((event) => event.id === e.event.id)?.slug}`;
 
     if (e.jsEvent.metaKey || e.jsEvent.ctrlKey) {
       window.open(eventUrl, '_blank');

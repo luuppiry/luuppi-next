@@ -111,14 +111,7 @@ async function createEvent({
   // `documentId` should be used in the future since it's the stable identifier now.
   const existingEvent = await prisma.event.findFirst({
     where: {
-      OR: [
-        {
-          nameEn: NameEn,
-          startDate: StartDate,
-          locationFi: LocationFi,
-        },
-        { eventDocumentId: documentId },
-      ],
+      eventDocumentId: documentId,
     },
   });
 
@@ -147,8 +140,7 @@ async function createEvent({
 
   return prisma.event.upsert({
     where: {
-      // FIXME: use `eventDocumentId: documentId`
-      eventId: id,
+      eventDocumentId: documentId,
     },
     create: {
       eventDocumentId: documentId,

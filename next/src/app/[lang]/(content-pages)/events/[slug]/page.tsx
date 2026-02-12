@@ -41,8 +41,7 @@ export default async function Event(props: EventProps) {
   const dictionary = await getDictionary(params.lang);
   const session = await auth();
 
-  const prop = process.env.NEXT_PUBLIC_SLUG_MIGRATION_DONE ? 'Slug' : 'id';
-  const url = `/api/events?filters[${prop}][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+  const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,

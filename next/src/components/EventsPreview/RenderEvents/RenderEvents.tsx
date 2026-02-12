@@ -67,7 +67,7 @@ export default async function RenderEvents({
         <Link
           key={i}
           className="group relative flex flex-col rounded-lg bg-primary-800 text-white dark:bg-primary-200"
-          href={`/${lang}/events/${event.slug ?? event.id}`}
+          href={`/${lang}/events/${event.slug}`}
         >
           <DayBadge dictionary={dictionary} event={event} />
           <div className="relative aspect-[7/5] overflow-hidden rounded-t-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:aspect-video max-sm:aspect-[7/3]">

@@ -4,9 +4,6 @@ import redirects from './strapi4-redirects.json' with { type: 'json' };
 const nextConfig = {
   output: 'standalone',
   poweredByHeader: false,
-  env: {
-    NEXT_PUBLIC_SLUG_MIGRATION_DONE: 'true',
-  },
   images: {
     remotePatterns: [
       {
@@ -26,9 +23,9 @@ const nextConfig = {
     ],
   },
   redirects: async () => {
-    return Object.keys(redirects).map((key) => ({
-      source: `/:lang*/events/${key}`,
-      destination: `/:lang*/events/${redirects[key]}`,
+    return Object.entries(redirects).map(([id, slug]) => ({
+      source: `/:lang*/events/${id}`,
+      destination: `/:lang*/events/${slug}`,
       permanent: true,
     }));
   },
