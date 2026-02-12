@@ -79,7 +79,17 @@
     "VisibleOnlyForRoles": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::event-role.event-role"
+      "target": "api::event-role.event-role",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "ShowInCalendar"
+            },
+            false
+          ]
+        }
+      }
     },
     "Slug": {
       "type": "uid",
