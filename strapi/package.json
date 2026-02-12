@@ -14,10 +14,12 @@
     "strapi": "strapi"
   },
   "dependencies": {
+    "@sindresorhus/slugify": "^3.0.0",
     "@strapi/plugin-users-permissions": "5.35.0",
     "@strapi/provider-email-nodemailer": "^5.35.0",
     "@strapi/strapi": "5.35.0",
     "@strapi/typescript-utils": "^5.35.0",
+    "@strapi/utils": "^5.36.0",
     "better-sqlite3": "^11.3.0",
     "pg": "8.13.0",
     "react": "^18.0.0",
@@ -25,8 +27,7 @@
     "react-router-dom": "^6.0.0",
     "strapi-middleware-upload-plugin-cache": "^2.1.0",
     "strapi-plugin-required-relation-field": "^0.3.1",
-    "styled-components": "^6.0.0",
-    "@sindresorhus/slugify": "^3.0.0"
+    "styled-components": "^6.0.0"
   },
   "engines": {
     "node": ">=18.0.0 <=20.x.x"
