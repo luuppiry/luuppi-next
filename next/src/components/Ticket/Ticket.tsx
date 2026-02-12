@@ -78,7 +78,6 @@ export default function Ticket({
       setLoading(true);
       const res = await reservationCreate(
         eventDocumentId,
-        eventId,
         amount,
         lang,
         ticket.role!,

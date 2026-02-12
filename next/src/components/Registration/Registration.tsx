@@ -25,7 +25,7 @@ interface RegistrationProps {
   };
   questions: {
     answerableUntil: Date | null;
-    eventId: number;
+    eventDocumentId: string;
     text: any[];
     select: any[];
     checkbox: any[];

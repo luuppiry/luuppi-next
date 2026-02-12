@@ -3,7 +3,7 @@ import { sendEventReceiptEmail } from '@/libs/emails/send-event-verify';
 import { checkReturn } from '@/libs/payments/check-return';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse } from '@/types/types';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -80,18 +80,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const eventId = payment.registration?.[0]?.event?.eventId;
-    const strapiUrl = `/api/events?filters[id][$eq]=${eventId}&populate=Registration.RoleToGive`;
-    const strapiEvents = await getStrapiData<
-      APIResponseCollection<'api::event.event'>
-    >(
+    const eventDocumentId = payment.registration?.[0]?.event?.eventDocumentId;
+    const strapiUrl = `/api/events/${eventDocumentId}?populate=Registration.RoleToGive`;
+    const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>(
       'fi', // Does not matter here. We only need the role to give.
       strapiUrl,
-      [`event-${eventId}`],
+      [`event-${eventDocumentId}`],
       true,
     );
 
-    const strapiEvent = strapiEvents?.data.at(0);
+    const strapiEvent = strapiEvents?.data;
 
     const roleToGive = strapiEvent?.Registration?.RoleToGive?.RoleId;
 
@@ -102,7 +100,7 @@ export async function POST(request: NextRequest) {
 
     if (roleToGive && !illegalRoles.includes(roleToGive)) {
       logger.info(
-        `Event ${eventId} has role to give ${roleToGive}. Giving role to user ${entraUserUuid}`,
+        `Event ${eventDocumentId} has role to give ${roleToGive}. Giving role to user ${entraUserUuid}`,
       );
 
       await prisma.rolesOnUsers.upsert({

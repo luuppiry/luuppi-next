@@ -7,12 +7,12 @@ import ShowParticipantsModal from './ShowParticipantsDialog/ShowParticipantsDial
 export const revalidate = 60; // revalidate the data at most every 60 seconds
 
 interface ShowParticipantsProps {
-  eventId: number;
+  eventDocumentId: string;
   lang: SupportedLanguage;
 }
 
 export default async function ShowParticipants({
-  eventId,
+  eventDocumentId,
   lang,
 }: ShowParticipantsProps) {
   // FIXME: Somewhat hacky way to not require database connection during build
@@ -21,7 +21,7 @@ export default async function ShowParticipants({
   }
 
   const dictionary = await getDictionary(lang);
-  const registrations = await getCachedEventParticipants(eventId);
+  const registrations = await getCachedEventParticipants(eventDocumentId);
   const participants = registrations.map(
     (registration) => registration.user.username ?? '???',
   );

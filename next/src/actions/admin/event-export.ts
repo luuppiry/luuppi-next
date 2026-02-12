@@ -7,7 +7,7 @@ import { getSelectChoice } from '@/libs/strapi/get-select-choice';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse, APIResponseCollection } from '@/types/types';
 
 function escapeCsvField(field: any): string {
   if (field === null || field === undefined) return '""';
@@ -98,13 +98,16 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
     };
   }
 
-  const url = `/api/events?filters[id][$eq]=${event.eventId}&populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
+  const url = `/api/events/${event.eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
 
-  const strapiEvents = await getStrapiData<
-    APIResponseCollection<'api::event.event'>
-  >(lang, url, [`event-${eventId}`], true);
+  const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>(
+    lang,
+    url,
+    [`event-${eventId}`],
+    true,
+  );
 
-  const strapiEvent = strapiEvents?.data.at(0);
+  const strapiEvent = strapiEvents?.data;
 
   if (!strapiEvent) {
     return {

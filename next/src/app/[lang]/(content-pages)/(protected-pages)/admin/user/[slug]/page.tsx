@@ -28,7 +28,7 @@ export interface UserWithRegistrations {
   }[];
   registrations: {
     id: number;
-    eventId: number;
+    eventDocumentId: string;
     eventName: string | undefined;
     paymentCompleted: boolean;
     reservedUntil: Date | null;
@@ -98,10 +98,10 @@ export default async function Page(props: {
   }
 
   const url =
-    '/api/events?pagination[limit]=9999&sort[0]=createdAt:desc&populate[Registration][populate][0]=TicketTypes&populate[Registration][populate][1]=QuestionsText&populate[Registration][populate][2]=QuestionsSelect&populate[Registration][populate][3]=QuestionsCheckbox&populate[Registration][TicketTypes][populate][0]=Role';
+    '/api/events?pagination[limit]=9999&sort[0]=createdAt:desc&populate[Registration][populate][TicketTypes][populate][0]=Role&populate[Registration][populate][QuestionsText]=true&populate[Registration][populate][QuestionsSelect]=true&populate[Registration][populate][QuestionsCheckbox]=true';
   const strapiEventData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
-  >('fi', url, ['events'], true);
+  >('fi', url, ['events'], false);
 
   if (!strapiEventData) {
     redirect(`/${lang}/admin?mode=user`);
@@ -109,7 +109,7 @@ export default async function Page(props: {
 
   const registrationsFormatted = user.registrations.map((registration) => {
     const event = strapiEventData.data.find(
-      (event) => event.id === registration.eventId,
+      (event) => event.documentId === registration.eventDocumentId,
     );
 
     const ticketType = event?.Registration?.TicketTypes.find(
@@ -118,7 +118,7 @@ export default async function Page(props: {
 
     return {
       id: registration.id,
-      eventId: registration.eventId,
+      eventDocumentId: registration.eventDocumentId,
       eventName: lang === 'en' ? event?.NameEn : event?.NameFi,
       paymentCompleted: registration.paymentCompleted,
       reservedUntil: registration.reservedUntil,

@@ -7,14 +7,14 @@ import { PiCamera, PiKeyboard, PiX } from 'react-icons/pi';
 interface PickupScannerProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
-  eventId: number;
+  eventDocumentId: string;
   onSuccess?: () => void;
 }
 
 export default function PickupScanner({
   dictionary,
   lang,
-  eventId,
+  eventDocumentId,
   onSuccess,
 }: PickupScannerProps) {
   const [showScanner, setShowScanner] = useState(false);
@@ -39,7 +39,7 @@ export default function PickupScanner({
       lang,
       manualCode.toUpperCase().trim(),
       true,
-      eventId,
+      eventDocumentId,
     );
 
     if (result.isError) {

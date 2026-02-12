@@ -10,7 +10,7 @@ export async function togglePickupStatus(
   lang: SupportedLanguage,
   registrationIdOrCode: string,
   pickedUp: boolean,
-  eventId: number,
+  eventDocumentId: string,
 ) {
   const dictionary = await getDictionary(lang);
 
@@ -56,7 +56,7 @@ export async function togglePickupStatus(
     pickupCode?: string;
     deletedAt: null;
     paymentCompleted: true;
-    eventId: number;
+    eventDocumentId: string;
   };
 
   if (typeof registrationIdOrCode === 'string') {
@@ -74,7 +74,7 @@ export async function togglePickupStatus(
       pickupCode: code,
       deletedAt: null,
       paymentCompleted: true,
-      eventId: eventId,
+      eventDocumentId,
     };
   } else {
     return {

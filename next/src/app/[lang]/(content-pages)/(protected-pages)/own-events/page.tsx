@@ -9,7 +9,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import QuestionProvider from '@/providers/QuestionProvider';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Payment, PaymentStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
@@ -113,28 +113,31 @@ export default async function OwnEvents(props: OwnEventsProps) {
 
   await processPendingPayments();
 
-  const uniqueUpcomingEventIds = Array.from(
+  const uniqueUpcomingEventIds: string[] = Array.from(
     new Set(
       userEventRegistrations
         .filter(
           (registration) => new Date(registration.event.endDate) >= new Date(),
         )
-        .map((registration) => registration.eventId),
+        .map((registration) => registration.eventDocumentId),
     ),
   );
 
   const upcomingEventQuestions = await Promise.all(
-    uniqueUpcomingEventIds.map(async (eventId) => {
-      const url = `/api/events?filters[id][$eq]=${eventId}&populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
+    uniqueUpcomingEventIds.map(async (eventDocumentId) => {
+      const url = `/api/events/${eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
 
-      const events = await getStrapiData<
-        APIResponseCollection<'api::event.event'>
-      >(params.lang, url, [`event-${eventId}`], true);
+      const events = await getStrapiData<APIResponse<'api::event.event'>>(
+        params.lang,
+        url,
+        [`event-${eventDocumentId}`],
+        true,
+      );
 
-      const event = events?.data.at(0);
+      const event = events?.data;
 
       return {
-        eventId,
+        eventDocumentId,
         text: event?.Registration?.QuestionsText ?? [],
         select: event?.Registration?.QuestionsSelect ?? [],
         checkbox: event?.Registration?.QuestionsCheckbox ?? [],
@@ -157,7 +160,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
     paymentCompleted: registration.paymentCompleted,
     deletedAt: registration.deletedAt,
     id: registration.id,
-    eventId: registration.eventId,
+    eventDocumentId: registration.eventDocumentId,
     pickupCode: registration.pickupCode,
     pickedUp: registration.pickedUp,
   }));
@@ -177,14 +180,14 @@ export default async function OwnEvents(props: OwnEventsProps) {
 
   const isFreeTicket = !unpaidRegistrations.some((reg) => reg.price !== 0);
 
-  const getQuestionsForEvent = (eventId: number) =>
+  const getQuestionsForEvent = (eventDocumentId: string) =>
     upcomingEventQuestions.find(
-      (eventQuestions) => eventQuestions.eventId === eventId,
+      (eventQuestions) => eventQuestions.eventDocumentId === eventDocumentId,
     ) ?? {
       text: [],
       select: [],
       checkbox: [],
-      eventId,
+      eventDocumentId,
       answerableUntil: null,
     };
 
@@ -195,7 +198,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
 
   const unpaidRegistrationsHaveUnansweredQuestions = unpaidRegistrations.some(
     (registration) => {
-      const questions = getQuestionsForEvent(registration.eventId);
+      const questions = getQuestionsForEvent(registration.eventDocumentId);
       const answers = getAnswersForReservation(registration.id);
 
       const questionsCount =
@@ -251,7 +254,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
                     answers={getAnswersForReservation(registration.id)}
                     dictionary={dictionary}
                     lang={params.lang}
-                    questions={getQuestionsForEvent(registration.eventId)}
+                    questions={getQuestionsForEvent(registration.eventDocumentId)}
                     registration={registration}
                   />
                 ))}
@@ -280,7 +283,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
                       answers={getAnswersForReservation(registration.id)}
                       dictionary={dictionary}
                       lang={params.lang}
-                      questions={getQuestionsForEvent(registration.eventId)}
+                      questions={getQuestionsForEvent(registration.eventDocumentId)}
                       registration={registration}
                     />
                   ))}

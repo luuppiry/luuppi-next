@@ -5,7 +5,7 @@ import prisma from '@/libs/db/prisma';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse, APIResponseCollection } from '@/types/types';
 import { redirect } from 'next/navigation';
 
 export async function reservationQuestionSubmit(
@@ -41,16 +41,16 @@ export async function reservationQuestionSubmit(
     };
   }
 
-  const url = `/api/events?filters[id][$eq]=${registration.eventId}&populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
+  const url = `/api/events/${registration.eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
 
-  const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
+  const events = await getStrapiData<APIResponse<'api::event.event'>>(
     lang,
     url,
-    [`event-${registration.eventId}`],
+    [`event-${registration.eventDocumentId}`],
     true,
   );
 
-  const event = events?.data.at(0);
+  const event = events?.data;
 
   if (!event) {
     return {

@@ -50,11 +50,13 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
     redirect('/api/auth/force-signout');
   }
 
-  const eventId = params.id;
+  const eventDocumentId = params.id;
+
+  console.log(eventDocumentId);
 
   const event = await prisma.event.findUnique({
     where: {
-      eventDocumentId: eventId,
+      eventDocumentId,
     },
     include: {
       registrations: {
@@ -80,8 +82,8 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
   // Fetch Strapi event data to get RequiresPickup field
   const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
     params.lang,
-    `/api/events/${eventId}?populate=Registration`,
-    [`event-${eventId}`],
+    `/api/events/${eventDocumentId}?populate=Registration`,
+    [`event-${eventDocumentId}`],
     true,
   );
 
@@ -105,7 +107,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
         {requiresPickup && (
           <PickupScanner
             dictionary={dictionary}
-            eventId={event.eventId}
+            eventDocumentId={event.eventDocumentId}
             lang={params.lang}
           />
         )}

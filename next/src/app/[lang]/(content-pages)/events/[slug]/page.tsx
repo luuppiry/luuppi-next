@@ -76,7 +76,7 @@ export default async function Event(props: EventProps) {
     ? getCachedUser(session.user.entraUserUuid)
     : null;
 
-  const eventRegistrationsPromise = getCachedEventRegistrations(event.id);
+  const eventRegistrationsPromise = getCachedEventRegistrations(event.documentId);
 
   const [localUser, eventRegistrations] = await Promise.all([
     localUserPromise,
@@ -293,7 +293,10 @@ export default async function Event(props: EventProps) {
                   </div>
                 }
               >
-                <ShowParticipants eventId={event.id} lang={params.lang} />
+                <ShowParticipants
+                  eventDocumentId={event.documentId}
+                  lang={params.lang}
+                />
               </Suspense>
             </div>
           )}
