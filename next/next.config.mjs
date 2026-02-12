@@ -27,8 +27,8 @@ const nextConfig = {
   },
   redirects: async () => {
     return Object.keys(redirects).map((key) => ({
-      source: `/events/${key}`,
-      destination: `/events/${redirects[key]}`,
+      source: `/:lang*/events/${key}`,
+      destination: `/:lang*/events/${redirects[key]}`,
       permanent: true,
     }));
   },
