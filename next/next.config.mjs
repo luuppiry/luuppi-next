@@ -14,10 +14,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_STRAPI_BASE_URL.replace(
-          'https://',
-          '',
-        ),
+        hostname: new URL(process.env.NEXT_PUBLIC_STRAPI_BASE_URL).hostname,
         pathname: '/uploads/**',
       },
     ],

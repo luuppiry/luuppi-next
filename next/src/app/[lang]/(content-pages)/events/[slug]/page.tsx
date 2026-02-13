@@ -16,6 +16,7 @@ import { getEventJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
+import { draftMode } from 'next/headers';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import Script from 'next/script';
@@ -40,6 +41,7 @@ export default async function Event(props: EventProps) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   const session = await auth();
+  const { isEnabled: isDraftMode } = await draftMode();
 
   const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
@@ -48,6 +50,7 @@ export default async function Event(props: EventProps) {
     url,
     [`event-${params.slug}`],
     true,
+    isDraftMode,
   );
 
   const event = events?.data.at(0);
@@ -76,7 +79,9 @@ export default async function Event(props: EventProps) {
     ? getCachedUser(session.user.entraUserUuid)
     : null;
 
-  const eventRegistrationsPromise = getCachedEventRegistrations(event.documentId);
+  const eventRegistrationsPromise = getCachedEventRegistrations(
+    event.documentId,
+  );
 
   const [localUser, eventRegistrations] = await Promise.all([
     localUserPromise,
