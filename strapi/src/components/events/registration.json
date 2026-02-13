@@ -9,8 +9,8 @@
   "attributes": {
     "TicketTypes": {
       "type": "component",
-      "repeatable": true,
       "component": "events.quotas",
+      "repeatable": true,
       "required": true,
       "min": 1
     },
@@ -20,22 +20,19 @@
       "target": "api::event-role.event-role"
     },
     "QuestionsText": {
-      "displayName": "QuestionsText",
       "type": "component",
-      "repeatable": true,
-      "component": "events.questions-text"
+      "component": "events.questions-text",
+      "repeatable": true
     },
     "QuestionsSelect": {
-      "displayName": "QuestionsSelect",
       "type": "component",
-      "repeatable": true,
-      "component": "events.questions-select"
+      "component": "events.questions-select",
+      "repeatable": true
     },
     "QuestionsCheckbox": {
-      "displayName": "QuestionsCheckbox",
       "type": "component",
-      "repeatable": true,
-      "component": "events.questions-checkbox"
+      "component": "events.questions-checkbox",
+      "repeatable": true
     },
     "AllowQuestionEditUntil": {
       "type": "datetime",
@@ -43,8 +40,29 @@
     },
     "RequiresPickup": {
       "type": "boolean",
-      "default": false,
-      "required": false
+      "required": false,
+      "default": false
+    },
+    "JointQuota": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "TicketsTotal": {
+      "type": "integer",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "JointQuota"
+            },
+            true
+          ]
+        }
+      },
+      "required": true,
+      "default": 1,
+      "min": 1
     }
   }
 }

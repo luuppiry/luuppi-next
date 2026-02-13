@@ -19,6 +19,8 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const dictionary = await getDictionary(lang);
 
   const ticketTypes = event.data.Registration?.TicketTypes;
+  const jointQuota = event.data.Registration?.JointQuota ?? false;
+  const totalTickets = event.data.Registration?.TicketsTotal;
 
   const localUserPromise = session?.user?.entraUserUuid
     ? getCachedUser(session.user.entraUserUuid)
@@ -123,6 +125,11 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const isSoldOutOwnQuota = ownQuota
     ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.RoleId!)
     : false;
+
+  const isSoldOutAllQuotas =
+    jointQuota && typeof totalTickets !== 'undefined'
+      ? totalTickets - eventRegistrations.length <= 0
+      : false;
 
   const hasUnpaidReservationsOwnQuota = ownQuota
     ? hasUnpaidReservations(ownQuota.Role?.RoleId!)
@@ -240,7 +247,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         level: 'error',
       });
     }
-    if (isSoldOutOwnQuota && ownQuota)
+    if ((isSoldOutOwnQuota || isSoldOutAllQuotas) && ownQuota)
       errors.push({
         message: dictionary.pages_events.sold_out_info,
         level: 'warn',
@@ -301,6 +308,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
           const disabled = Boolean(
             !ticket.isOwnQuota ||
             isSoldOutOwnQuota ||
+            isSoldOutAllQuotas ||
             Boolean(hasBoughtMaxTicketsOwnQuota) ||
             !isRegistrationOpenOwnQuota,
           );
