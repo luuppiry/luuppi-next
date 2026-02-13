@@ -15,24 +15,20 @@ export const flipBoardLocale = (
   data: APIResponseData<'api::board.board'>,
 ) =>
   lang === 'en'
-    ? (data.boardMembers!.map((member) => {
+    ? data.boardMembers!.map((member) => {
         const flippedLocales = member.boardRoles?.map((role) => {
-          const localeEn = role.localizations![0];
+          const localeEn = role.localizations?.at(0);
           return {
             ...role,
-            attributes: localeEn,
+            ...(localeEn ?? {}),
           };
         });
+
         return {
           ...member,
-          attributes: {
-            ...member,
-            boardRoles: {
-              data: flippedLocales,
-            },
-          },
-        };
-      }) as APIResponseData<'api::board-member.board-member'>[])
+          boardRoles: flippedLocales,
+        } as APIResponseData<'api::board-member.board-member'>;
+      })
     : data.boardMembers!;
 
 /**
@@ -50,18 +46,16 @@ export const flipNewsLocale = (
   lang === 'en'
     ? (
         data.map((news) => {
-          const localeEn = news.localizations![0];
+          const localeEn = news.localizations?.at(0);
           if (!localeEn) return null;
           return {
             ...news,
-            attributes: {
-              ...localeEn,
-              banner: news.banner,
-              authorImage: news.authorImage,
-              slug: news.slug,
-              Seo: {
-                ...localeEn?.Seo,
-              },
+            ...localeEn,
+            banner: news.banner,
+            authorImage: news.authorImage,
+            slug: news.slug,
+            Seo: {
+              ...localeEn?.Seo,
             },
           };
         }) as APIResponseData<'api::news-single.news-single'>[]
@@ -83,18 +77,16 @@ export const flipSanomatLocale = (
   lang === 'en'
     ? (
         data.map((publication) => {
-          const localeEn = publication.localizations![0];
+          const localeEn = publication.localizations?.at(0);
           if (!localeEn) return null;
           return {
             ...publication,
-            attributes: {
-              ...localeEn!,
-              id: publication.id,
-              image: publication.image,
-              pdf: publication.pdf,
-              Seo: {
-                ...localeEn?.Seo,
-              },
+            ...localeEn,
+            id: publication.id,
+            image: publication.image,
+            pdf: publication.pdf,
+            Seo: {
+              ...localeEn?.Seo,
             },
           };
         }) as APIResponseData<'api::luuppi-sanomat.luuppi-sanomat'>[]
@@ -116,18 +108,16 @@ export const flipMeetingMinuteLocale = (
   lang === 'en'
     ? (
         data.map((publication) => {
-          const localeEn = publication.localizations![0];
+          const localeEn = publication.localizations?.at(0);
           if (!localeEn) return null;
           return {
             ...publication,
-            attributes: {
-              ...localeEn,
-              id: publication.id,
-              image: publication.image,
-              pdf: publication.pdf,
-              Seo: {
-                ...localeEn?.Seo,
-              },
+            ...localeEn,
+            id: publication.id,
+            image: publication.image,
+            pdf: publication.pdf,
+            Seo: {
+              ...localeEn?.Seo,
             },
           };
         }) as APIResponseData<'api::meeting-minute-document.meeting-minute-document'>[]

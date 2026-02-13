@@ -1,4 +1,3 @@
-import { auth } from '@/auth';
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import SideNavigator from '@/components/SideNavigator/SideNavigator';
 import SidePartners from '@/components/SidePartners/SidePartners';
@@ -12,6 +11,7 @@ import { getNewsJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
+import { draftMode } from 'next/headers';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import Script from 'next/script';
@@ -28,19 +28,12 @@ interface NewsPostProps {
 export default async function NewsPost(props: NewsPostProps) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
-  const session = await auth();
-
-  const includeDrafts = session?.user?.isLuuppiHato ?? false;
+  const { isEnabled: isDraftMode } = await draftMode();
+  const url = `${baseUrl}${params.slug}`;
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
-  >(
-    'fi',
-    `${baseUrl}${params.slug}`,
-    ['news-single'],
-    undefined,
-    includeDrafts,
-  );
+  >('fi', url, ['news-single'], false, isDraftMode);
 
   const newsLocaleFlipped = flipNewsLocale(params.lang, pageData.data);
 
@@ -56,6 +49,15 @@ export default async function NewsPost(props: NewsPostProps) {
 
   // No version of the content exists in the requested language
   if (!selectedNews?.content) {
+    if (isDraftMode) {
+      const localeMap: Record<string, string> = {
+        fi: 'Finnish',
+        en: 'English',
+      };
+
+      return `No content for the given locale, update the ${localeMap[params.lang] ?? params.lang} 'content' to preview`;
+    }
+
     redirect(`/${params.lang}/404`);
   }
 
