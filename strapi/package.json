@@ -13,6 +13,11 @@
     "start": "strapi start",
     "strapi": "strapi"
   },
+  "pnpm": {
+    "overrides": {
+      "@casl/ability@>=2.4.0 <=6.7.4": "6.7.5"
+    }
+  },
   "dependencies": {
     "@sindresorhus/slugify": "^3.0.0",
     "@strapi/plugin-users-permissions": "^5.36.0",
