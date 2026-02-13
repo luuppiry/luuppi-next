@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const model = body?.model;
 
-  if (body.event !== 'entry.publish') {
-    return new Response(`Not revalidating a draft ${body.model}`, {
+  if (body.event !== 'entry.publish' && body.model === 'event') {
+    return new Response(`Not revalidating a draft event`, {
       status: 422,
     });
   }
