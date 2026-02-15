@@ -61,19 +61,6 @@ const config = [
         },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
-      'lines-around-comment': [
-        'error',
-        {
-          beforeBlockComment: true,
-          beforeLineComment: true,
-          allowBlockStart: true,
-          allowBlockEnd: true,
-          allowObjectStart: true,
-          allowObjectEnd: true,
-          allowArrayStart: true,
-          allowArrayEnd: true,
-        },
-      ],
     },
   },
 ];

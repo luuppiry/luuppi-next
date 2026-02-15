@@ -1,6 +1,6 @@
 export interface Event {
   /* Used for the event calendar, documentId */
-  id: string
+  id: string;
   title: string;
   description: string;
   slug: string;
