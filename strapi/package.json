@@ -35,7 +35,7 @@
     "styled-components": "^6.3.9"
   },
   "engines": {
-    "node": ">=18.0.0 <=20.x.x"
+    "node": ">=20.0.0 <=24.x.x"
   },
   "strapi": {
     "uuid": "da206653-4e39-4d5e-b60d-e10acf59bdf2"
