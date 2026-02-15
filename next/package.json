@@ -30,7 +30,7 @@
     "@strapi/blocks-react-renderer": "^1.0.2",
     "@strapi/client": "^1.6.1",
     "@types/qrcode": "^1.5.6",
-    "ical-generator": "^8.1.1",
+    "ical-generator": "^10.0.0",
     "ioredis": "^5.9.3",
     "jsonwebtoken": "^9.0.3",
     "negotiator": "^1.0.0",

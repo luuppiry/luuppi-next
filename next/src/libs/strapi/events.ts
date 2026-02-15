@@ -7,6 +7,8 @@ import { APIResponseData } from '@/types/types';
 const luuppiMember = process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!;
 const luuppiNonMember = process.env.NEXT_PUBLIC_NO_ROLE_ID!;
 
+type Event = Omit<APIResponseData<'api::event.event'>, 'id'>;
+
 /**
  * Helper function to extract role IDs from user roles
  * @param roles - User roles from Prisma
@@ -23,8 +25,8 @@ const extractRoleIds = (
 // to show the opening time in the calendar
 export const addEventRegisterationOpensAtInfo = <T>(
   acc: T[],
-  event: APIResponseData<'api::event.event'>,
-  formatEvent: (event: APIResponseData<'api::event.event'>) => T,
+  event: Event,
+  formatEvent: (event: Event) => T,
   dictionary: Dictionary,
 ) => {
   if (!event?.Registration?.TicketTypes) {
@@ -62,7 +64,7 @@ export const addEventRegisterationOpensAtInfo = <T>(
  * @returns Promise<boolean> - True if the event should be visible, false otherwise
  */
 export const isEventVisible = async (
-  event: APIResponseData<'api::event.event'>,
+  event: Event,
   userRoleIds?: string[],
 ): Promise<boolean> => {
   // If ShowInCalendar is not explicitly false, show to everyone (true is the default or undefined for old events)
@@ -82,7 +84,7 @@ export const isEventVisible = async (
     const ticketTypes = event.Registration?.TicketTypes;
     if (!ticketTypes || ticketTypes.length === 0) {
       // No ticket types and no visible roles - hide from everyone
-      logger.error(`Event ${event.id} is hidden entirely - no ticket types`);
+      logger.error(`Event ${event.documentId} is hidden entirely - no ticket types`);
       return false;
     }
 
@@ -93,7 +95,7 @@ export const isEventVisible = async (
     // If no valid role IDs found in ticket types, hide the event
     if (requiredRoleIds.length === 0) {
       logger.error(
-        `Event ${event.id} is hidden entirely - no roles for ticket types`,
+        `Event ${event.documentId} is hidden entirely - no roles for ticket types`,
       );
       return false;
     }
@@ -154,9 +156,9 @@ export const isEventVisible = async (
  * @returns Promise<Array> - Filtered array of events
  */
 export const filterVisibleEvents = async (
-  events: APIResponseData<'api::event.event'>[],
+  events: Event[],
   forcedRoles?: string[],
-): Promise<APIResponseData<'api::event.event'>[]> => {
+): Promise<Event[]> => {
   if (forcedRoles?.length) {
     const visibilityChecks = await Promise.all(
       events.map(async (event) => ({

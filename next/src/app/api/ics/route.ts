@@ -10,10 +10,12 @@ import { APIResponseCollection, APIResponseData } from '@/types/types';
 import ical from 'ical-generator';
 import { NextRequest } from 'next/server';
 
+type Event = Omit<APIResponseData<'api::event.event'>, 'id'>;
+
 interface IcsEvent {
   name: string;
-  id: number;
   startDate: Date;
+  Slug: string
   endDate: Date;
   location: string;
   description: string;
@@ -50,11 +52,11 @@ export async function GET(request: NextRequest) {
   ]);
 
   // Format event from raw event data
-  const formatEvent = (event: APIResponseData<'api::event.event'>) => ({
+  const formatEvent = (event: Event) => ({
     name: event[lang === 'fi' ? 'NameFi' : 'NameEn'],
-    id: event.id,
     startDate: new Date(event.StartDate),
     endDate: new Date(event.EndDate),
+    Slug: event.Slug,
     location: event[lang === 'fi' ? 'LocationFi' : 'LocationEn'],
     description: getPlainText(
       event[lang === 'fi' ? 'DescriptionFi' : 'DescriptionEn'],
@@ -84,13 +86,13 @@ export async function GET(request: NextRequest) {
       summary: event.name,
       location: event.location,
       description: event.description,
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/events/${event.id}`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/events/${event.Slug}`,
     });
   });
 
   return new Response(ics.toString(), {
     headers: {
-      'Content-Type': 'text/calendar',
+      'Content-Type': 'text/calendar; charset=utf-8',
       'Content-Disposition': `attachment; filename=events-${lang}.ics`,
     },
   });

@@ -39,14 +39,16 @@ export default async function Events(props: EventsProps) {
   const visibleEvents = await filterVisibleEvents(data.data);
 
   // Format event from raw event data
-  const formatEvent = (event: APIResponseData<'api::event.event'>): Event => ({
+  const formatEvent = (
+    event: Omit<APIResponseData<'api::event.event'>, 'id'>,
+  ): Event => ({
     description: getPlainText(
       event[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
     ),
     slug: event.Slug,
     end: new Date(event.EndDate),
     start: new Date(event.StartDate),
-    id: event.id.toString(),
+    id: event.documentId,
     location: event[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
     title: event[params.lang === 'en' ? 'NameEn' : 'NameFi'],
     hasTickets: Boolean(event.Registration?.TicketTypes.length),
