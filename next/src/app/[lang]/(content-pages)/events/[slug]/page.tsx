@@ -330,7 +330,7 @@ export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const params = await props.params;
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,
-    `/api/events?filters[id][$eq]=${params.slug}&populate=Image`,
+    `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image`,
     [`event-${params.slug}`],
     true,
   );
