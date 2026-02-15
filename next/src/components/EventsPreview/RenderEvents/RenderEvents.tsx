@@ -49,7 +49,7 @@ export default async function RenderEvents({
           : eventPlaceholder;
 
     return {
-      id: e.id.toString(),
+      id: e.documentId,
       slug: e.Slug,
       description,
       location,
