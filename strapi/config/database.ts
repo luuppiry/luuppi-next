@@ -103,7 +103,7 @@ export default ({ env }) => {
       // You need to sync content types before running migrations and this is not configurable
       // Toggle `runMigrations` manually when needed and contentTypes are in sync
       // https://docs.strapi.io/cms/database-migrations
-      runMigrations: false,
+      runMigrations: true,
     },
   };
 };
