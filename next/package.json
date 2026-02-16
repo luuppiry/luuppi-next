@@ -34,7 +34,7 @@
     "ioredis": "^5.9.3",
     "jsonwebtoken": "^9.0.3",
     "negotiator": "^1.0.0",
-    "next": "^15.5.12",
+    "next": "^16.1.6",
     "next-auth": "5.0.0-beta.30",
     "next-plausible": "^3.12.5",
     "node-ical": "^0.20.1",
