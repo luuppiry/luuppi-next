@@ -26,7 +26,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     ? getCachedUser(session.user.entraUserUuid)
     : null;
 
-  const eventRegistrationsPromise = getCachedEventRegistrations(event.data.id);
+  const eventRegistrationsPromise = getCachedEventRegistrations(event.data.documentId);
 
   const [localUser, eventRegistrations] = await Promise.all([
     localUserPromise,
@@ -83,7 +83,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   ): { isFree: boolean } | false => {
     if (!eventRegistrations || !localUser) return false;
     const userPurchases = localUser.registrations.filter(
-      (registration) => registration.eventId === event.data.id,
+      (registration) => registration.eventDocumentId === event.data.documentId,
     );
     const userPurchasesWithRole = userPurchases.filter(
       (registration) => registration.strapiRoleUuid === roleUuid,
@@ -101,7 +101,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   ): { isFree: boolean } | false => {
     if (!eventRegistrations || !localUser) return false;
     const userPurchases = localUser.registrations.filter(
-      (registration) => registration.eventId === event.data.id,
+      (registration) => registration.eventDocumentId === event.data.documentId,
     );
     const userPurchasesWithRole = userPurchases.filter(
       (registration) => registration.strapiRoleUuid === roleUuid,
@@ -319,7 +319,6 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
               dictionary={dictionary}
               disabled={disabled}
               eventDocumentId={event.data.documentId}
-              eventId={event.data.id}
               eventStartsAt={new Date(event.data.StartDate)}
               isOwnQuota={isOwnQuota(ticket.role!)}
               lang={lang}

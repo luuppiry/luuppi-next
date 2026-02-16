@@ -49,7 +49,6 @@ export async function GET(
       url,
       ['event'],
     );
-
     // Filter events based on visibility rules
     const visibleEvents = await filterVisibleEvents(data.data, [
       process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
@@ -57,6 +56,8 @@ export async function GET(
     ]);
 
     const events = visibleEvents.map((event) => ({
+      // @ts-expect-error TODO: legacy strapi 4 format
+      // I have no clue why larpake is implemented as larpake->luuppi->cms and not just larpake->cms but fine ig
       id: event.id,
       nameFi: event.NameFi,
       nameEn: event.NameEn,

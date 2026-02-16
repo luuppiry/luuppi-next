@@ -7,7 +7,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { generatePickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponse } from '@/types/types';
 import { revalidateTag } from 'next/cache';
 
 const options = {
@@ -16,7 +16,6 @@ const options = {
 
 export async function reservationCreate(
   eventDocumentId: string,
-  eventId: number,
   amount: number,
   lang: SupportedLanguage,
   selectedQuota: string,
@@ -40,11 +39,11 @@ export async function reservationCreate(
   ) {
     // Check if the event is sold out for the user's role
     const isSoldOut = await redisClient.get(
-      `event-sold-out:${eventId}:${userProvidedTargetedRole}`,
+      `event-sold-out:${eventDocumentId}:${userProvidedTargetedRole}`,
     );
     if (isSoldOut) {
       logger.info(
-        `Cache hit: Event ${eventId} is sold out for role ${userProvidedTargetedRole}`,
+        `Cache hit: Event ${eventDocumentId} is sold out for role ${userProvidedTargetedRole}`,
       );
       return {
         message: dictionary.api.sold_out,
@@ -72,19 +71,22 @@ export async function reservationCreate(
     };
   }
 
-  if (!eventId || isNaN(eventId) || eventId < 1) {
+  if (!eventDocumentId) {
     return {
       message: dictionary.api.invalid_event,
       isError: true,
     };
   }
 
-  const strapiUrl = `/api/events?filters[id][$eq]=${eventId}&populate=Registration.TicketTypes.Role&populate=Registration.RoleToGive`;
-  const strapiEvents = await getStrapiData<
-    APIResponseCollection<'api::event.event'>
-  >(lang, strapiUrl, [`event-${eventId}`], true);
+  const strapiUrl = `/api/events/${eventDocumentId}?populate=Registration.TicketTypes.Role&populate=Registration.RoleToGive`;
+  const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>(
+    lang,
+    strapiUrl,
+    [`event-${eventDocumentId}`],
+    true,
+  );
 
-  const strapiEvent = strapiEvents?.data.at(0);
+  const strapiEvent = strapiEvents?.data;
 
   if (!strapiEvent) {
     return {
@@ -199,7 +201,7 @@ export async function reservationCreate(
       const [eventRegistrations, currentUserReservations] = await Promise.all([
         prisma.eventRegistration.findMany({
           where: {
-            eventId,
+            eventDocumentId,
             deletedAt: null,
             OR: [
               { reservedUntil: { gte: new Date() } },
@@ -220,7 +222,7 @@ export async function reservationCreate(
         }),
         prisma.eventRegistration.count({
           where: {
-            eventId,
+            eventDocumentId,
             entraUserUuid: localUser.entraUserUuid,
             purchaseRole: {
               strapiRoleUuid: targetedRole.strapiRoleUuid,
@@ -306,10 +308,10 @@ export async function reservationCreate(
         // Set event as sold out for this role in redis for 3 minutes
         // to prevent unnecessary database locks & backend calculations
         logger.info(
-          `Event ${eventId} is sold out for role ${strapiRoleUuid}. Setting sold out in redis for 3 minutes.`,
+          `Event ${eventDocumentId} is sold out for role ${strapiRoleUuid}. Setting sold out in redis for 3 minutes.`,
         );
         await redisClient.set(
-          `event-sold-out:${eventId}:${strapiRoleUuid}`,
+          `event-sold-out:${eventDocumentId}:${strapiRoleUuid}`,
           'true',
           'EX',
           180, // 3 minutes
@@ -333,7 +335,7 @@ export async function reservationCreate(
         );
 
         // Revalidates cache for event registrations so that the sold out status is updated
-        revalidateTag(`get-cached-event-registrations:${eventId}`);
+        revalidateTag(`get-cached-event-registrations:${eventDocumentId}`);
       }
 
       const hasDefaultRole = localUser.roles.find(
@@ -370,7 +372,6 @@ export async function reservationCreate(
           length: amount,
         }).map(() => ({
           eventDocumentId,
-          eventId,
           entraUserUuid,
           strapiRoleUuid,
           reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
@@ -386,7 +387,6 @@ export async function reservationCreate(
         const eventRegistrationsFormatted = Array.from({ length: amount }).map(
           () => ({
             eventDocumentId,
-            eventId,
             entraUserUuid,
             strapiRoleUuid,
             reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
@@ -402,7 +402,7 @@ export async function reservationCreate(
       logger.info(
         `User ${
           localUser.entraUserUuid
-        } reserved ${amount} tickets for event ${eventId}. User's total count of tickets for this event is now ${
+        } reserved ${amount} tickets for event ${eventDocumentId}. User's total count of tickets for this event is now ${
           currentUserReservations + amount
         }`,
       );

@@ -1,3 +1,5 @@
+import redirects from './strapi4-redirects.json' with { type: 'json' };
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
@@ -12,13 +14,17 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_STRAPI_BASE_URL.replace(
-          'https://',
-          '',
-        ),
+        hostname: new URL(process.env.NEXT_PUBLIC_STRAPI_BASE_URL).hostname,
         pathname: '/uploads/**',
       },
     ],
+  },
+  redirects: async () => {
+    return Object.entries(redirects).map(([id, slug]) => ({
+      source: `/:lang*/events/${id}`,
+      destination: `/:lang*/events/${slug}`,
+      permanent: true,
+    }));
   },
 };
 

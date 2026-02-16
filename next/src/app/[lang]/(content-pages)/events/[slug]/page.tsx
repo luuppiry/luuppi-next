@@ -16,6 +16,7 @@ import { getEventJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
+import { draftMode } from 'next/headers';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import Script from 'next/script';
@@ -40,19 +41,16 @@ export default async function Event(props: EventProps) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   const session = await auth();
+  const { isEnabled: isDraftMode } = await draftMode();
 
-  const id = parseInt(params.slug, 10);
-  if (isNaN(id)) {
-    redirect(`/${params.lang}/404`);
-  }
-
-  const url = `/api/events?filters[id][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+  const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,
     url,
     [`event-${params.slug}`],
     true,
+    isDraftMode,
   );
 
   const event = events?.data.at(0);
@@ -81,7 +79,9 @@ export default async function Event(props: EventProps) {
     ? getCachedUser(session.user.entraUserUuid)
     : null;
 
-  const eventRegistrationsPromise = getCachedEventRegistrations(event.id);
+  const eventRegistrationsPromise = getCachedEventRegistrations(
+    event.documentId,
+  );
 
   const [localUser, eventRegistrations] = await Promise.all([
     localUserPromise,
@@ -298,7 +298,10 @@ export default async function Event(props: EventProps) {
                   </div>
                 }
               >
-                <ShowParticipants eventId={id} lang={params.lang} />
+                <ShowParticipants
+                  eventDocumentId={event.documentId}
+                  lang={params.lang}
+                />
               </Suspense>
             </div>
           )}
@@ -327,7 +330,7 @@ export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const params = await props.params;
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,
-    `/api/events?filters[id][$eq]=${params.slug}&populate=Image`,
+    `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image`,
     [`event-${params.slug}`],
     true,
   );

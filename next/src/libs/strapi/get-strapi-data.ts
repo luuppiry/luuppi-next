@@ -30,12 +30,8 @@ export async function getStrapiData<T>(
   try {
     let res = await fetch(
       getStrapiUrl(
-        `${url}${url.includes('?') ? '&' : '?'}locale=${lang}&publicationState=${
-          process.env.NEXT_PUBLIC_BASE_URL?.includes('beta.luuppi.fi') ||
-          process.env.NEXT_PUBLIC_BASE_URL?.includes('localhost') ||
-          includeDrafts
-            ? 'preview'
-            : 'live'
+        `${url}${url.includes('?') ? '&' : '?'}locale=${lang}&status=${
+          includeDrafts ? 'draft' : 'published'
         }`,
       ),
       {

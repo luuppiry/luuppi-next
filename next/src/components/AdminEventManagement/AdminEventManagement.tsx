@@ -94,7 +94,7 @@ export default async function AdminEventManagement({
   );
   const strapiEventsMap = new Map(
     strapiEventsResponse?.data?.map((event) => [
-      event.id,
+      event.documentId,
       event.Registration,
     ]) ?? [],
   );
@@ -103,14 +103,13 @@ export default async function AdminEventManagement({
   const eventLanguageFormatted = eventData
     .filter((event) => searchTerm || event.registrations.length)
     .map((event) => {
-      const strapiRegistration = strapiEventsMap.get(event.eventId) as
+      const strapiRegistration = strapiEventsMap.get(event.eventDocumentId) as
         | { RequiresPickup?: boolean }
         | undefined;
       const requiresPickup = strapiRegistration?.RequiresPickup ?? false;
       return {
         id: event.id,
         eventDocumentId: event.eventDocumentId,
-        eventId: event.eventId,
         name: lang === 'fi' ? event.nameFi : event.nameEn,
         startDate: new Date(event.startDate),
         registrations: event.registrations.length,

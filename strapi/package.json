@@ -13,22 +13,29 @@
     "start": "strapi start",
     "strapi": "strapi"
   },
+  "pnpm": {
+    "overrides": {
+      "@casl/ability@>=2.4.0 <=6.7.4": "6.7.5"
+    }
+  },
   "dependencies": {
-    "@strapi/plugin-users-permissions": "5.35.0",
-    "@strapi/provider-email-nodemailer": "^5.35.0",
-    "@strapi/strapi": "5.35.0",
-    "@strapi/typescript-utils": "^5.35.0",
+    "@sindresorhus/slugify": "^3.0.0",
+    "@strapi/plugin-users-permissions": "^5.36.0",
+    "@strapi/provider-email-nodemailer": "^5.36.0",
+    "@strapi/strapi": "^5.36.0",
+    "@strapi/typescript-utils": "^5.36.0",
+    "@strapi/utils": "^5.36.0",
     "better-sqlite3": "^11.3.0",
     "pg": "8.13.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-router-dom": "^6.0.0",
     "strapi-middleware-upload-plugin-cache": "^2.1.0",
     "strapi-plugin-required-relation-field": "^0.3.1",
-    "styled-components": "^6.0.0"
+    "styled-components": "^6.3.9"
   },
   "engines": {
-    "node": ">=18.0.0 <=20.x.x"
+    "node": ">=20.0.0 <=24.x.x"
   },
   "strapi": {
     "uuid": "da206653-4e39-4d5e-b60d-e10acf59bdf2"

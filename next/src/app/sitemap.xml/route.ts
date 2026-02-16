@@ -131,16 +131,16 @@ export async function GET() {
   ]);
 
   const eventPagesSiteMap: SitemapItemLoose[] = visibleEvents.map((event) => ({
-    url: `/fi/events/${event.id}`,
+    url: `/fi/events/${event.Slug}`,
     links: [
       {
         hreflang: 'fi',
-        url: `/fi/events/${event.id}`,
+        url: `/fi/events/${event.Slug}`,
         lang: 'fi',
       },
       {
         hreflang: 'en',
-        url: `/en/events/${event.id}`,
+        url: `/en/events/${event.Slug}`,
         lang: 'en',
       },
     ],
@@ -148,16 +148,16 @@ export async function GET() {
 
   const eventPagesSiteMapEn: SitemapItemLoose[] = visibleEvents.map(
     (event) => ({
-      url: `/en/events/${event.id}`,
+      url: `/en/events/${event.Slug}`,
       links: [
         {
           hreflang: 'en',
-          url: `/en/events/${event.id}`,
+          url: `/en/events/${event.Slug}`,
           lang: 'en',
         },
         {
           hreflang: 'fi',
-          url: `/fi/events/${event.id}`,
+          url: `/fi/events/${event.Slug}`,
           lang: 'fi',
         },
       ],

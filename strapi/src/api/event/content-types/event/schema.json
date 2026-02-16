@@ -13,27 +13,22 @@
   "pluginOptions": {},
   "attributes": {
     "NameFi": {
-      "pluginOptions": {},
       "type": "string",
       "required": true
     },
     "LocationFi": {
-      "pluginOptions": {},
       "type": "string",
       "required": true
     },
     "DescriptionFi": {
-      "pluginOptions": {},
       "type": "blocks",
       "required": true
     },
     "StartDate": {
-      "pluginOptions": {},
       "type": "datetime",
       "required": true
     },
     "EndDate": {
-      "pluginOptions": {},
       "type": "datetime",
       "required": true
     },
@@ -41,15 +36,12 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "pluginOptions": {}
+      "allowedTypes": ["images"]
     },
     "Registration": {
-      "displayName": "Registration",
       "type": "component",
-      "repeatable": false,
-      "pluginOptions": {},
-      "component": "events.registration"
+      "component": "events.registration",
+      "repeatable": false
     },
     "LocationEn": {
       "type": "string",
@@ -71,23 +63,40 @@
     },
     "Alcohol": {
       "type": "enumeration",
-      "enum": ["no_alcohol", "some_alcohol", "full_alcohol"],
-      "required": false
+      "required": false,
+      "enum": ["no_alcohol", "some_alcohol", "full_alcohol"]
     },
     "FuksiPoints": {
       "type": "enumeration",
-      "enum": ["fuksi_points_true", "fuksi_points_false"],
-      "required": false
+      "required": false,
+      "enum": ["fuksi_points_true", "fuksi_points_false"]
     },
     "ShowInCalendar": {
       "type": "boolean",
-      "default": true,
-      "required": true
+      "required": true,
+      "default": true
     },
     "VisibleOnlyForRoles": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::event-role.event-role"
+      "target": "api::event-role.event-role",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "ShowInCalendar"
+            },
+            false
+          ]
+        }
+      }
+    },
+    "Slug": {
+      "type": "uid",
+      "targetField": "NameEn",
+      "required": true,
+      "minLength": 3,
+      "regex": "^[A-Za-z]+(-[A-Za-z0-9]+)*$"
     }
   }
 }

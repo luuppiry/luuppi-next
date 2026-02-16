@@ -38,14 +38,14 @@ export default function EventCalendar({
   );
 
   const handleEventClick: CalendarListeners['eventClick'] = (e) => {
-    const eventId = e.event.id;
+    const eventUrl = `/${lang}/events/${events.find((event) => event.id === e.event.id)?.slug}`;
 
     if (e.jsEvent.metaKey || e.jsEvent.ctrlKey) {
-      window.open(`/${lang}/events/${eventId}`, '_blank');
+      window.open(eventUrl, '_blank');
       return;
     }
 
-    router.push(`/${lang}/events/${eventId}`);
+    router.push(eventUrl);
   };
 
   useEffect(() => {

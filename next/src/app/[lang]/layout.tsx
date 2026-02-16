@@ -11,6 +11,7 @@ import type { Metadata, Viewport } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import PlausibleProvider from 'next-plausible';
 import { Poppins } from 'next/font/google';
+import { draftMode, headers } from 'next/headers';
 import { i18n } from '../../i18n-config';
 import './globals.css';
 
@@ -28,6 +29,21 @@ export default async function RootLayout(props: RootLayoutProps) {
   const params = await props.params;
 
   const { children } = props;
+
+  // Disable draft mode if not accessed from CMS preview
+  // calling the /api/preview endpoint sets a cookie that is persisted for the session
+  // so draft mode would leak if user previews content in the CMS then navigates to luuppi.fi
+  // TODO: using Sec-Fetch-Dest is not the most eloquent solution since it disables for any non iframe request
+  // (https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-Dest)
+  const draft = await draftMode();
+  if (draft.isEnabled) {
+    const headersList = await headers();
+    const destination = headersList.get('Sec-Fetch-Dest');
+
+    if (destination !== 'iframe') {
+      draft.disable();
+    }
+  }
 
   const dictionary = await getDictionary(params.lang);
 

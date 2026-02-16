@@ -9,7 +9,7 @@ interface QuestionProviderProps {
 interface QuestionData {
   reservationId: number;
   questions: {
-    eventId: number;
+    eventDocumentId: string;
     text: {
       id?: number;
       QuestionEn: string;

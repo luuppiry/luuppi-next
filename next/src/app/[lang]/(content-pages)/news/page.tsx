@@ -1,4 +1,3 @@
-import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
 import { flipNewsLocale } from '@/libs/strapi/flip-locale';
@@ -7,12 +6,9 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { analyzeReadTime } from '@/libs/utils/analyze-read-time';
 import { SupportedLanguage } from '@/models/locale';
-import {
-  APIResponse,
-  APIResponseCollection,
-  APIResponseData,
-} from '@/types/types';
+import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
+import { draftMode } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaUserAlt } from 'react-icons/fa';
@@ -24,8 +20,7 @@ interface NewsProps {
 
 export default async function News(props: NewsProps) {
   const params = await props.params;
-  const session = await auth();
-  const includeDrafts = session?.user?.isLuuppiHato ?? false;
+  const { isEnabled: isDraftMode } = await draftMode();
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
@@ -33,8 +28,8 @@ export default async function News(props: NewsProps) {
     'fi',
     '/api/news?populate[0]=banner&populate[1]=authorImage&populate[3]=localizations&pagination[pageSize]=100',
     ['news-single'],
-    undefined,
-    includeDrafts,
+    false,
+    isDraftMode,
   );
 
   const newsLocaleFlipped = flipNewsLocale(params.lang, pageData.data);
@@ -59,7 +54,7 @@ export default async function News(props: NewsProps) {
       <div className="flex flex-col gap-12 max-md:gap-6">
         {sortedNews.map((news) => (
           <article
-            key={news.title}
+            key={news.documentId}
             className={
               'flex gap-4 rounded-lg border border-gray-200/50 bg-background-50 shadow-sm max-sm:flex-col dark:border-background-200'
             }
@@ -94,10 +89,7 @@ export default async function News(props: NewsProps) {
                       'flex items-center gap-1 text-sm font-semibold uppercase opacity-75'
                     }
                   >
-                    {analyzeReadTime(
-                      news as APIResponseData<'api::news-single.news-single'>,
-                    )}{' '}
-                    {dictionary.general.min_read}
+                    {analyzeReadTime(news)} {dictionary.general.min_read}
                   </p>
                 </div>
                 <Link

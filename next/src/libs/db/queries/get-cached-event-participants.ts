@@ -3,10 +3,10 @@ import prisma from '@/libs/db/prisma';
 import { unstable_cache } from 'next/cache';
 
 export const getCachedEventParticipants = unstable_cache(
-  async (eventId: number) => {
+  async (eventDocumentId: string) => {
     const res = await prisma.eventRegistration.findMany({
       where: {
-        eventId,
+        eventDocumentId,
         deletedAt: null,
         paymentCompleted: true,
         event: {

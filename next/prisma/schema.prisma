@@ -96,18 +96,14 @@ model EventRegistration {
   /// User's EntraID UUID
   entraUserUuid    String
   user             User      @relation(fields: [entraUserUuid], references: [entraUserUuid], onDelete: Cascade)
-  /// Strapi Event ID (legacy Strapi 4)
-  eventId          Int
   /// Strapi Event Document ID (Strapi 5)
   eventDocumentId  String
-  event            Event     @relation(fields: [eventId], references: [eventId])
+  event            Event     @relation(fields: [eventDocumentId], references: [eventDocumentId])
   payments         Payment[]
   answers          Answer[]
 
-  @@index([eventId])
-  @@index([eventDocumentId])
-  @@index([eventId, deletedAt, paymentCompleted])
-  @@index([entraUserUuid, eventId])
+  @@index([eventDocumentId, deletedAt, paymentCompleted])
+  @@index([entraUserUuid, eventDocumentId])
   @@index([pickupCode])
 }
 
@@ -141,8 +137,6 @@ model Payment {
 // we don't have to fetch it from Strapi every time.
 model Event {
   id              Int                 @id @default(autoincrement())
-  /// Strapi Event ID (legacy Strapi 4)
-  eventId         Int                 @unique
   /// Strapi Event Document ID (Strapi 5)
   eventDocumentId String              @unique
   nameEn          String

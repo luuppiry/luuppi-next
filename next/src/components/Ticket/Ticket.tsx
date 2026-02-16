@@ -18,14 +18,13 @@ interface TicketProps {
     role: string | undefined | null;
     maxTicketsPerUser: number;
   };
-  eventId: number;
   eventStartsAt: Date;
   lang: SupportedLanguage;
   dictionary: Dictionary;
   disabled?: boolean;
   isOwnQuota?: boolean;
   targetedRole?: string;
-  eventDocumentId: string
+  eventDocumentId: string;
 }
 
 export default function Ticket({
@@ -35,7 +34,6 @@ export default function Ticket({
   dictionary,
   disabled = false,
   isOwnQuota = false,
-  eventId,
   eventDocumentId,
   targetedRole,
 }: TicketProps) {
@@ -78,7 +76,6 @@ export default function Ticket({
       setLoading(true);
       const res = await reservationCreate(
         eventDocumentId,
-        eventId,
         amount,
         lang,
         ticket.role!,

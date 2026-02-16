@@ -1,4 +1,3 @@
-import { auth } from '@/auth';
 import { dateFormat } from '@/libs/constants';
 import { flipNewsLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
@@ -6,6 +5,7 @@ import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { analyzeReadTime } from '@/libs/utils/analyze-read-time';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection, APIResponseData } from '@/types/types';
+import { draftMode } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaUserAlt } from 'react-icons/fa';
@@ -20,17 +20,15 @@ export default async function RenderNews({
   lang,
   dictionary,
 }: RenderNewsProps) {
-  const session = await auth();
-  const includeDrafts = session?.user?.isLuuppiHato ?? false;
-
+  const { isEnabled: isDraftMode } = await draftMode();
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
   >(
     'fi',
     '/api/news?populate[0]=banner&populate[1]=authorImage&populate[3]=localizations&pagination[pageSize]=100',
     ['news-single'],
-    undefined,
-    includeDrafts,
+    false,
+    isDraftMode,
   );
 
   const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);
