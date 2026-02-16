@@ -1,9 +1,11 @@
+import type { NextConfig } from 'next';
 import redirects from './strapi4-redirects.json' with { type: 'json' };
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: 'standalone',
+const strapi: URL = new URL(process.env.NEXT_PUBLIC_STRAPI_BASE_URL!);
+
+const nextConfig: NextConfig = {
   poweredByHeader: false,
+  logging: { fetches: { fullUrl: true }, incomingRequests: true },
   images: {
     remotePatterns: [
       {
@@ -13,8 +15,8 @@ const nextConfig = {
         pathname: '/uploads/**',
       },
       {
-        protocol: 'https',
-        hostname: new URL(process.env.NEXT_PUBLIC_STRAPI_BASE_URL).hostname,
+        protocol: strapi.protocol.replace(':', '') as 'http' | 'https',
+        hostname: strapi.hostname,
         pathname: '/uploads/**',
       },
     ],
