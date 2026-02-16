@@ -1,4 +1,5 @@
 import { SupportedLanguage } from '@/models/locale';
+import { StrapiCacheTag } from '@/types/types';
 import 'server-only';
 import { logger } from '../utils/logger';
 import { getStrapiUrl } from './get-strapi-url';
@@ -7,7 +8,7 @@ import { getStrapiUrl } from './get-strapi-url';
 export function getStrapiData<T>(
   lang: SupportedLanguage,
   url: string,
-  revalidateTags: string[],
+  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
   ignoreError: true,
   includeDrafts?: boolean,
 ): Promise<T | null>;
@@ -15,7 +16,7 @@ export function getStrapiData<T>(
 export function getStrapiData<T>(
   lang: SupportedLanguage,
   url: string,
-  revalidateTags: string[],
+  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
   ignoreError?: false,
   includeDrafts?: boolean,
 ): Promise<T>;
@@ -23,7 +24,7 @@ export function getStrapiData<T>(
 export async function getStrapiData<T>(
   lang: SupportedLanguage,
   url: string,
-  revalidateTags: string[],
+  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
   ignoreError?: boolean,
   includeDrafts?: boolean,
 ): Promise<T | null> {
@@ -38,7 +39,7 @@ export async function getStrapiData<T>(
         headers: {
           Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
         },
-        next: { tags: revalidateTags },
+        next: { tags: [...revalidateTags] },
       },
     );
 
@@ -55,7 +56,7 @@ export async function getStrapiData<T>(
           headers: {
             Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
           },
-          next: { tags: revalidateTags },
+          next: { tags: [...revalidateTags] },
         },
       );
     }

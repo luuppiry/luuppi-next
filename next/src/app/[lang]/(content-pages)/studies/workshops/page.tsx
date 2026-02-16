@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/studies-workshop?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=ContactBanner';
-const tags = ['studies-workshop'];
+const tags = ['studies-workshop'] as const;
 
 interface StudiesWorkshopProps {
   params: Promise<{ lang: SupportedLanguage }>;

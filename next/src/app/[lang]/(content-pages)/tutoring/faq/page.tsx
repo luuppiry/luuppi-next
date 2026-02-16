@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/tutoring-faq?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
-const tags = ['tutoring-faq'];
+const tags = ['tutoring-faq'] as const;
 
 interface TutoringFaqProps {
   params: Promise<{ lang: SupportedLanguage }>;

@@ -145,7 +145,7 @@ export async function generateMetadata(props: NewsProps): Promise<Metadata> {
   const params = await props.params;
   const url =
     '/api/news-list?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
-  const tags = ['news-list'];
+  const tags = ['news-list'] as const;
 
   const data = await getStrapiData<APIResponse<'api::news-list.news-list'>>(
     params.lang,

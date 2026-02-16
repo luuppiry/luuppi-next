@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/sport?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=ContactBanner';
-const tags = ['sport'];
+const tags = ['sport'] as const;
 
 interface SportsProps {
   params: Promise<{ lang: SupportedLanguage }>;
