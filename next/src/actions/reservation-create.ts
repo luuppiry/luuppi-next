@@ -50,6 +50,20 @@ export async function reservationCreate(
         isError: true,
       };
     }
+
+    // Check if the joint quota is sold out
+    const isJointQuotaSoldOut = await redisClient.get(
+      `event-sold-out:${eventDocumentId}:joint-quota`,
+    );
+    if (isJointQuotaSoldOut) {
+      logger.info(
+        `Cache hit: Event ${eventDocumentId} joint quota is sold out`,
+      );
+      return {
+        message: dictionary.api.sold_out,
+        isError: true,
+      };
+    }
   }
 
   if (!amount || isNaN(amount) || amount < 1) {
@@ -242,8 +256,11 @@ export async function reservationCreate(
         };
       }
 
-      const ticketsAvailable =
-        ownQuota.TicketsTotal - totalRegistrationWithRole;
+      const ticketsAvailable = strapiEvent.Registration?.JointQuota
+        ? (strapiEvent.Registration.TicketsTotal ?? 0) -
+          eventRegistrations.length
+        : ownQuota.TicketsTotal - totalRegistrationWithRole;
+
       const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
 
       // Validate that the user has not already reserved the maximum amount of tickets
@@ -266,6 +283,7 @@ export async function reservationCreate(
 
       // Validate that there are still enough tickets available
       const isAvailable = amount <= ticketsAvailable;
+
       if (!isAvailable) {
         return {
           message: dictionary.api.not_enough_tickets,
@@ -285,6 +303,23 @@ export async function reservationCreate(
           'true',
           'EX',
           180, // 3 minutes
+        );
+        revalidateTag(`get-cached-event-registrations:${eventDocumentId}`);
+      }
+
+      // Check if joint quota is now sold out
+      if (
+        strapiEvent.Registration?.JointQuota &&
+        typeof strapiEvent.Registration.TicketsTotal !== 'undefined' &&
+        amount + eventRegistrations.length >=
+          strapiEvent.Registration.TicketsTotal
+      ) {
+        logger.info(`Event ${eventDocumentId} joint quota is sold out.`);
+        await redisClient.set(
+          `event-sold-out:${eventDocumentId}:joint-quota`,
+          'true',
+          'EX',
+          180,
         );
 
         // Revalidates cache for event registrations so that the sold out status is updated
