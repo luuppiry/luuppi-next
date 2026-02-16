@@ -53,10 +53,12 @@ export async function reservationCreate(
 
     // Check if the joint quota is sold out
     const isJointQuotaSoldOut = await redisClient.get(
-      `event-sold-out:${eventId}:joint-quota`,
+      `event-sold-out:${eventDocumentId}:joint-quota`,
     );
     if (isJointQuotaSoldOut) {
-      logger.info(`Cache hit: Event ${eventId} joint quota is sold out`);
+      logger.info(
+        `Cache hit: Event ${eventDocumentId} joint quota is sold out`,
+      );
       return {
         message: dictionary.api.sold_out,
         isError: true,
@@ -259,20 +261,6 @@ export async function reservationCreate(
           eventRegistrations.length
         : ownQuota.TicketsTotal - totalRegistrationWithRole;
 
-      if (
-        strapiEvent.Registration?.JointQuota &&
-        typeof strapiEvent.Registration.TicketsTotal !== 'undefined'
-      ) {
-        if (
-          eventRegistrations.length >= strapiEvent.Registration.TicketsTotal
-        ) {
-          return {
-            message: dictionary.api.sold_out,
-            isError: true,
-          };
-        }
-      }
-
       const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
 
       // Validate that the user has not already reserved the maximum amount of tickets
@@ -316,7 +304,7 @@ export async function reservationCreate(
           'EX',
           180, // 3 minutes
         );
-        revalidateTag(`get-cached-event-registrations:${eventId}`);
+        revalidateTag(`get-cached-event-registrations:${eventDocumentId}`);
       }
 
       // Check if joint quota is now sold out
@@ -326,9 +314,9 @@ export async function reservationCreate(
         amount + eventRegistrations.length >=
           strapiEvent.Registration.TicketsTotal
       ) {
-        logger.info(`Event ${eventId} joint quota is sold out.`);
+        logger.info(`Event ${eventDocumentId} joint quota is sold out.`);
         await redisClient.set(
-          `event-sold-out:${eventId}:joint-quota`,
+          `event-sold-out:${eventDocumentId}:joint-quota`,
           'true',
           'EX',
           180,
