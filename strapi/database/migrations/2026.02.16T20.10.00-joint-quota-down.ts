@@ -19,7 +19,7 @@ export async function up() {
   for (const event of events) {
     if (!event.Registration) continue;
 
-    strapi.documents("api::event.event").discardDraft({
+    await strapi.documents("api::event.event").discardDraft({
       documentId: event.documentId,
     });
   }
