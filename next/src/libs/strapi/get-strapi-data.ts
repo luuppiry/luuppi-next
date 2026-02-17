@@ -10,7 +10,7 @@ export function getStrapiData<T>(
   url: string,
   revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
   ignoreError: true,
-  includeDrafts?: boolean,
+  draftMode?: boolean,
 ): Promise<T | null>;
 
 export function getStrapiData<T>(
@@ -18,7 +18,7 @@ export function getStrapiData<T>(
   url: string,
   revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
   ignoreError?: false,
-  includeDrafts?: boolean,
+  draftMode?: boolean,
 ): Promise<T>;
 
 export async function getStrapiData<T>(
@@ -26,20 +26,24 @@ export async function getStrapiData<T>(
   url: string,
   revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
   ignoreError?: boolean,
-  includeDrafts?: boolean,
+  draftMode?: boolean,
 ): Promise<T | null> {
   try {
     let res = await fetch(
       getStrapiUrl(
         `${url}${url.includes('?') ? '&' : '?'}locale=${lang}&status=${
-          includeDrafts ? 'draft' : 'published'
+          draftMode ? 'draft' : 'published'
         }`,
       ),
       {
         headers: {
           Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
         },
-        next: { tags: [...revalidateTags] },
+        next: {
+          tags: revalidateTags as string[],
+          revalidate: 3600 /* 1h in seconds */,
+        },
+        cache: draftMode ? 'no-store' : 'force-cache',
       },
     );
 
@@ -51,12 +55,18 @@ export async function getStrapiData<T>(
      */
     if (!res.ok && res.status === 404 && !ignoreError) {
       res = await fetch(
-        getStrapiUrl(`${url}${url.includes('?') ? '&' : '?'}locale=fi`),
+        getStrapiUrl(
+          `${url}${url.includes('?') ? '&' : '?'}locale=fi&status=${draftMode ? 'draft' : 'published'}`,
+        ),
         {
           headers: {
             Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
           },
-          next: { tags: [...revalidateTags] },
+          next: {
+            tags: revalidateTags as string[],
+            revalidate: 3600 /* 1h in seconds */,
+          },
+          cache: draftMode ? 'no-store' : 'force-cache',
         },
       );
     }
