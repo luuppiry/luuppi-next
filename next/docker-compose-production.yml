@@ -10,6 +10,8 @@ services:
       - '127.0.0.1:3000:3000'
     depends_on:
       - redis_next_production
+    volumes:
+      - next-cache:/app/.next/cache:rw
     networks:
       - weba-network
 
@@ -41,6 +43,7 @@ services:
 
 volumes:
   postgres-data:
+  next-cache:
 
 #
 # External network handled by luuppi-proxy
