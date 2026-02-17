@@ -13,7 +13,7 @@
     "dev": "prisma generate && next dev --turbopack",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "pnpm eslint src",
     "format": "prettier --write .",
     "email-dev": "email dev"
   },
@@ -25,11 +25,14 @@
     "@fullcalendar/react": "^6.1.20",
     "@fullcalendar/timegrid": "^6.1.20",
     "@marsidev/react-turnstile": "^1.4.2",
+    "@next/eslint-plugin-next": "^16.1.6",
     "@prisma/client": "^6.19.2",
     "@react-email/components": "0.0.33",
     "@strapi/blocks-react-renderer": "^1.0.2",
     "@strapi/client": "^1.6.1",
     "@types/qrcode": "^1.5.6",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "ical-generator": "^10.0.0",
     "ioredis": "^5.9.3",
     "jsonwebtoken": "^9.0.3",
@@ -54,6 +57,7 @@
     "stripe": "^17.7.0"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.2",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
     "@microsoft/microsoft-graph-types": "^2.43.1",
@@ -67,7 +71,7 @@
     "@types/react-dom": "19.2.3",
     "autoprefixer": "^10.4.24",
     "daisyui": "^4.12.24",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.0",
     "eslint-config-next": "15.5.7",
     "husky": "^9.1.7",
     "postcss": "^8.5.6",
@@ -75,7 +79,8 @@
     "prettier-plugin-tailwindcss": "^0.6.14",
     "prisma": "^6.19.2",
     "tailwindcss": "^3.4.19",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.0"
   },
   "engines": {
     "node": ">=20"
