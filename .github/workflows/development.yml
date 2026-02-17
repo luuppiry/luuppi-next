@@ -100,6 +100,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.13
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: next/
+
       - name: Lint
         run: pnpm lint
         working-directory: next/
