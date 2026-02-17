@@ -90,8 +90,22 @@ jobs:
             docker compose -f docker-compose-production.yaml down
             docker compose -f docker-compose-production.yaml up -d
 
+  lint-nextjs:
+    needs: [changes]
+    if: |
+      always() &&
+      needs.changes.outputs.next == 'true'
+    name: 'Lint Next.js'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint
+        run: pnpm lint
+        working-directory: next/
+
   next:
-    needs: [changes, strapi]
+    needs: [changes, strapi, lint-nextjs]
     if: |
       always() &&
       needs.changes.outputs.next == 'true' &&
