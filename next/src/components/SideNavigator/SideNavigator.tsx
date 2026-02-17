@@ -24,6 +24,9 @@ export default function SideNavigator({
         .getElementsByClassName(targetClass)[0]
         .querySelectorAll('h1, h2'),
     );
+
+    // Ok because we are updating the DOM
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHeaders(headerElements);
 
     const handleScroll = () => {

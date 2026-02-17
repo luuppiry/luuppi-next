@@ -1,5 +1,5 @@
 'use client';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface TooltipProps {
@@ -10,20 +10,20 @@ interface TooltipProps {
 interface Position {
   top: number;
   left: number;
+  isBelow: boolean;
 }
 
 export default function Tooltip({ children, content }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
-  const [position, setPosition] = useState<Position>({ top: 0, left: 0 });
-  const [mounted, setMounted] = useState(false);
+  const [position, setPosition] = useState<Position>({
+    top: 0,
+    left: 0,
+    isBelow: false,
+  });
   const triggerRef = useRef<HTMLSpanElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const showTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const updatePosition = () => {
     if (!triggerRef.current || !tooltipRef.current) return;
@@ -49,7 +49,9 @@ export default function Tooltip({ children, content }: TooltipProps) {
       top = triggerRect.bottom + 8;
     }
 
-    setPosition({ top, left });
+    const isBelow = top >= triggerRect.bottom;
+
+    setPosition({ top, left, isBelow });
   };
 
   const handleMouseEnter = () => {
@@ -95,7 +97,7 @@ export default function Tooltip({ children, content }: TooltipProps) {
   }, [isVisible]);
 
   const tooltipElement =
-    isVisible && mounted ? (
+    isVisible && typeof document !== 'undefined' ? (
       <div
         ref={tooltipRef}
         className={`tooltip pointer-events-none fixed z-[9999] max-w-xs rounded bg-gray-800 p-1 px-2 text-sm text-[var(--tooltip-text-color)] ${
@@ -107,7 +109,7 @@ export default function Tooltip({ children, content }: TooltipProps) {
         }}
       >
         {content}
-        <Arrow position={position} triggerRef={triggerRef} />
+        <Arrow isBelow={position.isBelow} />
       </div>
     ) : null;
 
@@ -121,28 +123,23 @@ export default function Tooltip({ children, content }: TooltipProps) {
       >
         {children}
       </span>
-      {mounted && tooltipElement && createPortal(tooltipElement, document.body)}
+      {typeof document !== 'undefined' &&
+        tooltipElement &&
+        createPortal(tooltipElement, document.body)}
     </>
   );
 }
 
 interface ArrowProps {
-  triggerRef: RefObject<HTMLSpanElement | null>;
-  position: Position;
+  isBelow: boolean;
 }
 
-const Arrow = ({ position, triggerRef }: ArrowProps) => (
+const Arrow = ({ isBelow }: ArrowProps) => (
   <div
     className="absolute h-1 w-1 rotate-45 bg-gray-800"
     style={{
-      bottom:
-        position.top < triggerRef.current!.getBoundingClientRect().top
-          ? '-2px'
-          : 'auto',
-      top:
-        position.top >= triggerRef.current!.getBoundingClientRect().top
-          ? '-2px'
-          : 'auto',
+      bottom: !isBelow ? '-2px' : 'auto',
+      top: isBelow ? '-2px' : 'auto',
       left: '50%',
       transform: 'translateX(-50%) rotate(45deg)',
     }}

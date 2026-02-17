@@ -19,14 +19,15 @@ export const checkReturn = async (req: NextRequest) => {
     );
 
     switch (event.type) {
-      case 'checkout.session.completed':
-        // Payment successful
+      case 'checkout.session.completed': // Payment successful
+      {
         const session = event.data.object;
         return {
           orderId: session.metadata?.orderId,
           successful: true,
           status: 'completed',
         };
+      }
 
       case 'checkout.session.expired':
         // Payment attempt expired

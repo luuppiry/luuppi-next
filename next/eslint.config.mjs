@@ -1,24 +1,19 @@
-// @ts-check
-
 import eslint from '@eslint/js';
 import nextPlugin from '@next/eslint-plugin-next';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
-import { includeIgnoreFile } from "@eslint/compat";
+import { includeIgnoreFile } from '@eslint/compat';
 import path from 'node:path';
 
 const config = defineConfig(
-  includeIgnoreFile(path.join(import.meta.dirname, ".gitignore")),
+  includeIgnoreFile(path.join(import.meta.dirname, '.gitignore')),
   {
     files: ['**/*.js', '**/*.ts', '**/*.tsx'],
-    extends: [
-      eslint.configs.recommended,
-      ...tseslint.configs.recommended,
-    ],
+    extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
     rules: {
-      "@typescript-eslint/no-require-imports": "off",
+      '@typescript-eslint/no-require-imports': 'off',
       '@typescript-eslint/no-extra-non-null-assertion': 'off',
       'spaced-comment': 'error',
       '@typescript-eslint/no-unused-vars': [

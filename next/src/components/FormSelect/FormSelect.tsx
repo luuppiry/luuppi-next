@@ -8,7 +8,7 @@ interface FormSelectProps {
   marginBottom?: boolean;
   labelTopRight?: React.ReactNode;
   disabled?: boolean;
-  // eslint-disable-next-line no-unused-vars
+
   onChange?: (e: any) => void;
 }
 

@@ -36,6 +36,7 @@ export default function NotificationBar({
     const isExpired = showUntil ? new Date(showUntil) < new Date() : false;
 
     if (!isShowed && !isExpired && !isEmpty) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowNotification(true);
     }
   }, [lang, notification]);

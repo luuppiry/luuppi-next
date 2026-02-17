@@ -82,7 +82,7 @@ export default function MobileHamburger({
                   key={link.translation}
                   className={`${index === navLinksMobile.length - 1 ? 'pb-6' : ''}`}
                 >
-                  {Boolean(link.sublinks?.length) ? (
+                  {link.sublinks?.length ? (
                     <div className="flex items-center justify-between bg-secondary-400 font-bold text-white hover:cursor-auto hover:bg-secondary-400">
                       {
                         dictionary.navigation[

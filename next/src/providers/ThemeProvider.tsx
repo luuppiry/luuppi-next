@@ -9,21 +9,17 @@ interface ThemeContextType {
   setTheme: (theme: Theme) => void;
 }
 
+const applyTheme = (theme: Theme) => {
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const resolved =
+    theme === 'auto' ? (prefersDark.matches ? 'dark' : 'light') : theme;
+  document.documentElement.setAttribute('data-theme', resolved);
+};
+
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('auto');
-
-  const applyTheme = (theme: Theme) => {
-    const html = document.documentElement;
-
-    if (theme === 'auto') {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-      html.setAttribute('data-theme', prefersDark.matches ? 'dark' : 'light');
-    } else {
-      html.setAttribute('data-theme', theme);
-    }
-  };
 
   const handleSetTheme = (theme: Theme) => {
     setTheme(theme);
@@ -33,6 +29,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const theme = (localStorage.getItem('theme') as Theme) || 'auto';
+
+    // Should run after mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(theme);
     applyTheme(theme);
   }, []);

@@ -132,7 +132,7 @@ export default async function AdminEventManagement({
         />
       </div>
 
-      {Boolean(eventLanguageFormatted?.length) ? (
+      {eventLanguageFormatted?.length ? (
         <div className="overflow-x-auto">
           <table className="table">
             <thead>

@@ -5,7 +5,7 @@ import prisma from '@/libs/db/prisma';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { revalidatePath, revalidateTag, updateTag } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 
 const options = {
   cacheKey: 'migrate-legacy-account',
