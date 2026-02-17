@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/tutoring-larpake?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
-const tags = ['tutoring-larpake'];
+const tags = ['tutoring-larpake'] as const;
 
 interface TutoringLarpakeProps {
   params: Promise<{ lang: SupportedLanguage }>;

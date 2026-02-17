@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/organization-office-hervanta?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
-const tags = ['organization-office-hervanta'];
+const tags = ['organization-office-hervanta'] as const;
 
 interface OrganizationOfficeHervantaProps {
   params: Promise<{ lang: SupportedLanguage }>;

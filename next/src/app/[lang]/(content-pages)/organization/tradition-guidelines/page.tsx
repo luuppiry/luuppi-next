@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/organization-tradition-guideline?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
-const tags = ['organization-tradition-guideline'];
+const tags = ['organization-tradition-guideline'] as const;
 
 interface OrganizationTraditionGuidelinesProps {
   params: Promise<{ lang: SupportedLanguage }>;

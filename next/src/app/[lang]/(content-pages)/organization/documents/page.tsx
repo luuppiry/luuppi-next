@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/organization-document?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
-const tags = ['organization-document'];
+const tags = ['organization-document'] as const;
 
 interface OrganizationDocumentsProps {
   params: Promise<{ lang: SupportedLanguage }>;

@@ -16,9 +16,11 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
-  >('fi', '/api/luuppi-sanomats?populate[1]=image&pagination[pageSize]=100&sort[0]=publishedAt:desc', [
-    'luuppi-sanomat',
-  ]);
+  >(
+    'fi',
+    '/api/luuppi-sanomats?populate[1]=image&pagination[pageSize]=100&sort[0]=publishedAt:desc',
+    ['luuppi-sanomat'],
+  );
 
   const sortedData = pageData.data
     .filter((publication) => publication.createdAt)

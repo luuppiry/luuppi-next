@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/organization-rule?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
-const tags = ['organization-rule'];
+const tags = ['organization-rule'] as const;
 
 interface OrganizationRulesProps {
   params: Promise<{ lang: SupportedLanguage }>;

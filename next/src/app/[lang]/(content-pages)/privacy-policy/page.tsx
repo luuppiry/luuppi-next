@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/privacy-policy?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
-const tags = ['privacy-policy'];
+const tags = ['privacy-policy'] as const;
 
 interface PrivacyPolicyProps {
   params: Promise<{ lang: SupportedLanguage }>;

@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 
   if (model) {
     logger.info(`Revalidating ${model}`);
-    revalidateTag(model);
+    revalidateTag(model, 'max');
 
     if (model === 'event') {
       logger.info(`Revalidating event-${body.entry.documentId}`);
@@ -37,7 +37,8 @@ export async function POST(request: NextRequest) {
         return new Response('No entry found', { status: 400 });
       }
 
-      revalidateTag(`event-${body.entry.documentId}`);
+      revalidateTag(`event-${body.entry.documentId}`, 'max');
+      revalidateTag(`event-${body.entry.Slug}`, 'max');
 
       const {
         NameFi,

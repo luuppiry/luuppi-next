@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/contact?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage';
-const tags = ['contact'];
+const tags = ['contact'] as const;
 
 interface ContactProps {
   params: Promise<{ lang: SupportedLanguage }>;

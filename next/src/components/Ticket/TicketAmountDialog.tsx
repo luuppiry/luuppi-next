@@ -9,9 +9,9 @@ interface TicketAmountDialogProps {
   open: boolean;
   onClose: () => void;
   amount: number;
-  // eslint-disable-next-line no-unused-vars
+
   setAmount: (amount: number) => void;
-  // eslint-disable-next-line no-unused-vars
+
   submit: (e: any) => void;
 }
 

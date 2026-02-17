@@ -8,7 +8,7 @@ import { logger } from '@/libs/utils/logger';
 import { generatePickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 const options = {
   noRoleId: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
@@ -304,7 +304,7 @@ export async function reservationCreate(
           'EX',
           180, // 3 minutes
         );
-        revalidateTag(`get-cached-event-registrations:${eventDocumentId}`);
+        updateTag(`get-cached-event-registrations:${eventDocumentId}`);
       }
 
       // Check if joint quota is now sold out
@@ -323,7 +323,7 @@ export async function reservationCreate(
         );
 
         // Revalidates cache for event registrations so that the sold out status is updated
-        revalidateTag(`get-cached-event-registrations:${eventDocumentId}`);
+        updateTag(`get-cached-event-registrations:${eventDocumentId}`);
       }
 
       const hasDefaultRole = localUser.roles.find(
@@ -412,7 +412,7 @@ export async function reservationCreate(
     return result;
   }
 
-  revalidateTag(`get-cached-user:${localUser.entraUserUuid}`);
+  updateTag(`get-cached-user:${localUser.entraUserUuid}`);
 
   return {
     message: dictionary.general.success,

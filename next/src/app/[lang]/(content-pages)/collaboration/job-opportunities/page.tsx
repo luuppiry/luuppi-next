@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 const url = '/api/job-opportunities?populate=logo';
-const tags = ['job-opportunity'];
+const tags = ['job-opportunity'] as const;
 
 interface CollaborationJobOpportunitiesProps {
   params: Promise<{ lang: SupportedLanguage }>;
@@ -125,7 +125,7 @@ export async function generateMetadata(
   const params = await props.params;
   const url =
     '/api/collaboration-job-opportunity?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
-  const tags = ['collaboration-job-opportunity'];
+  const tags = ['collaboration-job-opportunity'] as const;
 
   const data = await getStrapiData<
     APIResponse<'api::collaboration-job-opportunity.collaboration-job-opportunity'>

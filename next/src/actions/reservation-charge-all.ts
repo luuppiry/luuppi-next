@@ -7,7 +7,7 @@ import { createCharge } from '@/libs/payments/create-charge';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { randomUUID } from 'crypto';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function reservationChargeAll(lang: SupportedLanguage) {
@@ -122,7 +122,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
       }
     });
 
-    revalidateTag(`get-cached-user:${session.user.entraUserUuid}`);
+    updateTag(`get-cached-user:${session.user.entraUserUuid}`);
     revalidatePath('/[lang]/events/[slug]', 'page');
   } catch (error) {
     logger.error('Error creating charge', error);

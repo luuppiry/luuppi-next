@@ -1,27 +1,28 @@
-'use client';
+import 'server-only';
+
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { Dictionary } from '@/models/locale';
 import { APIResponseData } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { connection } from 'next/server';
 
 interface SidePartnersProps {
   partnersData: APIResponseData<'api::company.company'>[];
   dictionary: Dictionary;
 }
 
-export default function SidePartners({
+export default async function SidePartners({
   partnersData,
   dictionary,
 }: SidePartnersProps) {
-  const [randomPartners, setRandomPartners] = useState<
-    APIResponseData<'api::company.company'>[]
-  >([]);
+  await connection();
 
-  useEffect(() => {
-    setRandomPartners(partnersData.sort(() => Math.random() - 0.5).slice(0, 3));
-  }, [partnersData]);
+  const randomPartners = partnersData
+    // await connection() quarantees this is never prerendered and Math.random() runs exactly once
+    // eslint-disable-next-line react-hooks/purity
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
 
   return (
     <div className="flex w-full flex-col gap-2 px-4">

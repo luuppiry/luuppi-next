@@ -6,7 +6,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
 import { logger } from '@/libs/utils/logger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponseCollection, StrapiCacheTag } from '@/types/types';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { PiEye } from 'react-icons/pi';
@@ -89,7 +89,7 @@ export default async function AdminEventManagement({
   >(
     lang,
     `/api/events?filters[documentId][$in]=${eventIds.join(',')}&populate=Registration`,
-    eventIds.map((id) => `event-${id}`),
+    eventIds.map((id) => `event-${id}` satisfies StrapiCacheTag),
     true,
   );
   const strapiEventsMap = new Map(
@@ -132,7 +132,7 @@ export default async function AdminEventManagement({
         />
       </div>
 
-      {Boolean(eventLanguageFormatted?.length) ? (
+      {eventLanguageFormatted?.length ? (
         <div className="overflow-x-auto">
           <table className="table">
             <thead>

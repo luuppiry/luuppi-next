@@ -1,6 +1,6 @@
 'use client';
 import { Dictionary } from '@/models/locale';
-import { useEffect, useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { FaAngleLeft, FaAngleRight, FaExternalLinkAlt } from 'react-icons/fa';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -11,7 +11,6 @@ import './PdfViewer.css';
 // https://github.com/wojtekmaj/react-pdf/issues/1811#issuecomment-2171064960
 if (typeof Promise.withResolvers === 'undefined') {
   if (window)
-    // eslint-disable-next-line lines-around-comment
     // @ts-expect-error This does not exist outside of polyfill which this is doing
     window.Promise.withResolvers = function () {
       let resolve, reject;
@@ -30,10 +29,21 @@ interface PdfViewerProps {
   dictionary: Dictionary;
 }
 
+function useIsMobile() {
+  return useSyncExternalStore(
+    (callback) => {
+      window.addEventListener('resize', callback);
+      return () => window.removeEventListener('resize', callback);
+    },
+    () => window.innerWidth < 768,
+    () => false, // SSR fallback
+  );
+}
+
 export default function PdfViewer({ pdfUrl, dictionary }: PdfViewerProps) {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
@@ -45,17 +55,6 @@ export default function PdfViewer({ pdfUrl, dictionary }: PdfViewerProps) {
 
   const previousPage = () => changePage(-1);
   const nextPage = () => changePage(1);
-
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   const handleDownload = () => {
     window.open(pdfUrl, '_blank');

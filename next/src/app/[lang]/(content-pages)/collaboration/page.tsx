@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 const url =
   '/api/collaboration-general?populate[0]=Content.banner&populate[1]=Seo.twitter.twitterImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=ContactBanner';
-const tags = ['collaboration-general'];
+const tags = ['collaboration-general'] as const;
 
 interface CollaborationGeneralProps {
   params: Promise<{ lang: SupportedLanguage }>;

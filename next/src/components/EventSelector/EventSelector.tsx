@@ -4,7 +4,7 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { SelectedViewContext } from '@/providers/EventSelectorProvider';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useSyncExternalStore } from 'react';
 import { LuCalendarPlus } from 'react-icons/lu';
 import EventCalendarSkeleton from '../EventCalendar/EventCalendarSkeleton';
 import EventListSkeleton from '../EventsList/EventListSkeleton';
@@ -34,21 +34,26 @@ interface EventSelectorProps {
   lang: SupportedLanguage;
 }
 
+function subscribe(callback: () => void) {
+  window.addEventListener('resize', callback);
+  return () => window.removeEventListener('resize', callback);
+}
+
+function useWindowWidth() {
+  return useSyncExternalStore(
+    subscribe,
+    () => window.innerWidth,
+    () => 1200,
+  );
+}
+
 export default function EventSelector({
   events,
   lang,
   dictionary,
 }: EventSelectorProps) {
   const ctx = useContext(SelectedViewContext);
-  const [width, setWidth] = useState(1200);
-
-  useEffect(() => {
-    setWidth(window.innerWidth);
-    window.addEventListener('resize', () => setWidth(window.innerWidth));
-    return () => {
-      window.removeEventListener('resize', () => setWidth(window.innerWidth));
-    };
-  }, []);
+  const width = useWindowWidth();
 
   const setView = (view: 'calendar' | 'list') => {
     ctx.setView(view);

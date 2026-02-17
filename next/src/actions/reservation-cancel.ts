@@ -2,7 +2,7 @@
 import { auth } from '@/auth';
 import prisma from '@/libs/db/prisma';
 import { SupportedLanguage } from '@/models/locale';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function reservationCancel(
@@ -46,7 +46,7 @@ export async function reservationCancel(
     },
   });
 
-  revalidateTag(`get-cached-user:${session.user.entraUserUuid}`);
+  updateTag(`get-cached-user:${session.user.entraUserUuid}`);
   revalidatePath('/[lang]/events/[slug]', 'page');
   redirect(`/${lang}/own-events`);
 }

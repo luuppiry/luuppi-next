@@ -168,7 +168,7 @@ export default function AdminEventsTable({
         <h2 className="mb-4 text-lg font-semibold">
           {dictionary.pages_admin.event_history}
         </h2>
-        {Boolean(user.registrations.length) ? (
+        {user.registrations.length ? (
           <div className="overflow-x-auto">
             <table className="table">
               <thead>

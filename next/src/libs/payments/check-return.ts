@@ -19,7 +19,7 @@ export const checkReturn = async (req: NextRequest) => {
     );
 
     switch (event.type) {
-      case 'checkout.session.completed':
+      case 'checkout.session.completed': {
         // Payment successful
         const session = event.data.object;
         return {
@@ -27,6 +27,7 @@ export const checkReturn = async (req: NextRequest) => {
           successful: true,
           status: 'completed',
         };
+      }
 
       case 'checkout.session.expired':
         // Payment attempt expired
@@ -56,6 +57,6 @@ export const checkReturn = async (req: NextRequest) => {
     return null;
   } catch (error) {
     logger.error('Error processing webhook', error);
-    throw new Error('Error processing webhook');
+    throw new Error('Error processing webhook', { cause: error });
   }
 };

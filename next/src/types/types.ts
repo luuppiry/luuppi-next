@@ -2,7 +2,7 @@ import type { Schema, UID, Utils } from '@strapi/strapi';
 
 interface IDProperty {
   id: number;
-  documentId: string
+  documentId: string;
 }
 
 type InvalidKeys<TSchemaUID extends UID.Schema> = Utils.Object.KeysBy<
@@ -109,3 +109,11 @@ export interface APIResponseCollection<
   data: APIResponseData<TContentTypeUID>[];
   meta: APIResponseCollectionMetadata;
 }
+
+type ExtractApiContentType<T extends string> =
+  T extends `api::${infer ContentType}.${string}` ? ContentType : never;
+
+type ID = string;
+export type StrapiCacheTag =
+  | ExtractApiContentType<UID.ContentType>
+  | `${ExtractApiContentType<UID.ContentType>}-${ID}`;

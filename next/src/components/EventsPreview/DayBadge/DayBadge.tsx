@@ -1,33 +1,38 @@
 'use client';
 import { Event } from '@/models/event';
 import { Dictionary } from '@/models/locale';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 interface DayBadgeProps {
   dictionary: Dictionary;
   event: Event;
 }
 
+function useNow(intervalMs = 60_000) {
+  return useSyncExternalStore(
+    (callback) => {
+      const id = setInterval(callback, intervalMs);
+      return () => clearInterval(id);
+    },
+    () => Date.now(),
+    () => null,
+  );
+}
+
 export default function DayBadge({ dictionary, event }: DayBadgeProps) {
-  const [isToday, setIsToday] = useState(false);
-  const [isTomorrow, setIsTomorrow] = useState(false);
-  const [isEventNow, setIsEventNow] = useState(false);
+  const now = useNow();
 
-  useEffect(() => {
-    const isEventNow =
-      new Date(event.start) <= new Date() && new Date(event.end) >= new Date();
+  if (now === null) return null;
 
-    const isEventToday =
-      new Date(event.start).toDateString() === new Date().toDateString();
+  const start = new Date(event.start);
+  const end = new Date(event.end);
+  const nowDate = new Date(now);
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const isEventTomorrow =
-      new Date(event.start).toDateString() ===
-      new Date(new Date().setDate(new Date().getDate() + 1)).toDateString();
-
-    setIsEventNow(isEventNow);
-    setIsToday(isEventToday);
-    setIsTomorrow(isEventTomorrow);
-  }, [event]);
+  const isEventNow = start <= nowDate && end >= nowDate;
+  const isToday = start.toDateString() === nowDate.toDateString();
+  const isTomorrow = start.toDateString() === tomorrow.toDateString();
 
   if (!isToday && !isTomorrow && !isEventNow) return null;
 

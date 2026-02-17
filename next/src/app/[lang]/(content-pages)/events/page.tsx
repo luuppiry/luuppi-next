@@ -82,7 +82,7 @@ export async function generateMetadata(props: EventsProps): Promise<Metadata> {
   const params = await props.params;
   const url =
     '/api/events-calendar?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
-  const tags = ['events-calendar'];
+  const tags = ['events-calendar'] as const;
 
   const data = await getStrapiData<
     APIResponse<'api::events-calendar.events-calendar'>
