@@ -15,7 +15,7 @@ type Event = Omit<APIResponseData<'api::event.event'>, 'id'>;
 interface IcsEvent {
   name: string;
   startDate: Date;
-  Slug: string
+  Slug: string;
   endDate: Date;
   location: string;
   description: string;

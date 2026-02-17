@@ -16,7 +16,7 @@ const config = defineConfig(
       '@typescript-eslint/no-require-imports': 'off',
       '@typescript-eslint/no-extra-non-null-assertion': 'off',
       'spaced-comment': 'error',
-      'no-useless-assignment': "off",
+      'no-useless-assignment': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {

@@ -26,7 +26,9 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     ? getCachedUser(session.user.entraUserUuid)
     : null;
 
-  const eventRegistrationsPromise = getCachedEventRegistrations(event.data.documentId);
+  const eventRegistrationsPromise = getCachedEventRegistrations(
+    event.data.documentId,
+  );
 
   const [localUser, eventRegistrations] = await Promise.all([
     localUserPromise,
