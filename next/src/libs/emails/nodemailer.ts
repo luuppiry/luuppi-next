@@ -49,6 +49,6 @@ export async function sendEmail(options: EmailOptions) {
     return info;
   } catch (error) {
     logger.error('Error sending email:', error);
-    throw new Error('Error sending email');
+    throw new Error('Error sending email', { cause: error });
   }
 }

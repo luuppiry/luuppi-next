@@ -59,7 +59,7 @@
   "devDependencies": {
     "@eslint/compat": "^2.0.2",
     "@eslint/eslintrc": "^3.3.3",
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@microsoft/microsoft-graph-types": "^2.43.1",
     "@strapi/strapi": "^5.36.0",
     "@tailwindcss/typography": "^0.5.19",
@@ -96,7 +96,8 @@
         "react-router-dom",
         "zod",
         "codemirror",
-        "typescript"
+        "typescript",
+        "eslint"
       ],
       "ignoreMissing": [
         "styled-components",

@@ -95,6 +95,7 @@ export async function getStrapiData<T>(
 
     throw new Error(
       `Failed to fetch data from Strapi: ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error },
     );
   }
 }

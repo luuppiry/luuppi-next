@@ -49,6 +49,6 @@ export const createCharge = async (
     return session.url;
   } catch (error) {
     logger.error('Error creating charge', error);
-    throw new Error('Failed to create payment session');
+    throw new Error('Failed to create payment session', {cause: error});
   }
 };
