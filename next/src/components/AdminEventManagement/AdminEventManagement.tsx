@@ -9,7 +9,8 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection, StrapiCacheTag } from '@/types/types';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { PiEye } from 'react-icons/pi';
+import qs from 'qs';
+import { IoTicket } from 'react-icons/io5';
 import AdminExportEventButton from './AdminExportEventButton/AdminExportEventButton';
 
 const MAX_SEARCH_RESULTS = 10;
@@ -82,25 +83,39 @@ export default async function AdminEventManagement({
     take: searchTerm ? MAX_SEARCH_RESULTS : undefined,
   });
 
-  // Fetch Strapi data for all events to get RequiresPickup field
+  // Fetch Strapi data for all displayed events to get RequiresPickup field
   const eventIds = eventData.map((event) => event.eventDocumentId);
-  const strapiEventsResponse = await getStrapiData<
+  const strapiEventsQuery = qs.stringify({
+    filters: { documentId: { $in: eventIds } },
+    fields: ['documentId'],
+    populate: {
+      Registration: {
+        fields: ['RequiresPickup'],
+        filters: {
+          RequiresPickup: { $eq: true },
+        },
+      },
+    },
+  });
+
+  const strapiEvents = await getStrapiData<
     APIResponseCollection<'api::event.event'>
   >(
     lang,
-    `/api/events?filters[documentId][$in]=${eventIds.join(',')}&populate=Registration`,
+    `/api/events?${strapiEventsQuery}`,
     eventIds.map((id) => `event-${id}` satisfies StrapiCacheTag),
     true,
   );
+
   const strapiEventsMap = new Map(
-    strapiEventsResponse?.data?.map((event) => [
+    strapiEvents?.data?.map((event) => [
       event.documentId,
       event.Registration,
     ]) ?? [],
   );
 
-  // For search results, don't filter by registrations count
   const eventLanguageFormatted = eventData
+    // For search results, don't filter by registrations count
     .filter((event) => searchTerm || event.registrations.length)
     .map((event) => {
       const strapiRegistration = strapiEventsMap.get(event.eventDocumentId) as
@@ -141,7 +156,6 @@ export default async function AdminEventManagement({
                 <th>{dictionary.general.event}</th>
                 <th>{dictionary.general.starts_at}</th>
                 <th>{dictionary.general.registrations}</th>
-                <th>{dictionary.pages_admin.picked_up ?? 'Picked up'}</th>
                 <th>
                   <span className="flex justify-end">
                     {dictionary.general.actions}
@@ -174,26 +188,19 @@ export default async function AdminEventManagement({
                     </span>
                   </td>
                   <td>
-                    {event.requiresPickup ? (
-                      <span className="badge badge-primary">
-                        {event.pickedUpCount} / {event.registrations}
-                      </span>
-                    ) : (
-                      <span className="badge badge-ghost">0 / 0</span>
-                    )}
-                  </td>
-                  <td>
                     <div className="flex items-end justify-end gap-1">
-                      <Link
-                        aria-label={dictionary.general.view}
-                        className="btn btn-circle btn-ghost btn-primary btn-sm"
-                        href={`/${lang}/admin/event/${event.eventDocumentId}`}
-                      >
-                        <PiEye
-                          className="text-gray-800 dark:text-background-950"
-                          size={26}
-                        />
-                      </Link>
+                      {event.requiresPickup && (
+                        <Link
+                          aria-label={dictionary.general.view}
+                          className="btn btn-circle btn-ghost btn-primary btn-sm"
+                          href={`/${lang}/admin/event/${event.eventDocumentId}`}
+                        >
+                          <IoTicket
+                            className="text-gray-800 dark:text-background-950"
+                            size={24}
+                          />
+                        </Link>
+                      )}
                       <AdminExportEventButton
                         disabled={!event.registrations}
                         eventId={event.id}
