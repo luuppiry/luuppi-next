@@ -99,9 +99,6 @@ export default async function AdminEventRegistrationsList({
           {questionKeys.length > 0 && (
             <colgroup>
               <col />
-              <col />
-              <col />
-              <col />
               {questionKeys.map((key) => (
                 <col key={key} className="bg-base-200/60" />
               ))}
@@ -110,13 +107,10 @@ export default async function AdminEventRegistrationsList({
           )}
           <thead>
             <tr>
-              <th>#</th>
-              <th>{dictionary.general.email}</th>
-              <th>{dictionary.general.firstNames}</th>
-              <th>{dictionary.general.lastName}</th>
+              <th>{dictionary.general.preferredFullName}</th>
               {questionKeys.length > 0 && (
                 <th
-                  className="text-primary/70 border-l-2 border-base-content/10"
+                  className="text-primary/70 max-w-44 text-pretty break-words border-l-2 border-base-content/10"
                   colSpan={questionKeys.length}
                 >
                   {dictionary.pages_admin.registration_answers}
@@ -133,9 +127,6 @@ export default async function AdminEventRegistrationsList({
             {questionKeys.length > 0 && (
               <tr>
                 <th />
-                <th />
-                <th />
-                <th />
                 {questionKeys.map((key, i) => (
                   <th
                     key={key}
@@ -151,7 +142,17 @@ export default async function AdminEventRegistrationsList({
             )}
           </thead>
           <tbody className="[&>*:nth-child(odd)]:bg-base-200/40">
-            {registrations.map((registration, index) => {
+            {registrations.map((registration) => {
+              const firstname = (
+                registration.user.preferredFullName ||
+                registration.user.firstName
+              )
+                ?.split(' ')
+                .at(0);
+              const lastname = registration.user.lastName;
+              const fullName =
+                firstname && lastname ? `${firstname} ${lastname}` : null;
+
               const answersMap = Object.fromEntries(
                 registration.answers.map((a) => [
                   getQuestion(strapiEvent?.data, lang, a.question, a.type) ??
@@ -169,14 +170,11 @@ export default async function AdminEventRegistrationsList({
 
               return (
                 <tr key={registration.id}>
-                  <th>{index + 1}</th>
-                  <td>{registration.user.email}</td>
-                  <td>{registration.user.firstName || '-'}</td>
-                  <td>{registration.user.lastName || '-'}</td>
+                  <td>{fullName || registration.user.email}</td>
                   {questionKeys.map((key, i) => (
                     <td
                       key={key}
-                      className={`bg-base-200/30 ${
+                      className={`max-w-44 text-pretty break-words bg-base-200/30 ${
                         i === 0 ? 'border-l-2 border-base-content/10' : ''
                       }`}
                     >

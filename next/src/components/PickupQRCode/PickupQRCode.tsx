@@ -1,4 +1,3 @@
-// pickup-qr-code.tsx
 'use client';
 import { Dictionary } from '@/models/locale';
 import Image from 'next/image';
