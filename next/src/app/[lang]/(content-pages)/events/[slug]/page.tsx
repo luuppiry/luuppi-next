@@ -211,6 +211,14 @@ export default async function Event(props: EventProps) {
                   )}
                 </p>
               </div>
+              <div className="flex items-center">
+                <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
+                  <IoLocationOutline className="shrink-0 text-2xl" />
+                </div>
+                <p className="line-clamp-2">
+                  {event[params.lang === 'en' ? 'LocationEn' : 'LocationFi']}
+                </p>
+              </div>
               {registrationEndsOwnQuota && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
@@ -218,7 +226,13 @@ export default async function Event(props: EventProps) {
                   </div>
                   <div className="flex w-full items-center justify-between">
                     <p className="line-clamp-2">
-                      {dictionary.pages_events.registration_ends}{' '}
+                      {
+                        dictionary.pages_events[
+                          ownQuota?.Price
+                            ? 'ticket_sales_ends'
+                            : 'registration_ends'
+                        ]
+                      }{' '}
                       {new Intl.DateTimeFormat(params.lang, {
                         day: '2-digit',
                         month: 'short',
@@ -230,7 +244,11 @@ export default async function Event(props: EventProps) {
                     <span
                       className="tooltip tooltip-left flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
                       data-tip={
-                        dictionary.pages_events.registration_ends_explanation
+                               dictionary.pages_events[
+                          ownQuota?.Price
+                            ? 'ticket_sales_ends_explanation'
+                            : 'registration_ends_explanation'
+                        ]
                       }
                     >
                       <FaQuestion size={12} />
@@ -238,14 +256,6 @@ export default async function Event(props: EventProps) {
                   </div>
                 </div>
               )}
-              <div className="flex items-center">
-                <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                  <IoLocationOutline className="shrink-0 text-2xl" />
-                </div>
-                <p className="line-clamp-2">
-                  {event[params.lang === 'en' ? 'LocationEn' : 'LocationFi']}
-                </p>
-              </div>
               {event['FuksiPoints'] && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
@@ -260,17 +270,17 @@ export default async function Event(props: EventProps) {
                   </p>
                 </div>
               )}
-              {event['Alcohol'] && (
-                <div className="flex items-center">
+              {event.Alcohol && (
+                <div className="group flex items-center hover:items-start sm:hover:items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                    {event['Alcohol'] === 'no_alcohol' ? (
+                    {event.Alcohol === 'no_alcohol' ? (
                       <MdNoDrinks className="shrink-0 text-2xl" />
                     ) : (
                       <BiSolidDrink className="shrink-0 text-2xl" />
                     )}
                   </div>
-                  <p className="line-clamp-2 font-normal">
-                    {dictionary.pages_events[event['Alcohol']]}
+                  <p className="line-clamp-2 font-normal group-hover:line-clamp-none">
+                    {dictionary.pages_events[event.Alcohol]}
                   </p>
                 </div>
               )}

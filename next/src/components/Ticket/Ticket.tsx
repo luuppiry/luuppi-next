@@ -236,7 +236,15 @@ export default function Ticket({
             <div className="mt-2">
               {days === 0 ? (
                 <div>
-                  <p>{dictionary.pages_events.registration_starts}</p>
+                  <p>
+                    {
+                      dictionary.pages_events[
+                        ticket.price
+                          ? 'ticket_sales_start'
+                          : 'registration_starts'
+                      ]
+                    }
+                  </p>
                   <div className="mb-1 flex gap-5">
                     <div className="text-sm">
                       <span className="countdown font-mono text-2xl max-md:text-lg">
