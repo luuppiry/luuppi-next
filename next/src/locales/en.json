@@ -358,7 +358,7 @@
     "pickup_code": "Pickup Code",
     "show_qr_code": "Show QR Code",
     "hide_qr_code": "Hide QR Code",
-    "not_picked_up": "Not picked up yet",
+    "not_picked_up": "Awaiting pickup",
     "already_picked_up": "Already picked up",
     "show_to_admin": "Show this code to the administrator"
   },

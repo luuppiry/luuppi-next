@@ -100,13 +100,18 @@ export default function Registration({
               <span>{registration.price?.toFixed(2)} €</span>
               <span
                 className={`badge max-md:badge-sm ${
-                  registration.paymentCompleted
+                  registration.paymentCompleted &&
+                  (registration.pickupCode ? registration.pickedUp : true)
                     ? 'badge-success text-white'
                     : 'badge-warning text-gray-800'
                 }`}
               >
                 {registration.paymentCompleted
-                  ? dictionary.general[redeemedOrPaid]
+                  ? registration.pickupCode
+                    ? registration.pickedUp
+                      ? dictionary.pages_admin.picked_up
+                      : dictionary.pages_events.not_picked_up
+                    : dictionary.general[redeemedOrPaid]
                   : dictionary.pages_events.reserved}
               </span>
               {registration.reservedUntil >= new Date() &&
@@ -124,6 +129,14 @@ export default function Registration({
             </div>
           </div>
           <div className="flex items-end gap-2">
+            {registration.paymentCompleted &&
+              registration.pickupCode &&
+              !registration.pickedUp && (
+                <PickupQRCode
+                  dictionary={dictionary}
+                  pickupCode={registration.pickupCode}
+                />
+              )}
             {displayQuestionButton(registration, questions) && (
               <QuestionButton
                 answers={answers}
@@ -148,14 +161,6 @@ export default function Registration({
             )}
           </div>
         </div>
-
-        {registration.paymentCompleted && registration.pickupCode && (
-          <PickupQRCode
-            dictionary={dictionary}
-            pickedUp={registration.pickedUp ?? false}
-            pickupCode={registration.pickupCode}
-          />
-        )}
       </div>
     </div>
   );

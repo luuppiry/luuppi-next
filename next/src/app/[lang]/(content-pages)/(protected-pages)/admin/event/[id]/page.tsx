@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import AdminEventRegistrationsList from '@/components/AdminEventRegistrationsList/AdminEventRegistrationsList';
+import AdminEventRegistrationsList from '@/components/AdminEventRegistrationsTable/AdminEventRegistrationsTable';
 import PickupScanner from '@/components/PickupScanner/PickupScanner';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';

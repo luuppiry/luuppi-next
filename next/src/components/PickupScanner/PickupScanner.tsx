@@ -1,43 +1,45 @@
 'use client';
 import { togglePickupStatus } from '@/actions/admin/toggle-pickup-status';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useRef, useState } from 'react';
-import { PiCamera, PiKeyboard, PiX } from 'react-icons/pi';
+import { useState } from 'react';
+import {
+  Button,
+  Dialog,
+  DialogTrigger,
+  Modal,
+  ModalOverlay,
+} from 'react-aria-components';
+import { PiX } from 'react-icons/pi';
 
 interface PickupScannerProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
   eventDocumentId: string;
-  onSuccess?: () => void;
 }
 
 export default function PickupScanner({
   dictionary,
   lang,
   eventDocumentId,
-  onSuccess,
 }: PickupScannerProps) {
-  const [showScanner, setShowScanner] = useState(false);
-  const [manualCode, setManualCode] = useState('');
+  const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     text: string;
     isError: boolean;
   } | null>(null);
-  const [scanMode, setScanMode] = useState<'camera' | 'manual'>('manual');
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleManualSubmit = async (e: React.FormEvent) => {
+  const handleManualSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
-    if (!manualCode.trim()) return;
+    if (!code.trim()) return;
 
     setLoading(true);
     setMessage(null);
 
     const result = await togglePickupStatus(
       lang,
-      manualCode.toUpperCase().trim(),
+      code.toUpperCase().trim(),
       true,
       eventDocumentId,
     );
@@ -49,68 +51,42 @@ export default function PickupScanner({
         text: `${dictionary.general.success}: ${result.data?.email}`,
         isError: false,
       });
-      setManualCode('');
-      if (onSuccess) {
-        setTimeout(() => onSuccess(), 1500);
-      }
+      setCode('');
     }
 
     setLoading(false);
   };
 
-  const startCamera = async () => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' },
-      });
-      setStream(mediaStream);
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
-      setScanMode('camera');
-    } catch (_error) {
-      setMessage({
-        text:
-          dictionary.pages_admin.camera_not_available ?? 'Camera not available',
-        isError: true,
-      });
-    }
-  };
-
-  const stopCamera = () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-      setStream(null);
-    }
-    setScanMode('manual');
-  };
-
   const closeScanner = () => {
-    stopCamera();
-    setShowScanner(false);
-    setManualCode('');
+    setIsOpen(false);
+    setCode('');
     setMessage(null);
   };
 
   return (
-    <div>
-      <button
+    <DialogTrigger>
+      <Button
         className="btn btn-primary"
         type="button"
-        onClick={() => setShowScanner(true)}
+        onClick={() => setIsOpen(true)}
       >
-        {dictionary.pages_admin.scan_pickup_code ?? 'Scan Pickup Code'}
-      </button>
+        {dictionary.pages_admin.scan_pickup_code}
+      </Button>
 
-      {showScanner && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="w-full max-w-md rounded-lg bg-white p-6">
-            <div className="mb-4 flex items-center justify-between">
+      <ModalOverlay
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+        isOpen={isOpen}
+        isDismissable
+        onOpenChange={setIsOpen}
+      >
+        <Modal>
+          <Dialog className="w-full max-w-md rounded-lg bg-base-100 p-6 pt-2">
+            <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">
-                {dictionary.pages_admin.scan_pickup_code ?? 'Scan Pickup Code'}
+                {dictionary.pages_admin.scan_pickup_code}
               </h3>
               <button
-                className="btn btn-circle btn-ghost btn-sm"
+                className="btn btn-circle btn-ghost animate-none"
                 type="button"
                 onClick={closeScanner}
               >
@@ -118,93 +94,53 @@ export default function PickupScanner({
               </button>
             </div>
 
-            <div className="mb-4 flex gap-2">
-              <button
-                className={`btn flex-1 ${scanMode === 'manual' ? 'btn-primary' : 'btn-outline'}`}
-                type="button"
-                onClick={() => {
-                  stopCamera();
-                  setScanMode('manual');
-                }}
-              >
-                <PiKeyboard size={20} />
-                {dictionary.pages_admin.manual_entry ?? 'Manual Entry'}
-              </button>
-              <button
-                className={`btn flex-1 ${scanMode === 'camera' ? 'btn-primary' : 'btn-outline'}`}
-                type="button"
-                onClick={startCamera}
-              >
-                <PiCamera size={20} />
-                {dictionary.pages_admin.camera ?? 'Camera'}
-              </button>
-            </div>
-
-            {scanMode === 'camera' && (
-              <div className="mb-4">
-                <video
-                  ref={videoRef}
-                  className="w-full rounded"
-                  autoPlay
-                  playsInline
+            <form onSubmit={handleManualSubmit}>
+              <div className="form-control mb-4">
+                <label className="label" htmlFor="pickup-code">
+                  <span className="label-text">
+                    {dictionary.pages_events.pickup_code}
+                  </span>
+                </label>
+                <input
+                  className="input input-bordered font-mono uppercase"
+                  id="pickup-code"
+                  maxLength={6}
+                  placeholder="ABC123"
+                  type="text"
+                  value={code}
+                  autoFocus
+                  onChange={(e) => setCode(e.target.value.toUpperCase())}
                 />
-                <p className="mt-2 text-center text-sm text-gray-600">
-                  {dictionary.pages_admin.camera_scanning_note}
-                </p>
+                <label className="label">
+                  <span className="label-text-alt text-gray-500">
+                    {dictionary.pages_admin.enter_6_char_code}
+                  </span>
+                </label>
               </div>
-            )}
 
-            {scanMode === 'manual' && (
-              <form onSubmit={handleManualSubmit}>
-                <div className="form-control mb-4">
-                  <label className="label" htmlFor="pickup-code">
-                    <span className="label-text">
-                      {dictionary.pages_events.pickup_code ?? 'Pickup Code'}
-                    </span>
-                  </label>
-                  <input
-                    className="input input-bordered font-mono uppercase"
-                    id="pickup-code"
-                    maxLength={6}
-                    placeholder="ABC123"
-                    type="text"
-                    value={manualCode}
-                    autoFocus
-                    onChange={(e) =>
-                      setManualCode(e.target.value.toUpperCase())
-                    }
-                  />
-                  <label className="label">
-                    <span className="label-text-alt text-gray-500">
-                      {dictionary.pages_admin.enter_6_char_code}
-                    </span>
-                  </label>
-                </div>
-
-                {message && (
-                  <div
-                    className={`alert mb-4 ${message.isError ? 'alert-error' : 'alert-success'}`}
-                  >
-                    {message.text}
-                  </div>
-                )}
-
-                <button
-                  className="btn btn-primary w-full"
-                  disabled={loading || manualCode.length !== 6}
-                  type="submit"
+              {message && (
+                <div
+                  className={`alert mb-4 ${message.isError ? 'alert-error' : 'alert-success'}`}
                 >
-                  {loading ? (
-                    <span className="loading loading-spinner" />
-                  ) : (
-                    dictionary.pages_admin.mark_picked_up
-                  )}
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
+                  {message.text}
+                </div>
+              )}
+
+              <button
+                className="btn btn-primary w-full"
+                disabled={loading || code.length !== 6}
+                type="submit"
+              >
+                {loading ? (
+                  <span className="loading loading-spinner" />
+                ) : (
+                  dictionary.pages_admin.mark_picked_up
+                )}
+              </button>
+            </form>
+          </Dialog>
+        </Modal>
+      </ModalOverlay>
+    </DialogTrigger>
   );
 }

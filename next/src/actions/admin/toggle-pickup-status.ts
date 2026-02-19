@@ -5,6 +5,7 @@ import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { isValidPickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
+import { refresh, revalidatePath } from 'next/cache';
 
 export async function togglePickupStatus(
   lang: SupportedLanguage,
@@ -64,8 +65,7 @@ export async function togglePickupStatus(
 
     if (!isValidPickupCode(code)) {
       return {
-        message:
-          dictionary.api.invalid_pickup_code ?? 'Invalid pickup code format',
+        message: dictionary.api.invalid_pickup_code,
         isError: true,
       };
     }
@@ -104,8 +104,7 @@ export async function togglePickupStatus(
 
     if (!registration) {
       return {
-        message:
-          dictionary.api.registration_not_found ?? 'Registration not found',
+        message: dictionary.api.registration_not_found,
         isError: true,
       };
     }
@@ -129,6 +128,9 @@ export async function togglePickupStatus(
 
     const eventName =
       lang === 'fi' ? registration.event.nameFi : registration.event.nameEn;
+
+    revalidatePath(`/${lang}/admin/event/${eventDocumentId}`, 'page');
+    refresh()
 
     return {
       message: dictionary.general.success,

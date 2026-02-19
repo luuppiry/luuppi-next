@@ -358,7 +358,7 @@
     "pickup_code": "Noutokoodi",
     "show_qr_code": "Näytä QR-koodi",
     "hide_qr_code": "Piilota QR-koodi",
-    "not_picked_up": "Ei vielä noudettu",
+    "not_picked_up": "Odottaa noutoa",
     "already_picked_up": "Tuote on jo noudettu",
     "show_to_admin": "Näytä tämä koodi järjestäjälle"
   },
