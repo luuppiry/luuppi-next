@@ -53,7 +53,7 @@ export default function Discover({ dictionary, lang }: DiscoverProps) {
           </Link>
         ))}
       </div>
-      <div className="absolute bottom-0 left-0 -z-10 h-full w-full rotate-6 scale-50 rounded-lg bg-blue-200 blur-[550px] dark:bg-base-100" />
+      <div className="absolute bottom-0 left-0 -z-10 h-full w-full rotate-6 scale-75 rounded-lg bg-blue-200 blur-2xl opacity-20 dark:bg-base-100" />
       <div className="luuppi-pattern max-md:.test absolute -right-40 -top-10 -z-50 h-[801px] w-[901px] max-md:right-0 max-md:top-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </section>
   );
