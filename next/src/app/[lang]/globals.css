@@ -352,3 +352,9 @@
     border-radius: 20px;
   }
 }
+
+/** Fix Daisy UI modal triggering repaint of the entire page */
+:root:has(:is(.modal-open, .modal:target, .modal-toggle:checked + .modal, .modal[open])) {
+    overflow: auto !important;
+    scrollbar-gutter: stable !important;
+}
