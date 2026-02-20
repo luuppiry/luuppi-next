@@ -14,7 +14,7 @@ function useNow(intervalMs = 60_000) {
       const id = setInterval(callback, intervalMs);
       return () => clearInterval(id);
     },
-    () => Date.now(),
+    () => Math.floor(Date.now() / intervalMs) * intervalMs,
     () => null,
   );
 }
