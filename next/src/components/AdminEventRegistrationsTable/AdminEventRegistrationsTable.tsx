@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import TableZoomControl from '@/components/AdminEventRegistrationsTable/TableZoomControl';
 import prisma from '@/libs/db/prisma';
 import { getQuestion } from '@/libs/strapi/get-question';
 import { getSelectChoice } from '@/libs/strapi/get-select-choice';
@@ -81,26 +82,29 @@ export default async function AdminEventRegistrationsList({
   const pickedUpCount = registrations.filter((r) => r.pickedUp).length;
 
   return (
-    <div className="card card-body bg-base-100 text-base-content">
+    <div className="card card-body text-base-content" id="registrations-table">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold">
           {dictionary.general.registrations}
         </h2>
-        {requiresPickup && (
-          <span className="badge badge-primary">
-            {dictionary.pages_admin.picked_up}: {pickedUpCount} /{' '}
-            {registrations.length}
-          </span>
-        )}
+        <div className="flex items-center gap-4">
+          {requiresPickup && (
+            <span className="badge badge-primary">
+              {dictionary.pages_admin.picked_up}: {pickedUpCount} /{' '}
+              {registrations.length}
+            </span>
+          )}
+          <TableZoomControl />
+        </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="table">
+      <div className="overflow-x-auto rounded-md">
+        <table className="table [&_*]:![font-size:inherit] [&_td]:!px-[1em] [&_td]:!py-[0.75em] [&_th]:!px-[1em] [&_th]:!py-[0.75em]">
           {questionKeys.length > 0 && (
             <colgroup>
               <col />
               {questionKeys.map((key) => (
-                <col key={key} className="bg-base-200/60" />
+                <col key={key} />
               ))}
               {requiresPickup && <col />}
             </colgroup>
@@ -110,7 +114,7 @@ export default async function AdminEventRegistrationsList({
               <th>{dictionary.general.preferredFullName}</th>
               {questionKeys.length > 0 && (
                 <th
-                  className="text-primary/70 max-w-44 text-pretty break-words border-l-2 border-base-content/10"
+                  className="border-l-2 border-base-content/10"
                   colSpan={questionKeys.length}
                 >
                   {dictionary.pages_admin.registration_answers}
@@ -130,7 +134,7 @@ export default async function AdminEventRegistrationsList({
                 {questionKeys.map((key, i) => (
                   <th
                     key={key}
-                    className={`text-xs font-medium text-base-content/60 ${
+                    className={`max-w-20 whitespace-normal break-words font-medium text-base-content/60 ${
                       i === 0 ? 'border-l-2 border-base-content/10' : ''
                     }`}
                   >
@@ -141,7 +145,7 @@ export default async function AdminEventRegistrationsList({
               </tr>
             )}
           </thead>
-          <tbody className="[&>*:nth-child(odd)]:bg-base-200/40">
+          <tbody className="[&>*:nth-child(odd)]:bg-base-200">
             {registrations.map((registration) => {
               const firstname = (
                 registration.user.preferredFullName ||
@@ -170,7 +174,9 @@ export default async function AdminEventRegistrationsList({
 
               return (
                 <tr key={registration.id}>
-                  <td>{fullName || registration.user.email}</td>
+                  <td className="max-w-20 whitespace-normal break-words">
+                    {fullName || registration.user.email}
+                  </td>
                   {questionKeys.map((key, i) => (
                     <td
                       key={key}
