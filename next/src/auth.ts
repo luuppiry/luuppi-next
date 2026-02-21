@@ -11,24 +11,27 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
-  providers: [
-    AzureB2C({
-      clientId: process.env.AZURE_P_CLIENT_ID,
-      clientSecret: process.env.AZURE_P_CLIENT_SECRET,
-      authorization: {
-        url: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/authorize`,
-        params: {
-          code_challenge_method: undefined,
-          code_challenge: undefined,
-        },
-      },
-      issuer: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/v2.0`,
-      token: {
-        url: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`,
-        grant_type: 'authorization_code',
-      },
-    }),
-  ],
+  providers:
+    process.env.NODE_ENV === 'development' && process.env.DEV_MOCK_USER
+      ? [(await import('./local-auth')).DevOnlyCredentialsProvider]
+      : [
+          AzureB2C({
+            clientId: process.env.AZURE_P_CLIENT_ID,
+            clientSecret: process.env.AZURE_P_CLIENT_SECRET,
+            authorization: {
+              url: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/authorize`,
+              params: {
+                code_challenge_method: undefined,
+                code_challenge: undefined,
+              },
+            },
+            issuer: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/v2.0`,
+            token: {
+              url: `https://${process.env.AZURE_TENANT_ID}.ciamlogin.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`,
+              grant_type: 'authorization_code',
+            },
+          }),
+        ],
   pages: {
     error: '/auth/error',
   },
@@ -57,8 +60,8 @@ export const {
 
       return session;
     },
-    async jwt({ token, account }) {
-      if (account) {
+    async jwt({ token, account, user }) {
+      if (account && account.provider !== 'credentials') {
         const idToken = account.id_token;
         if (!idToken) return token;
         let decoded: null | { email: string; oid: string } = null;
@@ -140,6 +143,21 @@ export const {
         token.username = localUser.username;
         token.version = process.env.TOKEN_VERSION;
       }
+
+      // Mock credentials (dev only)
+      if (
+        account?.provider === 'credentials' &&
+        user &&
+        process.env.NODE_ENV === 'development'
+      ) {
+        const jwt = (await import('./local-auth')).createDevOnlyJWT({
+          user,
+          token,
+        });
+
+        return await jwt;
+      }
+
       return token;
     },
   },
