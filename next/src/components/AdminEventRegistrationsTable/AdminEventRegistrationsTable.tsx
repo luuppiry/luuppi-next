@@ -83,11 +83,11 @@ export default async function AdminEventRegistrationsList({
 
   return (
     <div className="card card-body text-base-content" id="registrations-table">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between select-none">
         <h2 className="text-lg font-semibold">
           {dictionary.general.registrations}
         </h2>
-        <div className="flex items-center gap-4">
+        <div className="flex  items-center gap-4">
           {requiresPickup && (
             <span className="badge badge-primary">
               {dictionary.pages_admin.picked_up}: {pickedUpCount} /{' '}
