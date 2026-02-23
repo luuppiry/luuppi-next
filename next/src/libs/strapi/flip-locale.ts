@@ -51,7 +51,7 @@ export const flipNewsLocale = (
           return {
             ...news,
             ...localeEn,
-            banner: news.banner,
+            banner: localeEn.banner ?? news.banner,
             authorImage: news.authorImage,
             slug: news.slug,
             Seo: {
