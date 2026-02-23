@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
       },
     ],
     qualities: [75, 100],
-    formats: ['image/avif', 'image/webp'],
+    formats: ['image/webp'],
   },
   redirects: async () =>
     Object.entries(redirects).map(([id, slug]) => ({
