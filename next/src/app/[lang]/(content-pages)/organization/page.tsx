@@ -43,3 +43,5 @@ export async function generateMetadata(
 
   return formatMetadata(data, pathname);
 }
+
+export const dynamic = 'error';

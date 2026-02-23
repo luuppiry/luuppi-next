@@ -37,3 +37,5 @@ export default async function Home(props: HomeProps) {
     </>
   );
 }
+
+export const dynamic = 'error'

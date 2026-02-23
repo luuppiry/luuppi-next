@@ -5,7 +5,6 @@ import { Dictionary } from '@/models/locale';
 import { APIResponseData } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { connection } from 'next/server';
 
 interface SidePartnersProps {
   partnersData: APIResponseData<'api::company.company'>[];
@@ -16,10 +15,7 @@ export default async function SidePartners({
   partnersData,
   dictionary,
 }: SidePartnersProps) {
-  await connection();
-
   const randomPartners = partnersData
-    // await connection() quarantees this is never prerendered and Math.random() runs exactly once
     // eslint-disable-next-line react-hooks/purity
     .sort(() => Math.random() - 0.5)
     .slice(0, 3);

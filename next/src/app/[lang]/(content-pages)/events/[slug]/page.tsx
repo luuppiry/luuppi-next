@@ -1,12 +1,11 @@
-import { auth } from '@/auth';
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
+import RegistrationEndsOwnQuota from '@/components/RegistrationEndsOwnQuota/RegistrationEndsOwnQuota';
 import ShowParticipants from '@/components/ShowParticipants/ShowParticipants';
 import SidePartners from '@/components/SidePartners/SidePartners';
 import TicketArea from '@/components/Ticket/TicketArea';
 import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
-import { getCachedEventRegistrations } from '@/libs/db/queries/get-cached-event-registrations';
-import { getCachedUser } from '@/libs/db/queries/get-cached-user';
+
 import { getPlainText } from '@/libs/strapi/blocks-converter';
 import { isEventVisible } from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
@@ -22,12 +21,7 @@ import { redirect } from 'next/navigation';
 import Script from 'next/script';
 import { Suspense } from 'react';
 import { BiSolidDrink } from 'react-icons/bi';
-import { FaQuestion } from 'react-icons/fa';
-import {
-  IoCalendarOutline,
-  IoLocationOutline,
-  IoTicket,
-} from 'react-icons/io5';
+import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 import { LuBaby } from 'react-icons/lu';
 import { MdNoDrinks } from 'react-icons/md';
 import { PiImageBroken } from 'react-icons/pi';
@@ -40,7 +34,6 @@ interface EventProps {
 export default async function Event(props: EventProps) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
-  const session = await auth();
   const { isEnabled: isDraftMode } = await draftMode();
 
   const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
@@ -72,80 +65,6 @@ export default async function Event(props: EventProps) {
   if (!event || !partnersData) {
     redirect(`/${params.lang}/404`);
   }
-
-  const ticketTypes = event.Registration?.TicketTypes;
-
-  const localUserPromise = session?.user?.entraUserUuid
-    ? getCachedUser(session.user.entraUserUuid)
-    : null;
-
-  const eventRegistrationsPromise = getCachedEventRegistrations(
-    event.documentId,
-  );
-
-  const [localUser, eventRegistrations] = await Promise.all([
-    localUserPromise,
-    eventRegistrationsPromise,
-  ]);
-
-  const strapiRoleUuids =
-    localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
-  const eventRolesWithWeights =
-    ticketTypes?.map((ticketType) => ({
-      strapiRoleUuid: ticketType.Role?.RoleId,
-      weight: ticketType.Weight,
-    })) ?? [];
-
-  const hasDefaultRoleWeight = eventRolesWithWeights.find(
-    (role) => role.strapiRoleUuid === process.env.NEXT_PUBLIC_NO_ROLE_ID!,
-  );
-
-  const targetedRole = strapiRoleUuids.reduce(
-    (acc, strapiRoleUuid) => {
-      const roleWeight =
-        eventRolesWithWeights.find(
-          (role) => role.strapiRoleUuid === strapiRoleUuid,
-        )?.weight ?? 0;
-      return roleWeight > acc.weight
-        ? { strapiRoleUuid: strapiRoleUuid, weight: roleWeight }
-        : acc;
-    },
-    {
-      strapiRoleUuid: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
-      weight: hasDefaultRoleWeight?.weight ?? 0,
-    },
-  );
-
-  const ownQuota = ticketTypes?.find(
-    (type) => type.Role?.RoleId === targetedRole.strapiRoleUuid,
-  );
-
-  const isOwnQuota = (role: string) => {
-    if (!session?.user) return false;
-    return targetedRole.strapiRoleUuid === role;
-  };
-
-  const isSoldOut = (total: number, roleUuid: string) => {
-    if (!eventRegistrations) return false;
-    const totalRegistrationWithRole = eventRegistrations.filter(
-      (registration) => registration.purchaseRole.strapiRoleUuid === roleUuid,
-    ).length;
-    return totalRegistrationWithRole >= total;
-  };
-
-  const registrationEndsOwnQuota = ticketTypes?.reduce((latestDate, ticket) => {
-    const ticketIsOwnQuota = ticket.Role && isOwnQuota(ticket.Role!.RoleId!);
-    const isSoldOutOwnQuota = ownQuota
-      ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.RoleId!)
-      : false;
-
-    if (!ticketIsOwnQuota || isSoldOutOwnQuota) {
-      return latestDate;
-    }
-
-    const currentDate = new Date(ticket.RegistrationEndsAt);
-    return !latestDate || currentDate > latestDate ? currentDate : latestDate;
-  }, null! as Date);
 
   const imageUrlLocalized =
     params.lang === 'en' && event.ImageEn?.url
@@ -219,43 +138,13 @@ export default async function Event(props: EventProps) {
                   {event[params.lang === 'en' ? 'LocationEn' : 'LocationFi']}
                 </p>
               </div>
-              {registrationEndsOwnQuota && (
-                <div className="flex items-center">
-                  <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                    <IoTicket className="shrink-0 text-2xl" />
-                  </div>
-                  <div className="flex w-full items-center justify-between">
-                    <p className="line-clamp-2">
-                      {
-                        dictionary.pages_events[
-                          ownQuota?.Price
-                            ? 'ticket_sales_ends'
-                            : 'registration_ends'
-                        ]
-                      }{' '}
-                      {new Intl.DateTimeFormat(params.lang, {
-                        day: '2-digit',
-                        month: 'short',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                      }).format(registrationEndsOwnQuota)}
-                    </p>
-
-                    <span
-                      className="tooltip tooltip-left flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
-                      data-tip={
-                               dictionary.pages_events[
-                          ownQuota?.Price
-                            ? 'ticket_sales_ends_explanation'
-                            : 'registration_ends_explanation'
-                        ]
-                      }
-                    >
-                      <FaQuestion size={12} />
-                    </span>
-                  </div>
-                </div>
-              )}
+              <Suspense>
+                <RegistrationEndsOwnQuota
+                  dictionary={dictionary}
+                  event={event}
+                  lang={params.lang}
+                />
+              </Suspense>
               {event['FuksiPoints'] && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
@@ -393,25 +282,3 @@ export async function generateMetadata(props: EventProps): Promise<Metadata> {
     },
   };
 }
-
-// TODO: Remove when partial pre-rendering is available in Nextjs 15
-// export async function generateStaticParams() {
-//   const url = '/api/events';
-
-//   const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-//     'fi',
-//     url,
-//     ['event'],
-//     true,
-//   );
-
-//   if (!data) return [];
-
-//   const events = data.data
-//     .filter((e) => e.id)
-//     .map((event) => event.id.toString());
-
-//   return events.map((eventId) => ({
-//     slug: eventId,
-//   }));
-// }

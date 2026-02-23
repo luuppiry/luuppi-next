@@ -3,6 +3,7 @@ import Negotiator from 'negotiator';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { i18n } from './i18n-config';
+import { draftMode, headers } from 'next/headers';
 
 function getLocale(request: NextRequest): string | undefined {
   // Use cookie if it exists and is valid
@@ -29,7 +30,7 @@ function getLocale(request: NextRequest): string | undefined {
   return matchLocale(languages, locales, i18n.defaultLocale);
 }
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   if (pathname.startsWith('/api')) {
@@ -73,6 +74,21 @@ export function proxy(request: NextRequest) {
     ].includes(pathname)
   ) {
     return NextResponse.next();
+  }
+
+  // Disable draft mode if not accessed from CMS preview
+  // calling the /api/preview endpoint sets a cookie that is persisted for the session
+  // so draft mode would leak if user previews content in the CMS then navigates to luuppi.fi
+  // TODO: using Sec-Fetch-Dest is not the most eloquent solution since it disables for any non iframe request
+  // (https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-Fetch-Dest)
+  const draft = await draftMode();
+  if (draft.isEnabled) {
+    const headersList = await headers();
+    const destination = headersList.get('Sec-Fetch-Dest');
+
+    if (destination !== 'iframe') {
+      draft.disable();
+    }
   }
 
   // Check if there is any supported locale in the pathname

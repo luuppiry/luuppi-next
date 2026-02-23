@@ -3,6 +3,7 @@ import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { Dictionary } from '@/models/locale';
 import { APIResponseData } from '@/types/types';
+import { PHASE_PRODUCTION_SERVER } from 'next/constants';
 
 const luuppiMember = process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!;
 const luuppiNonMember = process.env.NEXT_PUBLIC_NO_ROLE_ID!;
@@ -161,11 +162,17 @@ export const filterVisibleEvents = async (
   events: Event[],
   forcedRoles?: string[],
 ): Promise<Event[]> => {
-  if (forcedRoles?.length) {
+  const isProd = process.env.NEXT_PHASE === PHASE_PRODUCTION_SERVER;
+
+  const roles = [
+    ...new Set(...(forcedRoles ?? []), ...(isProd ? [] : [luuppiNonMember])),
+  ];
+
+  if (roles?.length) {
     const visibilityChecks = await Promise.all(
       events.map(async (event) => ({
         event,
-        visible: await isEventVisible(event, forcedRoles),
+        visible: await isEventVisible(event, roles),
       })),
     );
 
