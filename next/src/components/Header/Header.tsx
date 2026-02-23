@@ -39,10 +39,10 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                 alt="Luuppi logo"
                 className={'object-contain'}
                 draggable={false}
+                fetchPriority="high"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={luuppiSvg}
                 fill
-                priority
               />
             </Link>
             <div className="flex items-center gap-4">

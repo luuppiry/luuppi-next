@@ -18,6 +18,8 @@ const nextConfig: NextConfig = {
         pathname: '/uploads/**',
       },
     ],
+    qualities: [75, 100],
+    formats: ['image/avif', 'image/webp'],
   },
   redirects: async () =>
     Object.entries(redirects).map(([id, slug]) => ({

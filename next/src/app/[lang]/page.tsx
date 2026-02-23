@@ -9,6 +9,7 @@ import { getDictionary } from '@/dictionaries';
 import { getOrganizationJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
 import Script from 'next/script';
+import ReactDOM from 'react-dom';
 
 interface HomeProps {
   params: Promise<{ lang: SupportedLanguage }>;
@@ -17,6 +18,8 @@ interface HomeProps {
 export default async function Home(props: HomeProps) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
+
+  ReactDOM.preload('/luuppi-cards.svg', { fetchPriority: 'high', as: 'image' });
 
   return (
     <>
@@ -38,4 +41,4 @@ export default async function Home(props: HomeProps) {
   );
 }
 
-export const dynamic = 'error'
+export const dynamic = 'error';
