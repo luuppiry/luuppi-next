@@ -17,9 +17,33 @@ import { redirect } from 'next/navigation';
 import Script from 'next/script';
 import { FaUserAlt } from 'react-icons/fa';
 import { PiImageBroken } from 'react-icons/pi';
+import qs from 'qs';
 
-const baseUrl =
-  '/api/news?populate[0]=banner&populate[1]=authorImage&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[slug][$eq]=';
+const baseQuery = qs.stringify({
+  populate: {
+    banner: true,
+    authorImage: true,
+    Seo: {
+      populate: {
+        openGraph: { populate: { openGraphImage: true } },
+        twitter: { populate: { twitterImage: true } },
+      },
+    },
+    localizations: {
+      populate: {
+        banner: true,
+        Seo: {
+          populate: {
+            twitter: { populate: { twitterImage: true } },
+            openGraph: { populate: { openGraphImage: true } },
+          },
+        },
+      },
+    },
+  },
+});
+
+const baseUrl = `/api/news?${baseQuery}&filters[slug][$eq]=`;
 
 interface NewsPostProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;

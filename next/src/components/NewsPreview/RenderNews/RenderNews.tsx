@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaUserAlt } from 'react-icons/fa';
 import { PiImageBroken } from 'react-icons/pi';
+import qs from 'qs';
 
 interface RenderNewsProps {
   lang: SupportedLanguage;
@@ -21,34 +22,29 @@ export default async function RenderNews({
   dictionary,
 }: RenderNewsProps) {
   const { isEnabled: isDraftMode } = await draftMode();
+
+  const query = qs.stringify({
+    populate: {
+      banner: true,
+      authorImage: true,
+      localizations: {
+        populate: { banner: true },
+      },
+    },
+    sort: ['publishedAt:desc', 'createdAt:desc'],
+    pagination: { pageSize: 20 },
+  });
+
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
-  >(
-    'fi',
-    '/api/news?populate[0]=banner&populate[1]=authorImage&populate[3]=localizations&pagination[pageSize]=100',
-    ['news-single'],
-    false,
-    isDraftMode,
-  );
+  >('fi', `/api/news?${query}`, ['news-single'], false, isDraftMode);
 
-  const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);
-
-  const sortedNews = newsLocaleFlipped
-    .sort((a, b) => {
-      const dateA = a?.publishedAt
-        ? new Date(a.publishedAt).getTime()
-        : new Date(a.createdAt || new Date()).getTime();
-      const dateB = b.publishedAt
-        ? new Date(b.publishedAt).getTime()
-        : new Date(b.createdAt || new Date()).getTime();
-
-      return dateB - dateA;
-    })
-    .slice(0, 4);
+  // We need to fetch more than we render, because flipNewsLocale removes entries that don't have english localization
+  const newsLocaleFlipped = flipNewsLocale(lang, pageData.data).slice(0, 4);
 
   return (
     <>
-      {sortedNews.map((news, i) => (
+      {newsLocaleFlipped.map((news, i) => (
         <article
           key={i}
           className={`${
