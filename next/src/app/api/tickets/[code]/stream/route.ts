@@ -1,6 +1,8 @@
 import { ticketEmitter } from '@/libs/sse-emitter';
 import { NextRequest } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ code: string }> },
