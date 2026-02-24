@@ -340,32 +340,37 @@ export async function reservationCreate(
 
       // Generate a unique pickup code
       const requiresPickup = strapiEvent.Registration?.RequiresPickup ?? false;
-      let pickupCode = '';
-      if (requiresPickup) {
-        pickupCode = generatePickupCode();
-        let attempts = 0;
-        const maxAttempts = 1000;
-        while (attempts < maxAttempts) {
-          const existing = await prisma.eventRegistration.findUnique({
-            where: { pickupCode },
-          });
-          if (!existing) {
-            break;
-          }
-          pickupCode = generatePickupCode();
-          attempts++;
-        }
 
-        const eventRegistrationsFormattedWithPickupCode = Array.from({
-          length: amount,
-        }).map(() => ({
-          eventDocumentId,
-          entraUserUuid,
-          strapiRoleUuid,
-          reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
-          price: ownQuota.Price,
-          pickupCode: pickupCode,
-        }));
+      if (requiresPickup) {
+        const eventRegistrationsFormattedWithPickupCode = await Promise.all(
+          Array.from({ length: amount }).map(async () => {
+            let pickupCode = '';
+            pickupCode = generatePickupCode();
+            let attempts = 0;
+            const maxAttempts = 1000;
+
+            while (attempts < maxAttempts) {
+              const existing = await prisma.eventRegistration.findUnique({
+                where: { pickupCode },
+              });
+
+              if (!existing) {
+                break;
+              }
+              pickupCode = generatePickupCode();
+              attempts++;
+            }
+
+            return {
+              eventDocumentId,
+              entraUserUuid,
+              strapiRoleUuid,
+              reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
+              price: ownQuota.Price,
+              pickupCode,
+            };
+          }),
+        );
 
         // Create event registrations. This is the actual reservation.
         await prisma.eventRegistration.createMany({
