@@ -69,8 +69,6 @@ export async function proxy(request: NextRequest) {
       '/kolmiot.svg',
       '/luuppi-cards.svg',
       '/luuppi.svg',
-      '/locale-icons/us.svg',
-      '/locale-icons/fi.svg',
     ].includes(pathname)
   ) {
     return NextResponse.next();
