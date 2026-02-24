@@ -15,6 +15,8 @@ export async function GET(
         controller.enqueue(`data: ${JSON.stringify(data)}\n\n`);
       };
 
+      controller.enqueue(':ok\n\n');
+
       const eventName = `ticket-updated-${code}`;
       ticketEmitter.on(eventName, listener);
 
