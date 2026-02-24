@@ -24,13 +24,16 @@ export async function GET(
         controller.error(error);
       }
 
-      subscriber.on('message', (channel, message) => {
+      const push = (channel: string, message: string) => {
         if (channel === eventName) {
           controller.enqueue(`data: ${message}\n\n`);
         }
-      });
+      };
+
+      subscriber.on('message', push);
 
       request.signal.addEventListener('abort', async () => {
+        subscriber.off('message', push);
         await subscriber.unsubscribe(eventName);
         await subscriber.quit();
       });
