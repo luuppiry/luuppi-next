@@ -1,4 +1,5 @@
-import { ticketEmitter } from '@/libs/sse-emitter';
+import { redisClient } from '@/libs/db/redis';
+import { logger } from '@/libs/utils/logger';
 import { NextRequest } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -8,20 +9,30 @@ export async function GET(
   { params }: { params: Promise<{ code: string }> },
 ) {
   const code = (await params).code;
+  const eventName = `ticket-updated-${code}`;
+
+  const subscriber = redisClient.duplicate();
 
   const stream = new ReadableStream({
-    start(controller) {
-      const listener = (data: any) => {
-        controller.enqueue(`data: ${JSON.stringify(data)}\n\n`);
-      };
-
+    async start(controller) {
       controller.enqueue(':ok\n\n');
 
-      const eventName = `ticket-updated-${code}`;
-      ticketEmitter.on(eventName, listener);
+      try {
+        await subscriber.subscribe(eventName);
+      } catch (error) {
+        logger.error('Redis Subscription Error:', error);
+        controller.error(error);
+      }
 
-      request.signal.addEventListener('abort', () => {
-        ticketEmitter.off(eventName, listener);
+      subscriber.on('message', (channel, message) => {
+        if (channel === eventName) {
+          controller.enqueue(`data: ${message}\n\n`);
+        }
+      });
+
+      request.signal.addEventListener('abort', async () => {
+        await subscriber.unsubscribe(eventName);
+        await subscriber.quit();
       });
     },
   });
@@ -31,6 +42,7 @@ export async function GET(
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache, no-transform',
       Connection: 'keep-alive',
+      'X-Accel-Buffering': 'no',
     },
   });
 }
