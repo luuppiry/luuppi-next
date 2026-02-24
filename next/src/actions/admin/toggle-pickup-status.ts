@@ -6,6 +6,7 @@ import { logger } from '@/libs/utils/logger';
 import { isValidPickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
 import { refresh, revalidatePath } from 'next/cache';
+import { ticketEmitter } from '@/libs/sse-emitter';
 
 export async function togglePickupStatus(
   lang: SupportedLanguage,
@@ -129,8 +130,12 @@ export async function togglePickupStatus(
     const eventName =
       lang === 'fi' ? registration.event.nameFi : registration.event.nameEn;
 
+    ticketEmitter.emit(`ticket-updated-${registration.pickupCode}`, {
+      isPickedUp: true,
+    });
+
     revalidatePath(`/${lang}/admin/event/${eventDocumentId}`, 'page');
-    refresh()
+    refresh();
 
     return {
       message: dictionary.general.success,

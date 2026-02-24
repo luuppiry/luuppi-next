@@ -30,6 +30,7 @@
     "@react-email/components": "0.0.33",
     "@strapi/blocks-react-renderer": "^1.0.2",
     "@types/qrcode": "^1.5.6",
+    "@yudiel/react-qr-scanner": "^2.5.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "ical-generator": "^10.0.0",

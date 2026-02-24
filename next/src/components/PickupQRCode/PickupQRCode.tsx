@@ -1,7 +1,7 @@
 'use client';
 import { Dictionary } from '@/models/locale';
 import Image from 'next/image';
-import QRCode from 'qrcode';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
   Button,
@@ -13,27 +13,36 @@ import {
 
 interface PickupQRCodeProps {
   pickupCode: string;
+  pickupQrCode: string | null;
   dictionary: Dictionary;
 }
 
 export default function PickupQRCode({
   pickupCode,
+  pickupQrCode,
   dictionary,
 }: PickupQRCodeProps) {
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    if (!pickupCode || !isOpen) return;
+    const eventSource = new EventSource(`/api/tickets/${pickupCode}/stream`);
 
-    QRCode.toDataURL(pickupCode, {
-      width: 200,
-      margin: 0,
-      color: { dark: '#000000', light: '#FFFFFF' },
-    })
-      .then(setQrCodeDataUrl)
-      .catch(() => {}); // QR code is optional
-  }, [pickupCode, isOpen]);
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.isPickedUp) {
+        setIsOpen(false);
+        router.refresh();
+
+        eventSource.close();
+      }
+    };
+
+    // Cleanup on unmount
+    return () => {
+      eventSource.close();
+    };
+  }, [pickupCode, router]);
 
   if (!pickupCode) return null;
 
@@ -56,12 +65,12 @@ export default function PickupQRCode({
         <Modal>
           <Dialog className="w-full max-w-md rounded-lg bg-base-100 p-6">
             <div className="flex flex-col gap-2">
-              {qrCodeDataUrl && (
+              {pickupQrCode && (
                 <Image
                   alt="Pickup QR Code"
                   className="rounded"
                   height={200}
-                  src={qrCodeDataUrl}
+                  src={pickupQrCode}
                   width={200}
                   unoptimized
                 />
