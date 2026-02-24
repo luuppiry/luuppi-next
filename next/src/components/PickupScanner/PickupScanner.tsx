@@ -1,7 +1,9 @@
 'use client';
+import PartyPhp from '@/../public/images/php.gif';
 import { togglePickupStatus } from '@/actions/admin/toggle-pickup-status';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner';
+import Image from 'next/image';
 import { useCallback, useState } from 'react';
 import {
   Button,
@@ -30,7 +32,8 @@ export default function PickupScanner({
     isError: boolean;
   } | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
+  const [hasSeenNotice, setHasSeenNotice] = useState(false);
 
   const highlightCodeOnCanvas = (
     detectedCodes: IDetectedBarcode[],
@@ -135,7 +138,7 @@ export default function PickupScanner({
             </div>
 
             <div
-              className={`h-60 overflow-clip rounded-xl border-4 shadow-md transition-all ${
+              className={`relative h-60 overflow-clip rounded-xl border-2 transition-all ${
                 message
                   ? message.isError
                     ? 'border-error'
@@ -143,12 +146,30 @@ export default function PickupScanner({
                   : 'border-transparent'
               }`}
             >
-              <Scanner
-                components={{ tracker: highlightCodeOnCanvas }}
-                formats={['qr_code']}
-                paused={isPaused}
-                onScan={onScan}
-              />
+              {hasSeenNotice ? (
+                <Scanner
+                  components={{ tracker: highlightCodeOnCanvas }}
+                  formats={['qr_code']}
+                  paused={isPaused}
+                  onScan={onScan}
+                />
+              ) : (
+                <div className="flex h-full flex-col gap-4 overflow-scroll p-1">
+                  <div className="font-sans text-sm">
+                    {dictionary.pages_admin.qr_instructions}
+                  </div>
+
+                  <Button
+                    className="btn btn-outline border-gray-400"
+                    onClick={() =>
+                      void (setHasSeenNotice(true), setIsPaused(false))
+                    }
+                  >
+                    <Image alt="" height={24} src={PartyPhp} width={24} />
+                    {dictionary.pages_admin.open_camera}
+                  </Button>
+                </div>
+              )}
             </div>
 
             <form

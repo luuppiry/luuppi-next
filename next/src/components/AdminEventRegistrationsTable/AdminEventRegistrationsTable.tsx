@@ -83,7 +83,7 @@ export default async function AdminEventRegistrationsList({
 
   return (
     <div className="card card-body text-base-content" id="registrations-table">
-      <div className="mb-4 flex items-center justify-between select-none">
+      <div className="mb-4 flex items-center justify-between select-none flex-wrap">
         <h2 className="text-lg font-semibold">
           {dictionary.general.registrations}
         </h2>
