@@ -18,7 +18,7 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
   >(
     'fi',
-    '/api/luuppi-sanomats?populate[1]=image&pagination[pageSize]=100&sort[0]=publishedAt:desc',
+    '/api/luuppi-sanomats?populate[1]=image&pagination[pageSize]=500&sort[0]=publishedAt:desc',
     ['luuppi-sanomat'],
   );
 
