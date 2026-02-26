@@ -215,7 +215,9 @@ export default async function OwnEvents(props: OwnEventsProps) {
 
   const isFreeTicket = !unpaidRegistrations.some((reg) => reg.price !== 0);
   const ticket = tickets.find((ticket) =>
-    unpaidRegistrations.find((reg) => reg.ticketUid === ticket?.uid),
+    unpaidRegistrations.find(
+      (reg) => reg.ticketUid && ticket?.uid && reg.ticketUid === ticket.uid,
+    ),
   );
 
   const getQuestionsForEvent = (eventDocumentId: string) =>
