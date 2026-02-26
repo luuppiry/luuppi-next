@@ -148,6 +148,8 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const ticketTypesFormatted = ticketTypes
     ?.filter((type) => Boolean(type.Role?.RoleId))
     ?.map((ticketType) => ({
+      // Ticket Component ID -- used to allow multiple quotas for a role (e.g. two tickets with role = member)
+      uid: ticketType.uid,
       name: ticketType[lang === 'en' ? 'NameEn' : 'NameFi'],
       location: event.data[lang === 'en' ? 'LocationEn' : 'LocationFi'],
       price: ticketType.Price,

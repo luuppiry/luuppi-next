@@ -37,8 +37,13 @@ export async function POST(request: NextRequest) {
         return new Response('No entry found', { status: 400 });
       }
 
-      revalidateTag(`event-${body.entry.documentId}`, 'max');
-      revalidateTag(`event-${body.entry.Slug}`, 'max');
+      // TODO: Next.js is moving away from blocking tag revalidations (updateTag is restricted to actions)
+      // This does not work for us since we need events to be fresh for registration purposes.
+      // Omitting the profile (2nd parameter) is a blocking cache reset and not typed
+      // @ts-expect-error ^^^ :)
+      revalidateTag(`event-${body.entry.documentId}`);
+      // @ts-expect-error ^^^ :)
+      revalidateTag(`event-${body.entry.Slug}`);
 
       const {
         NameFi,

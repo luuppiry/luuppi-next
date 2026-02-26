@@ -41,6 +41,10 @@ interface RegistrationProps {
   }[];
   dictionary: Dictionary;
   lang: SupportedLanguage;
+  ticket?: {
+    NameEn: string;
+    NameFi: string;
+  } | null;
 }
 
 const createQrCode = async (pickupCode: string) =>
@@ -56,6 +60,7 @@ export default async function Registration({
   lang,
   questions,
   answers,
+  ticket,
 }: RegistrationProps) {
   const reservationCancelAction = reservationCancel.bind(null, lang);
 
@@ -134,6 +139,8 @@ export default async function Registration({
                 )}{' '}
                 {registration.createdAt.toLocaleString(lang, shortTimeFormat)}
               </p>
+
+              {ticket && <p>{lang === 'en' ? ticket.NameEn : ticket.NameFi}</p>}
             </div>
           </div>
           <div className="flex items-end gap-2">

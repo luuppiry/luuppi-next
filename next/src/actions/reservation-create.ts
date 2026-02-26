@@ -20,6 +20,7 @@ export async function reservationCreate(
   lang: SupportedLanguage,
   selectedQuota: string,
   userProvidedTargetedRole: string | undefined,
+  ticketUid?: string,
 ) {
   const dictionary = await getDictionary(lang);
   const session = await auth();
@@ -165,15 +166,24 @@ export async function reservationCreate(
     };
   }
 
-  const ownQuota = ticketTypes?.find(
+  const roleQuota = ticketTypes?.find(
     (type) => type.Role?.RoleId === targetedRole.strapiRoleUuid,
   );
+  const targetedQuota = ticketTypes?.find(
+    (type) =>
+      type.Role?.RoleId === targetedRole.strapiRoleUuid &&
+      ticketUid === type.uid,
+  );
+
+  const ownQuota = targetedQuota ?? roleQuota;
 
   // Validate that the user has a role that can reserve tickets
+  // Frontend needs to refresh reload cache first and only then show error (if content has been updated)
   if (!ownQuota) {
     return {
       message: dictionary.api.unauthorized,
       isError: true,
+      reloadCache: true,
     };
   }
 
@@ -362,6 +372,7 @@ export async function reservationCreate(
             }
 
             return {
+              strapiTicketUid: ticketUid,
               eventDocumentId,
               entraUserUuid,
               strapiRoleUuid,
@@ -379,6 +390,7 @@ export async function reservationCreate(
       } else {
         const eventRegistrationsFormatted = Array.from({ length: amount }).map(
           () => ({
+            strapiTicketUid: ticketUid,
             eventDocumentId,
             entraUserUuid,
             strapiRoleUuid,

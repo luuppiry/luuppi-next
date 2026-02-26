@@ -13,6 +13,7 @@ import { APIResponse } from '@/types/types';
 import { Payment, PaymentStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import qs from 'qs';
 import { BiErrorCircle } from 'react-icons/bi';
 
 interface OwnEventsProps {
@@ -123,6 +124,39 @@ export default async function OwnEvents(props: OwnEventsProps) {
     ),
   );
 
+  const tickets = (
+    await Promise.all(
+      uniqueUpcomingEventIds.map(async (eventDocumentId) => {
+        const query = qs.stringify({
+          populate: {
+            Registration: {
+              populate: ['TicketTypes'],
+            },
+          },
+        });
+
+        const url = `/api/events/${eventDocumentId}?${query}`;
+
+        const events = await getStrapiData<APIResponse<'api::event.event'>>(
+          params.lang,
+          url,
+          [`event-${eventDocumentId}`],
+          true,
+        );
+
+        const event = events?.data;
+
+        if (!event?.Registration) {
+          return null;
+        }
+
+        return event.Registration.TicketTypes;
+      }),
+    )
+  )
+    .filter(Boolean)
+    .flat();
+
   const upcomingEventQuestions = await Promise.all(
     uniqueUpcomingEventIds.map(async (eventDocumentId) => {
       const url = `/api/events/${eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
@@ -160,6 +194,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
     paymentCompleted: registration.paymentCompleted,
     deletedAt: registration.deletedAt,
     id: registration.id,
+    ticketUid: registration.strapiTicketUid,
     eventDocumentId: registration.eventDocumentId,
     pickupCode: registration.pickupCode,
     pickedUp: registration.pickedUp,
@@ -179,6 +214,9 @@ export default async function OwnEvents(props: OwnEventsProps) {
     .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
   const isFreeTicket = !unpaidRegistrations.some((reg) => reg.price !== 0);
+  const ticket = tickets.find((ticket) =>
+    unpaidRegistrations.find((reg) => reg.ticketUid === ticket?.uid),
+  );
 
   const getQuestionsForEvent = (eventDocumentId: string) =>
     upcomingEventQuestions.find(
@@ -258,6 +296,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
                       registration.eventDocumentId,
                     )}
                     registration={registration}
+                    ticket={ticket}
                   />
                 ))}
               </div>
