@@ -214,11 +214,10 @@ export default async function OwnEvents(props: OwnEventsProps) {
     .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
   const isFreeTicket = !unpaidRegistrations.some((reg) => reg.price !== 0);
-  const ticket = tickets.find((ticket) =>
-    unpaidRegistrations.find(
-      (reg) => reg.ticketUid && ticket?.uid && reg.ticketUid === ticket.uid,
-    ),
-  );
+  const getTicketForRegistration = (ticketUid: string | null) => {
+    if (!ticketUid) return undefined;
+    return tickets.find((ticket) => ticket?.uid === ticketUid);
+  };
 
   const getQuestionsForEvent = (eventDocumentId: string) =>
     upcomingEventQuestions.find(
@@ -298,7 +297,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
                       registration.eventDocumentId,
                     )}
                     registration={registration}
-                    ticket={ticket}
+                    ticket={getTicketForRegistration(registration.ticketUid)}
                   />
                 ))}
               </div>

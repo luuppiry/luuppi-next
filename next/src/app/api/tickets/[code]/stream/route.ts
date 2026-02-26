@@ -1,5 +1,6 @@
 import { redisClient } from '@/libs/db/redis';
 import { logger } from '@/libs/utils/logger';
+import type Redis from 'ioredis';
 import { NextRequest } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -11,7 +12,13 @@ export async function GET(
   const code = (await params).code;
   const eventName = `ticket-updated-${code}`;
 
-  const subscriber = redisClient.duplicate();
+  let subscriber: Redis;
+
+  try {
+    subscriber = redisClient.duplicate();
+  } catch {
+    return new Response('Service unavailable', { status: 503 });
+  }
 
   const stream = new ReadableStream({
     async start(controller) {
