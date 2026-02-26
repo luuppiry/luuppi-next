@@ -175,12 +175,6 @@ export async function reservationCreate(
       ticketUid === type.uid,
   );
 
-  logger.info('ticketTypes', JSON.stringify(ticketTypes));
-  logger.info('ticketUid', ticketUid);
-  logger.info('targetedRole', JSON.stringify(targetedRole));
-  logger.info('roleQuota', JSON.stringify(roleQuota));
-  logger.info('targetedQuota', JSON.stringify(targetedQuota));
-
   const ownQuota = targetedQuota ?? roleQuota;
 
   // Validate that the user has a role that can reserve tickets
