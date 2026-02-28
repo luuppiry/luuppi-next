@@ -25,7 +25,7 @@ Before you begin, ensure you have the following prerequisites installed on your 
 
 #### 1. Configure `.env.local`
 
-First, fill in the configuration file `.env.local`. You can use `example.env` as a reference.
+First, fill in the configuration file `.env.local`. You should use `example.env` as a reference, e.g. by copying it. Configure at least database related secrets and `REVALIDATE_AUTH_SECRET` if working with the CMS. Everything else is optional for most functionality. 
 
 #### 2. Install Dependencies
 
@@ -67,7 +67,7 @@ Before you begin, ensure you have the following prerequisites installed on your 
 
 #### 1. Configure `.env`
 
-First, fill in the configuration file `.env`. You can use `example.env` as a reference.
+First, fill in the configuration file `.env`. You should use `example.env` as a reference, e.g. by copying it. Strapi has no required secrets, and default to a sqlite database at .tmp/data.db which is fine for development.
 
 #### 2. Install Dependencies
 
@@ -87,6 +87,37 @@ pnpm dev
 ```
 
 The development server should now be up and running at [http://localhost:1337](http://localhost:1337).
+
+### Working with sample data
+
+Sample data assumes a clean install, you can use `git clean --exclude="**/.env*" --exclude="**/node_modules" -dfxn` to remove build products. Remove the `n` (dry run) at the end if you're sure. Also ensure that you have dependencies installed before proceeding.
+
+#### Strapi
+You can use `node seed.cjs` to populate all collections. Note that the script will currently produce an error even if the migration was succesful due to a bug in `@strapi/utils`. It's succesful if you see "stopping Strapi" before the error message.
+
+Start the development server with `pnpm dev`
+
+#### Next.js
+In development you can use `default`, `member` and `hato` presets for auth by configuring `DEV_MOCK_USER`, for example `default@dev.local`. Only the local part changes. See `local-auth.ts`
+
+You should sync the local database with `pnpm prisma db push`, ensure DATABASE_URL is set, e.g. `DATABASE_URL=postgresql://postgres:@localhost:5433/postgres`  
+
+If you used sample data for cms you can now fix event registrations for the two events with:
+
+```sh
+set -a
+source ".env.local"
+set +a
+
+PGPASSWORD=${DATABASE_PASSWORD} docker exec -i postgresDB psql -U ${DATABASE_USERNAME} -d ${DATABASE_NAME} << EOF
+INSERT INTO public."Event" (id, "eventDocumentId", "nameEn", "nameFi", "startDate", "endDate", "locationEn", "locationFi", "createdAt", "updatedAt")
+VALUES
+  (1, 'nnprwozya53j9qzcxlgu2jnt', 'Simple Event', 'Simple Event', CURRENT_DATE, CURRENT_DATE + INTERVAL '360 days', 'Simple Event', 'Simple Event', NOW(), NOW()),
+  (2, 'zj2n6ois14m44914k2offd1r', 'With Registration', 'With Registration', CURRENT_DATE, CURRENT_DATE + INTERVAL '360 days', 'With Registration', 'With Registration', NOW(), NOW());
+EOF
+```
+
+You should use the revalidate webhook `http://localhost:1337/admin/settings/webhooks` for new events, which handles syncing the database. Authorization corresponds to `REVALIDATE_AUTH_SECRET` in Next.js .env.local.
 
 ## Port Overview
 
