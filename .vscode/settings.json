@@ -7,5 +7,6 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "always"
   },
-  "eslint.workingDirectories": ["next", "strapi"]
+  "eslint.workingDirectories": ["next", "strapi"],
+  "prisma.pinToPrisma6": true
 }

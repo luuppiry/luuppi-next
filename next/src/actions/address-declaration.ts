@@ -77,23 +77,8 @@ export async function addressDeclaration(
     string,
     { value: FormDataEntryValue | null; regex: RegExp; required?: boolean }
   > = {
-    streetAddress: {
-      value: formData.get('streetAddress'),
-      regex: /^.{2,70}$/,
-      required: isLuuppiMember,
-    },
-    postalCode: {
-      value: formData.get('postalCode'),
-      regex: /^.{2,10}$/,
-      required: isLuuppiMember,
-    },
     domicle: {
       value: formData.get('domicle'),
-      regex: /^.{2,35}$/,
-      required: isLuuppiMember,
-    },
-    country: {
-      value: formData.get('country'),
       regex: /^.{2,35}$/,
       required: isLuuppiMember,
     },
@@ -122,15 +107,9 @@ export async function addressDeclaration(
     ]),
   );
 
-  if (
-    (fieldsToUpdate.streetAddress ||
-      fieldsToUpdate.postalCode ||
-      fieldsToUpdate.domicle ||
-      fieldsToUpdate.country) &&
-    !isLuuppiMember
-  ) {
+  if (fieldsToUpdate.domicle && !isLuuppiMember) {
     logger.error(
-      'Tried to update stress adress, postal code, domicle or country without being a member of Luuppi',
+      'Tried to update address declaration domicle without being a member of Luuppi',
     );
     return {
       message: dictionary.api.unauthorized,
@@ -159,10 +138,7 @@ export async function addressDeclaration(
       entraUserUuid: session.user.entraUserUuid,
     },
     data: {
-      streetAddress: fieldsToUpdate.streetAddress,
-      postalCode: fieldsToUpdate.postalCode,
       domicle: fieldsToUpdate.domicle,
-      country: fieldsToUpdate.country,
     },
   });
 
