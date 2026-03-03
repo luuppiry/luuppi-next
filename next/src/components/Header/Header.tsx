@@ -39,10 +39,10 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                 alt="Luuppi logo"
                 className={'object-contain'}
                 draggable={false}
+                fetchPriority="high"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={luuppiSvg}
                 fill
-                priority
               />
             </Link>
             <div className="flex items-center gap-4">
@@ -116,7 +116,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                 </Link>
               )}
               {link.sublinks && link.sublinks.length > 0 && (
-                <div className="invisible absolute z-50 flex min-w-full flex-col bg-gray-100 px-2 py-4 text-gray-800 shadow-xl group-hover:visible dark:bg-base-200 dark:text-background-950">
+                <div className="invisible absolute z-50 flex max-h-[calc(100dvh-4rem-3rem)] min-w-full flex-col overflow-y-scroll bg-gray-100 px-2 py-4 text-gray-800 shadow-xl group-hover:visible dark:bg-base-200 dark:text-background-950">
                   {link.sublinks.map((sublink) => (
                     <HideableLink
                       key={sublink.translation}

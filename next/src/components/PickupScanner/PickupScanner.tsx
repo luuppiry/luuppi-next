@@ -1,7 +1,10 @@
 'use client';
+import PartyPhp from '@/../public/images/php.gif';
 import { togglePickupStatus } from '@/actions/admin/toggle-pickup-status';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useState } from 'react';
+import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner';
+import Image from 'next/image';
+import { useCallback, useState } from 'react';
 import {
   Button,
   Dialog,
@@ -29,58 +32,98 @@ export default function PickupScanner({
     isError: boolean;
   } | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
+  const [hasSeenNotice, setHasSeenNotice] = useState(false);
 
-  const handleManualSubmit = async (e: React.SubmitEvent) => {
-    e.preventDefault();
-    if (!code.trim()) return;
+  const highlightCodeOnCanvas = (
+    detectedCodes: IDetectedBarcode[],
+    ctx: CanvasRenderingContext2D,
+  ) => {
+    detectedCodes.forEach((detectedCode) => {
+      const { boundingBox } = detectedCode;
 
-    setLoading(true);
-    setMessage(null);
+      ctx.strokeStyle = '#00FF00';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(
+        boundingBox.x,
+        boundingBox.y,
+        boundingBox.width,
+        boundingBox.height,
+      );
+    });
+  };
 
-    const result = await togglePickupStatus(
-      lang,
-      code.toUpperCase().trim(),
-      true,
-      eventDocumentId,
-    );
+  const handleProcessCode = useCallback(
+    async (inputCode: string) => {
+      const cleanCode = inputCode.trim().toUpperCase();
+      if (!cleanCode || loading) return;
 
-    if (result.isError) {
-      setMessage({ text: result.message, isError: true });
-    } else {
-      setMessage({
-        text: `${dictionary.general.success}: ${result.data?.email}`,
-        isError: false,
-      });
-      setCode('');
+      setLoading(true);
+      setMessage(null);
+
+      const result = await togglePickupStatus(
+        lang,
+        cleanCode,
+        true,
+        eventDocumentId,
+      );
+
+      if (result.isError) {
+        setMessage({ text: result.message, isError: true });
+      } else {
+        setMessage({
+          text: `${dictionary.general.success}: ${result.data?.email}`,
+          isError: false,
+        });
+        setCode('');
+      }
+
+      setLoading(false);
+
+      if (isOpen) {
+        setIsPaused(true);
+        setTimeout(() => {
+          setIsPaused(false);
+          if (!result.isError) {
+            setMessage(null);
+          }
+        }, 2000);
+      }
+    },
+    [lang, eventDocumentId, dictionary, isOpen, loading],
+  );
+
+  const onScan = (detectedCodes: IDetectedBarcode[]) => {
+    if (detectedCodes.length > 0 && !isPaused) {
+      const scannedValue = detectedCodes[0].rawValue;
+      setCode(scannedValue);
+      handleProcessCode(scannedValue);
     }
-
-    setLoading(false);
   };
 
   const closeScanner = () => {
     setIsOpen(false);
     setCode('');
     setMessage(null);
+    setIsPaused(false);
   };
 
   return (
-    <DialogTrigger>
+    <DialogTrigger isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button
         className="btn btn-primary"
         type="button"
-        onClick={() => setIsOpen(true)}
+        onPress={() => setIsOpen(true)}
       >
         {dictionary.pages_admin.scan_pickup_code}
       </Button>
 
       <ModalOverlay
         className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
-        isOpen={isOpen}
         isDismissable
-        onOpenChange={setIsOpen}
       >
         <Modal>
-          <Dialog className="w-full max-w-md rounded-lg bg-base-100 p-6 pt-2">
+          <Dialog className="w-full max-w-md rounded-lg bg-base-100 p-6 pt-2 outline-none">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">
                 {dictionary.pages_admin.scan_pickup_code}
@@ -94,7 +137,47 @@ export default function PickupScanner({
               </button>
             </div>
 
-            <form onSubmit={handleManualSubmit}>
+            <div
+              className={`relative h-60 overflow-clip rounded-xl border-2 transition-all ${
+                message
+                  ? message.isError
+                    ? 'border-error'
+                    : 'border-success'
+                  : 'border-transparent'
+              }`}
+            >
+              {hasSeenNotice ? (
+                <Scanner
+                  components={{ tracker: highlightCodeOnCanvas }}
+                  formats={['qr_code']}
+                  paused={isPaused}
+                  onScan={onScan}
+                />
+              ) : (
+                <div className="flex h-full flex-col gap-4 overflow-scroll p-1">
+                  <div className="font-sans text-sm">
+                    {dictionary.pages_admin.qr_instructions}
+                  </div>
+
+                  <Button
+                    className="btn btn-outline border-gray-400"
+                    onClick={() =>
+                      void (setHasSeenNotice(true), setIsPaused(false))
+                    }
+                  >
+                    <Image alt="" height={24} src={PartyPhp} width={24} />
+                    {dictionary.pages_admin.open_camera}
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleProcessCode(code);
+              }}
+            >
               <div className="form-control mb-4">
                 <label className="label" htmlFor="pickup-code">
                   <span className="label-text">

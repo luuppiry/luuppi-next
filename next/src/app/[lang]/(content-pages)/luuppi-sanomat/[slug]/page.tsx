@@ -80,7 +80,7 @@ export async function generateMetadata(
 export async function generateStaticParams() {
   const pageData = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
-  >('fi', '/api/luuppi-sanomats?pagination[pageSize]=100', ['luuppi-sanomat']);
+  >('fi', '/api/luuppi-sanomats?pagination[pageSize]=500', ['luuppi-sanomat']);
 
   return pageData.data.map((sanomat) => ({
     slug: sanomat.id.toString(),

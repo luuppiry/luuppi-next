@@ -70,8 +70,7 @@ export interface EventsQuotas extends Struct.ComponentSchema {
       Schema.Attribute.DefaultTo<0>;
     RegistrationEndsAt: Schema.Attribute.DateTime & Schema.Attribute.Required;
     RegistrationStartsAt: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    Role: Schema.Attribute.Relation<'oneToOne', 'api::event-role.event-role'> &
-      Schema.Attribute.Required;
+    Role: Schema.Attribute.Relation<'oneToOne', 'api::event-role.event-role'>;
     TicketsAllowedToBuy: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
@@ -90,6 +89,18 @@ export interface EventsQuotas extends Struct.ComponentSchema {
         number
       > &
       Schema.Attribute.DefaultTo<10>;
+    uid: Schema.Attribute.UID<
+      undefined,
+      {
+        'disable-regenerate': true;
+      }
+    > &
+      Schema.Attribute.CustomField<
+        'plugin::strapi-advanced-uuid.uuid',
+        {
+          'disable-regenerate': true;
+        }
+      >;
     Weight: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<

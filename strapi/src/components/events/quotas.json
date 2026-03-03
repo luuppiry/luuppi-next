@@ -17,21 +17,20 @@
     },
     "TicketsTotal": {
       "type": "integer",
+      "required": true,
       "default": 10,
-      "min": 1,
-      "required": true
+      "min": 1
     },
     "Role": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::event-role.event-role",
-      "required": true
+      "target": "api::event-role.event-role"
     },
     "TicketsAllowedToBuy": {
       "type": "integer",
-      "min": 1,
+      "required": true,
       "default": 1,
-      "required": true
+      "min": 1
     },
     "Price": {
       "type": "decimal",
@@ -49,9 +48,16 @@
     },
     "Weight": {
       "type": "integer",
-      "default": 1,
       "required": true,
+      "default": 1,
       "min": 1
+    },
+    "uid": {
+      "type": "customField",
+      "customField": "plugin::strapi-advanced-uuid.uuid",
+      "options": {
+        "disable-regenerate": true
+      }
     }
   }
 }

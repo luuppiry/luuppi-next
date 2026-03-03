@@ -13,6 +13,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaUserAlt } from 'react-icons/fa';
 import { PiImageBroken } from 'react-icons/pi';
+import qs from 'qs'
 
 interface NewsProps {
   params: Promise<{ lang: SupportedLanguage }>;
@@ -22,11 +23,26 @@ export default async function News(props: NewsProps) {
   const params = await props.params;
   const { isEnabled: isDraftMode } = await draftMode();
 
+const query = qs.stringify({
+  populate: {
+    banner: true,
+    authorImage: true,
+    localizations: {
+      populate: {
+        banner: true,
+      }
+    }
+  },
+  pagination: {
+    pageSize: 100
+  }
+})
+
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
   >(
     'fi',
-    '/api/news?populate[0]=banner&populate[1]=authorImage&populate[3]=localizations&pagination[pageSize]=100',
+    `/api/news?${query}`,
     ['news-single'],
     false,
     isDraftMode,

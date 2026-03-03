@@ -90,41 +90,47 @@ export default async function RegistrationEndsOwnQuota({
     return !latestDate || currentDate > latestDate ? currentDate : latestDate;
   }, null! as Date);
 
-  return (
-    registrationEndsOwnQuota && (
-      <div className="flex items-center">
-        <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-          <IoTicket className="shrink-0 text-2xl" />
-        </div>
-        <div className="flex w-full items-center justify-between">
-          <p className="line-clamp-2">
-            {
-              dictionary.pages_events[
-                ownQuota?.Price ? 'ticket_sales_ends' : 'registration_ends'
-              ]
-            }{' '}
-            {new Intl.DateTimeFormat(lang, {
-              day: '2-digit',
-              month: 'short',
-              hour: 'numeric',
-              minute: 'numeric',
-            }).format(registrationEndsOwnQuota)}
-          </p>
+  if (
+    !registrationEndsOwnQuota ||
+    // eslint-disable-next-line react-hooks/purity
+    registrationEndsOwnQuota.getTime() < Date.now()
+  ) {
+    return null;
+  }
 
-          <span
-            className="tooltip tooltip-left flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
-            data-tip={
-              dictionary.pages_events[
-                ownQuota?.Price
-                  ? 'ticket_sales_ends_explanation'
-                  : 'registration_ends_explanation'
-              ]
-            }
-          >
-            <FaQuestion size={12} />
-          </span>
-        </div>
+  return (
+    <div className="flex items-center">
+      <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
+        <IoTicket className="shrink-0 text-2xl" />
       </div>
-    )
+      <div className="flex w-full items-center justify-between">
+        <p className="line-clamp-2">
+          {
+            dictionary.pages_events[
+              ownQuota?.Price ? 'ticket_sales_ends' : 'registration_ends'
+            ]
+          }{' '}
+          {new Intl.DateTimeFormat(lang, {
+            day: 'numeric',
+            month: 'short',
+            hour: 'numeric',
+            minute: 'numeric',
+          }).format(registrationEndsOwnQuota)}
+        </p>
+
+        <span
+          className="tooltip tooltip-left flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
+          data-tip={
+            dictionary.pages_events[
+              ownQuota?.Price
+                ? 'ticket_sales_ends_explanation'
+                : 'registration_ends_explanation'
+            ]
+          }
+        >
+          <FaQuestion size={12} />
+        </span>
+      </div>
+    </div>
   );
 }

@@ -30,6 +30,7 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^6.0.0",
+    "strapi-advanced-uuid": "^2.1.1",
     "strapi-middleware-upload-plugin-cache": "^2.1.0",
     "strapi-plugin-required-relation-field": "^0.3.1",
     "styled-components": "^6.3.9"

@@ -32,7 +32,7 @@ export default function HideableLink({
       key={sublink.translation}
       className={`${
         sublink.href === '/' ? 'disabled cursor-not-allowed opacity-50' : ''
-      } truncate rounded-lg p-2 font-bold hover:bg-gray-200 dark:hover:bg-primary-300`} // TODO: Remove disabled links
+      } truncate rounded-lg p-2 font-bold hover:bg-gray-200 dark:hover:bg-primary-300 min-h-fit`} // TODO: Remove disabled links
       href={
         sublink.href.startsWith('/')
           ? `/${lang}${sublink.href as string}`

@@ -190,6 +190,35 @@
     animation: gradientAnimation 3s ease infinite;
   }
 
+  .alert-error {
+    @apply rounded-lg bg-red-200 text-sm text-red-800;
+  }
+  [data-theme='dark'] .alert-error {
+    @apply rounded-lg bg-red-800/50 text-sm text-red-200 backdrop-blur;
+  }
+
+  .alert-info {
+    @apply rounded-lg bg-blue-200 text-sm text-blue-800;
+  }
+  [data-theme='dark'] .alert-info {
+    @apply rounded-lg bg-blue-800/30 text-sm text-blue-200;
+  }
+
+  .alert-success {
+    @apply rounded-lg bg-green-200 text-sm text-green-800;
+  }
+
+  [data-theme='dark'] .alert-success {
+    @apply rounded-lg bg-green-800/10 text-sm text-green-300;
+  }
+
+  .alert-warning {
+    @apply rounded-lg bg-yellow-200/50 text-sm text-yellow-800;
+  }
+  [data-theme='dark'] .alert-warning {
+    @apply rounded-lg bg-yellow-800/30 text-sm text-yellow-200;
+  }
+
   @keyframes gradientAnimation {
     0%,
     100% {
@@ -354,7 +383,9 @@
 }
 
 /** Fix Daisy UI modal triggering repaint of the entire page */
-:root:has(:is(.modal-open, .modal:target, .modal-toggle:checked + .modal, .modal[open])) {
-    overflow: auto !important;
-    scrollbar-gutter: stable !important;
+:root:has(
+  :is(.modal-open, .modal:target, .modal-toggle:checked + .modal, .modal[open])
+) {
+  overflow: auto !important;
+  scrollbar-gutter: stable !important;
 }

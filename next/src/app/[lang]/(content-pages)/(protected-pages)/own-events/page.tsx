@@ -13,6 +13,7 @@ import { APIResponse } from '@/types/types';
 import { Payment, PaymentStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import qs from 'qs';
 import { BiErrorCircle } from 'react-icons/bi';
 
 interface OwnEventsProps {
@@ -123,6 +124,39 @@ export default async function OwnEvents(props: OwnEventsProps) {
     ),
   );
 
+  const tickets = (
+    await Promise.all(
+      uniqueUpcomingEventIds.map(async (eventDocumentId) => {
+        const query = qs.stringify({
+          populate: {
+            Registration: {
+              populate: ['TicketTypes'],
+            },
+          },
+        });
+
+        const url = `/api/events/${eventDocumentId}?${query}`;
+
+        const events = await getStrapiData<APIResponse<'api::event.event'>>(
+          params.lang,
+          url,
+          [`event-${eventDocumentId}`],
+          true,
+        );
+
+        const event = events?.data;
+
+        if (!event?.Registration) {
+          return null;
+        }
+
+        return event.Registration.TicketTypes;
+      }),
+    )
+  )
+    .filter(Boolean)
+    .flat();
+
   const upcomingEventQuestions = await Promise.all(
     uniqueUpcomingEventIds.map(async (eventDocumentId) => {
       const url = `/api/events/${eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
@@ -160,6 +194,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
     paymentCompleted: registration.paymentCompleted,
     deletedAt: registration.deletedAt,
     id: registration.id,
+    ticketUid: registration.strapiTicketUid,
     eventDocumentId: registration.eventDocumentId,
     pickupCode: registration.pickupCode,
     pickedUp: registration.pickedUp,
@@ -179,6 +214,10 @@ export default async function OwnEvents(props: OwnEventsProps) {
     .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
   const isFreeTicket = !unpaidRegistrations.some((reg) => reg.price !== 0);
+  const getTicketForRegistration = (ticketUid: string | null) => {
+    if (!ticketUid) return undefined;
+    return tickets.find((ticket) => ticket?.uid === ticketUid);
+  };
 
   const getQuestionsForEvent = (eventDocumentId: string) =>
     upcomingEventQuestions.find(
@@ -218,7 +257,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
         <QuestionDialog dictionary={dictionary} lang={params.lang} />
         <h1 className="mb-12">{dictionary.navigation.own_events}</h1>
         {Boolean(unpaidRegistrations.length) && (
-          <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+          <div className="alert alert-error mb-4">
             <BiErrorCircle size={24} />
             {
               dictionary.pages_events[
@@ -230,7 +269,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
           </div>
         )}
         {userEventRegistrations.length === 0 && (
-          <div className="alert rounded-lg bg-blue-200 text-blue-800">
+          <div className="alert alert-info">
             <BiErrorCircle size={24} />
             {dictionary.pages_events.no_reservations}
           </div>
@@ -258,6 +297,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
                       registration.eventDocumentId,
                     )}
                     registration={registration}
+                    ticket={getTicketForRegistration(registration.ticketUid)}
                   />
                 ))}
               </div>

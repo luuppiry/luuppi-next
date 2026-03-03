@@ -7,6 +7,7 @@ import PickupQRCode from '../PickupQRCode/PickupQRCode';
 import QuestionButton from '../QuestionButton/QuestionButton';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import RegistrationCounter from './RegistrationCounter';
+import QRCode from 'qrcode';
 
 interface RegistrationProps {
   registration: {
@@ -40,14 +41,26 @@ interface RegistrationProps {
   }[];
   dictionary: Dictionary;
   lang: SupportedLanguage;
+  ticket?: {
+    NameEn: string;
+    NameFi: string;
+  } | null;
 }
 
-export default function Registration({
+const createQrCode = async (pickupCode: string) =>
+  QRCode.toDataURL(pickupCode, {
+    width: 200,
+    margin: 0,
+    color: { dark: '#000000', light: '#FFFFFF' },
+  }).catch(() => null);
+
+export default async function Registration({
   registration,
   dictionary,
   lang,
   questions,
   answers,
+  ticket,
 }: RegistrationProps) {
   const reservationCancelAction = reservationCancel.bind(null, lang);
 
@@ -126,6 +139,8 @@ export default function Registration({
                 )}{' '}
                 {registration.createdAt.toLocaleString(lang, shortTimeFormat)}
               </p>
+
+              {ticket && <p>{lang === 'en' ? ticket.NameEn : ticket.NameFi}</p>}
             </div>
           </div>
           <div className="flex items-end gap-2">
@@ -135,6 +150,7 @@ export default function Registration({
                 <PickupQRCode
                   dictionary={dictionary}
                   pickupCode={registration.pickupCode}
+                  pickupQrCode={await createQrCode(registration.pickupCode)}
                 />
               )}
             {displayQuestionButton(registration, questions) && (

@@ -22,12 +22,13 @@ export default function Banner({ lang }: BannerProps) {
               draggable={false}
               src={lang === 'en' ? luuppiBannerTextEn : luuppiBannerTextFi}
               fill
-              priority
+              preload
             />
             <Image
               alt="Luuppi banner text"
               className="z-10 object-cover opacity-[0.04] max-lg:scale-[2] max-md:scale-[3]"
               draggable={false}
+              loading="lazy"
               src={binarySvg}
               fill
             />
@@ -36,19 +37,21 @@ export default function Banner({ lang }: BannerProps) {
             alt="Luuppi banner"
             className="object-cover max-lg:hidden"
             draggable={false}
+            fetchPriority="high"
+            loading="eager"
             quality={100}
             src={bannerDesktop}
             fill
-            priority
           />
           <Image
             alt="Luuppi banner"
             className="object-cover lg:hidden"
             draggable={false}
+            fetchPriority="high"
+            loading="eager"
             quality={100}
             src={bannerMobile}
             fill
-            priority
           />
         </div>
       </div>

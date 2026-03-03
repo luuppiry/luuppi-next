@@ -42,13 +42,13 @@ export default function LegacyAccountMigrate({
             {dictionary.pages_profile.legacy_migrate_info}
           </p>
           {Boolean(formResponse.isError && formResponse.message) && (
-            <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+            <div className="alert alert-error mb-4">
               <BiErrorCircle size={24} />
               {formResponse.message}
             </div>
           )}
           {Boolean(!formResponse.isError && formResponse.message) && (
-            <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
+            <div className="alert alert-success mb-4">
               {formResponse.message}
             </div>
           )}

@@ -32,17 +32,19 @@ export default function ViewEventsDialog({
         </h2>
         {events && events.length > 0 && (
           <>
-            {events.map((event) => (
-              <Link
-                key={event.title + event.start}
-                className="mb-4 block rounded-lg bg-background-50 p-4"
-                href={`/${lang}/events/${event.slug}`}
-              >
-                <h3 className="text-lg font-bold">{event.title}</h3>
-                <h4>{formatDateRangeShort(event.start, event.end, lang)} </h4>
-                <p className="line-clamp-3 text-sm">{event.description}</p>
-              </Link>
-            ))}
+            {events
+              .toSorted((a, b) => a.start.getTime() - b.start.getTime())
+              .map((event) => (
+                <Link
+                  key={event.title + event.start}
+                  className="mb-4 block rounded-lg bg-background-50 p-4"
+                  href={`/${lang}/events/${event.slug}`}
+                >
+                  <h3 className="text-lg font-bold">{event.title}</h3>
+                  <h4>{formatDateRangeShort(event.start, event.end, lang)} </h4>
+                  <p className="line-clamp-3 text-sm">{event.description}</p>
+                </Link>
+              ))}
           </>
         )}
         <div className="modal-action">

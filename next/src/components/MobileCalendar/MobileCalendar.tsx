@@ -5,6 +5,8 @@ import { useContext, useMemo, useState } from 'react';
 import { BiArrowToLeft, BiArrowToRight } from 'react-icons/bi';
 import ViewEventsDialog from './ViewEventsDialog/ViewEventsDialog';
 
+const DAY_CUT_OFF = 6;
+
 const getDaysOfWeek = (locale: SupportedLanguage) => {
   const baseDate = new Date(Date.UTC(2021, 0, 10));
   const daysOfWeek = [];
@@ -23,42 +25,95 @@ const getDaysOfWeek = (locale: SupportedLanguage) => {
   return daysOfWeek;
 };
 
-const groupEventsByStartDate = (events: Event[]): Record<string, Event[]> =>
-  events
-    .filter((e) => e.start)
-    .reduce(
-      (acc, event) => {
-        const startDate = new Intl.DateTimeFormat('fi', {
-          timeZone: 'Europe/Helsinki',
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-        }).format(new Date(event.start));
+const formatToDateKey = (dateString: string | Date) => {
+  const d = new Date(dateString);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
 
-        const formattedDate = startDate.split('.').reverse().join('-').trim();
-        if (!acc[formattedDate]) {
-          acc[formattedDate] = [];
-        }
-        acc[formattedDate].push(event);
-        return acc;
-      },
-      {} as Record<string, Event[]>,
+function groupEventsWithLanes(
+  events: Event[],
+): Record<string, { event: Event; lane: number }[]> {
+  const sorted = [...events].sort((a, b) => {
+    const aStart = new Date(a.start).getTime();
+    const bStart = new Date(b.start).getTime();
+    if (aStart !== bStart) return aStart - bStart;
+
+    const aEnd = new Date(a.end || a.start).getTime();
+    const bEnd = new Date(b.end || b.start).getTime();
+    return bEnd - aEnd;
+  });
+
+  const result: Record<string, { event: Event; lane: number }[]> = {};
+
+  for (const event of sorted) {
+    if (!event.start) continue;
+
+    const start = new Date(event.start);
+    const end = event.end ? new Date(event.end) : new Date(event.start);
+
+    const visualEnd = new Date(end);
+    const endsBeforeCutoff = end.getHours() < DAY_CUT_OFF;
+    const spansMultipleDays =
+      end.getDate() !== start.getDate() || end.getMonth() !== start.getMonth();
+
+    if (endsBeforeCutoff && spansMultipleDays) {
+      visualEnd.setDate(visualEnd.getDate() - 1);
+    }
+
+    const eventDates: string[] = [];
+    const temp = new Date(
+      start.getFullYear(),
+      start.getMonth(),
+      start.getDate(),
     );
 
-const generateMonthGrid = (year: number, month: number) => {
+    while (temp <= visualEnd) {
+      eventDates.push(formatToDateKey(temp));
+      temp.setDate(temp.getDate() + 1);
+    }
+
+    let lane = 0;
+    while (true) {
+      const isLaneBusy = eventDates.some((dateKey) => {
+        const dayOccupants = result[dateKey] || [];
+        return dayOccupants.some((item) => item.lane === lane);
+      });
+
+      if (!isLaneBusy) break;
+      lane++;
+    }
+
+    for (const dateKey of eventDates) {
+      if (!result[dateKey]) result[dateKey] = [];
+      result[dateKey].push({ event, lane });
+    }
+  }
+  return result;
+}
+
+interface MobileCalendarProps {
+  lang: SupportedLanguage;
+  events: Event[];
+  dictionary: Dictionary;
+}
+
+const generateMonthGrid = (
+  year: number,
+  month: number,
+): (number | null)[][] => {
   const firstDayOfMonth = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   // Always use Monday as first day of week (adjust Sunday from 0 to 6)
   const adjustedFirstDay = (firstDayOfMonth + 6) % 7;
 
-  const grid = [];
+  const grid: (number | null)[][] = [];
   let dayCounter = 1;
 
   const rows = Math.ceil((adjustedFirstDay + daysInMonth) / 7);
 
   for (let i = 0; i < rows; i++) {
-    const week = [];
+    const week: (number | null)[] = [];
     for (let j = 0; j < 7; j++) {
       if ((i === 0 && j < adjustedFirstDay) || dayCounter > daysInMonth) {
         week.push(null);
@@ -71,12 +126,6 @@ const generateMonthGrid = (year: number, month: number) => {
 
   return grid;
 };
-
-interface MobileCalendarProps {
-  lang: SupportedLanguage;
-  events: Event[];
-  dictionary: Dictionary;
-}
 
 export default function MobileCalendar({
   lang,
@@ -107,11 +156,11 @@ export default function MobileCalendar({
     () => generateMonthGrid(currentYear, currentMonth),
     [currentYear, currentMonth],
   );
-  const groupedEvents = useMemo(() => groupEventsByStartDate(events), [events]);
+  const groupedEvents = useMemo(() => groupEventsWithLanes(events), [events]);
 
   const openDayEventsDialog = (date: string) => {
     const dayEvents = groupedEvents[date];
-    setSelectedEvents(dayEvents);
+    setSelectedEvents(dayEvents ? dayEvents.map((item) => item.event) : []);
   };
 
   const handleClose = () => {
@@ -150,8 +199,30 @@ export default function MobileCalendar({
           </div>
         ))}
         {monthGrid.flat().map((day, idx) => {
+          if (day === null) {
+            return (
+              <div
+                key={idx}
+                className="min-h-[4rem] w-full rounded-lg bg-gray-50 dark:bg-background-100"
+              />
+            );
+          }
+
           const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
           const dayEvents = groupedEvents[dateKey] || [];
+
+          const MAX_VISIBLE_LANES = 3;
+          const slots = Array(MAX_VISIBLE_LANES).fill(null);
+          dayEvents.forEach((item) => {
+            if (item.lane < MAX_VISIBLE_LANES) {
+              slots[item.lane] = item.event;
+            }
+          });
+
+          const overflowCount = dayEvents.filter(
+            (item) => item.lane >= MAX_VISIBLE_LANES,
+          ).length;
+
           const isToday =
             day === todayDate &&
             currentMonth === todayMonth &&
@@ -164,10 +235,12 @@ export default function MobileCalendar({
 
           const hasEvents = dayEvents.length > 0;
 
+          const dayOfWeekIndex = idx % 7;
+
           return (
             <button
               key={idx}
-              className={`flex w-full flex-col items-center rounded-lg py-2 text-center transition-all duration-300 ease-in-out dark:bg-background-100 ${
+              className={`relative flex min-h-[4rem] w-full flex-col items-center rounded-lg py-1 text-center transition-all duration-300 ease-in-out dark:bg-background-100 ${
                 isToday
                   ? 'bg-[#fffadf] font-bold dark:bg-yellow-800/30'
                   : 'bg-gray-50'
@@ -175,17 +248,67 @@ export default function MobileCalendar({
               disabled={!hasEvents}
               onClick={() => openDayEventsDialog(dateKey)}
             >
-              {day || ''}
+              <span className={`text-sm ${isPast ? 'text-gray-400' : ''}`}>
+                {day || ''}
+              </span>
+
               {hasEvents && (
-                <span
-                  className={`flex h-6 w-6 items-center justify-center rounded-full px-2 py-1 text-xs ${
-                    isPast
-                      ? 'bg-gray-400 text-white dark:bg-gray-700'
-                      : 'bg-secondary-400 text-white'
-                  }`}
-                >
-                  {dayEvents.length}
-                </span>
+                <div className="mt-1 flex w-full flex-col gap-1">
+                  {slots.map((event, laneIndex) => {
+                    if (!event)
+                      return <div key={laneIndex} className="h-1.5 w-full" />;
+
+                    const startKey = formatToDateKey(event.start);
+                    const continuesLeft = dateKey !== startKey;
+                    const isRowStart = dayOfWeekIndex === 0;
+
+                    const realEnd = event.end
+                      ? new Date(event.end)
+                      : new Date(event.start);
+
+                    const isPreviousDate =
+                      realEnd.getHours() < DAY_CUT_OFF &&
+                      realEnd.getDate() !== new Date(event.start).getDate();
+
+                    const visualEndKey = isPreviousDate
+                      ? formatToDateKey(
+                          new Date(realEnd.getTime() - 6 * 60 * 60 * 1000),
+                        )
+                      : formatToDateKey(realEnd);
+
+                    const extendsLeft = continuesLeft && !isRowStart;
+                    const extendsRight =
+                      dateKey !== visualEndKey && dayOfWeekIndex !== 6;
+
+                    let lineClasses = `h-1.5 ${isPast ? 'bg-gray-300 dark:bg-gray-600' : 'bg-secondary-400'}`;
+
+                    if (!extendsLeft && !extendsRight) {
+                      lineClasses +=
+                        ' w-[calc(100%-0.5rem)] rounded-full mx-auto';
+                    } else if (!extendsLeft && extendsRight) {
+                      lineClasses +=
+                        ' w-[calc(100%+0.25rem)] rounded-l-full ml-1';
+                    } else if (extendsLeft && !extendsRight) {
+                      lineClasses +=
+                        ' w-[calc(100%+0.25rem)] rounded-r-full -ml-2';
+                    } else {
+                      lineClasses += ' w-[calc(100%+1rem)] -ml-2';
+                    }
+
+                    return (
+                      <div
+                        key={`${event.id || laneIndex}-${dateKey}`}
+                        className={lineClasses}
+                      />
+                    );
+                  })}
+
+                  {overflowCount > 0 && (
+                    <span className="mt-0.5 text-[10px] leading-none text-gray-500">
+                      +{overflowCount}
+                    </span>
+                  )}
+                </div>
               )}
             </button>
           );

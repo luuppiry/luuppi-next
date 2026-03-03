@@ -43,9 +43,7 @@ export default function ProfileUserAddressDeclaration({
     setFormResponse(response);
   };
 
-  const hasMissingInformation =
-    isLuuppiMember &&
-    (!user.streetAddress || !user.postalCode || !user.domicle || !user.country);
+  const hasMissingInformation = isLuuppiMember && !user.domicle;
 
   const declarationYear = getDeclarationYear();
 
@@ -65,20 +63,20 @@ export default function ProfileUserAddressDeclaration({
         {declarationYear + 1}
       </h2>
       {hasMissingInformation && (
-        <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+        <div className="alert alert-error mb-4">
           <BiErrorCircle size={24} />
           {dictionary.pages_profile.missing_required_fields}
         </div>
       )}
       {!declared && (
-        <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+        <div className="alert alert-error mb-4">
           <BiErrorCircle size={24} />
           {dictionary.pages_profile.address_not_declared} {declarationYear}-
           {declarationYear + 1}.
         </div>
       )}
       {declared && (
-        <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
+        <div className="alert alert-success mb-4">
           <BiErrorCircle size={24} />
           {dictionary.pages_profile.address_declarated_info} {declarationYear}-
           {declarationYear + 1}.
@@ -89,7 +87,7 @@ export default function ProfileUserAddressDeclaration({
         formResponse.message &&
         formResponse.field !== '',
       ) && (
-        <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+        <div className="alert alert-error mb-4">
           <BiErrorCircle size={24} />
           {formResponse.message}
         </div>
@@ -99,52 +97,8 @@ export default function ProfileUserAddressDeclaration({
         formResponse.message &&
         formResponse.field !== '',
       ) && (
-        <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
-          {formResponse.message}
-        </div>
+        <div className="alert alert-success mb-4">{formResponse.message}</div>
       )}
-      <FormInput
-        disabled={!isDeclarationPeriod}
-        error={
-          formResponse.field === 'streetAddress' ? formResponse.message : ''
-        }
-        id="streetAddress"
-        labelTopRight={
-          <span
-            className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
-            data-tip={dictionary.pages_profile.street_address_explanation}
-          >
-            <FaQuestion size={12} />
-          </span>
-        }
-        marginTop={false}
-        placeholder={dictionary.general.street_address}
-        required={true}
-        title={dictionary.general.street_address}
-        type="text"
-        value={user.streetAddress ?? ''}
-        onChange={() => setFormResponse(initialState)}
-      />
-      <FormInput
-        disabled={!isDeclarationPeriod}
-        error={formResponse.field === 'postalCode' ? formResponse.message : ''}
-        id="postalCode"
-        labelTopRight={
-          <span
-            className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
-            data-tip={dictionary.pages_profile.postal_code_explanation}
-          >
-            <FaQuestion size={12} />
-          </span>
-        }
-        marginTop={false}
-        placeholder={dictionary.general.postal_code}
-        required={isLuuppiMember}
-        title={dictionary.general.postal_code}
-        type="text"
-        value={user.postalCode ?? ''}
-        onChange={() => setFormResponse(initialState)}
-      />
       <FormInput
         disabled={!isDeclarationPeriod}
         error={formResponse.field === 'domicle' ? formResponse.message : ''}
@@ -163,26 +117,6 @@ export default function ProfileUserAddressDeclaration({
         title={dictionary.general.domicle}
         type="text"
         value={user.domicle ?? ''}
-        onChange={() => setFormResponse(initialState)}
-      />
-      <FormInput
-        disabled={!isDeclarationPeriod}
-        error={formResponse.field === 'country' ? formResponse.message : ''}
-        id="country"
-        labelTopRight={
-          <span
-            className="tooltip tooltip-left flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-secondary-400 text-white"
-            data-tip={dictionary.pages_profile.country_explanation}
-          >
-            <FaQuestion size={12} />
-          </span>
-        }
-        marginTop={false}
-        placeholder={dictionary.general.country}
-        required={isLuuppiMember}
-        title={dictionary.general.country}
-        type="text"
-        value={user.country ?? ''}
         onChange={() => setFormResponse(initialState)}
       />
       <FormCheckbox

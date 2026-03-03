@@ -101,7 +101,7 @@ export default function QuestionDialog({
             : dictionary.pages_events.fill_additional_info}
         </h3>
         {response && response.isError && (
-          <div className="alert mt-2 rounded-lg bg-red-200 text-sm text-red-800">
+          <div className="alert alert-error mt-2">
             <BiErrorCircle size={24} />
             {response.message}
           </div>

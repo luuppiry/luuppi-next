@@ -10,6 +10,7 @@ import TicketAmountDialog from './TicketAmountDialog';
 
 interface TicketProps {
   ticket: {
+    uid?: string;
     name: string;
     location: string;
     price: number;
@@ -44,6 +45,7 @@ export default function Ticket({
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [routeRefreshedOnce, setRouteRefreshedOnce] = useState(false);
   const [response, setResponse] = useState<{
     message: string;
     isError: boolean;
@@ -80,11 +82,14 @@ export default function Ticket({
         lang,
         ticket.role!,
         targetedRole,
+        ticket.uid,
       );
+
       setAmountModalOpen(false);
 
-      if (res.reloadCache) {
+      if (res.reloadCache && !routeRefreshedOnce) {
         router.refresh();
+        setRouteRefreshedOnce(true);
         setLoading(false);
         return;
       }
