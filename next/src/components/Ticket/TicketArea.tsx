@@ -218,7 +218,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
 
   if (configErrors.length || !ticketTypesFormatted?.length) {
     return (
-      <div className="alert rounded-lg bg-red-200 text-sm text-red-800">
+      <div className="alert alert-error">
         <BiErrorCircle size={24} />
         <div className="flex flex-col">
           <span className="font-semibold">
@@ -291,12 +291,12 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       {errors.map((error, i) => (
         <div
           key={error.message}
-          className={`alert rounded-lg text-sm ${
+          className={`alert ${
             error.level === 'warn'
-              ? 'bg-yellow-200/50 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-200'
+              ? 'alert-warning'
               : error.level === 'info'
-                ? 'bg-blue-200 text-blue-800 dark:bg-blue-800/30 dark:text-blue-200'
-                : 'bg-red-200 text-sm text-red-800 dark:bg-red-800/30 dark:text-red-200'
+                ? 'alert-info'
+                : 'alert-error'
           } ${i === errors.length - 1 ? 'mb-8' : 'mb-4'}`}
         >
           {error.level === 'error' && <BiErrorCircle size={24} />}
@@ -334,7 +334,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       </div>
     </>
   ) : (
-    <div className="alert rounded-lg bg-blue-200 text-blue-800">
+    <div className="alert alert-info">
       <BiErrorCircle size={24} />
       {dictionary.pages_events.no_tickets}
     </div>

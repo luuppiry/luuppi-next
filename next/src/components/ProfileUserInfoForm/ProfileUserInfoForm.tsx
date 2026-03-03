@@ -51,7 +51,7 @@ export default function ProfileUserInfoForm({
         {dictionary.general.general_info}
       </h2>
       {hasMissingInformation && (
-        <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+        <div className="alert alert-error mb-4">
           <BiErrorCircle size={24} />
           {dictionary.pages_profile.missing_required_fields}
         </div>
@@ -61,7 +61,7 @@ export default function ProfileUserInfoForm({
         formResponse.message &&
         formResponse.field !== '',
       ) && (
-        <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+        <div className="alert alert-error mb-4">
           <BiErrorCircle size={24} />
           {formResponse.message}
         </div>
@@ -71,9 +71,7 @@ export default function ProfileUserInfoForm({
         formResponse.message &&
         formResponse.field !== '',
       ) && (
-        <div className="alert mb-4 rounded-lg bg-green-200 text-sm text-green-800">
-          {formResponse.message}
-        </div>
+        <div className="alert alert-success mb-4">{formResponse.message}</div>
       )}
       <FormInput
         error={formResponse.field === 'username' ? formResponse.message : ''}

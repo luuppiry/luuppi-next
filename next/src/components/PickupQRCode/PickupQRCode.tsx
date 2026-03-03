@@ -38,10 +38,7 @@ export default function PickupQRCode({
       }
     };
 
-    // Cleanup on unmount
-    return () => {
-      eventSource.close();
-    };
+    return () => eventSource.close();
   }, [pickupCode, router]);
 
   if (!pickupCode) return null;

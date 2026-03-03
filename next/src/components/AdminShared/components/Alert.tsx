@@ -6,10 +6,7 @@ interface AlertProps {
 }
 
 export default function Alert({ message, type }: AlertProps) {
-  const styles =
-    type === 'error'
-      ? 'bg-red-200 text-red-800'
-      : 'bg-green-200 text-green-800';
+  const styles = type === 'error' ? 'alert-error' : 'alert-success';
 
   return (
     <div className={`alert mb-4 rounded-lg text-sm ${styles}`}>

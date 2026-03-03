@@ -257,7 +257,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
         <QuestionDialog dictionary={dictionary} lang={params.lang} />
         <h1 className="mb-12">{dictionary.navigation.own_events}</h1>
         {Boolean(unpaidRegistrations.length) && (
-          <div className="alert mb-4 rounded-lg bg-red-200 text-sm text-red-800">
+          <div className="alert alert-error mb-4">
             <BiErrorCircle size={24} />
             {
               dictionary.pages_events[
@@ -269,7 +269,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
           </div>
         )}
         {userEventRegistrations.length === 0 && (
-          <div className="alert rounded-lg bg-blue-200 text-blue-800">
+          <div className="alert alert-info">
             <BiErrorCircle size={24} />
             {dictionary.pages_events.no_reservations}
           </div>
