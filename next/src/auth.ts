@@ -46,6 +46,12 @@ export const {
         session.user.name = token.username as string;
       }
 
+      // Reject dev-only mock tokens if somehow presented to a production instance.
+      // This is a defense-in-depth measure in case AUTH_SECRET is accidentally shared between environments.
+      if (token.devOnly && process.env.NODE_ENV !== 'development') {
+        throw new Error('Dev-only token rejected in production');
+      }
+
       // Forces user to sign in again if token version is outdated.
       // Useful for forcing users to sign in again after updating token version if
       // major changes have been made to the token structure.

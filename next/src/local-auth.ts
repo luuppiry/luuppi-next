@@ -139,6 +139,7 @@ export const createDevOnlyJWT = async ({ user, token }: DevOnlyJwtOptions) => {
   token.isLuuppiMember = hasRole(process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!);
   token.username = localUser.username ?? devUser.username;
   token.version = process.env.TOKEN_VERSION;
+  token.devOnly = true;
 
   return token;
 };
