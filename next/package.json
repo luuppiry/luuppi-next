@@ -62,7 +62,7 @@
     "@eslint/compat": "^2.0.2",
     "@eslint/js": "^10.0.1",
     "@microsoft/microsoft-graph-types": "^2.43.1",
-    "@strapi/strapi": "^5.36.0",
+    "@strapi/strapi": "^5.38.0",
     "@tailwindcss/typography": "^0.5.19",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/negotiator": "^0.6.4",
