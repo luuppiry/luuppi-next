@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // https://github.com/vercel/next.js/blob/77bb08d129a46eae14cd73c8f6286741153755f3/packages/next/src/server/config-shared.ts#L1534
   cacheMaxMemorySize: 500 * 1024 * 1024 /* 500 mb (x10 of default) */,
+  generateBuildId: () => process.env.GIT_COMMIT_SHA || crypto.randomUUID(),
+  deploymentId: process.env.GIT_COMMIT_SHA,
   images: {
     dangerouslyAllowLocalIP: process.env.NODE_ENV !== 'production',
     remotePatterns: [
