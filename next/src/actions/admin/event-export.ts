@@ -8,6 +8,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
+import qs from 'qs';
 
 function escapeCsvField(field: any): string {
   if (field === null || field === undefined) return '""';
@@ -98,11 +99,27 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
     };
   }
 
-  const url = `/api/events/${event.eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
+  const query = qs.stringify({
+    populate: {
+      Registration: {
+        populate: {
+          QuestionsText: true,
+          QuestionsSelect: true,
+          QuestionsCheckbox: true,
+          TicketTypes: {
+            populate: {
+              Role: true,
+            },
+          },
+        },
+      },
+    },
+  });
 
   const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>(
     lang,
-    url,
+    `/api/events/${event.eventDocumentId}?${query}`,
+
     [`event-${eventId}`],
     true,
   );
@@ -115,6 +132,8 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
       isError: true,
     };
   }
+
+  const ticketTypes = strapiEvents?.data.Registration?.TicketTypes;
 
   // Format nice json object to be converted to CSV
   const eventRegistrations = event.registrations.map((registration) => {
@@ -147,10 +166,20 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
       [dictionary.general.preferredFullName]:
         registration.user.preferredFullName ?? '',
       [dictionary.general.paid]: registration.price,
-      [dictionary.general.quota]: registration.strapiRoleUuid,
-      [dictionary.pages_admin.picked_up ?? 'Picked up']: registration.pickedUp
-        ? (dictionary.general.yes ?? 'Yes')
-        : (dictionary.general.no ?? 'No'),
+      [dictionary.general.ticket]:
+        ticketTypes?.find((t) =>
+          t.uid
+            ? t.uid === registration.strapiTicketUid
+            : t.Role?.RoleId === registration.strapiRoleUuid,
+        )?.[lang === 'en' ? 'NameEn' : 'NameFi'] ?? '-',
+      ...(strapiEvent.Registration?.RequiresPickup === true
+        ? {
+            [dictionary.pages_admin.picked_up ?? 'Picked up']:
+              registration.pickedUp
+                ? (dictionary.general.yes ?? 'Yes')
+                : (dictionary.general.no ?? 'No'),
+          }
+        : {}),
     } as Record<string, string>;
 
     return {

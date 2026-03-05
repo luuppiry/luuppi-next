@@ -8,6 +8,7 @@ import { logger } from '@/libs/utils/logger';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { redirect } from 'next/navigation';
+import qs from 'qs';
 import { PiCheckCircle, PiCircle } from 'react-icons/pi';
 
 interface AdminEventRegistrationsListProps {
@@ -49,9 +50,17 @@ export default async function AdminEventRegistrationsList({
     );
   }
 
+  const query = qs.stringify({
+    populate: {
+      Registration: {
+        populate: ['QuestionsText', 'QuestionsSelect', 'QuestionsCheckbox'],
+      },
+    },
+  });
+
   const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
     lang,
-    `/api/events/${event.eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`,
+    `/api/events/${event.eventDocumentId}?${query}`,
     [`event-${eventId}`],
     true,
   );
@@ -83,11 +92,11 @@ export default async function AdminEventRegistrationsList({
 
   return (
     <div className="card card-body text-base-content" id="registrations-table">
-      <div className="mb-4 flex items-center justify-between select-none flex-wrap">
+      <div className="mb-4 flex select-none flex-wrap items-center justify-between">
         <h2 className="text-lg font-semibold">
           {dictionary.general.registrations}
         </h2>
-        <div className="flex  items-center gap-4">
+        <div className="flex items-center gap-4">
           {requiresPickup && (
             <span className="badge badge-primary">
               {dictionary.pages_admin.picked_up}: {pickedUpCount} /{' '}
@@ -103,6 +112,7 @@ export default async function AdminEventRegistrationsList({
           {questionKeys.length > 0 && (
             <colgroup>
               <col />
+
               {questionKeys.map((key) => (
                 <col key={key} />
               ))}
@@ -120,6 +130,7 @@ export default async function AdminEventRegistrationsList({
                   {dictionary.pages_admin.registration_answers}
                 </th>
               )}
+
               {requiresPickup && (
                 <th>
                   <span className="flex justify-center">
