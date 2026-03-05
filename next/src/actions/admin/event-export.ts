@@ -178,11 +178,14 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
         registration.user.preferredFullName ?? '',
       [dictionary.general.paid]: registration.price,
       [dictionary.general.ticket]:
-        ticketTypes?.find((t) =>
-          t.uid
-            ? t.uid === registration.strapiTicketUid
-            : t.Role?.RoleId === registration.strapiRoleUuid,
-        )?.[lang === 'en' ? 'NameEn' : 'NameFi'] ?? '-',
+        (ticketTypes?.find(
+          (t) =>
+            registration.strapiTicketUid &&
+            t.uid === registration.strapiTicketUid,
+        ) ??
+          ticketTypes?.find(
+            (t) => t.Role?.RoleId === registration.strapiRoleUuid,
+          ))?.[lang === 'en' ? 'NameEn' : 'NameFi'] ?? '-',
       ...(strapiEvent.Registration?.RequiresPickup === true
         ? {
             [dictionary.pages_admin.picked_up ?? 'Picked up']:
