@@ -75,18 +75,24 @@ export default async function AdminEventRegistrationsList({
     );
   }
 
-  // Collect all unique question keys across registrations
-  const questionKeys = Array.from(
-    new Set(
-      registrations.flatMap((r) =>
-        r.answers.map(
-          (a) =>
-            getQuestion(strapiEvent?.data, lang, a.question, a.type) ??
-            a.question,
+  const cutoff = new Date(event.endDate);
+  cutoff.setDate(cutoff.getDate() + 7);
+  const answersHidden = new Date() > cutoff;
+
+  // Collect all unique question keys across registrations (hidden for past events)
+  const questionKeys = answersHidden
+    ? []
+    : Array.from(
+        new Set(
+          registrations.flatMap((r) =>
+            r.answers.map(
+              (a) =>
+                getQuestion(strapiEvent?.data, lang, a.question, a.type) ??
+                a.question,
+            ),
+          ),
         ),
-      ),
-    ),
-  );
+      );
 
   const pickedUpCount = registrations.filter((r) => r.pickedUp).length;
 

@@ -135,16 +135,27 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
 
   const ticketTypes = strapiEvents?.data.Registration?.TicketTypes;
 
+  const cutoff = new Date(event.endDate);
+  cutoff.setDate(cutoff.getDate() + 7);
+  const answersHidden = new Date() > cutoff;
+
   // Format nice json object to be converted to CSV
   const eventRegistrations = event.registrations.map((registration) => {
-    const answers = registration.answers.map((answer) => ({
-      question:
-        getQuestion(strapiEvent, lang, answer.question, answer.type) ?? '',
-      answer:
-        answer.type === 'SELECT'
-          ? getSelectChoice(strapiEvent, lang, answer.question, answer.answer)
-          : answer.answer,
-    }));
+    const answers = answersHidden
+      ? []
+      : registration.answers.map((answer) => ({
+          question:
+            getQuestion(strapiEvent, lang, answer.question, answer.type) ?? '',
+          answer:
+            answer.type === 'SELECT'
+              ? getSelectChoice(
+                  strapiEvent,
+                  lang,
+                  answer.question,
+                  answer.answer,
+                )
+              : answer.answer,
+        }));
 
     // Flatten the answers to be in the same object because all users have the same questions
     const answersObject = answers.reduce(
