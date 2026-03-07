@@ -173,7 +173,6 @@ export default function PickupScanner({
                   placeholder="ABC123"
                   type="text"
                   value={code}
-                  autoFocus
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
                 />
                 <label className="label">
