@@ -119,7 +119,7 @@ export default function PickupScanner({
       </Button>
 
       <ModalOverlay
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+        className="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 px-4 pt-[20dvh] transition-[padding-top] duration-300 has-[#pickup-code:focus]:pt-4 sm:has-[#pickup-code:focus]:pt-[20dvh]"
         isDismissable
       >
         <Modal>
