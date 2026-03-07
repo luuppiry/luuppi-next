@@ -412,7 +412,6 @@
     "scan_pickup_code": "Scan Pickup Code",
     "manual_entry": "Manual Entry",
     "open_camera": "Open camera",
-    "qr_instructions": "Scanning a code using camera requires iOS 17 or an Android with Chrome updated to at least version 83 (released 2020, see about://version). \uf8ff-users: you also need to enable Shape Detection API in Settings -> Safari -> Advanced Settings -> Feature Flags -> Shape Detection API. This is used to detect the QR code.",
     "enter_6_char_code": "Enter 6-character code (e.g., ABC123)",
     "registration_answers": "Registration Answers",
     "roles_management": "Roles management",

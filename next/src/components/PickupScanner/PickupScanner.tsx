@@ -1,9 +1,7 @@
 'use client';
-import PartyPhp from '@/../public/images/php.gif';
 import { togglePickupStatus } from '@/actions/admin/toggle-pickup-status';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner';
-import Image from 'next/image';
 import { useCallback, useState } from 'react';
 import {
   Button,
@@ -32,8 +30,8 @@ export default function PickupScanner({
     isError: boolean;
   } | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [isPaused, setIsPaused] = useState(true);
-  const [hasSeenNotice, setHasSeenNotice] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [scannedCodes] = useState(() => new Set<string>());
 
   const highlightCodeOnCanvas = (
     detectedCodes: IDetectedBarcode[],
@@ -57,6 +55,7 @@ export default function PickupScanner({
     async (inputCode: string) => {
       const cleanCode = inputCode.trim().toUpperCase();
       if (!cleanCode || loading) return;
+      if (scannedCodes.has(cleanCode)) return;
 
       setLoading(true);
       setMessage(null);
@@ -71,6 +70,7 @@ export default function PickupScanner({
       if (result.isError) {
         setMessage({ text: result.message, isError: true });
       } else {
+        scannedCodes.add(cleanCode);
         setMessage({
           text: `${dictionary.general.success}: ${result.data?.email}`,
           isError: false,
@@ -90,7 +90,7 @@ export default function PickupScanner({
         }, 2000);
       }
     },
-    [lang, eventDocumentId, dictionary, isOpen, loading],
+    [lang, eventDocumentId, dictionary, isOpen, loading, scannedCodes],
   );
 
   const onScan = (detectedCodes: IDetectedBarcode[]) => {
@@ -146,30 +146,12 @@ export default function PickupScanner({
                   : 'border-transparent'
               }`}
             >
-              {hasSeenNotice ? (
-                <Scanner
-                  components={{ tracker: highlightCodeOnCanvas }}
-                  formats={['qr_code']}
-                  paused={isPaused}
-                  onScan={onScan}
-                />
-              ) : (
-                <div className="flex h-full flex-col gap-4 overflow-scroll p-1">
-                  <div className="font-sans text-sm">
-                    {dictionary.pages_admin.qr_instructions}
-                  </div>
-
-                  <Button
-                    className="btn btn-outline border-gray-400"
-                    onClick={() =>
-                      void (setHasSeenNotice(true), setIsPaused(false))
-                    }
-                  >
-                    <Image alt="" height={24} src={PartyPhp} width={24} />
-                    {dictionary.pages_admin.open_camera}
-                  </Button>
-                </div>
-              )}
+              <Scanner
+                components={{ tracker: highlightCodeOnCanvas }}
+                formats={['qr_code']}
+                paused={isPaused}
+                onScan={onScan}
+              />
             </div>
 
             <form

@@ -412,7 +412,6 @@
     "scan_pickup_code": "Skannaa noutokoodi",
     "manual_entry": "Syötä käsin",
     "open_camera": "Avaa kamera",
-    "qr_instructions": "Koodin skannaaminen kameralla vaatii iOS 17 -käyttöjärjestelmän tai Android-laitteen, jonka Chrome-selain on päivitetty vähintään versioon 83 (julkaistu 2020, tarkista versio osoitteesta about://version). -käyttäjät: Asetukset -> Safari -> Lisäasetukset (Advanced) -> Ominaisuusliput (Feature Flags) -> Shape Detection API. Asetusta tarvitaan QR-koodin tunnistamiseen.",
     "enter_6_char_code": "Syötä 6-merkkinen koodi (esim. ABC123)",
     "registration_answers": "Ilmoittautumisen vastaukset",
     "roles_management": "Roolihallinta",
