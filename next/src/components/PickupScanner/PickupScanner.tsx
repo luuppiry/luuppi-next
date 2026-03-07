@@ -119,7 +119,7 @@ export default function PickupScanner({
       </Button>
 
       <ModalOverlay
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+        className="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 px-4 pt-[20dvh] transition-[padding-top] duration-300 has-[#pickup-code:focus]:pt-4 sm:has-[#pickup-code:focus]:pt-[20dvh]"
         isDismissable
       >
         <Modal>
@@ -174,6 +174,17 @@ export default function PickupScanner({
                   type="text"
                   value={code}
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
+                  // Used to ensure input contents are visible on mobile Safari
+                  onFocus={(event) => {
+                    const input = event.currentTarget;
+                    const viewport = window.visualViewport!;
+
+                    const onResize = () => {
+                      input.scrollIntoView({ block: 'nearest' });
+                      viewport.removeEventListener('resize', onResize);
+                    };
+                    viewport.addEventListener('resize', onResize);
+                  }}
                 />
                 <label className="label">
                   <span className="label-text-alt text-gray-500">
