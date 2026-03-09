@@ -1,5 +1,4 @@
 'use client';
-import { reloadIfStale } from '@/libs/utils/stale-deployment';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import roboSvg from '../../../../public/robo_500.svg';
@@ -24,7 +23,6 @@ export default function Error({
       : browserLang;
 
   useEffect(() => {
-    if (reloadIfStale(error)) return;
     // Log the error to an error reporting service
     // eslint-disable-next-line no-console
     console.error(error);

@@ -1,7 +1,6 @@
 import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
 import NotificationBar from '@/components/NotificationBar/NotificationBar';
-import StaleDeploymentRecovery from '@/components/StaleDeploymentRecovery/StaleDeploymentRecovery';
 import { getDictionary } from '@/dictionaries';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
@@ -78,7 +77,6 @@ export default async function RootLayout(props: RootLayoutProps) {
       <body className={titilliumFont.className}>
         <SessionProvider>
           <ThemeProvider>
-            <StaleDeploymentRecovery />
             <Header dictionary={dictionary} lang={params.lang} />
             <EventSelectorProvider>
               <div className="flex-1">{children}</div>
