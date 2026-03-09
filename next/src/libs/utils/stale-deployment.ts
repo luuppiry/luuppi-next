@@ -22,6 +22,12 @@ export function isStaleDeploymentError(
   if (msg.includes('Failed to fetch dynamically imported module')) return true;
   if (msg.includes('error loading dynamically imported module')) return true;
   if (/Loading chunk \d+ failed/.test(msg)) return true;
+
+  // Turbopack module instantiation failure (Next.js 16 build ID mismatch)
+  if (msg.includes('was instantiated because it was required from module'))
+    return true;
+  if (msg.includes('but the module factory is not available')) return true;
+
   return false;
 }
 
@@ -51,10 +57,7 @@ export function resetReloadCount(): void {
 export function reloadIfStale(error: Error & { digest?: string }): boolean {
   if (!isStaleDeploymentError(error)) return false;
   try {
-    const count = parseInt(
-      sessionStorage.getItem(RELOAD_COUNT_KEY) ?? '0',
-      10,
-    );
+    const count = parseInt(sessionStorage.getItem(RELOAD_COUNT_KEY) ?? '0', 10);
     if (count < MAX_RELOADS) {
       sessionStorage.setItem(RELOAD_COUNT_KEY, String(count + 1));
       window.location.reload();
