@@ -9,6 +9,7 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection, APIResponseData } from '@/types/types';
 import ical from 'ical-generator';
 import { NextRequest } from 'next/server';
+import qs from 'qs';
 
 type Event = Omit<APIResponseData<'api::event.event'>, 'id'>;
 
@@ -25,6 +26,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
   const lang = searchParams.get('lang') as SupportedLanguage | undefined;
+  const slug = searchParams.get('slug'); // optional single event
   const allowedLangs = ['en', 'fi'];
 
   if (!lang || !allowedLangs.includes(lang)) {
@@ -35,11 +37,20 @@ export async function GET(request: NextRequest) {
   const threeMonthsAgo = new Date();
   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
-  const strapiUrl = `/api/events?filters[StartDate][$gte]=${threeMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+  const query = qs.stringify({
+    filters: slug
+      ? { Slug: { $eq: slug } }
+      : {
+          StartDate: {
+            $gte: threeMonthsAgo.toISOString(),
+          },
+        },
+    populate: ['Registration.TicketTypes.Role', 'VisibleOnlyForRoles'],
+  });
 
   const eventData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
-  >(lang, strapiUrl, ['event'], true);
+  >(lang, `/api/events/?${query}`, ['event'], true);
 
   if (!eventData) {
     return new Response('Error fetching event data', { status: 500 });
@@ -93,7 +104,7 @@ export async function GET(request: NextRequest) {
   return new Response(ics.toString(), {
     headers: {
       'Content-Type': 'text/calendar; charset=utf-8',
-      'Content-Disposition': `attachment; filename=events-${lang}.ics`,
+      'Content-Disposition': `attachment; filename=${slug ? `event-${slug}` : 'events'}-${lang}.ics`,
     },
   });
 }

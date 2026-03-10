@@ -26,6 +26,7 @@ import { LuBaby } from 'react-icons/lu';
 import { MdNoDrinks } from 'react-icons/md';
 import { PiImageBroken } from 'react-icons/pi';
 import { RiProhibitedLine } from 'react-icons/ri';
+import { TbTableImport } from 'react-icons/tb';
 
 interface EventProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
@@ -211,6 +212,14 @@ export default async function Event(props: EventProps) {
               }
             />
           </div>
+
+          <a
+            className="btn btn-primary btn-sm my-8 w-fit"
+            href={`/api/ics?lang=${params.lang}&slug=${params.slug}`}
+          >
+            <TbTableImport role="presentation" size={18} />
+            {dictionary.general.add_to_calendar}
+          </a>
         </div>
         <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
           <div className="flex flex-col gap-4">
