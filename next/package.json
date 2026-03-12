@@ -56,7 +56,7 @@
     "server-only": "^0.0.1",
     "sharp": "^0.33.5",
     "sitemap": "^8.0.2",
-    "stripe": "^17.7.0"
+    "stripe": "^20.4.1"
   },
   "devDependencies": {
     "@eslint/compat": "^2.0.2",
