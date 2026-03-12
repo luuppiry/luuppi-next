@@ -54,7 +54,7 @@
     "react-turnstile": "^1.1.5",
     "schema-dts": "^1.1.5",
     "server-only": "^0.0.1",
-    "sharp": "^0.33.5",
+    "sharp": "^0.34.5",
     "sitemap": "^8.0.2",
     "stripe": "^20.4.1"
   },
