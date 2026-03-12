@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@azure/msal-node':
-        specifier: ^3.8.7
-        version: 3.8.7
+        specifier: ^5.0.6
+        version: 5.0.6
       '@formatjs/intl-localematcher':
         specifier: ^0.6.2
         version: 0.6.2
@@ -258,13 +258,13 @@ packages:
       nodemailer:
         optional: true
 
-  '@azure/msal-common@15.14.2':
-    resolution: {integrity: sha512-n8RBJEUmd5QotoqbZfd+eGBkzuFI1KX6jw2b3WcpSyGjwmzoeI/Jb99opIBPHpb8y312NB+B6+FGi2ZVSR8yfA==}
+  '@azure/msal-common@16.2.0':
+    resolution: {integrity: sha512-ge0nGzTLmEE5lg7tSCbTBrYqMGkpFQeQEtqfcKPuGJn/FPFf8Xz51uDfZsm5xpstNZGMYPhHvnYbL8OeNp/aLw==}
     engines: {node: '>=0.8.0'}
 
-  '@azure/msal-node@3.8.7':
-    resolution: {integrity: sha512-a+Xnrae+uwLnlw68bplS1X4kuJ9F/7K6afuMFyRkNIskhjgDezl5Fhrx+1pmAlDmC0VaaAxjRQMp1OmcqVwkIg==}
-    engines: {node: '>=16'}
+  '@azure/msal-node@5.0.6':
+    resolution: {integrity: sha512-vwGXndrTkf/5Nu0xjobrFXW1AVlrbp2IrTdmJumSERfHXMsBQC+5YqIvLxCqT2+Rn+sBvzRpGaUqHCA8CKAyjg==}
+    engines: {node: '>=20'}
 
   '@babel/code-frame@7.29.0':
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
@@ -9386,11 +9386,11 @@ snapshots:
     optionalDependencies:
       nodemailer: 7.0.13
 
-  '@azure/msal-common@15.14.2': {}
+  '@azure/msal-common@16.2.0': {}
 
-  '@azure/msal-node@3.8.7':
+  '@azure/msal-node@5.0.6':
     dependencies:
-      '@azure/msal-common': 15.14.2
+      '@azure/msal-common': 16.2.0
       jsonwebtoken: 9.0.3
       uuid: 8.3.2
 
