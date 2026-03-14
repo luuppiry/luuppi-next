@@ -9,10 +9,26 @@ import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Script from 'next/script';
+import qs from 'qs';
 
 interface BoardProps {
   params: Promise<{ lang: SupportedLanguage }>;
 }
+
+const BOARDS_QUERY = qs.stringify({
+  populate: {
+    boardMembers: {
+      populate: {
+        boardRoles: {
+          populate: {
+            localizations: true,
+          },
+        },
+        image: true,
+      },
+    },
+  },
+});
 
 export default async function Board(props: BoardProps) {
   const params = await props.params;
@@ -26,11 +42,11 @@ export default async function Board(props: BoardProps) {
    */
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
-  >(
-    'fi',
-    '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
-    ['board', 'board-role', 'board-member'],
-  );
+  >('fi', `/api/boards?${BOARDS_QUERY}`, [
+    'board',
+    'board-role',
+    'board-member',
+  ]);
 
   const boardGroupedByYear = groupBoardByYear(boardData.data);
   const boardSortedByYear = Object.keys(boardGroupedByYear).sort(
@@ -140,11 +156,11 @@ export async function generateMetadata(props: BoardProps): Promise<Metadata> {
 
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
-  >(
-    'fi',
-    '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
-    ['board', 'board-role', 'board-member'],
-  );
+  >('fi', `/api/boards?${BOARDS_QUERY}`, [
+    'board',
+    'board-role',
+    'board-member',
+  ]);
 
   const boardGroupedByYear = groupBoardByYear(boardData.data);
   const boardSortedByYear = Object.keys(boardGroupedByYear).sort(

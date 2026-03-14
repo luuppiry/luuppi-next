@@ -10,10 +10,26 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import Script from 'next/script';
+import qs from 'qs';
 
 interface OldBoardProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
+
+const BOARDS_QUERY = qs.stringify({
+  populate: {
+    boardMembers: {
+      populate: {
+        boardRoles: {
+          populate: {
+            localizations: true,
+          },
+        },
+        image: true,
+      },
+    },
+  },
+});
 
 export default async function OldBoard(props: OldBoardProps) {
   const params = await props.params;
@@ -27,11 +43,11 @@ export default async function OldBoard(props: OldBoardProps) {
 
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
-  >(
-    'fi',
-    '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
-    ['board', 'board-role', 'board-member'],
-  );
+  >('fi', `/api/boards?${BOARDS_QUERY}`, [
+    'board',
+    'board-role',
+    'board-member',
+  ]);
 
   const boardGroupedByYear = groupBoardByYear(boardData.data);
   const wantedBoard = boardGroupedByYear[params.slug];
@@ -153,11 +169,11 @@ export async function generateMetadata(
 
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
-  >(
-    'fi',
-    '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
-    ['board', 'board-role', 'board-member'],
-  );
+  >('fi', `/api/boards?${BOARDS_QUERY}`, [
+    'board',
+    'board-role',
+    'board-member',
+  ]);
 
   const boardGroupedByYear = groupBoardByYear(boardData.data);
   const wantedBoard = boardGroupedByYear[params.slug];
@@ -194,11 +210,11 @@ export async function generateMetadata(
 export async function generateStaticParams() {
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
-  >(
-    'fi',
-    '/api/boards?populate[boardMembers][populate][boardRoles][populate]=localizations&populate[boardMembers][populate]=image',
-    ['board', 'board-role', 'board-member'],
-  );
+  >('fi', `/api/boards?${BOARDS_QUERY}`, [
+    'board',
+    'board-role',
+    'board-member',
+  ]);
 
   const boardGroupedByYear = groupBoardByYear(boardData.data);
 
