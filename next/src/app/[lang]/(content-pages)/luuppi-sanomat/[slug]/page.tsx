@@ -1,4 +1,4 @@
-import PdfViewer from '@/components/PdfViewer/PdfViewer';
+import PdfViewer from '@/components/PdfViewer';
 import { getDictionary } from '@/dictionaries';
 import { flipSanomatLocale } from '@/libs/strapi/flip-locale';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
