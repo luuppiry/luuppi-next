@@ -130,13 +130,13 @@ export async function POST(request: NextRequest) {
     }
 
     if (!payment.confirmationSentAt && successful) {
-      const success = await sendEventReceiptEmail({
+      const emailMessageId = await sendEventReceiptEmail({
         name,
         email,
         payment,
       });
 
-      if (!success) {
+      if (!emailMessageId) {
         logger.error('Error sending email');
         return NextResponse.json(
           { message: 'Error sending email' },
@@ -152,8 +152,9 @@ export async function POST(request: NextRequest) {
           confirmationSentAt: new Date(),
         },
       });
+
+      logger.info(`Event confirmation email sent: ${emailMessageId}`);
     }
-    logger.info('Event confirmation email sent', { email });
   } catch (error) {
     logger.error('Error processing payment webhook', error);
     return NextResponse.json(

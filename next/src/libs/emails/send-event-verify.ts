@@ -23,7 +23,7 @@ export const sendEventReceiptEmail = async ({
   name,
   email,
   payment,
-}: SendEventReceiptProps): Promise<boolean> => {
+}: SendEventReceiptProps): Promise<false | string> => {
   try {
     const dictionary = await getDictionary(
       payment.language === 'EN' ? 'en' : 'fi',
@@ -61,13 +61,13 @@ export const sendEventReceiptEmail = async ({
       payment.language === 'FI' ? emailFi : emailEn,
     );
 
-    await sendEmail({
+    const event = await sendEmail({
       to: email,
       subject: dictionary.api.email_registration_confirmation_subject,
       html: emailHtml,
     });
 
-    return true;
+    return event.messageId;
   } catch (error) {
     logger.error('Error sending email', error);
     return false;
