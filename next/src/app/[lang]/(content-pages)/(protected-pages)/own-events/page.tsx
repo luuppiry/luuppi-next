@@ -15,7 +15,7 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import qs from 'qs';
 import { BiErrorCircle } from 'react-icons/bi';
-
+import { BsQrCode } from 'react-icons/bs';
 interface OwnEventsProps {
   params: Promise<{ lang: SupportedLanguage }>;
 }
@@ -268,6 +268,13 @@ export default async function OwnEvents(props: OwnEventsProps) {
             }
           </div>
         )}
+        {Boolean(unpaidRegistrations.length) &&
+          unpaidRegistrations.some((e) => e.pickupCode) && (
+            <div className="alert alert-info mb-4">
+              <BsQrCode size={24} />
+              {dictionary.pages_events.pickup_event_info}
+            </div>
+          )}
         {userEventRegistrations.length === 0 && (
           <div className="alert alert-info">
             <BiErrorCircle size={24} />

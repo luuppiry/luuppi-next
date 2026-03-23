@@ -332,6 +332,7 @@
     "pay": "Maksa",
     "unpaid_reservations_info": "Sinulla on maksamattomia varauksia. Maksa varauksesi ennen kuin ne vanhenevat.",
     "unredeemed_reservations_info": "Sinulla on lunastamattomia varauksia. Lunasta varauksesi ennen kuin ne vanhenevat.",
+    "pickup_event_info": "Saat rekisteröitymisen jälkeen koodin tuotteen noutamista varten. Jaa se ainoastaan järjestäjälle tai henkilölle, joka noutaa tuotteen puolestasi.",
     "no_reservations": "Sinulla ei ole tapahtumahistoriaa.",
     "ticket_amount": "Valitse lippujen määrä",
     "unpaid_registrations": "Maksamattomat tapahtumat",

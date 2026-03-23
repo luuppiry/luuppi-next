@@ -332,6 +332,7 @@
     "pay": "Pay",
     "unpaid_reservations_info": "You have unpaid reservations. Please pay them before they expire.",
     "unredeemed_reservations_info": "You have unredeemed reservations. Please redeem them before they expire.",
+    "pickup_event_info": "Upon completing your registration, you will get a code for picking up a physical product. Only share it with the organizer or someone collecting on your behalf.",
     "no_reservations": "You have no reservation history.",
     "ticket_amount": "Choose the amount of tickets you want to buy",
     "unpaid_registrations": "Unpaid registrations",
