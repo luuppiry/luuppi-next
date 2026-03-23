@@ -26,6 +26,8 @@ export default function PickupQRCode({
   const router = useRouter();
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const eventSource = new EventSource(`/api/tickets/${pickupCode}/stream`);
 
     eventSource.onmessage = (event) => {
@@ -38,8 +40,10 @@ export default function PickupQRCode({
       }
     };
 
+    eventSource.onerror = () => eventSource.close();
+
     return () => eventSource.close();
-  }, [pickupCode, router]);
+  }, [pickupCode, router, isOpen]);
 
   if (!pickupCode) return null;
 

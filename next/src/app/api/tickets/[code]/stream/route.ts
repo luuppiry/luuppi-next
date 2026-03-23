@@ -28,21 +28,39 @@ export async function GET(
         await subscriber.subscribe(eventName);
       } catch (error) {
         logger.error('Redis Subscription Error:', error);
-        controller.error(error);
+        try {
+          controller.close();
+        } catch {
+          // Connection was already closed: no-op
+        }
+        await subscriber.quit();
+        return;
       }
 
       const push = (channel: string, message: string) => {
-        if (channel === eventName) {
-          controller.enqueue(`data: ${message}\n\n`);
+        if (channel !== eventName) return;
+
+        controller.enqueue(`data: ${message}\n\n`);
+
+        const data = JSON.parse(message);
+        if (data.isPickedUp) {
+          subscriber.off('message', push);
+          subscriber.unsubscribe(eventName).catch(() => {});
+          subscriber.quit().catch(() => {});
+          try {
+            controller.close();
+          } catch {
+            // Connection was already closed: no-op
+          }
         }
       };
 
       subscriber.on('message', push);
 
-      request.signal.addEventListener('abort', async () => {
+      request.signal.addEventListener('abort', () => {
         subscriber.off('message', push);
-        await subscriber.unsubscribe(eventName);
-        await subscriber.quit();
+        subscriber.unsubscribe(eventName).catch(() => {});
+        subscriber.quit().catch(() => {});
       });
     },
   });
