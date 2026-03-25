@@ -5,7 +5,7 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { Session } from 'next-auth';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { FaLockOpen } from 'react-icons/fa';
 import { HiMenu } from 'react-icons/hi';
@@ -13,7 +13,6 @@ import { IoMdClose } from 'react-icons/io';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
-import './MobileHamburger.css';
 
 const InstallPwaButton = dynamic(() => import('./InstallPwaButton'), {
   ssr: false,
@@ -32,9 +31,8 @@ export default function MobileHamburger({
 }: MobileNavbarProps) {
   const [open, setOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setOpen(!open);
-  };
+  const closeMenu = useCallback(() => setOpen(false), []);
+  const toggleMenu = useCallback(() => setOpen((v) => !v), []);
 
   const displayLink = (link: NavLink): boolean => {
     const isAuthenticated = Boolean(
@@ -59,6 +57,8 @@ export default function MobileHamburger({
   return (
     <>
       <button
+        aria-controls="mobileNavDrawer"
+        aria-expanded={open}
         aria-label={
           open
             ? `${dictionary.general.close} ${dictionary.general.menu.toLowerCase()}`
@@ -69,11 +69,22 @@ export default function MobileHamburger({
       >
         <HiMenu size={34} />
       </button>
-      <dialog
-        className={`modal text-base-content ${open && 'modal-open lg:hidden'}`}
-        id="mobileNavbar"
+
+      <div
+        aria-label={dictionary.general.menu}
+        aria-modal="true"
+        className="fixed inset-y-0 left-0 z-50 w-screen overflow-y-auto overflow-x-hidden bg-base-100 text-base-content will-change-transform lg:hidden"
+        id="mobileNavDrawer"
+        role="dialog"
+        style={{
+          transform: open ? 'scale(1)' : 'scale(.8)',
+          opacity: open ? '1' : '0',
+          pointerEvents: open ? 'auto' : 'none',
+          transition:
+            'transform 220ms cubic-bezier(0.4, 0, 0.2, 1), opacity .2s cubic-bezier(0.4, 0, 0.2, 1) ',
+        }}
       >
-        <div className="modal-box flex h-full min-h-dvh w-screen max-w-full gap-4 rounded-none">
+        <div className="flex h-full min-h-dvh w-full gap-4 p-4">
           <ul className="menu h-max w-full flex-nowrap gap-2">
             {navLinksMobile
               .filter((link) => displayLink(link))
@@ -98,7 +109,7 @@ export default function MobileHamburger({
                           ? `/${lang}${link.href as string}`
                           : link.href!
                       }
-                      onClick={() => setOpen(false)}
+                      onClick={closeMenu}
                     >
                       <span>
                         {
@@ -127,7 +138,7 @@ export default function MobileHamburger({
                                 ? `/${lang}${sublink.href as string}`
                                 : sublink.href
                             }
-                            onClick={() => setOpen(false)}
+                            onClick={closeMenu}
                           >
                             {
                               dictionary.navigation[
@@ -145,12 +156,13 @@ export default function MobileHamburger({
               <InstallPwaButton dictionary={dictionary} />
             </li>
           </ul>
+
           <div className="sticky top-0 z-10 flex justify-end">
             <div className="flex h-full flex-col items-center gap-4">
               <button
                 aria-label={`${dictionary.general.close} ${dictionary.general.menu.toLowerCase()}`}
                 className="btn btn-circle btn-primary"
-                onClick={() => setOpen(false)}
+                onClick={closeMenu}
               >
                 <IoMdClose size={32} />
               </button>
@@ -177,7 +189,7 @@ export default function MobileHamburger({
             </div>
           </div>
         </div>
-      </dialog>
+      </div>
     </>
   );
 }
