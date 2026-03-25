@@ -7,7 +7,7 @@ import PickupQRCode from '../PickupQRCode/PickupQRCode';
 import QuestionButton from '../QuestionButton/QuestionButton';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import RegistrationCounter from './RegistrationCounter';
-import QRCode from 'qrcode';
+import { createQrCode } from '@/libs/utils/create-qr-code';
 
 interface RegistrationProps {
   registration: {
@@ -46,13 +46,6 @@ interface RegistrationProps {
     NameFi: string;
   } | null;
 }
-
-const createQrCode = async (pickupCode: string) =>
-  QRCode.toDataURL(pickupCode, {
-    width: 200,
-    margin: 0,
-    color: { dark: '#000000', light: '#FFFFFF' },
-  }).catch(() => null);
 
 export default async function Registration({
   registration,

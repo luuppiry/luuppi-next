@@ -33,6 +33,7 @@
     "@yudiel/react-qr-scanner": "^2.5.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
+    "hdrify": "^0.12.1",
     "ical-generator": "^10.0.0",
     "ioredis": "^5.9.3",
     "jsonwebtoken": "^9.0.3",
