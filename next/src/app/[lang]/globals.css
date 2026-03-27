@@ -360,6 +360,14 @@
   .tabs-boxed :is(input:checked) {
     @apply bg-secondary-400 text-white;
   }
+
+  [data-theme='dark'] .badge-success {
+    background: color-mix(in lch, oklch(var(--su)) 60%, #000000f0);
+  }
+
+  [data-theme='dark'] .badge-error {
+    background: color-mix(in lch, oklch(var(--er)) 60%, #000000f0);
+  }
 }
 
 @layer utilities {
