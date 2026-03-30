@@ -96,7 +96,7 @@
       "targetField": "NameEn",
       "required": true,
       "minLength": 3,
-      "regex": "^[A-Za-z]+(-[A-Za-z0-9]+)*$"
+      "regex": "^[a-z]+(-[a-z0-9]+)*$"
     }
   }
 }
