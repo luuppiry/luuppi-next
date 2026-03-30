@@ -97,31 +97,36 @@ interface MobileCalendarProps {
   dictionary: Dictionary;
 }
 
-const generateMonthGrid = (
-  year: number,
-  month: number,
-): (number | null)[][] => {
-  const firstDayOfMonth = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+interface CalendarDay {
+  day: number;
+  month: number;
+  year: number;
+  dateKey: string;
+}
 
+const generateMonthGrid = (year: number, month: number): CalendarDay[] => {
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
   // Always use Monday as first day of week (adjust Sunday from 0 to 6)
   const adjustedFirstDay = (firstDayOfMonth + 6) % 7;
-
-  const grid: (number | null)[][] = [];
-  let dayCounter = 1;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   const rows = Math.ceil((adjustedFirstDay + daysInMonth) / 7);
+  const totalDays = rows * 7;
 
-  for (let i = 0; i < rows; i++) {
-    const week: (number | null)[] = [];
-    for (let j = 0; j < 7; j++) {
-      if ((i === 0 && j < adjustedFirstDay) || dayCounter > daysInMonth) {
-        week.push(null);
-      } else {
-        week.push(dayCounter++);
-      }
-    }
-    grid.push(week);
+  const grid: CalendarDay[] = [];
+
+  // Start date: the 1st of the month, minus the number of preceding padding days
+  const currentDate = new Date(year, month, 1 - adjustedFirstDay);
+
+  for (let i = 0; i < totalDays; i++) {
+    grid.push({
+      day: currentDate.getDate(),
+      month: currentDate.getMonth(),
+      year: currentDate.getFullYear(),
+      dateKey: formatToDateKey(currentDate),
+    });
+
+    currentDate.setDate(currentDate.getDate() + 1);
   }
 
   return grid;
@@ -198,17 +203,8 @@ export default function MobileCalendar({
             {day}
           </div>
         ))}
-        {monthGrid.flat().map((day, idx) => {
-          if (day === null) {
-            return (
-              <div
-                key={idx}
-                className="min-h-[4rem] w-full rounded-lg bg-gray-50 dark:bg-background-100"
-              />
-            );
-          }
-
-          const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        {monthGrid.map((dayInfo, idx) => {
+          const { day, month, year, dateKey } = dayInfo;
           const dayEvents = groupedEvents[dateKey] || [];
 
           const MAX_VISIBLE_LANES = 3;
@@ -224,9 +220,7 @@ export default function MobileCalendar({
           ).length;
 
           const isToday =
-            day === todayDate &&
-            currentMonth === todayMonth &&
-            currentYear === todayYear;
+            day === todayDate && month === todayMonth && year === todayYear;
           const yesterday = new Date(today);
           yesterday.setDate(today.getDate() - 1);
           yesterday.setHours(23, 59, 59, 999);
@@ -249,7 +243,7 @@ export default function MobileCalendar({
               onClick={() => openDayEventsDialog(dateKey)}
             >
               <span className={`text-sm ${isPast ? 'text-gray-400' : ''}`}>
-                {day || ''}
+                {day}
               </span>
 
               {hasEvents && (
