@@ -64,7 +64,7 @@
     "@eslint/js": "^10.0.1",
     "@microsoft/microsoft-graph-types": "^2.43.1",
     "@react-email/preview-server": "5.2.9",
-    "@strapi/strapi": "^5.39.0",
+    "@strapi/strapi": "^5.43.0",
     "@tailwindcss/typography": "^0.5.19",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/negotiator": "^0.6.4",
