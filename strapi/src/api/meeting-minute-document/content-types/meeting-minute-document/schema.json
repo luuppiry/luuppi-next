@@ -57,8 +57,7 @@
     "year": {
       "pluginOptions": {},
       "type": "integer",
-      "required": true,
-      "private": true
+      "required": true
     },
     "shortMeetingName": {
       "pluginOptions": {},
