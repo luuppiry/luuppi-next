@@ -1,5 +1,6 @@
 import PdfViewer from '@/components/PdfViewer';
 import { getDictionary } from '@/dictionaries';
+import { toCalendarDate } from '@/libs/constants';
 import { flipSanomatLocale } from '@/libs/strapi/flip-locale';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
@@ -7,10 +8,9 @@ import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 
 const baseUrl =
-  '/api/luuppi-sanomats?populate[0]=image&populate[1]=pdf&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[id][$eq]=';
+  '/api/luuppi-sanomats?populate[0]=image&populate[1]=pdf&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[publishedAt][$gte]=';
 
 interface LuuppiSanomatProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
@@ -22,15 +22,16 @@ export default async function LuuppiSanomatPublication(
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
+  // If two entries are published within same date this blows up (sorry)
   const pageData = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
-  >('fi', `${baseUrl}${params.slug}`, ['luuppi-sanomat']);
+  >(
+    'fi',
+    `${baseUrl}${params.slug}&filters[publishedAt][$lte]=${params.slug}T23:59:59.999Z`,
+    ['luuppi-sanomat'],
+  );
 
   const sanomatLocaleFlipped = flipSanomatLocale(params.lang, pageData.data);
-
-  if (!pageData.data.length) {
-    redirect(`/${params.lang}/404`);
-  }
 
   const selectedPublication = sanomatLocaleFlipped[0];
 
@@ -83,6 +84,6 @@ export async function generateStaticParams() {
   >('fi', '/api/luuppi-sanomats?pagination[pageSize]=500', ['luuppi-sanomat']);
 
   return pageData.data.map((sanomat) => ({
-    slug: sanomat.id.toString(),
+    slug: toCalendarDate(sanomat.publishedAt!),
   }));
 }

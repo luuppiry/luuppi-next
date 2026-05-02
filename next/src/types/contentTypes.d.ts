@@ -1125,9 +1125,7 @@ export interface ApiMeetingMinuteDocumentMeetingMinuteDocument
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    year: Schema.Attribute.Integer &
-      Schema.Attribute.Required &
-      Schema.Attribute.Private;
+    year: Schema.Attribute.Integer & Schema.Attribute.Required;
   };
 }
 

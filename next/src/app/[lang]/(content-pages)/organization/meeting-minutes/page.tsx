@@ -28,26 +28,17 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     );
   }
 
-  let page = 1;
-  let allDocuments: any[] = [];
-  let totalPages = 5;
-  do {
-    const response = await getStrapiData<
-      APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-    >(
-      'fi',
-      `/api/meeting-minute-documents?populate[1]=image&pagination[page]=${page}&pagination[pageSize]=100&sort[0]=meetingDate:desc`,
-      ['meeting-minute-document'],
-    );
-    allDocuments = allDocuments.concat(response.data);
-    totalPages = response.meta?.pagination?.pageCount || 1;
-    page++;
-  } while (page <= totalPages);
+  const yearsResponse = await getStrapiData<{data: {year: number}[]}>(
+    'fi',
+    '/api/meeting-minute-documents?fields[0]=year&pagination[pageSize]=500&sort[0]=year:desc',
+    ['meeting-minute-document'],
+  );
 
-  const latestYear =
-    allDocuments.length > 0
-      ? new Date(allDocuments[0].meetingDate).getFullYear()
-      : new Date().getFullYear();
+  const years = Array.from(
+    new Set(yearsResponse.data.map((doc) => doc.year).filter(Boolean)),
+  ).sort((a, b) => b - a);
+
+  const latestYear = years.length > 0 ? years[0] : new Date().getFullYear();
 
   const yearParam = Array.isArray(searchParams.year)
     ? searchParams.year[0]
@@ -55,25 +46,19 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
 
   const yearFromQuery = yearParam ? Number.parseInt(yearParam, 10) : NaN;
 
-  const years = Array.from(
-    new Set(
-      allDocuments
-        .map((doc) => new Date(doc.meetingDate).getFullYear())
-        .filter((year) => !isNaN(year)),
-    ),
-  ).sort((a, b) => b - a);
-
   const selectedYear =
     Number.isFinite(yearFromQuery) && years.includes(yearFromQuery)
       ? yearFromQuery
       : latestYear;
 
-  const filteredDocuments = allDocuments.filter((doc) => {
-    const year = new Date(doc.meetingDate).getFullYear();
-    return year === selectedYear;
-  });
-
   const dropdownYears = years.filter((y) => y !== selectedYear);
+
+  const documentsResponse = await getStrapiData<APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>>(
+    'fi',
+    `/api/meeting-minute-documents?populate[1]=image&filters[year][$eq]=${selectedYear}&pagination[pageSize]=100&sort[0]=meetingDate:desc`,
+    ['meeting-minute-document'],
+  );
+  const documents = documentsResponse.data
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -106,29 +91,29 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
         </div>
       </div>
       <div className="grid grid-cols-4 gap-12 max-lg:grid-cols-3 max-sm:grid-cols-2">
-        {filteredDocuments.map((publication) => (
+        {documents.map((doc) => (
           <a
-            key={publication.id}
+            key={doc.id}
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
-            href={`/${params.lang}/organization/meeting-minutes/${publication.id}`}
+            href={`/${params.lang}/organization/meeting-minutes/${doc.year}-${doc.shortMeetingName}`}
           >
-            {publication.image.url && (
+            {doc.image.url && (
               <div className="relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">
                 <Image
                   alt={`${dictionary.navigation.meeting_minutes} cover`}
                   className="h-full w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 object-cover"
-                  src={getStrapiUrl(publication.image.url)}
+                  src={getStrapiUrl(doc.image.url)}
                   fill
                 />
               </div>
             )}
             <div className="absolute bottom-0 right-0 z-20 rounded-br-lg rounded-tl-lg bg-accent-400 px-2 py-1 font-bold text-white">
               {(() => {
-                const date = new Date(publication?.meetingDate);
+                const date = new Date(doc?.meetingDate);
                 const day = String(date.getDate()).padStart(2, '0');
                 const month = String(date.getMonth() + 1).padStart(2, '0');
                 const year = date.getFullYear();
-                return `${day}.${month}.${year} | ${publication?.shortMeetingName ?? ''}`;
+                return `${day}.${month}.${year} | ${doc?.shortMeetingName ?? ''}`;
               })()}
             </div>
             <div className="absolute bottom-0 z-10 h-full w-full rounded-lg bg-gradient-to-t from-black to-transparent opacity-25" />

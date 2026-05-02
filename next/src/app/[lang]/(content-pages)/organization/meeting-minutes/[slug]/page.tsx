@@ -9,9 +9,27 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import qs from 'qs';
 
-const baseUrl =
-  '/api/meeting-minute-documents?populate[0]=image&populate[1]=pdf&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[id][$eq]=';
+const query = qs.stringify(
+  {
+    populate: [
+      'image',
+      'pdf',
+      'Seo.openGraph.openGraphImage',
+      'Seo.twitter.twitterImage',
+      'localizations',
+      'localizations.Seo.twitter.twitterImage',
+      'localizations.Seo.openGraph.openGraphImage',
+    ],
+    filters: {
+      year: { $eq: '' },
+    },
+  },
+  { encodeValuesOnly: true },
+);
+
+const baseUrl = `/api/meeting-minute-documents?${query}`;
 
 interface LuuppiSanomatProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
@@ -24,9 +42,15 @@ export default async function LuuppiSanomatPublication(
   const dictionary = await getDictionary(params.lang);
   const session = await auth();
 
+  const [year, shortMeetingName] = params.slug.split('-');
+
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', `${baseUrl}${params.slug}`, ['meeting-minute-document']);
+  >(
+    'fi',
+    `${baseUrl}${year}&filters[shortMeetingName][$eq]=${shortMeetingName}`,
+    ['meeting-minute-document'],
+  );
 
   const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(
     params.lang,
@@ -87,9 +111,15 @@ export async function generateMetadata(
   props: LuuppiSanomatProps,
 ): Promise<Metadata> {
   const params = await props.params;
+  const [year, shortMeetingName] = params.slug.split('-');
+
   const data = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', `${baseUrl}${params.slug}`, ['meeting-minute-document']);
+  >(
+    'fi',
+    `${baseUrl}${year}&filters[shortMeetingName][$eq]=${shortMeetingName}`,
+    ['meeting-minute-document'],
+  );
   const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(
     params.lang,
     data.data,
@@ -98,7 +128,7 @@ export async function generateMetadata(
   const pathname = `/${params.lang}/organization/meeting-minutes/${params.slug}`;
 
   // No version of the content exists in the requested language
-  if (!selectedPublication.Seo?.id) {
+  if (!selectedPublication?.Seo?.id) {
     return {};
   }
 
@@ -113,6 +143,6 @@ export async function generateStaticParams() {
   ]);
 
   return pageData.data.map((meetingMinuteDocument) => ({
-    slug: meetingMinuteDocument.id.toString(),
+    slug: `${meetingMinuteDocument.year}-${meetingMinuteDocument.shortMeetingName}`,
   }));
 }
