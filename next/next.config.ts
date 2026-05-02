@@ -22,11 +22,19 @@ const nextConfig: NextConfig = {
     formats: ['image/webp'],
   },
   redirects: async () =>
-    Object.entries(redirects).map(([id, slug]) => ({
-      source: `/:lang*/events/${id}`,
-      destination: `/:lang*/events/${slug}`,
-      permanent: true,
-    })),
+    Object.entries(redirects.events)
+      .map(([id, slug]) => ({
+        source: `/:lang*/events/${id}`,
+        destination: `/:lang*/events/${slug}`,
+        permanent: true,
+      }))
+      .concat(
+        Object.entries(redirects.sanomats).map(([id, slug]) => ({
+          source: `/:lang*/luuppi-sanomat/${id}`,
+          destination: `/:lang*/luuppi-sanomat/${slug}`,
+          permanent: true,
+        })),
+      ),
 };
 
 export default nextConfig;
