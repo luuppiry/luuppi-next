@@ -16,6 +16,7 @@ export async function reservationQuestionSubmit(
     type: 'select' | 'text' | 'checkbox';
     value: string | boolean;
   }[],
+  shouldRedirect: boolean = true,
 ) {
   const dictionary = await getDictionary(lang);
 
@@ -218,5 +219,7 @@ export async function reservationQuestionSubmit(
     });
   });
 
-  redirect(`/${lang}/own-events`);
+  if (shouldRedirect) {
+    redirect(`/${lang}/own-events`);
+  }
 }
