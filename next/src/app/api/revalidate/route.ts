@@ -1,5 +1,6 @@
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
+import { generatePickupCode } from '@/libs/utils/pickup-code';
 import { revalidateTag } from 'next/cache';
 import { NextRequest } from 'next/server';
 
@@ -53,6 +54,7 @@ export async function POST(request: NextRequest) {
         StartDate,
         EndDate,
         documentId,
+        Registration,
       } = body.entry;
 
       await createEvent({
@@ -64,6 +66,11 @@ export async function POST(request: NextRequest) {
         EndDate,
         documentId,
       });
+
+      // Check if the event now requires pickup and backfill if necessary
+      if (Registration?.RequiresPickup === true) {
+        await backfillPickupCodes(documentId);
+      }
     }
 
     if (model === 'event-role') {
@@ -134,4 +141,54 @@ async function createEvent({
       startDate: StartDate,
     },
   });
+}
+
+async function backfillPickupCodes(eventDocumentId: string) {
+  const MAX_ATTEMPTS = 1000;
+
+  const registrationsWithoutCode = await prisma.eventRegistration
+    .findMany({
+      where: {
+        eventDocumentId,
+        pickupCode: null,
+      },
+      select: { id: true },
+    })
+    .catch(() => []);
+
+  if (registrationsWithoutCode.length === 0) return;
+
+  logger.info(
+    `Backfilling ${registrationsWithoutCode.length} pickup codes for event-${eventDocumentId}`,
+  );
+
+  for (const reg of registrationsWithoutCode) {
+    let success = false;
+    let attempts = 0;
+
+    while (!success && attempts < MAX_ATTEMPTS) {
+      try {
+        await prisma.eventRegistration.update({
+          where: { id: reg.id },
+          data: { pickupCode: generatePickupCode() },
+        });
+        success = true;
+      } catch (err: any) {
+        // Unique Constraint Violation (i.e. this code already exists)
+        // https://www.prisma.io/docs/orm/reference/error-reference#p2002
+        if (err.code === 'P2002') {
+          attempts++;
+        } else {
+          // Something unexpected happened, skip updating this entry
+
+          logger.error(
+            `Failed to assign pickup code to registration ${reg.id}`,
+            err,
+          );
+
+          break;
+        }
+      }
+    }
+  }
 }
