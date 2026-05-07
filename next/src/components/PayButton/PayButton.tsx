@@ -1,8 +1,11 @@
 'use client';
 import { reservationChargeAll } from '@/actions/reservation-charge-all';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { useState } from 'react';
-import QuestionConfirmDialog from '../QuestionConfirmDialog/QuestionConfirmDialog';
+import {
+  QuestionContext,
+  type QuestionData,
+} from '@/providers/QuestionProvider';
+import { useContext, useState } from 'react';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import ErrorDialog from '../Ticket/ErrorDialog';
 
@@ -11,6 +14,7 @@ interface PayButtonProps {
   dictionary: Dictionary;
   isFreeTicket?: boolean;
   hasUnansweredQuestions: boolean;
+  unansweredQuestionsData: QuestionData[];
 }
 
 export default function PayButton({
@@ -18,13 +22,34 @@ export default function PayButton({
   dictionary,
   hasUnansweredQuestions,
   isFreeTicket,
+  unansweredQuestionsData,
 }: PayButtonProps) {
   const [response, setResponse] = useState<{
     isError: boolean;
     message: string;
   } | null>(null);
-  const [questionConfirmation, setQuestionConfirmation] = useState(false);
   const reservationChargeAllAction = reservationChargeAll.bind(null, lang);
+
+  const ctx = useContext(QuestionContext);
+
+  const startQuestionFlow = (index = 0) => {
+    if (index >= unansweredQuestionsData.length) {
+      ctx.setData(null);
+      reservationChargeAllAction().then(setResponse);
+      return;
+    }
+
+    const data = unansweredQuestionsData[index];
+    ctx.setData({
+      reservationId: data.reservationId,
+      questions: data.questions,
+      answers: data.answers,
+      isPayFlow: true,
+      isLastInPayFlow: index === unansweredQuestionsData.length - 1,
+      isFreeTicket: isFreeTicket,
+      onSuccess: () => startQuestionFlow(index + 1),
+    });
+  };
 
   return (
     <>
@@ -34,15 +59,11 @@ export default function PayButton({
         response={response}
         onClose={() => setResponse(null)}
       />
-      <QuestionConfirmDialog
-        dictionary={dictionary}
-        open={questionConfirmation}
-        onClose={() => setQuestionConfirmation(false)}
-      />
+
       <form
         action={async () => {
           if (hasUnansweredQuestions) {
-            setQuestionConfirmation(true);
+            startQuestionFlow(0);
             return;
           }
           const response = await reservationChargeAllAction();

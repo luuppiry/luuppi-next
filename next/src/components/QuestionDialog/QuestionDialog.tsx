@@ -53,6 +53,7 @@ export default function QuestionDialog({
       ctx.data?.reservationId || 0,
       lang,
       formValues,
+      !ctx.data?.onSuccess,
     );
 
     if (response) {
@@ -60,7 +61,11 @@ export default function QuestionDialog({
       return;
     }
 
-    handleClose();
+    if (ctx.data?.onSuccess) {
+      ctx.data.onSuccess();
+    } else {
+      handleClose();
+    }
   };
 
   if (!ctx.data) return null;
@@ -154,10 +159,20 @@ export default function QuestionDialog({
           ))}
         </div>
         <div className="modal-action">
-          <button className="btn btn-sm" onClick={handleClose}>
+          <button className="btn btn-sm" type="button" onClick={handleClose}>
             {dictionary.general.close}
           </button>
-          <SubmitButton text={dictionary.general.submit} />
+          <SubmitButton
+            text={
+              ctx.data?.isPayFlow
+                ? ctx.data.isLastInPayFlow
+                  ? ctx.data.isFreeTicket
+                    ? dictionary.pages_events.redeem_ticket
+                    : dictionary.pages_events.move_to_checkout
+                  : dictionary.general.next
+                : dictionary.general.submit
+            }
+          />
         </div>
       </form>
       <label className="modal-backdrop" onClick={handleClose}>

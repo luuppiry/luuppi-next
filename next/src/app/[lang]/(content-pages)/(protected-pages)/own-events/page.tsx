@@ -315,6 +315,20 @@ export default async function OwnEvents(props: OwnEventsProps) {
                 }
                 isFreeTicket={isFreeTicket}
                 lang={params.lang}
+                unansweredQuestionsData={unpaidRegistrations
+                  .filter((reg) => {
+                    const q = getQuestionsForEvent(reg.eventDocumentId);
+                    const a = getAnswersForReservation(reg.id);
+                    return (
+                      q.text.length + q.select.length + q.checkbox.length > 0 &&
+                      a.length === 0
+                    );
+                  })
+                  .map((reg) => ({
+                    reservationId: reg.id,
+                    questions: getQuestionsForEvent(reg.eventDocumentId),
+                    answers: getAnswersForReservation(reg.id),
+                  }))}
               />
             </div>
           )}

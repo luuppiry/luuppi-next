@@ -6,7 +6,7 @@ interface QuestionProviderProps {
   children: React.ReactNode;
 }
 
-interface QuestionData {
+export interface QuestionData {
   reservationId: number;
   questions: {
     eventDocumentId: string;
@@ -39,6 +39,10 @@ interface QuestionData {
     entraUserUuid: string;
     registrationId: number;
   }[];
+  isPayFlow?: boolean;
+  isLastInPayFlow?: boolean;
+  isFreeTicket?: boolean;
+  onSuccess?: () => void;
 }
 
 const initialState = {
