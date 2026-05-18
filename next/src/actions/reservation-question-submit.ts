@@ -148,6 +148,10 @@ export async function reservationQuestionSubmit(
     const answer = textQuestions[i];
     const question = event.Registration?.QuestionsText?.[i]!;
 
+    if (!question.Required) {
+      continue;
+    }
+
     if (typeof answer.value !== 'string') {
       logger.error('Invalid answer:', answer.value);
       return {
