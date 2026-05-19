@@ -148,7 +148,10 @@ export async function reservationQuestionSubmit(
     const answer = textQuestions[i];
     const question = event.Registration?.QuestionsText?.[i]!;
 
-    if (!question.Required) {
+    if (
+      !question.Required &&
+      (answer.value.toString() ?? '').length <= question.MaxLength
+    ) {
       continue;
     }
 
