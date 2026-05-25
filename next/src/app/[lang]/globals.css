@@ -248,7 +248,7 @@
 
   @media screen and (max-width: 1280px) {
     .luuppi-hero-cards {
-      transform: rotateY(0) scale(1.5) rotate(-2deg);
+      transform: rotateY(0) scale(1.2) rotate(-2deg);
     }
     .luuppi-hero-cards:hover {
       @apply rotate-0 scale-[1.6];

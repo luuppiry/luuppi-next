@@ -65,7 +65,7 @@ export default function PickupQRCode({
       >
         <Modal>
           <Dialog className="w-full max-w-md rounded-lg bg-base-100 p-6">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col items-center gap-2">
               {pickupQrCode && (
                 <Image
                   alt="Pickup QR Code"
