@@ -29,6 +29,6 @@ export const telegramGroups = [
   },
   {
     translation: 'new_students',
-    link: 'https://t.me/+6J7xmmXoJmk3YzE0',
+    link: 'https://t.me/+oYCeeD-roSJjNjY0',
   },
 ];
