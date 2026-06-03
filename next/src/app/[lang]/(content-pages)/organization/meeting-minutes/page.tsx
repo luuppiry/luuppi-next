@@ -28,7 +28,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     );
   }
 
-  const yearsResponse = await getStrapiData<{data: {year: number}[]}>(
+  const yearsResponse = await getStrapiData<{ data: { year: number }[] }>(
     'fi',
     '/api/meeting-minute-documents?fields[0]=year&pagination[pageSize]=500&sort[0]=year:desc',
     ['meeting-minute-document'],
@@ -53,12 +53,14 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
 
   const dropdownYears = years.filter((y) => y !== selectedYear);
 
-  const documentsResponse = await getStrapiData<APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>>(
+  const documentsResponse = await getStrapiData<
+    APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
+  >(
     'fi',
     `/api/meeting-minute-documents?populate[1]=image&filters[year][$eq]=${selectedYear}&pagination[pageSize]=100&sort[0]=meetingDate:desc`,
     ['meeting-minute-document'],
   );
-  const documents = documentsResponse.data
+  const documents = documentsResponse.data;
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -117,8 +119,8 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
               })()}
             </div>
             <div className="absolute bottom-0 z-10 h-full w-full rounded-lg bg-gradient-to-t from-black to-transparent opacity-25" />
-            <div className="absolute -bottom-1.5 left-1.5 -z-10 h-full w-full transform rounded-lg bg-gray-300 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5 group-hover:rotate-1" />
-            <div className="absolute -bottom-3 left-3 -z-20 h-full w-full transform rounded-lg bg-gray-200 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:rotate-2" />
+            <div className="absolute -bottom-1.5 left-1.5 -z-10 h-full w-full transform rounded-lg bg-gray-300 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5 group-hover:rotate-1 dark:bg-base-100" />
+            <div className="absolute -bottom-3 left-3 -z-20 h-full w-full transform rounded-lg bg-gray-200 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:rotate-2 dark:bg-base-200" />
           </a>
         ))}
       </div>
