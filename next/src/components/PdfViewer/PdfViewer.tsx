@@ -1,6 +1,6 @@
 'use client';
 import { Dictionary } from '@/models/locale';
-import { useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { FaAngleLeft, FaAngleRight, FaExternalLinkAlt } from 'react-icons/fa';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -49,12 +49,31 @@ export default function PdfViewer({ pdfUrl, dictionary }: PdfViewerProps) {
     setNumPages(numPages);
   };
 
-  const changePage = (offset: number) => {
-    setPageNumber((prevPageNumber) => prevPageNumber + offset);
-  };
+  const changePage = useCallback(
+    (offset: number) => {
+      setPageNumber((prevPageNumber) => {
+        const next = prevPageNumber + offset;
+        return Math.max(1, Math.min(numPages ?? next, next));
+      });
+    },
+    [numPages],
+  );
 
-  const previousPage = () => changePage(-1);
-  const nextPage = () => changePage(1);
+  const previousPage = useCallback(() => changePage(-1), [changePage]);
+  const nextPage = useCallback(() => changePage(1), [changePage]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        previousPage();
+      } else if (event.key === 'ArrowRight') {
+        nextPage();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [nextPage, numPages, previousPage]);
 
   const handleDownload = () => {
     window.open(pdfUrl, '_blank');
