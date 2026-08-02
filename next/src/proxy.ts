@@ -112,5 +112,5 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`
-  matcher: ['/((?!_next).*)'],
+  matcher: ['/((?!_next|api/admin/process-pdf).*)'],
 };

@@ -424,7 +424,14 @@
     "remove_user_from_role": "Remove user from role",
     "search_users_to_add": "Search for users to add",
     "role_user_count": "users",
-    "active_users": "Active users"
+    "active_users": "Active users",
+    "sanomats_tool": "LuuppiSanomat PDF tool",
+    "sanomats_tool_description": "Processes a traditional PDF for use in LuuppiSanomats: cover, content (2 per page), and back cover.",
+    "cover_range": "Cover range",
+    "content_range": "Content range",
+    "back_range": "Back range",
+    "processing": "Processing...",
+    "process_pdf": "Process PDf"
   },
   "pages_profile": {
     "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",

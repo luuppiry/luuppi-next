@@ -424,7 +424,14 @@
     "remove_user_from_role": "Poista käyttäjä roolista",
     "search_users_to_add": "Etsi lisättäviä käyttäjiä",
     "role_user_count": "käyttäjää",
-    "active_users": "Aktiiviset käyttäjät"
+    "active_users": "Aktiiviset käyttäjät",
+    "sanomats_tool": "LuuppiSanomat PDF työkalu",
+    "sanomats_tool_description": "Prosessoi perinteisen PDFn sanomien käyttämään muotoon: etukansi, sisältö (2 per sivu), ja takakansi.",
+    "cover_range": "Etukansi lukualue",
+    "content_range": "Sisältö lukualue",
+    "back_range": "Takakansi lukualue",
+    "processing": "Käsittelee...",
+    "process_pdf": "Muunna PDF"
   },
   "pages_profile": {
     "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",
