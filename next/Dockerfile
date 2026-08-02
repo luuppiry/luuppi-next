@@ -40,7 +40,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN apk add --no-cache ghostscript curl \
+RUN apk add --no-cache ghostscript curl gcompat \
     && curl -sSL https://github.com/coherentgraphics/cpdf-binaries/raw/master/Linux-Intel-64bit/cpdf -o /usr/local/bin/cpdf \
     && chmod +x /usr/local/bin/cpdf \
     && apk del curl
