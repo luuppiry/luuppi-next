@@ -33,6 +33,7 @@ export const createCharge = async (
         },
         quantity: 1,
       })),
+      expires_at: Math.floor(Date.now() / 1000) + 60 * 60,
       mode: 'payment',
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/payment?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/payment?canceled=true`,
