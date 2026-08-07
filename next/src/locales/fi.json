@@ -8,6 +8,7 @@
     "email_change_mail_text": "Olet pyytänyt sähköpostiosoitteesi vaihtamista. Vahvista uusi sähköpostiosoitteesi klikkaamalla alla olevaa linkkiä. Jos et ole pyytänyt tätä, voit jättää tämän viestin huomiotta.",
     "verify_email_sent": "Vahvistuslinkki on lähetetty uuteen sähköpostiosoitteeseesi. Linkki on voimassa 30 minuuttia.",
     "email_sending_failed": "Sähköpostin lähetys epäonnistui. Tämä voi johtua väärästä sähköpostiosoitteesta tai teknisestä ongelmasta.",
+    "invalid_user": "Profiilistasi puutuu pakollisia tietoja. Päivitä tähdellä merkityt pakolliset kentät profiilisivulla ennen jatkamista.",
     "invalid_username": "Kelvoton käyttäjänimi. Käyttäjänimen tulee olla 3-30 merkkiä pitkä ja se voi sisältää vain kirjaimia ja numeroita.",
     "invalid_first_name": "Kelvottomat etunimet. Etunimien yhteispituuden tulee olla 2-70 merkkiä pitkä.",
     "invalid_last_name": "Kelvoton sukunimi. Sukunimen tulee olla 2-35 merkkiä pitkä.",
@@ -194,7 +195,9 @@
     "forgot_password": "Unohditko salasanasi?",
     "confirm_password": "Vahvista salasana",
     "accept_terms": "Hyväksyn tietosuojaselosteen ja käyttöehdot",
-    "reset_password": "Nollaa salasana"
+    "reset_password": "Nollaa salasana",
+    "missing_required_info": "Profiilistasi puuttuu pakollisia tietoja (YhdL 11 §). Voit liittyä jäseneksi ja ilmoittautua tapahtumiin vasta kun profiili on ajantasalla.",
+    "provide_missing_info": "Täydennä profiili"
   },
   "navigation": {
     "home": "Koti",
