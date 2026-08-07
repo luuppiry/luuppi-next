@@ -34,14 +34,21 @@ const validations = {
           "At least one ticket type's registration ends before it starts",
       },
       {
-        throwIf: () =>
-          data.Registration?.QuestionsSelect?.some(
+        throwIf: () => {
+          const isCleanCommaList = (value: string) =>
+            value.length > 0 &&
+            value
+              .split(",")
+              .every((item) => item.length > 0 && item.trim() === item);
+
+          return data.Registration?.QuestionsSelect?.some(
             (q) =>
-              !/^[^,\s]+(,[^,\s]+)*$/.test(q.ChoicesFi) ||
-              !/^[^,\s]+(,[^,\s]+)*$/.test(q.ChoicesEn),
-          ),
+              !isCleanCommaList(q.ChoicesFi) || !isCleanCommaList(q.ChoicesEn),
+          );
+        },
+
         message:
-          "Separate all questions with a comma, with no leading or trailing spaces, eg. one,two,three",
+          "Separate all questions with a comma, with no leading or trailing spaces, eg. apple,full ethanol,banana",
       },
       {
         throwIf: () => {

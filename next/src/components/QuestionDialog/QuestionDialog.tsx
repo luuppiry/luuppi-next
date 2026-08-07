@@ -81,8 +81,8 @@ export default function QuestionDialog({
     },
     index: number,
   ) => {
-    const choicesFiArray = question.ChoicesFi.split(',');
-    const choicesEnArray = question.ChoicesEn.split(',');
+    const choicesFiArray = question.ChoicesFi.split(',').map((v) => v.trim());
+    const choicesEnArray = question.ChoicesEn.split(',').map((v) => v.trim());
 
     const answer = ctx.data?.answers.find(
       (answer) => answer.question === `select-${index}`,
@@ -183,5 +183,8 @@ export default function QuestionDialog({
 }
 
 function getQuestionChoices(choices: string) {
-  return choices.split(',').map((choice) => ({ value: choice, label: choice }));
+  return choices.split(',').map((choice) => {
+    const trimmed = choice.trim();
+    return { value: trimmed, label: trimmed };
+  });
 }
