@@ -1,6 +1,7 @@
 'use server';
 import { auth } from '@/auth';
 import prisma from '@/libs/db/prisma';
+import { redisClient } from '@/libs/db/redis';
 import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -45,6 +46,11 @@ export async function reservationCancel(
       },
     },
   });
+
+  await redisClient.del(
+    `event-sold-out:${registration.eventDocumentId}:${registration.strapiRoleUuid}`,
+    `event-sold-out:${registration.eventDocumentId}:joint-quota`,
+  );
 
   updateTag(`get-cached-user:${session.user.entraUserUuid}`);
   revalidatePath('/[lang]/events/[slug]', 'page');
