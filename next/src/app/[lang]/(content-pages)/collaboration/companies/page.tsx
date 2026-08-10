@@ -44,14 +44,14 @@ export default async function CollaborationCompanies(
                 <div className="flex shrink-0 flex-col justify-center gap-4">
                   <Image
                     alt="Company logo"
-                    className="rounded-lg object-contain max-md:w-44 dark:hidden"
+                    className="h-[50px] rounded-lg object-contain object-left md:h-[75px] dark:hidden"
                     height={100}
                     src={light}
                     width={300}
                   />
                   <Image
                     alt="Company logo"
-                    className={`hidden rounded-lg object-contain max-md:w-44 dark:block ${
+                    className={`hidden h-[50px] rounded-lg object-contain object-left md:h-[75px] dark:block ${
                       company.logoDark
                         ? ''
                         : 'dark:drop-shadow-[0_0_.5px_white]'
