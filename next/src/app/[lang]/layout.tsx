@@ -39,6 +39,7 @@ export default async function RootLayout(props: RootLayoutProps) {
   return (
     <html lang={params.lang} suppressHydrationWarning>
       <head>
+        <meta content="light dark" name="color-scheme" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -54,8 +55,10 @@ export default async function RootLayout(props: RootLayoutProps) {
                   }
                   
                   document.documentElement.setAttribute('data-theme', theme);
+                  document.documentElement.style.colorScheme = theme === 'dark' ? 'dark' : 'light';
                 } catch (_) {
                   document.documentElement.setAttribute('data-theme', 'light');
+                  document.documentElement.style.colorScheme = 'light';
                 }
               })();
             `,

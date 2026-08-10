@@ -14,6 +14,7 @@ const applyTheme = (theme: Theme) => {
   const resolved =
     theme === 'auto' ? (prefersDark.matches ? 'dark' : 'light') : theme;
   document.documentElement.setAttribute('data-theme', resolved);
+  document.documentElement.style.colorScheme = resolved === 'dark' ? 'dark' : 'light';
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
