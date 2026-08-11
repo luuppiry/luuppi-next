@@ -20,6 +20,9 @@ importers:
       '@fullcalendar/daygrid':
         specifier: ^6.1.20
         version: 6.1.20(@fullcalendar/core@6.1.20)
+      '@fullcalendar/moment-timezone':
+        specifier: ^6.1.21
+        version: 6.1.21(@fullcalendar/core@6.1.20)(moment-timezone@0.5.48)
       '@fullcalendar/react':
         specifier: ^6.1.20
         version: 6.1.20(@fullcalendar/core@6.1.20)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -1360,6 +1363,12 @@ packages:
     resolution: {integrity: sha512-AO9vqhkLP77EesmJzuU+IGXgxNulsA8mgQHynclJ8U70vSwAVnbcLG9qftiTAFSlZjiY/NvhE7sflve6cJelyQ==}
     peerDependencies:
       '@fullcalendar/core': ~6.1.20
+
+  '@fullcalendar/moment-timezone@6.1.21':
+    resolution: {integrity: sha512-1H5voLR6PGiIf+JM6TCWq8oMTMOOqs+Am8lo/3GzHnBPo81RN72h87zm50YgGq9HjIsMdNs7RgdMVAUcXByerQ==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.21
+      moment-timezone: ^0.5.40
 
   '@fullcalendar/react@6.1.20':
     resolution: {integrity: sha512-1w0pZtceaUdfAnxMSCGHCQalhi+mR1jOe76sXzyAXpcPz/Lf0zHSdcGK/U2XpZlnQgQtBZW+d+QBnnzVQKCxAA==}
@@ -10613,6 +10622,11 @@ snapshots:
   '@fullcalendar/daygrid@6.1.20(@fullcalendar/core@6.1.20)':
     dependencies:
       '@fullcalendar/core': 6.1.20
+
+  '@fullcalendar/moment-timezone@6.1.21(@fullcalendar/core@6.1.20)(moment-timezone@0.5.48)':
+    dependencies:
+      '@fullcalendar/core': 6.1.20
+      moment-timezone: 0.5.48
 
   '@fullcalendar/react@6.1.20(@fullcalendar/core@6.1.20)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:

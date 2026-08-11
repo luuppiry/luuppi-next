@@ -6,6 +6,7 @@ import { SelectedViewContext } from '@/providers/EventSelectorProvider';
 import type { CalendarListeners } from '@fullcalendar/core';
 import fiLocale from '@fullcalendar/core/locales/fi';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useRouter } from 'next/navigation';
@@ -31,11 +32,7 @@ export default function EventCalendar({
 
   // Hacky solution to fix overlapping events styling
   const calendarRef = useRef<FullCalendar>(null);
-
-  // Don't rely on user timezone and always use Finland
-  const currentDate = new Date(
-    new Date().toLocaleString('en-US', { timeZone: 'Europe/Helsinki' }),
-  );
+  const currentDate = new Date();
 
   const handleEventClick: CalendarListeners['eventClick'] = (e) => {
     const eventUrl = `/${lang}/events/${events.find((event) => event.id === e.event.id)?.slug}`;
@@ -149,6 +146,7 @@ export default function EventCalendar({
             minute: '2-digit',
             meridiem: false,
             hour12: false,
+            timeZone: 'Europe/Helsinki',
           }}
           events={events.map((event) => {
             // Force multi-day events to display as block elements since `nextDayThreshold`
@@ -178,13 +176,14 @@ export default function EventCalendar({
           initialView={'dayGridMonth'}
           locale={lang === 'fi' ? fiLocale : ''}
           nextDayThreshold="06:00"
-          plugins={[dayGridPlugin, timeGridPlugin]}
+          plugins={[momentTimezonePlugin, dayGridPlugin, timeGridPlugin]}
           slotLabelFormat={{
             hour: 'numeric',
             minute: '2-digit',
             meridiem: false,
             hour12: false,
           }}
+          timeZone="Europe/Helsinki"
           titleFormat={{
             year: 'numeric',
             month: 'long',
