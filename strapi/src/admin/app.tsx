@@ -1,5 +1,6 @@
 // @ts-ignore - Ignore import errors
 import favicon from "./extensions/favicon.ico";
+import TimezoneOffsetPanel from "./extensions/TimezoneOffsetPanel";
 
 export default {
   config: {
@@ -53,6 +54,10 @@ export default {
     },
   },
   bootstrap(app) {
-    console.log(app);
+    const apis = app.getPlugin("content-manager").apis;
+
+    apis.addEditViewSidePanel((panels) => {
+      return [...panels, TimezoneOffsetPanel];
+    });
   },
 };
