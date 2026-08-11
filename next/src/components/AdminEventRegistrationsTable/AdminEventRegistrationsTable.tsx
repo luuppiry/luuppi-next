@@ -77,7 +77,7 @@ export default async function AdminEventRegistrationsList({
 
   const cutoff = new Date(event.endDate);
   cutoff.setDate(cutoff.getDate() + 7);
-  const answersHidden = new Date() > cutoff;
+  const answersHidden = !requiresPickup && new Date() > cutoff;
 
   // Collect all unique question keys across registrations (hidden for past events)
   const questionKeys = answersHidden
