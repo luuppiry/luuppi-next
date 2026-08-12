@@ -9,7 +9,7 @@ RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev l
 WORKDIR /opt/
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --production
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM base AS builder
 WORKDIR /opt/
@@ -20,6 +20,7 @@ COPY . ./app
 WORKDIR /opt/app
 ENV NODE_ENV=production
 ENV PATH=/opt/node_modules/.bin:$PATH
+RUN pnpm --dir src/plugins/luuppi-blocks build
 RUN pnpm build
 
 # Production image, copy all the files and run strapi
@@ -31,6 +32,7 @@ ENV PATH=/opt/node_modules/.bin:$PATH
 
 # Install runtime dependencies AND build tools for sharp rebuild
 RUN apk add --no-cache vips-dev build-base gcc autoconf automake zlib-dev libpng-dev python3 make g++
+RUN pnpm prune --prod
 
 COPY --from=deps /opt/node_modules ../node_modules
 COPY --from=deps /opt/package.json /opt/pnpm-lock.yaml /opt/pnpm-workspace.yaml  ../ 
