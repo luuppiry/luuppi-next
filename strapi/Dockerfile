@@ -32,7 +32,6 @@ ENV PATH=/opt/node_modules/.bin:$PATH
 
 # Install runtime dependencies AND build tools for sharp rebuild
 RUN apk add --no-cache vips-dev build-base gcc autoconf automake zlib-dev libpng-dev python3 make g++
-RUN pnpm prune --prod
 
 COPY --from=deps /opt/node_modules ../node_modules
 COPY --from=deps /opt/package.json /opt/pnpm-lock.yaml /opt/pnpm-workspace.yaml  ../ 
