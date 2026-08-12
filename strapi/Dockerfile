@@ -14,12 +14,13 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM base AS builder
 WORKDIR /opt/app
+ENV CI=true
 COPY --from=deps /opt/app ./
 
 RUN pnpm --filter luuppi-blocks build
 RUN pnpm build
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm prune --prod --force
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm prune --prod 
 
 # Production image, copy all the files and run strapi
 FROM base AS runner
