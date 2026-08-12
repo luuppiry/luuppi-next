@@ -9,6 +9,7 @@ RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev l
 WORKDIR /opt/
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY src/plugins/luuppi-blocks/package.json ./src/plugins/luuppi-blocks/package.json
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM base AS builder

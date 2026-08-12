@@ -5,3 +5,7 @@ onlyBuiltDependencies:
   - core-js-pure
   - esbuild
   - sharp
+
+packages: 
+ - .
+ - src/plugins/luuppi-blocks

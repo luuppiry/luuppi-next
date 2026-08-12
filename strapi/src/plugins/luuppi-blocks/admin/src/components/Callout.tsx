@@ -31,7 +31,7 @@ const Callout = (props: RenderElementProps) => {
   const variant = (element as any).calloutVariant ?? "info";
   const config = VARIANTS.find((v) => v.value === variant) ?? VARIANTS[0];
 
-  const handleVariantChange = (value: string) => {
+  const handleVariantChange = (value: string | number) => {
     const path = ReactEditor.findPath(editor, element);
     Transforms.setNodes(editor, { calloutVariant: value } as any, { at: path });
   };

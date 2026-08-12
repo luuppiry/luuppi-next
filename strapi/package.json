@@ -15,7 +15,9 @@
   },
   "pnpm": {
     "overrides": {
-      "@casl/ability@>=2.4.0 <=6.7.4": "6.7.5"
+      "@casl/ability@>=2.4.0 <=6.7.4": "6.7.5",
+      "slate": "0.126.2",
+      "slate-react": "0.126.0"
     }
   },
   "dependencies": {
