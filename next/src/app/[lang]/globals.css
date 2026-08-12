@@ -181,6 +181,10 @@
   @apply rounded-lg;
 }
 
+.alert + .alert {
+  @apply mt-2;
+}
+
 @layer components {
   .animate-gradient {
     background-size: 400%;

@@ -11,6 +11,10 @@ export default ({ env }) => {
         maxAge: 86_400_000,
       },
     },
+    "luuppi-blocks": {
+      enabled: true,
+      resolve: `./src/plugins/luuppi-blocks`,
+    },
     email: {
       config: {
         provider: "nodemailer",

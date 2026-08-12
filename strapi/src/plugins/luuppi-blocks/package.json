@@ -1,0 +1,65 @@
+{
+  "version": "0.0.0",
+  "keywords": [],
+  "private": true,
+  "type": "commonjs",
+  "exports": {
+    "./package.json": "./package.json",
+    "./strapi-admin": {
+      "types": "./dist/admin/src/index.d.ts",
+      "source": "./admin/src/index.tsx",
+      "import": "./dist/admin/index.mjs",
+      "require": "./dist/admin/index.js",
+      "default": "./dist/admin/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "strapi-plugin build",
+    "watch": "strapi-plugin watch",
+    "watch:link": "strapi-plugin watch:link",
+    "verify": "strapi-plugin verify",
+    "test:ts:front": "run -T tsc -p admin/tsconfig.json"
+  },
+  "dependencies": {
+    "@strapi/design-system": "^2.0.0-rc.30",
+    "@strapi/icons": "^2.0.0-rc.30",
+    "react-intl": "^10.1.20"
+  },
+  "devDependencies": {
+    "@strapi/strapi": "^5.51.2",
+    "@strapi/sdk-plugin": "^6.1.1",
+    "prettier": "^3.9.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.4",
+    "styled-components": "^6.5.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@strapi/typescript-utils": "^5.51.2",
+    "typescript": "^7.0.2"
+  },
+  "peerDependencies": {
+    "@strapi/strapi": "^5.51.2",
+    "@strapi/sdk-plugin": "^5.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.4",
+    "styled-components": "^6.5.2",
+    "slate": "^0.11.0",
+    "slate-react": "^0.11.0",
+    "slate-history": "^0.10.0"
+  },
+  "strapi": {
+    "kind": "plugin",
+    "name": "luuppi-blocks",
+    "displayName": "luuppi-blocks\u0017\u0017",
+    "description": "Custom blocks for the rich text editor"
+  },
+  "name": "luuppi-blocks",
+  "description": "Custom blocks for the rich text editor",
+  "license": "MIT",
+  "author": "Jasper Nykänen <jasperjnykanen@gmail.com>"
+}

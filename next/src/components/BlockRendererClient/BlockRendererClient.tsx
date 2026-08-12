@@ -13,12 +13,24 @@ import Link from 'next/link';
  * This should be addressed in the future. #bleeding-edge
  */
 
+const CALLOUT_CLASSES: Record<string, string> = {
+  success: 'alert-success',
+  warning: 'alert-warning',
+  danger: 'alert-error',
+};
+
+interface CalloutProps {
+  children: unknown;
+  calloutVariant: string;
+}
+
 interface BlockRendererClientProps {
   content: BlocksContent;
 }
 
 const isEmptyBlock = (block: any) =>
   block.type === 'paragraph' &&
+  !('isHr' in block) &&
   block.children?.length === 1 &&
   block.children?.[0]?.type === 'text' &&
   block.children?.[0]?.text === '';
@@ -40,7 +52,9 @@ export default function BlockRendererClient({
   content,
 }: BlockRendererClientProps) {
   if (!content) return null;
+
   const trimmedContent = trimEmptyBlocks(content);
+
   return (
     <BlocksRenderer
       blocks={{
@@ -65,6 +79,33 @@ export default function BlockRendererClient({
             case 6:
               return <h6 id={uuid}>{children}</h6>;
           }
+        },
+        quote: (props) => {
+          if ('calloutVariant' in props) {
+            const className =
+              CALLOUT_CLASSES[(props as CalloutProps).calloutVariant] ??
+              'alert-info';
+            return (
+              <aside
+                className={`alert ${className} not-prose !place-items-start border-0 !text-left !leading-5 tracking-wide`}
+              >
+                <p>{props.children}</p>
+              </aside>
+            );
+          }
+
+          return <blockquote>{props.children}</blockquote>;
+        },
+        paragraph: (props) => {
+          const text = Array.isArray(props.children)
+            ? props.children.map((child) => child?.props?.text ?? '').join('')
+            : '';
+
+          if (text === '\u200B') {
+            return <hr />;
+          }
+
+          return <p>{props.children}</p>;
         },
         link: (props) => <Link href={props.url}>{props.children}</Link>,
         image: ({ image }) => (

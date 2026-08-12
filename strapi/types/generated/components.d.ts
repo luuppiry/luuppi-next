@@ -261,7 +261,7 @@ export interface SharedSeo extends Struct.ComponentSchema {
 }
 
 declare module '@strapi/strapi' {
-  export module Public {
+  export namespace Public {
     export interface ComponentSchemas {
       'events.questions-checkbox': EventsQuestionsCheckbox;
       'events.questions-select': EventsQuestionsSelect;
