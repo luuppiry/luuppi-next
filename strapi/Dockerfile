@@ -19,7 +19,7 @@ COPY --from=deps /opt/app ./
 RUN pnpm --filter luuppi-blocks build
 RUN pnpm build
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm prune --prod
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm prune --prod --force
 
 # Production image, copy all the files and run strapi
 FROM base AS runner
