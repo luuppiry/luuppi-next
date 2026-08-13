@@ -2,21 +2,21 @@ import type {
   ContentManagerPlugin,
   SelectorBlock,
 } from "@strapi/content-manager/strapi-admin";
-import { Information, Quotes, Minus } from "@strapi/icons";
+import { Information, Minus, Quotes } from "@strapi/icons";
 import {
   BaseElement,
   Editor,
+  Path,
   Element as SlateElement,
   Node as SlateNode,
   Transforms,
-  Range,
-  Path,
 } from "slate";
+import { ReactEditor, useFocused, useSelected } from "slate-react";
 import { styled } from "styled-components";
 import Callout from "./components/Callout";
-import { pressEnterTwiceToExit } from "./utils/enter-key";
 import { makeSafetyNotice } from "./components/SafetyNotice";
-import { ReactEditor } from "slate-react";
+import { pressEnterTwiceToExit } from "./utils/enter-key";
+import { withHr, Hr, HR_MARKER } from "./components/Hr";
 
 const Blockquote = styled.blockquote.attrs({ role: "blockquote" })`
   font-weight: ${({ theme }) => theme.fontWeights.regular};
@@ -26,123 +26,15 @@ const Blockquote = styled.blockquote.attrs({ role: "blockquote" })`
   color: ${({ theme }) => theme.colors.neutral600};
 `;
 
-const Hr = styled.hr`
-  border: none;
-  border-top: 1px solid ${({ theme }) => theme.colors.neutral200};
-  margin: ${({ theme }) => theme.spaces[2]} 0;
-`;
-
-// Zero-width space: non-empty (so the frontend renderer's line-break split
-// doesn't fire, and Strapi doesn't prune the node as an empty paragraph)
-// but invisible, and trivial to strip from plain-text conversions since it
-// never occurs in real authored content.
-export const HR_MARKER = "\u200B";
-
-const withHr = (editor: Editor): Editor => {
-  const { normalizeNode, insertText, deleteBackward, deleteForward } = editor;
-
-  editor.normalizeNode = ([node, path]) => {
-    if (SlateElement.isElement(node) && (node as any).isHr === true) {
-      const text = SlateNode.string(node);
-      if (text !== HR_MARKER) {
-        Transforms.insertText(editor, HR_MARKER, {
-          at: {
-            anchor: Editor.start(editor, path),
-            focus: Editor.end(editor, path),
-          },
-        });
-        return;
-      }
-
-      const index = path[path.length - 1];
-      const prevPath = index > 0 ? Path.previous(path) : null;
-      const prevNode = prevPath ? SlateNode.get(editor, prevPath) : null;
-      const needsBefore =
-        !prevNode ||
-        !SlateElement.isElement(prevNode) ||
-        (prevNode as any).isHr === true;
-
-      if (needsBefore) {
-        Transforms.insertNodes(
-          editor,
-          { type: "paragraph", children: [{ text: "" }] } as any,
-          { at: path },
-        );
-        return;
-      }
-
-      const nextPath = Path.next(path);
-      const nextNode = Editor.hasPath(editor, nextPath)
-        ? SlateNode.get(editor, nextPath)
-        : null;
-      const needsAfter =
-        !nextNode ||
-        !SlateElement.isElement(nextNode) ||
-        (nextNode as any).isHr === true;
-
-      if (needsAfter) {
-        Transforms.insertNodes(
-          editor,
-          { type: "paragraph", children: [{ text: "" }] } as any,
-          { at: Path.next(path) },
-        );
-        return;
-      }
-    }
-
-    normalizeNode([node, path]);
-  };
-
-  editor.insertText = (text, options) => {
-    const { selection } = editor;
-    if (selection) {
-      const [entry] = Editor.nodes(editor, {
-        match: (n) => SlateElement.isElement(n) && (n as any).isHr === true,
-      });
-      if (entry) return;
-    }
-    insertText(text, options);
-  };
-
-  editor.deleteBackward = (unit) => {
-    const { selection } = editor;
-    if (selection && Range.isCollapsed(selection)) {
-      const [start] = Editor.edges(editor, selection);
-
-      const [insideEntry] = Editor.nodes(editor, {
-        match: (n) => SlateElement.isElement(n) && (n as any).isHr === true,
-      });
-      if (insideEntry) return;
-
-      const before = Editor.before(editor, start);
-      if (before) {
-        const beforePath = before.path.slice(0, -1);
-        const beforeNode = SlateNode.get(editor, beforePath);
-        if (
-          SlateElement.isElement(beforeNode) &&
-          (beforeNode as any).isHr === true &&
-          Editor.string(editor, start.path) === ""
-        ) {
-          Transforms.removeNodes(editor, { at: beforePath });
-          return;
-        }
-      }
-    }
-    deleteBackward(unit);
-  };
-
-  editor.deleteForward = (unit) => {
-    const { selection } = editor;
-    if (selection && Range.isCollapsed(selection)) {
-      const [entry] = Editor.nodes(editor, {
-        match: (n) => SlateElement.isElement(n) && (n as any).isHr === true,
-      });
-      if (entry) return;
-    }
-    deleteForward(unit);
-  };
-
-  return editor;
+const HrElement = (props: any) => {
+  const selected = useSelected();
+  const focused = useFocused();
+  return (
+    <div {...props.attributes} contentEditable={false}>
+      <Hr $selected={selected && focused} />
+      <span style={{ display: "none" }}>{props.children}</span>
+    </div>
+  );
 };
 
 export default {
@@ -157,15 +49,18 @@ export default {
         ...currentBlocks,
         paragraph: {
           ...paragraph,
-          renderElement: (props: any) =>
-            (props.element as any).isHr ? (
-              <div {...props.attributes}>
-                <Hr />
+          renderElement: (props: any) => {
+            if (!(props.element as any).isHr) {
+              return paragraph!.renderElement(props);
+            }
+
+            return (
+              <div {...props.attributes} contentEditable={false}>
+                <HrElement />
                 <span style={{ display: "none" }}>{props.children}</span>
               </div>
-            ) : (
-              paragraph!.renderElement(props)
-            ),
+            );
+          },
         },
       };
     });
@@ -232,7 +127,7 @@ export default {
       },
       hr: {
         icon: Minus,
-        renderElement: (props) => <Hr {...props} />,
+        renderElement: (props) => <HrElement {...props} />,
         label: { id: "luuppi-blocks.blocks.hr", defaultMessage: "Divider" },
         matchNode: (node) =>
           SlateElement.isElement(node) &&

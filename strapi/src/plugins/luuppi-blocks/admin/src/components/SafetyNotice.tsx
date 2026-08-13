@@ -1,4 +1,4 @@
-import { Information } from "@strapi/icons";
+import { Paragraph } from "@strapi/icons";
 import { ComponentType, SVGProps } from "react";
 import {
   BaseElement,
@@ -55,7 +55,7 @@ export function makeSafetyNotice(lang: "fi" | "en"): SafetyNoticeBlock {
     renderElement: (props: any) => (
       <p {...props.attributes}>{props.children}</p>
     ),
-    icon: Information,
+    icon: Paragraph,
     label: {
       id: `luuppi-blocks.blocks.safetyNotice.${lang}`,
       defaultMessage:

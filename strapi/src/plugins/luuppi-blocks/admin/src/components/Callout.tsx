@@ -10,15 +10,19 @@ import { Box, SingleSelect, SingleSelectOption } from "@strapi/design-system";
 import { styled } from "styled-components";
 
 const VARIANTS = [
-  { value: "info", label: "Info", accent: "#3b82f6", bg: "#eff6ff" },
-  { value: "warning", label: "Warning", accent: "#f59e0b", bg: "#fffbeb" },
-  { value: "success", label: "Success", accent: "#22c55e", bg: "#f0fdf4" },
-  { value: "danger", label: "Danger", accent: "#ef4444", bg: "#fef2f2" },
+  { value: "info", label: "Info", token: "primary" },
+  { value: "warning", label: "Warning", token: "warning" },
+  { value: "success", label: "Success", token: "success" },
+  { value: "danger", label: "Danger", token: "danger" },
 ] as const;
 
-const StyledCallout = styled(Box)<{ $accentColor: string; $bgColor: string }>`
-  border-left: 4px solid ${(props) => props.$accentColor};
-  background-color: ${(props) => props.$bgColor};
+const StyledCallout = styled(Box)<{ $token: string }>`
+  border-left: 4px solid
+    ${({ theme, $token }) => (theme.colors as any)[`${$token}600`]};
+  background-color: ${({ theme, $token }) =>
+    (theme.colors as any)[`${$token}100`]};
+  color: ${({ theme, $token }) =>
+    (theme.colors as any)[`${$token}700`] ?? theme.colors.neutral800};
 `;
 
 const Callout = (props: RenderElementProps) => {
@@ -41,8 +45,7 @@ const Callout = (props: RenderElementProps) => {
   return (
     <StyledCallout
       {...attributes}
-      $accentColor={config.accent}
-      $bgColor={config.bg}
+      $token={config.token}
       position="relative"
       paddingLeft={4}
       paddingTop={3}
