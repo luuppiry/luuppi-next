@@ -16,8 +16,7 @@ interface AddUserModalProps {
   onUserSelect: (value: string) => void;
   onExpirationDateChange: (date: Date | null) => void;
   onAddUser: () => void;
-  Success?: React.ReactElement
-  Error?: React.ReactElement
+  Error?: React.ReactElement;
 }
 
 export default function AddUserModal({
@@ -31,7 +30,7 @@ export default function AddUserModal({
   onUserSelect,
   onExpirationDateChange,
   onAddUser,
-  Success, Error
+  Error,
 }: AddUserModalProps) {
   const handleClose = () => {
     onClose();
@@ -63,7 +62,6 @@ export default function AddUserModal({
             onChange={onSearchChange}
             onSelect={onUserSelect}
           />
-          {Success}
           {Error}
           {selectedUser && (
             <div className="mt-4">

@@ -241,9 +241,6 @@ export default function AdminRoleUsers({
     <>
       <AddUserModal
         Error={(error && <Alert message={error} type="error" />) || undefined}
-        Success={
-          (success && <Alert message={success} type="success" />) || undefined
-        }
         availableUsers={availableUsers}
         dictionary={dictionary}
         isOpen={addUserModalOpen}
@@ -276,7 +273,6 @@ export default function AdminRoleUsers({
             </button>
           </div>
         </div>
-
         <div className="mb-4">
           <SearchBar
             placeholder={dictionary.general.search}
@@ -284,6 +280,8 @@ export default function AdminRoleUsers({
             onChange={handleSearchChange}
           />
         </div>
+
+        {success && <Alert message={success} type="success" />}
 
         <DataTable
           columns={columns}
@@ -297,7 +295,6 @@ export default function AdminRoleUsers({
           isLoading={isLoading}
           loadingRowCount={5}
         />
-
         <Pagination
           currentPage={page}
           isLoading={isLoading}
