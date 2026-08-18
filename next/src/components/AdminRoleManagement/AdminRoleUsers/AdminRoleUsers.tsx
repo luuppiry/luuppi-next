@@ -1,11 +1,6 @@
 'use client';
 import { roleAddUser, roleRemoveUser } from '@/actions/admin/role-manage-users';
 import { GetRoleUsersResponse } from '@/app/api/roles/[roleId]/users/route';
-import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { Role, RolesOnUsers, User } from '@prisma/client';
-import { useCallback, useEffect, useState } from 'react';
-import { BiTrash, BiUserPlus } from 'react-icons/bi';
-import AddUserModal from './AddUserModal';
 import Alert from '@/components/AdminShared/components/Alert';
 import DataTable, {
   TableColumn,
@@ -13,6 +8,11 @@ import DataTable, {
 import Pagination from '@/components/AdminShared/components/Pagination';
 import SearchBar from '@/components/AdminShared/components/SearchBar';
 import { useDebounce } from '@/components/AdminShared/hooks/useDebounce';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { Role, RolesOnUsers, User } from '@prisma/client';
+import { useCallback, useEffect, useState } from 'react';
+import { BiTrash, BiUserPlus } from 'react-icons/bi';
+import AddUserModal from './AddUserModal';
 
 interface AdminRoleUsersProps {
   dictionary: Dictionary;
@@ -48,6 +48,14 @@ export default function AdminRoleUsers({
   const [selectedExpirationDate, setSelectedExpirationDate] =
     useState<Date | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const onSearchChange = (value: string) => {
+    setError('');
+    setSuccess('');
+    setSelectedUser(null);
+    setSelectedExpirationDate(null);
+    setSearchUserInput(value);
+  };
 
   const loadUsers = useCallback(async () => {
     setIsLoading(true);
@@ -159,6 +167,8 @@ export default function AdminRoleUsers({
   };
 
   const handleCloseModal = () => {
+    setError('');
+    setSuccess('');
     setAddUserModalOpen(false);
     setSelectedUser(null);
     setSelectedExpirationDate(null);
@@ -171,6 +181,8 @@ export default function AdminRoleUsers({
 
     if (user) {
       setSelectedUser(user);
+    } else {
+      setError(dictionary.api.missing_required_fields_for_member);
     }
   };
 
@@ -228,6 +240,10 @@ export default function AdminRoleUsers({
   return (
     <>
       <AddUserModal
+        Error={(error && <Alert message={error} type="error" />) || undefined}
+        Success={
+          (success && <Alert message={success} type="success" />) || undefined
+        }
         availableUsers={availableUsers}
         dictionary={dictionary}
         isOpen={addUserModalOpen}
@@ -236,7 +252,7 @@ export default function AdminRoleUsers({
         onAddUser={handleAddUser}
         onClose={handleCloseModal}
         onExpirationDateChange={setSelectedExpirationDate}
-        onSearchChange={setSearchUserInput}
+        onSearchChange={onSearchChange}
         onUserSelect={handleUserSelect}
       />
 
@@ -268,10 +284,6 @@ export default function AdminRoleUsers({
             onChange={handleSearchChange}
           />
         </div>
-
-        {error && <Alert message={error} type="error" />}
-
-        {success && <Alert message={success} type="success" />}
 
         <DataTable
           columns={columns}

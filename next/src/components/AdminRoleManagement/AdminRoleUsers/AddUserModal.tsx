@@ -2,6 +2,7 @@
 import FormAutocomplete from '@/components/FormAutocomplete/FormAutocomplete';
 import { Dictionary } from '@/models/locale';
 import { User } from '@prisma/client';
+import React from 'react';
 import { BiInfinite } from 'react-icons/bi';
 
 interface AddUserModalProps {
@@ -15,6 +16,8 @@ interface AddUserModalProps {
   onUserSelect: (value: string) => void;
   onExpirationDateChange: (date: Date | null) => void;
   onAddUser: () => void;
+  Success?: React.ReactElement
+  Error?: React.ReactElement
 }
 
 export default function AddUserModal({
@@ -28,6 +31,7 @@ export default function AddUserModal({
   onUserSelect,
   onExpirationDateChange,
   onAddUser,
+  Success, Error
 }: AddUserModalProps) {
   const handleClose = () => {
     onClose();
@@ -59,6 +63,8 @@ export default function AddUserModal({
             onChange={onSearchChange}
             onSelect={onUserSelect}
           />
+          {Success}
+          {Error}
           {selectedUser && (
             <div className="mt-4">
               <p className="text-sm">
