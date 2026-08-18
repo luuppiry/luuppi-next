@@ -1,16 +1,17 @@
 'use client';
 
 import { telegramGroups } from '@/libs/constants/telegram-groups';
-import { Dictionary } from '@/models/locale';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BsTelegram } from 'react-icons/bs';
 
 interface GroupsDialogProps {
   dictionary: Dictionary;
+  lang: SupportedLanguage
 }
 
-export default function GroupsDialog({ dictionary }: GroupsDialogProps) {
+export default function GroupsDialog({ dictionary ,lang }: GroupsDialogProps) {
   const [open, setOpen] = useState(false);
 
   const onClose = () => {
@@ -41,7 +42,7 @@ export default function GroupsDialog({ dictionary }: GroupsDialogProps) {
                     ? 'bg-accent-400 text-white'
                     : 'bg-background-50'
                 }`}
-                href={group.link}
+                href={lang === 'en' ? (group.linkEn ?? group.link) : group.link}
                 target="_blank"
               >
                 <BsTelegram size={24} />

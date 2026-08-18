@@ -35,7 +35,7 @@ export default async function Home(props: HomeProps) {
       <Discover dictionary={dictionary} lang={params.lang} />
       <EventsPreview dictionary={dictionary} lang={params.lang} />
       <NewsPreview dictionary={dictionary} lang={params.lang} />
-      <TelegramPreview dictionary={dictionary} />
+      <TelegramPreview dictionary={dictionary} lang={params.lang} />
       <Partners dictionary={dictionary} lang={params.lang} />
     </>
   );
