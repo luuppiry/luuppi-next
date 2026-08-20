@@ -141,6 +141,7 @@ export default function MobileCalendar({
   const todayDate = today.getDate();
   const todayMonth = today.getMonth();
   const todayYear = today.getFullYear();
+  const [selectedDate, setSelectedDate] = useState<null | Date>(null);
 
   const ctx = useContext(SelectedViewContext);
   const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
@@ -166,15 +167,18 @@ export default function MobileCalendar({
   const openDayEventsDialog = (date: string) => {
     const dayEvents = groupedEvents[date];
     setSelectedEvents(dayEvents ? dayEvents.map((item) => item.event) : []);
+    setSelectedDate(new Date(date));
   };
 
   const handleClose = () => {
     setSelectedEvents([]);
+    setSelectedDate(null);
   };
 
   return (
     <div className="w-full bg-white py-4 dark:bg-base-100">
       <ViewEventsDialog
+        date={selectedDate!}
         dictionary={dictionary}
         events={selectedEvents}
         lang={lang}

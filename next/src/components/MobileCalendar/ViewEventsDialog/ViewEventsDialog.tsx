@@ -6,12 +6,14 @@ import Link from 'next/link';
 interface ViewEventsDialogProps {
   events: Event[];
   onClose: () => void;
+  date: Date
   lang: SupportedLanguage;
   dictionary: Dictionary;
 }
 
 export default function ViewEventsDialog({
   events,
+  date,
   onClose,
   lang,
   dictionary,
@@ -28,7 +30,7 @@ export default function ViewEventsDialog({
             month: 'long',
             year: 'numeric',
             day: 'numeric',
-          }).format(events[0]?.start)}{' '}
+          }).format(date)}
         </h2>
         {events && events.length > 0 && (
           <>
