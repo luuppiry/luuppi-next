@@ -95,6 +95,7 @@ export default function Ticket({
       }
 
       if (!res.isError) {
+        setLoading(false);
         router.push(`/${lang}/own-events`);
         router.refresh();
         return;

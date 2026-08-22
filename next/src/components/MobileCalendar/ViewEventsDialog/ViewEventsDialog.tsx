@@ -6,7 +6,7 @@ import Link from 'next/link';
 interface ViewEventsDialogProps {
   events: Event[];
   onClose: () => void;
-  date: Date
+  date: Date;
   lang: SupportedLanguage;
   dictionary: Dictionary;
 }
@@ -41,6 +41,7 @@ export default function ViewEventsDialog({
                   key={event.title + event.start}
                   className="mb-4 block rounded-lg bg-background-50 p-4"
                   href={`/${lang}/events/${event.slug}`}
+                  onClick={onClose}
                 >
                   <h3 className="text-lg font-bold">{event.title}</h3>
                   <h4>{formatDateRangeShort(event.start, event.end, lang)} </h4>
