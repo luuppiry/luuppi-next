@@ -3,7 +3,6 @@ import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { Dictionary } from '@/models/locale';
 import { APIResponseData } from '@/types/types';
-import { PHASE_PRODUCTION_SERVER } from 'next/constants';
 
 const luuppiMember = process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!;
 const luuppiNonMember = process.env.NEXT_PUBLIC_NO_ROLE_ID!;
@@ -152,75 +151,22 @@ export const isEventVisible = async (
 
 /**
  * Filters an array of events based on visibility rules.
- * Optimized to fetch user session and roles only once.
  *
  * @param events - Array of event data from Strapi
- * @param forcedRoles - Allows bypassing authentication for use in sitemap, ics generation, and event feed
  * @returns Promise<Array> - Filtered array of events
  */
 export const filterVisibleEvents = async (
   events: Event[],
-  forcedRoles?: string[],
 ): Promise<Event[]> => {
-  const isProd = process.env.NEXT_PHASE === PHASE_PRODUCTION_SERVER;
-
   const roles = [
-    ...new Set(...(forcedRoles ?? []), ...(isProd ? [] : [luuppiNonMember])),
+    process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
   ];
 
-  if (roles?.length) {
-    const visibilityChecks = await Promise.all(
-      events.map(async (event) => ({
-        event,
-        visible: await isEventVisible(event, roles),
-      })),
-    );
-
-    return visibilityChecks
-      .filter((check) => check.visible)
-      .map((check) => check.event);
-  }
-
-  // Get user session and roles once
-  const session = await auth();
-  let userRoleIds: string[] | undefined = undefined;
-
-  if (session?.user) {
-    const user = await prisma.user.findUnique({
-      where: {
-        entraUserUuid: session.user.entraUserUuid,
-      },
-      include: {
-        roles: {
-          include: {
-            role: true,
-          },
-          where: {
-            OR: [
-              {
-                expiresAt: {
-                  gte: new Date(),
-                },
-              },
-              {
-                expiresAt: null,
-              },
-            ],
-          },
-        },
-      },
-    });
-
-    if (user) {
-      userRoleIds = extractRoleIds(user.roles);
-    }
-  }
-
-  // Check visibility for all events with the same user role data
   const visibilityChecks = await Promise.all(
     events.map(async (event) => ({
       event,
-      visible: await isEventVisible(event, userRoleIds),
+      visible: await isEventVisible(event, roles),
     })),
   );
 

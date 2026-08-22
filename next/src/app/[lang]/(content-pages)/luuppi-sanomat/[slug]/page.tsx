@@ -17,6 +17,8 @@ interface LuuppiSanomatProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
 
+export const instant = false;
+
 export default async function LuuppiSanomatPublication(
   props: LuuppiSanomatProps,
 ) {

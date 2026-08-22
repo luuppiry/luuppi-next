@@ -4,8 +4,6 @@ import { SupportedLanguage } from '@/models/locale';
 import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 import ShowParticipantsModal from './ShowParticipantsDialog/ShowParticipantsDialog';
 
-export const revalidate = 60; // revalidate the data at most every 60 seconds
-
 interface ShowParticipantsProps {
   eventDocumentId: string;
   lang: SupportedLanguage;

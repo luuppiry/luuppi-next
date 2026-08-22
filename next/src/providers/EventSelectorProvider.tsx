@@ -1,5 +1,6 @@
 'use client';
-import { ReactNode, createContext, useState } from 'react';
+import type { ReactNode } from 'react';
+import { createContext, startTransition, useEffect, useState } from 'react';
 
 interface EventSelectorProviderProps {
   children: ReactNode;
@@ -26,12 +27,18 @@ export default function EventSelectorProvider({
     'calendar',
   );
   const [showPastEvents, setShowPastEvents] = useState(false);
-  const [activeCalendarMonth, setActiveCalendarMonth] = useState(new Date());
+  const [activeCalendarMonth, setActiveCalendarMonth] = useState<Date | null>(
+    initialState.activeCalendarMonth,
+  );
   const [desktopCalendarFullSize, setDesktopCalendarFullSize] = useState(false);
 
   const setView = (view: 'calendar' | 'list') => {
     setSelectedView(view);
   };
+
+  useEffect(() => {
+    startTransition(() => setActiveCalendarMonth(new Date()));
+  }, []);
 
   const toggleShowPastEvents = () => {
     setShowPastEvents(!showPastEvents);
@@ -42,7 +49,7 @@ export default function EventSelectorProvider({
     setView,
     showPastEvents,
     toggleShowPastEvents,
-    activeCalendarMonth,
+    activeCalendarMonth: activeCalendarMonth!,
     setActiveCalendarMonth,
     desktopCalendarFullSize,
     setDesktopCalendarFullSize,

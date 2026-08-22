@@ -1,49 +1,45 @@
 'server-only';
 import prisma from '@/libs/db/prisma';
-import { unstable_cache } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 
-export const getCachedEventRegistrations = (eventDocumentId: string) =>
-  unstable_cache(
-    async (eventDocumentId: string) => {
-      const res = await prisma.eventRegistration.findMany({
-        where: {
-          eventDocumentId,
-          deletedAt: null,
-          OR: [
-            {
-              reservedUntil: {
-                gte: new Date(),
-              },
-            },
-            {
-              paymentCompleted: true,
-            },
-            {
-              paymentCompleted: false,
-              payments: {
-                some: {
-                  status: 'PENDING',
-                },
-              },
-            },
-          ],
+export const getCachedEventRegistrations = async (eventDocumentId: string) => {
+  'use cache';
+  cacheLife('minutes');
+  cacheTag(`get-cached-event-registrations:${eventDocumentId}`);
+
+  const res = await prisma.eventRegistration.findMany({
+    where: {
+      eventDocumentId,
+      deletedAt: null,
+      OR: [
+        {
+          reservedUntil: {
+            gte: new Date(),
+          },
         },
-        select: {
-          entraUserUuid: true,
+        {
           paymentCompleted: true,
-          purchaseRole: {
-            select: {
-              strapiRoleUuid: true,
+        },
+        {
+          paymentCompleted: false,
+          payments: {
+            some: {
+              status: 'PENDING',
             },
           },
         },
-      });
+      ],
+    },
+    select: {
+      entraUserUuid: true,
+      paymentCompleted: true,
+      purchaseRole: {
+        select: {
+          strapiRoleUuid: true,
+        },
+      },
+    },
+  });
 
-      return res;
-    },
-    ['get-cached-event-registrations'],
-    {
-      revalidate: 60,
-      tags: [`get-cached-event-registrations:${eventDocumentId}`],
-    },
-  )(eventDocumentId);
+  return res;
+};

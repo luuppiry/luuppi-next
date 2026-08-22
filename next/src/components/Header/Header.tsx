@@ -8,6 +8,8 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import HeaderActions from './HeaderActions/HeaderActions';
 import HideableLink from './HideableLinks/HideableLink';
 import ScrollListener from './ScrollListener/ScrollListener';
+import { Suspense } from 'react';
+import { BsGlobe } from 'react-icons/bs';
 
 interface HeaderProps {
   dictionary: Dictionary;
@@ -54,8 +56,17 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                   </span>
                 </div>
               )}
+
               <div className="flex items-center justify-center max-lg:hidden">
-                <LanguageSwitcher />
+                <Suspense
+                  fallback={
+                    <div className="btn btn-circle btn-ghost m-1 bg-primary-600 max-lg:bg-secondary-400">
+                      <BsGlobe color="white" size={32} />
+                    </div>
+                  }
+                >
+                  <LanguageSwitcher />
+                </Suspense>
               </div>
               <HeaderActions dictionary={dictionary} lang={lang} />
             </div>

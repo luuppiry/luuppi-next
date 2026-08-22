@@ -3,8 +3,6 @@ import { logger } from '@/libs/utils/logger';
 import type Redis from 'ioredis';
 import { NextRequest } from 'next/server';
 
-export const dynamic = 'force-dynamic';
-
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ code: string }> },

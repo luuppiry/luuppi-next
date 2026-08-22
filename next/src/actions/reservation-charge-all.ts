@@ -138,6 +138,10 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
     });
 
     updateTag(`get-cached-user:${session.user.entraUserUuid}`);
+    for (const reg of registrations) {
+      updateTag(`get-cached-event-participants:${reg.eventDocumentId}`);
+      updateTag(`get-cached-event-registrations:${reg.eventDocumentId}`)
+    }
     revalidatePath('/[lang]/events/[slug]', 'page');
   } catch (error) {
     logger.error('Error creating charge', error);

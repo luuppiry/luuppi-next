@@ -12,6 +12,7 @@ import type { Metadata, Viewport } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import PlausibleProvider from 'next-plausible';
 import { Poppins } from 'next/font/google';
+import { Suspense } from 'react';
 import { i18n } from '../../i18n-config';
 import './globals.css';
 
@@ -82,7 +83,9 @@ export default async function RootLayout(props: RootLayoutProps) {
         <SessionProvider>
           <ThemeProvider>
             <Header dictionary={dictionary} lang={params.lang} />
-            <UserProfileNotice dictionary={dictionary} lang={params.lang} />
+            <Suspense fallback={null}>
+              <UserProfileNotice dictionary={dictionary} lang={params.lang} />
+            </Suspense>
             <EventSelectorProvider>
               <div className="flex-1">{children}</div>
             </EventSelectorProvider>

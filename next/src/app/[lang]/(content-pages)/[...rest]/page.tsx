@@ -9,6 +9,8 @@ interface NotFoundProps {
   params: Promise<{ lang: SupportedLanguage }>;
 }
 
+export const instant = false;
+
 export default async function NotFound(props: NotFoundProps) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);

@@ -1,20 +1,19 @@
 import { auth } from '@/auth';
 import prisma from '@/libs/db/prisma';
 import { NextResponse } from 'next/server';
+import { cacheTag, cacheLife } from 'next/cache';
 
-export async function GET() {
-  const session = await auth();
-
-  if (!session?.user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+async function getProfileCompletion(entraUserUuid: string) {
+  'use cache';
+  cacheTag(`get-cached-user:${entraUserUuid}`);
+  cacheLife('max');
 
   const localUser = await prisma.user.findFirst({
-    where: { entraUserUuid: session.user.entraUserUuid },
+    where: { entraUserUuid },
   });
 
   if (!localUser) {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    return null;
   }
 
   const requiredFields: Array<keyof typeof localUser> = [
@@ -25,5 +24,21 @@ export async function GET() {
 
   const missingFields = requiredFields.filter((key) => !localUser?.[key]);
 
-  return NextResponse.json({ isComplete: !missingFields.length });
+  return { isComplete: !missingFields.length };
+}
+
+export async function GET() {
+  const session = await auth();
+
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const result = await getProfileCompletion(session.user.entraUserUuid);
+
+  if (!result) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+
+  return NextResponse.json(result);
 }

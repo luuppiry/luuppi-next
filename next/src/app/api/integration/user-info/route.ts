@@ -1,6 +1,6 @@
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
-import { NextRequest, NextResponse } from 'next/server';
+import { connection, NextRequest, NextResponse } from 'next/server';
 
 interface UserInfoResponse {
   user: {
@@ -22,6 +22,8 @@ interface UserInfoError {
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<UserInfoResponse | UserInfoError>> {
+  await connection();
+
   try {
     const auth = request.headers.get('authorization');
     if (!auth || auth !== process.env.INTEGRATION_API_SECRET) {

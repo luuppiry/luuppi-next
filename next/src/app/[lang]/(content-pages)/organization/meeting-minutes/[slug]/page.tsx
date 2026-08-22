@@ -9,6 +9,7 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { connection } from 'next/server';
 import qs from 'qs';
 
 const query = qs.stringify(
@@ -35,9 +36,13 @@ interface LuuppiSanomatProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
 
+export const instant = false;
+
 export default async function LuuppiSanomatPublication(
   props: LuuppiSanomatProps,
 ) {
+  await connection();
+
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
   const session = await auth();

@@ -5,6 +5,7 @@ import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
+import { cacheLife, cacheTag } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaExternalLinkAlt } from 'react-icons/fa';
@@ -19,6 +20,10 @@ interface CollaborationJobOpportunitiesProps {
 export default async function CollaborationJobOpportunities(
   props: CollaborationJobOpportunitiesProps,
 ) {
+  'use cache';
+  cacheLife('max');
+  cacheTag(...tags);
+
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 

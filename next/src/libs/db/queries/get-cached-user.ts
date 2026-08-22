@@ -1,56 +1,52 @@
 'server-only';
 import prisma from '@/libs/db/prisma';
-import { unstable_cache } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 
-export const getCachedUser = (entraUserUuid: string) =>
-  unstable_cache(
-    async (entraUserUuid: string) => {
-      const res = await prisma.user.findFirst({
+export const getCachedUser = async (entraUserUuid: string) => {
+  'use cache';
+  cacheLife('minutes');
+  cacheTag(`get-cached-user:${entraUserUuid}`);
+
+  const res = await prisma.user.findFirst({
+    where: {
+      entraUserUuid,
+    },
+    select: {
+      entraUserUuid: true,
+      roles: {
+        include: {
+          role: true,
+        },
         where: {
-          entraUserUuid,
+          OR: [
+            {
+              expiresAt: {
+                gte: new Date(),
+              },
+            },
+            {
+              expiresAt: null,
+            },
+          ],
         },
-        select: {
-          entraUserUuid: true,
-          roles: {
-            include: {
-              role: true,
+      },
+      registrations: {
+        where: {
+          deletedAt: null,
+          OR: [
+            {
+              paymentCompleted: true,
             },
-            where: {
-              OR: [
-                {
-                  expiresAt: {
-                    gte: new Date(),
-                  },
-                },
-                {
-                  expiresAt: null,
-                },
-              ],
+            {
+              reservedUntil: {
+                gte: new Date(),
+              },
             },
-          },
-          registrations: {
-            where: {
-              deletedAt: null,
-              OR: [
-                {
-                  paymentCompleted: true,
-                },
-                {
-                  reservedUntil: {
-                    gte: new Date(),
-                  },
-                },
-              ],
-            },
-          },
+          ],
         },
-      });
+      },
+    },
+  });
 
-      return res;
-    },
-    ['get-cached-user'],
-    {
-      revalidate: 60,
-      tags: [`get-cached-user:${entraUserUuid}`],
-    },
-  )(entraUserUuid);
+  return res;
+};

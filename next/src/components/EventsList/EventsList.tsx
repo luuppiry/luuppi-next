@@ -12,7 +12,7 @@ interface EventListProps {
   lang: SupportedLanguage;
 }
 
-export default function EventsList({
+export default async function EventsList({
   events,
   showPastEvents,
   lang,

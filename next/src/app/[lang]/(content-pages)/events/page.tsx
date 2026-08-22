@@ -15,19 +15,34 @@ import {
   APIResponseData,
 } from '@/types/types';
 import { Metadata } from 'next';
+import { cacheLife, cacheTag } from 'next/cache';
 
 interface EventsProps {
   params: Promise<{ lang: SupportedLanguage }>;
 }
 
-export default async function Events(props: EventsProps) {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+async function getSixMonthsAgoISO() {
+  'use cache';
+  cacheLife('days');
+  cacheTag('event');
 
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+  sixMonthsAgo.setHours(0, 0, 0, 0);
+  return sixMonthsAgo.toISOString();
+}
 
-  const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+export default async function Events(props: EventsProps) {
+  'use cache';
+  cacheLife('max');
+  cacheTag('event');
+
+  const params = await props.params;
+  const dictionary = await getDictionary(params.lang);
+
+  const sixMonthsAgo = await getSixMonthsAgoISO();
+
+  const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo}&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     params.lang,

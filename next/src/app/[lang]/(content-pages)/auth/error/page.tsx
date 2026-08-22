@@ -12,6 +12,8 @@ interface AuthErrorProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
+export const instant = false;
+
 export default async function AuthError(props: AuthErrorProps) {
   const searchParams = await props.searchParams;
   const params = await props.params;

@@ -5,12 +5,17 @@ import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
+import { connection } from 'next/server';
+
+export const instant = false
 
 interface MeetingMinuteProps {
   params: Promise<{ lang: SupportedLanguage }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 export default async function MeetingMinute(props: MeetingMinuteProps) {
+  await connection()
+
   const params = await props.params;
   const searchParams = await props.searchParams;
   const session = await auth();

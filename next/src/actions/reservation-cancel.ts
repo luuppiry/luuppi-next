@@ -53,6 +53,7 @@ export async function reservationCancel(
   );
 
   updateTag(`get-cached-user:${session.user.entraUserUuid}`);
+  updateTag(`get-cached-event-registrations:${registration.eventDocumentId}`);
   revalidatePath('/[lang]/events/[slug]', 'page');
   redirect(`/${lang}/own-events`);
 }

@@ -4,6 +4,7 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
+import { updateTag } from 'next/cache';
 
 export async function userEditGeneral(
   formData: FormData,
@@ -127,6 +128,8 @@ export async function userEditGeneral(
       domicle: fieldsToUpdate.domicle,
     },
   });
+
+  updateTag(`get-cached-user:${userToEditEntraUuid}`)
 
   return {
     message: dictionary.api.user_updated,

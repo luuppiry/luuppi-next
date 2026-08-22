@@ -3,7 +3,7 @@ import { filterVisibleEvents } from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { APIResponseCollection } from '@/types/types';
-import { NextRequest, NextResponse } from 'next/server';
+import { connection, NextRequest, NextResponse } from 'next/server';
 
 interface EventsFeedResponse {
   events: {
@@ -32,6 +32,8 @@ interface EventsFeedError {
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<EventsFeedError | EventsFeedResponse>> {
+  await connection()
+
   try {
     const auth = request.headers.get('authorization');
     if (!auth || auth !== process.env.INTEGRATION_API_SECRET) {
@@ -50,10 +52,7 @@ export async function GET(
       ['event'],
     );
     // Filter events based on visibility rules
-    const visibleEvents = await filterVisibleEvents(data.data, [
-      process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
-      process.env.NEXT_PUBLIC_NO_ROLE_ID!,
-    ]);
+    const visibleEvents = await filterVisibleEvents(data.data);
 
     const events = visibleEvents.map((event) => ({
       // @ts-expect-error TODO: legacy strapi 4 format

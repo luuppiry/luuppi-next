@@ -18,7 +18,6 @@ import { promisify } from 'node:util';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 
-export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 const execFileAsync = promisify(execFile);

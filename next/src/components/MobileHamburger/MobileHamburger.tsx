@@ -5,7 +5,7 @@ import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { Session } from 'next-auth';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useCallback, useState } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { FaLockOpen } from 'react-icons/fa';
 import { HiMenu } from 'react-icons/hi';
@@ -13,6 +13,8 @@ import { IoMdClose } from 'react-icons/io';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
+
+import { BsGlobe } from 'react-icons/bs';
 
 const InstallPwaButton = dynamic(() => import('./InstallPwaButton'), {
   ssr: false,
@@ -166,7 +168,16 @@ export default function MobileHamburger({
               >
                 <IoMdClose size={32} />
               </button>
-              <LanguageSwitcher />
+
+              <Suspense
+                fallback={
+                  <div className="btn btn-circle btn-ghost m-1 bg-primary-600 max-lg:bg-secondary-400">
+                    <BsGlobe color="white" size={32} />
+                  </div>
+                }
+              >
+                <LanguageSwitcher />
+              </Suspense>
               <ThemeSwitcher dictionary={dictionary.theme} />
               {session?.user ? (
                 <button

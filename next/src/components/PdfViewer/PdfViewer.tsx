@@ -85,7 +85,7 @@ export default function PdfViewer({ pdfUrl, dictionary }: PdfViewerProps) {
         {dictionary.general.open_pdf}
         <FaExternalLinkAlt />
       </button>
-      <div className="justify-centerbg-red-50 flex h-full min-h-[70vh] w-full flex-col items-center gap-4">
+      <div className="flex h-full min-h-[70vh] w-full flex-col items-center justify-center gap-4">
         <Document
           file={pdfUrl}
           loading={

@@ -12,13 +12,17 @@ import {
   FaTiktok,
 } from 'react-icons/fa';
 import luuppiSvg from '../../../public/luuppi.svg';
+import { cacheLife } from 'next/cache';
 
 interface FooterProps {
   dictionary: Dictionary;
   lang: SupportedLanguage;
 }
 
-export default function Footer({ dictionary, lang }: FooterProps) {
+export default async function Footer({ dictionary, lang }: FooterProps) {
+  'use cache';
+  cacheLife('max');
+
   return (
     <footer className="bg-primary-500 py-12">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
@@ -67,7 +71,7 @@ export default function Footer({ dictionary, lang }: FooterProps) {
               <div className="flex flex-col text-sm text-white">
                 <p>{new Date().getFullYear()} © Luuppi ry</p>
                 <p className="text-xs">
-                  {dictionary.general.business_id}: 0512347-2
+                  {`${dictionary.general.business_id}: 0512347-2`}
                 </p>
               </div>
             </div>

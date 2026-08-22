@@ -1,33 +1,31 @@
 'server-only';
 import prisma from '@/libs/db/prisma';
-import { unstable_cache } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 
-export const getCachedEventParticipants = unstable_cache(
-  async (eventDocumentId: string) => {
-    const res = await prisma.eventRegistration.findMany({
-      where: {
-        eventDocumentId,
-        deletedAt: null,
-        paymentCompleted: true,
-        event: {
-          endDate: {
-            gte: new Date(),
-          },
+export const getCachedEventParticipants = async (eventDocumentId: string) => {
+  'use cache';
+  cacheLife('minutes');
+  cacheTag(`get-cached-event-participants:${eventDocumentId}`);
+
+  const res = await prisma.eventRegistration.findMany({
+    where: {
+      eventDocumentId,
+      deletedAt: null,
+      paymentCompleted: true,
+      event: {
+        endDate: {
+          gte: new Date(),
         },
       },
-      include: {
-        user: true,
-      },
-      orderBy: {
-        createdAt: 'asc',
-      },
-      distinct: ['entraUserUuid'],
-    });
+    },
+    include: {
+      user: true,
+    },
+    orderBy: {
+      createdAt: 'asc',
+    },
+    distinct: ['entraUserUuid'],
+  });
 
-    return res;
-  },
-  ['get-cached-event-participants'],
-  {
-    revalidate: 60,
-  },
-);
+  return res;
+};

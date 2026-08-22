@@ -293,12 +293,7 @@ export default function MobileCalendar({
                       lineClasses += ' w-[calc(100%+1rem)] -ml-2';
                     }
 
-                    return (
-                      <div
-                        key={`${event.id || laneIndex}-${dateKey}`}
-                        className={lineClasses}
-                      />
-                    );
+                    return <div key={laneIndex} className={lineClasses} />;
                   })}
 
                   {overflowCount > 0 && (

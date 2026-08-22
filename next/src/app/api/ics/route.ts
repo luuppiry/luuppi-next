@@ -57,10 +57,7 @@ export async function GET(request: NextRequest) {
   }
 
   // Filter events based on visibility rules
-  const visibleEvents = await filterVisibleEvents(eventData.data, [
-    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
-    process.env.NEXT_PUBLIC_NO_ROLE_ID!,
-  ]);
+  const visibleEvents = await filterVisibleEvents(eventData.data);
 
   // Format event from raw event data
   const formatEvent = (event: Event) => ({

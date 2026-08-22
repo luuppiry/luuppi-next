@@ -8,6 +8,8 @@ import TelegramPreview from '@/components/TelegramPreview/TelegramPreview';
 import { getDictionary } from '@/dictionaries';
 import { getOrganizationJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
+import { StrapiCacheTag } from '@/types/types';
+import { cacheLife, cacheTag } from 'next/cache';
 import Script from 'next/script';
 import ReactDOM from 'react-dom';
 
@@ -16,6 +18,10 @@ interface HomeProps {
 }
 
 export default async function Home(props: HomeProps) {
+  'use cache';
+  cacheLife('max');
+  cacheTag(...(['event', 'news-single'] satisfies StrapiCacheTag[]));
+
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);
 
@@ -40,5 +46,3 @@ export default async function Home(props: HomeProps) {
     </>
   );
 }
-
-export const dynamic = 'error';

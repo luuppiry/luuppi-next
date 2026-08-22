@@ -49,6 +49,8 @@ interface NewsPostProps {
   params: Promise<{ slug: string; lang: SupportedLanguage }>;
 }
 
+export const instant = false;
+
 export default async function NewsPost(props: NewsPostProps) {
   const params = await props.params;
   const dictionary = await getDictionary(params.lang);

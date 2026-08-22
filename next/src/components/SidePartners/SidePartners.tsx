@@ -1,24 +1,32 @@
-import 'server-only';
+'use client';
 
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { Dictionary } from '@/models/locale';
 import { APIResponseData } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
+import { startTransition, useEffect, useState } from 'react';
 
 interface SidePartnersProps {
   partnersData: APIResponseData<'api::company.company'>[];
   dictionary: Dictionary;
 }
 
-export default async function SidePartners({
+export default function SidePartners({
   partnersData,
   dictionary,
 }: SidePartnersProps) {
-  const randomPartners = partnersData
-    // eslint-disable-next-line react-hooks/purity
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 3);
+  const [randomPartners, setRandomPartners] = useState(
+    partnersData.slice(0, 3),
+  );
+
+  useEffect(() => {
+    startTransition(() => {
+      setRandomPartners(
+        [...partnersData].sort(() => Math.random() - 0.5).slice(0, 3),
+      );
+    });
+  }, [partnersData]);
 
   return (
     <div className="flex w-full flex-col gap-2 px-4">
