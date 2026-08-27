@@ -10,13 +10,18 @@ import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { connection } from 'next/server';
 import { PiArrowLeft } from 'react-icons/pi';
 
 interface AdminEventDetailProps {
   params: Promise<{ lang: SupportedLanguage; id: string }>;
 }
 
+export const instant = false;
+
 export default async function AdminEventDetail(props: AdminEventDetailProps) {
+  await connection();
+
   const params = await props.params;
   const session = await auth();
   const dictionary = await getDictionary(params.lang);
