@@ -88,6 +88,16 @@ export async function migrateLegacyAccount(
     };
   }
 
+  // Not valid user under Associations Act Section 11.
+  if (
+    !localUser ||
+    !localUser.firstName ||
+    !localUser.lastName ||
+    !localUser.domicle
+  ) {
+    return { message: dictionary.api.invalid_user, isError: true };
+  }
+
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
