@@ -452,7 +452,7 @@
     "declare_address": "I'm declaring address according to section 4 of Luuppi's rules for the period",
     "address_declarated_info": "Your address declaration is valid",
     "address_not_declared": "You have not made an address declaration for the period",
-    "legacy_migrate_info": "You can link your old website's Luuppi account using this form. Enter your old website username and password in the fields below and press 'Submit'.",
+    "legacy_migrate_info": "You can link your old website's Luuppi account using this form. Enter your old website email and password in the fields below and press 'Submit'. Please note that your profile needs to fulfill requirements set in Assocations Act Paragraph 11 on the current website.",
     "migrate_account": "Migrate account",
     "missing_required_fields": "You are a member of Luuppi, but you are missing some required information. Please provide the missing details. Required fields are marked with an asterisk.",
     "email_subscription": "Email subscription"
