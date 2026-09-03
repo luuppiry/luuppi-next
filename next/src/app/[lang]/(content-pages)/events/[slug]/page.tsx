@@ -87,13 +87,15 @@ export default async function Event(props: EventProps) {
       />
       <div className="relative flex w-full gap-12">
         <div className="flex w-full flex-col">
-          <div className="relative mb-12 h-64 rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:h-44">
+          <div className="relative mb-12 h-64 overflow-hidden rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:h-44">
             {imageUrl ? (
               <Image
                 alt="Page banner image"
-                className="rounded-lg object-cover"
+                className="object-cover"
+                sizes="(min-width: 1728px) 800px, (min-width: 700px) 668px, (min-width: 425px) 393px, 288px"
                 src={imageUrl}
                 fill
+                priority
               />
             ) : (
               <div className="flex h-full items-center justify-center">
