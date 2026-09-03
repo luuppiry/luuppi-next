@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "invites",
+  "info": {
+    "singularName": "invite",
+    "pluralName": "invites",
+    "displayName": "Invites"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Event": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event"
+    },
+    "Expires": {
+      "type": "datetime",
+      "required": true
+    },
+    "Slug": {
+      "type": "customField",
+      "customField": "plugin::strapi-advanced-uuid.uuid",
+      "required": true
+    },
+    "RoleToGive": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event-role.event-role",
+      "required": true
+    }
+  }
+}

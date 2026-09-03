@@ -68,6 +68,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    if (model === 'invite' && body?.entry?.Slug) {
+      revalidateTag(`invite-${body.entry.Slug}`, { expire: 0 });
+    }
+
     if (model === 'event-role') {
       if (!body.entry) {
         logger.error('No entry found for event-role');

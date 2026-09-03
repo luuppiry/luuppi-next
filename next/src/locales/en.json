@@ -470,6 +470,15 @@
     "seo_description": "Send feedback to Luuppi ry anonymously or with contact information. Feedback is addressed in board meetings.",
     "send_feedback": "Send feedback"
   },
+  "pages_invite": {
+    "invite_title": "You have been invited!",
+    "accept_invite": "Accept invite",
+    "invalid_invite": "Invite has either expired or it does not exist.",
+    "role_to_receive": "Role to receive:",
+    "failed_to_claim": "Failed to claim role",
+    "invalid_role": "Invalid role",
+    "must_be_logged_in": "You must be logged in to claim this invite. Create an account or login using the button below to return to this page."
+  },
   "pages_error": {
     "title": "Error",
     "description": "An error occurred while processing your request.",

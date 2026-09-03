@@ -3,7 +3,12 @@ import { signIn as authSignIn, signOut as authSignOut } from '@/auth';
 import { redirect } from 'next/navigation';
 import { refresh, revalidatePath } from 'next/cache';
 
-export const signIn = async () => {
+export type SignInOptions = Parameters<typeof authSignIn>[1];
+
+/**
+ * @param options Optional options to for example customize redirect URL
+ */
+export const signIn = async (options?: SignInOptions) => {
   if (process.env.NODE_ENV === 'development' && process.env.DEV_MOCK_USER) {
     await authSignIn('credentials', {
       email: process.env.DEV_MOCK_USER,
@@ -15,7 +20,7 @@ export const signIn = async () => {
     return redirect('/');
   }
 
-  await authSignIn('azure-ad-b2c');
+  await authSignIn('azure-ad-b2c', options);
 };
 
 export const signOut = async () => {

@@ -470,6 +470,15 @@
     "seo_description": "Anna palautetta Luupille. Nimettömät palautteet käsitellään hallituksen kokouksissa.",
     "send_feedback": "Lähetä palautetta"
   },
+  "pages_invite": {
+    "invite_title": "Olet saanut kutsun!",
+    "accept_invite": "Hyväksy kutsu",
+    "invalid_invite": "Kutsulinkki on joko vanhentunut tai sitä ei ole olemassa.",
+    "role_to_receive": "Saat roolin:",
+    "failed_to_claim": "Roolin lunastus epäonnistui",
+    "invalid_role": "Epäkelvollinen rooli",
+    "must_be_logged_in": "Sinun täytyy olla kirjautuneena lunastaaksesi tämän roolin. Luo uusi käyttäjä tai kirjaudu sisään alla olevalla napilla palataksesi sivulle."
+  },
   "pages_error": {
     "title": "Odottamaton virhe",
     "description": "Odottamaton virhe tapahtui käsitellessämme pyyntöäsi.",

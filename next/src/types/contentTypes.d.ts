@@ -945,6 +945,43 @@ export interface ApiEventsCalendarEventsCalendar
   };
 }
 
+export interface ApiInviteInvite extends Struct.CollectionTypeSchema {
+  collectionName: 'invites';
+  info: {
+    displayName: 'Invites';
+    pluralName: 'invites';
+    singularName: 'invite';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Event: Schema.Attribute.Relation<'oneToOne', 'api::event.event'>;
+    Expires: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::invite.invite'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    RoleToGive: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::event-role.event-role'
+    > &
+      Schema.Attribute.Required;
+    Slug: Schema.Attribute.UID &
+      Schema.Attribute.Required &
+      Schema.Attribute.CustomField<'plugin::strapi-advanced-uuid.uuid'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiJobOpportunityJobOpportunity
   extends Struct.CollectionTypeSchema {
   collectionName: 'job_opportunities';
@@ -2621,6 +2658,7 @@ declare module '@strapi/strapi' {
       'api::event-role.event-role': ApiEventRoleEventRole;
       'api::event.event': ApiEventEvent;
       'api::events-calendar.events-calendar': ApiEventsCalendarEventsCalendar;
+      'api::invite.invite': ApiInviteInvite;
       'api::job-opportunity.job-opportunity': ApiJobOpportunityJobOpportunity;
       'api::luuppi-sanomat.luuppi-sanomat': ApiLuuppiSanomatLuuppiSanomat;
       'api::meeting-minute-document.meeting-minute-document': ApiMeetingMinuteDocumentMeetingMinuteDocument;
