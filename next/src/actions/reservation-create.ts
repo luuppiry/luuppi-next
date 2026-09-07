@@ -208,7 +208,13 @@ export async function reservationCreate(
 
   const result = await prisma
     .$transaction(async (prisma) => {
-      await prisma.$executeRaw`LOCK TABLE "EventRegistration" IN ACCESS EXCLUSIVE MODE`;
+      // Advisory lock scoped to this event only. Serializes concurrent reservation attempts
+      // for the same event, but does not block reads or updates, nor writes to other events.
+      // ALWAYS claim the lock if you are inserting rows; reads always ok,
+      // Updates are safe without the lock UNLESS they could cause a row to
+      // newly satisfy the counting WHERE clause (deletedAt: null AND
+      // (reservedUntil >= now() OR paymentCompleted OR pending payment)
+      await prisma.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${eventDocumentId}))`;
 
       const [eventRegistrations, currentUserReservations] = await Promise.all([
         prisma.eventRegistration.findMany({
