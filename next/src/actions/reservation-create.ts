@@ -237,193 +237,196 @@ export async function reservationCreate(
   const MAX_INSERT_ATTEMPTS = 5;
 
   const result = await prisma
-    .$transaction(async (prisma) => {
-      // Advisory lock scoped to this event only. Serializes concurrent reservation attempts
-      // for the same event, but does not block reads or updates, nor writes to other events.
-      // ALWAYS claim the lock if you are inserting rows; reads always ok,
-      // Updates are safe without the lock UNLESS they could cause a row to
-      // newly satisfy the counting WHERE clause (deletedAt: null AND
-      // (reservedUntil >= now() OR paymentCompleted OR pending payment)
-      await prisma.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${eventDocumentId}))`;
+    .$transaction(
+      async (prisma) => {
+        // Advisory lock scoped to this event only. Serializes concurrent reservation attempts
+        // for the same event, but does not block reads or updates, nor writes to other events.
+        // ALWAYS claim the lock if you are inserting rows; reads always ok,
+        // Updates are safe without the lock UNLESS they could cause a row to
+        // newly satisfy the counting WHERE clause (deletedAt: null AND
+        // (reservedUntil >= now() OR paymentCompleted OR pending payment)
+        await prisma.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${eventDocumentId}))`;
 
-      const [
-        totalRegistrationsForTicketType,
-        totalRegistrationsJoint,
-        userReservationsForRole,
-      ] = await Promise.all([
-        prisma.eventRegistration.count({
-          where: {
-            eventDocumentId,
-            strapiTicketUid: ticketUid,
-            deletedAt: null,
-            OR: [
-              { reservedUntil: { gte: new Date() } },
-              { paymentCompleted: true },
-              {
-                paymentCompleted: false,
-                payments: { some: { status: 'PENDING' } },
-              },
-            ],
-          },
-        }),
-        jointQuota
-          ? prisma.eventRegistration.count({
-              where: {
-                eventDocumentId,
-                deletedAt: null,
-                OR: [
-                  { reservedUntil: { gte: new Date() } },
-                  { paymentCompleted: true },
-                  {
-                    paymentCompleted: false,
-                    payments: { some: { status: 'PENDING' } },
-                  },
-                ],
-              },
-            })
-          : Promise.resolve(0),
-        prisma.eventRegistration.findMany({
-          where: {
-            eventDocumentId,
-            entraUserUuid: localUser.entraUserUuid,
-            purchaseRole: {
-              strapiRoleUuid: targetedRole.strapiRoleUuid,
+        const [
+          totalRegistrationsForTicketType,
+          totalRegistrationsJoint,
+          userReservationsForRole,
+        ] = await Promise.all([
+          prisma.eventRegistration.count({
+            where: {
+              eventDocumentId,
+              strapiTicketUid: ticketUid,
+              deletedAt: null,
+              OR: [
+                { reservedUntil: { gte: new Date() } },
+                { paymentCompleted: true },
+                {
+                  paymentCompleted: false,
+                  payments: { some: { status: 'PENDING' } },
+                },
+              ],
             },
-            deletedAt: null,
-            OR: [
-              { reservedUntil: { gte: new Date() } },
-              { paymentCompleted: true },
-              {
-                paymentCompleted: false,
-                payments: { some: { status: 'PENDING' } },
+          }),
+          jointQuota
+            ? prisma.eventRegistration.count({
+                where: {
+                  eventDocumentId,
+                  deletedAt: null,
+                  OR: [
+                    { reservedUntil: { gte: new Date() } },
+                    { paymentCompleted: true },
+                    {
+                      paymentCompleted: false,
+                      payments: { some: { status: 'PENDING' } },
+                    },
+                  ],
+                },
+              })
+            : Promise.resolve(0),
+          prisma.eventRegistration.findMany({
+            where: {
+              eventDocumentId,
+              entraUserUuid: localUser.entraUserUuid,
+              purchaseRole: {
+                strapiRoleUuid: targetedRole.strapiRoleUuid,
               },
-            ],
-          },
-          select: {
-            strapiTicketUid: true,
-          },
-        }),
-      ]);
+              deletedAt: null,
+              OR: [
+                { reservedUntil: { gte: new Date() } },
+                { paymentCompleted: true },
+                {
+                  paymentCompleted: false,
+                  payments: { some: { status: 'PENDING' } },
+                },
+              ],
+            },
+            select: {
+              strapiTicketUid: true,
+            },
+          }),
+        ]);
 
-      // Validate that the event is not sold out for the user's role
-      if (totalRegistrationsForTicketType >= ownQuota.TicketsTotal) {
-        return {
-          message: dictionary.api.sold_out,
-          isError: true,
-        };
-      }
-
-      const ticketsAvailable = jointQuota
-        ? (jointQuotaTotal ?? 0) - totalRegistrationsJoint
-        : ownQuota.TicketsTotal - totalRegistrationsForTicketType;
-
-      const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
-
-      const hasOtherTicketTypeInRole = userReservationsForRole.some(
-        (registration) => registration.strapiTicketUid !== ticketUid,
-      );
-
-      if (hasOtherTicketTypeInRole) {
-        return {
-          message: dictionary.api.not_enough_tickets,
-          isError: true,
-        };
-      }
-
-      const currentUserReservationsForTicketType =
-        userReservationsForRole.filter(
-          (registration) => registration.strapiTicketUid === ticketUid,
-        ).length;
-
-      // Validate that the user has not already reserved the maximum amount of tickets
-      if (currentUserReservationsForTicketType >= ticketsAllowedToBuy) {
-        return {
-          message: dictionary.api.maximum_tickets_reached,
-          isError: true,
-        };
-      }
-
-      // Validate per user limit still allows the user to reserve the amount
-      const canReserveAmount =
-        amount + currentUserReservationsForTicketType <= ticketsAllowedToBuy;
-      if (!canReserveAmount) {
-        return {
-          message: dictionary.api.no_room_own_limit,
-          isError: true,
-        };
-      }
-
-      // Validate that there are still enough tickets available
-      if (amount > ticketsAvailable) {
-        return {
-          message: dictionary.api.not_enough_tickets,
-          isError: true,
-        };
-      }
-
-      // Insert with retry-on-conflict for pickup code collisions only (rare, cheap to retry
-      // a handful of times; never a sequential pre-check loop while the lock is held).
-      let attempt = 0;
-      let rows = buildRows();
-      for (;;) {
-        try {
-          await prisma.eventRegistration.createMany({ data: rows });
-          break;
-        } catch (err) {
-          const isUniqueConflict =
-            err instanceof Prisma.PrismaClientKnownRequestError &&
-            err.code === 'P2002';
-          attempt++;
-          if (!isUniqueConflict || attempt >= MAX_INSERT_ATTEMPTS) {
-            throw err;
-          }
-          // Regenerate codes and try again
-          rows = buildRows();
+        // Validate that the event is not sold out for the user's role
+        if (totalRegistrationsForTicketType >= ownQuota.TicketsTotal) {
+          return {
+            message: dictionary.api.sold_out,
+            isError: true,
+          };
         }
-      }
 
-      if (amount + totalRegistrationsForTicketType >= ownQuota.TicketsTotal) {
+        const ticketsAvailable = jointQuota
+          ? (jointQuotaTotal ?? 0) - totalRegistrationsJoint
+          : ownQuota.TicketsTotal - totalRegistrationsForTicketType;
+
+        const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
+
+        const hasOtherTicketTypeInRole = userReservationsForRole.some(
+          (registration) => registration.strapiTicketUid !== ticketUid,
+        );
+
+        if (hasOtherTicketTypeInRole) {
+          return {
+            message: dictionary.api.not_enough_tickets,
+            isError: true,
+          };
+        }
+
+        const currentUserReservationsForTicketType =
+          userReservationsForRole.filter(
+            (registration) => registration.strapiTicketUid === ticketUid,
+          ).length;
+
+        // Validate that the user has not already reserved the maximum amount of tickets
+        if (currentUserReservationsForTicketType >= ticketsAllowedToBuy) {
+          return {
+            message: dictionary.api.maximum_tickets_reached,
+            isError: true,
+          };
+        }
+
+        // Validate per user limit still allows the user to reserve the amount
+        const canReserveAmount =
+          amount + currentUserReservationsForTicketType <= ticketsAllowedToBuy;
+        if (!canReserveAmount) {
+          return {
+            message: dictionary.api.no_room_own_limit,
+            isError: true,
+          };
+        }
+
+        // Validate that there are still enough tickets available
+        if (amount > ticketsAvailable) {
+          return {
+            message: dictionary.api.not_enough_tickets,
+            isError: true,
+          };
+        }
+
+        // Insert with retry-on-conflict for pickup code collisions only (rare, cheap to retry
+        // a handful of times; never a sequential pre-check loop while the lock is held).
+        let attempt = 0;
+        let rows = buildRows();
+        for (;;) {
+          try {
+            await prisma.eventRegistration.createMany({ data: rows });
+            break;
+          } catch (err) {
+            const isUniqueConflict =
+              err instanceof Prisma.PrismaClientKnownRequestError &&
+              err.code === 'P2002';
+            attempt++;
+            if (!isUniqueConflict || attempt >= MAX_INSERT_ATTEMPTS) {
+              throw err;
+            }
+            // Regenerate codes and try again
+            rows = buildRows();
+          }
+        }
+
+        if (amount + totalRegistrationsForTicketType >= ownQuota.TicketsTotal) {
+          logger.info(
+            `Event ${eventDocumentId} ticket ${ticketUid} is sold out. Setting sold out in redis for 3 minutes.`,
+          );
+          await redisClient.set(
+            `event-sold-out:${eventDocumentId}:ticket:${ticketUid}`,
+            'true',
+            'EX',
+            180, // 3 minutes
+          );
+          updateTag(`get-cached-event-registrations:${eventDocumentId}`);
+        }
+
+        // Check if joint quota is now sold out
+        if (
+          jointQuota &&
+          typeof jointQuotaTotal !== 'undefined' &&
+          amount + totalRegistrationsJoint >= jointQuotaTotal
+        ) {
+          logger.info(`Event ${eventDocumentId} joint quota is sold out.`);
+          await redisClient.set(
+            `event-sold-out:${eventDocumentId}:joint-quota`,
+            'true',
+            'EX',
+            180,
+          );
+
+          // Revalidates cache for event registrations so that the sold out status is updated
+          updateTag(`get-cached-event-registrations:${eventDocumentId}`);
+        }
+
         logger.info(
-          `Event ${eventDocumentId} ticket ${ticketUid} is sold out. Setting sold out in redis for 3 minutes.`,
-        );
-        await redisClient.set(
-          `event-sold-out:${eventDocumentId}:ticket:${ticketUid}`,
-          'true',
-          'EX',
-          180, // 3 minutes
-        );
-        updateTag(`get-cached-event-registrations:${eventDocumentId}`);
-      }
-
-      // Check if joint quota is now sold out
-      if (
-        jointQuota &&
-        typeof jointQuotaTotal !== 'undefined' &&
-        amount + totalRegistrationsJoint >= jointQuotaTotal
-      ) {
-        logger.info(`Event ${eventDocumentId} joint quota is sold out.`);
-        await redisClient.set(
-          `event-sold-out:${eventDocumentId}:joint-quota`,
-          'true',
-          'EX',
-          180,
+          `User ${localUser.entraUserUuid} reserved ${amount} ${ticketUid} tickets for event ${eventDocumentId}. User's total count of this ticket type is now ${
+            currentUserReservationsForTicketType + amount
+          }`,
         );
 
-        // Revalidates cache for event registrations so that the sold out status is updated
-        updateTag(`get-cached-event-registrations:${eventDocumentId}`);
-      }
-
-      logger.info(
-        `User ${localUser.entraUserUuid} reserved ${amount} ${ticketUid} tickets for event ${eventDocumentId}. User's total count of this ticket type is now ${
-          currentUserReservationsForTicketType + amount
-        }`,
-      );
-
-      return {
-        message: dictionary.general.success,
-        isError: false,
-      };
-    })
+        return {
+          message: dictionary.general.success,
+          isError: false,
+        };
+      },
+      { timeout: 5000, maxWait: 2000 },
+    )
     .catch((error) => {
       logger.error('Error creating reservation', error);
       return {
