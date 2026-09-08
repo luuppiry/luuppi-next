@@ -75,6 +75,11 @@ export default function Ticket({
 
   const handleSubmit = async () => {
     try {
+      if (!ticket.uid) {
+        setResponse({ message: dictionary.api.invalid_event, isError: true });
+        return;
+      }
+
       setLoading(true);
       const res = await reservationCreate(
         eventDocumentId,

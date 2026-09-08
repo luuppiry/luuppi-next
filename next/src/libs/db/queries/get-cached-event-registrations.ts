@@ -33,6 +33,7 @@ export const getCachedEventRegistrations = async (eventDocumentId: string) => {
     select: {
       entraUserUuid: true,
       paymentCompleted: true,
+      strapiTicketUid: true,
       purchaseRole: {
         select: {
           strapiRoleUuid: true,

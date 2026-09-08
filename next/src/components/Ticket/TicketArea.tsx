@@ -68,48 +68,48 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     return targetedRole.strapiRoleUuid === role;
   };
 
-  const isSoldOut = (total: number, roleUuid: string) => {
+  const isSoldOut = (total: number, ticketUid: string) => {
     if (!eventRegistrations) return false;
-    const totalRegistrationWithRole = eventRegistrations.filter(
-      (registration) => registration.purchaseRole.strapiRoleUuid === roleUuid,
+    const totalRegistrationsForTicketType = eventRegistrations.filter(
+      (registration) => registration.strapiTicketUid === ticketUid,
     ).length;
-    return totalRegistrationWithRole >= total;
+    return totalRegistrationsForTicketType >= total;
   };
 
   const isRegistrationOpen = (registrationEndsAt: Date) =>
     new Date() < new Date(registrationEndsAt);
 
   const hasBoughtMaxTickets = (
-    roleUuid: string,
+    ticketUid: string,
     maxAmount: number,
   ): { isFree: boolean } | false => {
     if (!eventRegistrations || !localUser) return false;
     const userPurchases = localUser.registrations.filter(
       (registration) => registration.eventDocumentId === event.data.documentId,
     );
-    const userPurchasesWithRole = userPurchases.filter(
-      (registration) => registration.strapiRoleUuid === roleUuid,
+    const userPurchasesForTicketType = userPurchases.filter(
+      (registration) => registration.strapiTicketUid === ticketUid,
     );
 
     return (
-      userPurchasesWithRole.length >= maxAmount && {
-        isFree: !userPurchasesWithRole.some((reg) => reg.price !== 0),
+      userPurchasesForTicketType.length >= maxAmount && {
+        isFree: !userPurchasesForTicketType.some((reg) => reg.price !== 0),
       }
     );
   };
 
   const hasUnpaidReservations = (
-    roleUuid: string,
+    ticketUid: string,
   ): { isFree: boolean } | false => {
     if (!eventRegistrations || !localUser) return false;
     const userPurchases = localUser.registrations.filter(
       (registration) => registration.eventDocumentId === event.data.documentId,
     );
-    const userPurchasesWithRole = userPurchases.filter(
-      (registration) => registration.strapiRoleUuid === roleUuid,
+    const userPurchasesForTicketType = userPurchases.filter(
+      (registration) => registration.strapiTicketUid === ticketUid,
     );
 
-    const notPaid = userPurchasesWithRole.find(
+    const notPaid = userPurchasesForTicketType.find(
       (registration) => !registration.paymentCompleted,
     );
 
@@ -120,45 +120,48 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     return { isFree: notPaid.price === 0 };
   };
 
-  const ownQuota = ticketTypes?.find(
-    (type) => type.Role?.RoleId === targetedRole.strapiRoleUuid,
-  );
-
-  const isSoldOutOwnQuota = ownQuota
-    ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.RoleId!)
-    : false;
-
-  const isSoldOutAllQuotas =
-    jointQuota && typeof totalTickets !== 'undefined'
-      ? totalTickets - eventRegistrations.length <= 0
-      : false;
-
-  const hasUnpaidReservationsOwnQuota = ownQuota
-    ? hasUnpaidReservations(ownQuota.Role?.RoleId!)
-    : false;
-
-  const hasBoughtMaxTicketsOwnQuota = ownQuota
-    ? hasBoughtMaxTickets(ownQuota.Role?.RoleId!, ownQuota.TicketsAllowedToBuy)
-    : false;
-
-  const isRegistrationOpenOwnQuota = ownQuota
-    ? isRegistrationOpen(new Date(ownQuota.RegistrationEndsAt))
-    : false;
+  const ownQuotaTicketTypes =
+    ticketTypes?.filter(
+      (type) => type.Role?.RoleId === targetedRole.strapiRoleUuid,
+    ) ?? [];
 
   const ticketTypesFormatted = ticketTypes
     ?.filter((type) => Boolean(type.Role?.RoleId))
-    ?.map((ticketType) => ({
-      // Ticket Component ID -- used to allow multiple quotas for a role (e.g. two tickets with role = member)
-      uid: ticketType.uid,
-      name: ticketType[lang === 'en' ? 'NameEn' : 'NameFi'],
-      location: event.data[lang === 'en' ? 'LocationEn' : 'LocationFi'],
-      price: ticketType.Price,
-      role: ticketType.Role?.RoleId,
-      registrationStartsAt: new Date(ticketType.RegistrationStartsAt),
-      registrationEndsAt: new Date(ticketType.RegistrationEndsAt),
-      isOwnQuota: isOwnQuota(ticketType.Role?.RoleId!),
-      maxTicketsPerUser: ticketType.TicketsAllowedToBuy,
-    }))
+    ?.map((ticketType) => {
+      const soldOut = isSoldOut(ticketType.TicketsTotal, ticketType.uid!);
+      const soldOutAllQuotas =
+        jointQuota && typeof totalTickets !== 'undefined'
+          ? totalTickets - (eventRegistrations?.length ?? 0) <= 0
+          : false;
+      const boughtMax = hasBoughtMaxTickets(
+        ticketType.uid!,
+        ticketType.TicketsAllowedToBuy,
+      );
+      const unpaidReservations = hasUnpaidReservations(ticketType.uid!);
+      const registrationOpen = isRegistrationOpen(
+        new Date(ticketType.RegistrationEndsAt),
+      );
+      const isOwn = isOwnQuota(ticketType.Role?.RoleId!);
+
+      return {
+        // Ticket Component ID -- used to allow multiple quotas for a role (e.g. two tickets with role = member)
+        uid: ticketType.uid,
+        name: ticketType[lang === 'en' ? 'NameEn' : 'NameFi'],
+        location: event.data[lang === 'en' ? 'LocationEn' : 'LocationFi'],
+        price: ticketType.Price,
+        role: ticketType.Role?.RoleId,
+        registrationStartsAt: new Date(ticketType.RegistrationStartsAt),
+        registrationEndsAt: new Date(ticketType.RegistrationEndsAt),
+        isOwnQuota: isOwn,
+        maxTicketsPerUser: ticketType.TicketsAllowedToBuy,
+
+        soldOut,
+        soldOutAllQuotas,
+        boughtMax,
+        unpaidReservations,
+        registrationOpen,
+      };
+    })
     .sort((a, b) =>
       a.isOwnQuota === b.isOwnQuota ? 0 : a.isOwnQuota ? -1 : 1,
     );
@@ -189,13 +192,23 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     });
 
     // Check for duplicate weights
-    const weights = ticketTypes?.map((type) => type.Weight);
-    const duplicateWeights = weights?.filter(
-      (weight, index) => weights.indexOf(weight) !== index,
+    const weightsByRole = new Map<string, number[]>();
+    ticketTypes?.forEach((type) => {
+      const roleId = type.Role?.RoleId ?? 'unknown';
+      const list = weightsByRole.get(roleId) ?? [];
+      list.push(type.Weight);
+      weightsByRole.set(roleId, list);
+    });
+    const roleWeights = Array.from(weightsByRole.entries()).map(
+      ([roleId, weights]) => ({ roleId, weight: weights[0] }),
     );
-    if (duplicateWeights?.length) {
+    const allWeights = roleWeights.map((r) => r.weight);
+    const duplicateWeights = allWeights.filter(
+      (weight, index) => allWeights.indexOf(weight) !== index,
+    );
+    if (duplicateWeights.length) {
       errors.push(
-        `Multiple quotas have same weight(s): ${duplicateWeights.join(', ')}`,
+        `Multiple roles have same weight(s): ${duplicateWeights.join(', ')}`,
       );
     }
 
@@ -238,57 +251,75 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
     );
   }
 
-  const getErrors = () => {
+  const getRoleLevelErrors = () => {
     const errors = [];
     if (!session?.user)
       errors.push({
         message: dictionary.pages_events.login_required,
         level: 'error',
       });
-    if (session?.user && !ownQuota) {
+    if (session?.user && ownQuotaTicketTypes.length === 0) {
       errors.push({
         message: dictionary.pages_events.no_quota,
         level: 'error',
       });
     }
-    if ((isSoldOutOwnQuota || isSoldOutAllQuotas) && ownQuota)
+    return errors;
+  };
+
+  const roleLevelErrors = getRoleLevelErrors();
+
+  const ticketsWithState = ticketTypesFormatted.map((ticket) => {
+    const errors = [];
+    if (ticket.isOwnQuota && (ticket.soldOut || ticket.soldOutAllQuotas)) {
       errors.push({
         message: dictionary.pages_events.sold_out_info,
         level: 'warn',
       });
-    if (hasBoughtMaxTicketsOwnQuota && ownQuota)
+    }
+    if (ticket.isOwnQuota && ticket.boughtMax) {
       errors.push({
         message:
           dictionary.pages_events[
-            hasBoughtMaxTicketsOwnQuota.isFree
+            ticket.boughtMax.isFree
               ? 'max_tickets_redeemed'
               : 'max_tickets_bought'
           ],
         level: 'info',
       });
-    if (!isRegistrationOpenOwnQuota && ownQuota)
+    }
+    if (ticket.isOwnQuota && !ticket.registrationOpen) {
       errors.push({
         message: dictionary.pages_events.registration_closed,
         level: 'info',
       });
-    if (hasUnpaidReservationsOwnQuota && ownQuota)
+    }
+    if (ticket.isOwnQuota && ticket.unpaidReservations) {
       errors.push({
         message:
           dictionary.pages_events[
-            hasUnpaidReservationsOwnQuota.isFree
+            ticket.unpaidReservations.isFree
               ? 'unredeemed_reservations'
               : 'unpaid_reservations'
           ],
         level: 'warn',
       });
-    return errors;
-  };
+    }
 
-  const errors = getErrors();
+    const disabled = Boolean(
+      !ticket.isOwnQuota ||
+      ticket.soldOut ||
+      ticket.soldOutAllQuotas ||
+      Boolean(ticket.boughtMax) ||
+      !ticket.registrationOpen,
+    );
+
+    return { ticket, disabled, errors };
+  });
 
   return ticketTypesFormatted.length > 0 ? (
     <>
-      {errors.map((error, i) => (
+      {roleLevelErrors.map((error) => (
         <div
           key={error.message}
           className={`alert ${
@@ -297,7 +328,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
               : error.level === 'info'
                 ? 'alert-info'
                 : 'alert-error'
-          } ${i === errors.length - 1 ? 'mb-8' : 'mb-4'}`}
+          } mb-4`}
         >
           {error.level === 'error' && <BiErrorCircle size={24} />}
           {error.level === 'warn' && <IoWarningOutline size={24} />}
@@ -308,29 +339,39 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         </div>
       ))}
       <div className="flex flex-col gap-4">
-        {ticketTypesFormatted?.map((ticket, index) => {
-          const disabled = Boolean(
-            !ticket.isOwnQuota ||
-            isSoldOutOwnQuota ||
-            isSoldOutAllQuotas ||
-            Boolean(hasBoughtMaxTicketsOwnQuota) ||
-            !isRegistrationOpenOwnQuota,
-          );
-
-          return (
+        {ticketsWithState.map(({ ticket, disabled, errors }, index) => (
+          <div key={`${ticket.name}-${index}`} className="flex flex-col gap-2">
+            {errors.map((error) => (
+              <div
+                key={error.message}
+                className={`alert ${
+                  error.level === 'warn'
+                    ? 'alert-warning'
+                    : error.level === 'info'
+                      ? 'alert-info'
+                      : 'alert-error'
+                }`}
+              >
+                {error.level === 'warn' && <IoWarningOutline size={20} />}
+                {error.level === 'info' && (
+                  <IoIosInformationCircleOutline size={20} />
+                )}
+                {error.message}
+              </div>
+            ))}
             <Ticket
               key={`${ticket.name}-${index}`}
               dictionary={dictionary}
               disabled={disabled}
               eventDocumentId={event.data.documentId}
               eventStartsAt={new Date(event.data.StartDate)}
-              isOwnQuota={isOwnQuota(ticket.role!)}
+              isOwnQuota={ticket.isOwnQuota}
               lang={lang}
               targetedRole={targetedRole.strapiRoleUuid}
               ticket={ticket}
             />
-          );
-        })}
+          </div>
+        ))}
       </div>
     </>
   ) : (

@@ -20,7 +20,7 @@ export async function reservationCreate(
   lang: SupportedLanguage,
   selectedQuota: string,
   userProvidedTargetedRole: string | undefined,
-  ticketUid?: string,
+  ticketUid: string,
 ) {
   const dictionary = await getDictionary(lang);
   const session = await auth();
@@ -32,19 +32,26 @@ export async function reservationCreate(
     };
   }
 
+  if (!ticketUid) {
+    return {
+      message: dictionary.api.invalid_event,
+      isError: true,
+    };
+  }
+
   // User provided targeted role cannot be trusted (can be manipulated by user), but this
   // prevents unnecessary database queries most of the time
   if (
     userProvidedTargetedRole &&
     typeof userProvidedTargetedRole === 'string'
   ) {
-    // Check if the event is sold out for the user's role
+    // Check if this specific ticket type is sold out
     const isSoldOut = await redisClient.get(
-      `event-sold-out:${eventDocumentId}:${userProvidedTargetedRole}`,
+      `event-sold-out:${eventDocumentId}:ticket:${ticketUid}`,
     );
     if (isSoldOut) {
       logger.info(
-        `Cache hit: Event ${eventDocumentId} is sold out for role ${userProvidedTargetedRole}`,
+        `Cache hit: Event ${eventDocumentId} ticket ${ticketUid} is sold out`,
       );
       return {
         message: dictionary.api.sold_out,
@@ -166,16 +173,11 @@ export async function reservationCreate(
     };
   }
 
-  const roleQuota = ticketTypes?.find(
-    (type) => type.Role?.RoleId === targetedRole.strapiRoleUuid,
-  );
-  const targetedQuota = ticketTypes?.find(
+  const ownQuota = ticketTypes?.find(
     (type) =>
       type.Role?.RoleId === targetedRole.strapiRoleUuid &&
       ticketUid === type.uid,
   );
-
-  const ownQuota = targetedQuota ?? roleQuota;
 
   // Validate that the user has a role that can reserve tickets
   // Frontend needs to refresh reload cache first and only then show error (if content has been updated)
@@ -216,56 +218,54 @@ export async function reservationCreate(
       // (reservedUntil >= now() OR paymentCompleted OR pending payment)
       await prisma.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${eventDocumentId}))`;
 
-      const [eventRegistrations, currentUserReservations] = await Promise.all([
-        prisma.eventRegistration.findMany({
-          where: {
-            eventDocumentId,
-            deletedAt: null,
-            OR: [
-              { reservedUntil: { gte: new Date() } },
-              { paymentCompleted: true },
-              {
-                paymentCompleted: false,
-                payments: { some: { status: 'PENDING' } },
-              },
-            ],
-          },
-          select: {
-            purchaseRole: {
-              select: {
-                strapiRoleUuid: true,
+      const [eventRegistrations, currentUserReservationsForTicketType] =
+        await Promise.all([
+          prisma.eventRegistration.findMany({
+            where: {
+              eventDocumentId,
+              deletedAt: null,
+              OR: [
+                { reservedUntil: { gte: new Date() } },
+                { paymentCompleted: true },
+                {
+                  paymentCompleted: false,
+                  payments: { some: { status: 'PENDING' } },
+                },
+              ],
+            },
+            select: {
+              strapiTicketUid: true,
+              purchaseRole: {
+                select: {
+                  strapiRoleUuid: true,
+                },
               },
             },
-          },
-        }),
-        prisma.eventRegistration.count({
-          where: {
-            eventDocumentId,
-            entraUserUuid: localUser.entraUserUuid,
-            purchaseRole: {
-              strapiRoleUuid: targetedRole.strapiRoleUuid,
+          }),
+          prisma.eventRegistration.count({
+            where: {
+              eventDocumentId,
+              entraUserUuid: localUser.entraUserUuid,
+              strapiTicketUid: ticketUid,
+              deletedAt: null,
+              OR: [
+                { reservedUntil: { gte: new Date() } },
+                { paymentCompleted: true },
+                {
+                  paymentCompleted: false,
+                  payments: { some: { status: 'PENDING' } },
+                },
+              ],
             },
-            deletedAt: null,
-            OR: [
-              { reservedUntil: { gte: new Date() } },
-              { paymentCompleted: true },
-              {
-                paymentCompleted: false,
-                payments: { some: { status: 'PENDING' } },
-              },
-            ],
-          },
-        }),
-      ]);
+          }),
+        ]);
 
-      const totalRegistrationWithRole = eventRegistrations.filter(
-        (registration) =>
-          registration.purchaseRole.strapiRoleUuid ===
-          targetedRole.strapiRoleUuid,
+      const totalRegistrationsForTicketType = eventRegistrations.filter(
+        (registration) => registration.strapiTicketUid === ticketUid,
       ).length;
 
       // Validate that the event is not sold out for the user's role
-      if (totalRegistrationWithRole >= ownQuota.TicketsTotal) {
+      if (totalRegistrationsForTicketType >= ownQuota.TicketsTotal) {
         return {
           message: dictionary.api.sold_out,
           isError: true,
@@ -275,12 +275,12 @@ export async function reservationCreate(
       const ticketsAvailable = strapiEvent.Registration?.JointQuota
         ? (strapiEvent.Registration.TicketsTotal ?? 0) -
           eventRegistrations.length
-        : ownQuota.TicketsTotal - totalRegistrationWithRole;
+        : ownQuota.TicketsTotal - totalRegistrationsForTicketType;
 
       const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
 
       // Validate that the user has not already reserved the maximum amount of tickets
-      if (currentUserReservations >= ticketsAllowedToBuy) {
+      if (currentUserReservationsForTicketType >= ticketsAllowedToBuy) {
         return {
           message: dictionary.api.maximum_tickets_reached,
           isError: true,
@@ -289,7 +289,7 @@ export async function reservationCreate(
 
       // Validate per user limit still allows the user to reserve the amount
       const canReserveAmount =
-        amount + currentUserReservations <= ticketsAllowedToBuy;
+        amount + currentUserReservationsForTicketType <= ticketsAllowedToBuy;
       if (!canReserveAmount) {
         return {
           message: dictionary.api.no_room_own_limit,
@@ -307,15 +307,13 @@ export async function reservationCreate(
         };
       }
 
-      // Buys the last tickets
-      if (amount + totalRegistrationWithRole >= ownQuota.TicketsTotal) {
-        // Set event as sold out for this role in redis for 3 minutes
-        // to prevent unnecessary database locks & backend calculations
+      // Buys the last tickets for this ticket type
+      if (amount + totalRegistrationsForTicketType >= ownQuota.TicketsTotal) {
         logger.info(
-          `Event ${eventDocumentId} is sold out for role ${strapiRoleUuid}. Setting sold out in redis for 3 minutes.`,
+          `Event ${eventDocumentId} ticket ${ticketUid} is sold out. Setting sold out in redis for 3 minutes.`,
         );
         await redisClient.set(
-          `event-sold-out:${eventDocumentId}:${strapiRoleUuid}`,
+          `event-sold-out:${eventDocumentId}:ticket:${ticketUid}`,
           'true',
           'EX',
           180, // 3 minutes
@@ -413,8 +411,8 @@ export async function reservationCreate(
       logger.info(
         `User ${
           localUser.entraUserUuid
-        } reserved ${amount} tickets for event ${eventDocumentId}. User's total count of tickets for this event is now ${
-          currentUserReservations + amount
+        } reserved ${amount} ${ticketUid} tickets for event ${eventDocumentId}. User's total count of this ticket type is now ${
+          currentUserReservationsForTicketType + amount
         }`,
       );
 
