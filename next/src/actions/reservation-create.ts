@@ -218,47 +218,51 @@ export async function reservationCreate(
       // (reservedUntil >= now() OR paymentCompleted OR pending payment)
       await prisma.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${eventDocumentId}))`;
 
-      const [eventRegistrations, currentUserReservationsForTicketType] =
-        await Promise.all([
-          prisma.eventRegistration.findMany({
-            where: {
-              eventDocumentId,
-              deletedAt: null,
-              OR: [
-                { reservedUntil: { gte: new Date() } },
-                { paymentCompleted: true },
-                {
-                  paymentCompleted: false,
-                  payments: { some: { status: 'PENDING' } },
-                },
-              ],
-            },
-            select: {
-              strapiTicketUid: true,
-              purchaseRole: {
-                select: {
-                  strapiRoleUuid: true,
-                },
+      const [eventRegistrations, userReservationsForRole] = await Promise.all([
+        prisma.eventRegistration.findMany({
+          where: {
+            eventDocumentId,
+            deletedAt: null,
+            OR: [
+              { reservedUntil: { gte: new Date() } },
+              { paymentCompleted: true },
+              {
+                paymentCompleted: false,
+                payments: { some: { status: 'PENDING' } },
+              },
+            ],
+          },
+          select: {
+            strapiTicketUid: true,
+            purchaseRole: {
+              select: {
+                strapiRoleUuid: true,
               },
             },
-          }),
-          prisma.eventRegistration.count({
-            where: {
-              eventDocumentId,
-              entraUserUuid: localUser.entraUserUuid,
-              strapiTicketUid: ticketUid,
-              deletedAt: null,
-              OR: [
-                { reservedUntil: { gte: new Date() } },
-                { paymentCompleted: true },
-                {
-                  paymentCompleted: false,
-                  payments: { some: { status: 'PENDING' } },
-                },
-              ],
+          },
+        }),
+        prisma.eventRegistration.findMany({
+          where: {
+            eventDocumentId,
+            entraUserUuid: localUser.entraUserUuid,
+            purchaseRole: {
+              strapiRoleUuid: targetedRole.strapiRoleUuid,
             },
-          }),
-        ]);
+            deletedAt: null,
+            OR: [
+              { reservedUntil: { gte: new Date() } },
+              { paymentCompleted: true },
+              {
+                paymentCompleted: false,
+                payments: { some: { status: 'PENDING' } },
+              },
+            ],
+          },
+          select: {
+            strapiTicketUid: true,
+          },
+        }),
+      ]);
 
       const totalRegistrationsForTicketType = eventRegistrations.filter(
         (registration) => registration.strapiTicketUid === ticketUid,
@@ -278,6 +282,22 @@ export async function reservationCreate(
         : ownQuota.TicketsTotal - totalRegistrationsForTicketType;
 
       const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
+
+      const hasOtherTicketTypeInRole = userReservationsForRole.some(
+        (registration) => registration.strapiTicketUid !== ticketUid,
+      );
+
+      if (hasOtherTicketTypeInRole) {
+        return {
+          message: dictionary.api.not_enough_tickets,
+          isError: true,
+        };
+      }
+
+      const currentUserReservationsForTicketType =
+        userReservationsForRole.filter(
+          (registration) => registration.strapiTicketUid === ticketUid,
+        ).length;
 
       // Validate that the user has not already reserved the maximum amount of tickets
       if (currentUserReservationsForTicketType >= ticketsAllowedToBuy) {

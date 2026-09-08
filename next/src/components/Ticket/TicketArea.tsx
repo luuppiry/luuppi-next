@@ -79,6 +79,21 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const isRegistrationOpen = (registrationEndsAt: Date) =>
     new Date() < new Date(registrationEndsAt);
 
+  const hasBoughtOtherTicketTypeInRole = (
+    roleUuid: string,
+    ticketUid: string,
+  ): boolean => {
+    if (!localUser) return false;
+    const userPurchasesForRole = localUser.registrations.filter(
+      (registration) =>
+        registration.eventDocumentId === event.data.documentId &&
+        registration.strapiRoleUuid === roleUuid,
+    );
+    return userPurchasesForRole.some(
+      (registration) => registration.strapiTicketUid !== ticketUid,
+    );
+  };
+
   const hasBoughtMaxTickets = (
     ticketUid: string,
     maxAmount: number,
@@ -137,6 +152,10 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         ticketType.uid!,
         ticketType.TicketsAllowedToBuy,
       );
+      const boughtOtherTicketType = hasBoughtOtherTicketTypeInRole(
+        ticketType.Role?.RoleId!,
+        ticketType.uid!,
+      );
       const unpaidReservations = hasUnpaidReservations(ticketType.uid!);
       const registrationOpen = isRegistrationOpen(
         new Date(ticketType.RegistrationEndsAt),
@@ -159,6 +178,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         soldOutAllQuotas,
         boughtMax,
         unpaidReservations,
+        boughtOtherTicketType,
         registrationOpen,
       };
     })
@@ -311,6 +331,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       ticket.soldOut ||
       ticket.soldOutAllQuotas ||
       Boolean(ticket.boughtMax) ||
+      ticket.boughtOtherTicketType ||
       !ticket.registrationOpen,
     );
 
