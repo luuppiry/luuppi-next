@@ -350,6 +350,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
                         registration.eventDocumentId,
                       )}
                       registration={registration}
+                      ticket={getTicketForRegistration(registration.ticketUid)}
                     />
                   ))}
               </div>
