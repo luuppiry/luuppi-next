@@ -9,6 +9,7 @@ import { generatePickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { updateTag } from 'next/cache';
+import { Prisma } from '@prisma/client';
 
 const options = {
   noRoleId: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
@@ -22,8 +23,10 @@ export async function reservationCreate(
   userProvidedTargetedRole: string | undefined,
   ticketUid: string,
 ) {
-  const dictionary = await getDictionary(lang);
-  const session = await auth();
+  const [dictionary, session] = await Promise.all([
+    getDictionary(lang),
+    auth(),
+  ]);
 
   if (!session?.user) {
     return {
@@ -45,10 +48,11 @@ export async function reservationCreate(
     userProvidedTargetedRole &&
     typeof userProvidedTargetedRole === 'string'
   ) {
-    // Check if this specific ticket type is sold out
-    const isSoldOut = await redisClient.get(
-      `event-sold-out:${eventDocumentId}:ticket:${ticketUid}`,
-    );
+    const [isSoldOut, isJointQuotaSoldOut] = await Promise.all([
+      redisClient.get(`event-sold-out:${eventDocumentId}:ticket:${ticketUid}`),
+      redisClient.get(`event-sold-out:${eventDocumentId}:joint-quota`),
+    ]);
+
     if (isSoldOut) {
       logger.info(
         `Cache hit: Event ${eventDocumentId} ticket ${ticketUid} is sold out`,
@@ -60,9 +64,6 @@ export async function reservationCreate(
     }
 
     // Check if the joint quota is sold out
-    const isJointQuotaSoldOut = await redisClient.get(
-      `event-sold-out:${eventDocumentId}:joint-quota`,
-    );
     if (isJointQuotaSoldOut) {
       logger.info(
         `Cache hit: Event ${eventDocumentId} joint quota is sold out`,
@@ -174,9 +175,9 @@ export async function reservationCreate(
   }
 
   const ownQuota = ticketTypes?.find(
-    (type) =>
-      type.Role?.RoleId === targetedRole.strapiRoleUuid &&
-      ticketUid === type.uid,
+    (ticket) =>
+      ticket.Role?.RoleId === targetedRole.strapiRoleUuid &&
+      ticket.uid === ticketUid,
   );
 
   // Validate that the user has a role that can reserve tickets
@@ -205,8 +206,35 @@ export async function reservationCreate(
     };
   }
 
+  const hasDefaultRole = localUser.roles.find(
+    (role) => role.role.strapiRoleUuid === options.noRoleId!,
+  );
+  if (!hasDefaultRole) {
+    logger.error(
+      'User doesnt have a default role. This should never happen.',
+      localUser.entraUserUuid,
+    );
+    return { message: dictionary.api.server_error, isError: true };
+  }
+
   const strapiRoleUuid = targetedRole.strapiRoleUuid;
   const entraUserUuid = localUser.entraUserUuid;
+  const requiresPickup = strapiEvent.Registration?.RequiresPickup ?? false;
+  const jointQuota = strapiEvent.Registration?.JointQuota ?? false;
+  const jointQuotaTotal = strapiEvent.Registration?.TicketsTotal;
+
+  const buildRows = () =>
+    Array.from({ length: amount }).map(() => ({
+      strapiTicketUid: ticketUid,
+      eventDocumentId,
+      entraUserUuid,
+      strapiRoleUuid,
+      reservedUntil: new Date(Date.now() + 60 * 60 * 1000),
+      price: ownQuota.Price,
+      ...(requiresPickup ? { pickupCode: generatePickupCode() } : {}),
+    }));
+
+  const MAX_INSERT_ATTEMPTS = 5;
 
   const result = await prisma
     .$transaction(async (prisma) => {
@@ -218,10 +246,15 @@ export async function reservationCreate(
       // (reservedUntil >= now() OR paymentCompleted OR pending payment)
       await prisma.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${eventDocumentId}))`;
 
-      const [eventRegistrations, userReservationsForRole] = await Promise.all([
-        prisma.eventRegistration.findMany({
+      const [
+        totalRegistrationsForTicketType,
+        totalRegistrationsJoint,
+        userReservationsForRole,
+      ] = await Promise.all([
+        prisma.eventRegistration.count({
           where: {
             eventDocumentId,
+            strapiTicketUid: ticketUid,
             deletedAt: null,
             OR: [
               { reservedUntil: { gte: new Date() } },
@@ -232,15 +265,23 @@ export async function reservationCreate(
               },
             ],
           },
-          select: {
-            strapiTicketUid: true,
-            purchaseRole: {
-              select: {
-                strapiRoleUuid: true,
-              },
-            },
-          },
         }),
+        jointQuota
+          ? prisma.eventRegistration.count({
+              where: {
+                eventDocumentId,
+                deletedAt: null,
+                OR: [
+                  { reservedUntil: { gte: new Date() } },
+                  { paymentCompleted: true },
+                  {
+                    paymentCompleted: false,
+                    payments: { some: { status: 'PENDING' } },
+                  },
+                ],
+              },
+            })
+          : Promise.resolve(0),
         prisma.eventRegistration.findMany({
           where: {
             eventDocumentId,
@@ -264,10 +305,6 @@ export async function reservationCreate(
         }),
       ]);
 
-      const totalRegistrationsForTicketType = eventRegistrations.filter(
-        (registration) => registration.strapiTicketUid === ticketUid,
-      ).length;
-
       // Validate that the event is not sold out for the user's role
       if (totalRegistrationsForTicketType >= ownQuota.TicketsTotal) {
         return {
@@ -276,9 +313,8 @@ export async function reservationCreate(
         };
       }
 
-      const ticketsAvailable = strapiEvent.Registration?.JointQuota
-        ? (strapiEvent.Registration.TicketsTotal ?? 0) -
-          eventRegistrations.length
+      const ticketsAvailable = jointQuota
+        ? (jointQuotaTotal ?? 0) - totalRegistrationsJoint
         : ownQuota.TicketsTotal - totalRegistrationsForTicketType;
 
       const ticketsAllowedToBuy = ownQuota.TicketsAllowedToBuy;
@@ -318,16 +354,34 @@ export async function reservationCreate(
       }
 
       // Validate that there are still enough tickets available
-      const isAvailable = amount <= ticketsAvailable;
-
-      if (!isAvailable) {
+      if (amount > ticketsAvailable) {
         return {
           message: dictionary.api.not_enough_tickets,
           isError: true,
         };
       }
 
-      // Buys the last tickets for this ticket type
+      // Insert with retry-on-conflict for pickup code collisions only (rare, cheap to retry
+      // a handful of times; never a sequential pre-check loop while the lock is held).
+      let attempt = 0;
+      let rows = buildRows();
+      for (;;) {
+        try {
+          await prisma.eventRegistration.createMany({ data: rows });
+          break;
+        } catch (err) {
+          const isUniqueConflict =
+            err instanceof Prisma.PrismaClientKnownRequestError &&
+            err.code === 'P2002';
+          attempt++;
+          if (!isUniqueConflict || attempt >= MAX_INSERT_ATTEMPTS) {
+            throw err;
+          }
+          // Regenerate codes and try again
+          rows = buildRows();
+        }
+      }
+
       if (amount + totalRegistrationsForTicketType >= ownQuota.TicketsTotal) {
         logger.info(
           `Event ${eventDocumentId} ticket ${ticketUid} is sold out. Setting sold out in redis for 3 minutes.`,
@@ -343,10 +397,9 @@ export async function reservationCreate(
 
       // Check if joint quota is now sold out
       if (
-        strapiEvent.Registration?.JointQuota &&
-        typeof strapiEvent.Registration.TicketsTotal !== 'undefined' &&
-        amount + eventRegistrations.length >=
-          strapiEvent.Registration.TicketsTotal
+        jointQuota &&
+        typeof jointQuotaTotal !== 'undefined' &&
+        amount + totalRegistrationsJoint >= jointQuotaTotal
       ) {
         logger.info(`Event ${eventDocumentId} joint quota is sold out.`);
         await redisClient.set(
@@ -360,78 +413,8 @@ export async function reservationCreate(
         updateTag(`get-cached-event-registrations:${eventDocumentId}`);
       }
 
-      const hasDefaultRole = localUser.roles.find(
-        (role) => role.role.strapiRoleUuid === options.noRoleId!,
-      );
-      if (!hasDefaultRole) {
-        // User should always have a default role
-        logger.error(
-          'User doesnt have a default role. This should never happen.',
-          localUser.entraUserUuid,
-        );
-        throw new Error(dictionary.api.server_error);
-      }
-
-      // Generate a unique pickup code
-      const requiresPickup = strapiEvent.Registration?.RequiresPickup ?? false;
-
-      if (requiresPickup) {
-        const eventRegistrationsFormattedWithPickupCode = await Promise.all(
-          Array.from({ length: amount }).map(async () => {
-            let pickupCode = '';
-            pickupCode = generatePickupCode();
-            let attempts = 0;
-            const maxAttempts = 1000;
-
-            while (attempts < maxAttempts) {
-              const existing = await prisma.eventRegistration.findUnique({
-                where: { pickupCode },
-              });
-
-              if (!existing) {
-                break;
-              }
-              pickupCode = generatePickupCode();
-              attempts++;
-            }
-
-            return {
-              strapiTicketUid: ticketUid,
-              eventDocumentId,
-              entraUserUuid,
-              strapiRoleUuid,
-              reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
-              price: ownQuota.Price,
-              pickupCode,
-            };
-          }),
-        );
-
-        // Create event registrations. This is the actual reservation.
-        await prisma.eventRegistration.createMany({
-          data: eventRegistrationsFormattedWithPickupCode,
-        });
-      } else {
-        const eventRegistrationsFormatted = Array.from({ length: amount }).map(
-          () => ({
-            strapiTicketUid: ticketUid,
-            eventDocumentId,
-            entraUserUuid,
-            strapiRoleUuid,
-            reservedUntil: new Date(Date.now() + 60 * 60 * 1000), // 60 minutes from now
-            price: ownQuota.Price,
-          }),
-        );
-
-        await prisma.eventRegistration.createMany({
-          data: eventRegistrationsFormatted,
-        });
-      }
-
       logger.info(
-        `User ${
-          localUser.entraUserUuid
-        } reserved ${amount} ${ticketUid} tickets for event ${eventDocumentId}. User's total count of this ticket type is now ${
+        `User ${localUser.entraUserUuid} reserved ${amount} ${ticketUid} tickets for event ${eventDocumentId}. User's total count of this ticket type is now ${
           currentUserReservationsForTicketType + amount
         }`,
       );
