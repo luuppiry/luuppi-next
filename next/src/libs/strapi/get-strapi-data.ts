@@ -1,10 +1,98 @@
 import { SupportedLanguage } from '@/models/locale';
 import { StrapiCacheTag } from '@/types/types';
 import 'server-only';
+import { cacheLife, cacheTag } from 'next/cache';
 import { logger } from '../utils/logger';
 import { getStrapiUrl } from './get-strapi-url';
 
-// Define the function overloads
+async function fetchStrapi(
+  lang: string,
+  url: string,
+  status: 'draft' | 'published',
+) {
+  return fetch(
+    getStrapiUrl(
+      `${url}${url.includes('?') ? '&' : '?'}locale=${lang}&status=${status}`,
+    ),
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
+      },
+    },
+  );
+}
+
+async function parseStrapiResponse<T>(
+  res: Response,
+  url: string,
+  ignoreError?: boolean,
+): Promise<T | null> {
+  const data = await res.json();
+
+  if (!data?.data) {
+    if (ignoreError) return null;
+    logger.error(`Failed to fetch data from ${url}`, data);
+    throw new Error(`Failed to fetch data from ${url}`);
+  }
+
+  return data as T;
+}
+
+function logAndWrap(error: unknown, lang: string, url: string): never {
+  logger.error('Error fetching data from Strapi', {
+    error: error instanceof Error ? error.message : String(error),
+    errorType: error?.constructor?.name,
+    cause: error instanceof Error ? error.cause : undefined,
+    stack: error instanceof Error ? error.stack : undefined,
+    url: getStrapiUrl(`${url}${url.includes('?') ? '&' : '?'}locale=${lang}`),
+    strapiBaseUrl: process.env.NEXT_PUBLIC_STRAPI_BASE_URL,
+    hasApiKey: !!process.env.STRAPI_API_KEY,
+  });
+
+  throw new Error(
+    `Failed to fetch data from Strapi: ${error instanceof Error ? error.message : String(error)}`,
+    { cause: error },
+  );
+}
+
+async function getStrapiDataCached<T>(
+  lang: SupportedLanguage,
+  url: string,
+  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
+  ignoreError?: boolean,
+): Promise<T | null> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag(...revalidateTags);
+
+  try {
+    let res = await fetchStrapi(lang, url, 'published');
+
+    if (!res.ok && res.status === 404 && !ignoreError) {
+      res = await fetchStrapi('fi', url, 'published');
+    }
+
+    return await parseStrapiResponse<T>(res, url, ignoreError);
+  } catch (error) {
+    if (ignoreError) return null;
+    return logAndWrap(error, lang, url);
+  }
+}
+
+async function getStrapiDataDraft<T>(
+  lang: SupportedLanguage,
+  url: string,
+  ignoreError?: boolean,
+): Promise<T | null> {
+  try {
+    const res = await fetchStrapi(lang, url, 'draft');
+    return await parseStrapiResponse<T>(res, url, ignoreError);
+  } catch (error) {
+    if (ignoreError) return null;
+    return logAndWrap(error, lang, url);
+  }
+}
+
 export function getStrapiData<T>(
   lang: SupportedLanguage,
   url: string,
@@ -28,74 +116,9 @@ export async function getStrapiData<T>(
   ignoreError?: boolean,
   draftMode?: boolean,
 ): Promise<T | null> {
-  try {
-    let res = await fetch(
-      getStrapiUrl(
-        `${url}${url.includes('?') ? '&' : '?'}locale=${lang}&status=${
-          draftMode ? 'draft' : 'published'
-        }`,
-      ),
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
-        },
-        next: {
-          tags: revalidateTags as string[],
-          revalidate: 3600 /* 1h in seconds */,
-        },
-        cache: draftMode ? 'no-store' : 'force-cache',
-      },
-    );
-
-    /**
-     * Strapi does not have any feature to fallback language? (or does it?)
-     * This is a workaround to fetch data from default language if the current
-     * language does not have any data.
-     * TODO: Remove this when Strapi has an automatic fallback
-     */
-    if (!res.ok && res.status === 404 && !ignoreError) {
-      res = await fetch(
-        getStrapiUrl(
-          `${url}${url.includes('?') ? '&' : '?'}locale=fi&status=${draftMode ? 'draft' : 'published'}`,
-        ),
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
-          },
-          next: {
-            tags: revalidateTags as string[],
-            revalidate: 3600 /* 1h in seconds */,
-          },
-          cache: draftMode ? 'no-store' : 'force-cache',
-        },
-      );
-    }
-
-    const data = await res.json();
-
-    if (!data?.data) {
-      if (ignoreError) return null;
-      logger.error(`Failed to fetch data from ${url}`, data);
-      throw new Error(`Failed to fetch data from ${url}`);
-    }
-
-    return data as T;
-  } catch (error) {
-    if (ignoreError) return null;
-
-    logger.error('Error fetching data from Strapi', {
-      error: error instanceof Error ? error.message : String(error),
-      errorType: error?.constructor?.name,
-      cause: error instanceof Error ? error.cause : undefined,
-      stack: error instanceof Error ? error.stack : undefined,
-      url: getStrapiUrl(`${url}${url.includes('?') ? '&' : '?'}locale=${lang}`),
-      strapiBaseUrl: process.env.NEXT_PUBLIC_STRAPI_BASE_URL,
-      hasApiKey: !!process.env.STRAPI_API_KEY,
-    });
-
-    throw new Error(
-      `Failed to fetch data from Strapi: ${error instanceof Error ? error.message : String(error)}`,
-      { cause: error },
-    );
+  if (draftMode) {
+    return getStrapiDataDraft<T>(lang, url, ignoreError);
   }
+
+  return getStrapiDataCached<T>(lang, url, revalidateTags, ignoreError);
 }
