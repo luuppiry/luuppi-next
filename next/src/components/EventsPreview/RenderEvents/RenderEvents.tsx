@@ -32,6 +32,8 @@ export default async function RenderEvents({
       'LocationFi',
       'StartDate',
       'EndDate',
+      'DescriptionEn',
+      'DescriptionFi'
     ],
     populate: {
       Image: { fields: ['url'] },
