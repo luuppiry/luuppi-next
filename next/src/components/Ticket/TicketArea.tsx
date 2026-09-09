@@ -272,7 +272,8 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
   }
 
   const getRoleLevelErrors = () => {
-    const errors = [];
+    const errors: Array<{ message: string; level: 'error' | 'info' | 'warn' }> =
+      [];
     if (!session?.user)
       errors.push({
         message: dictionary.pages_events.login_required,
@@ -284,41 +285,57 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         level: 'error',
       });
     }
-    return errors;
-  };
+    const ownFormattedTickets = ticketTypesFormatted.filter(
+      (ticket) => ticket.isOwnQuota,
+    );
 
-  const roleLevelErrors = getRoleLevelErrors();
+    if (ownFormattedTickets.length === 0) {
+      return errors;
+    }
 
-  const ticketsWithState = ticketTypesFormatted.map((ticket) => {
-    const errors = [];
-    if (ticket.isOwnQuota && (ticket.soldOut || ticket.soldOutAllQuotas)) {
+    const allSoldOut = ownFormattedTickets.every(
+      (ticket) => ticket.soldOut || ticket.soldOutAllQuotas,
+    );
+    if (allSoldOut) {
       errors.push({
         message: dictionary.pages_events.sold_out_info,
         level: 'warn',
       });
     }
-    if (ticket.isOwnQuota && ticket.boughtMax) {
+
+    const boughtMaxTicket = ownFormattedTickets.find((ticket) =>
+      Boolean(ticket.boughtMax),
+    );
+    if (boughtMaxTicket && boughtMaxTicket.boughtMax) {
       errors.push({
         message:
           dictionary.pages_events[
-            ticket.boughtMax.isFree
+            boughtMaxTicket.boughtMax.isFree
               ? 'max_tickets_redeemed'
               : 'max_tickets_bought'
           ],
         level: 'info',
       });
     }
-    if (ticket.isOwnQuota && !ticket.registrationOpen) {
+
+    const allRegistrationClosed = ownFormattedTickets.every(
+      (ticket) => !ticket.registrationOpen,
+    );
+    if (allRegistrationClosed) {
       errors.push({
         message: dictionary.pages_events.registration_closed,
         level: 'info',
       });
     }
-    if (ticket.isOwnQuota && ticket.unpaidReservations) {
+
+    const unpaidTicket = ownFormattedTickets.find((ticket) =>
+      Boolean(ticket.unpaidReservations),
+    );
+    if (unpaidTicket && unpaidTicket.unpaidReservations) {
       errors.push({
         message:
           dictionary.pages_events[
-            ticket.unpaidReservations.isFree
+            unpaidTicket.unpaidReservations.isFree
               ? 'unredeemed_reservations'
               : 'unpaid_reservations'
           ],
@@ -326,6 +343,12 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       });
     }
 
+    return errors;
+  };
+
+  const roleLevelErrors = getRoleLevelErrors();
+
+  const ticketsWithState = ticketTypesFormatted.map((ticket) => {
     const disabled = Boolean(
       !ticket.isOwnQuota ||
       ticket.soldOut ||
@@ -335,7 +358,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       !ticket.registrationOpen,
     );
 
-    return { ticket, disabled, errors };
+    return { ticket, disabled };
   });
 
   return ticketTypesFormatted.length > 0 ? (
@@ -360,26 +383,8 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
         </div>
       ))}
       <div className="flex flex-col gap-4">
-        {ticketsWithState.map(({ ticket, disabled, errors }, index) => (
-          <div key={`${ticket.name}-${index}`} className="flex flex-col gap-4 overflow-x-clip">
-            {errors.map((error) => (
-              <div
-                key={error.message}
-                className={`alert ${
-                  error.level === 'warn'
-                    ? 'alert-warning'
-                    : error.level === 'info'
-                      ? 'alert-info'
-                      : 'alert-error'
-                }`}
-              >
-                {error.level === 'warn' && <IoWarningOutline size={20} />}
-                {error.level === 'info' && (
-                  <IoIosInformationCircleOutline size={20} />
-                )}
-                {error.message}
-              </div>
-            ))}
+        {ticketsWithState.map(({ ticket, disabled }, index) => (
+          <div key={`${ticket.name}-${index}`} className="overflow-x-clip">
             <Ticket
               key={`${ticket.name}-${index}`}
               dictionary={dictionary}
