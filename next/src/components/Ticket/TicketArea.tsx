@@ -361,7 +361,7 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       ))}
       <div className="flex flex-col gap-4">
         {ticketsWithState.map(({ ticket, disabled, errors }, index) => (
-          <div key={`${ticket.name}-${index}`} className="flex flex-col gap-2">
+          <div key={`${ticket.name}-${index}`} className="flex flex-col gap-4 overflow-x-clip">
             {errors.map((error) => (
               <div
                 key={error.message}
