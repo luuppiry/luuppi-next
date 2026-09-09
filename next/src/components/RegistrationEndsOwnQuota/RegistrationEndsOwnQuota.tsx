@@ -78,11 +78,9 @@ export default async function RegistrationEndsOwnQuota({
 
   const registrationEndsOwnQuota = ticketTypes?.reduce((latestDate, ticket) => {
     const ticketIsOwnQuota = ticket.Role && isOwnQuota(ticket.Role!.RoleId!);
-    const isSoldOutOwnQuota = ownQuota
-      ? isSoldOut(ownQuota.TicketsTotal, ownQuota.Role?.RoleId!)
-      : false;
+    const isTicketSoldOut = isSoldOut(ticket.TicketsTotal, ticket.uid!);
 
-    if (!ticketIsOwnQuota || isSoldOutOwnQuota) {
+    if (!ticketIsOwnQuota || isTicketSoldOut) {
       return latestDate;
     }
 
