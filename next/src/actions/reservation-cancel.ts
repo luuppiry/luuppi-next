@@ -48,7 +48,7 @@ export async function reservationCancel(
   });
 
   await redisClient.del(
-    `event-sold-out:${registration.eventDocumentId}:${registration.strapiRoleUuid}`,
+    `event-sold-out:${registration.eventDocumentId}:ticket:${registration.strapiTicketUid}`,
     `event-sold-out:${registration.eventDocumentId}:joint-quota`,
   );
 
