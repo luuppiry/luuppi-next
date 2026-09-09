@@ -32,7 +32,7 @@ interface EventsFeedError {
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<EventsFeedError | EventsFeedResponse>> {
-  await connection()
+  await connection();
 
   try {
     const auth = request.headers.get('authorization');
@@ -44,7 +44,7 @@ export async function GET(
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-    const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString()}&populate=Registration.TicketTypes.Role&populate=Image&populate=ImageEn&populate=VisibleOnlyForRoles`;
+    const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString().split('T')[0]}&populate=Registration.TicketTypes.Role&populate=Image&populate=ImageEn&populate=VisibleOnlyForRoles`;
 
     const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
       'fi',

@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       ? { Slug: { $eq: slug } }
       : {
           StartDate: {
-            $gte: threeMonthsAgo.toISOString(),
+            $gte: threeMonthsAgo.toISOString().split('T')[0],
           },
         },
     populate: ['Registration.TicketTypes.Role', 'VisibleOnlyForRoles'],

@@ -118,7 +118,7 @@ export async function GET() {
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
 
-  const url = `/api/events?filters[StartDate][$gte]=${weekAgo.toISOString()}&pagination[limit]=9999&sort[0]=createdAt:desc&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+  const url = `/api/events?filters[StartDate][$gte]=${weekAgo.toISOString().split('T')[0]}&pagination[limit]=9999&sort[0]=createdAt:desc&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const eventsData = await getStrapiData<
     APIResponseCollection<'api::event.event'>

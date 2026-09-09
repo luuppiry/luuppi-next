@@ -10,6 +10,8 @@ import Link from 'next/link';
 import eventPlaceholder from '../../../../public/images/event_placeholder.png';
 import DayBadge from '../DayBadge/DayBadge';
 
+import qs from 'qs';
+
 interface RenderEventsProps {
   lang: SupportedLanguage;
   dictionary: Dictionary;
@@ -19,7 +21,27 @@ export default async function RenderEvents({
   lang,
   dictionary,
 }: RenderEventsProps) {
-  const url = `/api/events?pagination[limit]=9999&sort[0]=StartDate&filters[EndDate][$gte]=${new Date().toISOString()}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+  const query = qs.stringify({
+    pagination: { limit: 9999 },
+    sort: ['StartDate'],
+    filters: { EndDate: { $gte: new Date().toISOString().split('T')[0] } },
+    fields: [
+      'NameEn',
+      'NameFi',
+      'LocationEn',
+      'LocationFi',
+      'StartDate',
+      'EndDate',
+    ],
+    populate: {
+      Image: { fields: ['url'] },
+      ImageEn: { fields: ['url'] },
+      Registration: { populate: { TicketTypes: { populate: ['Role'] } } },
+      VisibleOnlyForRoles: true,
+    },
+  });
+
+  const url = `/api/events?${query}`;
 
   const eventsData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
@@ -28,12 +50,7 @@ export default async function RenderEvents({
   // Filter events based on visibility rules
   const visibleEventsData = await filterVisibleEvents(eventsData.data);
 
-  const upcomingEvents = visibleEventsData.map((e) => ({
-    ...e,
-    isToday: new Date(e.StartDate).toDateString() === new Date().toDateString(),
-  }));
-
-  const formattedEvents = upcomingEvents.map((e) => {
+  const formattedEvents = visibleEventsData.map((e) => {
     const isEnglish = lang === 'en';
     const description = getPlainText(
       isEnglish ? e.DescriptionEn : e.DescriptionFi,

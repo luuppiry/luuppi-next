@@ -29,7 +29,7 @@ async function getSixMonthsAgoISO() {
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
   sixMonthsAgo.setHours(0, 0, 0, 0);
-  return sixMonthsAgo.toISOString();
+  return sixMonthsAgo.toISOString().split('T')[0];
 }
 
 export default async function Events(props: EventsProps) {
