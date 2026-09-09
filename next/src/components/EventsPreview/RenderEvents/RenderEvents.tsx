@@ -33,7 +33,8 @@ export default async function RenderEvents({
       'StartDate',
       'EndDate',
       'DescriptionEn',
-      'DescriptionFi'
+      'DescriptionFi',
+      'Slug'
     ],
     populate: {
       Image: { fields: ['url'] },
