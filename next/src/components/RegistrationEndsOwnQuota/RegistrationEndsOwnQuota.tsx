@@ -68,12 +68,12 @@ export default async function RegistrationEndsOwnQuota({
     return targetedRole.strapiRoleUuid === role;
   };
 
-  const isSoldOut = (total: number, roleUuid: string) => {
+  const isSoldOut = (total: number, ticketUid: string) => {
     if (!eventRegistrations) return false;
-    const totalRegistrationWithRole = eventRegistrations.filter(
-      (registration) => registration.purchaseRole.strapiRoleUuid === roleUuid,
+    const totalRegistrationsForTicketType = eventRegistrations.filter(
+      (registration) => registration.strapiTicketUid === ticketUid,
     ).length;
-    return totalRegistrationWithRole >= total;
+    return totalRegistrationsForTicketType >= total;
   };
 
   const registrationEndsOwnQuota = ticketTypes?.reduce((latestDate, ticket) => {
