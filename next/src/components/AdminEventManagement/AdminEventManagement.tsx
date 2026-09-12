@@ -170,7 +170,8 @@ export default async function AdminEventManagement({
                   <td className="truncate">
                     <Link
                       className="link"
-                      href={`/admin/event/${event.eventDocumentId}`}
+                      href={`/${lang}/admin/event/${event.eventDocumentId}`}
+                      prefetch={false}
                     >
                       {event.name}
                     </Link>
@@ -194,6 +195,7 @@ export default async function AdminEventManagement({
                           aria-label={dictionary.general.view}
                           className="btn btn-circle btn-ghost btn-primary btn-sm"
                           href={`/${lang}/admin/event/${event.eventDocumentId}`}
+                          prefetch={false}
                         >
                           <IoTicket
                             className="text-gray-800 dark:text-background-950"
