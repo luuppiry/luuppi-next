@@ -70,7 +70,8 @@ export interface EventsQuotas extends Struct.ComponentSchema {
       Schema.Attribute.DefaultTo<0>;
     RegistrationEndsAt: Schema.Attribute.DateTime & Schema.Attribute.Required;
     RegistrationStartsAt: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    Role: Schema.Attribute.Relation<'oneToOne', 'api::event-role.event-role'>;
+    Role: Schema.Attribute.Relation<'oneToOne', 'api::event-role.event-role'> &
+      Schema.Attribute.Required;
     TicketsAllowedToBuy: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
