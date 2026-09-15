@@ -5,6 +5,9 @@ const strapi: URL = new URL(process.env.NEXT_PUBLIC_STRAPI_BASE_URL!);
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  experimental: {
+    serverSourceMaps: true,
+  },
   poweredByHeader: false,
   cacheComponents: true,
   partialPrefetching: true,
