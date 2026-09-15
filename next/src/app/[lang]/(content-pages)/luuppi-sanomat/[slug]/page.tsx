@@ -32,9 +32,10 @@ export default async function LuuppiSanomatPublication(
     'fi',
     `${baseUrl}${params.slug}&filters[publishedAt][$lte]=${params.slug}T23:59:59.999Z`,
     ['luuppi-sanomat'],
+    true
   );
 
-  if (!pageData.data.length) {
+  if (!pageData?.data.length) {
     redirect(`/${params.lang}/404`);
   }
 
