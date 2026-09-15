@@ -34,6 +34,9 @@ COPY . .
 # COPY .env.production.sample .env.production
 RUN pnpm build
 
+# Copy server source maps into the standalone output
+RUN cp -r .next/server/. .next/standalone/.next/server/
+
 # 3. Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
