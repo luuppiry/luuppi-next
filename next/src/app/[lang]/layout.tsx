@@ -3,6 +3,7 @@ import Header from '@/components/Header/Header';
 import NotificationBar from '@/components/NotificationBar/NotificationBar';
 import UserProfileNotice from '@/components/UserProfileNotice/UserProfileNotice';
 import { getDictionary } from '@/dictionaries';
+import { validLanguage } from '@/libs/i18n';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { SupportedLanguage } from '@/models/locale';
 import EventSelectorProvider from '@/providers/EventSelectorProvider';
@@ -12,6 +13,7 @@ import type { Metadata, Viewport } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import PlausibleProvider from 'next-plausible';
 import { Poppins } from 'next/font/google';
+import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { i18n } from '../../i18n-config';
 import './globals.css';
@@ -28,6 +30,10 @@ interface RootLayoutProps {
 
 export default async function RootLayout(props: RootLayoutProps) {
   const params = await props.params;
+
+  if (!validLanguage(params.lang)) {
+    notFound();
+  }
 
   const { children } = props;
 
