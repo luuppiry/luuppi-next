@@ -41,6 +41,9 @@ export const createCharge = async (
       metadata: {
         orderId: chargeObj.id,
       },
+      payment_intent_data: {
+        metadata: { orderId: chargeObj.id },
+      },
     });
 
     if (!session.url) {
