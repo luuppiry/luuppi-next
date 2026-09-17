@@ -236,6 +236,21 @@ export default async function Event(props: EventProps) {
   );
 }
 
+export async function generateStaticParams() {
+  // Needs to have at least one event to opt the route to ISR
+  const url = '/api/events?sort=updatedAt:desc&fields=Slug&pagination[limit]=1';
+
+  const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
+    'fi',
+    url,
+    ['event'],
+  );
+
+  const events = data.data.map((event) => event.Slug);
+
+  return events.map((slug) => ({ slug }));
+}
+
 export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const params = await props.params;
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
