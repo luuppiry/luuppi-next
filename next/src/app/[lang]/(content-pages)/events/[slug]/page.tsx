@@ -27,6 +27,7 @@ import { MdNoDrinks } from 'react-icons/md';
 import { PiImageBroken } from 'react-icons/pi';
 import { RiProhibitedLine } from 'react-icons/ri';
 import { TbTableImport } from 'react-icons/tb';
+import qs from 'qs';
 
 interface EventProps {
   params: Promise<{ slug: string }>;
@@ -240,8 +241,20 @@ export default async function Event(props: EventProps) {
 }
 
 export async function generateStaticParams() {
-  // Needs to have at least one event to opt the route to ISR
-  const url = '/api/events?sort=updatedAt:desc&fields=Slug&pagination[limit]=1';
+  const now = new Date();
+  const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const twoMonthsInFuture = new Date(now.getFullYear(), now.getMonth() + 3, 0);
+
+  const query = qs.stringify({
+    sort: 'updatedAt:desc',
+    fields: 'Slug',
+    filters: {
+      StartDate: { $gte: thisMonth.toISOString().split('T')[0] },
+      EndDate: { $lte: twoMonthsInFuture.toISOString().split('T')[0] },
+    },
+  });
+
+  const url = `/api/events?${query}`;
 
   const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     'fi',
