@@ -1,19 +1,19 @@
 'use server';
 
 import { auth } from '@/auth';
+import { getDictionary } from '@/dictionaries';
+import prisma from '@/libs/db/prisma';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import { APIResponseCollection } from '@/types/types';
-import prisma from '@/libs/db/prisma';
 import { redirect } from 'next/navigation';
-import { getDictionary } from '@/dictionaries';
 
 const options = { cacheKey: 'invite' };
 
 export async function claimInvite(id: string, lang: string) {
   const session = await auth();
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
 
   if (!session?.user?.entraUserUuid) {
     throw new Error('Unauthorized');

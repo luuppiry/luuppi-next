@@ -4,16 +4,12 @@ import { flipBoardLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { groupBoardByYear } from '@/libs/strapi/group-board-by-year';
 import { getBoardMemberJsonLd } from '@/libs/utils/json-ld';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { lang as language } from 'next/root-params';
 import Script from 'next/script';
 import qs from 'qs';
-
-interface BoardProps {
-  params: Promise<{ lang: SupportedLanguage }>;
-}
 
 const BOARDS_QUERY = qs.stringify({
   populate: {
@@ -30,9 +26,9 @@ const BOARDS_QUERY = qs.stringify({
   },
 });
 
-export default async function Board(props: BoardProps) {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export default async function Board() {
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   /**
    * Localization doesn't matter because we have non i18n
@@ -57,7 +53,7 @@ export default async function Board(props: BoardProps) {
     (year) => parseInt(year, 10) !== latestBoard.year,
   );
 
-  const boardLanguageFlipped = flipBoardLocale(params.lang, latestBoard);
+  const boardLanguageFlipped = flipBoardLocale(lang, latestBoard);
 
   const boardMembers = boardLanguageFlipped.filter(
     (member: any) => member.isBoardMember === true,
@@ -97,7 +93,7 @@ export default async function Board(props: BoardProps) {
               >
                 {otherBoards.map((year) => (
                   <li key={year}>
-                    <Link href={`/${params.lang}/organization/board/${year}`}>
+                    <Link href={`/${lang}/organization/board/${year}`}>
                       {year}
                     </Link>
                   </li>
@@ -150,9 +146,9 @@ export default async function Board(props: BoardProps) {
   );
 }
 
-export async function generateMetadata(props: BoardProps): Promise<Metadata> {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
@@ -168,7 +164,7 @@ export async function generateMetadata(props: BoardProps): Promise<Metadata> {
   );
   const latestBoard = boardGroupedByYear[boardSortedByYear[0]];
 
-  const pathname = `/${params.lang}/organization/board`;
+  const pathname = `/${lang}/organization/board`;
 
   return {
     title: `${dictionary.navigation.board} ${latestBoard.year} | Luuppi ry`,

@@ -15,7 +15,7 @@ export async function addressDeclaration(
   lang: SupportedLanguage,
   formData: FormData,
 ) {
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
   const session = await auth();
 
   if (!session?.user) {

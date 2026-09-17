@@ -5,16 +5,16 @@ import { flipSanomatLocale } from '@/libs/strapi/flip-locale';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 
 const baseUrl =
   '/api/luuppi-sanomats?populate[0]=image&populate[1]=pdf&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[publishedAt][$gte]=';
 
 interface LuuppiSanomatProps {
-  params: Promise<{ slug: string; lang: SupportedLanguage }>;
+  params: Promise<{ slug: string }>;
 }
 
 export const instant = false;
@@ -22,8 +22,9 @@ export const instant = false;
 export default async function LuuppiSanomatPublication(
   props: LuuppiSanomatProps,
 ) {
+  const lang = await language();
   const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
 
   // If two entries are published within same date this blows up (sorry)
   const pageData = await getStrapiData<
@@ -32,14 +33,14 @@ export default async function LuuppiSanomatPublication(
     'fi',
     `${baseUrl}${params.slug}&filters[publishedAt][$lte]=${params.slug}T23:59:59.999Z`,
     ['luuppi-sanomat'],
-    true
+    true,
   );
 
   if (!pageData?.data.length) {
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
-  const sanomatLocaleFlipped = flipSanomatLocale(params.lang, pageData.data);
+  const sanomatLocaleFlipped = flipSanomatLocale(lang, pageData.data);
 
   const selectedPublication = sanomatLocaleFlipped[0];
 
@@ -50,7 +51,7 @@ export default async function LuuppiSanomatPublication(
         {new Date(
           selectedPublication?.publishedAt || selectedPublication.createdAt!,
         )
-          .toLocaleDateString(params.lang, {
+          .toLocaleDateString(lang, {
             month: 'short',
             year: 'numeric',
           })
@@ -74,9 +75,10 @@ export async function generateMetadata(
   const data = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
   >('fi', `${baseUrl}${params.slug}`, ['luuppi-sanomat']);
-  const sanomatLocaleFlipped = flipSanomatLocale(params.lang, data.data);
+  const lang = await language();
+  const sanomatLocaleFlipped = flipSanomatLocale(lang, data.data);
   const selectedPublication = sanomatLocaleFlipped[0];
-  const pathname = `/${params.lang}/luuppi-sanomat/${params.slug}`;
+  const pathname = `/${lang}/luuppi-sanomat/${params.slug}`;
 
   // No version of the content exists in the requested language
   if (!selectedPublication?.Seo?.id) {

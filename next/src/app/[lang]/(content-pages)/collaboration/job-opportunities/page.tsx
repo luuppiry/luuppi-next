@@ -12,6 +12,7 @@ import { Metadata } from 'next';
 import { cacheLife, cacheTag } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
+import { lang as language } from 'next/root-params';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 const url = '/api/job-opportunities?populate=logo&populate=logoDark';
@@ -28,12 +29,12 @@ export default async function CollaborationJobOpportunities(
   cacheLife('max');
   cacheTag(...tags);
 
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::job-opportunity.job-opportunity'>
-  >(params.lang, url, tags);
+  >(lang, url, tags);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -45,7 +46,7 @@ export default async function CollaborationJobOpportunities(
 
   const formatDate = (date: string | Date) => {
     const formatted = new Date(date);
-    return formatted.toLocaleDateString(params.lang, {
+    return formatted.toLocaleDateString(lang, {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
@@ -148,19 +149,17 @@ export default async function CollaborationJobOpportunities(
   );
 }
 
-export async function generateMetadata(
-  props: CollaborationJobOpportunitiesProps,
-): Promise<Metadata> {
-  const params = await props.params;
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await language();
   const url =
     '/api/collaboration-job-opportunity?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['collaboration-job-opportunity'] as const;
 
   const data = await getStrapiData<
     APIResponse<'api::collaboration-job-opportunity.collaboration-job-opportunity'>
-  >(params.lang, url, tags);
+  >(lang, url, tags);
 
-  const pathname = `/${params.lang}/collaboration/job-opportunities`;
+  const pathname = `/${lang}/collaboration/job-opportunities`;
 
   return formatMetadata(data, pathname);
 }

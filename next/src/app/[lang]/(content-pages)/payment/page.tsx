@@ -1,22 +1,20 @@
 import { getDictionary } from '@/dictionaries';
 import { stripe } from '@/libs/payments';
-import { SupportedLanguage } from '@/models/locale';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 
 interface PaymentProps {
-  params: Promise<{ lang: SupportedLanguage }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function Payment({
-  params: initialParams,
   searchParams: initialSearchParams,
 }: PaymentProps) {
-  const params = await initialParams;
+  const lang = await language();
   const searchParams = await initialSearchParams;
-  const lang = params.lang;
-  const dictionary = await getDictionary(params.lang);
+
+  const dictionary = await getDictionary();
   const sessionId = searchParams.session_id as string;
   const canceled = searchParams.canceled === 'true';
 

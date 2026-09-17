@@ -11,7 +11,7 @@ import { revalidatePath, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function reservationChargeAll(lang: SupportedLanguage) {
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
   const session = await auth();
 
   if (!session?.user) {
@@ -125,7 +125,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
     updateTag(`get-cached-user:${session.user.entraUserUuid}`);
     for (const reg of registrations) {
       updateTag(`get-cached-event-participants:${reg.eventDocumentId}`);
-      updateTag(`get-cached-event-registrations:${reg.eventDocumentId}`)
+      updateTag(`get-cached-event-registrations:${reg.eventDocumentId}`);
     }
     revalidatePath('/[lang]/events/[slug]', 'page');
   } catch (error) {

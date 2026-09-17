@@ -16,7 +16,7 @@ export const instant = false;
 export default async function InvitePage({ params }: Props) {
   await connection();
   const { lang, id } = await params;
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
   const session = await auth();
 
   if (!session?.user) {

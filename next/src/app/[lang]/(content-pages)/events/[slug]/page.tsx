@@ -12,12 +12,12 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { formatDateRangeLong } from '@/libs/utils/format-date-range';
 import { getEventJsonLd } from '@/libs/utils/json-ld';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { draftMode } from 'next/headers';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 import Script from 'next/script';
 import { Suspense } from 'react';
 import { BiSolidDrink } from 'react-icons/bi';
@@ -29,18 +29,19 @@ import { RiProhibitedLine } from 'react-icons/ri';
 import { TbTableImport } from 'react-icons/tb';
 
 interface EventProps {
-  params: Promise<{ slug: string; lang: SupportedLanguage }>;
+  params: Promise<{ slug: string }>;
 }
 
 export default async function Event(props: EventProps) {
+  const lang = await language();
   const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
   const { isEnabled: isDraftMode } = await draftMode();
 
   const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    params.lang,
+    lang,
     url,
     [`event-${params.slug}`],
     true,
@@ -50,27 +51,25 @@ export default async function Event(props: EventProps) {
   const event = events?.data.at(0);
 
   if (!event) {
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   // Check if the event is visible to the current user
   const eventVisible = await isEventVisible(event);
   if (!eventVisible) {
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   const partnersData = await getStrapiData<
     APIResponseCollection<'api::company.company'>
-  >(params.lang, '/api/companies?populate=*', ['company']);
+  >(lang, '/api/companies?populate=*', ['company']);
 
   if (!event || !partnersData) {
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   const imageUrlLocalized =
-    params.lang === 'en' && event.ImageEn?.url
-      ? event.ImageEn?.url
-      : event.Image?.url;
+    lang === 'en' && event.ImageEn?.url ? event.ImageEn?.url : event.Image?.url;
 
   const imageUrl = imageUrlLocalized ? getStrapiUrl(imageUrlLocalized) : null;
 
@@ -80,7 +79,7 @@ export default async function Event(props: EventProps) {
     <>
       <Script
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getEventJsonLd({ data: event }, params.lang)),
+          __html: JSON.stringify(getEventJsonLd({ data: event }, lang)),
         }}
         id="event-jsonld"
         type="application/ld+json"
@@ -105,15 +104,12 @@ export default async function Event(props: EventProps) {
           </div>
           <div className="relative flex flex-col gap-4">
             <h1 className="break-words">
-              {event[params.lang === 'en' ? 'NameEn' : 'NameFi']}
+              {event[lang === 'en' ? 'NameEn' : 'NameFi']}
             </h1>
             <div className="flex flex-col opacity-40">
               <p className="text-sm dark:text-white">
                 {dictionary.general.content_updated}:{' '}
-                {new Date(event.updatedAt!).toLocaleString(
-                  params.lang,
-                  dateFormat,
-                )}
+                {new Date(event.updatedAt!).toLocaleString(lang, dateFormat)}
               </p>
             </div>
             <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
@@ -129,7 +125,7 @@ export default async function Event(props: EventProps) {
                   {formatDateRangeLong(
                     new Date(event.StartDate),
                     new Date(event.EndDate),
-                    params.lang,
+                    lang,
                   )}
                 </p>
               </div>
@@ -138,14 +134,14 @@ export default async function Event(props: EventProps) {
                   <IoLocationOutline className="shrink-0 text-2xl" />
                 </div>
                 <p className="line-clamp-2">
-                  {event[params.lang === 'en' ? 'LocationEn' : 'LocationFi']}
+                  {event[lang === 'en' ? 'LocationEn' : 'LocationFi']}
                 </p>
               </div>
               <Suspense>
                 <RegistrationEndsOwnQuota
                   dictionary={dictionary}
                   event={event}
-                  lang={params.lang}
+                  lang={lang}
                 />
               </Suspense>
               {event['FuksiPoints'] && (
@@ -191,7 +187,7 @@ export default async function Event(props: EventProps) {
                   </div>
                 }
               >
-                <TicketArea event={{ data: event }} lang={params.lang} />
+                <TicketArea event={{ data: event }} lang={lang} />
               </Suspense>
               <Suspense
                 fallback={
@@ -202,22 +198,20 @@ export default async function Event(props: EventProps) {
               >
                 <ShowParticipants
                   eventDocumentId={event.documentId}
-                  lang={params.lang}
+                  lang={lang}
                 />
               </Suspense>
             </div>
           )}
           <div className="organization-page prose prose-custom max-w-full break-words decoration-secondary-400 transition-all duration-300 ease-in-out">
             <BlockRendererClient
-              content={
-                event[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']
-              }
+              content={event[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']}
             />
           </div>
 
           <a
             className="btn btn-primary btn-sm my-8 w-fit"
-            href={`/api/ics?lang=${params.lang}&slug=${params.slug}`}
+            href={`/api/ics?lang=${lang}&slug=${params.slug}`}
           >
             <TbTableImport role="presentation" size={18} />
             {dictionary.general.add_to_calendar}
@@ -252,10 +246,11 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: EventProps): Promise<Metadata> {
+  const lang = await language();
   const params = await props.params;
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    params.lang,
-    `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image`,
+    lang,
+    `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=ImageEn`,
     [`event-${params.slug}`],
     true,
   );
@@ -264,18 +259,16 @@ export async function generateMetadata(props: EventProps): Promise<Metadata> {
 
   if (!event) return {};
 
-  const pathname = `/${params.lang}/events/${params.slug}`;
+  const pathname = `/${lang}/events/${params.slug}`;
 
   const description = getPlainText(
-    event[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
+    event[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
   );
 
-  const title = event[params.lang === 'en' ? 'NameEn' : 'NameFi'];
+  const title = event[lang === 'en' ? 'NameEn' : 'NameFi'];
 
   const imageUrlLocalized =
-    params.lang === 'en' && event.ImageEn?.url
-      ? event.ImageEn?.url
-      : event.Image?.url;
+    lang === 'en' && event.ImageEn?.url ? event.ImageEn?.url : event.Image?.url;
 
   const imageUrl = imageUrlLocalized
     ? getStrapiUrl(imageUrlLocalized)

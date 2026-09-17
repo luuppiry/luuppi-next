@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
   if (!lang || !allowedLangs.includes(lang)) {
     return new Response('Invalid lang parameter', { status: 400 });
   }
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
 
   const threeMonthsAgo = new Date();
   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);

@@ -5,21 +5,22 @@ import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
+import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 
-export const instant = false
+export const instant = false;
 
 interface MeetingMinuteProps {
   params: Promise<{ lang: SupportedLanguage }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 export default async function MeetingMinute(props: MeetingMinuteProps) {
-  await connection()
+  await connection();
 
-  const params = await props.params;
+  const lang = await language();
   const searchParams = await props.searchParams;
   const session = await auth();
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
 
   const user = session?.user;
   if (!user?.entraUserUuid || !user?.isLuuppiMember) {
@@ -87,9 +88,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
           >
             {dropdownYears.map((year) => (
               <li key={year}>
-                <a
-                  href={`/${params.lang}/organization/meeting-minutes?year=${year}`}
-                >
+                <a href={`/${lang}/organization/meeting-minutes?year=${year}`}>
                   {year}
                 </a>
               </li>
@@ -102,7 +101,7 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
           <a
             key={doc.id}
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
-            href={`/${params.lang}/organization/meeting-minutes/${doc.year}-${doc.shortMeetingName}`}
+            href={`/${lang}/organization/meeting-minutes/${doc.year}-${doc.shortMeetingName}`}
           >
             {doc.image.url && (
               <div className="relative aspect-[210/297] w-full rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300">

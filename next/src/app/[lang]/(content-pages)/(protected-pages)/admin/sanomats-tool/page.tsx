@@ -3,25 +3,20 @@ import AdminPdfTool from '@/components/AdminPdfTool/AdminPdfTool';
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 
-interface AdminProps {
-  params: Promise<{ lang: SupportedLanguage }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
-
-export default async function SanomatsPdfTool(props: AdminProps) {
-  const params = await props.params;
+export default async function SanomatsPdfTool() {
+  const lang = await language();
   const session = await auth();
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
 
   const user = session?.user;
 
   if (!user?.entraUserUuid || !user?.isLuuppiHato) {
     logger.error('User not found in session or does not have required role');
-    redirect(`/${params.lang}`);
+    redirect(`/${lang}`);
   }
 
   const hasHatoRole = await prisma.rolesOnUsers.findFirst({
@@ -57,9 +52,8 @@ export default async function SanomatsPdfTool(props: AdminProps) {
   );
 }
 
-export async function generateMetadata(props: AdminProps): Promise<Metadata> {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export async function generateMetadata(): Promise<Metadata> {
+  const dictionary = await getDictionary();
   return {
     title: dictionary.navigation.admin,
   };

@@ -8,8 +8,8 @@ import { logger } from '@/libs/utils/logger';
 import { generatePickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
-import { updateTag } from 'next/cache';
 import { Prisma } from '@prisma/client';
+import { updateTag } from 'next/cache';
 
 const options = {
   noRoleId: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
@@ -23,10 +23,7 @@ export async function reservationCreate(
   userProvidedTargetedRole: string | undefined,
   ticketUid: string,
 ) {
-  const [dictionary, session] = await Promise.all([
-    getDictionary(lang),
-    auth(),
-  ]);
+  const [dictionary, session] = await Promise.all([getDictionary(), auth()]);
 
   if (!session?.user) {
     return {

@@ -18,7 +18,7 @@ export default async function ShowParticipants({
     return;
   }
 
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
   const registrations = await getCachedEventParticipants(eventDocumentId);
   const participants = registrations.map(
     (registration) => registration.user.username ?? '???',

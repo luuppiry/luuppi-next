@@ -3,17 +3,13 @@ import { toCalendarDate } from '@/libs/constants';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { firstLetterToUpperCase } from '@/libs/utils/first-letter-uppercase';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import Image from 'next/image';
+import { lang as language } from 'next/root-params';
 
-interface LuuppiSanomatProps {
-  params: Promise<{ lang: SupportedLanguage }>;
-}
-
-export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export default async function LuuppiSanomat() {
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
@@ -44,7 +40,7 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
           <a
             key={publication.documentId}
             className="group relative flex cursor-pointer flex-col gap-4 transition-transform duration-300 hover:scale-105"
-            href={`/${params.lang}/luuppi-sanomat/${toCalendarDate(publication.publishedAt!)}`}
+            href={`/${lang}/luuppi-sanomat/${toCalendarDate(publication.publishedAt!)}`}
           >
             {publication.image.url && (
               <div
@@ -64,7 +60,7 @@ export default async function LuuppiSanomat(props: LuuppiSanomatProps) {
               {firstLetterToUpperCase(
                 new Date(
                   publication?.publishedAt || publication.createdAt!,
-                ).toLocaleDateString(params.lang, {
+                ).toLocaleDateString(lang, {
                   month: 'short',
                   year: 'numeric',
                 }),

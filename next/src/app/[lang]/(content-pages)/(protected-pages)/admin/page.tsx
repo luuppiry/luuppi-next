@@ -5,33 +5,32 @@ import AdminUsersTable from '@/components/AdminUserManagement/AdminUsersTable/Ad
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 
 interface AdminProps {
-  params: Promise<{ lang: SupportedLanguage }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function Admin(props: AdminProps) {
   const searchParams = await props.searchParams;
-  const params = await props.params;
+  const lang = await language();
   const session = await auth();
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
   const mode = searchParams.mode;
 
   const user = session?.user;
 
   if (!user?.entraUserUuid || !user?.isLuuppiHato) {
     logger.error('User not found in session or does not have required role');
-    redirect(`/${params.lang}`);
+    redirect(`/${lang}`);
   }
 
   const allowedModes = ['user', 'event', 'roles'];
   if (!mode || typeof mode !== 'string' || !allowedModes.includes(mode)) {
-    redirect(`/${params.lang}/admin?mode=event`);
+    redirect(`/${lang}/admin?mode=event`);
   }
 
   const hasHatoRole = await prisma.rolesOnUsers.findFirst({
@@ -66,7 +65,7 @@ export default async function Admin(props: AdminProps) {
 
     urlParams.set('mode', mode);
 
-    return `/${params.lang}/admin?${urlParams.toString()}`;
+    return `/${lang}/admin?${urlParams.toString()}`;
   };
 
   return (
@@ -101,15 +100,15 @@ export default async function Admin(props: AdminProps) {
         </div>
       </div>
       {mode === 'user' && (
-        <AdminUsersTable dictionary={dictionary} lang={params.lang} />
+        <AdminUsersTable dictionary={dictionary} lang={lang} />
       )}
       {mode === 'roles' && (
-        <AdminRolesTable dictionary={dictionary} lang={params.lang} />
+        <AdminRolesTable dictionary={dictionary} lang={lang} />
       )}
       {mode === 'event' && (
         <AdminEventManagement
           dictionary={dictionary}
-          lang={params.lang}
+          lang={lang}
           searchParams={searchParams}
         />
       )}
@@ -118,9 +117,9 @@ export default async function Admin(props: AdminProps) {
   );
 }
 
-export async function generateMetadata(props: AdminProps): Promise<Metadata> {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await language();
+  const dictionary = await getDictionary();
   return {
     title: dictionary.navigation.admin,
   };

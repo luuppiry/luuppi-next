@@ -14,7 +14,7 @@ export async function userEditRoles(
   lang: SupportedLanguage,
   userToEditEntraUuid: string,
 ) {
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
 
   const session = await auth();
   const user = session?.user;

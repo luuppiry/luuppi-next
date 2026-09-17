@@ -2,9 +2,7 @@ import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
 import NotificationBar from '@/components/NotificationBar/NotificationBar';
 import { getDictionary } from '@/dictionaries';
-import { validLanguage } from '@/libs/i18n';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
-import { SupportedLanguage } from '@/models/locale';
 import EventSelectorProvider from '@/providers/EventSelectorProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { APIResponse } from '@/types/types';
@@ -12,7 +10,7 @@ import type { Metadata, Viewport } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import PlausibleProvider from 'next-plausible';
 import { Poppins } from 'next/font/google';
-import { notFound } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 import { i18n } from '../../i18n-config';
 import './globals.css';
 
@@ -23,26 +21,21 @@ const titilliumFont = Poppins({
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ lang: SupportedLanguage }>;
 }
 
 export default async function RootLayout(props: RootLayoutProps) {
-  const params = await props.params;
-
-  if (!validLanguage(params.lang)) {
-    notFound();
-  }
+  const lang = await language();
 
   const { children } = props;
 
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
 
   const notification = await getStrapiData<
     APIResponse<'api::notification.notification'>
-  >(params.lang, '/api/notification', ['notification'], true);
+  >(lang, '/api/notification', ['notification'], true);
 
   return (
-    <html lang={params.lang} suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head>
         <meta content="light dark" name="color-scheme" />
         <script
@@ -86,12 +79,12 @@ export default async function RootLayout(props: RootLayoutProps) {
       <body className={titilliumFont.className}>
         <SessionProvider>
           <ThemeProvider>
-            <Header dictionary={dictionary} lang={params.lang} />
+            <Header dictionary={dictionary} lang={lang} />
             <EventSelectorProvider>
               <div className="flex-1">{children}</div>
             </EventSelectorProvider>
-            <Footer dictionary={dictionary} lang={params.lang} />
-            <NotificationBar lang={params.lang} notification={notification} />
+            <Footer dictionary={dictionary} lang={lang} />
+            <NotificationBar lang={lang} notification={notification} />
           </ThemeProvider>
         </SessionProvider>
       </body>
@@ -103,18 +96,16 @@ export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
 }
 
-export async function generateMetadata(props: {
-  params: Promise<{ lang: SupportedLanguage }>;
-}): Promise<Metadata> {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   return {
     title: dictionary.seo.title,
     description: dictionary.seo.description,
     metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL as string),
     alternates: {
-      canonical: `/${params.lang}`,
+      canonical: `/${lang}`,
       languages: {
         en: '/en',
         fi: '/fi',

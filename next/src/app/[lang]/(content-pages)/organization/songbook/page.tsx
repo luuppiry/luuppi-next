@@ -9,7 +9,7 @@ interface SongbookProps {
 
 export default async function SongbookPage(props: SongbookProps) {
   const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
 
   return (
     <div className="relative">
@@ -27,7 +27,7 @@ export async function generateMetadata(
   props: SongbookProps,
 ): Promise<Metadata> {
   const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
   return {
     title: dictionary.pages_songbook.seo_title,
     description: dictionary.pages_songbook.seo_description,

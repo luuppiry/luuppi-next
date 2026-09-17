@@ -17,7 +17,7 @@ export async function emailSendFeedback(
   lang: SupportedLanguage,
   formData: FormData,
 ) {
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
 
   const isLimited = await isRateLimited(options.cacheKey, options.cacheKey, 10);
   if (isLimited) {

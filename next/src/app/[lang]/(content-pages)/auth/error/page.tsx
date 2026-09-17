@@ -3,6 +3,7 @@ import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { lang as language } from 'next/root-params';
 import roboSvg from '../../../../../../public/robo_500.svg';
 
 interface AuthErrorProps {
@@ -16,8 +17,8 @@ export const instant = false;
 
 export default async function AuthError(props: AuthErrorProps) {
   const searchParams = await props.searchParams;
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const lang = await language();
+  const dictionary = await getDictionary();
   const errorSearchParam = searchParams?.error;
 
   return (
@@ -30,7 +31,7 @@ export default async function AuthError(props: AuthErrorProps) {
             : dictionary.pages_error.auth_description}
         </p>
         <div>
-          <Link className="btn btn-primary btn-sm" href={`/${params.lang}`}>
+          <Link className="btn btn-primary btn-sm" href={`/${lang}`}>
             {dictionary.pages_error.return_home}
           </Link>
         </div>
@@ -43,11 +44,8 @@ export default async function AuthError(props: AuthErrorProps) {
   );
 }
 
-export async function generateMetadata(
-  props: AuthErrorProps,
-): Promise<Metadata> {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export async function generateMetadata(): Promise<Metadata> {
+  const dictionary = await getDictionary();
   return {
     title: dictionary.pages_error.seo_title,
     description: dictionary.pages_error.seo_description,

@@ -5,51 +5,41 @@ import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { analyzeReadTime } from '@/libs/utils/analyze-read-time';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { draftMode } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
+import { lang as language } from 'next/root-params';
+import qs from 'qs';
 import { FaUserAlt } from 'react-icons/fa';
 import { PiImageBroken } from 'react-icons/pi';
-import qs from 'qs'
 
-interface NewsProps {
-  params: Promise<{ lang: SupportedLanguage }>;
-}
-
-export default async function News(props: NewsProps) {
-  const params = await props.params;
+export default async function News() {
+  const lang = await language();
   const { isEnabled: isDraftMode } = await draftMode();
 
-const query = qs.stringify({
-  populate: {
-    banner: true,
-    authorImage: true,
-    localizations: {
-      populate: {
-        banner: true,
-      }
-    }
-  },
-  pagination: {
-    pageSize: 100
-  }
-})
+  const query = qs.stringify({
+    populate: {
+      banner: true,
+      authorImage: true,
+      localizations: {
+        populate: {
+          banner: true,
+        },
+      },
+    },
+    pagination: {
+      pageSize: 100,
+    },
+  });
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
-  >(
-    'fi',
-    `/api/news?${query}`,
-    ['news-single'],
-    false,
-    isDraftMode,
-  );
+  >('fi', `/api/news?${query}`, ['news-single'], false, isDraftMode);
 
-  const newsLocaleFlipped = flipNewsLocale(params.lang, pageData.data);
-  const dictionary = await getDictionary(params.lang);
+  const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);
+  const dictionary = await getDictionary();
 
   const sortedNews = newsLocaleFlipped
     .filter((n) => n.createdAt)
@@ -112,7 +102,7 @@ const query = qs.stringify({
                   className={
                     'inline-block text-2xl font-bold hover:underline max-lg:text-xl'
                   }
-                  href={`/${params.lang}/news/${news.slug}`}
+                  href={`/${lang}/news/${news.slug}`}
                 >
                   {news.title}
                 </Link>
@@ -144,7 +134,7 @@ const query = qs.stringify({
                   <span className="text-sm opacity-60">
                     {new Date(
                       news?.publishedAt || news.createdAt!,
-                    ).toLocaleDateString(params.lang, dateFormat)}
+                    ).toLocaleDateString(lang, dateFormat)}
                   </span>
                 </div>
               </div>
@@ -157,19 +147,19 @@ const query = qs.stringify({
   );
 }
 
-export async function generateMetadata(props: NewsProps): Promise<Metadata> {
-  const params = await props.params;
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await language();
   const url =
     '/api/news-list?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['news-list'] as const;
 
   const data = await getStrapiData<APIResponse<'api::news-list.news-list'>>(
-    params.lang,
+    lang,
     url,
     tags,
   );
 
-  const pathname = `/${params.lang}/news`;
+  const pathname = `/${lang}/news`;
 
   return formatMetadata(data, pathname);
 }

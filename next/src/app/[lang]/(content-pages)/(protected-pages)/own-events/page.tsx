@@ -7,27 +7,24 @@ import prisma from '@/libs/db/prisma';
 import { checkStatus } from '@/libs/payments/check-status';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import QuestionProvider from '@/providers/QuestionProvider';
 import { APIResponse } from '@/types/types';
 import { Payment, PaymentStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 import qs from 'qs';
 import { BiErrorCircle } from 'react-icons/bi';
 import { BsQrCode } from 'react-icons/bs';
-interface OwnEventsProps {
-  params: Promise<{ lang: SupportedLanguage }>;
-}
 
-export default async function OwnEvents(props: OwnEventsProps) {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export default async function OwnEvents() {
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   const session = await auth();
   if (!session?.user) {
     logger.error('Error getting user');
-    redirect(`/${params.lang}`);
+    redirect(`/${lang}`);
   }
 
   let userEventRegistrations = await prisma.eventRegistration.findMany({
@@ -138,7 +135,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
         const url = `/api/events/${eventDocumentId}?${query}`;
 
         const events = await getStrapiData<APIResponse<'api::event.event'>>(
-          params.lang,
+          lang,
           url,
           [`event-${eventDocumentId}`],
           true,
@@ -162,7 +159,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
       const url = `/api/events/${eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
 
       const events = await getStrapiData<APIResponse<'api::event.event'>>(
-        params.lang,
+        lang,
         url,
         [`event-${eventDocumentId}`],
         true,
@@ -183,9 +180,8 @@ export default async function OwnEvents(props: OwnEventsProps) {
   );
 
   const registrationsFormatted = userEventRegistrations.map((registration) => ({
-    name: registration.event[params.lang === 'fi' ? 'nameFi' : 'nameEn'],
-    location:
-      registration.event[params.lang === 'fi' ? 'locationFi' : 'locationEn'],
+    name: registration.event[lang === 'fi' ? 'nameFi' : 'nameEn'],
+    location: registration.event[lang === 'fi' ? 'locationFi' : 'locationEn'],
     startDate: registration.event.startDate,
     endDate: registration.event.endDate,
     price: registration.price,
@@ -254,7 +250,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
   return (
     <div className="relative">
       <QuestionProvider>
-        <QuestionDialog dictionary={dictionary} lang={params.lang} />
+        <QuestionDialog dictionary={dictionary} lang={lang} />
         <h1 className="mb-12">{dictionary.navigation.own_events}</h1>
         {Boolean(unpaidRegistrations.length) && (
           <div className="alert alert-error mb-4">
@@ -299,7 +295,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
                     key={registration.id}
                     answers={getAnswersForReservation(registration.id)}
                     dictionary={dictionary}
-                    lang={params.lang}
+                    lang={lang}
                     questions={getQuestionsForEvent(
                       registration.eventDocumentId,
                     )}
@@ -314,7 +310,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
                   unpaidRegistrationsHaveUnansweredQuestions
                 }
                 isFreeTicket={isFreeTicket}
-                lang={params.lang}
+                lang={lang}
                 unansweredQuestionsData={unpaidRegistrations
                   .filter((reg) => {
                     const q = getQuestionsForEvent(reg.eventDocumentId);
@@ -345,7 +341,7 @@ export default async function OwnEvents(props: OwnEventsProps) {
                       key={registration.id}
                       answers={getAnswersForReservation(registration.id)}
                       dictionary={dictionary}
-                      lang={params.lang}
+                      lang={lang}
                       questions={getQuestionsForEvent(
                         registration.eventDocumentId,
                       )}
@@ -363,11 +359,8 @@ export default async function OwnEvents(props: OwnEventsProps) {
   );
 }
 
-export async function generateMetadata(
-  props: OwnEventsProps,
-): Promise<Metadata> {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export async function generateMetadata(): Promise<Metadata> {
+  const dictionary = await getDictionary();
   return {
     title: dictionary.navigation.own_events,
   };

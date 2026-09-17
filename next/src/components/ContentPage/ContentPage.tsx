@@ -1,13 +1,12 @@
-import { ContentPageSkeleton } from '@/components/ContentPage/ContentPageSkeleton';
 import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection, StrapiCacheTag } from '@/types/types';
+import { cacheLife, cacheTag } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Suspense } from 'react';
+import { lang as language } from 'next/root-params';
 import BlockRendererClient from '../BlockRendererClient/BlockRendererClient';
 import SideNavigator from '../SideNavigator/SideNavigator';
 import SidePartners from '../SidePartners/SidePartners';
@@ -15,24 +14,18 @@ import SidePartners from '../SidePartners/SidePartners';
 interface ContentPageProps {
   fetchTags: StrapiCacheTag[];
   url: string;
-  params: Promise<{ lang: SupportedLanguage }>;
 }
 
 export default async function ContentPage({
-  params,
   fetchTags,
   url,
 }: ContentPageProps) {
-  return (
-    <Suspense fallback={<ContentPageSkeleton />}>
-      <ContentPageRender fetchTags={fetchTags} params={params} url={url} />
-    </Suspense>
-  );
-}
+  'use cache';
+  cacheLife('max');
+  cacheTag(...fetchTags);
 
-async function ContentPageRender({ fetchTags, url, params }: ContentPageProps) {
-  const { lang } = await params;
-  const dictionary = await getDictionary(lang);
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: contentData } = await getStrapiData<any>(lang, url, fetchTags);

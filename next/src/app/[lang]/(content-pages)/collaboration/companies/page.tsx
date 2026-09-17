@@ -2,29 +2,23 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { lang as language } from 'next/root-params';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 const url = '/api/companies?populate=logo&populate=logoDark';
 const tags = ['company'] as const;
 
-interface CollaborationCompaniesProps {
-  params: Promise<{ lang: SupportedLanguage }>;
-}
-
-export default async function CollaborationCompanies(
-  props: CollaborationCompaniesProps,
-) {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export default async function CollaborationCompanies() {
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::company.company'>
-  >(params.lang, url, tags);
+  >(lang, url, tags);
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -103,19 +97,17 @@ export default async function CollaborationCompanies(
   );
 }
 
-export async function generateMetadata(
-  props: CollaborationCompaniesProps,
-): Promise<Metadata> {
-  const params = await props.params;
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await language();
   const url =
     '/api/collaboration-company?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['collaboration-company'] as const;
 
   const data = await getStrapiData<
     APIResponse<'api::collaboration-company.collaboration-company'>
-  >(params.lang, url, tags);
+  >(lang, url, tags);
 
-  const pathname = `/${params.lang}/collaboration/companies`;
+  const pathname = `/${lang}/collaboration/companies`;
 
   return formatMetadata(data, pathname);
 }

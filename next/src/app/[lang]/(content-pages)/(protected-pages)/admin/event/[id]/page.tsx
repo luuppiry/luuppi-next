@@ -5,16 +5,16 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 import { PiArrowLeft } from 'react-icons/pi';
 
 interface AdminEventDetailProps {
-  params: Promise<{ lang: SupportedLanguage; id: string }>;
+  params: Promise<{ id: string }>;
 }
 
 export const instant = false;
@@ -22,15 +22,16 @@ export const instant = false;
 export default async function AdminEventDetail(props: AdminEventDetailProps) {
   await connection();
 
+  const lang = await language();
   const params = await props.params;
   const session = await auth();
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
 
   const user = session?.user;
 
   if (!user?.entraUserUuid || !user?.isLuuppiHato) {
     logger.error('User not found in session or does not have required role');
-    redirect(`/${params.lang}`);
+    redirect(`/${lang}`);
   }
 
   const hasHatoRole = await prisma.rolesOnUsers.findFirst({
@@ -79,30 +80,30 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
   });
 
   if (!event) {
-    redirect(`/${params.lang}/admin?mode=event`);
+    redirect(`/${lang}/admin?mode=event`);
   }
 
   // Fetch Strapi event data to get RequiresPickup field
   const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
-    params.lang,
+    lang,
     `/api/events/${eventDocumentId}?populate=Registration`,
     [`event-${eventDocumentId}`],
     true,
   );
 
   if (!strapiEvent?.data) {
-    return redirect(`/${params.lang}/404`);
+    return redirect(`/${lang}/404`);
   }
 
   const requiresPickup = strapiEvent.data.Registration?.RequiresPickup ?? false;
-  const eventName = params.lang === 'fi' ? event.nameFi : event.nameEn;
+  const eventName = lang === 'fi' ? event.nameFi : event.nameEn;
 
   return (
     <div className="relative">
       <div className="mb-6 flex items-center justify-between">
         <Link
           className="btn btn-ghost gap-2"
-          href={`/${params.lang}/admin?mode=event`}
+          href={`/${lang}/admin?mode=event`}
         >
           <PiArrowLeft size={20} />
           {dictionary.general.back}
@@ -111,7 +112,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
           <PickupScanner
             dictionary={dictionary}
             eventDocumentId={event.eventDocumentId}
-            lang={params.lang}
+            lang={lang}
           />
         )}
       </div>
@@ -119,7 +120,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
       <AdminEventRegistrationsList
         dictionary={dictionary}
         eventId={event.id}
-        lang={params.lang}
+        lang={lang}
         requiresPickup={requiresPickup}
       />
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
@@ -127,11 +128,9 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
   );
 }
 
-export async function generateMetadata(
-  props: AdminEventDetailProps,
-): Promise<Metadata> {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await language();
+  const dictionary = await getDictionary();
   return {
     title: `${dictionary.pages_admin.event_management} - ${dictionary.navigation.admin}`,
   };

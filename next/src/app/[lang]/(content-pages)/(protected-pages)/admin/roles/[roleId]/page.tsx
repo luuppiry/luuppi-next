@@ -15,7 +15,7 @@ export default async function RolePage(props: RolePageProps) {
   const { roleId, lang } = params;
 
   const session = await auth();
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
 
   if (!session?.user?.isLuuppiHato || !session?.user?.entraUserUuid) {
     redirect(`/${lang}`);

@@ -8,16 +8,16 @@ import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { getNewsJsonLd } from '@/libs/utils/json-ld';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { draftMode } from 'next/headers';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 import Script from 'next/script';
+import qs from 'qs';
 import { FaUserAlt } from 'react-icons/fa';
 import { PiImageBroken } from 'react-icons/pi';
-import qs from 'qs';
 
 const baseQuery = qs.stringify({
   populate: {
@@ -46,14 +46,15 @@ const baseQuery = qs.stringify({
 const baseUrl = `/api/news?${baseQuery}&filters[slug][$eq]=`;
 
 interface NewsPostProps {
-  params: Promise<{ slug: string; lang: SupportedLanguage }>;
+  params: Promise<{ slug: string }>;
 }
 
 export const instant = false;
 
 export default async function NewsPost(props: NewsPostProps) {
+  const lang = await language();
   const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
   const { isEnabled: isDraftMode } = await draftMode();
   const url = `${baseUrl}${params.slug}`;
 
@@ -61,14 +62,14 @@ export default async function NewsPost(props: NewsPostProps) {
     APIResponseCollection<'api::news-single.news-single'>
   >('fi', url, ['news-single'], false, isDraftMode);
 
-  const newsLocaleFlipped = flipNewsLocale(params.lang, pageData.data);
+  const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);
 
   const partnersData = await getStrapiData<
     APIResponseCollection<'api::company.company'>
-  >(params.lang, '/api/companies?populate=*', ['company']);
+  >(lang, '/api/companies?populate=*', ['company']);
 
   if (!pageData.data.length) {
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   const selectedNews = newsLocaleFlipped[0];
@@ -81,17 +82,17 @@ export default async function NewsPost(props: NewsPostProps) {
         en: 'English',
       };
 
-      return `No content for the given locale, update the ${localeMap[params.lang] ?? params.lang} 'content' to preview`;
+      return `No content for the given locale, update the ${localeMap[lang] ?? lang} 'content' to preview`;
     }
 
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   return (
     <>
       <Script
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getNewsJsonLd(selectedNews, params.lang)),
+          __html: JSON.stringify(getNewsJsonLd(selectedNews, lang)),
         }}
         id="news-jsonld"
         type="application/ld+json"
@@ -141,7 +142,7 @@ export default async function NewsPost(props: NewsPostProps) {
                 <span className="text-sm opacity-75">
                   {new Date(
                     selectedNews?.publishedAt || selectedNews.createdAt!,
-                  ).toLocaleString(params.lang, dateFormat)}
+                  ).toLocaleString(lang, dateFormat)}
                 </span>
               </div>
             </div>
@@ -154,7 +155,7 @@ export default async function NewsPost(props: NewsPostProps) {
               <p className="text-sm">
                 {dictionary.general.content_updated}:{' '}
                 {new Date(selectedNews.updatedAt!).toLocaleString(
-                  params.lang,
+                  lang,
                   dateFormat,
                 )}
               </p>
@@ -185,13 +186,14 @@ export default async function NewsPost(props: NewsPostProps) {
 export async function generateMetadata(
   props: NewsPostProps,
 ): Promise<Metadata> {
+  const lang = await language();
   const params = await props.params;
   const data = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
   >('fi', `${baseUrl}${params.slug}`, ['news-single']);
-  const newsLocaleFlipped = flipNewsLocale(params.lang, data.data);
+  const newsLocaleFlipped = flipNewsLocale(lang, data.data);
   const selectedNews = newsLocaleFlipped[0];
-  const pathname = `/${params.lang}/news/${params.slug}`;
+  const pathname = `/${lang}/news/${params.slug}`;
 
   // No version of the content exists in the requested language
   if (!selectedNews?.content) {

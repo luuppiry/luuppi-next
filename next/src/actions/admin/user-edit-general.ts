@@ -11,7 +11,7 @@ export async function userEditGeneral(
   lang: SupportedLanguage,
   userToEditEntraUuid: string,
 ) {
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
 
   const session = await auth();
   const user = session?.user;
@@ -129,7 +129,7 @@ export async function userEditGeneral(
     },
   });
 
-  updateTag(`get-cached-user:${userToEditEntraUuid}`)
+  updateTag(`get-cached-user:${userToEditEntraUuid}`);
 
   return {
     message: dictionary.api.user_updated,

@@ -18,7 +18,7 @@ export async function reservationQuestionSubmit(
   }[],
   shouldRedirect: boolean = true,
 ) {
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
 
   const session = await auth();
   if (!session?.user) {

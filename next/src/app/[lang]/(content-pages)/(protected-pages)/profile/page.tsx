@@ -6,13 +6,9 @@ import ProfileUserInfoForm from '@/components/ProfileUserInfoForm/ProfileUserInf
 import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-
-interface ProfileProps {
-  params: Promise<{ lang: SupportedLanguage }>;
-}
+import { lang as language } from 'next/root-params';
 
 const mailman = {
   auth:
@@ -23,14 +19,14 @@ const mailman = {
   baseUrl: `http://${process.env.MAILMAN_HOSTNAME}:${process.env.MAILMAN_PORT}`,
 };
 
-export default async function Profile(props: ProfileProps) {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export default async function Profile() {
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   const session = await auth();
   if (!session?.user) {
     logger.error('Error getting user');
-    redirect(`/${params.lang}`);
+    redirect(`/${lang}`);
   }
 
   const subscribed = await fetch(
@@ -87,7 +83,7 @@ export default async function Profile(props: ProfileProps) {
 
   if (!localUser) {
     logger.error('User not found in database. This should not happen.');
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   const roles = localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];
@@ -102,13 +98,13 @@ export default async function Profile(props: ProfileProps) {
       <div className="flex w-full flex-col gap-8">
         <ProfileEmailform
           dictionary={dictionary}
-          lang={params.lang}
+          lang={lang}
           user={localUser}
         />
         <ProfileUserInfoForm
           dictionary={dictionary}
           isLuuppiMember={isLuuppiMember}
-          lang={params.lang}
+          lang={lang}
           user={localUser}
         />
         {Boolean(isLuuppiMember) && (
@@ -117,7 +113,7 @@ export default async function Profile(props: ProfileProps) {
               declared={declared}
               dictionary={dictionary}
               isLuuppiMember={isLuuppiMember}
-              lang={params.lang}
+              lang={lang}
               user={localUser}
             />
           </>
@@ -138,9 +134,8 @@ function getDeclarationYear(d = new Date()): number {
   return month >= 9 ? year : year - 1; // Sep–Dec → current, Jan–Aug → previous
 }
 
-export async function generateMetadata(props: ProfileProps): Promise<Metadata> {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export async function generateMetadata(): Promise<Metadata> {
+  const dictionary = await getDictionary();
   return {
     title: dictionary.navigation.profile,
   };

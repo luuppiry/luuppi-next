@@ -6,33 +6,32 @@ import prisma from '@/libs/db/prisma';
 import { getAccessToken } from '@/libs/get-access-token';
 import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
 import { logger } from '@/libs/utils/logger';
-import { SupportedLanguage } from '@/models/locale';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 
 const tenantName = process.env.AZURE_TENANT_NAME!;
 
 interface VerifyEmailProps {
-  params: Promise<{ lang: SupportedLanguage }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function VerifyEmail(props: VerifyEmailProps) {
   const searchParams = await props.searchParams;
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   const emailChangeToken = searchParams.token as string;
 
   if (!emailChangeToken) {
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   const session = await auth();
 
   if (!session?.user) {
-    redirect(`/${params.lang}`);
+    redirect(`/${lang}`);
   }
 
   let newEmailVerified: string;
@@ -50,25 +49,25 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
 
     if (!newMail || !userId) {
       logger.error('Invalid token, missing newMail or userId');
-      redirect(`/${params.lang}/404`);
+      redirect(`/${lang}/404`);
     }
 
     newEmailVerified = newMail;
     userIdVerified = userId;
   } catch (error) {
     logger.error('Error verifying token', error);
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   if (session.user.entraUserUuid !== userIdVerified) {
     logger.error('User ID does not match token');
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
     logger.error('Error getting access token for Graph API');
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   const graphEmailUpdated = await updateGraphAPIUser(
@@ -88,7 +87,7 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
 
   if (!graphEmailUpdated) {
     logger.error('Error updating user email');
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   await prisma.user.update({
@@ -118,11 +117,8 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
   );
 }
 
-export async function generateMetadata(
-  props: VerifyEmailProps,
-): Promise<Metadata> {
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+export async function generateMetadata(): Promise<Metadata> {
+  const dictionary = await getDictionary();
   return {
     title: dictionary.pages_verify_email.email_changed,
   };

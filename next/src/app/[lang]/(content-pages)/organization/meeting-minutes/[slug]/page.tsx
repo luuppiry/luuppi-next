@@ -5,10 +5,10 @@ import { flipMeetingMinuteLocale } from '@/libs/strapi/flip-locale';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 import qs from 'qs';
 
@@ -33,7 +33,7 @@ const query = qs.stringify(
 const baseUrl = `/api/meeting-minute-documents?${query}`;
 
 interface LuuppiSanomatProps {
-  params: Promise<{ slug: string; lang: SupportedLanguage }>;
+  params: Promise<{ slug: string }>;
 }
 
 export const instant = false;
@@ -44,7 +44,8 @@ export default async function LuuppiSanomatPublication(
   await connection();
 
   const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const lang = await language();
+  const dictionary = await getDictionary();
   const session = await auth();
 
   const [year, shortMeetingName] = params.slug.split('-');
@@ -58,12 +59,12 @@ export default async function LuuppiSanomatPublication(
   );
 
   const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(
-    params.lang,
+    lang,
     pageData.data,
   );
 
   if (!pageData.data.length) {
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   const selectedPublication = meetingMinuteLocaleFlipped[0];
@@ -76,7 +77,7 @@ export default async function LuuppiSanomatPublication(
           <h1>
             {dictionary.general.meeting_minute}{' '}
             {new Date(selectedPublication?.meetingDate)
-              .toLocaleDateString(params.lang, {
+              .toLocaleDateString(lang, {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',
@@ -94,7 +95,7 @@ export default async function LuuppiSanomatPublication(
       <h1>
         {dictionary.general.meeting_minute}{' '}
         {new Date(selectedPublication?.meetingDate)
-          .toLocaleDateString(params.lang, {
+          .toLocaleDateString(lang, {
             day: 'numeric',
             month: 'short',
             year: 'numeric',
@@ -116,6 +117,7 @@ export async function generateMetadata(
   props: LuuppiSanomatProps,
 ): Promise<Metadata> {
   const params = await props.params;
+  const lang = await language();
   const [year, shortMeetingName] = params.slug.split('-');
 
   const data = await getStrapiData<
@@ -125,12 +127,9 @@ export async function generateMetadata(
     `${baseUrl}${year}&filters[shortMeetingName][$eq]=${shortMeetingName}`,
     ['meeting-minute-document'],
   );
-  const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(
-    params.lang,
-    data.data,
-  );
+  const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(lang, data.data);
   const selectedPublication = meetingMinuteLocaleFlipped[0];
-  const pathname = `/${params.lang}/organization/meeting-minutes/${params.slug}`;
+  const pathname = `/${lang}/organization/meeting-minutes/${params.slug}`;
 
   // No version of the content exists in the requested language
   if (!selectedPublication?.Seo?.id) {

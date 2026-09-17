@@ -4,16 +4,16 @@ import { flipBoardLocale } from '@/libs/strapi/flip-locale';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { groupBoardByYear } from '@/libs/strapi/group-board-by-year';
 import { getBoardMemberJsonLd } from '@/libs/utils/json-ld';
-import { SupportedLanguage } from '@/models/locale';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { lang as language } from 'next/root-params';
 import Script from 'next/script';
 import qs from 'qs';
 
 interface OldBoardProps {
-  params: Promise<{ slug: string; lang: SupportedLanguage }>;
+  params: Promise<{ slug: string }>;
 }
 
 const BOARDS_QUERY = qs.stringify({
@@ -33,12 +33,13 @@ const BOARDS_QUERY = qs.stringify({
 
 export default async function OldBoard(props: OldBoardProps) {
   const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
+  const lang = await language();
 
   const year = parseInt(params.slug, 10);
 
   if (isNaN(year)) {
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   const boardData = await getStrapiData<
@@ -53,7 +54,7 @@ export default async function OldBoard(props: OldBoardProps) {
   const wantedBoard = boardGroupedByYear[params.slug];
 
   if (!wantedBoard) {
-    redirect(`/${params.lang}/404`);
+    redirect(`/${lang}/404`);
   }
 
   const boardSortedByYear = Object.keys(boardGroupedByYear).sort(
@@ -64,7 +65,7 @@ export default async function OldBoard(props: OldBoardProps) {
     (year) => parseInt(year, 10) !== wantedBoard.year,
   );
 
-  const boardLanguageFlipped = flipBoardLocale(params.lang, wantedBoard);
+  const boardLanguageFlipped = flipBoardLocale(lang, wantedBoard);
 
   const boardMembers = boardLanguageFlipped.filter(
     (member: any) => member.isBoardMember === true,
@@ -105,7 +106,7 @@ export default async function OldBoard(props: OldBoardProps) {
                 {otherBoards.map((year) => (
                   <li key={year}>
                     <Link
-                      href={`/${params.lang}/organization/board/${
+                      href={`/${lang}/organization/board/${
                         year === latestBoard.year.toString() ? '' : year
                       }`}
                     >
@@ -165,7 +166,8 @@ export async function generateMetadata(
   props: OldBoardProps,
 ): Promise<Metadata> {
   const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const dictionary = await getDictionary();
+  const lang = await language();
 
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
@@ -182,7 +184,7 @@ export async function generateMetadata(
     return {};
   }
 
-  const pathname = `/${params.lang}/organization/board/${params.slug}`;
+  const pathname = `/${lang}/organization/board/${params.slug}`;
 
   return {
     title: `${dictionary.navigation.board} ${wantedBoard.year} | Luuppi ry`,

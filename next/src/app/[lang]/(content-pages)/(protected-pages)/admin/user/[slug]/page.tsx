@@ -55,7 +55,7 @@ export default async function Page(props: {
   const { slug, lang } = params;
 
   const session = await auth();
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
 
   if (!session?.user?.isLuuppiHato || !session?.user?.entraUserUuid) {
     redirect(`/${lang}`);

@@ -16,7 +16,7 @@ interface TicketAreaProps {
 
 export default async function TicketArea({ lang, event }: TicketAreaProps) {
   const session = await auth();
-  const dictionary = await getDictionary(lang);
+  const dictionary = await getDictionary();
 
   const ticketTypes = event.data.Registration?.TicketTypes;
   const jointQuota = event.data.Registration?.JointQuota ?? false;

@@ -8,7 +8,6 @@ import {
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { Event } from '@/models/event';
-import { SupportedLanguage } from '@/models/locale';
 import {
   APIResponse,
   APIResponseCollection,
@@ -16,10 +15,7 @@ import {
 } from '@/types/types';
 import { Metadata } from 'next';
 import { cacheLife, cacheTag } from 'next/cache';
-
-interface EventsProps {
-  params: Promise<{ lang: SupportedLanguage }>;
-}
+import { lang as language } from 'next/root-params';
 
 async function getSixMonthsAgoISO() {
   'use cache';
@@ -32,20 +28,20 @@ async function getSixMonthsAgoISO() {
   return sixMonthsAgo.toISOString().split('T')[0];
 }
 
-export default async function Events(props: EventsProps) {
+export default async function Events() {
   'use cache';
   cacheLife('max');
   cacheTag('event');
 
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  const lang = await language();
+  const dictionary = await getDictionary();
 
   const sixMonthsAgo = await getSixMonthsAgoISO();
 
   const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo}&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    params.lang,
+    lang,
     url,
     ['event'],
   );
@@ -58,14 +54,14 @@ export default async function Events(props: EventsProps) {
     event: Omit<APIResponseData<'api::event.event'>, 'id'>,
   ): Event => ({
     description: getPlainText(
-      event[params.lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
+      event[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
     ),
     slug: event.Slug,
     end: new Date(event.EndDate),
     start: new Date(event.StartDate),
     id: event.documentId,
-    location: event[params.lang === 'en' ? 'LocationEn' : 'LocationFi'],
-    title: event[params.lang === 'en' ? 'NameEn' : 'NameFi'],
+    location: event[lang === 'en' ? 'LocationEn' : 'LocationFi'],
+    title: event[lang === 'en' ? 'NameEn' : 'NameFi'],
     hasTickets: Boolean(event.Registration?.TicketTypes.length),
   });
 
@@ -83,27 +79,23 @@ export default async function Events(props: EventsProps) {
   return (
     <div className="relative">
       <h1 className="mb-12">{dictionary.navigation.events}</h1>
-      <EventSelector
-        dictionary={dictionary}
-        events={events}
-        lang={params.lang}
-      />
+      <EventSelector dictionary={dictionary} events={events} lang={lang} />
       <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
     </div>
   );
 }
 
-export async function generateMetadata(props: EventsProps): Promise<Metadata> {
-  const params = await props.params;
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await language();
   const url =
     '/api/events-calendar?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
   const tags = ['events-calendar'] as const;
 
   const data = await getStrapiData<
     APIResponse<'api::events-calendar.events-calendar'>
-  >(params.lang, url, tags);
+  >(lang, url, tags);
 
-  const pathname = `/${params.lang}/events`;
+  const pathname = `/${lang}/events`;
 
   return formatMetadata(data, pathname);
 }
