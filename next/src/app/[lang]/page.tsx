@@ -6,12 +6,14 @@ import NewsPreview from '@/components/NewsPreview/NewsPreview';
 import Partners from '@/components/Partners/Partners';
 import TelegramPreview from '@/components/TelegramPreview/TelegramPreview';
 import { getDictionary } from '@/dictionaries';
+import { validLanguage } from '@/libs/i18n';
 import { getOrganizationJsonLd } from '@/libs/utils/json-ld';
 import { SupportedLanguage } from '@/models/locale';
 import { StrapiCacheTag } from '@/types/types';
 import { cacheLife, cacheTag } from 'next/cache';
+import { notFound } from 'next/navigation';
 import Script from 'next/script';
-import ReactDOM from 'react-dom';
+import { Suspense } from 'react';
 
 interface HomeProps {
   params: Promise<{ lang: SupportedLanguage }>;
@@ -22,10 +24,20 @@ export default async function Home(props: HomeProps) {
   cacheLife('max');
   cacheTag(...(['event', 'news-single'] satisfies StrapiCacheTag[]));
 
-  const params = await props.params;
-  const dictionary = await getDictionary(params.lang);
+  return (
+    <Suspense fallback={null}>
+      <LocalizedHome params={props.params} />
+    </Suspense>
+  );
+}
 
-  ReactDOM.preload('/luuppi-cards.svg', { fetchPriority: 'high', as: 'image' });
+async function LocalizedHome(props: HomeProps) {
+  const params = await props.params;
+  if (!validLanguage(params.lang)) {
+    notFound();
+  }
+
+  const dictionary = await getDictionary(params.lang);
 
   return (
     <>
