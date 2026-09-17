@@ -2,7 +2,6 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { SupportedLanguage } from '@/models/locale';
 import {
   APIResponse,
   APIResponseCollection,
@@ -18,13 +17,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 const url = '/api/job-opportunities?populate=logo&populate=logoDark';
 const tags = ['job-opportunity'] as const satisfies StrapiCacheTag[];
 
-interface CollaborationJobOpportunitiesProps {
-  params: Promise<{ lang: SupportedLanguage }>;
-}
-
-export default async function CollaborationJobOpportunities(
-  props: CollaborationJobOpportunitiesProps,
-) {
+export default async function CollaborationJobOpportunities() {
   'use cache';
   cacheLife('max');
   cacheTag(...tags);

@@ -208,10 +208,7 @@ export default async function Event(props: EventProps) {
                   </div>
                 }
               >
-                <ShowParticipants
-                  eventDocumentId={event.documentId}
-                  lang={lang}
-                />
+                <ShowParticipants eventDocumentId={event.documentId} />
               </Suspense>
             </div>
           )}

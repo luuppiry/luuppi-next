@@ -118,7 +118,6 @@ export default async function Admin(props: AdminProps) {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const lang = await language();
   const dictionary = await getDictionary();
   return {
     title: dictionary.navigation.admin,

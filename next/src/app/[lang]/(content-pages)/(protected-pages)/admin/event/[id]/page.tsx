@@ -129,7 +129,6 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const lang = await language();
   const dictionary = await getDictionary();
   return {
     title: `${dictionary.pages_admin.event_management} - ${dictionary.navigation.admin}`,

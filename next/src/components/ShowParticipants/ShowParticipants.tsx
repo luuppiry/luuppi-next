@@ -1,17 +1,14 @@
 import { getDictionary } from '@/dictionaries';
 import { getCachedEventParticipants } from '@/libs/db/queries/get-cached-event-participants';
-import { SupportedLanguage } from '@/models/locale';
 import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 import ShowParticipantsModal from './ShowParticipantsDialog/ShowParticipantsDialog';
 
 interface ShowParticipantsProps {
   eventDocumentId: string;
-  lang: SupportedLanguage;
 }
 
 export default async function ShowParticipants({
   eventDocumentId,
-  lang,
 }: ShowParticipantsProps) {
   // FIXME: Somewhat hacky way to not require database connection during build
   if (process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD) {
