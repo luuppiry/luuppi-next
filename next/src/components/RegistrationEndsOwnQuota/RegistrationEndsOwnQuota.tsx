@@ -3,6 +3,7 @@ import { getCachedEventRegistrations } from '@/libs/db/queries/get-cached-event-
 import { getCachedUser } from '@/libs/db/queries/get-cached-user';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponseData } from '@/types/types';
+import { connection } from 'next/server';
 import { FaQuestion } from 'react-icons/fa';
 import { IoTicket } from 'react-icons/io5';
 
@@ -15,6 +16,8 @@ export default async function RegistrationEndsOwnQuota({
   lang: SupportedLanguage;
   dictionary: any;
 }) {
+  await connection()
+
   const session = await auth();
   const ticketTypes = event.Registration?.TicketTypes;
 

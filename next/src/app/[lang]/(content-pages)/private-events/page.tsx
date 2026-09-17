@@ -14,11 +14,11 @@ import { formatDateRangeLong } from '@/libs/utils/format-date-range';
 import { getEventJsonLd } from '@/libs/utils/json-ld';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
-import { draftMode } from 'next/headers';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import Script from 'next/script';
+import { connection } from 'next/server';
 import { Suspense } from 'react';
 import { BiSolidDrink } from 'react-icons/bi';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
@@ -32,25 +32,22 @@ interface EventProps {
   params: Promise<{ slug: string }>;
 }
 
-const getCachedDate = async (date: string) => {
-  'use cache';
-  return new Date(date);
-};
+export const instant = false;
 
 export default async function Event(props: EventProps) {
+  await connection();
+
   const lang = await language();
   const params = await props.params;
   const dictionary = await getDictionary();
-  const { isEnabled: isDraftMode } = await draftMode();
 
-  const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+  const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles&filters[ShowInCalendar][$eq]=false`;
 
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     lang,
     url,
     [`event-${params.slug}`],
     true,
-    isDraftMode,
   );
 
   const event = events?.data.at(0);
@@ -60,10 +57,7 @@ export default async function Event(props: EventProps) {
   }
 
   // Check if the event is visible to the current user
-  const eventVisible = await isEventVisible(event, [
-    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
-    process.env.NEXT_PUBLIC_NO_ROLE_ID!,
-  ]);
+  const eventVisible = await isEventVisible(event);
   if (!eventVisible) {
     redirect(`/${lang}/404`);
   }
@@ -82,8 +76,6 @@ export default async function Event(props: EventProps) {
   const imageUrl = imageUrlLocalized ? getStrapiUrl(imageUrlLocalized) : null;
 
   const hasRegistration = event?.Registration?.TicketTypes?.length;
-
-  const updatedAt = await getCachedDate(event.updatedAt as string);
 
   return (
     <>
@@ -119,7 +111,7 @@ export default async function Event(props: EventProps) {
             <div className="flex flex-col opacity-40">
               <p className="text-sm dark:text-white">
                 {dictionary.general.content_updated}:{' '}
-                {updatedAt.toLocaleString(lang, dateFormat)}
+                {new Date(event.updatedAt!).toLocaleString(lang, dateFormat)}
               </p>
             </div>
             <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
@@ -133,8 +125,8 @@ export default async function Event(props: EventProps) {
                 </div>
                 <p className="line-clamp-2">
                   {formatDateRangeLong(
-                    await getCachedDate(event.StartDate as string),
-                    await getCachedDate(event.EndDate as string),
+                    new Date(event.StartDate),
+                    new Date(event.EndDate),
                     lang,
                   )}
                 </p>
@@ -147,15 +139,13 @@ export default async function Event(props: EventProps) {
                   {event[lang === 'en' ? 'LocationEn' : 'LocationFi']}
                 </p>
               </div>
-              {hasRegistration && (
-                <Suspense fallback={<div />}>
-                  <RegistrationEndsOwnQuota
-                    dictionary={dictionary}
-                    event={event}
-                    lang={lang}
-                  />
-                </Suspense>
-              )}
+              <Suspense>
+                <RegistrationEndsOwnQuota
+                  dictionary={dictionary}
+                  event={event}
+                  lang={lang}
+                />
+              </Suspense>
               {event['FuksiPoints'] && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
@@ -242,21 +232,6 @@ export default async function Event(props: EventProps) {
   );
 }
 
-export async function generateStaticParams() {
-  // Needs to have at least one event to opt the route to ISR
-  const url = '/api/events?sort=updatedAt:desc&fields=Slug&pagination[limit]=1';
-
-  const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    'fi',
-    url,
-    ['event'],
-  );
-
-  const events = data.data.map((event) => event.Slug);
-
-  return events.map((slug) => ({ slug }));
-}
-
 export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const lang = await language();
   const params = await props.params;
@@ -289,6 +264,7 @@ export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const descriptionCutted = description.length > 300;
 
   return {
+    robots: { index: false },
     title: `${title} | Luuppi ry`,
     description: description.slice(0, 300) + (descriptionCutted ? '...' : ''),
     alternates: {
