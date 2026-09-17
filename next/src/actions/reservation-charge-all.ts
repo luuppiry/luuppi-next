@@ -11,7 +11,7 @@ import { revalidatePath, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function reservationChargeAll(lang: SupportedLanguage) {
-  const dictionary = await getDictionary();
+  const dictionary = await getDictionary(lang);
   const session = await auth();
 
   if (!session?.user) {

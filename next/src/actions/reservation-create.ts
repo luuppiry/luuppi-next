@@ -23,7 +23,10 @@ export async function reservationCreate(
   userProvidedTargetedRole: string | undefined,
   ticketUid: string,
 ) {
-  const [dictionary, session] = await Promise.all([getDictionary(), auth()]);
+  const [dictionary, session] = await Promise.all([
+    getDictionary(lang),
+    auth(),
+  ]);
 
   if (!session?.user) {
     return {

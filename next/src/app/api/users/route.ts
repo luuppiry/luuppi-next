@@ -31,7 +31,7 @@ export async function GET(
   const pageSize = parseInt(searchParams.get('pageSize') || '10');
   const search = searchParams.get('search') || '';
   const lang = searchParams.get('lang') || 'fi';
-  const dictionary = await getDictionary();
+  const dictionary = await getDictionary(lang);
 
   if (isNaN(page) || page < 1) {
     logger.error('Invalid page:', page);

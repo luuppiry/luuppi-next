@@ -24,7 +24,7 @@ function escapeCsvField(field: any): string {
 }
 
 export async function eventExport(lang: SupportedLanguage, eventId: number) {
-  const dictionary = await getDictionary();
+  const dictionary = await getDictionary(lang);
 
   const session = await auth();
   const user = session?.user;

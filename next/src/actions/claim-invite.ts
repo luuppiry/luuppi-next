@@ -13,7 +13,7 @@ const options = { cacheKey: 'invite' };
 
 export async function claimInvite(id: string, lang: string) {
   const session = await auth();
-  const dictionary = await getDictionary();
+  const dictionary = await getDictionary(lang);
 
   if (!session?.user?.entraUserUuid) {
     throw new Error('Unauthorized');

@@ -14,7 +14,7 @@ export async function togglePickupStatus(
   pickedUp: boolean,
   eventDocumentId: string,
 ) {
-  const dictionary = await getDictionary();
+  const dictionary = await getDictionary(lang);
 
   const session = await auth();
   const user = session?.user;

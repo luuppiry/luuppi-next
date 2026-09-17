@@ -16,7 +16,7 @@ export async function migrateLegacyAccount(
   lang: SupportedLanguage,
   formData: FormData,
 ) {
-  const dictionary = await getDictionary();
+  const dictionary = await getDictionary(lang);
 
   const session = await auth();
   const user = session?.user;

@@ -12,7 +12,7 @@ export async function roleAddUser(
   expiresAt: Date | null,
   lang: SupportedLanguage,
 ) {
-  const dictionary = await getDictionary();
+  const dictionary = await getDictionary(lang);
 
   const session = await auth();
   const user = session?.user;
@@ -127,7 +127,7 @@ export async function roleRemoveUser(
   userEntraUuid: string,
   lang: SupportedLanguage,
 ) {
-  const dictionary = await getDictionary();
+  const dictionary = await getDictionary(lang);
 
   const session = await auth();
   const user = session?.user;
