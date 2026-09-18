@@ -10,30 +10,40 @@ import Link from 'next/link';
 import eventPlaceholder from '../../../../public/images/event_placeholder.png';
 import DayBadge from '../DayBadge/DayBadge';
 
-import qs from 'qs';
 import { cacheLife, cacheTag } from 'next/cache';
-
+import qs from 'qs';
 interface RenderEventsProps {
   lang: SupportedLanguage;
   dictionary: Dictionary;
 }
 
-async function getCachedCalendarDate() {
+async function getCachedCalendarDate(date?: string | Date) {
   'use cache';
   cacheLife('hours');
   cacheTag('event' satisfies StrapiCacheTag);
 
-  return new Date().toISOString().split('T')[0];
+  if (date) {
+    return new Date(date);
+  }
+
+  return new Date();
 }
 
 export default async function RenderEvents({
   lang,
   dictionary,
 }: RenderEventsProps) {
+  const today = await getCachedCalendarDate();
+  today.setMinutes(0);
+  today.setSeconds(0);
+  today.setMilliseconds(0);
+
   const query = qs.stringify({
     pagination: { limit: 9999 },
     sort: ['StartDate'],
-    filters: { EndDate: { $gte: getCachedCalendarDate() } },
+    filters: {
+      EndDate: { $gte: today.toISOString() },
+    },
     fields: [
       'NameEn',
       'NameFi',
@@ -62,33 +72,35 @@ export default async function RenderEvents({
   // Filter events based on visibility rules
   const visibleEventsData = await filterVisibleEvents(eventsData.data);
 
-  const formattedEvents = visibleEventsData.map((e) => {
-    const isEnglish = lang === 'en';
-    const description = getPlainText(
-      isEnglish ? e.DescriptionEn : e.DescriptionFi,
-    );
-    const location = isEnglish ? e.LocationEn : e.LocationFi;
-    const title = isEnglish ? e.NameEn : e.NameFi;
+  const formattedEvents = await Promise.all(
+    visibleEventsData.map(async (e) => {
+      const isEnglish = lang === 'en';
+      const description = getPlainText(
+        isEnglish ? e.DescriptionEn : e.DescriptionFi,
+      );
+      const location = isEnglish ? e.LocationEn : e.LocationFi;
+      const title = isEnglish ? e.NameEn : e.NameFi;
 
-    const image =
-      isEnglish && e.ImageEn?.url
-        ? getStrapiUrl(e.ImageEn.url)
-        : e.Image?.url
-          ? getStrapiUrl(e.Image.url)
-          : eventPlaceholder;
+      const image =
+        isEnglish && e.ImageEn?.url
+          ? getStrapiUrl(e.ImageEn.url)
+          : e.Image?.url
+            ? getStrapiUrl(e.Image.url)
+            : eventPlaceholder;
 
-    return {
-      id: e.documentId,
-      slug: e.Slug,
-      description,
-      location,
-      title,
-      image,
-      start: new Date(e.StartDate),
-      end: new Date(e.EndDate),
-      hasTickets: Boolean(e.Registration?.TicketTypes.length),
-    };
-  });
+      return {
+        id: e.documentId,
+        slug: e.Slug,
+        description,
+        location,
+        title,
+        image,
+        start: await getCachedCalendarDate(e.StartDate),
+        end: await getCachedCalendarDate(e.EndDate),
+        hasTickets: Boolean(e.Registration?.TicketTypes.length),
+      };
+    }),
+  );
 
   return (
     <>
@@ -111,7 +123,7 @@ export default async function RenderEvents({
           </div>
           <div className="relative flex flex-grow flex-col overflow-hidden p-6 transition-all duration-300">
             <p className="z-20 text-sm font-bold">
-              {new Date(event.start).toLocaleString(lang, dateFormat)}
+              {event.start.toLocaleString(lang, dateFormat)}
             </p>
             <p className="z-20 line-clamp-3 text-lg font-bold text-accent-400 transition-all duration-300 group-hover:underline max-md:text-base dark:text-accent-600">
               {event.title}
