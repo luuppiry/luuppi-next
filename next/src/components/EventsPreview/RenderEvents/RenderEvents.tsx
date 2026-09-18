@@ -4,17 +4,26 @@ import { filterVisibleEvents } from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
-import { APIResponseCollection } from '@/types/types';
+import { APIResponseCollection, StrapiCacheTag } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import eventPlaceholder from '../../../../public/images/event_placeholder.png';
 import DayBadge from '../DayBadge/DayBadge';
 
 import qs from 'qs';
+import { cacheLife, cacheTag } from 'next/cache';
 
 interface RenderEventsProps {
   lang: SupportedLanguage;
   dictionary: Dictionary;
+}
+
+async function getCachedCalendarDate() {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('event' satisfies StrapiCacheTag);
+
+  return new Date().toISOString().split('T')[0];
 }
 
 export default async function RenderEvents({
@@ -24,7 +33,7 @@ export default async function RenderEvents({
   const query = qs.stringify({
     pagination: { limit: 9999 },
     sort: ['StartDate'],
-    filters: { EndDate: { $gte: new Date().toISOString().split('T')[0] } },
+    filters: { EndDate: { $gte: getCachedCalendarDate() } },
     fields: [
       'NameEn',
       'NameFi',
@@ -34,7 +43,7 @@ export default async function RenderEvents({
       'EndDate',
       'DescriptionEn',
       'DescriptionFi',
-      'Slug'
+      'Slug',
     ],
     populate: {
       Image: { fields: ['url'] },

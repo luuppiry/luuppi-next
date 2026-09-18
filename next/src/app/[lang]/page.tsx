@@ -7,16 +7,10 @@ import Partners from '@/components/Partners/Partners';
 import TelegramPreview from '@/components/TelegramPreview/TelegramPreview';
 import { getDictionary } from '@/dictionaries';
 import { getOrganizationJsonLd } from '@/libs/utils/json-ld';
-import { StrapiCacheTag } from '@/types/types';
-import { cacheLife, cacheTag } from 'next/cache';
 import { lang as language } from 'next/root-params';
 import Script from 'next/script';
 
 export default async function Home() {
-  'use cache';
-  cacheLife('max');
-  cacheTag(...(['event', 'news-single'] satisfies StrapiCacheTag[]));
-
   const lang = await language();
   const dictionary = await getDictionary();
 
