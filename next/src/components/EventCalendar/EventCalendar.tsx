@@ -3,7 +3,7 @@ import Tooltip from '@/components/Tooltip/Tooltip';
 import { Event } from '@/models/event';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { SelectedViewContext } from '@/providers/EventSelectorProvider';
-import type { CalendarListeners } from '@fullcalendar/core';
+import type { EventMountArg } from '@fullcalendar/core';
 import fiLocale from '@fullcalendar/core/locales/fi';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
@@ -34,15 +34,20 @@ export default function EventCalendar({
   const calendarRef = useRef<FullCalendar>(null);
   const currentDate = new Date();
 
-  const handleEventClick: CalendarListeners['eventClick'] = (e) => {
-    const eventUrl = `/${lang}/events/${events.find((event) => event.id === e.event.id)?.slug}`;
+  const handleEventDidMount = (info: EventMountArg) => {
+    const event = events.find((e) => e.id === info.event.id);
+    if (!event) return;
+    const eventUrl = `/${lang}/events/${event.slug}`;
 
-    if (e.jsEvent.metaKey || e.jsEvent.ctrlKey) {
-      window.open(eventUrl, '_blank');
-      return;
-    }
+    const anchor = info.el.matches('a') ? info.el : info.el.querySelector('a');
+    anchor?.setAttribute('href', eventUrl);
 
-    router.push(eventUrl);
+    const prefetch = () => router.prefetch(eventUrl);
+    info.el.addEventListener('mouseenter', prefetch, { once: true });
+    info.el.addEventListener('touchstart', prefetch, {
+      once: true,
+      passive: true,
+    });
   };
 
   useEffect(() => {
@@ -122,7 +127,6 @@ export default function EventCalendar({
           }
           dayMaxEventRows={4}
           dayMaxEvents={4}
-          eventClick={handleEventClick}
           eventContent={function (arg) {
             return (
               <Tooltip content={arg.event.title}>
@@ -140,6 +144,7 @@ export default function EventCalendar({
               </Tooltip>
             );
           }}
+          eventDidMount={handleEventDidMount}
           eventOrderStrict={true}
           eventTimeFormat={{
             hour: 'numeric',

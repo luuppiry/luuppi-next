@@ -41,6 +41,7 @@ export default function ViewEventsDialog({
                   key={event.title + event.start}
                   className="mb-4 block rounded-lg bg-background-50 p-4"
                   href={`/${lang}/events/${event.slug}`}
+                  prefetch
                   onClick={onClose}
                 >
                   <h3 className="text-lg font-bold">{event.title}</h3>
