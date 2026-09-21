@@ -409,6 +409,7 @@
     "user_management_description": "View and manage all users in the system. Use search to filter by email, username, or name.",
     "picked_up": "Picked up",
     "mark_picked_up": "Mark as picked up",
+    "check_code": "Check pickup code",
     "mark_not_picked_up": "Mark as not picked up",
     "scan_pickup_code": "Scan Pickup Code",
     "manual_entry": "Manual Entry",

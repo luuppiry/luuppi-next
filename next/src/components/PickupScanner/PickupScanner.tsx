@@ -1,4 +1,5 @@
 'use client';
+import { getPickupDetails } from '@/actions/admin/get-pickup-details';
 import { togglePickupStatus } from '@/actions/admin/toggle-pickup-status';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner';
@@ -32,6 +33,7 @@ export default function PickupScanner({
   const [isOpen, setIsOpen] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [scannedCodes] = useState(() => new Set<string>());
+  const [canMarkAsPickedUp, setCanMarkAsPickedUp] = useState(false);
 
   const highlightCodeOnCanvas = (
     detectedCodes: IDetectedBarcode[],
@@ -51,6 +53,39 @@ export default function PickupScanner({
     });
   };
 
+  const handleFetchCode = useCallback(
+    async (inputCode: string) => {
+      const cleanCode = inputCode.trim().toUpperCase();
+      if (!cleanCode || loading) return;
+      if (scannedCodes.has(cleanCode)) return;
+
+      setLoading(true);
+      setMessage(null);
+      setCanMarkAsPickedUp(false);
+
+      const result = await getPickupDetails(
+        lang,
+        cleanCode,
+        true,
+        eventDocumentId,
+      );
+
+      if (result.isError) {
+        setMessage({ text: result.message, isError: true });
+      } else {
+        setMessage({
+          text: result.data!.ticket!,
+          isError: false,
+        });
+
+        setCanMarkAsPickedUp(true);
+      }
+
+      setLoading(false);
+    },
+    [eventDocumentId, lang, loading, scannedCodes],
+  );
+
   const handleProcessCode = useCallback(
     async (inputCode: string) => {
       const cleanCode = inputCode.trim().toUpperCase();
@@ -59,6 +94,7 @@ export default function PickupScanner({
 
       setLoading(true);
       setMessage(null);
+      setCanMarkAsPickedUp(false);
 
       const result = await togglePickupStatus(
         lang,
@@ -97,7 +133,7 @@ export default function PickupScanner({
     if (detectedCodes.length > 0 && !isPaused) {
       const scannedValue = detectedCodes[0].rawValue;
       setCode(scannedValue);
-      handleProcessCode(scannedValue);
+      handleFetchCode(scannedValue);
     }
   };
 
@@ -157,7 +193,12 @@ export default function PickupScanner({
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleProcessCode(code);
+
+                if (canMarkAsPickedUp) {
+                  handleProcessCode(code);
+                } else {
+                  handleFetchCode(code);
+                }
               }}
             >
               <div className="form-control mb-4">
@@ -198,7 +239,9 @@ export default function PickupScanner({
                 {loading ? (
                   <span className="loading loading-spinner" />
                 ) : (
-                  dictionary.pages_admin.mark_picked_up
+                  dictionary.pages_admin[
+                    canMarkAsPickedUp ? 'mark_picked_up' : 'check_code'
+                  ]
                 )}
               </button>
             </form>

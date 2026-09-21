@@ -1,0 +1,152 @@
+'use server';
+import { auth } from '@/auth';
+import { getDictionary } from '@/dictionaries';
+import prisma from '@/libs/db/prisma';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
+import { logger } from '@/libs/utils/logger';
+import { isValidPickupCode } from '@/libs/utils/pickup-code';
+import { SupportedLanguage } from '@/models/locale';
+import { APIResponse } from '@/types/types';
+
+export async function getPickupDetails(
+  lang: SupportedLanguage,
+  registrationIdOrCode: string,
+  pickedUp: boolean,
+  eventDocumentId: string,
+) {
+  const dictionary = await getDictionary(lang);
+
+  const session = await auth();
+  const user = session?.user;
+
+  if (!user || !user.isLuuppiHato) {
+    logger.error('User not found in session or does not have required role');
+    return {
+      message: dictionary.api.unauthorized,
+      isError: true,
+    };
+  }
+
+  const hasHatoRole = await prisma.rolesOnUsers.findFirst({
+    where: {
+      entraUserUuid: user.entraUserUuid,
+      strapiRoleUuid: process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
+      OR: [
+        {
+          expiresAt: {
+            gte: new Date(),
+          },
+        },
+        {
+          expiresAt: null,
+        },
+      ],
+    },
+  });
+
+  if (!hasHatoRole) {
+    logger.error('User does not have the required role');
+    return {
+      message: dictionary.api.unauthorized,
+      isError: true,
+    };
+  }
+
+  // Determine if we're looking up by ID or pickup code
+  let whereClause: {
+    id?: number;
+    pickupCode?: string;
+    deletedAt: null;
+    paymentCompleted: true;
+    eventDocumentId: string;
+  };
+
+  if (typeof registrationIdOrCode === 'string') {
+    const code = registrationIdOrCode.toUpperCase().trim();
+
+    if (!isValidPickupCode(code)) {
+      return {
+        message: dictionary.api.invalid_pickup_code,
+        isError: true,
+      };
+    }
+
+    whereClause = {
+      pickupCode: code,
+      deletedAt: null,
+      paymentCompleted: true,
+      eventDocumentId,
+    };
+  } else {
+    return {
+      message: dictionary.api.invalid_message,
+      isError: true,
+    };
+  }
+
+  try {
+    const registration = await prisma.eventRegistration.findFirst({
+      where: whereClause,
+      include: {
+        user: {
+          select: {
+            username: true,
+            email: true,
+          },
+        },
+        event: {
+          select: {
+            nameFi: true,
+            nameEn: true,
+          },
+        },
+      },
+    });
+
+    if (!registration) {
+      return {
+        message: dictionary.api.registration_not_found,
+        isError: true,
+      };
+    }
+
+    if (pickedUp === true && registration.pickedUp === true) {
+      return {
+        message: dictionary.pages_events.already_picked_up,
+        isError: true,
+      };
+    }
+
+    const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
+      lang,
+      `/api/events/${eventDocumentId}?populate=Registration.TicketTypes&fields=id`,
+      [`event-${eventDocumentId}`],
+      true,
+    );
+
+    const ticket = strapiEvent?.data.Registration?.TicketTypes.find(
+      (ticket) => ticket.uid === registration.strapiTicketUid,
+    );
+
+    if (!ticket) {
+      return {
+        message: dictionary.api.invalid_event,
+        isError: true,
+      };
+    }
+
+    return {
+      message: dictionary.general.success,
+      isError: false,
+      data: {
+        ticket: ticket[lang === 'fi' ? 'NameFi' : 'NameEn'],
+      },
+    };
+  } catch (error) {
+    logger.error('Failed to fetch pickup event details', error);
+    return {
+      message: dictionary.api.invalid_message,
+      isError: true,
+    };
+  }
+}

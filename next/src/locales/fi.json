@@ -409,6 +409,7 @@
     "user_management_description": "Selaa ja hallinnoi järjestelmän käyttäjiä. Käytä hakua suodattaaksesi sähköpostin, käyttäjänimen tai nimen perusteella.",
     "picked_up": "Noudettu",
     "mark_picked_up": "Merkitse noudetuksi",
+    "check_code": "Tarkista koodi",
     "mark_not_picked_up": "Merkitse ei noudetuksi",
     "scan_pickup_code": "Skannaa noutokoodi",
     "manual_entry": "Syötä käsin",
