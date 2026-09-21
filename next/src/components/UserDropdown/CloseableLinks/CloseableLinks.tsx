@@ -29,6 +29,7 @@ export default function CloseableLink({
       <Link
         className="btn btn-ghost btn-sm justify-start"
         href={`/${lang}/profile`}
+        prefetch={false}
         onClick={handleClick}
       >
         <RiUser3Fill size={22} />
@@ -37,6 +38,7 @@ export default function CloseableLink({
       <Link
         className="btn btn-ghost btn-sm justify-start"
         href={`/${lang}/own-events`}
+        prefetch={false}
         onClick={handleClick}
       >
         <RiCalendarEventLine size={22} />
@@ -46,6 +48,7 @@ export default function CloseableLink({
         <Link
           className="btn btn-ghost btn-sm w-full justify-start"
           href={`/${lang}/migrate-account`}
+          prefetch={false}
         >
           <MdOutlineBackup size={22} />
           {dictionary.navigation.migrate_account}
