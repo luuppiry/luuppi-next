@@ -62,6 +62,7 @@ export default function PickupScanner({
       setLoading(true);
       setMessage(null);
       setCanMarkAsPickedUp(false);
+      setIsPaused(true);
 
       const result = await getPickupDetails(
         lang,
