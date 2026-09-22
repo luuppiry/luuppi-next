@@ -1,7 +1,7 @@
 'use client';
 
 import Tooltip from '@/components/Tooltip/Tooltip';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { PiCheckCircle, PiCircle } from 'react-icons/pi';
@@ -52,13 +52,20 @@ export default function RegistrationsTableRow({
   showTickets,
 }: RegistrationsTableRowProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const pickedCount = registrations.filter((r) => r.pickedUp).length;
   const total = registrations.length;
 
+  const showModal = () => {
+    setIsOpen(true);
+
+    window.requestAnimationFrame(() => dialogRef.current?.showModal());
+  };
+
   return (
     <>
-      <tr onClick={() => dialogRef.current?.showModal()}>
+      <tr onClick={showModal}>
         <td className="max-w-20 whitespace-normal break-words">
           <div className="flex justify-between">
             {displayName || email}
@@ -129,75 +136,75 @@ export default function RegistrationsTableRow({
         )}
       </tr>
 
-      {createPortal(
-        <dialog ref={dialogRef} className="modal">
-          <div className="modal-box max-w-3xl">
-            <h3 className="text-lg font-semibold">{displayName || email}</h3>
-            <p className="text-sm text-base-content/60">{email}</p>
+      {isOpen &&
+        createPortal(
+          <dialog
+            ref={dialogRef}
+            className="modal"
+            onClose={() => setIsOpen(false)}
+          >
+            <div className="modal-box max-w-3xl">
+              <h3 className="text-lg font-semibold">{displayName || email}</h3>
+              <p className="text-sm text-base-content/60">{email}</p>
 
-            <div className="mt-4 overflow-x-auto">
-              <table className="table table-sm">
-                <thead>
-                  <tr>
-                    <th>{dictionary.pages_admin.ticket_type}</th>
-                    {questionKeys.map((key) => (
-                      <th key={key} className="whitespace-normal break-words">
-                        {key}
-                      </th>
-                    ))}
-                    {requiresPickup && (
-                      <th className="text-center">{pickedUpLabel}</th>
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  {registrations.map((reg) => (
-                    <tr key={reg.id}>
-                      <td>{reg.ticketName}</td>
+              <div className="mt-4 overflow-x-auto">
+                <table className="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>{dictionary.pages_admin.ticket_type}</th>
                       {questionKeys.map((key) => (
-                        <td key={key} className="whitespace-normal break-words">
-                          {renderAnswerCell(reg.answers[key], false)}
-                        </td>
+                        <th key={key} className="whitespace-normal break-words">
+                          {key}
+                        </th>
                       ))}
                       {requiresPickup && (
-                        <td>
-                          <div className="flex justify-center">
-                            {reg.pickedUp ? (
-                              <PiCheckCircle
-                                className="text-success"
-                                size={18}
-                              />
-                            ) : (
-                              <PiCircle
-                                className="text-base-content/40"
-                                size={18}
-                              />
-                            )}
-                          </div>
-                        </td>
+                        <th className="text-center">{pickedUpLabel}</th>
                       )}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {registrations.map((reg) => (
+                      <tr key={reg.id}>
+                        <td>{reg.ticketName}</td>
+                        {questionKeys.map((key) => (
+                          <td
+                            key={key}
+                            className="whitespace-normal break-words"
+                          >
+                            {renderAnswerCell(reg.answers[key], false)}
+                          </td>
+                        ))}
+                        {requiresPickup && (
+                          <td>
+                            <div className="flex justify-center">
+                              {reg.pickedUp ? (
+                                <PiCheckCircle
+                                  className="text-success"
+                                  size={18}
+                                />
+                              ) : (
+                                <PiCircle
+                                  className="text-base-content/40"
+                                  size={18}
+                                />
+                              )}
+                            </div>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-
-            <div className="modal-action">
-              <form method="dialog">
-                <button className="btn btn-sm">
-                  {dictionary.general.close}
-                </button>
-              </form>
-            </div>
-          </div>
-          <form className="modal-backdrop" method="dialog">
-            <button className="cursor-default">
-              {dictionary.general.close}
-            </button>
-          </form>
-        </dialog>,
-        document.documentElement,
-      )}
+            <form className="modal-backdrop" method="dialog">
+              <button className="cursor-default">
+                {dictionary.general.close}
+              </button>
+            </form>
+          </dialog>,
+          document.documentElement,
+        )}
     </>
   );
 }
