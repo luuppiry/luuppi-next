@@ -34,9 +34,6 @@ COPY . .
 # COPY .env.production.sample .env.production
 RUN pnpm build
 
-# Copy server source maps into the standalone output
-RUN cp -r .next/server/. .next/standalone/.next/server/
-
 # 3. Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
@@ -69,4 +66,4 @@ ENV HOSTNAME "0.0.0.0"
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/app/api-reference/config/next-config-js/output
-CMD ["node", "--enable-source-maps", "server.js"]
+CMD ["node", "server.js"]

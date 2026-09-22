@@ -6,7 +6,8 @@ const strapi: URL = new URL(process.env.NEXT_PUBLIC_STRAPI_BASE_URL!);
 const nextConfig: NextConfig = {
   output: 'standalone',
   experimental: {
-    serverSourceMaps: true,
+    // https://github.com/vercel/next.js/issues/98543
+    cachedNavigations: false,
   },
   poweredByHeader: false,
   cacheComponents: true,
