@@ -13,17 +13,16 @@ import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 import { PiArrowLeft } from 'react-icons/pi';
 
-interface AdminEventDetailProps {
-  params: Promise<{ id: string }>;
-}
-
 export const instant = false;
 
-export default async function AdminEventDetail(props: AdminEventDetailProps) {
+export default async function AdminEventDetail(
+  props: PageProps<'/[lang]/admin/event/[id]'>,
+) {
   await connection();
 
   const lang = await language();
   const params = await props.params;
+  const search = await props.searchParams;
   const session = await auth();
   const dictionary = await getDictionary();
 
@@ -120,6 +119,7 @@ export default async function AdminEventDetail(props: AdminEventDetailProps) {
       <AdminEventRegistrationsList
         dictionary={dictionary}
         eventId={event.id}
+        filters={search.filters}
         lang={lang}
         requiresPickup={requiresPickup}
       />
