@@ -3,12 +3,13 @@ import Tooltip from '@/components/Tooltip/Tooltip';
 import { Event } from '@/models/event';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { SelectedViewContext } from '@/providers/EventSelectorProvider';
-import type { EventMountArg } from '@fullcalendar/core';
+import type { CalendarListeners, EventMountArg } from '@fullcalendar/core';
 import fiLocale from '@fullcalendar/core/locales/fi';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
 import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
@@ -34,6 +35,18 @@ export default function EventCalendar({
   const calendarRef = useRef<FullCalendar>(null);
   const currentDate = new Date();
 
+  const handleEventClick: CalendarListeners['eventClick'] = (e) => {
+    e.jsEvent.preventDefault();
+    const eventUrl = `/${lang}/events/${events.find((event) => event.id === e.event.id)?.slug}`;
+
+    if (e.jsEvent.metaKey || e.jsEvent.ctrlKey) {
+      window.open(eventUrl, '_blank');
+      return;
+    }
+
+    router.push(eventUrl);
+  };
+
   const handleEventDidMount = (info: EventMountArg) => {
     const event = events.find((e) => e.id === info.event.id);
     if (!event) return;
@@ -42,7 +55,9 @@ export default function EventCalendar({
     const anchor = info.el.matches('a') ? info.el : info.el.querySelector('a');
     anchor?.setAttribute('href', eventUrl);
 
-    const prefetch = () => router.prefetch(eventUrl);
+    const prefetch = () =>
+      router.prefetch(eventUrl, { kind: PrefetchKind.FULL });
+
     info.el.addEventListener('mouseenter', prefetch, { once: true });
     info.el.addEventListener('touchstart', prefetch, {
       once: true,
@@ -127,6 +142,7 @@ export default function EventCalendar({
           }
           dayMaxEventRows={4}
           dayMaxEvents={4}
+          eventClick={handleEventClick}
           eventContent={function (arg) {
             return (
               <Tooltip content={arg.event.title}>
