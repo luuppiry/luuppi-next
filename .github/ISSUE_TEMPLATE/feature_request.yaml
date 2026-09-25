@@ -1,8 +1,7 @@
 ---
 name: 🛠️ Feature Request
 description: Suggest a new feature
-labels:
-    - 'type: feature request'
+type: Feature
 
 body:
     - type: markdown
