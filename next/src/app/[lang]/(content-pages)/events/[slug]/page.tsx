@@ -149,7 +149,7 @@ export default async function Event(props: EventProps) {
                 </p>
               </div>
               {hasRegistration && (
-                <Suspense fallback={<div />}>
+                <Suspense fallback={<div className='contents' />}>
                   <RegistrationEndsOwnQuota
                     dictionary={dictionary}
                     event={event}
