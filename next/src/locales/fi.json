@@ -56,7 +56,8 @@
     "role_updated": "Rooli päivitetty onnistuneesti",
     "user_added_to_role": "Käyttäjä lisätty rooliin onnistuneesti",
     "user_removed_from_role": "Käyttäjä poistettu roolista onnistuneesti",
-    "role_already_exists": "Käyttäjällä on jo rooli"
+    "role_already_exists": "Käyttäjällä on jo rooli",
+    "incomplete_profile": "Profiilistasi puuttuu jäsenrekisterin vaatimia tietoja. Päivitä profiilisivulla (luuppi.fi/profile) etunimet, sukunimi ja kotikunta jatkaaksesi."
   },
   "roles": {
     "entire_board": "Koko hallitus",

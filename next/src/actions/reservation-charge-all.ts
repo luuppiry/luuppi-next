@@ -5,6 +5,7 @@ import prisma from '@/libs/db/prisma';
 import { sendEventReceiptEmail } from '@/libs/emails/send-event-verify';
 import { createCharge } from '@/libs/payments/create-charge';
 import { logger } from '@/libs/utils/logger';
+import { isValidMember } from '@/libs/utils/user';
 import { SupportedLanguage } from '@/models/locale';
 import { randomUUID } from 'crypto';
 import { revalidatePath, updateTag } from 'next/cache';
@@ -17,6 +18,26 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
   if (!session?.user) {
     return {
       message: dictionary.api.unauthorized,
+      isError: true,
+    };
+  }
+
+  const localUser = await prisma.user.findFirst({
+    where: { entraUserUuid: session.user.entraUserUuid },
+    select: {
+      firstName: true,
+      lastName: true,
+      domicle: true,
+    },
+  });
+
+  if (!localUser) {
+    return { message: dictionary.api.unauthorized, isError: true };
+  }
+
+  if (session.user.isLuuppiMember && !isValidMember(localUser)) {
+    return {
+      message: dictionary.api.incomplete_profile,
       isError: true,
     };
   }

@@ -4,6 +4,7 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
+import { isValidMember } from '@/libs/utils/user';
 import { SupportedLanguage } from '@/models/locale';
 import { revalidatePath, updateTag } from 'next/cache';
 
@@ -73,6 +74,13 @@ export async function migrateLegacyAccount(
     logger.error('User not found in database');
     return {
       message: dictionary.api.invalid_credentials,
+      isError: true,
+    };
+  }
+
+  if (!isValidMember(localUser)) {
+    return {
+      message: dictionary.api.incomplete_profile,
       isError: true,
     };
   }

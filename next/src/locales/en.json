@@ -56,7 +56,8 @@
     "role_updated": "Role updated successfully",
     "user_added_to_role": "User added to role successfully",
     "user_removed_from_role": "User removed from role successfully",
-    "role_already_exists": "User already has the role"
+    "role_already_exists": "User already has the role",
+    "incomplete_profile": "Your profile is missing information required for the membership register. Please update your profile (luuppi.fi/profile) with first names, family name and municipality to continue with your action."
   },
   "roles": {
     "entire_board": "Entire Board",
