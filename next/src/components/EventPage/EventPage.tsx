@@ -1,24 +1,17 @@
+import 'server-only'
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import RegistrationEndsOwnQuota from '@/components/RegistrationEndsOwnQuota/RegistrationEndsOwnQuota';
 import ShowParticipants from '@/components/ShowParticipants/ShowParticipants';
 import SidePartners from '@/components/SidePartners/SidePartners';
 import TicketArea from '@/components/Ticket/TicketArea';
-import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
-
-import { getPlainText } from '@/libs/strapi/blocks-converter';
-import { isEventVisible } from '@/libs/strapi/events';
-import { getStrapiData } from '@/libs/strapi/get-strapi-data';
-import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
+import { getEventImageUrl } from '@/libs/events';
 import { formatDateRangeLong } from '@/libs/utils/format-date-range';
 import { getEventJsonLd } from '@/libs/utils/json-ld';
-import { APIResponseCollection } from '@/types/types';
-import { Metadata } from 'next';
+import { Dictionary, SupportedLanguage } from '@/models/locale';
+import { APIResponseData } from '@/types/types';
 import Image from 'next/image';
-import { redirect } from 'next/navigation';
-import { lang as language } from 'next/root-params';
 import Script from 'next/script';
-import { connection } from 'next/server';
 import { Suspense } from 'react';
 import { BiSolidDrink } from 'react-icons/bi';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
@@ -27,55 +20,31 @@ import { MdNoDrinks } from 'react-icons/md';
 import { PiImageBroken } from 'react-icons/pi';
 import { RiProhibitedLine } from 'react-icons/ri';
 import { TbTableImport } from 'react-icons/tb';
+import 'server-only';
 
-interface EventProps {
-  params: Promise<{ slug: string }>;
+interface EventPageProps {
+  event: APIResponseData<'api::event.event'>;
+  partners: APIResponseData<'api::company.company'>[];
+  lang: SupportedLanguage;
+  slug: string;
+  dictionary: Dictionary;
+  updatedAt: Date;
+  startDate: Date;
+  endDate: Date;
 }
 
-export const instant = false;
-
-export default async function Event(props: EventProps) {
-  await connection();
-
-  const lang = await language();
-  const params = await props.params;
-  const dictionary = await getDictionary();
-
-  const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles&filters[ShowInCalendar][$eq]=false`;
-
-  const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    lang,
-    url,
-    [`event-${params.slug}`],
-    true,
-  );
-
-  const event = events?.data.at(0);
-
-  if (!event) {
-    redirect(`/${lang}/404`);
-  }
-
-  // Check if the event is visible to the current user
-  const eventVisible = await isEventVisible(event);
-  if (!eventVisible) {
-    redirect(`/${lang}/404`);
-  }
-
-  const partnersData = await getStrapiData<
-    APIResponseCollection<'api::company.company'>
-  >(lang, '/api/companies?populate=*', ['company']);
-
-  if (!event || !partnersData) {
-    redirect(`/${lang}/404`);
-  }
-
-  const imageUrlLocalized =
-    lang === 'en' && event.ImageEn?.url ? event.ImageEn?.url : event.Image?.url;
-
-  const imageUrl = imageUrlLocalized ? getStrapiUrl(imageUrlLocalized) : null;
-
-  const hasRegistration = event?.Registration?.TicketTypes?.length;
+export default function EventPage({
+  event,
+  partners,
+  lang,
+  slug,
+  dictionary,
+  updatedAt,
+  startDate,
+  endDate,
+}: EventPageProps) {
+  const imageUrl = getEventImageUrl(event, lang);
+  const hasRegistration = !!event.Registration?.TicketTypes?.length;
 
   return (
     <>
@@ -111,7 +80,7 @@ export default async function Event(props: EventProps) {
             <div className="flex flex-col opacity-40">
               <p className="text-sm dark:text-white">
                 {dictionary.general.content_updated}:{' '}
-                {new Date(event.updatedAt!).toLocaleString(lang, dateFormat)}
+                {updatedAt.toLocaleString(lang, dateFormat)}
               </p>
             </div>
             <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
@@ -124,11 +93,7 @@ export default async function Event(props: EventProps) {
                   <IoCalendarOutline className="shrink-0 text-2xl" />
                 </div>
                 <p className="line-clamp-2">
-                  {formatDateRangeLong(
-                    new Date(event.StartDate),
-                    new Date(event.EndDate),
-                    lang,
-                  )}
+                  {formatDateRangeLong(startDate, endDate, lang)}
                 </p>
               </div>
               <div className="flex items-center">
@@ -139,13 +104,15 @@ export default async function Event(props: EventProps) {
                   {event[lang === 'en' ? 'LocationEn' : 'LocationFi']}
                 </p>
               </div>
-              <Suspense>
-                <RegistrationEndsOwnQuota
-                  dictionary={dictionary}
-                  event={event}
-                  lang={lang}
-                />
-              </Suspense>
+              {hasRegistration && (
+                <Suspense fallback={<div className="contents" />}>
+                  <RegistrationEndsOwnQuota
+                    dictionary={dictionary}
+                    event={event}
+                    lang={lang}
+                  />
+                </Suspense>
+              )}
               {event['FuksiPoints'] && (
                 <div className="flex items-center">
                   <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
@@ -210,7 +177,7 @@ export default async function Event(props: EventProps) {
 
           <a
             className="btn btn-primary btn-sm my-8 w-fit"
-            href={`/api/ics?lang=${lang}&slug=${params.slug}`}
+            href={`/api/ics?lang=${lang}&slug=${slug}`}
           >
             <TbTableImport role="presentation" size={18} />
             {dictionary.general.add_to_calendar}
@@ -218,71 +185,10 @@ export default async function Event(props: EventProps) {
         </div>
         <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
           <div className="flex flex-col gap-4">
-            <SidePartners
-              dictionary={dictionary}
-              partnersData={partnersData.data}
-            />
+            <SidePartners dictionary={dictionary} partnersData={partners} />
           </div>
         </div>
       </div>
     </>
   );
-}
-
-export async function generateMetadata(props: EventProps): Promise<Metadata> {
-  const lang = await language();
-  const params = await props.params;
-  const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    lang,
-    `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=ImageEn`,
-    [`event-${params.slug}`],
-    true,
-  );
-
-  const event = events?.data.at(0);
-
-  if (!event) return {};
-
-  const pathname = `/${lang}/events/${params.slug}`;
-
-  const description = getPlainText(
-    event[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
-  );
-
-  const title = event[lang === 'en' ? 'NameEn' : 'NameFi'];
-
-  const imageUrlLocalized =
-    lang === 'en' && event.ImageEn?.url ? event.ImageEn?.url : event.Image?.url;
-
-  const imageUrl = imageUrlLocalized
-    ? getStrapiUrl(imageUrlLocalized)
-    : undefined;
-
-  const descriptionCutted = description.length > 300;
-
-  return {
-    robots: { index: false },
-    title: `${title} | Luuppi ry`,
-    description: description.slice(0, 300) + (descriptionCutted ? '...' : ''),
-    alternates: {
-      canonical: pathname,
-      languages: {
-        fi: `/fi${pathname.slice(3)}`,
-        en: `/en${pathname.slice(3)}`,
-      },
-    },
-    openGraph: {
-      title,
-      description: description.slice(0, 300) + (descriptionCutted ? '...' : ''),
-      url: pathname,
-      siteName: 'Luuppi ry',
-      images: imageUrl,
-    },
-    twitter: {
-      title,
-      description: description.slice(0, 300) + (descriptionCutted ? '...' : ''),
-      card: 'summary_large_image',
-      images: imageUrl,
-    },
-  };
 }

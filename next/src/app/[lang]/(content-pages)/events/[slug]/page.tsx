@@ -1,32 +1,13 @@
-import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
-import RegistrationEndsOwnQuota from '@/components/RegistrationEndsOwnQuota/RegistrationEndsOwnQuota';
-import ShowParticipants from '@/components/ShowParticipants/ShowParticipants';
-import SidePartners from '@/components/SidePartners/SidePartners';
-import TicketArea from '@/components/Ticket/TicketArea';
+import EventPage from '@/components/EventPage/EventPage';
 import { getDictionary } from '@/dictionaries';
-import { dateFormat } from '@/libs/constants';
-
-import { getPlainText } from '@/libs/strapi/blocks-converter';
+import { EVENT_POPULATE, buildEventMetadata } from '@/libs/events';
 import { isEventVisible } from '@/libs/strapi/events';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
-import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import { formatDateRangeLong } from '@/libs/utils/format-date-range';
-import { getEventJsonLd } from '@/libs/utils/json-ld';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { draftMode } from 'next/headers';
-import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
-import Script from 'next/script';
-import { Suspense } from 'react';
-import { BiSolidDrink } from 'react-icons/bi';
-import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
-import { LuBaby } from 'react-icons/lu';
-import { MdNoDrinks } from 'react-icons/md';
-import { PiImageBroken } from 'react-icons/pi';
-import { RiProhibitedLine } from 'react-icons/ri';
-import { TbTableImport } from 'react-icons/tb';
 import qs from 'qs';
 
 interface EventProps {
@@ -40,16 +21,14 @@ const getCachedDate = async (date: string) => {
 
 export default async function Event(props: EventProps) {
   const lang = await language();
-  const params = await props.params;
+  const { slug } = await props.params;
   const dictionary = await getDictionary();
   const { isEnabled: isDraftMode } = await draftMode();
 
-  const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=ImageEn&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
-
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     lang,
-    url,
-    [`event-${params.slug}`],
+    `/api/events?filters[Slug][$eq]=${slug}&${EVENT_POPULATE}`,
+    [`event-${slug}`],
     true,
     isDraftMode,
   );
@@ -61,10 +40,13 @@ export default async function Event(props: EventProps) {
   }
 
   // Check if the event is visible to the current user
-  const eventVisible = await isEventVisible(event, [
-    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
-    process.env.NEXT_PUBLIC_NO_ROLE_ID!,
-  ]);
+  const eventVisible =
+    isDraftMode ||
+    (await isEventVisible(event, [
+      process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
+      process.env.NEXT_PUBLIC_NO_ROLE_ID!,
+    ]));
+
   if (!eventVisible) {
     redirect(`/${lang}/404`);
   }
@@ -73,170 +55,21 @@ export default async function Event(props: EventProps) {
     APIResponseCollection<'api::company.company'>
   >(lang, '/api/companies?populate=*', ['company']);
 
-  if (!event || !partnersData) {
+  if (!partnersData) {
     redirect(`/${lang}/404`);
   }
 
-  const imageUrlLocalized =
-    lang === 'en' && event.ImageEn?.url ? event.ImageEn?.url : event.Image?.url;
-
-  const imageUrl = imageUrlLocalized ? getStrapiUrl(imageUrlLocalized) : null;
-
-  const hasRegistration = event?.Registration?.TicketTypes?.length;
-
-  const updatedAt = await getCachedDate(event.updatedAt as string);
-
   return (
-    <>
-      <Script
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getEventJsonLd({ data: event }, lang)),
-        }}
-        id="event-jsonld"
-        type="application/ld+json"
-      />
-      <div className="relative flex w-full gap-12">
-        <div className="flex w-full flex-col">
-          <div className="relative mb-12 h-64 overflow-hidden rounded-lg bg-gradient-to-r from-secondary-400 to-primary-300 max-md:h-44">
-            {imageUrl ? (
-              <Image
-                alt="Page banner image"
-                className="object-cover"
-                sizes="(min-width: 1728px) 800px, (min-width: 700px) 668px, (min-width: 425px) 393px, 288px"
-                src={imageUrl}
-                fill
-                priority
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center">
-                <PiImageBroken className="text-8xl text-white" />
-              </div>
-            )}
-          </div>
-          <div className="relative flex flex-col gap-4">
-            <h1 className="break-words">
-              {event[lang === 'en' ? 'NameEn' : 'NameFi']}
-            </h1>
-            <div className="flex flex-col opacity-40">
-              <p className="text-sm dark:text-white">
-                {dictionary.general.content_updated}:{' '}
-                {updatedAt.toLocaleString(lang, dateFormat)}
-              </p>
-            </div>
-            <div className="luuppi-pattern absolute -left-28 -top-28 -z-50 h-[401px] w-[601px] max-md:left-0 max-md:w-full" />
-          </div>
-          <div className="mb-12 mt-4 flex gap-4 rounded-lg bg-background-50">
-            <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
-            <div className="flex w-full flex-col gap-2 rounded-lg py-4 pr-4 font-semibold max-sm:text-sm">
-              <div className="flex items-center">
-                <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                  <IoCalendarOutline className="shrink-0 text-2xl" />
-                </div>
-                <p className="line-clamp-2">
-                  {formatDateRangeLong(
-                    await getCachedDate(event.StartDate as string),
-                    await getCachedDate(event.EndDate as string),
-                    lang,
-                  )}
-                </p>
-              </div>
-              <div className="flex items-center">
-                <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                  <IoLocationOutline className="shrink-0 text-2xl" />
-                </div>
-                <p className="line-clamp-2">
-                  {event[lang === 'en' ? 'LocationEn' : 'LocationFi']}
-                </p>
-              </div>
-              {hasRegistration && (
-                <Suspense fallback={<div className='contents' />}>
-                  <RegistrationEndsOwnQuota
-                    dictionary={dictionary}
-                    event={event}
-                    lang={lang}
-                  />
-                </Suspense>
-              )}
-              {event['FuksiPoints'] && (
-                <div className="flex items-center">
-                  <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                    {event['FuksiPoints'] === 'fuksi_points_true' ? (
-                      <LuBaby className="shrink-0 text-2xl" />
-                    ) : (
-                      <RiProhibitedLine className="shrink-0 text-2xl" />
-                    )}
-                  </div>
-                  <p className="line-clamp-2 font-normal">
-                    {dictionary.pages_events[event['FuksiPoints']]}
-                  </p>
-                </div>
-              )}
-              {event.Alcohol && (
-                <div className="group flex items-center hover:items-start sm:hover:items-center">
-                  <div className="mr-2 flex items-center justify-center rounded-full bg-primary-400 p-2 text-white">
-                    {event.Alcohol === 'no_alcohol' ? (
-                      <MdNoDrinks className="shrink-0 text-2xl" />
-                    ) : (
-                      <BiSolidDrink className="shrink-0 text-2xl" />
-                    )}
-                  </div>
-                  <p className="line-clamp-2 font-normal group-hover:line-clamp-none">
-                    {dictionary.pages_events[event.Alcohol]}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-          {hasRegistration && (
-            <div className="mb-12">
-              <h2 className="mb-4 text-2xl font-bold">
-                {dictionary.pages_events.tickets}
-              </h2>
-              <Suspense
-                fallback={
-                  <div className="flex flex-col gap-4">
-                    <div className="skeleton h-24 w-full" />
-                    <div className="skeleton h-24 w-full" />
-                  </div>
-                }
-              >
-                <TicketArea event={{ data: event }} lang={lang} />
-              </Suspense>
-              <Suspense
-                fallback={
-                  <div className="mt-6">
-                    <div className="skeleton h-8 w-48" />
-                  </div>
-                }
-              >
-                <ShowParticipants eventDocumentId={event.documentId} />
-              </Suspense>
-            </div>
-          )}
-          <div className="organization-page prose prose-custom max-w-full break-words decoration-secondary-400 transition-all duration-300 ease-in-out">
-            <BlockRendererClient
-              content={event[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi']}
-            />
-          </div>
-
-          <a
-            className="btn btn-primary btn-sm my-8 w-fit"
-            href={`/api/ics?lang=${lang}&slug=${params.slug}`}
-          >
-            <TbTableImport role="presentation" size={18} />
-            {dictionary.general.add_to_calendar}
-          </a>
-        </div>
-        <div className="sticky top-36 h-full w-full max-w-80 max-lg:hidden">
-          <div className="flex flex-col gap-4">
-            <SidePartners
-              dictionary={dictionary}
-              partnersData={partnersData.data}
-            />
-          </div>
-        </div>
-      </div>
-    </>
+    <EventPage
+      dictionary={dictionary}
+      endDate={await getCachedDate(event.EndDate as string)}
+      event={event}
+      lang={lang}
+      partners={partnersData.data}
+      slug={slug}
+      startDate={await getCachedDate(event.StartDate as string)}
+      updatedAt={await getCachedDate(event.updatedAt as string)}
+    />
   );
 }
 
@@ -269,57 +102,13 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const lang = await language();
-  const params = await props.params;
+  const { slug } = await props.params;
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     lang,
-    `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=ImageEn`,
-    [`event-${params.slug}`],
+    `/api/events?filters[Slug][$eq]=${slug}&populate=Image&populate=ImageEn`,
+    [`event-${slug}`],
     true,
   );
-
   const event = events?.data.at(0);
-
-  if (!event) return {};
-
-  const pathname = `/${lang}/events/${params.slug}`;
-
-  const description = getPlainText(
-    event[lang === 'en' ? 'DescriptionEn' : 'DescriptionFi'],
-  );
-
-  const title = event[lang === 'en' ? 'NameEn' : 'NameFi'];
-
-  const imageUrlLocalized =
-    lang === 'en' && event.ImageEn?.url ? event.ImageEn?.url : event.Image?.url;
-
-  const imageUrl = imageUrlLocalized
-    ? getStrapiUrl(imageUrlLocalized)
-    : undefined;
-
-  const descriptionCutted = description.length > 300;
-
-  return {
-    title: `${title} | Luuppi ry`,
-    description: description.slice(0, 300) + (descriptionCutted ? '...' : ''),
-    alternates: {
-      canonical: pathname,
-      languages: {
-        fi: `/fi${pathname.slice(3)}`,
-        en: `/en${pathname.slice(3)}`,
-      },
-    },
-    openGraph: {
-      title,
-      description: description.slice(0, 300) + (descriptionCutted ? '...' : ''),
-      url: pathname,
-      siteName: 'Luuppi ry',
-      images: imageUrl,
-    },
-    twitter: {
-      title,
-      description: description.slice(0, 300) + (descriptionCutted ? '...' : ''),
-      card: 'summary_large_image',
-      images: imageUrl,
-    },
-  };
+  return event ? buildEventMetadata(event, lang, 'events', slug) : {};
 }
