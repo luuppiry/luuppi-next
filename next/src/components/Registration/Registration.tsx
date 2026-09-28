@@ -8,6 +8,7 @@ import QuestionButton from '../QuestionButton/QuestionButton';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import RegistrationCounter from './RegistrationCounter';
 import { createQrCode } from '@/libs/utils/create-qr-code';
+import { IoTicket } from 'react-icons/io5';
 
 interface RegistrationProps {
   registration: {
@@ -102,7 +103,8 @@ export default async function Registration({
             <h2 className="line-clamp-2 break-all text-lg font-semibold max-md:text-base">
               {registration.name}
             </h2>
-            <h2 className="flex items-center gap-4 text-xl font-semibold max-md:text-lg">
+
+            <div className="flex items-center gap-4 text-xl font-semibold max-md:text-lg">
               <span>{registration.price?.toFixed(2)} €</span>
               <span
                 className={`badge max-md:badge-sm ${
@@ -124,17 +126,23 @@ export default async function Registration({
                 !registration.paymentCompleted && (
                   <RegistrationCounter expiresAt={registration.reservedUntil} />
                 )}
-            </h2>
-            <div className="flex items-center gap-6">
-              <p className="text-sm">
-                {firstLetterToUpperCase(
-                  registration.createdAt.toLocaleString(lang, longDateFormat),
-                )}{' '}
-                {registration.createdAt.toLocaleString(lang, shortTimeFormat)}
-              </p>
-
-              {ticket && <p>{lang === 'en' ? ticket.NameEn : ticket.NameFi}</p>}
             </div>
+
+            {ticket && (
+              <div className="flex items-center gap-2">
+                <IoTicket />
+                <p className="text-sm">
+                  {lang === 'en' ? ticket.NameEn : ticket.NameFi}
+                </p>
+              </div>
+            )}
+
+            <p className="text-sm">
+              {firstLetterToUpperCase(
+                registration.createdAt.toLocaleString(lang, longDateFormat),
+              )}{' '}
+              {registration.createdAt.toLocaleString(lang, shortTimeFormat)}
+            </p>
           </div>
           <div className="flex items-end gap-2">
             {registration.paymentCompleted &&
