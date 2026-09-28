@@ -44,7 +44,7 @@ export default async function Event(props: EventProps) {
   const dictionary = await getDictionary();
   const { isEnabled: isDraftMode } = await draftMode();
 
-  const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
+  const url = `/api/events?filters[Slug][$eq]=${params.slug}&populate=Image&populate=ImageEn&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     lang,
