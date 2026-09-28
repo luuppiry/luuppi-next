@@ -387,7 +387,11 @@ export default async function TicketArea({ lang, event }: TicketAreaProps) {
       ))}
       <div className="flex flex-col gap-4">
         {ticketsWithState.map(({ ticket, disabled }, index) => (
-          <div key={`${ticket.name}-${index}`} className="overflow-x-clip">
+          <div
+            key={`${ticket.name}-${index}`}
+            className="overflow-x-clip"
+            suppressHydrationWarning
+          >
             <Ticket
               key={`${ticket.name}-${index}`}
               dictionary={dictionary}
