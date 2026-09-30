@@ -9,12 +9,17 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
+import { connection } from 'next/server';
 
 interface AdminProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
+export const instant = false;
+
 export default async function Admin(props: AdminProps) {
+  await connection();
+
   const searchParams = await props.searchParams;
   const lang = await language();
   const session = await auth();
