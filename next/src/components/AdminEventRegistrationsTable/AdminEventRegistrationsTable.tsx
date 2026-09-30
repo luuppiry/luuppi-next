@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import qs from 'qs';
 import RegistrationsTableRow from './TableRow';
+import { getFullName } from '@/libs/utils/user';
 
 interface AdminEventRegistrationsListProps {
   dictionary: Dictionary;
@@ -290,12 +291,7 @@ export default async function AdminEventRegistrationsList({
           <tbody className="[&>*:nth-child(odd)]:bg-base-200">
             {Array.from(userGroups.values()).map((group) => {
               const user = group[0].user;
-              const firstname = (user.preferredFullName || user.firstName)
-                ?.split(' ')
-                .at(0);
-              const lastname = user.lastName;
-              const fullName =
-                firstname && lastname ? `${firstname} ${lastname}` : null;
+              const fullName = getFullName(user);
 
               const sortedGroup = [...group].sort((a, b) => {
                 const nameA = a.strapiTicketUid

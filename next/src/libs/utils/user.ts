@@ -20,3 +20,17 @@ export const isValidMember = (
   const record = user as Record<string, unknown>;
   return requiredFields.every((key) => typeof record[key] === 'string');
 };
+
+export const getFullName = (
+  user: Pick<User, 'firstName' | 'lastName' | 'preferredFullName'>,
+) => {
+  const preferredParts = (user.preferredFullName || '').trim().split(' ');
+  const hasValidPreferredName = preferredParts.length > 1;
+
+  const firstname = hasValidPreferredName
+    ? preferredParts?.at(0)
+    : user.firstName?.split(' ').at(0);
+  const lastname = user.lastName;
+
+  return firstname && lastname ? `${firstname} ${lastname}` : null;
+};
