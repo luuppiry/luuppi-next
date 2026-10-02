@@ -23,6 +23,8 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
+export const unstable_paramMatching = { lang: 'not-found' }
+
 export default async function RootLayout(props: RootLayoutProps) {
   const lang = await language();
 
