@@ -1,4 +1,4 @@
-import 'server-only'
+import placeholder from '@/../public/images/event_placeholder.png';
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import RegistrationEndsOwnQuota from '@/components/RegistrationEndsOwnQuota/RegistrationEndsOwnQuota';
 import ShowParticipants from '@/components/ShowParticipants/ShowParticipants';
@@ -17,7 +17,6 @@ import { BiSolidDrink } from 'react-icons/bi';
 import { IoCalendarOutline, IoLocationOutline } from 'react-icons/io5';
 import { LuBaby } from 'react-icons/lu';
 import { MdNoDrinks } from 'react-icons/md';
-import { PiImageBroken } from 'react-icons/pi';
 import { RiProhibitedLine } from 'react-icons/ri';
 import { TbTableImport } from 'react-icons/tb';
 import 'server-only';
@@ -68,9 +67,14 @@ export default function EventPage({
                 priority
               />
             ) : (
-              <div className="flex h-full items-center justify-center">
-                <PiImageBroken className="text-8xl text-white" />
-              </div>
+              <Image
+                alt=""
+                className="object-cover"
+                sizes="(min-width: 1728px) 800px, (min-width: 700px) 668px, (min-width: 425px) 393px, 288px"
+                src={placeholder}
+                fill
+                priority
+              />
             )}
           </div>
           <div className="relative flex flex-col gap-4">
