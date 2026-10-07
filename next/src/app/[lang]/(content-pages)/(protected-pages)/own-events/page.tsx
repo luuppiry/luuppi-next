@@ -13,11 +13,14 @@ import { Payment, PaymentStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
+import { connection } from 'next/server';
 import qs from 'qs';
 import { BiErrorCircle } from 'react-icons/bi';
 import { BsQrCode } from 'react-icons/bs';
 
 export default async function OwnEvents() {
+  await connection()
+
   const lang = await language();
   const dictionary = await getDictionary();
 

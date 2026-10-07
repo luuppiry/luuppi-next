@@ -14,11 +14,6 @@ interface EventProps {
   params: Promise<{ slug: string }>;
 }
 
-const getCachedDate = async (date: string) => {
-  'use cache';
-  return new Date(date);
-};
-
 export default async function Event(props: EventProps) {
   const lang = await language();
   const { slug } = await props.params;
@@ -62,13 +57,13 @@ export default async function Event(props: EventProps) {
   return (
     <EventPage
       dictionary={dictionary}
-      endDate={await getCachedDate(event.EndDate as string)}
+      endDate={new Date(event.EndDate)}
       event={event}
       lang={lang}
       partners={partnersData.data}
       slug={slug}
-      startDate={await getCachedDate(event.StartDate as string)}
-      updatedAt={await getCachedDate(event.updatedAt as string)}
+      startDate={new Date(event.StartDate)}
+      updatedAt={new Date(event.updatedAt!)}
     />
   );
 }

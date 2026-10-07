@@ -4,7 +4,7 @@ import { cacheLife, cacheTag } from 'next/cache';
 
 export const getCachedEventRegistrations = async (eventDocumentId: string) => {
   'use cache';
-  cacheLife('minutes');
+  cacheLife('hours');
   cacheTag(`get-cached-event-registrations:${eventDocumentId}`);
 
   const res = await prisma.eventRegistration.findMany({

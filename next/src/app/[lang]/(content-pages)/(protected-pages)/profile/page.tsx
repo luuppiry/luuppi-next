@@ -9,6 +9,7 @@ import { logger } from '@/libs/utils/logger';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
+import { connection } from 'next/server';
 
 const mailman = {
   auth:
@@ -20,6 +21,8 @@ const mailman = {
 };
 
 export default async function Profile() {
+  await connection()
+
   const lang = await language();
   const dictionary = await getDictionary();
 
