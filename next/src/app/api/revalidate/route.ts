@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
   if (model) {
     logger.info(`Revalidating ${model}`);
-    revalidateTag(model, { expire: 0 });
+    revalidateTag(model, 'max');
 
     if (model === 'event') {
       logger.info(`Revalidating event-${body.entry.documentId}`);
@@ -38,8 +38,8 @@ export async function POST(request: NextRequest) {
         return new Response('No entry found', { status: 400 });
       }
 
-      revalidateTag(`event-${body.entry.documentId}`, { expire: 0 });
-      revalidateTag(`event-${body.entry.Slug}`, { expire: 0 });
+      revalidateTag(`event-${body.entry.documentId}`, 'max');
+      revalidateTag(`event-${body.entry.Slug}`, 'max');
 
       const {
         NameFi,
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (model === 'invite' && body?.entry?.Slug) {
-      revalidateTag(`invite-${body.entry.Slug}`, { expire: 0 });
+      revalidateTag(`invite-${body.entry.Slug}`, 'max');
     }
 
     if (model === 'event-role') {

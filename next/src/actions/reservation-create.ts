@@ -93,7 +93,7 @@ export async function reservationCreate(
   const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>(
     lang,
     strapiUrl,
-    [`event-${eventDocumentId}`],
+    null,
     true,
   );
 

@@ -96,7 +96,7 @@ async function getStrapiDataDraft<T>(
 export function getStrapiData<T>(
   lang: SupportedLanguage,
   url: string,
-  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
+  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[] | null,
   ignoreError: true,
   draftMode?: boolean,
 ): Promise<T | null>;
@@ -104,7 +104,7 @@ export function getStrapiData<T>(
 export function getStrapiData<T>(
   lang: SupportedLanguage,
   url: string,
-  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
+  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[] | null,
   ignoreError?: false,
   draftMode?: boolean,
 ): Promise<T>;
@@ -112,12 +112,22 @@ export function getStrapiData<T>(
 export async function getStrapiData<T>(
   lang: SupportedLanguage,
   url: string,
-  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
+  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[] | null,
   ignoreError?: boolean,
   draftMode?: boolean,
 ): Promise<T | null> {
   if (draftMode) {
     return getStrapiDataDraft<T>(lang, url, ignoreError);
+  }
+
+  if (revalidateTags === null) {
+    try {
+      const res = await fetchStrapi(lang, url, 'published');
+      return await parseStrapiResponse<T>(res, url, ignoreError);
+    } catch (error) {
+      if (ignoreError) return null;
+      return logAndWrap(error, lang, url);
+    }
   }
 
   return getStrapiDataCached<T>(lang, url, revalidateTags, ignoreError);
