@@ -4,7 +4,7 @@ import { auth } from '@/auth';
 import { getDictionary } from '@/dictionaries';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
-import { revalidatePath } from 'next/cache';
+import { refresh } from 'next/cache';
 
 type ResponseSuccess = { message: string };
 type ResponseError = ResponseSuccess & { isError: true };
@@ -102,7 +102,7 @@ export const unsubscribe = async (
       };
     }
 
-    revalidatePath('/[lang]/profile', 'page');
+    refresh()
 
     return { message: dictionary.mail_list.unsubscribed };
   } catch (error) {
@@ -172,7 +172,7 @@ export const subscribe = async (
       };
     }
 
-    revalidatePath('/[lang]/profile', 'page');
+    refresh()
 
     return { message: dictionary.mail_list.subscribed };
   } catch (error) {

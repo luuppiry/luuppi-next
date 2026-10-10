@@ -6,7 +6,7 @@ import { redisClient } from '@/libs/db/redis';
 import { logger } from '@/libs/utils/logger';
 import { isValidPickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
-import { refresh, revalidatePath } from 'next/cache';
+import { refresh } from 'next/cache';
 
 export async function togglePickupStatus(
   lang: SupportedLanguage,
@@ -135,7 +135,6 @@ export async function togglePickupStatus(
       JSON.stringify({ isPickedUp: true }),
     );
 
-    revalidatePath(`/${lang}/admin/event/${eventDocumentId}`, 'page');
     refresh();
 
     return {

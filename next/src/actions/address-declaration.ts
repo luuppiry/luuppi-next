@@ -5,7 +5,7 @@ import prisma from '@/libs/db/prisma';
 import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { revalidatePath } from 'next/cache';
+import { refresh } from 'next/cache';
 
 const options = {
   cacheKey: 'address-declaration',
@@ -142,7 +142,7 @@ export async function addressDeclaration(
     },
   });
 
-  revalidatePath('/[lang]/profile', 'page');
+  refresh();
 
   return {
     message: dictionary.api.profile_updated,

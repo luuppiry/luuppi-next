@@ -4,7 +4,7 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { revalidatePath, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export async function userEditRoles(
   roles: {
@@ -179,8 +179,6 @@ export async function userEditRoles(
   });
 
   updateTag(`get-cached-user:${userToEdit.entraUserUuid}`);
-  revalidatePath('/[lang]/events/[slug]', 'page');
-  revalidatePath('/[lang]/profile', 'page');
 
   return {
     isError: false,

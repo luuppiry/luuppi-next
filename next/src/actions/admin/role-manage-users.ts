@@ -4,7 +4,7 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
-import { revalidatePath } from 'next/cache';
+import { refresh, updateTag } from 'next/cache';
 
 export async function roleAddUser(
   roleId: string,
@@ -114,7 +114,7 @@ export async function roleAddUser(
     },
   });
 
-  revalidatePath('/[lang]/admin', 'page');
+  refresh()
 
   return {
     isError: false,
@@ -197,7 +197,7 @@ export async function roleRemoveUser(
       },
     });
 
-    revalidatePath('/[lang]/admin', 'page');
+    updateTag(`get-cached-user:${user.entraUserUuid}`)
 
     return {
       isError: false,

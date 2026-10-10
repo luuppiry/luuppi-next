@@ -3,7 +3,7 @@ import { auth } from '@/auth';
 import prisma from '@/libs/db/prisma';
 import { redisClient } from '@/libs/db/redis';
 import { SupportedLanguage } from '@/models/locale';
-import { revalidatePath, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function reservationCancel(
@@ -54,6 +54,5 @@ export async function reservationCancel(
 
   updateTag(`get-cached-user:${session.user.entraUserUuid}`);
   updateTag(`get-cached-event-registrations:${registration.eventDocumentId}`);
-  revalidatePath('/[lang]/events/[slug]', 'page');
   redirect(`/${lang}/own-events`);
 }

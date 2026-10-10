@@ -6,7 +6,7 @@ import { isRateLimited, updateRateLimitCounter } from '@/libs/rate-limiter';
 import { logger } from '@/libs/utils/logger';
 import { isValidMember } from '@/libs/utils/user';
 import { SupportedLanguage } from '@/models/locale';
-import { revalidatePath, updateTag } from 'next/cache';
+import { refresh, updateTag } from 'next/cache';
 
 const options = {
   cacheKey: 'migrate-legacy-account',
@@ -149,8 +149,7 @@ export async function migrateLegacyAccount(
   );
 
   updateTag(`get-cached-user:${user.entraUserUuid}`);
-  revalidatePath('/[lang]/events/[slug]', 'page');
-  revalidatePath('/[lang]/profile', 'page');
+  refresh();
 
   return {
     message: dictionary.api.legacy_account_migrated,
