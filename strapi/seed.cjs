@@ -1,14 +1,11 @@
 const { createStrapi } = require("@strapi/strapi");
-const fs = require("node:fs");
 const { execSync } = require("child_process");
 
 const DEFAULT_ROLE_ID = 1;
 
 async function main() {
-  if (!fs.existsSync("dist")) {
-    execSync("pnpm strapi import -f seed.tar.gz", { stdio: "inherit" });
-    execSync("pnpm strapi build", { stdio: "inherit" });
-  }
+  execSync("pnpm strapi import -f seed.tar.gz", { stdio: "inherit" });
+  execSync("pnpm strapi build", { stdio: "inherit" });
 
   const strapi = await createStrapi({ distDir: "./dist" }).load();
 
