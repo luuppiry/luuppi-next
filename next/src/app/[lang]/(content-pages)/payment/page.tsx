@@ -3,6 +3,7 @@ import { stripe } from '@/libs/payments';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
+import { connection } from 'next/server';
 
 interface PaymentProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -11,6 +12,8 @@ interface PaymentProps {
 export default async function Payment({
   searchParams: initialSearchParams,
 }: PaymentProps) {
+  await connection();
+
   const lang = await language();
   const searchParams = await initialSearchParams;
 
