@@ -12,7 +12,6 @@ export default async function MigrateAccount() {
   const session = await auth();
 
   if (!session?.user) {
-    logger.error('Error getting user');
     redirect(`/${lang}`);
   }
 

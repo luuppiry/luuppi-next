@@ -21,14 +21,13 @@ const mailman = {
 };
 
 export default async function Profile() {
-  await connection()
+  await connection();
 
   const lang = await language();
   const dictionary = await getDictionary();
 
   const session = await auth();
   if (!session?.user) {
-    logger.error('Error getting user');
     redirect(`/${lang}`);
   }
 

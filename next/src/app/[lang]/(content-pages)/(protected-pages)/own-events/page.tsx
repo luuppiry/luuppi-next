@@ -19,14 +19,13 @@ import { BiErrorCircle } from 'react-icons/bi';
 import { BsQrCode } from 'react-icons/bs';
 
 export default async function OwnEvents() {
-  await connection()
+  await connection();
 
   const lang = await language();
   const dictionary = await getDictionary();
 
   const session = await auth();
   if (!session?.user) {
-    logger.error('Error getting user');
     redirect(`/${lang}`);
   }
 
