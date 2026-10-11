@@ -1,3 +1,5 @@
+import type { ChangeEventHandler } from 'react';
+
 interface FormInputProps {
   title: string;
   id: string;
@@ -13,7 +15,7 @@ interface FormInputProps {
   maxLength?: number;
   labelTopRight?: React.ReactNode;
   readonly?: boolean;
-  onChange?: () => void;
+  onChange?: ChangeEventHandler<HTMLInputElement, HTMLInputElement>;
 }
 
 export default function FormInput({

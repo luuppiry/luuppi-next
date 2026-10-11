@@ -69,11 +69,6 @@ export async function emailSendVerify(
   }
 
   if (user.email === email) {
-    logger.error(
-      // eslint-disable-next-line quotes
-      "User's email is the same as the new email when trying to change",
-      email,
-    );
     return {
       message: dictionary.api.email_already_in_use,
       isError: true,
