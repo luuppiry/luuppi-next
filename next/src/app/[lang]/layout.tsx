@@ -85,7 +85,7 @@ export default async function RootLayout(props: RootLayoutProps) {
             <EventSelectorProvider>
               <div className="flex-1">{children}</div>
             </EventSelectorProvider>
-            <Footer dictionary={dictionary} lang={lang} />
+            <Footer lang={lang} />
             <NotificationBar lang={lang} notification={notification} />
           </ThemeProvider>
         </SessionProvider>
