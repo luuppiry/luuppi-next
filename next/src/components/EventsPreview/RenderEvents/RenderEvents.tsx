@@ -70,7 +70,7 @@ export default async function RenderEvents({
   >('fi', url, ['event']);
 
   // Filter events based on visibility rules
-  const visibleEventsData = await filterVisibleEvents(eventsData.data);
+  const visibleEventsData = await filterVisibleEvents(eventsData.data, []);
 
   const formattedEvents = await Promise.all(
     visibleEventsData.map(async (e) => {

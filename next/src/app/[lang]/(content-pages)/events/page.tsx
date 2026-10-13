@@ -47,7 +47,7 @@ export default async function Events() {
   );
 
   // Filter events based on visibility rules
-  const visibleEvents = await filterVisibleEvents(data.data);
+  const visibleEvents = await filterVisibleEvents(data.data, []);
 
   // Format event from raw event data
   const formatEvent = (

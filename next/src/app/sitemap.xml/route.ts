@@ -125,7 +125,7 @@ export async function GET() {
   >('fi', url, ['event']);
 
   // Filter events based on visibility rules
-  const visibleEvents = await filterVisibleEvents(eventsData.data);
+  const visibleEvents = await filterVisibleEvents(eventsData.data, []);
 
   const eventPagesSiteMap: SitemapItemLoose[] = visibleEvents.map((event) => ({
     url: `/fi/events/${event.Slug}`,

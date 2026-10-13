@@ -157,12 +157,8 @@ export const isEventVisible = async (
  */
 export const filterVisibleEvents = async (
   events: Event[],
+  roles?: string[],
 ): Promise<Event[]> => {
-  const roles = [
-    process.env.NEXT_PUBLIC_NO_ROLE_ID!,
-    process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
-  ];
-
   const visibilityChecks = await Promise.all(
     events.map(async (event) => ({
       event,

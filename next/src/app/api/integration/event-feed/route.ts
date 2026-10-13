@@ -52,7 +52,7 @@ export async function GET(
       ['event'],
     );
     // Filter events based on visibility rules
-    const visibleEvents = await filterVisibleEvents(data.data);
+    const visibleEvents = await filterVisibleEvents(data.data, []);
 
     const events = visibleEvents.map((event) => ({
       // @ts-expect-error TODO: legacy strapi 4 format
