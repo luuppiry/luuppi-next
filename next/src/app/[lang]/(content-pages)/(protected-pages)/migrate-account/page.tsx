@@ -5,8 +5,11 @@ import { logger } from '@/libs/utils/logger';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
+import { connection } from 'next/server';
 
 export default async function MigrateAccount() {
+  await connection();
+
   const lang = await language();
   const dictionary = await getDictionary();
   const session = await auth();

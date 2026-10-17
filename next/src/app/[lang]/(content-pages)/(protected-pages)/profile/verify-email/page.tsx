@@ -10,6 +10,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
+import { connection } from 'next/server';
 
 const tenantName = process.env.AZURE_TENANT_NAME!;
 
@@ -18,6 +19,8 @@ interface VerifyEmailProps {
 }
 
 export default async function VerifyEmail(props: VerifyEmailProps) {
+  await connection();
+
   const searchParams = await props.searchParams;
   const lang = await language();
   const dictionary = await getDictionary();
