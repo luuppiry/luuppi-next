@@ -1,6 +1,5 @@
 import { auth } from '@/auth';
 import prisma from '@/libs/db/prisma';
-import { logger } from '@/libs/utils/logger';
 import { Dictionary } from '@/models/locale';
 import { APIResponseData } from '@/types/types';
 
@@ -73,34 +72,17 @@ export const isEventVisible = async (
   }
 
   const visibleForRoles = event.VisibleOnlyForRoles;
-  let requiredRoleIds: string[];
+  let requiredRoleIds: string[] = [];
 
-  // Use VisibleOnlyForRoles if specified or TicketTypes as a fallback, otherwise hide the event entirely
+  // If VisibleOnlyForRoles is not set, the event is visible to anyone with the link
+  if (!visibleForRoles || visibleForRoles.length === 0) {
+    return true;
+  }
+
   if (visibleForRoles && visibleForRoles.length > 0) {
     requiredRoleIds = visibleForRoles
       .map((r) => r?.RoleId)
       .filter((id): id is string => Boolean(id));
-  } else {
-    const ticketTypes = event.Registration?.TicketTypes;
-    if (!ticketTypes || ticketTypes.length === 0) {
-      // No ticket types and no visible roles - hide from everyone
-      logger.error(
-        `Event ${event.documentId} is hidden entirely - no ticket types`,
-      );
-      return false;
-    }
-
-    requiredRoleIds = ticketTypes
-      .map((type) => type?.Role?.RoleId)
-      .filter((id): id is string => Boolean(id));
-
-    // If no valid role IDs found in ticket types, hide the event
-    if (requiredRoleIds.length === 0) {
-      logger.error(
-        `Event ${event.documentId} is hidden entirely - no roles for ticket types`,
-      );
-      return false;
-    }
   }
 
   // If userRoleIds weren't passed, we need to fetch them
@@ -151,18 +133,14 @@ export const isEventVisible = async (
 
 /**
  * Filters an array of events based on visibility rules.
- *
- * @param events - Array of event data from Strapi
- * @returns Promise<Array> - Filtered array of events
  */
 export const filterVisibleEvents = async (
   events: Event[],
-  roles?: string[],
 ): Promise<Event[]> => {
   const visibilityChecks = await Promise.all(
     events.map(async (event) => ({
       event,
-      visible: await isEventVisible(event, roles),
+      visible: event.ShowInCalendar !== false,
     })),
   );
 
