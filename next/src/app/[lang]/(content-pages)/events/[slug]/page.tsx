@@ -22,7 +22,7 @@ export default async function Event(props: EventProps) {
 
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
     lang,
-    `/api/events?filters[Slug][$eq]=${slug}&${EVENT_POPULATE}`,
+    `/api/events?filters[Slug][$eq]=${slug}&${EVENT_POPULATE}&filters[ShowInCalendar][$ne]=false`,
     [`event-${slug}`],
     true,
     isDraftMode,
