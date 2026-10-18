@@ -21,21 +21,21 @@ const SAFETY_NOTICE_FI = {
 
 const SAFETY_NOTICE_EN = {
   before:
-    "The event follows Luuppi’s equality plan and principles for a safer space, which can be found ",
+    "The event will follow Luuppi's Equality and Safer Space principles, which can be found ",
   linkText: "here",
   after:
-    ". In case of harassment, please contact the main organizer or Luuppi’s equality representative.",
+    ". In the event of harassment, contact the event's main organizer or Luuppi's equality representative.",
 };
 
 function buildSafetyChildren(notice: typeof SAFETY_NOTICE_FI, lang: string) {
   return [
-    { type: "text", text: notice.before, italic: true },
+    { type: "text", text: notice.before },
     {
       type: "link",
       url: safetyLink(lang),
-      children: [{ type: "text", text: notice.linkText, italic: true }],
+      children: [{ type: "text", text: notice.linkText }],
     },
-    { type: "text", text: notice.after, italic: true },
+    { type: "text", text: notice.after },
   ];
 }
 
