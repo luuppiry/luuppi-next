@@ -57,7 +57,15 @@
     "user_added_to_role": "User added to role successfully",
     "user_removed_from_role": "User removed from role successfully",
     "role_already_exists": "User already has the role",
-    "incomplete_profile": "Your profile is missing information required for the membership register. Please update your profile (luuppi.fi/profile) with first names, family name and municipality to continue with your action."
+    "incomplete_profile": "Your profile is missing information required for the membership register. Please update your profile (luuppi.fi/profile) with first names, family name and municipality to continue with your action.",
+    "invalid_iban": "That IBAN doesn't look valid. Check it for typos.",
+    "invalid_purpose": "Describe what the expenses were for (3-100 characters).",
+    "invalid_business_id": "Invalid business ID.",
+    "invalid_expense_date": "Enter the date of the expense.",
+    "invalid_expense_description": "Describe the expense (3-80 characters).",
+    "invalid_expense_amount": "Enter an amount greater than zero, for example 12,50.",
+    "invalid_receipts": "Attach 1-10 receipts as PDF, JPEG or PNG, max 5 MB each and 10 MB in total.",
+    "expense_claim_sent": "Your claim was sent to the treasurer."
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -361,6 +369,41 @@
     "not_picked_up": "Awaiting pickup",
     "already_picked_up": "Already picked up",
     "show_to_admin": "Show this code to the administrator"
+  },
+  "pages_expense_claim": {
+    "title": "Expense claim",
+    "name": "Your name",
+    "description": "Claim reimbursement for association expenses. Fill in your expenses, attach receipts and the claim is sent to the treasurer.",
+    "seo_title": "Expense claim",
+    "seo_description": "Claim reimbursement for association expenses. Fill in your expenses, attach receipts and the claim is sent to the treasurer.",
+    "email": "Your email",
+    "iban": "IBAN for reimbursement",
+    "purpose": "What were the expenses for?",
+    "organization_section": "Claiming for another association?",
+    "organization_help": "Fill in these only if you are sending an invoice or claim on behalf of another association.",
+    "organization": "Association name",
+    "business_id": "Business ID",
+    "invoice_number": "Your invoice number",
+    "expenses": "Expenses",
+    "expense": "Expense",
+    "date": "Date",
+    "field_description": "Description",
+    "amount": "Amount (€, including VAT)",
+    "category": "Category",
+    "vat": "VAT",
+    "vat_none": "No VAT / unknown",
+    "add_line": "Add expense",
+    "remove_line": "Remove last",
+    "notes": "Additional information",
+    "receipts": "Receipts (PDF, JPEG or PNG)",
+    "receipts_help": "Up to 10 files, 5 MB each. Photos are merged into one PDF.",
+    "send": "Send claim",
+    "categories": {
+      "events": "Event costs",
+      "premises": "Premises costs",
+      "tutoring": "Tutoring costs",
+      "other": "Other"
+    }
   },
   "pages_404": {
     "title": "Page not found",
