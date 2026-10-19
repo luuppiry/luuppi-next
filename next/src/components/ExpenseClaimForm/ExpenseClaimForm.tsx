@@ -1,16 +1,11 @@
 'use client';
 import { emailSendExpenseClaim } from '@/actions/email-send-expense-claim';
-import {
-  expenseCategories,
-  expenseLimits,
-  expenseVatRates,
-} from '@/libs/constants/expense-claim';
+import { expenseLimits } from '@/libs/constants/expense-claim';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 import { useRef, useState } from 'react';
 import { BiErrorCircle } from 'react-icons/bi';
 import FormInput from '../FormInput/FormInput';
-import FormSelect from '../FormSelect/FormSelect';
 import FormTextArea from '../FormTextArea/FormTextArea';
 import SubmitButton from '../SubmitButton/SubmitButton';
 
@@ -58,7 +53,7 @@ export default function ExpenseClaimForm({
 
   return (
     <form ref={formRef} action={sendClaim} className="card card-body">
-      <h2 className="mb-4 text-lg font-semibold">{t.title}</h2>
+      <h2 className="mb-4 text-lg font-semibold">{t.form_title}</h2>
       {Boolean(
         formResponse.isError && formResponse.message && !formResponse.field,
       ) && (
@@ -72,6 +67,8 @@ export default function ExpenseClaimForm({
       ) && (
         <div className="alert alert-success mb-4">{formResponse.message}</div>
       )}
+
+      <div className="alert alert-info mb-4">{t.separate_forms_notice}</div>
 
       <FormInput
         error={fieldError('name')}
@@ -101,33 +98,6 @@ export default function ExpenseClaimForm({
         marginTop={false}
         placeholder={t.purpose}
         title={t.purpose}
-      />
-
-      <h3 className="mb-2 mt-2 font-semibold">{t.organization_section}</h3>
-      <p className="mb-2 text-sm">{t.organization_help}</p>
-      <FormInput
-        error={fieldError('organization')}
-        id="organization"
-        marginTop={false}
-        placeholder={t.organization}
-        required={false}
-        title={t.organization}
-      />
-      <FormInput
-        error={fieldError('businessId')}
-        id="businessId"
-        marginTop={false}
-        placeholder={t.business_id}
-        required={false}
-        title={t.business_id}
-      />
-      <FormInput
-        error={fieldError('invoiceNumber')}
-        id="invoiceNumber"
-        marginTop={false}
-        placeholder={t.invoice_number}
-        required={false}
-        title={t.invoice_number}
       />
 
       <h3 className="mb-2 mt-2 font-semibold">{t.expenses}</h3>
@@ -160,33 +130,11 @@ export default function ExpenseClaimForm({
             placeholder="0,00"
             title={t.amount}
           />
-          <FormSelect
-            id={`line-${i}-category`}
-            marginTop={false}
-            options={expenseCategories.map((category) => ({
-              label: t.categories[category.key as keyof typeof t.categories],
-              value: category.key,
-            }))}
-            title={t.category}
-            value={expenseCategories[0].key}
-            onChange={() => setFormResponse(initialState)}
-          />
-          <FormSelect
-            id={`line-${i}-vat`}
-            marginTop={false}
-            options={expenseVatRates.map((rate) => ({
-              label: rate === '0' ? t.vat_none : `${rate} %`,
-              value: rate,
-            }))}
-            title={t.vat}
-            value={expenseVatRates[0]}
-            onChange={() => setFormResponse(initialState)}
-          />
         </fieldset>
       ))}
       <div className="mb-4 flex gap-2">
         <button
-          className="btn btn-primary btn-sm"
+          className="btn btn-neutral btn-sm"
           disabled={lineCount >= expenseLimits.maxLines}
           type="button"
           onClick={() => setLineCount((n) => n + 1)}

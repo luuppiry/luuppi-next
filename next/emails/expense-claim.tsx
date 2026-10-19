@@ -11,10 +11,8 @@ import {
 
 interface ExpenseClaimLine {
   date: string;
-  category: string;
   description: string;
   amount: string;
-  vat: string;
 }
 
 interface LuuppiExpenseClaimProps {
@@ -22,9 +20,6 @@ interface LuuppiExpenseClaimProps {
   senderName: string;
   senderEmail: string;
   iban: string;
-  organization?: string;
-  businessId?: string;
-  theirInvoiceNumber?: string;
   purpose: string;
   notes?: string;
   lines: ExpenseClaimLine[];
@@ -37,9 +32,6 @@ export const LuuppiExpenseClaim = ({
   senderName,
   senderEmail,
   iban,
-  organization,
-  businessId,
-  theirInvoiceNumber,
   purpose,
   notes,
   lines,
@@ -78,21 +70,6 @@ export const LuuppiExpenseClaim = ({
           <Text style={titleText}>
             <span style={titleSpan}>IBAN:</span> {iban}
           </Text>
-          {organization ? (
-            <Text style={titleText}>
-              <span style={titleSpan}>Yhdistys:</span> {organization}
-            </Text>
-          ) : null}
-          {businessId ? (
-            <Text style={titleText}>
-              <span style={titleSpan}>Y-tunnus:</span> {businessId}
-            </Text>
-          ) : null}
-          {theirInvoiceNumber ? (
-            <Text style={titleText}>
-              <span style={titleSpan}>Laskun numero:</span> {theirInvoiceNumber}
-            </Text>
-          ) : null}
         </Container>
         <Container style={messageContainer}>
           <Text style={messageTitle}>{purpose}</Text>
@@ -101,20 +78,14 @@ export const LuuppiExpenseClaim = ({
               {lines.map((line, i) => (
                 <tr key={i}>
                   <td style={cell}>{line.date}</td>
-                  <td style={cell}>
-                    {line.description}
-                    <br />
-                    <span style={subtle}>
-                      {line.category}, ALV {line.vat} %
-                    </span>
-                  </td>
+                  <td style={cell}>{line.description}</td>
                   <td style={{ ...cell, textAlign: 'right' }}>
                     {line.amount} €
                   </td>
                 </tr>
               ))}
               <tr>
-                <td style={totalCell} colSpan={2}>
+                <td colSpan={2} style={totalCell}>
                   Yhteensä
                 </td>
                 <td style={{ ...totalCell, textAlign: 'right' }}>{total} €</td>
@@ -145,10 +116,8 @@ LuuppiExpenseClaim.PreviewProps = {
   lines: [
     {
       date: '2026-10-02',
-      category: 'Tapahtumakulut',
       description: 'Servetit ja lautaset',
       amount: '12,50',
-      vat: '25.5',
     },
   ],
   total: '12,50',
@@ -223,11 +192,6 @@ const cell = {
 const totalCell = {
   padding: '8px 4px',
   fontWeight: 'bold',
-};
-
-const subtle = {
-  color: '#6b7280',
-  fontSize: '12px',
 };
 
 const hr = {

@@ -379,31 +379,19 @@
     "email": "Your email",
     "iban": "IBAN for reimbursement",
     "purpose": "What were the expenses for?",
-    "organization_section": "Claiming for another association?",
-    "organization_help": "Fill in these only if you are sending an invoice or claim on behalf of another association.",
-    "organization": "Association name",
-    "business_id": "Business ID",
-    "invoice_number": "Your invoice number",
     "expenses": "Expenses",
     "expense": "Expense",
     "date": "Date",
     "field_description": "Description",
     "amount": "Amount (€, including VAT)",
-    "category": "Category",
-    "vat": "VAT",
-    "vat_none": "No VAT / unknown",
     "add_line": "Add expense",
     "remove_line": "Remove last",
     "notes": "Additional information",
     "receipts": "Receipts (PDF, JPEG or PNG)",
     "receipts_help": "Up to 10 files, 5 MB each. Photos are merged into one PDF.",
     "send": "Send claim",
-    "categories": {
-      "events": "Event costs",
-      "premises": "Premises costs",
-      "tutoring": "Tutoring costs",
-      "other": "Other"
-    }
+    "separate_forms_notice": "Please send expenses for different events or matters on separate forms. Accounting needs one voucher per event.",
+    "form_title": "Claim details"
   },
   "pages_404": {
     "title": "Page not found",

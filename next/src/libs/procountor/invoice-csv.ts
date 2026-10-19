@@ -1,22 +1,17 @@
 /* eslint-disable no-control-regex */
 /* eslint-disable quotes */
-import {
-  expenseCategories,
-  expenseLimits,
-} from '@/libs/constants/expense-claim';
+import { expenseLimits } from '@/libs/constants/expense-claim';
 
 // FIXME: confirm with a test import in Procountor's import preview
 const DECIMAL_SEPARATOR = ',';
-const MEMBER_INVOICE_TYPE = 'T'; // travel invoice (fallback: 'O' purchase invoice)
-const ASSOCIATION_INVOICE_TYPE = 'O'; // purchase invoice
+const INVOICE_TYPE = 'T'; // travel invoice (fallback: 'O' purchase invoice)
+const ROW_VAT_PERCENT = '0'; // VAT isn't collected; confirm in the import preview
 const RECORD_WIDTH = 44; // invoice record fields 1-44 (45-47 are journal receipts only)
 
 export interface ExpenseLine {
   date: string;
   description: string;
   amountCents: number;
-  vat: string;
-  category: string;
 }
 
 export interface ExpenseClaim {
@@ -24,9 +19,6 @@ export interface ExpenseClaim {
   name: string;
   email: string;
   iban: string;
-  organization: string;
-  businessId: string;
-  theirInvoiceNumber: string;
   purpose: string;
   notes: string;
   lines: ExpenseLine[];
@@ -60,15 +52,13 @@ const encode = (csv: string) =>
   );
 
 export function buildInvoiceCsv(claim: ExpenseClaim, todayIso: string): Buffer {
-  const isAssociation = Boolean(claim.organization);
   const total = claim.lines.reduce((sum, l) => sum + l.amountCents, 0);
 
   const invoice = record({
-    1: isAssociation ? ASSOCIATION_INVOICE_TYPE : MEMBER_INVOICE_TYPE,
+    1: INVOICE_TYPE,
     2: 'EUR',
     4: claim.iban,
-    5: clean(claim.businessId, 40),
-    7: clean(isAssociation ? claim.organization : claim.name, 80),
+    7: clean(claim.name, 80),
     10: 't', // amounts are gross
     13: formatDate(todayIso),
     20: clean(
@@ -78,7 +68,7 @@ export function buildInvoiceCsv(claim: ExpenseClaim, todayIso: string): Buffer {
     24: formatAmount(total),
     29: 't', // accounting by rows
     34: claim.attachmentName,
-    39: clean(claim.theirInvoiceNumber || claim.reference, 80),
+    39: claim.reference,
   });
 
   const rows = claim.lines.map((l) =>
@@ -86,9 +76,8 @@ export function buildInvoiceCsv(claim: ExpenseClaim, todayIso: string): Buffer {
       2: clean(l.description, 80),
       4: '1',
       6: formatAmount(l.amountCents),
-      8: l.vat.replace('.', DECIMAL_SEPARATOR),
+      8: ROW_VAT_PERCENT,
       9: formatDate(l.date),
-      14: expenseCategories.find((c) => c.key === l.category)?.account ?? '',
     }),
   );
 

@@ -14,7 +14,7 @@ export async function sendExpenseClaimEmail({
   attachments,
   ...claim
 }: SendExpenseClaimEmailParams) {
-  const receiver = 'rahasto@luuppi.fi';
+  const receiver = process.env.EXPENSE_CLAIM_RECEIVER!;
   const emailHtml = await render(LuuppiExpenseClaim(claim));
 
   try {

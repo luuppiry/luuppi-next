@@ -379,31 +379,19 @@
     "seo_description": "Hae korvausta yhdistyksen kuluista. Täytä kulut, liitä kuitit ja korvaus lähetetään rahastonhoitajalle.",
     "iban": "Tilinumero (IBAN) korvausta varten",
     "purpose": "Mihin kulut liittyivät?",
-    "organization_section": "Laskutatko toisen yhdistyksen puolesta?",
-    "organization_help": "Täytä nämä vain, jos lähetät laskun tai korvausvaatimuksen toisen yhdistyksen puolesta.",
-    "organization": "Yhdistyksen nimi",
-    "business_id": "Y-tunnus",
-    "invoice_number": "Laskun numero",
     "expenses": "Kulut",
     "expense": "Kulu",
     "date": "Päivämäärä",
     "field_description": "Kuvaus",
     "amount": "Summa (€, sis. ALV)",
-    "category": "Kategoria",
-    "vat": "ALV",
-    "vat_none": "Ei ALV:tä / ei tiedossa",
     "add_line": "Lisää kulu",
     "remove_line": "Poista viimeinen",
     "notes": "Lisätiedot",
     "receipts": "Kuitit (PDF, JPEG tai PNG)",
     "receipts_help": "Enintään 10 tiedostoa, 5 Mt per tiedosto. Kuvat yhdistetään yhdeksi PDF:ksi.",
     "send": "Lähetä kulukorvaus",
-    "categories": {
-      "events": "Tapahtumakulut",
-      "premises": "Toimitilakulut",
-      "tutoring": "Tuutoroinnin kulut",
-      "other": "Muu"
-    }
+    "separate_forms_notice": "Lähetä eri asioita tai tapahtumia koskevat kulukorvaukset eri lomakkeilla. Kirjanpitoon tarvitaan yksi tosite per tapahtuma.",
+    "form_title": "Korvauksen tiedot"
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",

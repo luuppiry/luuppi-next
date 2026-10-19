@@ -1,10 +1,8 @@
 'use server';
 import { getDictionary } from '@/dictionaries';
 import {
-  expenseCategories,
   expenseLimits,
   expenseReceiptTypes,
-  expenseVatRates,
 } from '@/libs/constants/expense-claim';
 import { sendExpenseClaimEmail } from '@/libs/emails/send-expense-claim-email';
 import { mergeReceipts, zipFiles } from '@/libs/expense-claim/receipts';
@@ -56,9 +54,6 @@ export async function emailSendExpenseClaim(
   const name = text('name');
   const email = text('email');
   const iban = text('iban').replace(/\s+/g, '').toUpperCase();
-  const organization = text('organization');
-  const businessId = text('businessId');
-  const theirInvoiceNumber = text('invoiceNumber');
   const purpose = text('purpose');
   const notes = text('notes');
 
@@ -67,15 +62,6 @@ export async function emailSendExpenseClaim(
     return fail(dictionary.api.invalid_email, 'email');
   }
   if (!isValidIban(iban)) return fail(dictionary.api.invalid_iban, 'iban');
-  if (organization && !/^.{3,80}$/.test(organization)) {
-    return fail(dictionary.api.invalid_name, 'organization');
-  }
-  if (businessId.length > 40) {
-    return fail(dictionary.api.invalid_business_id, 'businessId');
-  }
-  if (theirInvoiceNumber.length > 80) {
-    return fail(dictionary.api.invalid_business_id, 'invoiceNumber');
-  }
   if (!/^.{3,100}$/.test(purpose)) {
     return fail(dictionary.api.invalid_purpose, 'purpose');
   }
@@ -106,17 +92,7 @@ export async function emailSendExpenseClaim(
       return fail(dictionary.api.invalid_expense_amount, `line-${i}-amount`);
     }
 
-    const vat = text(`line-${i}-vat`);
-    const category = text(`line-${i}-category`);
-    lines.push({
-      date,
-      description,
-      amountCents,
-      vat: (expenseVatRates as readonly string[]).includes(vat) ? vat : '0',
-      category: expenseCategories.some((c) => c.key === category)
-        ? category
-        : 'other',
-    });
+    lines.push({ date, description, amountCents });
   }
   if (lines.length === 0) {
     return fail(dictionary.api.invalid_expense_amount, 'line-0-amount');
@@ -157,9 +133,6 @@ export async function emailSendExpenseClaim(
     name,
     email,
     iban,
-    organization,
-    businessId,
-    theirInvoiceNumber,
     purpose,
     notes,
     lines,
@@ -189,19 +162,12 @@ export async function emailSendExpenseClaim(
     senderName: name,
     senderEmail: email,
     iban,
-    organization,
-    businessId,
-    theirInvoiceNumber,
     purpose,
     notes,
     lines: lines.map((l) => ({
       date: l.date,
-      category:
-        expenseCategories.find((c) => c.key === l.category)?.labelFi ??
-        l.category,
       description: l.description,
       amount: formatAmount(l.amountCents),
-      vat: l.vat,
     })),
     total: formatAmount(total),
     csvIncluded,
