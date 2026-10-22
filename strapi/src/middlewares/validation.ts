@@ -64,7 +64,7 @@ const validations = {
             (data.Registration?.QuestionsText?.length ?? 0) +
             (data.Registration?.QuestionsSelect?.length ?? 0) +
             (data.Registration?.QuestionsCheckbox?.length ?? 0);
-          return questions > 0 && !data.Registration.AllowQuestionEditUntil;
+          return questions > 0 && !data.Registration?.AllowQuestionEditUntil;
         },
         message:
           "You have defined questions, but haven't set AllowQuestionEditUntil",
@@ -86,7 +86,7 @@ const validations = {
       },
       {
         throwIf: () => {
-          return data.Registration.TicketTypes?.some(
+          return data.Registration?.TicketTypes?.some(
             (tt) =>
               Date.parse(data.Registration.AllowQuestionEditUntil as string) <
               Date.parse(tt.RegistrationEndsAt as string),
