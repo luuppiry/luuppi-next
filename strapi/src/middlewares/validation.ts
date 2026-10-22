@@ -27,16 +27,19 @@ const validations = {
         message: "Paid ticket price must be at least 0.5€ (Stripe limitation)",
       },
       {
-        throwIf: () => +data.StartDate > +data.EndDate,
+        throwIf: () =>
+          Date.parse(data.StartDate as string) >
+          Date.parse(data.EndDate as string),
         message: "StartDate is after EndDate",
       },
       {
         throwIf: () =>
           data.Registration?.TicketTypes?.some(
-            (tt) => +tt.RegistrationStartsAt > +tt.RegistrationEndsAt,
+            (tt) =>
+              Date.parse(tt.RegistrationStartsAt as string) >
+              Date.parse(tt.RegistrationEndsAt as string),
           ),
-        message:
-          "At least one ticket type's registration ends before it starts",
+        message: "At least one ticket types registration ends before it starts",
       },
       {
         throwIf: () => {
@@ -80,6 +83,16 @@ const validations = {
         throwIf: () => data.Registration?.TicketTypes.some((tt) => !tt.uid),
         message:
           "Ticket type is missing it's unique identifier. If you copied this event from an old event you will need to recreate the ticket types or the registration will fail with 'Invalid event'",
+      },
+      {
+        throwIf: () => {
+          return data.Registration.TicketTypes?.some(
+            (tt) =>
+              Date.parse(data.Registration.AllowQuestionEditUntil as string) <
+              Date.parse(tt.RegistrationEndsAt as string),
+          );
+        },
+        message: "Question edit deadline is set before registration ends",
       },
     ] as const satisfies Rule[];
 
