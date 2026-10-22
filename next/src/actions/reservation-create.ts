@@ -425,7 +425,7 @@ export async function reservationCreate(
           isError: false,
         };
       },
-      { timeout: 5000, maxWait: 2000 },
+      { timeout: 5000, maxWait: 10_000 , },
     )
     .catch((error) => {
       logger.error('Error creating reservation', error);
