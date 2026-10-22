@@ -1,12 +1,19 @@
+import type { Data } from "@strapi/strapi";
 import { errors } from "@strapi/utils";
+
 type Rule = {
   throwIf: () => boolean;
   message: string;
 };
 
+type Event = Data.ContentType<
+  "api::event.event",
+  "Slug" | "Registration" | "StartDate" | "EndDate"
+>;
+
 /** collection / single name -> validations */
 const validations = {
-  event: (data) => {
+  event: (data: Event) => {
     const rules = [
       {
         throwIf: () => data.Slug === "event",
@@ -20,15 +27,13 @@ const validations = {
         message: "Paid ticket price must be at least 0.5€ (Stripe limitation)",
       },
       {
-        throwIf: () => Date.parse(data.StartDate) > Date.parse(data.EndDate),
+        throwIf: () => +data.StartDate > +data.EndDate,
         message: "StartDate is after EndDate",
       },
       {
         throwIf: () =>
           data.Registration?.TicketTypes?.some(
-            (tt) =>
-              Date.parse(tt.RegistrationStartsAt) >
-              Date.parse(tt.RegistrationEndsAt),
+            (tt) => +tt.RegistrationStartsAt > +tt.RegistrationEndsAt,
           ),
         message:
           "At least one ticket type's registration ends before it starts",
@@ -70,6 +75,11 @@ const validations = {
         },
         message:
           "All ticket types must have unique weights, see the 'Weight' field decsription",
+      },
+      {
+        throwIf: () => data.Registration?.TicketTypes.some((tt) => !tt.uid),
+        message:
+          "Ticket type is missing it's unique identifier. If you copied this event from an old event you will need to recreate the ticket types or the registration will fail with 'Invalid event'",
       },
     ] as const satisfies Rule[];
 
