@@ -24,32 +24,32 @@
     "test:ts:front": "run -T tsc -p admin/tsconfig.json"
   },
   "dependencies": {
-    "@strapi/design-system": "^2.0.0-rc.30",
-    "@strapi/icons": "^2.0.0-rc.30",
+    "@strapi/design-system": "^2.2.4",
+    "@strapi/icons": "^2.2.4",
     "react-intl": "^10.1.20"
   },
   "devDependencies": {
-    "@strapi/strapi": "^5.51.2",
     "@strapi/sdk-plugin": "^6.1.1",
+    "@strapi/strapi": "^5.59.0",
+    "@strapi/typescript-utils": "^5.59.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^6.30.4",
     "styled-components": "^6.3.11",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
-    "@strapi/typescript-utils": "^5.51.2",
     "typescript": "^7.0.2"
   },
   "peerDependencies": {
-    "@strapi/strapi": "^5.51.2",
     "@strapi/sdk-plugin": "^6.1.1",
+    "@strapi/strapi": "^5.51.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^6.30.4",
-    "styled-components": "^6.3.11",
     "slate": "^0.126.2",
+    "slate-history": "^0.113.1",
     "slate-react": "^0.126.0",
-    "slate-history": "^0.113.1"
+    "styled-components": "^6.3.11"
   },
   "strapi": {
     "kind": "plugin",

@@ -22,11 +22,11 @@
   },
   "dependencies": {
     "@sindresorhus/slugify": "^3.0.0",
-    "@strapi/plugin-users-permissions": "^5.56.0",
-    "@strapi/provider-email-nodemailer": "^5.56.0",
-    "@strapi/strapi": "^5.56.0",
-    "@strapi/typescript-utils": "^5.56.0",
-    "@strapi/utils": "^5.56.0",
+    "@strapi/plugin-users-permissions": "^5.59.0",
+    "@strapi/provider-email-nodemailer": "^5.59.0",
+    "@strapi/strapi": "^5.59.0",
+    "@strapi/typescript-utils": "^5.59.0",
+    "@strapi/utils": "^5.59.0",
     "better-sqlite3": "^12.6.2",
     "pg": "8.20.0",
     "react": "^19.2.4",
@@ -38,7 +38,7 @@
     "styled-components": "^6.3.11"
   },
   "engines": {
-    "node": ">=20.0.0 <=24.x.x"
+    "node": ">=22.19 <=24.x.x"
   },
   "strapi": {
     "uuid": "da206653-4e39-4d5e-b60d-e10acf59bdf2"
