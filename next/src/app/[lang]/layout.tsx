@@ -12,6 +12,7 @@ import { lang as language } from 'next/root-params';
 import { Suspense } from 'react';
 import { i18n } from '../../i18n-config';
 import './globals.css';
+import SkewRecovery from '@/components/SkewRecovery/SkewRecovery';
 
 const titilliumFont = Poppins({
   subsets: ['latin'],
@@ -70,6 +71,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           selfHosted
         />
       </head>
+      <SkewRecovery />
       <body className={titilliumFont.className}>
         <SessionProvider>
           <ThemeProvider>

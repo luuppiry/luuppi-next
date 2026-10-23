@@ -1,7 +1,8 @@
 'use client';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import roboSvg from '../../../public/robo_500.svg';
+import { tryRecoverFromSkew } from '@/libs/skew-recovery';
 
 export default function Error({
   error,
@@ -10,6 +11,8 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const [recovering, setRecovering] = useState(false);
+
   // Try to get /en or /fi from params
   const paramLanguage = window.location.pathname.split('/')?.[1];
 
@@ -23,10 +26,18 @@ export default function Error({
       : browserLang;
 
   useEffect(() => {
+    if (tryRecoverFromSkew(error)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRecovering(true);
+      return;
+    }
     // Log the error to an error reporting service
     // eslint-disable-next-line no-console
     console.error(error);
   }, [error]);
+
+  // Avoid flashing the error UI while the reload happens
+  if (recovering) return null;
 
   return (
     <section className="mx-auto max-w-[1200px] px-4 py-20 max-md:py-12">
