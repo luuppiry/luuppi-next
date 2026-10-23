@@ -41,6 +41,20 @@ services:
     networks:
       - weba-network
 
+  next_static_sync:
+    image: luuppi.azurecr.io/next-prod:latest
+    user: root
+    restart: 'no'
+    entrypoint: [ 'sh', '-c' ]
+    command:
+      - |
+        mkdir -p /static/_next/static &&
+        cp -r /app/.next/static/. /static/_next/static/ &&
+        find /static/_next/static -mindepth 1 -type f -mtime +14 -delete &&
+        find /static/_next/static -mindepth 1 -type d -empty -delete
+    volumes:
+      - /srv/luuppi/next-static:/static
+
 volumes:
   postgres-data:
   next-cache:

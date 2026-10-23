@@ -182,6 +182,7 @@ jobs:
             git pull
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
             docker pull ${{ secrets.REGISTRY }}/next-prod:latest
+            docker compose -f docker-compose-production.yml run --rm next_static_sync
             docker compose -f docker-compose-production.yml down
             docker compose -f docker-compose-production.yml up -d
             echo "Sleeping for 10 seconds"
