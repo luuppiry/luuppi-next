@@ -179,6 +179,7 @@ export default function EventCalendar({
             return event;
           })}
           firstDay={1}
+          fixedWeekCount={false}
           headerToolbar={
             isSmallDesktop
               ? {
