@@ -96,7 +96,14 @@
       "targetField": "NameEn",
       "required": true,
       "minLength": 3,
-      "regex": "^[a-z]+(-[a-z0-9]+)*$"
+      "regex": "^[a-z@]+(-[a-z0-9@]+)*$",
+      "options": {
+        "customReplacements": [
+          ["ä", "a"],
+          ["å", "o"],
+          ["ö", "o"]
+        ]
+      }
     }
   }
 }

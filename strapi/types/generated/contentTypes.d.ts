@@ -887,7 +887,12 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     ShowInCalendar: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<true>;
-    Slug: Schema.Attribute.UID<'NameEn'> &
+    Slug: Schema.Attribute.UID<
+      'NameEn',
+      {
+        customReplacements: [['\u00E4', 'a'], ['\u00E5', 'o'], ['\u00F6', 'o']];
+      }
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 3;
