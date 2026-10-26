@@ -4,7 +4,6 @@ import { Dictionary } from '@/models/locale';
 import { useTheme } from '@/providers/ThemeProvider';
 
 import { Session } from 'next-auth';
-import { useState } from 'react';
 import { BsDisplay, BsMoon, BsSun } from 'react-icons/bs';
 
 type ThemeMode = 'auto' | 'light' | 'dark';
@@ -16,11 +15,9 @@ interface ThemeSwitcherProps {
 
 const ThemeSwitcher = ({ dictionary }: Omit<ThemeSwitcherProps, 'session'>) => {
   const { theme: currentTheme, setTheme: setMode } = useTheme();
-  const [isOpen, setIsOpen] = useState(false);
 
   const handleThemeChange = (newMode: ThemeMode) => {
     setMode(newMode);
-    setIsOpen(false);
   };
 
   const getThemeIcon = (mode: ThemeMode, variant?: 'small') => {
@@ -53,33 +50,27 @@ const ThemeSwitcher = ({ dictionary }: Omit<ThemeSwitcherProps, 'session'>) => {
         className="btn btn-circle btn-ghost m-1 bg-primary-600 max-lg:bg-secondary-400"
         role="button"
         tabIndex={0}
-        onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-1 text-white">
           {getThemeIcon(currentTheme)}
         </div>
       </div>
-      {isOpen && (
-        <ul
-          className="menu dropdown-content z-[1] w-48 gap-2 rounded-box bg-base-100 p-2 font-bold text-base-content shadow"
-          tabIndex={0}
-        >
-          {(['auto', 'light', 'dark'] as ThemeMode[]).map((mode) => (
-            <li
-              key={mode}
-              className={currentTheme === mode ? 'rounded-lg bg-base-300' : ''}
+      <ul className="menu dropdown-content z-[1] w-48 gap-2 rounded-box bg-base-100 p-2 font-bold text-base-content shadow">
+        {(['auto', 'light', 'dark'] as ThemeMode[]).map((mode) => (
+          <li
+            key={mode}
+            className={currentTheme === mode ? 'rounded-lg bg-base-300' : ''}
+          >
+            <button
+              className="flex items-center gap-2"
+              onClick={() => handleThemeChange(mode)}
             >
-              <button
-                className="flex items-center gap-2"
-                onClick={() => handleThemeChange(mode)}
-              >
-                {getThemeIcon(mode, 'small')}
-                {getThemeLabel(mode)}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+              {getThemeIcon(mode, 'small')}
+              {getThemeLabel(mode)}
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

@@ -2,14 +2,14 @@ import { navLinksDesktop } from '@/libs/constants';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
+import { BsGlobe } from 'react-icons/bs';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import luuppiSvg from '../../../public/luuppi.svg';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import HeaderActions from './HeaderActions/HeaderActions';
 import HideableLink from './HideableLinks/HideableLink';
 import ScrollListener from './ScrollListener/ScrollListener';
-import { Suspense } from 'react';
-import { BsGlobe } from 'react-icons/bs';
 
 interface HeaderProps {
   dictionary: Dictionary;
@@ -83,6 +83,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                   className={
                     'custom-scroll-text flex h-full items-center justify-center p-2 text-lg font-bold transition-all duration-300 ease-in-out hover:bg-primary-200 group-hover:bg-primary-200 max-xl:text-base dark:group-hover:bg-background-700'
                   }
+                  tabIndex={0}
                 >
                   <span>
                     {
@@ -127,7 +128,7 @@ export default function Header({ dictionary, lang }: HeaderProps) {
                 </Link>
               )}
               {link.sublinks && link.sublinks.length > 0 && (
-                <div className="invisible absolute z-50 flex max-h-[calc(100dvh-4rem-3rem)] min-w-full flex-col overflow-y-auto bg-gray-100 px-2 py-4 text-gray-800 shadow-xl group-hover:visible dark:bg-base-200 dark:text-background-950">
+                <div className="invisible absolute z-50 flex max-h-[calc(100dvh-4rem-3rem)] min-w-full flex-col overflow-y-auto bg-gray-100 px-2 py-4 text-gray-800 shadow-xl group-focus-within:visible group-hover:visible dark:bg-base-200 dark:text-background-950">
                   {link.sublinks.map((sublink) => (
                     <HideableLink
                       key={sublink.translation}

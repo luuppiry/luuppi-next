@@ -32,10 +32,7 @@ export default function LanguageSwitcher() {
         >
           <BsGlobe color="white" size={32} />
         </div>
-        <ul
-          className="menu dropdown-content z-[1] w-52 gap-2 rounded-box bg-base-100 p-2 font-bold text-base-content shadow"
-          tabIndex={0}
-        >
+        <ul className="menu dropdown-content z-[1] w-52 gap-2 rounded-box bg-base-100 p-2 font-bold text-base-content shadow">
           <li
             className={currentLocale === 'en' ? 'rounded-lg bg-base-300' : ''}
           >

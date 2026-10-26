@@ -65,6 +65,7 @@ export default function Hero({ dictionary, lang }: HeroProps) {
           <object
             className="h-full w-full"
             data="/luuppi-cards.svg"
+            tabIndex={-1}
             type="image/svg+xml"
           />
         </div>
