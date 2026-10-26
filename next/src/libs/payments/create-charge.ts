@@ -8,6 +8,7 @@ interface Reservation {
   name: string;
   priceInCents: number;
   confirmationTime: string;
+  imageUrl?: string;
 }
 
 interface ChargePayment {
@@ -28,6 +29,7 @@ export const createCharge = async (
           currency: 'eur',
           product_data: {
             name: reservation.name,
+            images: reservation.imageUrl ? [reservation.imageUrl] : undefined,
           },
           unit_amount: reservation.priceInCents,
         },

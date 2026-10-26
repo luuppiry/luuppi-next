@@ -4,12 +4,23 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { sendEventReceiptEmail } from '@/libs/emails/send-event-verify';
 import { createCharge } from '@/libs/payments/create-charge';
+import { getStrapiData } from '@/libs/strapi/get-strapi-data';
+import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { logger } from '@/libs/utils/logger';
 import { isValidMember } from '@/libs/utils/user';
 import { SupportedLanguage } from '@/models/locale';
+import { APIResponse } from '@/types/types';
 import { randomUUID } from 'crypto';
 import { updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
+
+type StrapiImage =
+  | {
+      url?: string;
+      formats?: { medium?: { url?: string } };
+    }
+  | null
+  | undefined;
 
 export async function reservationChargeAll(lang: SupportedLanguage) {
   const dictionary = await getDictionary(lang);
@@ -73,6 +84,32 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
     const orderId = randomUUID();
 
     if (priceInCents) {
+      const imageByEventId = new Map<string, string | undefined>();
+      await Promise.allSettled(
+        [...new Set(registrations.map((r) => r.eventDocumentId))].map(
+          async (id) => {
+            const event = await getStrapiData<APIResponse<'api::event.event'>>(
+              lang,
+              `/api/events/${id}?populate=Image&populate=ImageEn&fields=id`,
+              ['event'],
+            );
+
+            const image = (
+              lang === 'en'
+                ? (event.data.ImageEn ?? event.data.Image)
+                : event.data.Image
+            ) as StrapiImage;
+
+            if (!image) return;
+
+            imageByEventId.set(
+              id,
+              getStrapiUrl(image.formats?.medium?.url ?? image?.url),
+            );
+          },
+        ),
+      );
+
       redirectUrl = await createCharge(
         {
           amountInCents: priceInCents,
@@ -82,6 +119,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
             priceInCents: registration.price * 100,
             name: registration.event[lang === 'fi' ? 'nameFi' : 'nameEn'],
             confirmationTime: registration.createdAt.toISOString(),
+            imageUrl: imageByEventId.get(registration.eventDocumentId),
           })),
         },
         lang,
