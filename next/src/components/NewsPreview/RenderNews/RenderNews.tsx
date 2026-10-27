@@ -121,7 +121,9 @@ export default async function RenderNews({
                 <span className="text-sm font-semibold">{news.authorName}</span>
                 <span className="text-sm opacity-60">
                   {new Date(
-                    news?.publishedAt || news.createdAt!,
+                    news.firstPublishedAt ||
+                      news.publishedAt ||
+                      news.createdAt!,
                   ).toLocaleDateString(lang, dateFormat)}
                 </span>
               </div>

@@ -872,6 +872,7 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     DescriptionEn: Schema.Attribute.Blocks & Schema.Attribute.Required;
     DescriptionFi: Schema.Attribute.Blocks & Schema.Attribute.Required;
     EndDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    firstPublishedAt: Schema.Attribute.DateTime;
     FuksiPoints: Schema.Attribute.Enumeration<
       ['fuksi_points_true', 'fuksi_points_false']
     >;
@@ -889,7 +890,12 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     ShowInCalendar: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<true>;
-    Slug: Schema.Attribute.UID<'NameEn'> &
+    Slug: Schema.Attribute.UID<
+      'NameEn',
+      {
+        customReplacements: [['\u00E4', 'a'], ['\u00E5', 'o'], ['\u00F6', 'o']];
+      }
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 3;
@@ -1095,6 +1101,7 @@ export interface ApiLuuppiSanomatLuuppiSanomat
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    firstPublishedAt: Schema.Attribute.DateTime;
     image: Schema.Attribute.Media<'images'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1149,6 +1156,7 @@ export interface ApiMeetingMinuteDocumentMeetingMinuteDocument
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    firstPublishedAt: Schema.Attribute.DateTime;
     image: Schema.Attribute.Media<'images'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1291,6 +1299,7 @@ export interface ApiNewsSingleNewsSingle extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    firstPublishedAt: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

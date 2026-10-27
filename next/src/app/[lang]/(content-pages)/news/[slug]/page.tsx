@@ -141,7 +141,9 @@ export default async function NewsPost(props: NewsPostProps) {
                 </span>
                 <span className="text-sm opacity-75">
                   {new Date(
-                    selectedNews?.publishedAt || selectedNews.createdAt!,
+                    selectedNews.firstPublishedAt ||
+                      selectedNews.publishedAt ||
+                      selectedNews.createdAt!,
                   ).toLocaleString(lang, dateFormat)}
                 </span>
               </div>

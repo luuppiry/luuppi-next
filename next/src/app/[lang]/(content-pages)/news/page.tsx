@@ -29,6 +29,7 @@ export default async function News() {
         },
       },
     },
+    sort: ['publishedAt:desc', 'createdAt:desc'],
     pagination: {
       pageSize: 100,
     },
@@ -41,24 +42,11 @@ export default async function News() {
   const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);
   const dictionary = await getDictionary();
 
-  const sortedNews = newsLocaleFlipped
-    .filter((n) => n.createdAt)
-    .sort((a, b) => {
-      const dateA = a?.publishedAt
-        ? new Date(a.publishedAt).getTime()
-        : new Date(a.createdAt || new Date()).getTime();
-      const dateB = b.publishedAt
-        ? new Date(b.publishedAt).getTime()
-        : new Date(b.createdAt || new Date()).getTime();
-
-      return dateB - dateA;
-    });
-
   return (
     <div className="relative flex flex-col gap-12">
       <h1>{dictionary.navigation.news}</h1>
       <div className="flex flex-col gap-12 max-md:gap-6">
-        {sortedNews.map((news) => (
+        {newsLocaleFlipped.map((news) => (
           <article
             key={news.documentId}
             className={
@@ -133,7 +121,9 @@ export default async function News() {
                   </span>
                   <span className="text-sm opacity-60">
                     {new Date(
-                      news?.publishedAt || news.createdAt!,
+                      news.firstPublishedAt ||
+                        news.publishedAt ||
+                        news.createdAt!,
                     ).toLocaleDateString(lang, dateFormat)}
                   </span>
                 </div>

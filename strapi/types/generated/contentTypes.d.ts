@@ -870,6 +870,7 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     DescriptionEn: Schema.Attribute.Blocks & Schema.Attribute.Required;
     DescriptionFi: Schema.Attribute.Blocks & Schema.Attribute.Required;
     EndDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    firstPublishedAt: Schema.Attribute.DateTime;
     FuksiPoints: Schema.Attribute.Enumeration<
       ['fuksi_points_true', 'fuksi_points_false']
     >;
@@ -1098,6 +1099,7 @@ export interface ApiLuuppiSanomatLuuppiSanomat
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    firstPublishedAt: Schema.Attribute.DateTime;
     image: Schema.Attribute.Media<'images'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1152,6 +1154,7 @@ export interface ApiMeetingMinuteDocumentMeetingMinuteDocument
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    firstPublishedAt: Schema.Attribute.DateTime;
     image: Schema.Attribute.Media<'images'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1294,6 +1297,7 @@ export interface ApiNewsSingleNewsSingle extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    firstPublishedAt: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

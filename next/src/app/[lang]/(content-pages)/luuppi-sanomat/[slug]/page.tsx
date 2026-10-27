@@ -9,15 +9,42 @@ import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
-
-const baseUrl =
-  '/api/luuppi-sanomats?populate[0]=image&populate[1]=pdf&populate[2]=Seo.openGraph.openGraphImage&populate[3]=Seo.twitter.twitterImage&populate[4]=localizations&populate=localizations.Seo.twitter.twitterImage&populate=localizations.Seo.openGraph.openGraphImage&filters[publishedAt][$gte]=';
+import qs from 'qs';
 
 interface LuuppiSanomatProps {
   params: Promise<{ slug: string }>;
 }
 
 export const instant = false;
+
+const buildQuery = (slug: string) => {
+  const startOfDay = `${slug}T00:00:00.000Z`;
+  const endOfDay = `${slug}T23:59:59.999Z`;
+
+  return qs.stringify({
+    populate: [
+      'image',
+      'pdf',
+      'Seo.openGraph.openGraphImage',
+      'Seo.twitter.twitterImage',
+      'localizations',
+      'localizations.Seo.twitter.twitterImage',
+      'localizations.Seo.openGraph.openGraphImage',
+    ],
+    filters: {
+      $or: [
+        { firstPublishedAt: { $gte: startOfDay, $lte: endOfDay } },
+        // Fallback for older entries, can be removed if every publication has `firstPublishedAt`
+        {
+          firstPublishedAt: { $null: true },
+          publishedAt: { $gte: startOfDay, $lte: endOfDay },
+        },
+      ],
+    },
+    pagination: { limit: 1 },
+    sort: ['firstPublishedAt:asc'],
+  });
+};
 
 export default async function LuuppiSanomatPublication(
   props: LuuppiSanomatProps,
@@ -31,7 +58,7 @@ export default async function LuuppiSanomatPublication(
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
   >(
     'fi',
-    `${baseUrl}${params.slug}&filters[publishedAt][$lte]=${params.slug}T23:59:59.999Z`,
+    `/api/luuppi-sanomats?${buildQuery(params.slug)}`,
     ['luuppi-sanomat'],
     true,
   );
@@ -49,7 +76,9 @@ export default async function LuuppiSanomatPublication(
       <h1>
         {dictionary.general.publication}{' '}
         {new Date(
-          selectedPublication?.publishedAt || selectedPublication.createdAt!,
+          selectedPublication.firstPublishedAt ||
+            selectedPublication?.publishedAt ||
+            selectedPublication.createdAt!,
         )
           .toLocaleDateString(lang, {
             month: 'short',
@@ -74,7 +103,9 @@ export async function generateMetadata(
   const params = await props.params;
   const data = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
-  >('fi', `${baseUrl}${params.slug}`, ['luuppi-sanomat']);
+  >('fi', `/api/luuppi-sanomats?${buildQuery(params.slug)}`, [
+    'luuppi-sanomat',
+  ]);
   const lang = await language();
   const sanomatLocaleFlipped = flipSanomatLocale(lang, data.data);
   const selectedPublication = sanomatLocaleFlipped[0];
@@ -94,6 +125,6 @@ export async function generateStaticParams() {
   >('fi', '/api/luuppi-sanomats?pagination[pageSize]=500', ['luuppi-sanomat']);
 
   return pageData.data.map((sanomat) => ({
-    slug: toCalendarDate(sanomat.publishedAt!),
+    slug: toCalendarDate(sanomat.firstPublishedAt || sanomat.publishedAt!),
   }));
 }
