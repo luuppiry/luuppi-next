@@ -13,6 +13,7 @@ import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 
 const tenantName = process.env.AZURE_TENANT_NAME!;
+const log = logger.child('page:verify-email');
 
 interface VerifyEmailProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -51,25 +52,25 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
     const { newMail, userId } = decoded;
 
     if (!newMail || !userId) {
-      logger.error('Invalid token, missing newMail or userId');
+      log.error('Invalid token, missing newMail or userId');
       redirect(`/${lang}/404`);
     }
 
     newEmailVerified = newMail;
     userIdVerified = userId;
   } catch (error) {
-    logger.error('Error verifying token', error);
+    log.error('Error verifying token', error);
     redirect(`/${lang}/404`);
   }
 
   if (session.user.entraUserUuid !== userIdVerified) {
-    logger.error('User ID does not match token');
+    log.error('User ID does not match token');
     redirect(`/${lang}/404`);
   }
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
-    logger.error('Error getting access token for Graph API');
+    log.error('Error getting access token for Graph API');
     redirect(`/${lang}/404`);
   }
 
@@ -89,7 +90,7 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
   );
 
   if (!graphEmailUpdated) {
-    logger.error('Error updating user email');
+    log.error('Error updating user email');
     redirect(`/${lang}/404`);
   }
 

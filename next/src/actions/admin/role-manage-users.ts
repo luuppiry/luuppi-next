@@ -6,6 +6,8 @@ import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { refresh, updateTag } from 'next/cache';
 
+const log = logger.child('action:role-manage-users');
+
 export async function roleAddUser(
   roleId: string,
   userEntraUuid: string,
@@ -18,7 +20,7 @@ export async function roleAddUser(
   const user = session?.user;
 
   if (!user) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -43,7 +45,7 @@ export async function roleAddUser(
   });
 
   if (!hasHatoRole) {
-    logger.error('User does not have the required role');
+    log.error('User does not have the required role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -57,7 +59,7 @@ export async function roleAddUser(
     : [process.env.NEXT_PUBLIC_LUUPPI_HATO_ID];
 
   if (illegalRoles.includes(roleId)) {
-    logger.error('Attempt to add to a protected role');
+    log.error('Attempt to add to a protected role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -114,7 +116,7 @@ export async function roleAddUser(
     },
   });
 
-  refresh()
+  refresh();
 
   return {
     isError: false,
@@ -133,7 +135,7 @@ export async function roleRemoveUser(
   const user = session?.user;
 
   if (!user) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -158,7 +160,7 @@ export async function roleRemoveUser(
   });
 
   if (!hasHatoRole) {
-    logger.error('User does not have the required role');
+    log.error('User does not have the required role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -179,7 +181,7 @@ export async function roleRemoveUser(
     illegalRoles.includes(roleId) ||
     roleId === process.env.NEXT_PUBLIC_NO_ROLE_ID
   ) {
-    logger.error('Attempt to remove protected role');
+    log.error('Attempt to remove protected role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -197,14 +199,14 @@ export async function roleRemoveUser(
       },
     });
 
-    updateTag(`get-cached-user:${user.entraUserUuid}`)
+    updateTag(`get-cached-user:${user.entraUserUuid}`);
 
     return {
       isError: false,
       message: dictionary.api.user_removed_from_role,
     };
   } catch (error) {
-    logger.error('Failed to remove user from role:', error);
+    log.error('Failed to remove user from role:', error);
     return {
       isError: true,
       message: dictionary.api.server_error,

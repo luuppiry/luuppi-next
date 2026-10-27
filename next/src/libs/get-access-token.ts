@@ -10,6 +10,8 @@ const msalConfig = {
   },
 };
 
+const log = logger.child('lib:get-access-token');
+
 /**
  * Get access token with high privilege. This is used on server side to
  * access Microsoft Graph API.
@@ -25,7 +27,7 @@ export const getAccessToken = async (): Promise<string | null> => {
 
     return tokenRes?.accessToken ?? null;
   } catch (error) {
-    logger.error('Error getting access token', error);
+    log.error('Error getting access token', error);
     return null;
   }
 };

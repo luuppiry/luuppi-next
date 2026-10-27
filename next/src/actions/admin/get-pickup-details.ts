@@ -8,6 +8,8 @@ import { isValidPickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 
+const log = logger.child('action:get-pickup-details');
+
 export async function getPickupDetails(
   lang: SupportedLanguage,
   registrationIdOrCode: string,
@@ -20,7 +22,7 @@ export async function getPickupDetails(
   const user = session?.user;
 
   if (!user || !user.isLuuppiHato) {
-    logger.error('User not found in session or does not have required role');
+    log.error('User not found in session or does not have required role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -45,7 +47,7 @@ export async function getPickupDetails(
   });
 
   if (!hasHatoRole) {
-    logger.error('User does not have the required role');
+    log.error('User does not have the required role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -143,7 +145,7 @@ export async function getPickupDetails(
       },
     };
   } catch (error) {
-    logger.error('Failed to fetch pickup event details', error);
+    log.error('Failed to fetch pickup event details', error);
     return {
       message: dictionary.api.invalid_message,
       isError: true,

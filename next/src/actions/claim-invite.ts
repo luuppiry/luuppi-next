@@ -10,6 +10,7 @@ import { APIResponseCollection } from '@/types/types';
 import { redirect } from 'next/navigation';
 
 const options = { cacheKey: 'invite' };
+const log = logger.child('action:claim-invite');
 
 export async function claimInvite(id: string, lang: string) {
   const session = await auth();
@@ -23,7 +24,7 @@ export async function claimInvite(id: string, lang: string) {
 
   const isLimited = await isRateLimited(entraUserUuid, options.cacheKey, 10);
   if (isLimited) {
-    logger.error(`User is being rate limited: ${entraUserUuid}`);
+    log.error(`User is being rate limited: ${entraUserUuid}`);
     return {
       message: dictionary.api.ratelimit,
       isError: true,
@@ -54,7 +55,7 @@ export async function claimInvite(id: string, lang: string) {
       process.env.NEXT_PUBLIC_LUUPPI_HATO_ID!,
     ].includes(role)
   ) {
-    logger.error(`Trying to add restricted role via invite ${invite.id}`);
+    log.error(`Trying to add restricted role via invite ${invite.id}`);
     return {
       message: dictionary.pages_invite.invalid_role,
       isError: true,
@@ -77,9 +78,9 @@ export async function claimInvite(id: string, lang: string) {
       },
     });
 
-    logger.info(`User ${entraUserUuid} claimed role ${role} via invite ${id}`);
+    log.info(`User ${entraUserUuid} claimed role ${role} via invite ${id}`);
   } catch (error) {
-    logger.error(`Failed to assign role via invite ${id}`, error);
+    log.error(`Failed to assign role via invite ${id}`, error);
     return {
       message: dictionary.pages_invite.failed_to_claim,
       isError: true,

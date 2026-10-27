@@ -5,6 +5,8 @@ import { cacheLife, cacheTag } from 'next/cache';
 import { logger } from '../utils/logger';
 import { getStrapiUrl } from './get-strapi-url';
 
+const log = logger.child('lib:strapi/get-strapi-data');
+
 async function fetchStrapi(
   lang: string,
   url: string,
@@ -31,7 +33,7 @@ async function parseStrapiResponse<T>(
 
   if (!data?.data) {
     if (ignoreError) return null;
-    logger.error(`Failed to fetch data from ${url}`, data);
+    log.error(`Failed to fetch data from ${url}`, data);
     throw new Error(`Failed to fetch data from ${url}`);
   }
 
@@ -39,7 +41,7 @@ async function parseStrapiResponse<T>(
 }
 
 function logAndWrap(error: unknown, lang: string, url: string): never {
-  logger.error('Error fetching data from Strapi', {
+  log.error('Error fetching data from Strapi', {
     error: error instanceof Error ? error.message : String(error),
     errorType: error?.constructor?.name,
     cause: error instanceof Error ? error.cause : undefined,

@@ -6,6 +6,8 @@ import { logger } from '@/libs/utils/logger';
 import { APIResponse } from '@/types/types';
 import { NextRequest, NextResponse } from 'next/server';
 
+const log = logger.child('api:payment');
+
 export async function POST(request: NextRequest) {
   try {
     const result = await checkReturn(request);
@@ -18,7 +20,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { orderId, successful, status } = result;
-    logger.info('Processing payment webhook', { orderId, successful, status });
+    log.info('Processing payment webhook', { orderId, successful, status });
 
     const payment = await prisma.payment.update({
       where: { orderId },
@@ -49,7 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!payment.registration?.[0]?.entraUserUuid) {
-      logger.error('Error getting entraUserUuid');
+      log.error('Error getting entraUserUuid');
       return NextResponse.json(
         { message: 'Error getting entraUserUuid' },
         { status: 400 },
@@ -59,7 +61,7 @@ export async function POST(request: NextRequest) {
     const entraUserUuid = payment.registration[0].entraUserUuid;
 
     if (!entraUserUuid) {
-      logger.error('Error getting entraUserUuid');
+      log.error('Error getting entraUserUuid');
       return NextResponse.json(
         { message: 'Error getting entraUserUuid' },
         { status: 400 },
@@ -73,7 +75,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!localUser) {
-      logger.error('Error getting user');
+      log.error('Error getting user');
       return NextResponse.json(
         { message: 'Error getting user' },
         { status: 400 },
@@ -99,7 +101,7 @@ export async function POST(request: NextRequest) {
     ];
 
     if (roleToGive && !illegalRoles.includes(roleToGive)) {
-      logger.info(
+      log.info(
         `Event ${eventDocumentId} has role to give ${roleToGive}. Giving role to user ${entraUserUuid}`,
       );
 
@@ -122,7 +124,7 @@ export async function POST(request: NextRequest) {
     const email = localUser.email;
 
     if (!email) {
-      logger.error('Error getting email');
+      log.error('Error getting email');
       return NextResponse.json(
         { message: 'Error getting email' },
         { status: 400 },
@@ -137,7 +139,7 @@ export async function POST(request: NextRequest) {
       });
 
       if (!emailMessageId) {
-        logger.error('Error sending email');
+        log.error('Error sending email');
         return NextResponse.json(
           { message: 'Error sending email' },
           { status: 400 },
@@ -153,10 +155,10 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      logger.info(`Event confirmation email sent: ${emailMessageId}`);
+      log.info(`Event confirmation email sent: ${emailMessageId}`);
     }
   } catch (error) {
-    logger.error('Error processing payment webhook', error);
+    log.error('Error processing payment webhook', error);
     return NextResponse.json(
       { message: 'Error processing payment webhook' },
       { status: 400 },

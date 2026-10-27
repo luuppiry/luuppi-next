@@ -23,6 +23,8 @@ interface AdminEventManagementProps {
   };
 }
 
+const log = logger.child('component:admin-event-management');
+
 export default async function AdminEventManagement({
   dictionary,
   lang,
@@ -31,7 +33,7 @@ export default async function AdminEventManagement({
   const session = await auth();
 
   if (!session?.user || !session.user.isLuuppiHato) {
-    logger.error('User not found in session or does not have required role');
+    log.error('User not found in session or does not have required role');
     redirect(`/${lang}`);
   }
 

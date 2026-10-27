@@ -22,6 +22,8 @@ type StrapiImage =
   | null
   | undefined;
 
+const log = logger.child('action:reservation-charge-all');
+
 export async function reservationChargeAll(lang: SupportedLanguage) {
   const dictionary = await getDictionary(lang);
   const session = await auth();
@@ -176,7 +178,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
         });
 
         if (!success) {
-          logger.error('Error sending email, failing silently');
+          log.error('Error sending email, failing silently');
         }
       }
     });
@@ -187,7 +189,7 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
       updateTag(`get-cached-event-registrations:${reg.eventDocumentId}`);
     }
   } catch (error) {
-    logger.error('Error creating charge', error);
+    log.error('Error creating charge', error);
     return {
       message: dictionary.api.payment_failed,
       isError: true,

@@ -2,6 +2,8 @@ import 'server-only';
 import { stripe } from '.';
 import { logger } from '../utils/logger';
 
+const log = logger.child('lib:payments/check-status');
+
 export const checkStatus = async (orderId: string) => {
   try {
     const sessions = await stripe.checkout.sessions.list({
@@ -18,7 +20,7 @@ export const checkStatus = async (orderId: string) => {
       failed: session.payment_status === 'unpaid',
     };
   } catch (error) {
-    logger.error('Error checking payment status', error);
+    log.error('Error checking payment status', error);
     return null;
   }
 };

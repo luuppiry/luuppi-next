@@ -4,6 +4,8 @@ import { stripe } from '.';
 import { logger } from '../utils/logger';
 import { getRawBody } from '../utils/raw-body';
 
+const log = logger.child('lib:payments/check-return');
+
 export const checkReturn = async (req: NextRequest) => {
   const sig = req.headers.get('stripe-signature');
   if (!sig || !process.env.STRIPE_WEBHOOK_SECRET) {
@@ -56,7 +58,7 @@ export const checkReturn = async (req: NextRequest) => {
 
     return null;
   } catch (error) {
-    logger.error('Error processing webhook', error);
+    log.error('Error processing webhook', error);
     throw new Error('Error processing webhook', { cause: error });
   }
 };

@@ -10,6 +10,8 @@ interface SendExpenseClaimEmailParams extends ExpenseClaimEmailProps {
   attachments: { filename: string; content: Uint8Array | Buffer }[];
 }
 
+const log = logger.child('lib:emails/send-expense-claim-email');
+
 export async function sendExpenseClaimEmail({
   attachments,
   ...claim
@@ -28,10 +30,10 @@ export async function sendExpenseClaimEmail({
         content: Buffer.from(a.content),
       })),
     });
-    logger.info('Expense claim email sent:', claim.reference);
+    log.info('Expense claim email sent:', claim.reference);
     return true;
   } catch (error) {
-    logger.error('Error sending expense claim email:', error);
+    log.error('Error sending expense claim email:', error);
     return false;
   }
 }

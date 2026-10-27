@@ -13,6 +13,8 @@ interface SendVerificationEmailParams {
   language: SupportedLanguage;
 }
 
+const log = logger.child('lib:emails/send-verification-email');
+
 export async function sendVerificationEmail({
   to,
   name,
@@ -38,10 +40,10 @@ export async function sendVerificationEmail({
       subject,
       html: emailHtml,
     });
-    logger.info('Verification email sent to:', to);
+    log.info('Verification email sent to:', to);
     return true;
   } catch (error) {
-    logger.error('Error sending verification email:', error);
+    log.error('Error sending verification email:', error);
     return false;
   }
 }

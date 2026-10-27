@@ -14,6 +14,7 @@ import { updateTag } from 'next/cache';
 const options = {
   noRoleId: process.env.NEXT_PUBLIC_NO_ROLE_ID!,
 };
+const log = logger.child('action:reservation-create');
 
 export async function reservationCreate(
   eventDocumentId: string,
@@ -54,7 +55,7 @@ export async function reservationCreate(
     ]);
 
     if (isSoldOut) {
-      logger.info(
+      log.info(
         `Cache hit: Event ${eventDocumentId} ticket ${ticketUid} is sold out`,
       );
       return {
@@ -65,9 +66,7 @@ export async function reservationCreate(
 
     // Check if the joint quota is sold out
     if (isJointQuotaSoldOut) {
-      logger.info(
-        `Cache hit: Event ${eventDocumentId} joint quota is sold out`,
-      );
+      log.info(`Cache hit: Event ${eventDocumentId} joint quota is sold out`);
       return {
         message: dictionary.api.sold_out,
         isError: true,
@@ -210,7 +209,7 @@ export async function reservationCreate(
     (role) => role.role.strapiRoleUuid === options.noRoleId!,
   );
   if (!hasDefaultRole) {
-    logger.error(
+    log.error(
       'User doesnt have a default role. This should never happen.',
       localUser.entraUserUuid,
     );
@@ -384,7 +383,7 @@ export async function reservationCreate(
         }
 
         if (amount + totalRegistrationsForTicketType >= ownQuota.TicketsTotal) {
-          logger.info(
+          log.info(
             `Event ${eventDocumentId} ticket ${ticketUid} is sold out. Setting sold out in redis for 3 minutes.`,
           );
           await redisClient.set(
@@ -402,7 +401,7 @@ export async function reservationCreate(
           typeof jointQuotaTotal !== 'undefined' &&
           amount + totalRegistrationsJoint >= jointQuotaTotal
         ) {
-          logger.info(`Event ${eventDocumentId} joint quota is sold out.`);
+          log.info(`Event ${eventDocumentId} joint quota is sold out.`);
           await redisClient.set(
             `event-sold-out:${eventDocumentId}:joint-quota`,
             'true',
@@ -414,7 +413,7 @@ export async function reservationCreate(
           updateTag(`get-cached-event-registrations:${eventDocumentId}`);
         }
 
-        logger.info(
+        log.info(
           `User ${localUser.entraUserUuid} reserved ${amount} ${ticketUid} tickets for event ${eventDocumentId}. User's total count of this ticket type is now ${
             currentUserReservationsForTicketType + amount
           }`,
@@ -425,10 +424,10 @@ export async function reservationCreate(
           isError: false,
         };
       },
-      { timeout: 5000, maxWait: 10_000 , },
+      { timeout: 5000, maxWait: 10_000 },
     )
     .catch((error) => {
-      logger.error('Error creating reservation', error);
+      log.error('Error creating reservation', error);
       return {
         message: dictionary.api.server_error,
         isError: true,

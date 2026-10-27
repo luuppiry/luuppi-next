@@ -18,6 +18,8 @@ import qs from 'qs';
 import { BiErrorCircle } from 'react-icons/bi';
 import { BsQrCode } from 'react-icons/bs';
 
+const log = logger.child('page:own-events');
+
 export default async function OwnEvents() {
   await connection();
 
@@ -73,7 +75,7 @@ export default async function OwnEvents() {
     status: PaymentStatus,
     paymentCompleted: boolean,
   ) => {
-    logger.info('Setting pending payment status to', status);
+    log.info('Setting pending payment status to', status);
     await prisma.payment.update({
       where: { id: payment.id },
       data: {

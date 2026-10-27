@@ -12,6 +12,7 @@ const options = {
   cacheKey: 'migrate-legacy-account',
   memberRole: process.env.NEXT_PUBLIC_LUUPPI_MEMBER_ID!,
 };
+const log = logger.child('action:migrate-legacy-account');
 
 export async function migrateLegacyAccount(
   lang: SupportedLanguage,
@@ -23,7 +24,7 @@ export async function migrateLegacyAccount(
   const user = session?.user;
 
   if (!user) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -36,7 +37,7 @@ export async function migrateLegacyAccount(
     5,
   );
   if (isLimited) {
-    logger.error(`User is being rate limited: ${user.email}`);
+    log.error(`User is being rate limited: ${user.email}`);
     return {
       message: dictionary.api.ratelimit,
       isError: true,
@@ -71,7 +72,7 @@ export async function migrateLegacyAccount(
   });
 
   if (!localUser) {
-    logger.error('User not found in database');
+    log.error('User not found in database');
     return {
       message: dictionary.api.invalid_credentials,
       isError: true,
@@ -89,7 +90,7 @@ export async function migrateLegacyAccount(
     (r) => r.role.strapiRoleUuid === options.memberRole,
   );
   if (hasMemberRole) {
-    logger.error('User already has member role');
+    log.error('User already has member role');
     return {
       message: dictionary.api.already_member_role,
       isError: true,
@@ -100,7 +101,7 @@ export async function migrateLegacyAccount(
   const password = formData.get('password') as string;
 
   if (!email || !password) {
-    logger.error('Email or password missing in form data');
+    log.error('Email or password missing in form data');
     return {
       message: dictionary.api.invalid_credentials,
       isError: true,
@@ -116,7 +117,7 @@ export async function migrateLegacyAccount(
   });
 
   if (!legacyMigrateResponse.ok) {
-    logger.error('Error migrating legacy account');
+    log.error('Error migrating legacy account');
     return {
       message: dictionary.api.invalid_credentials,
       isError: true,
@@ -144,7 +145,7 @@ export async function migrateLegacyAccount(
     },
   });
 
-  logger.info(
+  log.info(
     `User ${user.entraUserUuid} migrated legacy account with expiresAt: ${endsAt}`,
   );
 

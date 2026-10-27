@@ -10,6 +10,8 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import qs from 'qs';
 
+const log = logger.child('action:event-export');
+
 function escapeCsvField(field: any): string {
   if (field === null || field === undefined) return '""';
   const stringField = String(field);
@@ -30,7 +32,7 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
   const user = session?.user;
 
   if (!user || !user.isLuuppiHato) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -55,7 +57,7 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
   });
 
   if (!hasHatoRole) {
-    logger.error('User does not have the required role');
+    log.error('User does not have the required role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,

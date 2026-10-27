@@ -1,12 +1,14 @@
 import { redisClient } from './db/redis';
 import { logger } from './utils/logger';
 
+const log = logger.child('lib:rate-limiter');
+
 export async function isRateLimited(id: string, event: string, limit = 10) {
   const key = `rate-limit:${event}:${id}`;
   const hasVerification = await redisClient.get(key);
 
   if (hasVerification && parseInt(hasVerification) >= limit) {
-    logger.error(`${event}: Too many requests, rate limited`);
+    log.error(`${event}: Too many requests, rate limited`);
     return parseInt(hasVerification);
   }
   return null;

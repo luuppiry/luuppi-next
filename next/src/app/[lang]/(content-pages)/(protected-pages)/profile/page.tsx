@@ -11,6 +11,8 @@ import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 
+const log = logger.child('page:profile');
+
 const mailman = {
   auth:
     'Basic ' +
@@ -84,7 +86,7 @@ export default async function Profile() {
   const declared = !!declaration;
 
   if (!localUser) {
-    logger.error('User not found in database. This should not happen.');
+    log.error('User not found in database. This should not happen.');
     redirect(`/${lang}/404`);
   }
 

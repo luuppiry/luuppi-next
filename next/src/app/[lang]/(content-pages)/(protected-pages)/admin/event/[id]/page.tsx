@@ -13,6 +13,8 @@ import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 import { PiArrowLeft } from 'react-icons/pi';
 
+const log = logger.child('page:admin/event/[id]');
+
 export const instant = false;
 
 export default async function AdminEventDetail(
@@ -29,7 +31,7 @@ export default async function AdminEventDetail(
   const user = session?.user;
 
   if (!user?.entraUserUuid || !user?.isLuuppiHato) {
-    logger.error('User not found in session or does not have required role');
+    log.error('User not found in session or does not have required role');
     redirect(`/${lang}`);
   }
 
@@ -51,7 +53,7 @@ export default async function AdminEventDetail(
   });
 
   if (!hasHatoRole) {
-    logger.error(`User ${user.entraUserUuid} had expired hato role`);
+    log.error(`User ${user.entraUserUuid} had expired hato role`);
     redirect('/api/auth/force-signout');
   }
 

@@ -78,7 +78,7 @@ const createLogger = (scope?: string) => ({
   info: (...m: unknown[]) => log('info', scope, m),
   warn: (...m: unknown[]) => log('warn', scope, m),
   error: (...m: unknown[]) => log('error', scope, m),
-  /** Create a logger that prefixes every line with a scope, e.g. "api/users" */
+  /** Create a logger that prefixes every line with a scope, e.g. "api:users" */
   child: (name: string) => createLogger(scope ? `${scope}:${name}` : name),
 });
 

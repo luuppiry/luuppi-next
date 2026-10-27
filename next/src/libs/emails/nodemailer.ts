@@ -15,6 +15,8 @@ const transporter = nodemailer.createTransport({
   ignoreTLS: process.env.SMTP_IGNORE_TLS === 'true' || true,
 } as SMTPTransport.Options);
 
+const log = logger.child('lib:emails/nodemailer');
+
 const defaults = {
   from: {
     name: process.env.SMTP_FROM_NAME || 'Luuppi',
@@ -45,10 +47,10 @@ export async function sendEmail(options: EmailOptions) {
       throw new Error('Email rejected');
     }
 
-    logger.info('Email sent:', info.messageId);
+    log.info('Email sent:', info.messageId);
     return info;
   } catch (error) {
-    logger.error('Error sending email:', error);
+    log.error('Error sending email:', error);
     throw new Error('Error sending email', { cause: error });
   }
 }

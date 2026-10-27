@@ -6,6 +6,8 @@ import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { updateTag } from 'next/cache';
 
+const log = logger.child('action:user-edit-roles');
+
 export async function userEditRoles(
   roles: {
     strapiRoleUuid: string;
@@ -20,7 +22,7 @@ export async function userEditRoles(
   const user = session?.user;
 
   if (!user) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -45,7 +47,7 @@ export async function userEditRoles(
   });
 
   if (!hasHatoRole) {
-    logger.error('User does not have the required role');
+    log.error('User does not have the required role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -63,7 +65,7 @@ export async function userEditRoles(
   );
 
   if (invalidExpirationDates) {
-    logger.error('Invalid expiration dates');
+    log.error('Invalid expiration dates');
     return {
       message: dictionary.api.invalid_roles,
       isError: true,
@@ -71,7 +73,7 @@ export async function userEditRoles(
   }
 
   if (invalidRoles) {
-    logger.error('Invalid roles');
+    log.error('Invalid roles');
     return {
       message: dictionary.api.invalid_roles,
       isError: true,
@@ -87,7 +89,7 @@ export async function userEditRoles(
   });
 
   if (rolesMatch.length !== strapiRoleUuids.length) {
-    logger.error('Some roles not found');
+    log.error('Some roles not found');
     return {
       message: dictionary.api.invalid_roles,
       isError: true,
@@ -110,7 +112,7 @@ export async function userEditRoles(
   // Check if roles contain illegal roles, meaning roles that should not
   // be assigned by the user
   if (includesIllegalRoles) {
-    logger.error('Roles contains illegal role');
+    log.error('Roles contains illegal role');
     return {
       message: dictionary.api.invalid_roles,
       isError: true,
@@ -143,7 +145,7 @@ export async function userEditRoles(
       userToEdit.firstName && userToEdit.lastName && userToEdit.domicle;
 
     if (!hasRequiredFields) {
-      logger.error('Missing required fields for member role', {
+      log.error('Missing required fields for member role', {
         entraUserUuid: userToEditEntraUuid,
         hasFirstName: !!userToEdit.firstName,
         hasLastName: !!userToEdit.lastName,

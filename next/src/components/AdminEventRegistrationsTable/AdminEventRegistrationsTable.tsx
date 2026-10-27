@@ -27,6 +27,8 @@ interface AdminEventRegistrationsListProps {
   filters?: string | string[];
 }
 
+const log = logger.child('component:admin-event-registration-list');
+
 export default async function AdminEventRegistrationsList({
   dictionary,
   eventId,
@@ -37,7 +39,7 @@ export default async function AdminEventRegistrationsList({
   const session = await auth();
 
   if (!session?.user || !session.user.isLuuppiHato) {
-    logger.error('User not found in session or does not have required role');
+    log.error('User not found in session or does not have required role');
     redirect(`/${lang}`);
   }
 

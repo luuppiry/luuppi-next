@@ -8,6 +8,8 @@
 //                      default "end")
 
 import { auth } from '@/auth';
+import { getDictionary } from '@/dictionaries';
+import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { execFile } from 'node:child_process';
@@ -15,12 +17,11 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import { getDictionary } from '@/dictionaries';
-import prisma from '@/libs/db/prisma';
 
 export const maxDuration = 60;
 
 const execFileAsync = promisify(execFile);
+const log = logger.child('api:admin/process-pdf');
 
 // Loose allowlist for cpdf page-range syntax: digits, commas, spaces,
 // hyphens, tildes (used for "from the end", e.g. "~1"), and the literal
@@ -77,7 +78,7 @@ export async function POST(req: NextRequest) {
   const user = session?.user;
 
   if (!user || !user.isLuuppiHato) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return NextResponse.json(
       { message: dictionary.api.unauthorized, isError: true },
       { status: 401 },
@@ -93,7 +94,7 @@ export async function POST(req: NextRequest) {
   });
 
   if (!hasHatoRole) {
-    logger.error('User does not have the required role');
+    log.error('User does not have the required role');
     return NextResponse.json(
       { message: dictionary.api.unauthorized, isError: true },
       { status: 401 },
@@ -193,7 +194,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (err: unknown) {
-    logger.error('PDF processing failed:', err);
+    log.error('PDF processing failed:', err);
 
     return NextResponse.json(
       {

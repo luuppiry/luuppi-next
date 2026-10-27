@@ -24,6 +24,8 @@ export type GetRoleUsersResponse =
   | GetRoleUsersErrorResponse
   | GetRoleUsersSuccessResponse;
 
+const log = logger.child('api:roles/[roleId]');
+
 const MAX_PAGE_SIZE = 50;
 const SUPPORTED_LANGUAGES = ['fi', 'en'] as const;
 
@@ -48,7 +50,7 @@ export async function GET(
   if (
     !SUPPORTED_LANGUAGES.includes(lang as (typeof SUPPORTED_LANGUAGES)[number])
   ) {
-    logger.error('Unsupported language:', lang);
+    log.error('Unsupported language:', lang);
     return NextResponse.json(
       { message: dictionary.api.server_error, isError: true },
       { status: 400 },
@@ -59,7 +61,7 @@ export async function GET(
   const user = session?.user;
 
   if (!user || !user.isLuuppiHato) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return NextResponse.json(
       { message: dictionary.api.unauthorized, isError: true },
       { status: 401 },
@@ -75,7 +77,7 @@ export async function GET(
   });
 
   if (!hasHatoRole) {
-    logger.error('User does not have the required role');
+    log.error('User does not have the required role');
     return NextResponse.json(
       { message: dictionary.api.unauthorized, isError: true },
       { status: 401 },
@@ -176,7 +178,7 @@ export async function GET(
       isError: false,
     });
   } catch (error) {
-    logger.error('Failed to fetch users for role:', error);
+    log.error('Failed to fetch users for role:', error);
     return NextResponse.json(
       { message: dictionary.api.server_error, isError: true },
       { status: 500 },

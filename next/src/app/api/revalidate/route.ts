@@ -4,6 +4,8 @@ import { generatePickupCode } from '@/libs/utils/pickup-code';
 import { revalidateTag } from 'next/cache';
 import { NextRequest } from 'next/server';
 
+const log = logger.child('api:revalidate')
+
 /**
  * Strapi sends webhooks to this endpoint to revalidate
  * pages when content is updated.
@@ -13,7 +15,7 @@ import { NextRequest } from 'next/server';
 export async function POST(request: NextRequest) {
   const auth = request.headers.get('authorization');
   if (!auth || auth !== process.env.REVALIDATE_AUTH_SECRET) {
-    logger.error('Unauthorized revalidate request');
+    log.error('Unauthorized revalidate request');
     return new Response('Unauthorized', { status: 401 });
   }
 
@@ -27,14 +29,14 @@ export async function POST(request: NextRequest) {
   }
 
   if (model) {
-    logger.info(`Revalidating ${model}`);
+    log.info(`Revalidating ${model}`);
     revalidateTag(model, 'max');
 
     if (model === 'event') {
-      logger.info(`Revalidating event-${body.entry.documentId}`);
+      log.info(`Revalidating event-${body.entry.documentId}`);
 
       if (!body.entry?.documentId) {
-        logger.error(`No entry found for event-${body.entry.documentId}`);
+        log.error(`No entry found for event-${body.entry.documentId}`);
         return new Response('No entry found', { status: 400 });
       }
 
@@ -74,7 +76,7 @@ export async function POST(request: NextRequest) {
 
     if (model === 'event-role') {
       if (!body.entry) {
-        logger.error('No entry found for event-role');
+        log.error('No entry found for event-role');
         return new Response('No entry found', { status: 400 });
       }
 
@@ -157,7 +159,7 @@ async function backfillPickupCodes(eventDocumentId: string) {
 
   if (registrationsWithoutCode.length === 0) return;
 
-  logger.info(
+  log.info(
     `Backfilling ${registrationsWithoutCode.length} pickup codes for event-${eventDocumentId}`,
   );
 
@@ -180,7 +182,7 @@ async function backfillPickupCodes(eventDocumentId: string) {
         } else {
           // Something unexpected happened, skip updating this entry
 
-          logger.error(
+          log.error(
             `Failed to assign pickup code to registration ${reg.id}`,
             err,
           );

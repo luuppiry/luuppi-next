@@ -5,6 +5,8 @@ import 'server-only';
 import prisma from './libs/db/prisma';
 import { logger } from './libs/utils/logger';
 
+const log = logger.child('auth');
+
 export const {
   handlers: { GET, POST },
   auth,
@@ -74,7 +76,7 @@ export const {
         try {
           decoded = jwt.decode(idToken) as { email: string; oid: string };
         } catch (e) {
-          logger.error('Error decoding JWT', e);
+          log.error('Error decoding JWT', e);
         }
         if (!decoded) return token;
         token.email = decoded.email;

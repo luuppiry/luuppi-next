@@ -2,6 +2,8 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { logger } from '@/libs/utils/logger';
 
+const log = logger.child('lib:strapi/get-select-choice');
+
 export const getSelectChoice = (
   event: APIResponse<'api::event.event'>['data'] | undefined,
   lang: SupportedLanguage,
@@ -12,7 +14,7 @@ export const getSelectChoice = (
   const answerIndex = parseInt(answer, 10);
 
   if (Number.isNaN(questionIndex) || Number.isNaN(answerIndex)) {
-    logger.error('Invalid question/answer index:', question, answer);
+    log.error('Invalid question/answer index:', question, answer);
     return '';
   }
 

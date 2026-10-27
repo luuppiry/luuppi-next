@@ -17,6 +17,8 @@ interface ChargePayment {
   reservations: Reservation[];
 }
 
+const log = logger.child('lib:payments/create-charge');
+
 export const createCharge = async (
   chargeObj: ChargePayment,
   lang: SupportedLanguage,
@@ -54,7 +56,7 @@ export const createCharge = async (
 
     return session.url;
   } catch (error) {
-    logger.error('Error creating charge', error);
+    log.error('Error creating charge', error);
     throw new Error('Failed to create payment session', { cause: error });
   }
 };

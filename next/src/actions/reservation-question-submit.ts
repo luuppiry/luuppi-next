@@ -8,6 +8,8 @@ import { SupportedLanguage } from '@/models/locale';
 import { APIResponse } from '@/types/types';
 import { redirect } from 'next/navigation';
 
+const log = logger.child('action:reservation-question-submit');
+
 export async function reservationQuestionSubmit(
   reservationId: number,
   lang: SupportedLanguage,
@@ -111,7 +113,7 @@ export async function reservationQuestionSubmit(
 
     if (lang === 'en') {
       if (!allowedAnswers.en.includes(answer.value as string)) {
-        logger.error('Invalid answer:', answer.value);
+        log.error('Invalid answer:', answer.value);
         return {
           message: dictionary.api.invalid_answer,
           isError: true,
@@ -121,7 +123,7 @@ export async function reservationQuestionSubmit(
 
     if (lang === 'fi') {
       if (!allowedAnswers.fi.includes(answer.value as string)) {
-        logger.error('Invalid answer:', answer.value);
+        log.error('Invalid answer:', answer.value);
         return {
           message: dictionary.api.invalid_answer,
           isError: true,
@@ -135,7 +137,7 @@ export async function reservationQuestionSubmit(
     const answer = checkboxQuestions[i];
 
     if (typeof answer.value !== 'boolean') {
-      logger.error('Invalid answer:', answer.value);
+      log.error('Invalid answer:', answer.value);
       return {
         message: dictionary.api.invalid_answer,
         isError: true,
@@ -156,7 +158,7 @@ export async function reservationQuestionSubmit(
     }
 
     if (typeof answer.value !== 'string') {
-      logger.error('Invalid answer:', answer.value);
+      log.error('Invalid answer:', answer.value);
       return {
         message: dictionary.api.invalid_answer,
         isError: true,
@@ -167,7 +169,7 @@ export async function reservationQuestionSubmit(
       answer.value.length < question.MinLength ||
       answer.value.length > question.MaxLength
     ) {
-      logger.error('Invalid answer:', answer.value);
+      log.error('Invalid answer:', answer.value);
       return {
         message: dictionary.api.invalid_answer,
         isError: true,
@@ -203,7 +205,7 @@ export async function reservationQuestionSubmit(
         }
 
         if (selectIndex === null && answer.type === 'select') {
-          logger.error('Invalid answer:', answer.value);
+          log.error('Invalid answer:', answer.value);
           throw new Error(dictionary.api.invalid_answer);
         }
 

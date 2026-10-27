@@ -23,6 +23,7 @@ const options = {
   turnstileSecret: process.env.TURNSTILE_SECRET!,
   cacheKey: 'expense-claim',
 };
+const log = logger.child('action:email-send-expense-claim');
 
 const fail = (message: string, field?: string) => ({
   message,
@@ -38,7 +39,7 @@ export async function emailSendExpenseClaim(
 
   const isLimited = await isRateLimited(options.cacheKey, options.cacheKey, 10);
   if (isLimited) {
-    logger.error('Expense claim is being rate limited');
+    log.error('Expense claim is being rate limited');
     return fail(dictionary.api.ratelimit);
   }
   await updateRateLimitCounter(options.cacheKey, options.cacheKey);
@@ -119,7 +120,7 @@ export async function emailSendExpenseClaim(
   try {
     receiptsPdf = await mergeReceipts(files);
   } catch (error) {
-    logger.error('Error merging expense claim receipts', error);
+    log.error('Error merging expense claim receipts', error);
     return fail(dictionary.api.invalid_receipts, 'receipts');
   }
 
@@ -153,7 +154,7 @@ export async function emailSendExpenseClaim(
     attachments.push({ filename: `${reference}-procountor.zip`, content: zip });
     csvIncluded = true;
   } catch (error) {
-    logger.error('Error building Procountor CSV for expense claim', error);
+    log.error('Error building Procountor CSV for expense claim', error);
   }
 
   const total = lines.reduce((sum, l) => sum + l.amountCents, 0);
@@ -203,7 +204,7 @@ async function verifyTurnstileToken(token: string): Promise<boolean> {
 
     return data.success;
   } catch (error) {
-    logger.error('Error verifying turnstile token', error);
+    log.error('Error verifying turnstile token', error);
     return false;
   }
 }
