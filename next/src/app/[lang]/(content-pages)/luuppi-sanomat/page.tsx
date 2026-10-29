@@ -27,7 +27,11 @@ export default async function LuuppiSanomat() {
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
-  >('fi', `/api/luuppi-sanomats?${query}`, ['luuppi-sanomat']);
+  >({
+    lang: 'fi',
+    url: `/api/luuppi-sanomats?${query}`,
+    collection: 'luuppi-sanomat',
+  });
 
   return (
     <div className="relative flex flex-col gap-12">

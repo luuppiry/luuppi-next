@@ -44,11 +44,12 @@ export default async function OldBoard(props: OldBoardProps) {
 
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
-  >('fi', `/api/boards?${BOARDS_QUERY}`, [
-    'board',
-    'board-role',
-    'board-member',
-  ]);
+  >({
+    lang: 'fi',
+    url: `/api/boards?${BOARDS_QUERY}`,
+    collection: 'board',
+    overrideTags: ['board', 'board-role', 'board-member'],
+  });
 
   const boardGroupedByYear = groupBoardByYear(boardData.data);
   const wantedBoard = boardGroupedByYear[params.slug];
@@ -171,11 +172,12 @@ export async function generateMetadata(
 
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
-  >('fi', `/api/boards?${BOARDS_QUERY}`, [
-    'board',
-    'board-role',
-    'board-member',
-  ]);
+  >({
+    lang: 'fi',
+    url: `/api/boards?${BOARDS_QUERY}`,
+    collection: 'board',
+    overrideTags: ['board', 'board-role', 'board-member'],
+  });
 
   const boardGroupedByYear = groupBoardByYear(boardData.data);
   const wantedBoard = boardGroupedByYear[params.slug];
@@ -212,11 +214,12 @@ export async function generateMetadata(
 export async function generateStaticParams() {
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
-  >('fi', `/api/boards?${BOARDS_QUERY}`, [
-    'board',
-    'board-role',
-    'board-member',
-  ]);
+  >({
+    lang: 'fi',
+    url: `/api/boards?${BOARDS_QUERY}`,
+    collection: 'board',
+    overrideTags: ['board', 'board-role', 'board-member'],
+  });
 
   const boardGroupedByYear = groupBoardByYear(boardData.data);
 

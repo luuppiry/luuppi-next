@@ -102,12 +102,13 @@ export default async function AdminEventManagement({
 
   const strapiEvents = await getStrapiData<
     APIResponseCollection<'api::event.event'>
-  >(
+  >({
     lang,
-    `/api/events?${strapiEventsQuery}`,
-    eventIds.map((id) => `event-${id}` satisfies StrapiCacheTag),
-    true,
-  );
+    collection: 'event',
+    url: `/api/events?${strapiEventsQuery}`,
+    overrideTags: eventIds.map((id) => `event:${id}` satisfies StrapiCacheTag),
+    ignoreError: true,
+  });
 
   const strapiEventsMap = new Map(
     strapiEvents?.data?.map((event) => [

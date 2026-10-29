@@ -83,13 +83,14 @@ export async function POST(request: NextRequest) {
     }
 
     const eventDocumentId = payment.registration?.[0]?.event?.eventDocumentId;
-    const strapiUrl = `/api/events/${eventDocumentId}?populate=Registration.RoleToGive`;
-    const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>(
-      'fi', // Does not matter here. We only need the role to give.
-      strapiUrl,
-      [`event-${eventDocumentId}`],
-      true,
-    );
+    const url = `/api/events/${eventDocumentId}?populate=Registration.RoleToGive`;
+    const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>({
+      lang: 'fi', // Does not matter here. We only need the role to give.
+      url,
+      collection: 'event',
+      ignoreError: true,
+      unique: true,
+    });
 
     const strapiEvent = strapiEvents?.data;
 

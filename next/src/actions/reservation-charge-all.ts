@@ -90,11 +90,12 @@ export async function reservationChargeAll(lang: SupportedLanguage) {
       await Promise.allSettled(
         [...new Set(registrations.map((r) => r.eventDocumentId))].map(
           async (id) => {
-            const event = await getStrapiData<APIResponse<'api::event.event'>>(
+            const event = await getStrapiData<APIResponse<'api::event.event'>>({
               lang,
-              `/api/events/${id}?populate=Image&populate=ImageEn&fields=id`,
-              ['event'],
-            );
+              url: `/api/events/${id}?populate=Image&populate=ImageEn&fields=id`,
+              collection: 'event',
+              unique: true,
+            });
 
             const image = (
               lang === 'en'

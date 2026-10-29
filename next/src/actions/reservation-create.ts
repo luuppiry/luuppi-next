@@ -88,13 +88,14 @@ export async function reservationCreate(
     };
   }
 
-  const strapiUrl = `/api/events/${eventDocumentId}?populate=Registration.TicketTypes.Role&populate=Registration.RoleToGive`;
-  const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>(
+  const url = `/api/events/${eventDocumentId}?populate=Registration.TicketTypes.Role&populate=Registration.RoleToGive`;
+  const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>({
     lang,
-    strapiUrl,
-    null,
-    true,
-  );
+    url,
+    collection: null,
+    ignoreError: true,
+    unique: true
+  });
 
   const strapiEvent = strapiEvents?.data;
 

@@ -119,12 +119,13 @@ export async function getPickupDetails(
       };
     }
 
-    const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
+    const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>({
       lang,
-      `/api/events/${eventDocumentId}?populate=Registration.TicketTypes&fields=id`,
-      [`event-${eventDocumentId}`],
-      true,
-    );
+      url: `/api/events/${eventDocumentId}?populate=Registration.TicketTypes&fields=id`,
+      collection: 'event',
+      ignoreError: true,
+      unique: true,
+    });
 
     const ticket = strapiEvent?.data.Registration?.TicketTypes.find(
       (ticket) => ticket.uid === registration.strapiTicketUid,

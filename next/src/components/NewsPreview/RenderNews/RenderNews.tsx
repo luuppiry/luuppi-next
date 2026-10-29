@@ -37,7 +37,13 @@ export default async function RenderNews({
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
-  >('fi', `/api/news?${query}`, ['news-single'], false, isDraftMode);
+  >({
+    collection: 'news-single',
+    url: `/api/news?${query}`,
+    lang: 'fi',
+    ignoreError: false,
+    draftMode: isDraftMode,
+  });
 
   // We need to fetch more than we render, because flipNewsLocale removes entries that don't have english localization
   const newsLocaleFlipped = flipNewsLocale(lang, pageData.data).slice(0, 4);

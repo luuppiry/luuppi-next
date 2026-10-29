@@ -13,7 +13,11 @@ interface RenderPartnersProps {
 export default async function RenderPartners({ lang }: RenderPartnersProps) {
   const partnersData = await getStrapiData<
     APIResponseCollection<'api::company.company'>
-  >(lang, '/api/companies?populate=*', ['company']);
+  >({
+    lang,
+    url: '/api/companies?populate=*',
+    collection: 'company',
+  });
 
   return (
     <Marquee className="mt-4 h-32 max-md:mt-8" autoFill>

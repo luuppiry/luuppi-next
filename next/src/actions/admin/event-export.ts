@@ -118,13 +118,13 @@ export async function eventExport(lang: SupportedLanguage, eventId: number) {
     },
   });
 
-  const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>(
+  const strapiEvents = await getStrapiData<APIResponse<'api::event.event'>>({
     lang,
-    `/api/events/${event.eventDocumentId}?${query}`,
-
-    [`event-${eventId}`],
-    true,
-  );
+    url: `/api/events/${event.eventDocumentId}?${query}`,
+    collection: 'event',
+    ignoreError: true,
+    unique: true,
+  });
 
   const strapiEvent = strapiEvents?.data;
 

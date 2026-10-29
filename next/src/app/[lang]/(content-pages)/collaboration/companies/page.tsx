@@ -10,7 +10,6 @@ import { lang as language } from 'next/root-params';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 const url = '/api/companies?populate=logo&populate=logoDark';
-const tags = ['company'] as const;
 
 export default async function CollaborationCompanies() {
   const lang = await language();
@@ -18,7 +17,7 @@ export default async function CollaborationCompanies() {
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::company.company'>
-  >(lang, url, tags);
+  >({ lang, url, collection: 'company', unique: true });
 
   return (
     <div className="relative flex flex-col gap-12">
@@ -101,11 +100,15 @@ export async function generateMetadata(): Promise<Metadata> {
   const lang = await language();
   const url =
     '/api/collaboration-company?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
-  const tags = ['collaboration-company'] as const;
 
   const data = await getStrapiData<
     APIResponse<'api::collaboration-company.collaboration-company'>
-  >(lang, url, tags);
+  >({
+    lang,
+    url,
+    collection: 'collaboration-company',
+    unique: true,
+  });
 
   const pathname = `/${lang}/collaboration/companies`;
 

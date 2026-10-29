@@ -46,12 +46,13 @@ export async function reservationQuestionSubmit(
 
   const url = `/api/events/${registration.eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
 
-  const events = await getStrapiData<APIResponse<'api::event.event'>>(
+  const events = await getStrapiData<APIResponse<'api::event.event'>>({
     lang,
     url,
-    [`event-${registration.eventDocumentId}`],
-    true,
-  );
+    collection: 'event',
+    ignoreError: true,
+    unique: true,
+  });
 
   const event = events?.data;
 

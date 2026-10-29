@@ -116,4 +116,4 @@ type ExtractApiContentType<T extends string> =
 type ID = string;
 export type StrapiCacheTag =
   | ExtractApiContentType<UID.ContentType>
-  | `${ExtractApiContentType<UID.ContentType>}-${ID}`;
+  | `${ExtractApiContentType<UID.ContentType>}:${ID}`;
