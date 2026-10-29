@@ -56,12 +56,13 @@ export default async function LuuppiSanomatPublication(
   // If two entries are published within same date this blows up (sorry)
   const pageData = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
-  >(
-    'fi',
-    `/api/luuppi-sanomats?${buildQuery(params.slug)}`,
-    ['luuppi-sanomat'],
-    true,
-  );
+  >({
+    lang: 'fi',
+    url: `/api/luuppi-sanomats?${buildQuery(params.slug)}`,
+    collection: 'luuppi-sanomat',
+    ignoreError: true,
+    unique: true,
+  });
 
   if (!pageData?.data.length) {
     redirect(`/${lang}/404`);
@@ -103,9 +104,12 @@ export async function generateMetadata(
   const params = await props.params;
   const data = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
-  >('fi', `/api/luuppi-sanomats?${buildQuery(params.slug)}`, [
-    'luuppi-sanomat',
-  ]);
+  >({
+    lang: 'fi',
+    url: `/api/luuppi-sanomats?${buildQuery(params.slug)}`,
+    collection: 'luuppi-sanomat',
+    unique: true,
+  });
   const lang = await language();
   const sanomatLocaleFlipped = flipSanomatLocale(lang, data.data);
   const selectedPublication = sanomatLocaleFlipped[0];
@@ -122,7 +126,11 @@ export async function generateMetadata(
 export async function generateStaticParams() {
   const pageData = await getStrapiData<
     APIResponseCollection<'api::luuppi-sanomat.luuppi-sanomat'>
-  >('fi', '/api/luuppi-sanomats?pagination[pageSize]=500', ['luuppi-sanomat']);
+  >({
+    lang: 'fi',
+    url: '/api/luuppi-sanomats?pagination[pageSize]=500',
+    collection: 'luuppi-sanomat',
+  });
 
   return pageData.data.map((sanomat) => ({
     slug: toCalendarDate(sanomat.firstPublishedAt || sanomat.publishedAt!),

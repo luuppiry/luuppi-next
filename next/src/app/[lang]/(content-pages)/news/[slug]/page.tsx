@@ -60,13 +60,19 @@ export default async function NewsPost(props: NewsPostProps) {
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
-  >('fi', url, ['news-single'], false, isDraftMode);
+  >({
+    collection: 'news-single',
+    lang: 'fi',
+    url,
+    unique: true,
+    draftMode: isDraftMode,
+  });
 
   const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);
 
   const partnersData = await getStrapiData<
     APIResponseCollection<'api::company.company'>
-  >(lang, '/api/companies?populate=*', ['company']);
+  >({ lang, collection: 'company', url: '/api/companies?populate=*' });
 
   if (!pageData.data.length) {
     redirect(`/${lang}/404`);
@@ -192,7 +198,12 @@ export async function generateMetadata(
   const params = await props.params;
   const data = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
-  >('fi', `${baseUrl}${params.slug}`, ['news-single']);
+  >({
+    lang: 'fi',
+    collection: 'news-single',
+    url: `${baseUrl}${params.slug}`,
+    unique: true,
+  });
   const newsLocaleFlipped = flipNewsLocale(lang, data.data);
   const selectedNews = newsLocaleFlipped[0];
   const pathname = `/${lang}/news/${params.slug}`;
@@ -208,7 +219,11 @@ export async function generateMetadata(
 export async function generateStaticParams() {
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
-  >('fi', '/api/news?pagination[pageSize]=100', ['news-single']);
+  >({
+    lang: 'fi',
+    collection: 'news-single',
+    url: '/api/news?pagination[pageSize]=100',
+  });
 
   return pageData.data.map((news) => ({
     slug: news.slug,

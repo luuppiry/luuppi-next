@@ -32,10 +32,16 @@ export async function claimInvite(id: string, lang: string) {
   }
   await updateRateLimitCounter(entraUserUuid, options.cacheKey);
 
-  const strapiUrl = `/api/invites?populate=RoleToGive&populate=Event&filters[Slug][$eq]=${id}`;
+  const url = `/api/invites?populate=RoleToGive&populate=Event&filters[Slug][$eq]=${id}`;
   const invites = await getStrapiData<
     APIResponseCollection<'api::invite.invite'>
-  >(lang, strapiUrl, [`invite-${id}`], true);
+  >({
+    lang,
+    url,
+    collection: 'invite',
+    ignoreError: true,
+    unique: true,
+  });
 
   const invite = invites?.data.at(0);
   const role = invite?.RoleToGive?.RoleId;

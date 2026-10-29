@@ -7,7 +7,12 @@ export async function NotificationBarLoader() {
   const language = await lang();
   const notification = await getStrapiData<
     APIResponse<'api::notification.notification'>
-  >(language, '/api/notification', ['notification'], true);
+  >({
+    lang: language,
+    url: '/api/notification',
+    collection: 'notification',
+    ignoreError: true,
+  });
 
   return <NotificationBar lang={language} notification={notification} />;
 }

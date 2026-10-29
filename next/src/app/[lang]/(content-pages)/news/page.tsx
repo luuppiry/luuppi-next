@@ -37,7 +37,13 @@ export default async function News() {
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::news-single.news-single'>
-  >('fi', `/api/news?${query}`, ['news-single'], false, isDraftMode);
+  >({
+    lang: 'fi',
+    url: `/api/news?${query}`,
+    collection: 'news-single',
+    ignoreError: false,
+    draftMode: isDraftMode,
+  });
 
   const newsLocaleFlipped = flipNewsLocale(lang, pageData.data);
   const dictionary = await getDictionary();
@@ -141,13 +147,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const lang = await language();
   const url =
     '/api/news-list?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
-  const tags = ['news-list'] as const;
 
-  const data = await getStrapiData<APIResponse<'api::news-list.news-list'>>(
+  const data = await getStrapiData<APIResponse<'api::news-list.news-list'>>({
     lang,
     url,
-    tags,
-  );
+    collection: 'news-list',
+  });
 
   const pathname = `/${lang}/news`;
 

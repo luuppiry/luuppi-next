@@ -3,7 +3,7 @@ import { dateFormat } from '@/libs/constants';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { APIResponseCollection, StrapiCacheTag } from '@/types/types';
-import { cacheLife, cacheTag } from 'next/cache';
+import { cacheLife } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
 import { lang as language } from 'next/root-params';
@@ -12,27 +12,33 @@ import SideNavigator from '../SideNavigator/SideNavigator';
 import SidePartners from '../SidePartners/SidePartners';
 
 interface ContentPageProps {
-  fetchTags: StrapiCacheTag[];
+  collection: StrapiCacheTag;
+  unique?: boolean;
   url: string;
 }
 
 export default async function ContentPage({
-  fetchTags,
+  collection,
   url,
+  unique = false,
 }: ContentPageProps) {
   'use cache';
   cacheLife('max');
-  cacheTag(...fetchTags);
 
   const lang = await language();
   const dictionary = await getDictionary();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: contentData } = await getStrapiData<any>(lang, url, fetchTags);
+  const { data: contentData } = await getStrapiData<any>({
+    lang,
+    url,
+    collection,
+    unique,
+  });
 
   const partnersData = await getStrapiData<
     APIResponseCollection<'api::company.company'>
-  >(lang, '/api/companies?populate=*', ['company']);
+  >({ lang, url: '/api/companies?populate=*', collection: 'company' });
 
   const imagePath = contentData.Content.banner.url;
   const imageUrl = getStrapiUrl(imagePath);

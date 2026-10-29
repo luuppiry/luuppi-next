@@ -34,10 +34,16 @@ export default async function InvitePage({ params }: Props) {
     );
   }
 
-  const strapiUrl = `/api/invites?populate=RoleToGive&populate=Event&filters[Slug][$eq]=${id}`;
+  const url = `/api/invites?populate=RoleToGive&populate=Event&filters[Slug][$eq]=${id}`;
   const invites = await getStrapiData<
     APIResponseCollection<'api::invite.invite'>
-  >(lang, strapiUrl, [`invite-${id}`], true);
+  >({
+    lang,
+    url,
+    collection: 'invite',
+    ignoreError: true,
+    unique: true,
+  });
 
   const invite = invites?.data.at(0);
   const isExpired = invite?.Expires && new Date(invite.Expires) < new Date();

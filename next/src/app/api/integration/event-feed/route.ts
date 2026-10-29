@@ -49,9 +49,11 @@ export async function GET(
     const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString().split('T')[0]}&populate=Registration.TicketTypes.Role&populate=Image&populate=ImageEn&populate=VisibleOnlyForRoles`;
 
     const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-      'fi',
-      url,
-      ['event'],
+      {
+        lang: 'fi',
+        url,
+        collection: 'event',
+      },
     );
     // Filter events based on visibility rules
     const visibleEvents = await filterVisibleEvents(data.data);

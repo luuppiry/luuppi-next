@@ -52,11 +52,12 @@ export default async function LuuppiSanomatPublication(
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >(
-    'fi',
-    `${baseUrl}${year}&filters[shortMeetingName][$eq]=${shortMeetingName}`,
-    ['meeting-minute-document'],
-  );
+  >({
+    lang: 'fi',
+    url: `${baseUrl}${year}&filters[shortMeetingName][$eq]=${shortMeetingName}`,
+    collection: 'meeting-minute-document',
+    unique: true,
+  });
 
   const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(
     lang,
@@ -122,11 +123,12 @@ export async function generateMetadata(
 
   const data = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >(
-    'fi',
-    `${baseUrl}${year}&filters[shortMeetingName][$eq]=${shortMeetingName}`,
-    ['meeting-minute-document'],
-  );
+  >({
+    lang: 'fi',
+    url: `${baseUrl}${year}&filters[shortMeetingName][$eq]=${shortMeetingName}`,
+    collection: 'meeting-minute-document',
+    unique: true,
+  });
   const meetingMinuteLocaleFlipped = flipMeetingMinuteLocale(lang, data.data);
   const selectedPublication = meetingMinuteLocaleFlipped[0];
   const pathname = `/${lang}/organization/meeting-minutes/${params.slug}`;
@@ -142,9 +144,11 @@ export async function generateMetadata(
 export async function generateStaticParams() {
   const pageData = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >('fi', '/api/meeting-minute-documents?pagination[pageSize]=100', [
-    'meeting-minute-document',
-  ]);
+  >({
+    lang: 'fi',
+    url: '/api/meeting-minute-documents?pagination[pageSize]=100',
+    collection: 'meeting-minute-document',
+  });
 
   return pageData.data.map((meetingMinuteDocument) => ({
     slug: `${meetingMinuteDocument.year}-${meetingMinuteDocument.shortMeetingName}`,

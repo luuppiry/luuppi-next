@@ -138,12 +138,13 @@ export default async function OwnEvents() {
 
         const url = `/api/events/${eventDocumentId}?${query}`;
 
-        const events = await getStrapiData<APIResponse<'api::event.event'>>(
+        const events = await getStrapiData<APIResponse<'api::event.event'>>({
           lang,
           url,
-          [`event-${eventDocumentId}`],
-          true,
-        );
+          collection: 'event',
+          ignoreError: true,
+          unique: true,
+        });
 
         const event = events?.data;
 
@@ -162,12 +163,13 @@ export default async function OwnEvents() {
     uniqueUpcomingEventIds.map(async (eventDocumentId) => {
       const url = `/api/events/${eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
 
-      const events = await getStrapiData<APIResponse<'api::event.event'>>(
+      const events = await getStrapiData<APIResponse<'api::event.event'>>({
         lang,
         url,
-        [`event-${eventDocumentId}`],
-        true,
-      );
+        collection: 'event',
+        ignoreError: true,
+        unique: true,
+      });
 
       const event = events?.data;
 

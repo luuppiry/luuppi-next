@@ -22,10 +22,13 @@ export default async function PrivateEvent(props: EventProps) {
   const dictionary = await getDictionary();
 
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    lang,
-    `/api/events?filters[Slug][$eq]=${slug}&${EVENT_POPULATE}&filters[ShowInCalendar][$eq]=false`,
-    [`event-${slug}`],
-    true,
+    {
+      lang,
+      url: `/api/events?filters[Slug][$eq]=${slug}&${EVENT_POPULATE}&filters[ShowInCalendar][$eq]=false`,
+      collection: 'event',
+      ignoreError: true,
+      unique: true,
+    },
   );
   const event = events?.data.at(0);
   if (!event) redirect(`/${lang}/404`);
@@ -33,7 +36,11 @@ export default async function PrivateEvent(props: EventProps) {
 
   const partners = await getStrapiData<
     APIResponseCollection<'api::company.company'>
-  >(lang, '/api/companies?populate=*', ['company']);
+  >({
+    lang,
+    url: '/api/companies?populate=*',
+    collection: 'company',
+  });
   if (!partners) redirect(`/${lang}/404`);
 
   return (
@@ -54,11 +61,15 @@ export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const lang = await language();
   const { slug } = await props.params;
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    lang,
-    `/api/events?filters[Slug][$eq]=${slug}&populate=Image&populate=ImageEn`,
-    [`event-${slug}`],
-    true,
+    {
+      lang,
+      url: `/api/events?filters[Slug][$eq]=${slug}&populate=Image&populate=ImageEn`,
+      collection: 'event',
+      ignoreError: true,
+      unique: true,
+    },
   );
+
   const event = events?.data.at(0);
   return event
     ? buildEventMetadata(event, lang, 'private-events', slug, { noIndex: true })

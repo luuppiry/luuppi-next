@@ -95,12 +95,13 @@ export default async function AdminEventRegistrationsList({
     },
   });
 
-  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
+  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>({
     lang,
-    `/api/events/${event.eventDocumentId}?${query}`,
-    [`event-${eventId}`],
-    true,
-  );
+    url: `/api/events/${event.eventDocumentId}?${query}`,
+    unique: true,
+    collection: 'event',
+    ignoreError: true,
+  });
 
   const registrations = event.registrations;
 

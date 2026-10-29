@@ -85,12 +85,13 @@ export default async function AdminEventDetail(
   }
 
   // Fetch Strapi event data to get RequiresPickup field
-  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>(
+  const strapiEvent = await getStrapiData<APIResponse<'api::event.event'>>({
     lang,
-    `/api/events/${eventDocumentId}?populate=Registration`,
-    [`event-${eventDocumentId}`],
-    true,
-  );
+    url: `/api/events/${eventDocumentId}?populate=Registration`,
+    collection: 'event',
+    unique: true,
+    ignoreError: true,
+  });
 
   if (!strapiEvent?.data) {
     return redirect(`/${lang}/404`);
