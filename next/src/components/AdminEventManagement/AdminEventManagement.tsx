@@ -170,9 +170,9 @@ export default async function AdminEventManagement({
               {eventLanguageFormatted?.map((event, index) => (
                 <tr key={event.id}>
                   <th>{index + 1}</th>
-                  <td className="truncate">
+                  <td className="max-w-xl truncate">
                     <Link
-                      className="link"
+                      className="link block"
                       href={`/${lang}/admin/event/${event.eventDocumentId}`}
                       prefetch={false}
                     >
