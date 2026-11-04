@@ -470,6 +470,7 @@
     "process_pdf": "Process PDf"
   },
   "pages_profile": {
+    "do_not_use_tuni_email": "Use an email address other than @tuni.fi.",
     "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",
     "first_name_explanation": "All your official first names. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
     "lastname_explanation": "Official surname. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",

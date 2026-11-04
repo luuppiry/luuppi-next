@@ -470,6 +470,7 @@
     "process_pdf": "Muunna PDF"
   },
   "pages_profile": {
+    "do_not_use_tuni_email": "Käytä muuta kuin @tuni.fi-sähköpostiosoitetta.",
     "username_explanation": "Käyttäjänimi on tarkoitettu tunnistamaan sinut verkkosivustolla. Sen on oltava 3-30 merkkiä pitkä. Käyttäjänimeä voidaan näyttää julkisesti.",
     "first_name_explanation": "Kaikki viralliset etunimesi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",
     "lastname_explanation": "Virallinen sukunimi. Tämä on yhdistyslain 11 § vaatima tieto, joka tarkistetaan yhdistykseen liittyessä.",

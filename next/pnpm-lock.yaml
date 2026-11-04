@@ -65,6 +65,9 @@ importers:
       ioredis:
         specifier: ^5.9.3
         version: 5.9.3
+      jose:
+        specifier: ^6.2.15
+        version: 6.2.15
       jsonwebtoken:
         specifier: ^9.0.3
         version: 9.0.3
@@ -6665,8 +6668,8 @@ packages:
   jose@4.15.9:
     resolution: {integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==}
 
-  jose@6.2.9:
-    resolution: {integrity: sha512-XrchZOFZUl/T3vTwRe8XK+cJrGtMF4th1ARnDfwbBXFKThGhlsxEE4Zu03AD/bjJSt/9jT/mxrOCkJWOg77aPA==}
+  jose@6.2.15:
+    resolution: {integrity: sha512-qdF6ewcZARtef63fJ9AKKZPgxw+t7USH6HLXYcD4CrdmSvDp79rpJSPFEKc90QBeGS63u1KQtN2MZQHC0yDIzA==}
 
   jpeg-js@0.4.4:
     resolution: {integrity: sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==}
@@ -9781,7 +9784,7 @@ snapshots:
   '@auth/core@0.41.3(nodemailer@7.0.13)':
     dependencies:
       '@panva/hkdf': 1.2.1
-      jose: 6.2.9
+      jose: 6.2.15
       oauth4webapi: 3.8.7
       preact: 10.24.3
       preact-render-to-string: 6.5.11(preact@10.24.3)
@@ -17434,7 +17437,7 @@ snapshots:
 
   jose@4.15.9: {}
 
-  jose@6.2.9: {}
+  jose@6.2.15: {}
 
   jpeg-js@0.4.4: {}
 

@@ -1,4 +1,5 @@
 'use client';
+
 import { emailSendVerify } from '@/actions/email-send-verify';
 import { Dictionary, SupportedLanguage } from '@/models/locale';
 import { User } from '@prisma/client';
@@ -25,6 +26,11 @@ interface ProfileEmailFormProps {
   dictionary: Dictionary;
 }
 
+function isTuniEmail(email: string) {
+  const domain = email.trim().toLowerCase().split('@')[1];
+  return domain === 'tuni.fi' || domain?.endsWith('.tuni.fi');
+}
+
 export default function ProfileEmailform({
   user,
   lang,
@@ -34,6 +40,18 @@ export default function ProfileEmailform({
   const [formResponse, setFormResponse] = useState(initialState);
 
   const updateEmailUpdate = async (formData: FormData) => {
+    const email = String(formData.get('email') ?? '');
+
+    if (isTuniEmail(email)) {
+      setFormResponse({
+        message: dictionary.pages_profile.do_not_use_tuni_email,
+        isError: true,
+        field: 'email',
+      });
+
+      return;
+    }
+
     const response = await emailSendVerify(lang, formData);
     setFormResponse(response);
   };

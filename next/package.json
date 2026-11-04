@@ -37,6 +37,7 @@
     "hdrify": "^0.12.1",
     "ical-generator": "^10.0.0",
     "ioredis": "^5.9.3",
+    "jose": "^6.2.15",
     "jsonwebtoken": "^9.0.3",
     "jszip": "^3.10.2",
     "negotiator": "^1.0.0",
