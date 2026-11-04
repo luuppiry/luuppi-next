@@ -8,7 +8,7 @@ import { checkStatus } from '@/libs/payments/check-status';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { logger } from '@/libs/utils/logger';
 import QuestionProvider from '@/providers/QuestionProvider';
-import { APIResponse } from '@/types/types';
+import { APIResponseCollection } from '@/types/types';
 import { Payment, PaymentStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
@@ -115,75 +115,64 @@ export default async function OwnEvents() {
 
   await processPendingPayments();
 
-  const uniqueUpcomingEventIds: string[] = Array.from(
-    new Set(
-      userEventRegistrations
-        .filter(
-          (registration) => new Date(registration.event.endDate) >= new Date(),
-        )
-        .map((registration) => registration.eventDocumentId),
+  const now = new Date();
+
+  const eventIds = Array.from(
+    new Set(userEventRegistrations.map((r) => r.eventDocumentId)),
+  );
+
+  const upcomingEventIds = eventIds.filter((id) =>
+    userEventRegistrations.some(
+      (r) => r.eventDocumentId === id && new Date(r.event.endDate) >= now,
     ),
   );
 
-  const tickets = (
-    await Promise.all(
-      uniqueUpcomingEventIds.map(async (eventDocumentId) => {
-        const query = qs.stringify({
-          populate: {
-            Registration: {
-              populate: ['TicketTypes'],
-            },
-          },
-        });
+  const query = qs.stringify({
+    filters: { documentId: { $in: eventIds } },
+    pagination: { pageSize: eventIds.length },
+    fields: ['Slug'],
+    populate: {
+      Registration: {
+        populate: [
+          'TicketTypes',
+          'QuestionsText',
+          'QuestionsSelect',
+          'QuestionsCheckbox',
+        ],
+      },
+    },
+  });
 
-        const url = `/api/events/${eventDocumentId}?${query}`;
-
-        const events = await getStrapiData<APIResponse<'api::event.event'>>({
-          lang,
-          url,
-          collection: 'event',
-          ignoreError: true,
-          unique: true,
-        });
-
-        const event = events?.data;
-
-        if (!event?.Registration) {
-          return null;
-        }
-
-        return event.Registration.TicketTypes;
-      }),
-    )
-  )
-    .filter(Boolean)
-    .flat();
-
-  const upcomingEventQuestions = await Promise.all(
-    uniqueUpcomingEventIds.map(async (eventDocumentId) => {
-      const url = `/api/events/${eventDocumentId}?populate[Registration][populate][0]=QuestionsText&populate[Registration][populate][1]=QuestionsSelect&populate[Registration][populate][2]=QuestionsCheckbox`;
-
-      const events = await getStrapiData<APIResponse<'api::event.event'>>({
+  const strapiEvents = eventIds.length
+    ? await getStrapiData<APIResponseCollection<'api::event.event'>>({
         lang,
-        url,
+        url: `/api/events?${query}`,
         collection: 'event',
         ignoreError: true,
-        unique: true,
-      });
+      })
+    : null;
 
-      const event = events?.data;
-
-      return {
-        eventDocumentId,
-        text: event?.Registration?.QuestionsText ?? [],
-        select: event?.Registration?.QuestionsSelect ?? [],
-        checkbox: event?.Registration?.QuestionsCheckbox ?? [],
-        answerableUntil: event?.Registration?.AllowQuestionEditUntil
-          ? new Date(event?.Registration?.AllowQuestionEditUntil)
-          : null,
-      };
-    }),
+  const strapiEventById = new Map(
+    (strapiEvents?.data ?? []).map((e) => [e.documentId, e]),
   );
+
+  // Tickets and questions only matter for upcoming events
+  const tickets = upcomingEventIds.flatMap(
+    (id) => strapiEventById.get(id)?.Registration?.TicketTypes ?? [],
+  );
+
+  const upcomingEventQuestions = upcomingEventIds.map((eventDocumentId) => {
+    const registration = strapiEventById.get(eventDocumentId)?.Registration;
+    return {
+      eventDocumentId,
+      text: registration?.QuestionsText ?? [],
+      select: registration?.QuestionsSelect ?? [],
+      checkbox: registration?.QuestionsCheckbox ?? [],
+      answerableUntil: registration?.AllowQuestionEditUntil
+        ? new Date(registration.AllowQuestionEditUntil)
+        : null,
+    };
+  });
 
   const registrationsFormatted = userEventRegistrations.map((registration) => ({
     name: registration.event[lang === 'fi' ? 'nameFi' : 'nameEn'],
@@ -193,6 +182,7 @@ export default async function OwnEvents() {
     price: registration.price,
     createdAt: registration.createdAt,
     reservedUntil: registration.reservedUntil,
+    slug: strapiEventById.get(registration.eventDocumentId)?.Slug ?? null,
     paymentCompleted: registration.paymentCompleted,
     deletedAt: registration.deletedAt,
     id: registration.id,
@@ -210,7 +200,7 @@ export default async function OwnEvents() {
     .filter(
       (registration) =>
         !registration.paymentCompleted &&
-        registration.reservedUntil >= new Date() &&
+        registration.reservedUntil >= now &&
         registration.deletedAt === null,
     )
     .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
@@ -341,7 +331,7 @@ export default async function OwnEvents() {
               </h2>
               <div className="flex flex-col gap-4">
                 {paidRegistrations
-                  .sort((a, b) => +b.startDate - +a.endDate)
+                  .sort((a, b) => +b.startDate - +a.startDate)
                   .map((registration) => (
                     <Registration
                       key={registration.id}
