@@ -60,7 +60,7 @@ export async function emailSendVerify(
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email) || email.endsWith('@tuni.fi')) {
+  if (!emailRegex.test(email)) {
     log.error('Email does not match regex');
     return {
       message: dictionary.api.invalid_email,
