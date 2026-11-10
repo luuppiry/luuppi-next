@@ -65,7 +65,8 @@
     "invalid_expense_description": "Kuvaile kulu (3-80 merkkiä).",
     "invalid_expense_amount": "Anna nollaa suurempi summa, esimerkiksi 12,50.",
     "invalid_receipts": "Liitä 1-10 kuittia PDF-, JPEG- tai PNG-muodossa, enintään 5 Mt per tiedosto ja 10 Mt yhteensä.",
-    "expense_claim_sent": "Kulukorvaus lähetettiin rahastonhoitajalle."
+    "expense_claim_sent": "Kulukorvaus lähetettiin rahastonhoitajalle.",
+    "client_outdated": "Käytät vanhaa versiota verkkosivuista, lataa sivu uudelleen jatkaaksesi."
   },
   "roles": {
     "entire_board": "Koko hallitus",

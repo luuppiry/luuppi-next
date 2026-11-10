@@ -65,7 +65,8 @@
     "invalid_expense_description": "Describe the expense (3-80 characters).",
     "invalid_expense_amount": "Enter an amount greater than zero, for example 12,50.",
     "invalid_receipts": "Attach 1-10 receipts as PDF, JPEG or PNG, max 5 MB each and 10 MB in total.",
-    "expense_claim_sent": "Your claim was sent to the treasurer."
+    "expense_claim_sent": "Your claim was sent to the treasurer.",
+    "client_outdated": "You are using an outdated client, please refresh the page to continue."
   },
   "roles": {
     "entire_board": "Entire Board",

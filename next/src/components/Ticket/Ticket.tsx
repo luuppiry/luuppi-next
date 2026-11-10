@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { BuyTicketsButton } from './BuyTicketsButton';
 import ErrorDialog from './ErrorDialog';
 import TicketAmountDialog from './TicketAmountDialog';
+import { unstable_isUnrecognizedActionError } from 'next/navigation';
 
 interface TicketProps {
   ticket: {
@@ -78,7 +79,17 @@ export default function Ticket({
         router.push(`/${lang}/own-events`);
         router.refresh();
       }
-    } catch {
+    } catch (error: unknown) {
+      if (unstable_isUnrecognizedActionError(error)) {
+        // The client is from a different deployment than the server.
+        // Reloading the page will fix this mismatch.
+        setResponse({
+          message: dictionary.api.client_outdated,
+          isError: true,
+        });
+        return;
+      }
+
       setResponse({ message: dictionary.api.server_error, isError: true });
     } finally {
       setLoading(false);
