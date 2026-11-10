@@ -391,7 +391,8 @@
     "receipts_help": "Up to 10 files, 5 MB each. Photos are merged into one PDF.",
     "send": "Send claim",
     "separate_forms_notice": "Please send expenses for different events or matters on separate forms. Accounting needs one voucher per event.",
-    "form_title": "Claim details"
+    "form_title": "Claim details",
+    "files_too_large": "Attachments you were trying to send exceed the limits after optimization."
   },
   "pages_404": {
     "title": "Page not found",

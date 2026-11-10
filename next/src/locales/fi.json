@@ -391,7 +391,8 @@
     "receipts_help": "Enintään 10 tiedostoa, 5 Mt per tiedosto. Kuvat yhdistetään yhdeksi PDF:ksi.",
     "send": "Lähetä kulukorvaus",
     "separate_forms_notice": "Lähetä eri asioita tai tapahtumia koskevat kulukorvaukset eri lomakkeilla. Kirjanpitoon tarvitaan yksi tosite per tapahtuma.",
-    "form_title": "Korvauksen tiedot"
+    "form_title": "Korvauksen tiedot",
+    "files_too_large": "Liitteet, joita yritit lähettää ylittää rajat."
   },
   "pages_404": {
     "title": "Sivua ei löytynyt",
