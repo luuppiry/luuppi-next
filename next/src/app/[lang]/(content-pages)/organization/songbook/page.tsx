@@ -1,26 +1,32 @@
-import Songbook from '@/components/Songbook/Songbook';
+import { promises as fs } from 'fs';
+import path from 'path';
 import { getDictionary } from '@/dictionaries';
-import { Metadata } from 'next';
+import Songbook, {
+  type SongbookCategory,
+} from '@/components/Songbook/Songbook';
+import { cacheLife } from 'next/cache';
 
-export default async function SongbookPage() {
-  const dictionary = await getDictionary();
+async function getSongbook(): Promise<SongbookCategory[]> {
+  'use cache';
+  cacheLife('max');
 
-  return (
-    <div className="relative">
-      <h1 className="mb-4">{dictionary.pages_songbook.title}</h1>
-      <p className="max-w-3xl">{dictionary.pages_songbook.description}</p>
-      <div className="mt-6">
-        <Songbook dictionary={dictionary} />
-      </div>
-      <div className="luuppi-pattern absolute -left-48 -top-10 -z-50 h-[701px] w-[801px] max-md:left-0 max-md:h-full max-md:w-full max-md:rounded-none" />
-    </div>
+  const file = await fs.readFile(
+    path.join(process.cwd(), 'public/data/songbook.json'),
+    'utf-8',
   );
+  return JSON.parse(file);
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const dictionary = await getDictionary();
-  return {
-    title: dictionary.pages_songbook.seo_title,
-    description: dictionary.pages_songbook.seo_description,
-  };
+export default async function SongbookPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const [dictionary, songbook] = await Promise.all([
+    getDictionary(lang),
+    getSongbook(),
+  ]);
+
+  return <Songbook dictionary={dictionary} songbook={songbook} />;
 }
