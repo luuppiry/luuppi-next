@@ -11,20 +11,17 @@ interface SongbookCategory {
   songs: SongbookSong[];
 }
 
-interface PaginatedResponse {
+interface SongsResponse {
   songs: SongbookSong[];
   totalCount: number;
-  hasMore: boolean;
 }
 
 export async function GET(
   request: NextRequest,
-): Promise<NextResponse<PaginatedResponse>> {
+): Promise<NextResponse<SongsResponse>> {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q')?.toLowerCase().trim() || '';
   const category = searchParams.get('category')?.toLowerCase().trim() || '';
-  const page = parseInt(searchParams.get('page') || '0');
-  const pageSize = parseInt(searchParams.get('pageSize') || '20');
 
   const file = await fs.readFile(
     process.cwd() + '/public/data/songbook.json',
@@ -32,43 +29,26 @@ export async function GET(
   );
 
   const songbook: SongbookCategory[] = JSON.parse(file);
-  let filteredSongs: SongbookSong[] = [];
-
-  const normalizedQuery = query.replace(/\s+/g, ' ').toLowerCase();
+  const normalizedQuery = query.replace(/\s+/g, ' ');
 
   const textMatches = (text: string, searchTerm: string) =>
     text.toLowerCase().includes(searchTerm);
 
-  songbook.forEach((cat) => {
-    if (category && !textMatches(cat.category, category)) {
-      return;
-    }
+  const songs = songbook
+    .filter((cat) => !category || textMatches(cat.category, category))
+    .flatMap((cat) =>
+      cat.songs.filter(
+        (song) =>
+          !normalizedQuery ||
+          textMatches(song.title, normalizedQuery) ||
+          song.verses.some((verse) => textMatches(verse, normalizedQuery)),
+      ),
+    );
 
-    const matchingSongs = cat.songs.filter((song) => {
-      if (!normalizedQuery) {
-        return true;
-      }
-
-      if (textMatches(song.title, normalizedQuery)) {
-        return true;
-      }
-
-      return song.verses.some((verse) => textMatches(verse, normalizedQuery));
-    });
-
-    filteredSongs.push(...matchingSongs);
-  });
-
-  filteredSongs = Array.from(new Set(filteredSongs));
-
-  const totalCount = filteredSongs.length;
-  const start = page * pageSize;
-  const end = start + pageSize;
-  const paginatedSongs = filteredSongs.slice(start, end);
+  await new Promise(r => setTimeout(r, 750));
 
   return NextResponse.json({
-    songs: paginatedSongs,
-    totalCount,
-    hasMore: end < totalCount,
+    songs,
+    totalCount: songs.length,
   });
 }

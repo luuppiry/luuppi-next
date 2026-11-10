@@ -513,6 +513,13 @@
     "invalid_role": "Epäkelvollinen rooli",
     "must_be_logged_in": "Sinun täytyy olla kirjautuneena lunastaaksesi tämän roolin. Luo uusi käyttäjä tai kirjaudu sisään alla olevalla napilla palataksesi sivulle."
   },
+  "pages_songs": {
+    "all_categories": "Kaikki kategoriat",
+    "clear_search": "Tyhjennä haku",
+    "loading_title": "Ladataan lauluja...",
+    "no_results_title": "Lauluja ei löytynyt",
+    "empty_filters": "Kokeile valita toinen kategoria tai tyhjennä hakuehdot."
+  },
   "pages_error": {
     "title": "Odottamaton virhe",
     "description": "Odottamaton virhe tapahtui käsitellessämme pyyntöäsi.",

@@ -1,4 +1,3 @@
-/* eslint-disable */
 
 import type { Schema, Struct } from '@strapi/strapi';
 
