@@ -51,6 +51,12 @@ type GetComponentValue<TAttribute extends Schema.Attribute.Attribute> =
       : IDProperty & GetValues<TComponentUID>
     : never;
 
+export type JsonPrimative = string | number | boolean | null;
+export type JsonArray = Json[];
+export type JsonObject = { [key: string]: Json };
+export type JsonComposite = JsonArray | JsonObject;
+export type Json = JsonPrimative | JsonComposite;
+
 type GetValue<TAttribute extends Schema.Attribute.Attribute> = Utils.If<
   Utils.IsNotNever<TAttribute>,
   Utils.MatchFirst<
@@ -78,8 +84,13 @@ type GetValue<TAttribute extends Schema.Attribute.Attribute> = Utils.If<
         MediaValue<TAttribute>,
       ],
 
+      // JSON
+      [
+        Utils.Extends<TAttribute, Schema.Attribute.OfType<'json'>>,
+        Record<string, any>,
+      ],
+
       // Fallback
-      // If none of the above attribute type, fallback to the original Attribute.GetValue (while making sure it's an attribute)
       [Utils.Constants.True, Schema.Attribute.Value<TAttribute, unknown>],
     ],
     unknown
