@@ -15,19 +15,18 @@ import { lang as language } from 'next/root-params';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 const url = '/api/job-opportunities?populate=logo&populate=logoDark';
-const tags = ['job-opportunity'] as const satisfies StrapiCacheTag[];
 
 export default async function CollaborationJobOpportunities() {
   'use cache';
   cacheLife('max');
-  cacheTag(...tags);
+  cacheTag('job-opportunity' satisfies StrapiCacheTag);
 
   const lang = await language();
   const dictionary = await getDictionary();
 
   const pageData = await getStrapiData<
     APIResponseCollection<'api::job-opportunity.job-opportunity'>
-  >(lang, url, tags);
+  >({ lang, collection: 'job-opportunity', url });
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -146,11 +145,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const lang = await language();
   const url =
     '/api/collaboration-job-opportunity?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
-  const tags = ['collaboration-job-opportunity'] as const;
 
   const data = await getStrapiData<
     APIResponse<'api::collaboration-job-opportunity.collaboration-job-opportunity'>
-  >(lang, url, tags);
+  >({ lang, url, collection: 'collaboration-job-opportunity' });
 
   const pathname = `/${lang}/collaboration/job-opportunities`;
 

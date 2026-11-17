@@ -15,10 +15,12 @@ const strapiEvents = {
   'entry.create': '🆕 Sisältöä luotu',
 };
 
+const log = logger.child('api:cms-logging');
+
 export async function POST(request: NextRequest) {
   const auth = request.headers.get('authorization');
   if (!auth || auth !== process.env.REVALIDATE_AUTH_SECRET) {
-    logger.error('Unauthorized cms logging request');
+    log.error('Unauthorized cms logging request');
     return new Response('Unauthorized', { status: 401 });
   }
 
@@ -27,7 +29,7 @@ export async function POST(request: NextRequest) {
   const eventType = body?.event;
   const hasEvent = Object.keys(strapiEvents).includes(eventType);
   if (!hasEvent) {
-    logger.info('Invalid event type');
+    log.warn('Invalid event type');
   }
 
   const title = strapiEvents[eventType as keyof typeof strapiEvents];
@@ -71,7 +73,7 @@ async function sendSlackMessage(message: Record<string, any>) {
   const slackUrl = process.env.SLACK_WEBHOOK_URL;
 
   if (!slackUrl) {
-    logger.error('No Slack webhook URL provided');
+    log.error('No Slack webhook URL provided');
     return;
   }
 
@@ -84,6 +86,6 @@ async function sendSlackMessage(message: Record<string, any>) {
       body: JSON.stringify(message),
     });
   } catch (error) {
-    logger.error('Error sending Slack message', error);
+    log.error('Error sending Slack message', error);
   }
 }

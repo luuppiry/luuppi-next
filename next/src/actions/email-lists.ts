@@ -22,6 +22,7 @@ const options = {
     baseUrl: `http://${process.env.MAILMAN_HOSTNAME}:${process.env.MAILMAN_PORT}`,
   },
 };
+const log = logger.child('action:email-lists');
 
 export const unsubscribe = async (
   dictionary: Dictionary,
@@ -41,7 +42,7 @@ export const unsubscribe = async (
     10,
   );
   if (isLimited) {
-    logger.error('User is being rate limited');
+    log.error('User is being rate limited');
     return {
       message: dictionary.api.ratelimit,
       isError: true,
@@ -64,7 +65,7 @@ export const unsubscribe = async (
 
     if (!find.ok) {
       /* eslint-disable quotes */
-      logger.error("Couldn't find user", find.status, await find.text());
+      log.error("Couldn't find user", find.status, await find.text());
 
       return {
         message: dictionary.api.server_error,
@@ -94,7 +95,7 @@ export const unsubscribe = async (
     );
 
     if (!remove.ok) {
-      logger.error('Failed to remove user', remove.status, await remove.text());
+      log.error('Failed to remove user', remove.status, await remove.text());
 
       return {
         message: dictionary.api.server_error,
@@ -102,11 +103,11 @@ export const unsubscribe = async (
       };
     }
 
-    refresh()
+    refresh();
 
     return { message: dictionary.mail_list.unsubscribed };
   } catch (error) {
-    logger.error('Failed to remove user', error);
+    log.error('Failed to remove user', error);
 
     return {
       message: dictionary.api.server_error,
@@ -133,7 +134,7 @@ export const subscribe = async (
     10,
   );
   if (isLimited) {
-    logger.error('User is being rate limited');
+    log.error('User is being rate limited');
     return {
       message: dictionary.api.ratelimit,
       isError: true,
@@ -160,7 +161,7 @@ export const subscribe = async (
     });
 
     if (!response.ok) {
-      logger.error(
+      log.error(
         'Could not add user to the list',
         response.status,
         await response.text(),
@@ -172,11 +173,11 @@ export const subscribe = async (
       };
     }
 
-    refresh()
+    refresh();
 
     return { message: dictionary.mail_list.subscribed };
   } catch (error) {
-    logger.error('Could not add user to the list', error);
+    log.error('Could not add user to the list', error);
 
     return {
       message: dictionary.api.server_error,

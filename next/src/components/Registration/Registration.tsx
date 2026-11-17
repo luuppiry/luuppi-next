@@ -9,6 +9,7 @@ import SubmitButton from '../SubmitButton/SubmitButton';
 import RegistrationCounter from './RegistrationCounter';
 import { createQrCode } from '@/libs/utils/create-qr-code';
 import { IoTicket } from 'react-icons/io5';
+import Link from 'next/link';
 
 interface RegistrationProps {
   registration: {
@@ -24,6 +25,7 @@ interface RegistrationProps {
     id: number;
     pickupCode?: string | null;
     pickedUp?: boolean;
+    slug: string | null;
   };
   questions: {
     answerableUntil: Date | null;
@@ -101,7 +103,16 @@ export default async function Registration({
         <div className="flex w-full justify-between gap-4 max-md:flex-col">
           <div className="flex flex-1 flex-col gap-2">
             <h2 className="line-clamp-2 break-all text-lg font-semibold max-md:text-base">
-              {registration.name}
+              {registration.slug ? (
+                <Link
+                  className="link"
+                  href={`/${lang}/events/${registration.slug}`}
+                >
+                  {registration.name}
+                </Link>
+              ) : (
+                registration.name
+              )}
             </h2>
 
             <div className="flex items-center gap-4 text-xl font-semibold max-md:text-lg">

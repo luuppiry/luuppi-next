@@ -16,6 +16,8 @@ interface UserInfoError {
   error: string;
 }
 
+const log = logger.child('api:integration/user-info')
+
 /**
  * This is integration endpoint for Lärpäke which is in separate repository.
  */
@@ -27,7 +29,7 @@ export async function GET(
   try {
     const auth = request.headers.get('authorization');
     if (!auth || auth !== process.env.INTEGRATION_API_SECRET) {
-      logger.error('Unauthorized user info request');
+      log.error('Unauthorized user info request');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -61,7 +63,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    logger.error('Error while fetching user info', error);
+    log.error('Error while fetching user info', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },

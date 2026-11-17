@@ -1,6 +1,8 @@
 import 'server-only';
 import { logger } from '../utils/logger';
 
+const log = logger.child('lib:graph/graph-verify-email');
+
 /**
  * Verify if an email is already in use in the Microsoft Graph API
  * @param token Access token
@@ -31,7 +33,7 @@ export const verifyGraphAPIEmail = async (
     }
     return false;
   } catch (error) {
-    logger.error('Graph API error', error);
+    log.error('Graph API error', error);
     return null;
   }
 };

@@ -12,6 +12,7 @@ const options = {
   turnstileSecret: process.env.TURNSTILE_SECRET!,
   cacheKey: 'feedback',
 };
+const log = logger.child('action:email-send-feedback');
 
 export async function emailSendFeedback(
   lang: SupportedLanguage,
@@ -21,7 +22,7 @@ export async function emailSendFeedback(
 
   const isLimited = await isRateLimited(options.cacheKey, options.cacheKey, 10);
   if (isLimited) {
-    logger.error('Feedback is being rate limited');
+    log.error('Feedback is being rate limited');
     return {
       message: dictionary.api.ratelimit,
       isError: true,
@@ -131,7 +132,7 @@ async function verifyTurnstileToken(token: string): Promise<boolean> {
 
     return data.success;
   } catch (error) {
-    logger.error('Error verifying turnstile token', error);
+    log.error('Error verifying turnstile token', error);
     return false;
   }
 }

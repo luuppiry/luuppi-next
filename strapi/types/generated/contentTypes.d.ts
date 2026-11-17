@@ -870,6 +870,7 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     DescriptionEn: Schema.Attribute.Blocks & Schema.Attribute.Required;
     DescriptionFi: Schema.Attribute.Blocks & Schema.Attribute.Required;
     EndDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    firstPublishedAt: Schema.Attribute.DateTime;
     FuksiPoints: Schema.Attribute.Enumeration<
       ['fuksi_points_true', 'fuksi_points_false']
     >;
@@ -887,7 +888,12 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     ShowInCalendar: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<true>;
-    Slug: Schema.Attribute.UID<'NameEn'> &
+    Slug: Schema.Attribute.UID<
+      'NameEn',
+      {
+        customReplacements: [['\u00E4', 'a'], ['\u00E5', 'o'], ['\u00F6', 'o']];
+      }
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 3;
@@ -931,6 +937,52 @@ export interface ApiEventsCalendarEventsCalendar
     >;
     publishedAt: Schema.Attribute.DateTime;
     Seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiGalleryGallery extends Struct.CollectionTypeSchema {
+  collectionName: 'galleries';
+  info: {
+    displayName: 'Gallery';
+    pluralName: 'galleries';
+    singularName: 'gallery';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Description: Schema.Attribute.Blocks &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Images: Schema.Attribute.Media<'images', true> & Schema.Attribute.Required;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::gallery.gallery'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    Title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -1093,6 +1145,7 @@ export interface ApiLuuppiSanomatLuuppiSanomat
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    firstPublishedAt: Schema.Attribute.DateTime;
     image: Schema.Attribute.Media<'images'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1147,6 +1200,7 @@ export interface ApiMeetingMinuteDocumentMeetingMinuteDocument
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    firstPublishedAt: Schema.Attribute.DateTime;
     image: Schema.Attribute.Media<'images'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1289,6 +1343,7 @@ export interface ApiNewsSingleNewsSingle extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    firstPublishedAt: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -2662,6 +2717,7 @@ declare module '@strapi/strapi' {
       'api::event-role.event-role': ApiEventRoleEventRole;
       'api::event.event': ApiEventEvent;
       'api::events-calendar.events-calendar': ApiEventsCalendarEventsCalendar;
+      'api::gallery.gallery': ApiGalleryGallery;
       'api::invite.invite': ApiInviteInvite;
       'api::job-opportunity.job-opportunity': ApiJobOpportunityJobOpportunity;
       'api::luuppi-sanomat.luuppi-sanomat': ApiLuuppiSanomatLuuppiSanomat;

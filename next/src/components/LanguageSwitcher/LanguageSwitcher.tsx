@@ -34,7 +34,7 @@ export default function LanguageSwitcher() {
         </div>
         <ul
           className="menu dropdown-content z-[1] w-52 gap-2 rounded-box bg-base-100 p-2 font-bold text-base-content shadow"
-          tabIndex={0}
+          tabIndex={-1}
         >
           <li
             className={currentLocale === 'en' ? 'rounded-lg bg-base-300' : ''}

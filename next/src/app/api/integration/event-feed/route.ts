@@ -26,6 +26,8 @@ interface EventsFeedError {
   error: string;
 }
 
+const log = logger.child('api:integration/event-feed');
+
 /**
  * This is integration endpoint for Lärpäke which is in separate repository.
  */
@@ -37,7 +39,7 @@ export async function GET(
   try {
     const auth = request.headers.get('authorization');
     if (!auth || auth !== process.env.INTEGRATION_API_SECRET) {
-      logger.error('Unauthorized events feed request');
+      log.error('Unauthorized events feed request');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -47,9 +49,11 @@ export async function GET(
     const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo.toISOString().split('T')[0]}&populate=Registration.TicketTypes.Role&populate=Image&populate=ImageEn&populate=VisibleOnlyForRoles`;
 
     const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-      'fi',
-      url,
-      ['event'],
+      {
+        lang: 'fi',
+        url,
+        collection: 'event',
+      },
     );
     // Filter events based on visibility rules
     const visibleEvents = await filterVisibleEvents(data.data);
@@ -73,7 +77,7 @@ export async function GET(
 
     return NextResponse.json({ events: events });
   } catch (error) {
-    logger.error('Error while fetching event feed', error);
+    log.error('Error while fetching event feed', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },

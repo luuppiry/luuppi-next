@@ -7,6 +7,8 @@ import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 
+const log = logger.child('page:migrate-account');
+
 export default async function MigrateAccount() {
   await connection();
 
@@ -19,7 +21,7 @@ export default async function MigrateAccount() {
   }
 
   if (session.user.isLuuppiMember) {
-    logger.info('User is already a Luuppi member');
+    log.info('User is already a Luuppi member');
     redirect(`/${lang}/profile`);
   }
 

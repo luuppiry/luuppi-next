@@ -1,26 +1,12 @@
 'use client';
+
 import { Dictionary } from '@/models/locale';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { MdClear } from 'react-icons/md';
-
-// TODO: Should come from the backend
-const CATEGORIES = [
-  'Luuppi',
-  'Isänmaa',
-  'Politiikka',
-  'Alkoholi',
-  'Sitsit',
-  'Juomalaulu',
-  'Kotimaa',
-  'Ulkomaat',
-  'Lasten leikki',
-  'Pakanajuhla',
-  'Happo XXX K-18',
-] as const;
-
 interface SongbookProps {
   dictionary: Dictionary;
+  songbook: SongbookCategory[];
 }
 
 interface SongbookSong {
@@ -28,203 +14,135 @@ interface SongbookSong {
   verses: string[];
 }
 
-interface FetchResponse {
+export interface SongbookCategory {
+  category: string;
   songs: SongbookSong[];
-  totalCount: number;
-  hasMore: boolean;
 }
 
-export default function Songbook({ dictionary }: SongbookProps) {
-  const [songs, setSongs] = useState<SongbookSong[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+interface IndexedSong {
+  key: string;
+  song: SongbookSong;
+  titleLower: string;
+  versesLower: string[];
+}
+
+interface IndexedCategory {
+  category: string;
+  songs: IndexedSong[];
+}
+
+interface ResultSong extends IndexedSong {
+  verseMatch: boolean;
+}
+
+interface ResultCategory {
+  category: string;
+  songs: ResultSong[];
+}
+
+const escapeRegExp = (text: string) =>
+  text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+export default function Songbook({ dictionary, songbook }: SongbookProps) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
-  const [expandedSong, setExpandedSong] = useState<string | null>(null);
-  const [debouncedSearch, setDebouncedSearch] = useState('');
-  const [manuallyCollapsed, setManuallyCollapsed] = useState<Set<string>>(
-    new Set(),
-  );
-  const isFetchingRef = useRef(false);
-  const loadingRef = useRef(false);
+  const [toggled, setToggled] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-      if (search !== debouncedSearch) {
-        setPage(0);
-        setSongs([]);
-        setHasMore(true);
-        isFetchingRef.current = false;
-      }
-    }, 300);
+  const query = search.trim().replace(/\s+/g, ' ').toLowerCase();
 
-    return () => clearTimeout(timer);
-  }, [search, debouncedSearch]);
-
-  useEffect(() => {
-    if (debouncedSearch !== search) return;
-    if (loadingRef.current || isFetchingRef.current) return;
-
-    const fetchSongs = async () => {
-      try {
-        loadingRef.current = true;
-        isFetchingRef.current = true;
-        setLoading(true);
-        setError('');
-
-        const params = new URLSearchParams({
-          page: page.toString(),
-          pageSize: '20',
-          ...(debouncedSearch && { q: debouncedSearch.trim() }),
-          ...(category && { category: category.trim() }),
-        });
-
-        const response = await fetch(`/api/songbook?${params}`);
-        if (!response.ok) throw new Error('Failed to fetch songs');
-
-        const data: FetchResponse = await response.json();
-
-        setSongs((prev) =>
-          page === 0 ? data.songs : [...prev, ...data.songs],
-        );
-        setHasMore(data.hasMore);
-        if (data.hasMore && page === 0) {
-          setPage(1);
-        }
-      } catch (_err) {
-        setError(dictionary.general.error);
-      } finally {
-        setLoading(false);
-        isFetchingRef.current = false;
-        loadingRef.current = false;
-      }
-    };
-
-    if (page === 0) {
-      setSongs([]);
-      setHasMore(true);
-    }
-
-    fetchSongs();
-
-    return () => {
-      loadingRef.current = false;
-      isFetchingRef.current = false;
-    };
-  }, [page, debouncedSearch, category, search, dictionary.general.error]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (
-          entries[0].isIntersecting &&
-          !loadingRef.current &&
-          !isFetchingRef.current &&
-          hasMore &&
-          page > 0
-        ) {
-          setPage((prev) => prev + 1);
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    const sentinel = document.getElementById('scroll-sentinel');
-    if (sentinel) {
-      observer.observe(sentinel);
-    }
-
-    return () => observer.disconnect();
-  }, [hasMore, page]);
-
-  const shouldExpandSong = useCallback(
-    (song: SongbookSong, searchTerm: string): boolean => {
-      if (!searchTerm) return false;
-      return song.verses.some((verse) =>
-        verse.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-    },
-    [],
+  const index = useMemo<IndexedCategory[]>(
+    () =>
+      songbook.map((cat) => ({
+        category: cat.category,
+        songs: cat.songs.map((song) => ({
+          key: `${cat.category}:${song.title}`,
+          song,
+          titleLower: song.title.toLowerCase(),
+          versesLower: song.verses.map((verse) => verse.toLowerCase()),
+        })),
+      })),
+    [songbook],
   );
 
-  useEffect(() => {
-    if (debouncedSearch) {
-      const matchingSongs = songs
-        .filter((song) => shouldExpandSong(song, debouncedSearch))
-        .map((song) => song.title);
-      setExpandedSong(matchingSongs.length === 1 ? matchingSongs[0] : null);
-      setManuallyCollapsed(new Set());
-    } else {
-      setExpandedSong(null);
-      setManuallyCollapsed(new Set());
-    }
-  }, [songs, debouncedSearch, shouldExpandSong]);
+  const categories = useMemo(
+    () => songbook.map((cat) => cat.category),
+    [songbook],
+  );
 
-  const highlightText = (text: string, searchTerm: string) => {
-    if (!searchTerm) return text;
-    const parts = text.split(new RegExp(`(${searchTerm})`, 'gi'));
-    return (
-      <>
-        {parts.map((part, i) =>
-          part.toLowerCase() === searchTerm.toLowerCase() ? (
-            <mark key={i} className="rounded bg-primary-200 px-1">
-              {part}
-            </mark>
-          ) : (
-            part
-          ),
-        )}
-      </>
+  const results = useMemo<ResultCategory[]>(() => {
+    const output: ResultCategory[] = [];
+
+    for (const cat of index) {
+      if (category && cat.category !== category) {
+        continue;
+      }
+
+      const songs: ResultSong[] = [];
+
+      for (const entry of cat.songs) {
+        const verseMatch =
+          !!query && entry.versesLower.some((verse) => verse.includes(query));
+
+        if (!query || verseMatch || entry.titleLower.includes(query)) {
+          songs.push({ ...entry, verseMatch });
+        }
+      }
+
+      if (songs.length > 0) {
+        output.push({ category: cat.category, songs });
+      }
+    }
+
+    return output;
+  }, [index, category, query]);
+
+  const highlight = (text: string) => {
+    if (!query) {
+      return text;
+    }
+
+    // With a capture group, split() puts the matches at odd indexes.
+    const pattern = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+
+    return text.split(pattern).map((part, i) =>
+      i % 2 === 1 ? (
+        <mark key={i} className="rounded bg-primary-200 px-1">
+          {part}
+        </mark>
+      ) : (
+        part
+      ),
     );
   };
 
-  const handleReset = useCallback(() => {
+  const resetToggled = () => setToggled(new Set());
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    resetToggled();
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+    resetToggled();
+  };
+
+  const handleReset = () => {
     setSearch('');
     setCategory('');
-    setPage(0);
-    setSongs([]);
-    setHasMore(true);
-    loadingRef.current = false;
-    isFetchingRef.current = false;
-  }, []);
+    resetToggled();
+  };
 
-  const groupSongsByCategory = (songs: SongbookSong[]) => {
-    const groupedSongs = songs.reduce(
-      (acc, song) => {
-        const categoryMatch = song.title.match(/^\d+\./);
-        const categoryNum = categoryMatch ? parseInt(categoryMatch[0]) : 0;
-        let category = 'Muu';
-
-        if (categoryNum >= 1 && categoryNum <= 100) category = 'Luuppi';
-        else if (categoryNum >= 101 && categoryNum <= 200) category = 'Isänmaa';
-        else if (categoryNum >= 201 && categoryNum <= 300)
-          category = 'Politiikka';
-        else if (categoryNum >= 301 && categoryNum <= 400)
-          category = 'Alkoholi';
-        else if (categoryNum >= 401 && categoryNum <= 500) category = 'Sitsit';
-        else if (categoryNum >= 501 && categoryNum <= 600)
-          category = 'Juomalaulu';
-        else if (categoryNum >= 601 && categoryNum <= 700) category = 'Kotimaa';
-        else if (categoryNum >= 701 && categoryNum <= 800)
-          category = 'Ulkomaat';
-        else if (categoryNum >= 801 && categoryNum <= 900)
-          category = 'Lasten leikki';
-        else if (categoryNum >= 901 && categoryNum <= 1000)
-          category = 'Pakanajuhla';
-        else if (categoryNum >= 1001) category = 'Happo XXX K-18';
-
-        if (!acc[category]) {
-          acc[category] = [];
-        }
-        acc[category].push(song);
-        return acc;
-      },
-      {} as Record<string, typeof songs>,
-    );
-    return groupedSongs;
+  const toggleSong = (key: string) => {
+    setToggled((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
   };
 
   return (
@@ -234,11 +152,12 @@ export default function Songbook({ dictionary }: SongbookProps) {
           <div className="relative w-full">
             <input
               className="input input-bordered w-full pl-10 text-base"
-              placeholder={dictionary.general.search + '...'}
+              placeholder={`${dictionary.general.search}...`}
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
             />
+
             <BiSearch
               className="absolute left-3 top-3 text-gray-400"
               size={24}
@@ -249,15 +168,10 @@ export default function Songbook({ dictionary }: SongbookProps) {
             <select
               className="select select-bordered w-full text-base max-md:w-full"
               value={category}
-              onChange={(e) => {
-                setCategory(e.target.value);
-                setPage(0);
-                setSongs([]);
-                setHasMore(true);
-              }}
+              onChange={(e) => handleCategoryChange(e.target.value)}
             >
               <option value="">{dictionary.general.all_categories}</option>
-              {CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
                 </option>
@@ -266,6 +180,7 @@ export default function Songbook({ dictionary }: SongbookProps) {
 
             {(search || category) && (
               <button
+                aria-label={dictionary.pages_songs.clear_search}
                 className="btn btn-square btn-ghost"
                 type="button"
                 onClick={handleReset}
@@ -277,83 +192,82 @@ export default function Songbook({ dictionary }: SongbookProps) {
         </div>
       </div>
 
-      {error && <div className="alert alert-error mb-3 sm:mb-4">{error}</div>}
-
-      <div className="mt-8 flex flex-col gap-12">
-        {Object.entries(groupSongsByCategory(songs))
-          .filter(
-            ([cat]) =>
-              !category || cat.toLowerCase() === category.toLowerCase(),
-          )
-          .map(([categoryName, categorySongs]) => (
-            <div key={categoryName} className="flex flex-col gap-2">
-              <h2 className="text-xl font-bold">{categoryName}</h2>
-              <div className="flex flex-col gap-3 sm:gap-4">
-                {categorySongs.map((song, index) => (
-                  <div
-                    key={index}
-                    className="flex rounded-lg bg-background-50 transition-all"
-                  >
-                    <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
-                    <div className="card-body flex-1 p-3 sm:p-4">
-                      <button
-                        className="w-full text-left"
-                        onClick={() => {
-                          if (shouldExpandSong(song, debouncedSearch)) {
-                            setManuallyCollapsed((prev) => {
-                              const next = new Set(prev);
-                              if (next.has(song.title)) {
-                                next.delete(song.title);
-                              } else {
-                                next.add(song.title);
-                              }
-                              return next;
-                            });
-                          } else {
-                            setExpandedSong(
-                              expandedSong === song.title ? null : song.title,
-                            );
-                          }
-                        }}
-                      >
-                        <h3 className="text-base font-bold sm:text-lg">
-                          {highlightText(song.title, debouncedSearch)}
-                        </h3>
-                      </button>
-                      {(expandedSong === song.title ||
-                        (shouldExpandSong(song, debouncedSearch) &&
-                          !manuallyCollapsed.has(song.title))) && (
-                        <div className="mt-3 space-y-3 sm:mt-4 sm:space-y-4">
-                          {song.verses.map((verse, vIndex) => (
-                            <p
-                              key={vIndex}
-                              className="whitespace-pre-line text-xs sm:text-sm"
-                            >
-                              {highlightText(verse, debouncedSearch)}
-                            </p>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+      <div className="mt-8">
+        {results.length === 0 ? (
+          <div className="flex min-h-64 flex-col items-center justify-center rounded-lg bg-background-50 px-6 py-12 text-center">
+            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-base-200">
+              <BiSearch className="opacity-50" size={32} />
             </div>
-          ))}
 
-        {loading && (
-          <div className="space-y-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="card animate-pulse bg-base-100 shadow-lg">
-                <div className="card-body p-4">
-                  <div className="h-6 w-2/3 rounded bg-gray-200" />
+            <h2 className="text-lg font-bold">
+              {dictionary.pages_songs.no_results_title}
+            </h2>
+
+            <p className="mt-2 max-w-md text-sm opacity-60">
+              {dictionary.pages_songs.empty_filters}
+            </p>
+
+            {(search || category) && (
+              <button
+                className="btn btn-primary btn-sm mt-6"
+                type="button"
+                onClick={handleReset}
+              >
+                {dictionary.pages_songs.clear_search}
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col gap-12">
+            {results.map((cat) => (
+              <div key={cat.category} className="flex flex-col gap-2">
+                <h2 className="text-xl font-bold">{cat.category}</h2>
+
+                <div className="flex flex-col gap-3 sm:gap-4">
+                  {cat.songs.map(({ key, song, verseMatch }) => {
+                    // Songs matching in their verses open by default;
+                    // clicking flips whatever the default is.
+                    const isExpanded = verseMatch !== toggled.has(key);
+
+                    return (
+                      <div
+                        key={key}
+                        className="flex rounded-lg bg-background-50 transition-all"
+                      >
+                        <span className="w-1 shrink-0 rounded-l-lg bg-secondary-400" />
+                        <div className="card-body flex-1 p-3 sm:p-4">
+                          <button
+                            aria-expanded={isExpanded}
+                            className="w-full text-left"
+                            type="button"
+                            onClick={() => toggleSong(key)}
+                          >
+                            <h3 className="text-base font-bold sm:text-lg">
+                              {highlight(song.title)}
+                            </h3>
+                          </button>
+
+                          {isExpanded && (
+                            <div className="mt-3 space-y-3 sm:mt-4 sm:space-y-4">
+                              {song.verses.map((verse, verseIndex) => (
+                                <p
+                                  key={verseIndex}
+                                  className="whitespace-pre-line text-xs sm:text-sm"
+                                >
+                                  {highlight(verse)}
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}
           </div>
         )}
-
-        <div className="h-4 w-full" id="scroll-sentinel" />
       </div>
     </div>
   );

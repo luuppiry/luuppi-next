@@ -7,6 +7,8 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 
+const log = logger.child('page:admin/sanomats-tool');
+
 export default async function SanomatsPdfTool() {
   const lang = await language();
   const session = await auth();
@@ -15,7 +17,7 @@ export default async function SanomatsPdfTool() {
   const user = session?.user;
 
   if (!user?.entraUserUuid || !user?.isLuuppiHato) {
-    logger.error('User not found in session or does not have required role');
+    log.error('User not found in session or does not have required role');
     redirect(`/${lang}`);
   }
 
@@ -38,7 +40,7 @@ export default async function SanomatsPdfTool() {
 
   // In case of an expired token, force sign out so next sign in will get a new token
   if (!hasHatoRole) {
-    logger.error(`User ${user.entraUserUuid} had expired hato role`);
+    log.error(`User ${user.entraUserUuid} had expired hato role`);
     redirect('/api/auth/force-signout');
   }
 

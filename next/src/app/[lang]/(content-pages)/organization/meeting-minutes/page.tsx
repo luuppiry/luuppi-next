@@ -34,11 +34,11 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
     );
   }
 
-  const yearsResponse = await getStrapiData<{ data: { year: number }[] }>(
-    'fi',
-    '/api/meeting-minute-documents?fields[0]=year&pagination[pageSize]=500&sort[0]=year:desc',
-    ['meeting-minute-document'],
-  );
+  const yearsResponse = await getStrapiData<{ data: { year: number }[] }>({
+    lang: 'fi',
+    url: '/api/meeting-minute-documents?fields[0]=year&pagination[pageSize]=500&sort[0]=year:desc',
+    collection: 'meeting-minute-document',
+  });
 
   const years = Array.from(
     new Set(yearsResponse.data.map((doc) => doc.year).filter(Boolean)),
@@ -61,11 +61,11 @@ export default async function MeetingMinute(props: MeetingMinuteProps) {
 
   const documentsResponse = await getStrapiData<
     APIResponseCollection<'api::meeting-minute-document.meeting-minute-document'>
-  >(
-    'fi',
-    `/api/meeting-minute-documents?populate[1]=image&filters[year][$eq]=${selectedYear}&pagination[pageSize]=100&sort[0]=meetingDate:desc`,
-    ['meeting-minute-document'],
-  );
+  >({
+    lang: 'fi',
+    url: `/api/meeting-minute-documents?populate[1]=image&filters[year][$eq]=${selectedYear}&pagination[pageSize]=100&sort[0]=meetingDate:desc`,
+    collection: 'meeting-minute-document',
+  });
   const documents = documentsResponse.data;
 
   return (

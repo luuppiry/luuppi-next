@@ -23,6 +23,8 @@ interface AdminEventManagementProps {
   };
 }
 
+const log = logger.child('component:admin-event-management');
+
 export default async function AdminEventManagement({
   dictionary,
   lang,
@@ -31,7 +33,7 @@ export default async function AdminEventManagement({
   const session = await auth();
 
   if (!session?.user || !session.user.isLuuppiHato) {
-    logger.error('User not found in session or does not have required role');
+    log.error('User not found in session or does not have required role');
     redirect(`/${lang}`);
   }
 
@@ -100,12 +102,13 @@ export default async function AdminEventManagement({
 
   const strapiEvents = await getStrapiData<
     APIResponseCollection<'api::event.event'>
-  >(
+  >({
     lang,
-    `/api/events?${strapiEventsQuery}`,
-    eventIds.map((id) => `event-${id}` satisfies StrapiCacheTag),
-    true,
-  );
+    collection: 'event',
+    url: `/api/events?${strapiEventsQuery}`,
+    overrideTags: eventIds.map((id) => `event:${id}` satisfies StrapiCacheTag),
+    ignoreError: true,
+  });
 
   const strapiEventsMap = new Map(
     strapiEvents?.data?.map((event) => [
@@ -167,9 +170,9 @@ export default async function AdminEventManagement({
               {eventLanguageFormatted?.map((event, index) => (
                 <tr key={event.id}>
                   <th>{index + 1}</th>
-                  <td className="truncate">
+                  <td className="max-w-xl truncate">
                     <Link
-                      className="link"
+                      className="link block"
                       href={`/${lang}/admin/event/${event.eventDocumentId}`}
                       prefetch={false}
                     >

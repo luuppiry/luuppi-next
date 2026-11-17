@@ -8,6 +8,8 @@ import { isValidPickupCode } from '@/libs/utils/pickup-code';
 import { SupportedLanguage } from '@/models/locale';
 import { refresh } from 'next/cache';
 
+const log = logger.child('action:toggle-pickup-status');
+
 export async function togglePickupStatus(
   lang: SupportedLanguage,
   registrationIdOrCode: string,
@@ -20,7 +22,7 @@ export async function togglePickupStatus(
   const user = session?.user;
 
   if (!user || !user.isLuuppiHato) {
-    logger.error('User not found in session or does not have required role');
+    log.error('User not found in session or does not have required role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -45,7 +47,7 @@ export async function togglePickupStatus(
   });
 
   if (!hasHatoRole) {
-    logger.error('User does not have the required role');
+    log.error('User does not have the required role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -149,7 +151,7 @@ export async function togglePickupStatus(
       },
     };
   } catch (error) {
-    logger.error('Failed to update pickup status', error);
+    log.error('Failed to update pickup status', error);
     return {
       message: dictionary.api.invalid_message,
       isError: true,

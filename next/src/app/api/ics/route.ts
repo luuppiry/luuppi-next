@@ -50,7 +50,12 @@ export async function GET(request: NextRequest) {
 
   const eventData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
-  >(lang, `/api/events/?${query}`, ['event'], true);
+  >({
+    lang,
+    url: `/api/events/?${query}`,
+    collection: 'event',
+    ignoreError: true,
+  });
 
   if (!eventData) {
     return new Response('Error fetching event data', { status: 500 });

@@ -7,6 +7,8 @@ import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { refresh } from 'next/cache';
 
+const log = logger.child('action:address-declaration');
+
 const options = {
   cacheKey: 'address-declaration',
 };
@@ -19,7 +21,7 @@ export async function addressDeclaration(
   const session = await auth();
 
   if (!session?.user) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -32,7 +34,7 @@ export async function addressDeclaration(
     10,
   );
   if (isLimited) {
-    logger.error('User is being rate limited');
+    log.error('User is being rate limited');
     return {
       message: dictionary.api.ratelimit,
       isError: true,
@@ -108,7 +110,7 @@ export async function addressDeclaration(
   );
 
   if (fieldsToUpdate.domicle && !isLuuppiMember) {
-    logger.error(
+    log.error(
       'Tried to update address declaration domicle without being a member of Luuppi',
     );
     return {

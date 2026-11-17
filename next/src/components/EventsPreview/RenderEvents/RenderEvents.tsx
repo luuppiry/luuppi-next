@@ -68,7 +68,11 @@ export default async function RenderEvents({
 
   const eventsData = await getStrapiData<
     APIResponseCollection<'api::event.event'>
-  >('fi', url, ['event']);
+  >({
+    url,
+    lang: 'fi',
+    collection: 'event',
+  });
 
   // Filter events based on visibility rules
   const visibleEventsData = await filterVisibleEvents(eventsData.data);

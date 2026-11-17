@@ -40,11 +40,11 @@ export default async function Events() {
 
   const url = `/api/events?filters[StartDate][$gte]=${sixMonthsAgo}&populate=Registration.TicketTypes.Role&populate=VisibleOnlyForRoles`;
 
-  const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
+  const data = await getStrapiData<APIResponseCollection<'api::event.event'>>({
     lang,
     url,
-    ['event'],
-  );
+    collection: 'event',
+  });
 
   // Filter events based on visibility rules
   const visibleEvents = await filterVisibleEvents(data.data);
@@ -89,11 +89,15 @@ export async function generateMetadata(): Promise<Metadata> {
   const lang = await language();
   const url =
     '/api/events-calendar?populate=Seo.twitter.twitterImage&populate=Seo.openGraph.openGraphImage';
-  const tags = ['events-calendar'] as const;
 
   const data = await getStrapiData<
     APIResponse<'api::events-calendar.events-calendar'>
-  >(lang, url, tags);
+  >({
+    lang,
+    url,
+    collection: 'events-calendar',
+    unique: true,
+  });
 
   const pathname = `/${lang}/events`;
 

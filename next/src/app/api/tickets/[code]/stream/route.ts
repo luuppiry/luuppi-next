@@ -3,6 +3,8 @@ import { logger } from '@/libs/utils/logger';
 import type Redis from 'ioredis';
 import { NextRequest } from 'next/server';
 
+const log = logger.child('api:tickets/[code]/stream');
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ code: string }> },
@@ -25,7 +27,7 @@ export async function GET(
       try {
         await subscriber.subscribe(eventName);
       } catch (error) {
-        logger.error('Redis Subscription Error:', error);
+        log.error('Redis Subscription Error:', error);
         try {
           controller.close();
         } catch {

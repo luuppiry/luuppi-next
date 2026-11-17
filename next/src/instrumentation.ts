@@ -1,8 +1,10 @@
 import { logger } from './libs/utils/logger';
 
+const log = logger.child('instrumentation');
+
 export function register() {
   if (process.env.NEXT_RUNTIME === 'node') {
-    logger.info('Validating environment variables');
+    log.info('Validating environment variables');
 
     const envValidation = {
       // Must be a valid URL
@@ -151,16 +153,16 @@ export function register() {
 
     for (const [key, value] of Object.entries(envValidation)) {
       if (!process.env[key]) {
-        logger.error(`Environment variable ${key} is missing`);
+        log.error(`Environment variable ${key} is missing`);
         throw new Error(`Environment variable ${key} is missing`);
       }
 
       if (!value.regex.test(process.env[key]!)) {
-        logger.error(value.message);
+        log.error(value.message);
         throw new Error(value.message);
       }
     }
 
-    logger.info('Environment variables are valid');
+    log.info('Environment variables are valid');
   }
 }

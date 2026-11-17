@@ -8,6 +8,7 @@ interface Reservation {
   name: string;
   priceInCents: number;
   confirmationTime: string;
+  imageUrl?: string;
 }
 
 interface ChargePayment {
@@ -15,6 +16,8 @@ interface ChargePayment {
   amountInCents: number;
   reservations: Reservation[];
 }
+
+const log = logger.child('lib:payments/create-charge');
 
 export const createCharge = async (
   chargeObj: ChargePayment,
@@ -28,6 +31,7 @@ export const createCharge = async (
           currency: 'eur',
           product_data: {
             name: reservation.name,
+            images: reservation.imageUrl ? [reservation.imageUrl] : undefined,
           },
           unit_amount: reservation.priceInCents,
         },
@@ -52,7 +56,7 @@ export const createCharge = async (
 
     return session.url;
   } catch (error) {
-    logger.error('Error creating charge', error);
+    log.error('Error creating charge', error);
     throw new Error('Failed to create payment session', { cause: error });
   }
 };

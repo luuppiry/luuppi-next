@@ -8,6 +8,7 @@ import { BiErrorCircle } from 'react-icons/bi';
 import FormInput from '../FormInput/FormInput';
 import FormTextArea from '../FormTextArea/FormTextArea';
 import SubmitButton from '../SubmitButton/SubmitButton';
+import { compressImage } from '@/libs/utils/compress-image-browser';
 
 interface ExpenseClaimResponse {
   message: string;
@@ -41,6 +42,26 @@ export default function ExpenseClaimForm({
     formResponse.field === id ? formResponse.message : '';
 
   const sendClaim = async (formData: FormData) => {
+    const receipts = formData
+      .getAll('receipts')
+      .filter((f): f is File => f instanceof File && f.size > 0);
+
+    const processed = await Promise.all(receipts.map(compressImage));
+    const totalFileBytes = processed.reduce((sum, f) => sum + f.size, 0);
+
+    if (totalFileBytes > expenseLimits.maxFileBytes) {
+      setFormResponse({
+        message: dictionary.pages_expense_claim.files_too_large,
+        isError: true,
+        field: 'receipts',
+      });
+      turnstileRef.current?.reset();
+      return;
+    }
+
+    formData.delete('receipts');
+    processed.forEach((f) => formData.append('receipts', f));
+
     formData.append('turnstileToken', turnstileToken);
     const response = await emailSendExpenseClaim(lang, formData);
     setFormResponse(response);

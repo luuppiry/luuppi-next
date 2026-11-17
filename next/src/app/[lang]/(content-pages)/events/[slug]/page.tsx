@@ -21,11 +21,14 @@ export default async function Event(props: EventProps) {
   const { isEnabled: isDraftMode } = await draftMode();
 
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    lang,
-    `/api/events?filters[Slug][$eq]=${slug}&${EVENT_POPULATE}&filters[ShowInCalendar][$ne]=false`,
-    [`event-${slug}`],
-    true,
-    isDraftMode,
+    {
+      collection: 'event',
+      lang,
+      url: `/api/events?filters[Slug][$eq]=${slug}&${EVENT_POPULATE}&filters[ShowInCalendar][$ne]=false`,
+      ignoreError: true,
+      draftMode: isDraftMode,
+      unique: true,
+    },
   );
 
   const event = events?.data.at(0);
@@ -48,7 +51,7 @@ export default async function Event(props: EventProps) {
 
   const partnersData = await getStrapiData<
     APIResponseCollection<'api::company.company'>
-  >(lang, '/api/companies?populate=*', ['company']);
+  >({ lang, url: '/api/companies?populate=*', collection: 'company' });
 
   if (!partnersData) {
     redirect(`/${lang}/404`);
@@ -84,11 +87,11 @@ export async function generateStaticParams() {
 
   const url = `/api/events?${query}`;
 
-  const data = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    'fi',
+  const data = await getStrapiData<APIResponseCollection<'api::event.event'>>({
+    lang: 'fi',
+    collection: 'event',
     url,
-    ['event'],
-  );
+  });
 
   const events = data.data.map((event) => event.Slug);
 
@@ -99,11 +102,14 @@ export async function generateMetadata(props: EventProps): Promise<Metadata> {
   const lang = await language();
   const { slug } = await props.params;
   const events = await getStrapiData<APIResponseCollection<'api::event.event'>>(
-    lang,
-    `/api/events?filters[Slug][$eq]=${slug}&populate=Image&populate=ImageEn`,
-    [`event-${slug}`],
-    true,
+    {
+      lang,
+      collection: 'event',
+      url: `/api/events?filters[Slug][$eq]=${slug}&populate=Image&populate=ImageEn`,
+      unique: true,
+    },
   );
+
   const event = events?.data.at(0);
   return event ? buildEventMetadata(event, lang, 'events', slug) : {};
 }

@@ -11,6 +11,8 @@ import { redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 
+const log = logger.child('page:admin');
+
 interface AdminProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
@@ -29,7 +31,7 @@ export default async function Admin(props: AdminProps) {
   const user = session?.user;
 
   if (!user?.entraUserUuid || !user?.isLuuppiHato) {
-    logger.error('User not found in session or does not have required role');
+    log.error('User not found in session or does not have required role');
     redirect(`/${lang}`);
   }
 
@@ -57,7 +59,7 @@ export default async function Admin(props: AdminProps) {
 
   // In case of an expired token, force sign out so next sign in will get a new token
   if (!hasHatoRole) {
-    logger.error(`User ${user.entraUserUuid} had expired hato role`);
+    log.error(`User ${user.entraUserUuid} had expired hato role`);
     redirect('/api/auth/force-signout');
   }
 

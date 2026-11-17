@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   experimental: {
     serverSourceMaps: true,
+    serverActions: {
+      bodySizeLimit: '5mb',
+    },
   },
   poweredByHeader: false,
   cacheComponents: true,

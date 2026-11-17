@@ -5,6 +5,8 @@ import { cacheLife, cacheTag } from 'next/cache';
 import { logger } from '../utils/logger';
 import { getStrapiUrl } from './get-strapi-url';
 
+const log = logger.child('lib:strapi/get-strapi-data');
+
 async function fetchStrapi(
   lang: string,
   url: string,
@@ -31,7 +33,7 @@ async function parseStrapiResponse<T>(
 
   if (!data?.data) {
     if (ignoreError) return null;
-    logger.error(`Failed to fetch data from ${url}`, data);
+    log.error(`Failed to fetch data from ${url}`, data);
     throw new Error(`Failed to fetch data from ${url}`);
   }
 
@@ -39,7 +41,7 @@ async function parseStrapiResponse<T>(
 }
 
 function logAndWrap(error: unknown, lang: string, url: string): never {
-  logger.error('Error fetching data from Strapi', {
+  log.error('Error fetching data from Strapi', {
     error: error instanceof Error ? error.message : String(error),
     errorType: error?.constructor?.name,
     cause: error instanceof Error ? error.cause : undefined,
@@ -55,15 +57,56 @@ function logAndWrap(error: unknown, lang: string, url: string): never {
   );
 }
 
+interface StrapiBody {
+  data?: { documentId?: string } | { documentId?: string }[] | null;
+}
+
+export type StrapiTag = StrapiCacheTag | `${StrapiCacheTag}:${string}`;
+
+export function strapiTag(
+  collection: StrapiCacheTag,
+  documentId?: string,
+): StrapiTag {
+  return documentId ? `${collection}:${documentId}` : collection;
+}
+
+function inferTags(
+  collection: StrapiCacheTag,
+  unique: boolean,
+  body: unknown,
+): StrapiTag[] {
+  const data = (body as StrapiBody | null)?.data;
+
+  // GET /api/events/:documentId -> object
+  if (data && !Array.isArray(data) && data.documentId) {
+    return [strapiTag(collection, data.documentId)];
+  }
+
+  // Slug lookup (caller guarantees the filter is unique) -> [entry]
+  if (
+    unique &&
+    Array.isArray(data) &&
+    data.length === 1 &&
+    data[0].documentId
+  ) {
+    return [strapiTag(collection, data[0].documentId)];
+  }
+
+  // Lists, or "not found" results that a future entry should invalidate
+  return [collection];
+}
+
 async function getStrapiDataCached<T>(
   lang: SupportedLanguage,
   url: string,
-  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[],
+  collection: StrapiCacheTag,
+  overrideTags: StrapiTag[] | null,
+  unique: boolean,
   ignoreError?: boolean,
 ): Promise<T | null> {
   'use cache';
   cacheLife('hours');
-  cacheTag(...revalidateTags);
+  if (overrideTags) cacheTag(...overrideTags);
 
   try {
     let res = await fetchStrapi(lang, url, 'published');
@@ -72,9 +115,16 @@ async function getStrapiDataCached<T>(
       res = await fetchStrapi('fi', url, 'published');
     }
 
-    return await parseStrapiResponse<T>(res, url, ignoreError);
+    const body = await parseStrapiResponse<T>(res, url, ignoreError);
+
+    if (!overrideTags) cacheTag(...inferTags(collection, unique, body));
+    return body;
   } catch (error) {
-    if (ignoreError) return null;
+    if (ignoreError) {
+      // Cached null isn't stuck without a tag
+      cacheTag(collection);
+      return null;
+    }
     return logAndWrap(error, lang, url);
   }
 }
@@ -93,34 +143,36 @@ async function getStrapiDataDraft<T>(
   }
 }
 
+interface StrapiDataOptions {
+  lang: SupportedLanguage;
+  url: string;
+  /** Collection this request belongs to. `null` = don't cache. */
+  collection: StrapiCacheTag | null;
+  /** The URL filters on a unique field (slug, documentId); tag by the single entry found. */
+  unique?: boolean;
+  /** Replaces inference entirely. Use when tags are known before the fetch. */
+  overrideTags?: readonly StrapiTag[];
+  draftMode?: boolean;
+}
+
 export function getStrapiData<T>(
-  lang: SupportedLanguage,
-  url: string,
-  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[] | null,
-  ignoreError: true,
-  draftMode?: boolean,
+  opts: StrapiDataOptions & { ignoreError: true },
 ): Promise<T | null>;
-
 export function getStrapiData<T>(
-  lang: SupportedLanguage,
-  url: string,
-  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[] | null,
-  ignoreError?: false,
-  draftMode?: boolean,
+  opts: StrapiDataOptions & { ignoreError?: false },
 ): Promise<T>;
+export async function getStrapiData<T>({
+  lang,
+  url,
+  collection,
+  unique = false,
+  overrideTags,
+  ignoreError,
+  draftMode,
+}: StrapiDataOptions & { ignoreError?: boolean }): Promise<T | null> {
+  if (draftMode) return getStrapiDataDraft<T>(lang, url, ignoreError);
 
-export async function getStrapiData<T>(
-  lang: SupportedLanguage,
-  url: string,
-  revalidateTags: StrapiCacheTag[] | readonly StrapiCacheTag[] | null,
-  ignoreError?: boolean,
-  draftMode?: boolean,
-): Promise<T | null> {
-  if (draftMode) {
-    return getStrapiDataDraft<T>(lang, url, ignoreError);
-  }
-
-  if (revalidateTags === null) {
+  if (collection === null) {
     try {
       const res = await fetchStrapi(lang, url, 'published');
       return await parseStrapiResponse<T>(res, url, ignoreError);
@@ -130,5 +182,12 @@ export async function getStrapiData<T>(
     }
   }
 
-  return getStrapiDataCached<T>(lang, url, revalidateTags, ignoreError);
+  return getStrapiDataCached<T>(
+    lang,
+    url,
+    collection,
+    overrideTags?.length ? [...new Set(overrideTags)] : null,
+    unique,
+    ignoreError,
+  );
 }

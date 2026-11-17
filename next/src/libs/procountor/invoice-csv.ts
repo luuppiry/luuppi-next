@@ -2,9 +2,9 @@
 /* eslint-disable quotes */
 import { expenseLimits } from '@/libs/constants/expense-claim';
 
-// FIXME: confirm with a test import in Procountor's import preview
+// https://help.procountor.fi/en/articles/532417-invoice-data-import-file
 const DECIMAL_SEPARATOR = ',';
-const INVOICE_TYPE = 'T'; // travel invoice (fallback: 'O' purchase invoice)
+const INVOICE_TYPE = 'K'; // bill of charges
 const ROW_VAT_PERCENT = '0'; // VAT isn't collected; confirm in the import preview
 const RECORD_WIDTH = 44; // invoice record fields 1-44 (45-47 are journal receipts only)
 

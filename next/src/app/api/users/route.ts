@@ -20,6 +20,8 @@ export interface GetUsersSuccessResponse {
 
 export type GetUsersResponse = GetUsersErrorResponse | GetUsersSuccessResponse;
 
+const log = logger.child('api:users');
+
 const MAX_PAGE_SIZE = 50;
 const SUPPORTED_LANGUAGES = ['fi', 'en'] as const;
 
@@ -34,7 +36,7 @@ export async function GET(
   const dictionary = await getDictionary(lang);
 
   if (isNaN(page) || page < 1) {
-    logger.error('Invalid page:', page);
+    log.error('Invalid page:', page);
     return NextResponse.json(
       { message: dictionary.api.server_error, isError: true },
       { status: 400 },
@@ -42,7 +44,7 @@ export async function GET(
   }
 
   if (isNaN(pageSize) || pageSize < 1 || pageSize > MAX_PAGE_SIZE) {
-    logger.error('Invalid page size:', pageSize);
+    log.error('Invalid page size:', pageSize);
     return NextResponse.json(
       {
         message: dictionary.api.server_error,
@@ -53,7 +55,7 @@ export async function GET(
   }
 
   if (!SUPPORTED_LANGUAGES.includes(lang as any)) {
-    logger.error('Unsupported language:', lang);
+    log.error('Unsupported language:', lang);
     return NextResponse.json(
       { message: dictionary.api.server_error, isError: true },
       { status: 400 },
@@ -65,7 +67,7 @@ export async function GET(
   const user = session?.user;
 
   if (!user || !user.isLuuppiHato) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return NextResponse.json(
       { message: dictionary.api.unauthorized, isError: true },
       { status: 401 },
@@ -81,7 +83,7 @@ export async function GET(
   });
 
   if (!hasHatoRole) {
-    logger.error('User does not have the required role');
+    log.error('User does not have the required role');
     return NextResponse.json(
       { message: dictionary.api.unauthorized, isError: true },
       { status: 401 },
@@ -130,7 +132,7 @@ export async function GET(
 
     return NextResponse.json({ users, total, isError: false });
   } catch (error) {
-    logger.error('Error fetching users:', error);
+    log.error('Error fetching users:', error);
     return NextResponse.json(
       { message: dictionary.api.server_error, isError: true },
       { status: 500 },

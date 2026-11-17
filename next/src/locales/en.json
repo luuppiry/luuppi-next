@@ -65,7 +65,8 @@
     "invalid_expense_description": "Describe the expense (3-80 characters).",
     "invalid_expense_amount": "Enter an amount greater than zero, for example 12,50.",
     "invalid_receipts": "Attach 1-10 receipts as PDF, JPEG or PNG, max 5 MB each and 10 MB in total.",
-    "expense_claim_sent": "Your claim was sent to the treasurer."
+    "expense_claim_sent": "Your claim was sent to the treasurer.",
+    "client_outdated": "You are using an outdated client, please refresh the page to continue."
   },
   "roles": {
     "entire_board": "Entire Board",
@@ -94,6 +95,7 @@
     "username": "Username",
     "content_updated": "Content updated",
     "next": "Next",
+    "previous": "Previous",
     "add_to_calendar": "Add to calendar",
     "login": "Login",
     "register": "Register",
@@ -391,7 +393,8 @@
     "receipts_help": "Up to 10 files, 5 MB each. Photos are merged into one PDF.",
     "send": "Send claim",
     "separate_forms_notice": "Please send expenses for different events or matters on separate forms. Accounting needs one voucher per event.",
-    "form_title": "Claim details"
+    "form_title": "Claim details",
+    "files_too_large": "Attachments you were trying to send exceed the limits after optimization."
   },
   "pages_404": {
     "title": "Page not found",
@@ -470,6 +473,7 @@
     "process_pdf": "Process PDf"
   },
   "pages_profile": {
+    "do_not_use_tuni_email": "Use an email address other than @tuni.fi.",
     "username_explanation": "Username is used to identify you on the website. It must be 3-30 characters long. Username can be displayed publicly.",
     "first_name_explanation": "All your official first names. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
     "lastname_explanation": "Official surname. This is information required by section 11 of the Associations Act, which will be verified upon joining the association.",
@@ -512,6 +516,13 @@
     "invalid_role": "Invalid role",
     "must_be_logged_in": "You must be logged in to claim this invite. Create an account or login using the button below to return to this page."
   },
+  "pages_songs": {
+    "all_categories": "All categories",
+    "clear_search": "Clear search",
+    "loading_title": "Loading songs...",
+    "no_results_title": "No songs found",
+    "empty_filters": "Try selecting another category or clear the filters."
+  },
   "pages_error": {
     "title": "Error",
     "description": "An error occurred while processing your request.",
@@ -520,5 +531,11 @@
     "seo_title": "Luuppi ry | Error",
     "seo_description": "An error occurred while processing your request.",
     "return_home": "Back to home"
+  },
+  "pages_gallery": {
+    "taken_at": "Taken at",
+    "focal_length": "Focal length",
+    "dimensions": "Dimensions",
+    "images": "photos"
   }
 }

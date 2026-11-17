@@ -38,11 +38,12 @@ export default async function Board() {
    */
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
-  >('fi', `/api/boards?${BOARDS_QUERY}`, [
-    'board',
-    'board-role',
-    'board-member',
-  ]);
+  >({
+    lang: 'fi',
+    url: `/api/boards?${BOARDS_QUERY}`,
+    collection: 'board',
+    overrideTags: ['board', 'board-role', 'board-member'],
+  });
 
   const boardGroupedByYear = groupBoardByYear(boardData.data);
   const boardSortedByYear = Object.keys(boardGroupedByYear).sort(
@@ -73,7 +74,7 @@ export default async function Board() {
         id="board-members-jsonld"
         type="application/ld+json"
       />
-      <div className="relative flex flex-col gap-12">
+      <div className="relative flex flex-col gap-12 overflow-x-hidden">
         <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2">
           <h1>
             {dictionary.navigation.board} {latestBoard.year}
@@ -152,11 +153,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const boardData = await getStrapiData<
     APIResponseCollection<'api::board.board'>
-  >('fi', `/api/boards?${BOARDS_QUERY}`, [
-    'board',
-    'board-role',
-    'board-member',
-  ]);
+  >({
+    lang: 'fi',
+    url: `/api/boards?${BOARDS_QUERY}`,
+    collection: 'board',
+    overrideTags: ['board', 'board-role', 'board-member'],
+  });
 
   const boardGroupedByYear = groupBoardByYear(boardData.data);
   const boardSortedByYear = Object.keys(boardGroupedByYear).sort(

@@ -2,6 +2,8 @@ import { User } from '@microsoft/microsoft-graph-types';
 import 'server-only';
 import { logger } from '../utils/logger';
 
+const log = logger.child('lib:graph/graph-update-user');
+
 /**
  * Update a user in the Microsoft Graph API
  * @param token Access token
@@ -43,7 +45,7 @@ export const updateGraphAPIUser = async (
 
     return true;
   } catch (error) {
-    logger.error('Graph API error', error);
+    log.error('Graph API error', error);
     return false;
   }
 };

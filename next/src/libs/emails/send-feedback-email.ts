@@ -11,6 +11,8 @@ interface SendFeedbackEmailParams {
   senderEmail?: string;
 }
 
+const log = logger.child('lib:emails/send-feedback-email');
+
 export async function sendFeedbackEmail({
   receiver,
   subject,
@@ -34,10 +36,10 @@ export async function sendFeedbackEmail({
       subject,
       html: emailHtml,
     });
-    logger.info('Feedback email sent to:', receiver);
+    log.info('Feedback email sent to:', receiver);
     return true;
   } catch (error) {
-    logger.error('Error sending feedback email:', error);
+    log.error('Error sending feedback email:', error);
     return false;
   }
 }

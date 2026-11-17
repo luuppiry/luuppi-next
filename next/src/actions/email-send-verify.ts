@@ -14,6 +14,7 @@ const options = {
   jwtSecret: process.env.JWT_SECRET!,
   cacheKey: 'email-verification',
 };
+const log = logger.child('action:email-send-verify');
 
 export async function emailSendVerify(
   lang: SupportedLanguage,
@@ -25,7 +26,7 @@ export async function emailSendVerify(
   const user = session?.user;
 
   if (!user) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -38,7 +39,7 @@ export async function emailSendVerify(
     3,
   );
   if (isLimited) {
-    logger.error(`User is being rate limited: ${user.email}`);
+    log.error(`User is being rate limited: ${user.email}`);
     return {
       message: dictionary.api.ratelimit,
       isError: true,
@@ -50,7 +51,7 @@ export async function emailSendVerify(
   const email = formData.get('email') as string;
 
   if (!email) {
-    logger.error('Email missing in form data');
+    log.error('Email missing in form data');
     return {
       message: dictionary.api.invalid_email,
       isError: true,
@@ -60,7 +61,7 @@ export async function emailSendVerify(
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    logger.error('Email does not match regex');
+    log.error('Email does not match regex');
     return {
       message: dictionary.api.invalid_email,
       isError: true,
@@ -78,7 +79,7 @@ export async function emailSendVerify(
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
-    logger.error('Error getting access token for Graph API');
+    log.error('Error getting access token for Graph API');
     return {
       message: dictionary.api.server_error,
       isError: true,
@@ -87,7 +88,7 @@ export async function emailSendVerify(
   const result = await verifyGraphAPIEmail(accessToken, email);
 
   if (result === null) {
-    logger.error('Error verifying email with Graph API, server error');
+    log.error('Error verifying email with Graph API, server error');
     return {
       message: dictionary.api.server_error,
       isError: true,
@@ -95,7 +96,7 @@ export async function emailSendVerify(
   }
 
   if (result) {
-    logger.error('Email already in use by another user');
+    log.error('Email already in use by another user');
     return {
       message: dictionary.api.email_already_in_use,
       isError: true,

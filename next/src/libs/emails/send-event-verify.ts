@@ -9,6 +9,8 @@ import { firstLetterToUpperCase } from '../utils/first-letter-uppercase';
 import { logger } from '../utils/logger';
 import { sendEmail } from './nodemailer';
 
+const log = logger.child('lib:emails/send-event-verify');
+
 interface SendEventReceiptProps {
   name: string;
   email: string;
@@ -69,7 +71,7 @@ export const sendEventReceiptEmail = async ({
 
     return event.messageId;
   } catch (error) {
-    logger.error('Error sending email', error);
+    log.error('Error sending email', error);
     return false;
   }
 };

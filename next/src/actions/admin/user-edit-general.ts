@@ -6,6 +6,8 @@ import { logger } from '@/libs/utils/logger';
 import { SupportedLanguage } from '@/models/locale';
 import { updateTag } from 'next/cache';
 
+const log = logger.child('action:user-edit-general');
+
 export async function userEditGeneral(
   formData: FormData,
   lang: SupportedLanguage,
@@ -17,7 +19,7 @@ export async function userEditGeneral(
   const user = session?.user;
 
   if (!user || !user.isLuuppiHato) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -42,7 +44,7 @@ export async function userEditGeneral(
   });
 
   if (!hasHatoRole) {
-    logger.error('User does not have the required role');
+    log.error('User does not have the required role');
     return {
       message: dictionary.api.unauthorized,
       isError: true,

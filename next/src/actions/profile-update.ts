@@ -10,6 +10,7 @@ import { refresh, updateTag } from 'next/cache';
 const options = {
   cacheKey: 'update-profile',
 };
+const log = logger.child('action:profile-update');
 
 export async function profileUpdate(
   lang: SupportedLanguage,
@@ -19,7 +20,7 @@ export async function profileUpdate(
   const session = await auth();
 
   if (!session?.user) {
-    logger.error('User not found in session');
+    log.error('User not found in session');
     return {
       message: dictionary.api.unauthorized,
       isError: true,
@@ -32,7 +33,7 @@ export async function profileUpdate(
     10,
   );
   if (isLimited) {
-    logger.error('User is being rate limited');
+    log.error('User is being rate limited');
     return {
       message: dictionary.api.ratelimit,
       isError: true,
