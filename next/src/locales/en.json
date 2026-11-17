@@ -95,6 +95,7 @@
     "username": "Username",
     "content_updated": "Content updated",
     "next": "Next",
+    "previous": "Previous",
     "add_to_calendar": "Add to calendar",
     "login": "Login",
     "register": "Register",
@@ -530,5 +531,11 @@
     "seo_title": "Luuppi ry | Error",
     "seo_description": "An error occurred while processing your request.",
     "return_home": "Back to home"
+  },
+  "pages_gallery": {
+    "taken_at": "Taken at",
+    "focal_length": "Focal length",
+    "dimensions": "Dimensions",
+    "images": "photos"
   }
 }
