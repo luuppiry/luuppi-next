@@ -24,6 +24,18 @@
       },
       "required": true
     },
+    "Slug": {
+      "type": "uid",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "targetField": "Title",
+      "required": true,
+      "minLength": 3,
+      "regex": "^[a-z0-9@]+(-[a-z0-9@]+)*$"
+    },
     "Description": {
       "type": "blocks",
       "pluginOptions": {
@@ -31,15 +43,47 @@
           "localized": true
         }
       },
-      "required": true
+      "required": false
     },
     "Images": {
       "type": "media",
       "multiple": true,
-      "required": true,
-      "allowedTypes": [
-        "images"
-      ]
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "Cover": {
+      "type": "media",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "Date": {
+      "type": "date",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "Order": {
+      "type": "integer",
+      "default": 0
+    },
+    "Parent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::gallery.gallery",
+      "inversedBy": "Children"
+    },
+    "Children": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::gallery.gallery",
+      "mappedBy": "Parent"
     }
   }
 }

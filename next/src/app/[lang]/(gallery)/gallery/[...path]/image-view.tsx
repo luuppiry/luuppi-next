@@ -1,13 +1,11 @@
 import { getDictionary } from '@/dictionaries';
 import { dateFormat } from '@/libs/constants';
-import { getGalleries, getGallery } from '@/libs/strapi/get-gallery';
+import { galleryHref, ResolvedPath } from '@/libs/strapi/get-gallery';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { getExif } from '@/libs/utils/get-exif';
 import { Dictionary } from '@/models/locale';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { lang, lang as language } from 'next/root-params';
 import React, { Suspense, ViewTransition } from 'react';
 import {
   IoIosAperture,
@@ -19,25 +17,23 @@ import { MdShutterSpeed } from 'react-icons/md';
 import { RiCameraLensFill } from 'react-icons/ri';
 
 interface Props {
-  params: Promise<{ documentId: string; imageDocumentId: string }>;
+  lang: string;
+  resolved: Extract<ResolvedPath, { type: 'image' }>;
 }
 
-export default async function ImagePage({ params }: Props) {
-  const { documentId, imageDocumentId: photoDocumentId } = await params;
-  const lang = await language();
+export default async function ImageView({ lang, resolved }: Props) {
   const dictionary = await getDictionary();
-  const gallery = await getGallery(lang, documentId);
+  const { gallery, chain, imageIndex } = resolved;
+  const images = gallery.Images!;
 
-  const index = gallery.Images.findIndex(
-    (i) => i.documentId === photoDocumentId,
+  const image = images[imageIndex];
+  const prev = images[imageIndex - 1];
+  const next = images[imageIndex + 1];
+  const base = galleryHref(
+    lang,
+    chain.map((g) => g.Slug),
   );
-  if (index === -1) notFound();
-
-  const photo = gallery.Images[index];
-  const prev = gallery.Images[index - 1];
-  const next = gallery.Images[index + 1];
-  const base = `/${lang}/gallery/${gallery.documentId}`;
-  const photoUrl = getStrapiUrl(photo.url);
+  const imageUrl = getStrapiUrl(image.url);
 
   return (
     <ViewTransition
@@ -61,16 +57,16 @@ export default async function ImagePage({ params }: Props) {
         <div className="flex justify-center rounded-lg">
           <ViewTransition
             default="none"
-            name={`photo-${photo.documentId}`}
+            name={`photo-${image.documentId}`}
             share="morph"
           >
             <Image
-              alt={photo.alternativeText || photo.name}
+              alt={image.alternativeText || image.name}
               className="h-[75dvh] w-auto rounded-lg object-contain"
-              height={photo.height}
+              height={image.height}
               sizes="100vw"
-              src={photoUrl}
-              width={photo.width}
+              src={imageUrl}
+              width={image.width}
               priority
             />
           </ViewTransition>
@@ -114,10 +110,10 @@ export default async function ImagePage({ params }: Props) {
       >
         <ExifPanel
           dictionary={dictionary}
-          height={photo.height!}
+          height={image.height!}
           lang={lang}
-          url={photoUrl}
-          width={photo.width!}
+          url={imageUrl}
+          width={image.width!}
         />
       </Suspense>
     </ViewTransition>
@@ -178,29 +174,4 @@ async function ExifPanel({
         ))}
     </dl>
   );
-}
-
-export async function generateStaticParams(): Promise<
-  Pick<
-    Awaited<
-      PageProps<'/[lang]/gallery/[documentId]/[imageDocumentId]'>['params']
-    >,
-    'imageDocumentId' | 'documentId'
-  >[]
-> {
-  const language = await lang();
-  const galleries = await getGalleries(language);
-
-  const paths = [];
-
-  for (const gallery of galleries) {
-    for (const photo of gallery.Images) {
-      paths.push({
-        documentId: gallery.documentId,
-        imageDocumentId: photo.documentId,
-      });
-    }
-  }
-
-  return paths;
 }
