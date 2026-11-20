@@ -9,7 +9,6 @@ import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { lang as language } from 'next/root-params';
-import { Suspense } from 'react';
 
 interface Props {
   params: Promise<{ path: string[] }>;
@@ -23,20 +22,15 @@ function safeDecode(segment: string) {
   }
 }
 
+export const ensureStatic = 'navigation';
+export const instant = false;
+
 /**
  * /gallery/a            -> gallery
  * /gallery/a/b/c        -> nested gallery (recursive hierarchy)
  * /gallery/a/b/<image>  -> image of gallery b
  */
-export default function GalleryCatchAllPage({ params }: Props) {
-  return (
-    <Suspense fallback={<div className="skeleton h-dvh w-full bg-white/5" />}>
-      <Content params={params} />
-    </Suspense>
-  );
-}
-
-async function Content({ params }: Props) {
+export default async function GalleryPage({ params }: Props) {
   const { path } = await params;
   const lang = await language();
   const resolved = await resolveGalleryPath(lang, path.map(safeDecode));
@@ -69,5 +63,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  return getAllGalleryPaths(await language());
+  return await getAllGalleryPaths(await language());
 }
