@@ -56,11 +56,13 @@ async function parseExif(buf: Buffer): Promise<PhotoExif | null> {
 
 async function makeBlurDataUrl(buf: Buffer): Promise<string> {
   const out = await sharp(buf)
-    .rotate() // respect EXIF orientation
-    .resize(16)
-    .jpeg({ quality: 50 })
+    .rotate()
+    .resize(22)
+    .blur(2.9)
+    .webp({ quality: 100 })
     .toBuffer();
-  return `data:image/jpeg;base64,${out.toString("base64")}`;
+
+  return `data:image/webp;base64,${out.toString("base64")}`;
 }
 
 export async function extractPhotoMeta(buf: Buffer) {

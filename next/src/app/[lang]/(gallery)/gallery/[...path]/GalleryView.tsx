@@ -90,6 +90,7 @@ export default async function GalleryView({ lang, resolved }: Props) {
                     alt={image.alternativeText || `${gallery.Title} ${i + 1}`}
                     className="h-auto w-full transition-opacity hover:opacity-90"
                     height={image.height}
+                    placeholder={image.blurDataUrl as `data:image/${string}`}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     src={galleryImageHref(image)}
                     width={image.width}
