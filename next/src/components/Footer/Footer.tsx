@@ -27,7 +27,7 @@ export default async function Footer({ lang }: FooterProps) {
   const dictionary = await getDictionary(lang);
 
   return (
-    <footer className="bg-primary-500 py-12">
+    <footer className="z-10 bg-primary-500 py-12">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
         <div className="grid w-full grid-cols-5 gap-12 px-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
           {footerLinks.map((footerLink, i) => (
@@ -110,10 +110,7 @@ export default async function Footer({ lang }: FooterProps) {
             >
               <FaLinkedin className="text-white" size={20} />
             </Link>
-            <Link
-              aria-label="Linktree"
-              href="https://linktr.ee/luuppi"
-            >
+            <Link aria-label="Linktree" href="https://linktr.ee/luuppi">
               <SiLinktree className="text-white" size={20} />
             </Link>
           </div>

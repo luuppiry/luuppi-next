@@ -1,5 +1,5 @@
-import GalleryView from '@/app/[lang]/(gallery)/gallery/[...path]/gallery-view';
-import ImageView from '@/app/[lang]/(gallery)/gallery/[...path]/image-view';
+import GalleryView from '@/app/[lang]/(gallery)/gallery/[...path]/GalleryView';
+import ImageView from '@/app/[lang]/(gallery)/gallery/[...path]/ImageView';
 import {
   getAllGalleryPaths,
   getGalleryCover,

@@ -1,6 +1,9 @@
+import {
+  Gallery,
+  galleryImageHref,
+  getGalleryCover,
+} from '@/libs/strapi/get-gallery';
 import { Dictionary } from '@/models/locale';
-import { Gallery, getGalleryCover } from '@/libs/strapi/get-gallery';
-import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PiFolder, PiImageBroken } from 'react-icons/pi';
@@ -25,18 +28,22 @@ export default function GalleryCard({ gallery, href, dictionary }: Props) {
       <div className="relative aspect-[4/3] w-full bg-gradient-to-r from-secondary-400 to-primary-300">
         {cover ? (
           <Image
-            alt={cover.alternativeText || gallery.Title}
+            alt=""
             className="object-cover transition-transform duration-300 group-hover:scale-105"
+            placeholder={cover.blurDataUrl}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            src={getStrapiUrl(cover.url)}
+            src={galleryImageHref(cover)}
             fill
           />
         ) : (
           <div className="flex h-full items-center justify-center">
             {childCount > 0 ? (
-              <PiFolder className="text-8xl text-white" />
+              <PiFolder aria-hidden="true" className="text-8xl text-white" />
             ) : (
-              <PiImageBroken className="text-8xl text-white" />
+              <PiImageBroken
+                aria-hidden="true"
+                className="text-8xl text-white"
+              />
             )}
           </div>
         )}

@@ -1,5 +1,5 @@
-import exifr from 'exifr';
-import { cacheLife } from 'next/cache';
+import exifr from "exifr";
+import sharp from "sharp";
 
 export interface PhotoExif {
   camera?: string;
@@ -11,30 +11,26 @@ export interface PhotoExif {
   takenAt?: string;
 }
 
-export async function getExif(url: string): Promise<PhotoExif | null> {
-  'use cache';
-  cacheLife('max');
-
+async function parseExif(buf: Buffer): Promise<PhotoExif | null> {
   try {
-    const raw = await exifr.parse(url, {
+    const raw = await exifr.parse(buf, {
       pick: [
-        'Make',
-        'Model',
-        'LensModel',
-        'FocalLength',
-        'FNumber',
-        'ExposureTime',
-        'ISO',
-        'DateTimeOriginal',
+        "Make",
+        "Model",
+        "LensModel",
+        "FocalLength",
+        "FNumber",
+        "ExposureTime",
+        "ISO",
+        "DateTimeOriginal",
       ],
     });
     if (!raw) return null;
 
     const camera = [raw.Make, raw.Model]
       .filter(Boolean)
-      // Avoid "Canon Canon EOS R6"
       .filter((v, i, arr) => i === 0 || !v.startsWith(arr[0]))
-      .join(' ');
+      .join(" ");
 
     return {
       camera: camera || undefined,
@@ -56,4 +52,21 @@ export async function getExif(url: string): Promise<PhotoExif | null> {
   } catch {
     return null;
   }
+}
+
+async function makeBlurDataUrl(buf: Buffer): Promise<string> {
+  const out = await sharp(buf)
+    .rotate() // respect EXIF orientation
+    .resize(16)
+    .jpeg({ quality: 50 })
+    .toBuffer();
+  return `data:image/jpeg;base64,${out.toString("base64")}`;
+}
+
+export async function extractPhotoMeta(buf: Buffer) {
+  const [exif, blurDataUrl] = await Promise.all([
+    parseExif(buf),
+    makeBlurDataUrl(buf),
+  ]);
+  return { exif, blurDataUrl };
 }

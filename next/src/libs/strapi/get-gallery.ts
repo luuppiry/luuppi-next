@@ -8,6 +8,7 @@ import qs from 'qs';
 import 'server-only';
 import { getStrapiData } from './get-strapi-data';
 import { cacheLife, cacheTag } from 'next/cache';
+import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 
 const DEFAULT_LOCALE: SupportedLanguage = 'fi';
 const PAGE_SIZE = 9999;
@@ -15,6 +16,7 @@ const PAGE_SIZE = 9999;
 export interface GalleryMedia {
   url: string;
   alternativeText?: string | null;
+  blurDataUrl?: `data:image/${string}`;
 }
 
 /** Shape of a list item for the `fields`/`populate` used in listQuery. */
@@ -42,7 +44,7 @@ export interface GalleryNode {
   Order: number;
   Date: string | null;
   Cover: GalleryMedia | null;
-  imageCount: number; // new
+  imageCount: number;
   parentId: string | null;
   children: GalleryNode[];
 }
@@ -77,13 +79,21 @@ export function galleryHref(lang: string, slugs: string[]): string {
   return path ? `/${lang}/gallery/${path}` : `/${lang}/gallery`;
 }
 
+export function galleryImageHref<T extends { url: string; formats?: any }>(
+  image: T,
+) {
+  return getStrapiUrl(image.formats?.large?.url ?? image.url);
+}
+
 function listQuery(page: number) {
   return qs.stringify({
     fields: ['Title', 'Slug', 'Order', 'Date'],
     populate: {
       Parent: { fields: ['documentId'] },
-      Cover: { fields: ['url', 'alternativeText'] },
-      Images: { fields: ['url', 'alternativeText'] }, // new
+      Cover: { fields: ['url', 'alternativeText', 'formats', 'blurDataUrl'] },
+      Images: {
+        fields: ['url', 'alternativeText', 'formats', 'blurDataUrl', 'exif'],
+      },
     },
     sort: ['Order:asc', 'Title:asc'],
     pagination: { page, pageSize: PAGE_SIZE },

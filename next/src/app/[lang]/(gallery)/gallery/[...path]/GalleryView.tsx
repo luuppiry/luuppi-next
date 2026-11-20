@@ -1,8 +1,11 @@
-import GalleryCard from '@/app/[lang]/(gallery)/gallery-card';
+import GalleryCard from '@/app/[lang]/(gallery)/GalleryCard';
 import BlockRendererClient from '@/components/BlockRendererClient/BlockRendererClient';
 import { getDictionary } from '@/dictionaries';
-import { galleryHref, ResolvedPath } from '@/libs/strapi/get-gallery';
-import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
+import {
+  galleryHref,
+  galleryImageHref,
+  ResolvedPath,
+} from '@/libs/strapi/get-gallery';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ViewTransition } from 'react';
@@ -21,18 +24,23 @@ export default async function GalleryView({ lang, resolved }: Props) {
 
   return (
     <div className="flex flex-col gap-8">
-      <nav aria-label="Breadcrumb" className="text-sm opacity-70">
+      <nav aria-label="Breadcrumb" className="text-sm">
         <ol className="flex flex-wrap gap-2">
           <li>
-            <Link className="link" href={galleryHref(lang, [])}>
+            <Link
+              className="link opacity-70 hover:opacity-100"
+              href={galleryHref(lang, [])}
+            >
               {dictionary.navigation.gallery}
             </Link>
           </li>
           {chain.slice(0, -1).map((g, i) => (
             <li key={g.documentId} className="flex gap-2">
-              <span aria-hidden="true">/</span>
+              <span aria-hidden="true" className="opacity-70">
+                /
+              </span>
               <Link
-                className="link"
+                className="link opacity-70 hover:opacity-100"
                 href={galleryHref(lang, slugs.slice(0, i + 1))}
               >
                 {g.Title}
@@ -83,7 +91,7 @@ export default async function GalleryView({ lang, resolved }: Props) {
                     className="h-auto w-full transition-opacity hover:opacity-90"
                     height={image.height}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    src={getStrapiUrl(image.url)}
+                    src={galleryImageHref(image)}
                     width={image.width}
                   />
                 </ViewTransition>

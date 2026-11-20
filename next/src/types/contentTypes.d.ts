@@ -2479,10 +2479,12 @@ export interface PluginUploadFile extends Struct.CollectionTypeSchema {
   };
   attributes: {
     alternativeText: Schema.Attribute.Text;
+    blurDataUrl: Schema.Attribute.Text;
     caption: Schema.Attribute.Text;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    exif: Schema.Attribute.JSON;
     ext: Schema.Attribute.String;
     focalPoint: Schema.Attribute.JSON;
     folder: Schema.Attribute.Relation<'manyToOne', 'plugin::upload.folder'> &
