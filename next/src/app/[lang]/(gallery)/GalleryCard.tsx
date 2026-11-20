@@ -30,7 +30,7 @@ export default function GalleryCard({ gallery, href, dictionary }: Props) {
           <Image
             alt=""
             className="object-cover transition-transform duration-300 group-hover:scale-105"
-            placeholder={cover.blurDataUrl}
+            placeholder={cover.blurDataUrl as `data:image/${string}`}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             src={galleryImageHref(cover)}
             fill

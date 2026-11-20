@@ -16,7 +16,7 @@ const PAGE_SIZE = 9999;
 export interface GalleryMedia {
   url: string;
   alternativeText?: string | null;
-  blurDataUrl?: `data:image/${string}`;
+  blurDataUrl?: string;
 }
 
 /** Shape of a list item for the `fields`/`populate` used in listQuery. */
