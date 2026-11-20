@@ -7,7 +7,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <div className="bg-[hsl(0,0%,4%)]">
+    <div className="min-h-dvh bg-[hsl(0,0%,4%)]">
       <Suspense fallback={<div />}>
         <GalleryClient />
       </Suspense>

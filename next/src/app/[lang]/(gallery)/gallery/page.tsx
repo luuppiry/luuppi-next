@@ -1,4 +1,4 @@
-import GalleryCard from '@/app/[lang]/(gallery)/gallery-card';
+import GalleryCard from '@/app/[lang]/(gallery)/GalleryCard';
 import { getDictionary } from '@/dictionaries';
 import { galleryHref, getGalleries } from '@/libs/strapi/get-gallery';
 import { lang as language } from 'next/root-params';

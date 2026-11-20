@@ -121,6 +121,17 @@ export interface APIResponseCollection<
   meta: APIResponseCollectionMetadata;
 }
 
+// strapi photo-meta.ts
+export interface PhotoExif {
+  camera?: string;
+  lens?: string;
+  focalLength?: string;
+  aperture?: string;
+  shutter?: string;
+  iso?: number;
+  takenAt?: string;
+}
+
 type ExtractApiContentType<T extends string> =
   T extends `api::${infer ContentType}.${string}` ? ContentType : never;
 
