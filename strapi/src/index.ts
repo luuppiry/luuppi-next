@@ -26,7 +26,7 @@ export default {
       beforeUpdate(event) {
         const data = event.params?.data;
         if (data?.hash) {
-          data.blurDataURL = null;
+          data.blurDataUrl = null;
           data.exif = null;
         }
       },
