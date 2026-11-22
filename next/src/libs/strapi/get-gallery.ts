@@ -17,6 +17,7 @@ export interface GalleryMedia {
   url: string;
   alternativeText?: string | null;
   blurDataUrl?: string;
+  formats?: any;
 }
 
 /** Shape of a list item for the `fields`/`populate` used in listQuery. */

@@ -8,8 +8,7 @@ export default function GalleryClient() {
   use(browser())
 
   const { setTheme, theme } = useTheme();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const initialTheme = useMemo(() => theme, []);
+  const initialTheme = useMemo(() => theme, [theme]);
 
   useLayoutEffect(() => {
     setTheme('dark');

@@ -58,7 +58,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: gallery.Title,
-    openGraph: { images: image ? [getStrapiUrl(image.url)] : [] },
+    openGraph: {
+      images: image
+        ? [getStrapiUrl(image.formats?.large.url ?? image.url)]
+        : [],
+    },
   };
 }
 
