@@ -346,6 +346,7 @@ export default async function AdminEventRegistrationsList({
                   registrations={registrationDetails}
                   requiresPickup={requiresPickup}
                   showTickets={(numOfTickets ?? 0) > 1}
+                  ticketCount={group.length}
                   tickets={ticketNames}
                 />
               );

@@ -26,6 +26,7 @@ interface RegistrationsTableRowProps {
   pickedUpLabel: string;
   registrations: RegistrationDetail[];
   showTickets: boolean;
+  ticketCount: number;
 }
 
 function renderAnswerCell(value: string | undefined, clamp = true) {
@@ -49,6 +50,7 @@ export default function RegistrationsTableRow({
   requiresPickup,
   pickedUpLabel,
   registrations,
+  ticketCount,
   showTickets,
 }: RegistrationsTableRowProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -68,14 +70,22 @@ export default function RegistrationsTableRow({
       <tr onClick={showModal}>
         <td className="max-w-20 whitespace-normal break-words">
           <div className="flex justify-between">
-            {displayName || email}
+            <span className="flex items-center gap-1">
+              <span className="truncate text-ellipsis">
+                {displayName || email}
+              </span>
+              {ticketCount > 1 && (
+                <span className="badge badge-outline badge-sm text-xs">
+                  ×{ticketCount}
+                </span>
+              )}
+            </span>
 
             <div className="flex gap-1.5">
               {showTickets &&
                 tickets.map((ticket, i) => (
                   <Tooltip key={i} content={ticket}>
                     <span
-                      key={i}
                       className="float-right h-[1em] w-[1em] rounded-full"
                       style={{ background: getTicketColor(ticket) }}
                     />
