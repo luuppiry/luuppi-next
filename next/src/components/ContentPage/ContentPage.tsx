@@ -3,7 +3,6 @@ import { dateFormat } from '@/libs/constants';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { APIResponseCollection, StrapiCacheTag } from '@/types/types';
-import { cacheLife } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
 import { lang as language } from 'next/root-params';
@@ -22,9 +21,6 @@ export default async function ContentPage({
   url,
   unique = false,
 }: ContentPageProps) {
-  'use cache';
-  cacheLife('max');
-
   const lang = await language();
   const dictionary = await getDictionary();
 

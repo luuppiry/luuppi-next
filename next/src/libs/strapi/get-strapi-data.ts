@@ -4,8 +4,13 @@ import 'server-only';
 import { cacheLife, cacheTag } from 'next/cache';
 import { logger } from '../utils/logger';
 import { getStrapiUrl } from './get-strapi-url';
+import { connection } from 'next/server';
+import { unstable_rethrow } from 'next/navigation';
 
 const log = logger.child('lib:strapi/get-strapi-data');
+
+// Expire below 300 so not founds and errors are not included in the prerender shell
+const NEGATIVE_TTL = { stale: 30, revalidate: 30, expire: 240 } as const;
 
 async function fetchStrapi(
   lang: string,
@@ -96,6 +101,27 @@ function inferTags(
   return [collection];
 }
 
+async function handleError(
+  error: unknown,
+  lang: string,
+  url: string,
+  ignoreError?: boolean,
+  { dynamicOnIgnore = false }: { dynamicOnIgnore?: boolean } = {},
+): Promise<null> {
+  // Lets Next.js signals through untouched
+  unstable_rethrow(error);
+  if (ignoreError) {
+    if (dynamicOnIgnore) await connection();
+    return null;
+  }
+  return logAndWrap(error, lang, url);
+}
+
+function isEmptyBody(body: unknown): boolean {
+  const data = (body as StrapiBody | null)?.data;
+  return data == null || (Array.isArray(data) && data.length === 0);
+}
+
 async function getStrapiDataCached<T>(
   lang: SupportedLanguage,
   url: string,
@@ -105,28 +131,29 @@ async function getStrapiDataCached<T>(
   ignoreError?: boolean,
 ): Promise<T | null> {
   'use cache';
-  cacheLife('hours');
   if (overrideTags) cacheTag(...overrideTags);
 
-  try {
-    let res = await fetchStrapi(lang, url, 'published');
+  let res = await fetchStrapi(lang, url, 'published');
 
-    if (!res.ok && res.status === 404 && !ignoreError) {
-      res = await fetchStrapi('fi', url, 'published');
-    }
-
-    const body = await parseStrapiResponse<T>(res, url, ignoreError);
-
-    if (!overrideTags) cacheTag(...inferTags(collection, unique, body));
-    return body;
-  } catch (error) {
-    if (ignoreError) {
-      // Cached null isn't stuck without a tag
-      cacheTag(collection);
-      return null;
-    }
-    return logAndWrap(error, lang, url);
+  if (res.status === 404 && !ignoreError) {
+    res = await fetchStrapi('fi', url, 'published');
   }
+
+  // 5xx / auth failures are transient: throw so nothing is cached
+  if (!res.ok && res.status !== 404) {
+    throw new Error(`Strapi responded ${res.status} for ${url}`);
+  }
+
+  const body = await parseStrapiResponse<T>(res, url, ignoreError);
+
+  const negative = !res.ok || isEmptyBody(body);
+  if (!overrideTags) cacheTag(...inferTags(collection, unique, body));
+  else if (negative) cacheTag(collection);
+
+  if (negative) cacheLife(NEGATIVE_TTL);
+  else cacheLife('hours');
+
+  return body;
 }
 
 async function getStrapiDataDraft<T>(
@@ -138,8 +165,7 @@ async function getStrapiDataDraft<T>(
     const res = await fetchStrapi(lang, url, 'draft');
     return await parseStrapiResponse<T>(res, url, ignoreError);
   } catch (error) {
-    if (ignoreError) return null;
-    return logAndWrap(error, lang, url);
+    return handleError(error, lang, url, ignoreError);
   }
 }
 
@@ -177,17 +203,24 @@ export async function getStrapiData<T>({
       const res = await fetchStrapi(lang, url, 'published');
       return await parseStrapiResponse<T>(res, url, ignoreError);
     } catch (error) {
-      if (ignoreError) return null;
-      return logAndWrap(error, lang, url);
+      return handleError(error, lang, url, ignoreError, {
+        dynamicOnIgnore: true,
+      });
     }
   }
 
-  return getStrapiDataCached<T>(
-    lang,
-    url,
-    collection,
-    overrideTags?.length ? [...new Set(overrideTags)] : null,
-    unique,
-    ignoreError,
-  );
+  try {
+    return await getStrapiDataCached<T>(
+      lang,
+      url,
+      collection,
+      overrideTags?.length ? [...new Set(overrideTags)] : null,
+      unique,
+      ignoreError,
+    );
+  } catch (error) {
+    return handleError(error, lang, url, ignoreError, {
+      dynamicOnIgnore: true,
+    });
+  }
 }

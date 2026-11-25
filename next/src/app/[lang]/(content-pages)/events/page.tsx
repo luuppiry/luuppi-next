@@ -29,10 +29,6 @@ async function getSixMonthsAgoISO() {
 }
 
 export default async function Events() {
-  'use cache';
-  cacheLife('max');
-  cacheTag('event');
-
   const lang = await language();
   const dictionary = await getDictionary();
 

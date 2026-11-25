@@ -2,13 +2,9 @@ import { getDictionary } from '@/dictionaries';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
-import {
-  APIResponse,
-  APIResponseCollection,
-  StrapiCacheTag,
-} from '@/types/types';
+import { APIResponse, APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
-import { cacheLife, cacheTag } from 'next/cache';
+import { cacheLife } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
 import { lang as language } from 'next/root-params';
@@ -16,11 +12,16 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 
 const url = '/api/job-opportunities?populate=logo&populate=logoDark';
 
-export default async function CollaborationJobOpportunities() {
+async function getToday() {
   'use cache';
-  cacheLife('max');
-  cacheTag('job-opportunity' satisfies StrapiCacheTag);
+  cacheLife('hours');
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
+
+export default async function CollaborationJobOpportunities() {
   const lang = await language();
   const dictionary = await getDictionary();
 
@@ -28,8 +29,7 @@ export default async function CollaborationJobOpportunities() {
     APIResponseCollection<'api::job-opportunity.job-opportunity'>
   >({ lang, collection: 'job-opportunity', url });
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = await getToday();
 
   const openJobOpportunities = pageData.data.filter((job) => {
     const endingDate = new Date(job.jobOpportunityDateEnding);
