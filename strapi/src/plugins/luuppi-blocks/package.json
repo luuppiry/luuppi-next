@@ -24,14 +24,14 @@
     "test:ts:front": "run -T tsc -p admin/tsconfig.json"
   },
   "dependencies": {
-    "@strapi/design-system": "^2.2.4",
-    "@strapi/icons": "^2.2.4",
+    "@strapi/design-system": "^2.4.0",
+    "@strapi/icons": "^2.4.0",
     "react-intl": "^10.1.20"
   },
   "devDependencies": {
     "@strapi/sdk-plugin": "^6.1.1",
-    "@strapi/strapi": "^5.59.0",
-    "@strapi/typescript-utils": "^5.59.0",
+    "@strapi/strapi": "^5.64.0",
+    "@strapi/typescript-utils": "^5.64.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "react": "^19.2.4",
