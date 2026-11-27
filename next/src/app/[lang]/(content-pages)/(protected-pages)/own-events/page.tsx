@@ -147,7 +147,8 @@ export default async function OwnEvents() {
     ? await getStrapiData<APIResponseCollection<'api::event.event'>>({
         lang,
         url: `/api/events?${query}`,
-        collection: 'event',
+        // Large, personalized and probably one-off: cheaper to request from Strapi rather than grow cache
+        collection: null,
         ignoreError: true,
       })
     : null;

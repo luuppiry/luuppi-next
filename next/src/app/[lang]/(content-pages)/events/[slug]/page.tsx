@@ -80,6 +80,7 @@ export async function generateStaticParams() {
     sort: 'updatedAt:desc',
     fields: 'Slug',
     filters: {
+      ShowInCalendar: { $ne: false },
       StartDate: { $gte: thisMonth.toISOString().split('T')[0] },
       EndDate: { $lte: twoMonthsInFuture.toISOString().split('T')[0] },
     },

@@ -1,6 +1,6 @@
 import PdfViewer from '@/components/PdfViewer';
 import { getDictionary } from '@/dictionaries';
-import { toCalendarDate } from '@/libs/constants';
+import { isValidISOCalendarDate, toCalendarDate } from '@/libs/constants';
 import { flipSanomatLocale } from '@/libs/strapi/flip-locale';
 import { formatMetadata } from '@/libs/strapi/format-metadata';
 import { getStrapiData } from '@/libs/strapi/get-strapi-data';
@@ -31,16 +31,7 @@ const buildQuery = (slug: string) => {
       'localizations.Seo.twitter.twitterImage',
       'localizations.Seo.openGraph.openGraphImage',
     ],
-    filters: {
-      $or: [
-        { firstPublishedAt: { $gte: startOfDay, $lte: endOfDay } },
-        // Fallback for older entries, can be removed if every publication has `firstPublishedAt`
-        {
-          firstPublishedAt: { $null: true },
-          publishedAt: { $gte: startOfDay, $lte: endOfDay },
-        },
-      ],
-    },
+    filters: { firstPublishedAt: { $gte: startOfDay, $lte: endOfDay } },
     pagination: { limit: 1 },
     sort: ['firstPublishedAt:asc'],
   });
@@ -52,6 +43,10 @@ export default async function LuuppiSanomatPublication(
   const lang = await language();
   const params = await props.params;
   const dictionary = await getDictionary();
+
+  if (!isValidISOCalendarDate(params.slug)) {
+    redirect(`/${lang}/404`);
+  }
 
   // If two entries are published within same date this blows up (sorry)
   const pageData = await getStrapiData<
