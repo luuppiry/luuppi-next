@@ -2,7 +2,8 @@ import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { type NextRequest, NextResponse } from 'next/server';
 
 const ENTRA_CALLER_APP_ID = '99045fe1-7639-4a75-9d4a-577b6ca3810f';
-const EVENT_TYPE = 'microsoft.graph.authenticationEvent.attributeCollectionStart';
+const EVENT_TYPE =
+  'microsoft.graph.authenticationEvent.attributeCollectionStart';
 const RESPONSE_TYPE = 'microsoft.graph.onAttributeCollectionStartResponseData';
 
 interface EntraIdentity {
@@ -19,11 +20,13 @@ interface EntraSignupEvent {
 }
 
 const jwksUri = process.env.ENTRA_EXTENSION_JWKS_URI;
-const jwks = jwksUri ? createRemoteJWKSet(new URL(jwksUri), {
-  timeoutDuration: 1500,
-  cooldownDuration: 30_000,
-  cacheMaxAge: 600_000,
-}) : null;
+const jwks = jwksUri
+  ? createRemoteJWKSet(new URL(jwksUri), {
+      timeoutDuration: 1500,
+      cooldownDuration: 30_000,
+      cacheMaxAge: 600_000,
+    })
+  : null;
 
 function reply(action: Record<string, string>) {
   return NextResponse.json(
@@ -42,7 +45,8 @@ function block(message: string) {
 
 function allow() {
   return reply({
-    '@odata.type': 'microsoft.graph.attributeCollectionStart.continueWithDefaultBehavior',
+    '@odata.type':
+      'microsoft.graph.attributeCollectionStart.continueWithDefaultBehavior',
   });
 }
 
@@ -68,8 +72,11 @@ export async function POST(request: NextRequest) {
       clockTolerance: 30,
     });
 
-    if (payload.tid !== tenantId ||
-        (payload.azp !== ENTRA_CALLER_APP_ID && payload.appid !== ENTRA_CALLER_APP_ID)) {
+    if (
+      payload.tid !== tenantId ||
+      (payload.azp !== ENTRA_CALLER_APP_ID &&
+        payload.appid !== ENTRA_CALLER_APP_ID)
+    ) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
   } catch {
@@ -78,24 +85,37 @@ export async function POST(request: NextRequest) {
 
   let event: EntraSignupEvent;
   try {
-    event = await request.json() as EntraSignupEvent;
+    event = (await request.json()) as EntraSignupEvent;
   } catch {
     return new NextResponse('Invalid JSON', { status: 400 });
   }
 
   const identities = event?.data?.userSignUpInfo?.identities;
-  if (event?.type !== EVENT_TYPE || event.data?.tenantId !== tenantId || !Array.isArray(identities)) {
+  if (
+    event?.type !== EVENT_TYPE ||
+    event.data?.tenantId !== tenantId ||
+    !Array.isArray(identities)
+  ) {
     return new NextResponse('Invalid Entra event', { status: 400 });
   }
 
   const emails = identities
-    .filter((identity) => identity?.signInType === 'email' || identity?.signInType === 'emailAddress')
-    .map((identity) => typeof identity.issuerAssignedId === 'string'
-      ? identity.issuerAssignedId.trim().toLowerCase()
-      : '');
+    .filter(
+      (identity) =>
+        identity?.signInType === 'email' ||
+        identity?.signInType === 'emailAddress',
+    )
+    .map((identity) =>
+      typeof identity.issuerAssignedId === 'string'
+        ? identity.issuerAssignedId.trim().toLowerCase()
+        : '',
+    );
 
   // The policy is deliberately fail-closed: unknown/federated identities without an email are not admitted.
-  if (emails.length === 0 || emails.some((email) => !email || !/^[^\s@]+@[^\s@]+$/.test(email))) {
+  if (
+    emails.length === 0 ||
+    emails.some((email) => !email || !/^[^\s@]+@[^\s@]+$/.test(email))
+  ) {
     return block('Registration requires a verified email address.');
   }
 

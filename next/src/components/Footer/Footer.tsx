@@ -110,10 +110,7 @@ export default async function Footer({ lang }: FooterProps) {
             >
               <FaLinkedin className="text-white" size={20} />
             </Link>
-            <Link
-              aria-label="Linktree"
-              href="https://linktr.ee/luuppi"
-            >
+            <Link aria-label="Linktree" href="https://linktr.ee/luuppi">
               <SiLinktree className="text-white" size={20} />
             </Link>
           </div>

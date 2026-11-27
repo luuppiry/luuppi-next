@@ -94,7 +94,7 @@ export default async function AdminEventDetail(
   });
 
   if (!strapiEvent?.data) {
-    notFound()
+    notFound();
   }
 
   const requiresPickup = strapiEvent.data.Registration?.RequiresPickup ?? false;

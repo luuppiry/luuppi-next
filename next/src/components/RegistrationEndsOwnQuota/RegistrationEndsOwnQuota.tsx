@@ -16,7 +16,7 @@ export default async function RegistrationEndsOwnQuota({
   lang: SupportedLanguage;
   dictionary: any;
 }) {
-  await connection()
+  await connection();
 
   const session = await auth();
   const ticketTypes = event.Registration?.TicketTypes;

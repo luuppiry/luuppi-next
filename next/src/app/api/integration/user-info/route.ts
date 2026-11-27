@@ -16,7 +16,7 @@ interface UserInfoError {
   error: string;
 }
 
-const log = logger.child('api:integration/user-info')
+const log = logger.child('api:integration/user-info');
 
 /**
  * This is integration endpoint for Lärpäke which is in separate repository.

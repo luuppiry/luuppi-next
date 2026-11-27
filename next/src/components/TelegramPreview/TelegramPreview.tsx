@@ -5,10 +5,13 @@ import GroupsDialog from './GroupsDialog/GroupsDialog';
 
 interface TelegramPreviewProps {
   dictionary: Dictionary;
-  lang: SupportedLanguage
+  lang: SupportedLanguage;
 }
 
-export default function TelegramPreview({ dictionary, lang }: TelegramPreviewProps) {
+export default function TelegramPreview({
+  dictionary,
+  lang,
+}: TelegramPreviewProps) {
   return (
     <section className="relative mx-auto max-w-[1200px] overflow-hidden px-4 pt-4">
       <div className="flex items-center gap-12 max-md:flex-col-reverse">

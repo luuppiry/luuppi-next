@@ -58,7 +58,7 @@ const ThemeSwitcher = ({ dictionary }: Omit<ThemeSwitcherProps, 'session'>) => {
       <ul
         className="menu dropdown-content z-[1] w-48 gap-2 rounded-box bg-base-100 p-2 font-bold text-base-content shadow"
         tabIndex={-1}
-        >
+      >
         {(['auto', 'light', 'dark'] as ThemeMode[]).map((mode) => (
           <li
             key={mode}

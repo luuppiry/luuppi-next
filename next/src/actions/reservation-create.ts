@@ -94,7 +94,7 @@ export async function reservationCreate(
     url,
     collection: null,
     ignoreError: true,
-    unique: true
+    unique: true,
   });
 
   const strapiEvent = strapiEvents?.data;

@@ -45,7 +45,7 @@ services:
     image: luuppi.azurecr.io/next-prod:latest
     user: root
     restart: 'no'
-    entrypoint: [ 'sh', '-c' ]
+    entrypoint: ['sh', '-c']
     command:
       - |
         mkdir -p /static/_next/static &&
