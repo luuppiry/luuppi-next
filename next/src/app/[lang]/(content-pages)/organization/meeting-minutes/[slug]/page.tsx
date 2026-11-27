@@ -7,7 +7,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 import qs from 'qs';
@@ -65,7 +65,7 @@ export default async function LuuppiSanomatPublication(
   );
 
   if (!pageData.data.length) {
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   const selectedPublication = meetingMinuteLocaleFlipped[0];

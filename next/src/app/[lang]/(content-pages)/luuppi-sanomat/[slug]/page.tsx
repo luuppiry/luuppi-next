@@ -7,7 +7,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { getStrapiUrl } from '@/libs/strapi/get-strapi-url';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import qs from 'qs';
 
@@ -45,7 +45,7 @@ export default async function LuuppiSanomatPublication(
   const dictionary = await getDictionary();
 
   if (!isValidISOCalendarDate(params.slug)) {
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   // If two entries are published within same date this blows up (sorry)
@@ -60,7 +60,7 @@ export default async function LuuppiSanomatPublication(
   });
 
   if (!pageData?.data.length) {
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   const sanomatLocaleFlipped = flipSanomatLocale(lang, pageData.data);

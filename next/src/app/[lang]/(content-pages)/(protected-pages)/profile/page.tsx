@@ -7,7 +7,7 @@ import { getDictionary } from '@/dictionaries';
 import prisma from '@/libs/db/prisma';
 import { logger } from '@/libs/utils/logger';
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 
@@ -87,7 +87,7 @@ export default async function Profile() {
 
   if (!localUser) {
     log.error('User not found in database. This should not happen.');
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   const roles = localUser?.roles.map((role) => role.role.strapiRoleUuid) ?? [];

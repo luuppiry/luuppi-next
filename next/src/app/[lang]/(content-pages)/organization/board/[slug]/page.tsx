@@ -7,7 +7,7 @@ import { getBoardMemberJsonLd } from '@/libs/utils/json-ld';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import Script from 'next/script';
 import qs from 'qs';
@@ -39,7 +39,7 @@ export default async function OldBoard(props: OldBoardProps) {
   const year = parseInt(params.slug, 10);
 
   if (isNaN(year)) {
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   const boardData = await getStrapiData<
@@ -55,7 +55,7 @@ export default async function OldBoard(props: OldBoardProps) {
   const wantedBoard = boardGroupedByYear[params.slug];
 
   if (!wantedBoard) {
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   const boardSortedByYear = Object.keys(boardGroupedByYear).sort(

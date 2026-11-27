@@ -6,7 +6,7 @@ import { getStrapiData } from '@/libs/strapi/get-strapi-data';
 import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { draftMode } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import qs from 'qs';
 
@@ -34,7 +34,7 @@ export default async function Event(props: EventProps) {
   const event = events?.data.at(0);
 
   if (!event) {
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   // Check if the event is visible to the current user
@@ -46,7 +46,7 @@ export default async function Event(props: EventProps) {
     ]));
 
   if (!eventVisible) {
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   const partnersData = await getStrapiData<
@@ -54,7 +54,7 @@ export default async function Event(props: EventProps) {
   >({ lang, url: '/api/companies?populate=*', collection: 'company' });
 
   if (!partnersData) {
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   return (

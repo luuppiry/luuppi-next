@@ -8,7 +8,7 @@ import { updateGraphAPIUser } from '@/libs/graph/graph-update-user';
 import { logger } from '@/libs/utils/logger';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 
@@ -29,7 +29,7 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
   const emailChangeToken = searchParams.token as string;
 
   if (!emailChangeToken) {
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   const session = await auth();
@@ -53,25 +53,25 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
 
     if (!newMail || !userId) {
       log.error('Invalid token, missing newMail or userId');
-      redirect(`/${lang}/404`);
+      notFound();
     }
 
     newEmailVerified = newMail;
     userIdVerified = userId;
   } catch (error) {
     log.error('Error verifying token', error);
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   if (session.user.entraUserUuid !== userIdVerified) {
     log.error('User ID does not match token');
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
     log.error('Error getting access token for Graph API');
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   const graphEmailUpdated = await updateGraphAPIUser(
@@ -91,7 +91,7 @@ export default async function VerifyEmail(props: VerifyEmailProps) {
 
   if (!graphEmailUpdated) {
     log.error('Error updating user email');
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   await prisma.user.update({

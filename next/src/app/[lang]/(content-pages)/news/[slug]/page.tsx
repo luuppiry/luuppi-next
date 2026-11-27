@@ -12,7 +12,7 @@ import { APIResponseCollection } from '@/types/types';
 import { Metadata } from 'next';
 import { draftMode } from 'next/headers';
 import Image from 'next/image';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import Script from 'next/script';
 import qs from 'qs';
@@ -75,7 +75,7 @@ export default async function NewsPost(props: NewsPostProps) {
   >({ lang, collection: 'company', url: '/api/companies?populate=*' });
 
   if (!pageData.data.length) {
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   const selectedNews = newsLocaleFlipped[0];
@@ -91,7 +91,7 @@ export default async function NewsPost(props: NewsPostProps) {
       return `No content for the given locale, update the ${localeMap[lang] ?? lang} 'content' to preview`;
     }
 
-    redirect(`/${lang}/404`);
+    notFound();
   }
 
   return (

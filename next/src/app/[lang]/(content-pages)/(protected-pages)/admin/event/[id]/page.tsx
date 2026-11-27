@@ -8,7 +8,7 @@ import { logger } from '@/libs/utils/logger';
 import { APIResponse } from '@/types/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { lang as language } from 'next/root-params';
 import { connection } from 'next/server';
 import { PiArrowLeft } from 'react-icons/pi';
@@ -94,7 +94,7 @@ export default async function AdminEventDetail(
   });
 
   if (!strapiEvent?.data) {
-    return redirect(`/${lang}/404`);
+    notFound()
   }
 
   const requiresPickup = strapiEvent.data.Registration?.RequiresPickup ?? false;
